@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.classification.core.driftdetection.eddm module &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.classification.core.driftdetection package" href="skmultiflow.classification.core.driftdetection.html"/>
+        <link rel="next" title="skmultiflow.classification.core.driftdetection.page_hinkley module" href="skmultiflow.classification.core.driftdetection.page_hinkley.html"/>
+        <link rel="prev" title="skmultiflow.classification.core.driftdetection.ddm module" href="skmultiflow.classification.core.driftdetection.ddm.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">For developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="skmultiflow.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skmultiflow.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skmultiflow.classification.html">skmultiflow.classification package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="skmultiflow.classification.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.classification.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.classification.html#module-skmultiflow.classification">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.html">skmultiflow.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.html">skmultiflow.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.demos.html">skmultiflow.demos package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.html">skmultiflow.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.filtering.html">skmultiflow.filtering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.options.html">skmultiflow.options package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.visualization.html">skmultiflow.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skmultiflow.html#module-skmultiflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.classification.html">skmultiflow.classification package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.classification.core.html">skmultiflow.classification.core package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.classification.core.driftdetection.html">skmultiflow.classification.core.driftdetection package</a> &raquo;</li>
+        
+      <li>skmultiflow.classification.core.driftdetection.eddm module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/skmultiflow.classification.core.driftdetection.eddm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-skmultiflow.classification.core.driftdetection.eddm">
+<span id="skmultiflow-classification-core-driftdetection-eddm-module"></span><h1>skmultiflow.classification.core.driftdetection.eddm module<a class="headerlink" href="#module-skmultiflow.classification.core.driftdetection.eddm" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.classification.core.driftdetection.eddm.EDDM">
+<em class="property">class </em><code class="descclassname">skmultiflow.classification.core.driftdetection.eddm.</code><code class="descname">EDDM</code><a class="reference internal" href="_modules/skmultiflow/classification/core/driftdetection/eddm.html#EDDM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector" title="skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector"><code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector</span></code></a></p>
+<p>Early Drift Detection Method</p>
+<p>This detection method was created to improve the detection
+rate of gradual concept drift in DDM, while keeping a good
+performance against abrupt concept drift. The implementation
+and complete method explanation can be found in Early Drift
+Detection Method by Baena-García, Campo-Ávila, Fidalgo, Bifet,
+Gavaldà and Morales-Bueno.</p>
+<p>This method works by keeping track of the average distance
+between two errors instead of only the error rate. For this,
+it&#8217;s necessary to keep track of the running average distance
+and the running standard deviation, as well as the maximum
+distance and the maximum standard deviation.</p>
+<p>The algorithm works similarly to the DDM algorithm, by keeping
+track of statistics only. It works with the running average
+distance (pi&#8217;) and the running standard deviation (si&#8217;), as
+well as p&#8217;max and s&#8217;max, which are the values of pi&#8217; and si&#8217;
+when (pi&#8217; + 2 * si&#8217;) reaches its maximum.</p>
+<p>Like DDM, there are two threshold values that define the
+borderline between no change, warning zone, and drift detected.
+These are as follows:
+if (pi&#8217; + 2 * si&#8217;)/(p&#8217;max + 2 * s&#8217;max) &lt; alpha -&gt; Warning zone
+if (pi&#8217; + 2 * si&#8217;)/(p&#8217;max + 2 * s&#8217;max) &lt; beta -&gt; Change detected</p>
+<p>Alpha and beta are set to 0.95 and 0.9, respectively.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.classification.core.driftdetection.eddm</span> <span class="k">import</span> <span class="n">EDDM</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eddm</span> <span class="o">=</span> <span class="n">EDDM</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Simulating a data stream as a normal distribution of 1&#39;s and 0&#39;s</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_stream</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Changing the data concept from index 999 to 1500, simulating an</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># increase in error rate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">999</span><span class="p">,</span> <span class="mi">1500</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Adding stream elements to ADWIN and verifying if drift occurred</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">eddm</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">eddm</span><span class="o">.</span><span class="n">detected_warning_zone</span><span class="p">():</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning zone has been detected in data: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; - of index: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">eddm</span><span class="o">.</span><span class="n">detected_change</span><span class="p">():</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Change has been detected in data: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; - of index: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="skmultiflow.classification.core.driftdetection.eddm.EDDM.FDDM_MIN_NUM_INSTANCES">
+<code class="descname">FDDM_MIN_NUM_INSTANCES</code><em class="property"> = 30</em><a class="headerlink" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM.FDDM_MIN_NUM_INSTANCES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.classification.core.driftdetection.eddm.EDDM.FDDM_OUTCONTROL">
+<code class="descname">FDDM_OUTCONTROL</code><em class="property"> = 0.9</em><a class="headerlink" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM.FDDM_OUTCONTROL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.classification.core.driftdetection.eddm.EDDM.FDDM_WARNING">
+<code class="descname">FDDM_WARNING</code><em class="property"> = 0.95</em><a class="headerlink" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM.FDDM_WARNING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.classification.core.driftdetection.eddm.EDDM.add_element">
+<code class="descname">add_element</code><span class="sig-paren">(</span><em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/core/driftdetection/eddm.html#EDDM.add_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM.add_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new element to the statistics</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prediction</strong> (<em>int. Either 0</em><em> or </em><em>1.</em>) &#8211; This parameter indicates whether the last sample analyzed was
+correctly classified or not. 1 indicates a good classification
+and 0 a wrong classification.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM" title="skmultiflow.classification.core.driftdetection.eddm.EDDM">EDDM</a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>After calling this method, to verify if change was detected or if
+the learner is in the warning zone, one should call the super method
+detected_change, which returns True if concept drift was detected and
+False otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.classification.core.driftdetection.eddm.EDDM.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/core/driftdetection/eddm.html#EDDM.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.classification.core.driftdetection.eddm.EDDM.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/core/driftdetection/eddm.html#EDDM.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.core.driftdetection.eddm.EDDM.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the change detector parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.classification.core.driftdetection.page_hinkley.html" class="btn btn-neutral float-right" title="skmultiflow.classification.core.driftdetection.page_hinkley module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.classification.core.driftdetection.ddm.html" class="btn btn-neutral" title="skmultiflow.classification.core.driftdetection.ddm module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

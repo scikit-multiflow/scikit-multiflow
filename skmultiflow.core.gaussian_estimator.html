@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.core.gaussian_estimator module &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.core package" href="skmultiflow.core.html"/>
+        <link rel="next" title="skmultiflow.core.pipeline module" href="skmultiflow.core.pipeline.html"/>
+        <link rel="prev" title="skmultiflow.core.base_object module" href="skmultiflow.core.base_object.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">For developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="skmultiflow.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skmultiflow.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.classification.html">skmultiflow.classification package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="skmultiflow.core.html">skmultiflow.core package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.core.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="skmultiflow.core.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.core.html#module-skmultiflow.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.html">skmultiflow.data package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.demos.html">skmultiflow.demos package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.html">skmultiflow.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.filtering.html">skmultiflow.filtering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.options.html">skmultiflow.options package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.visualization.html">skmultiflow.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skmultiflow.html#module-skmultiflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.core.html">skmultiflow.core package</a> &raquo;</li>
+        
+      <li>skmultiflow.core.gaussian_estimator module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/skmultiflow.core.gaussian_estimator.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-skmultiflow.core.gaussian_estimator">
+<span id="skmultiflow-core-gaussian-estimator-module"></span><h1>skmultiflow.core.gaussian_estimator module<a class="headerlink" href="#module-skmultiflow.core.gaussian_estimator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator">
+<em class="property">class </em><code class="descclassname">skmultiflow.core.gaussian_estimator.</code><code class="descname">GaussianEstimator</code><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Gaussian incremental estimator that uses incremental method that is more resistant to floating point imprecision.
+For more info, Donald Knuth&#8217;s &#8220;The Art of Computer Programming, Volume 2: Seminumerical Algorithms&#8221;, section 4.2.2.</p>
+<dl class="method">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator.add_observation">
+<code class="descname">add_observation</code><span class="sig-paren">(</span><em>value</em>, <em>weight</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator.add_observation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator.add_observation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new observation and updates statistics</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>The value</em>) &#8211; </li>
+<li><strong>weight</strong> (<em>The weight of the instance</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator.estimated_weight_lessthan_equalto_greaterthan_value">
+<code class="descname">estimated_weight_lessthan_equalto_greaterthan_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator.estimated_weight_lessthan_equalto_greaterthan_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator.estimated_weight_lessthan_equalto_greaterthan_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator.get_mean">
+<code class="descname">get_mean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator.get_mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_mean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator.get_std_dev">
+<code class="descname">get_std_dev</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator.get_std_dev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_std_dev" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator.get_total_weight_observed">
+<code class="descname">get_total_weight_observed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator.get_total_weight_observed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_total_weight_observed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator.get_variance">
+<code class="descname">get_variance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator.get_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.core.gaussian_estimator.GaussianEstimator.probability_density">
+<code class="descname">probability_density</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/gaussian_estimator.html#GaussianEstimator.probability_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.gaussian_estimator.GaussianEstimator.probability_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the normal distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<em>The value</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Probability density (normal distribution)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.core.pipeline.html" class="btn btn-neutral float-right" title="skmultiflow.core.pipeline module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.core.base_object.html" class="btn btn-neutral" title="skmultiflow.core.base_object module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
