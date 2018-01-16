@@ -198,84 +198,97 @@
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree">
 <em class="property">class </em><code class="descclassname">skmultiflow.classification.trees.hoeffding_tree.</code><code class="descname">HoeffdingTree</code><span class="sig-paren">(</span><em>max_byte_size=33554432</em>, <em>memory_estimate_period=1000000</em>, <em>grace_period=200</em>, <em>split_criterion='info_gain'</em>, <em>split_confidence=1e-07</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>no_preprune=False</em>, <em>leaf_prediction='mc'</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier" title="skmultiflow.classification.base.BaseClassifier"><code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.base.BaseClassifier</span></code></a></p>
-<p>Hoeffding Tree or VFDT.</p>
-<p>A Hoeffding tree is an incremental, anytime decision tree induction algorithm that is capable of learning from
-massive data streams, assuming that the distribution generating examples does not change over time. Hoeffding trees
-exploit the fact that a small sample can often be enough to choose an optimal splitting attribute. This idea is
-supported mathematically by the Hoeffding bound, which quantiﬁes the number of observations (in our case, examples)
-needed to estimate some statistics within a prescribed precision (in our case, the goodness of an attribute).</p>
-<p>A theoretically appealing feature of Hoeffding Trees not shared by other incremental decision tree learners is that
-it has sound guarantees of performance. Using the Hoeffding bound one can show that its output is asymptotically</p>
-<blockquote>
-<div><p>nearly identical to that of a non-incremental learner using inﬁnitely many examples.</p>
-<p>See for details:
-G. Hulten, L. Spencer, and P. Domingos. Mining time-changing data streams.</p>
-</div></blockquote>
-<p>In KDD’01, pages 97–106, San Francisco, CA, 2001. ACM Press.</p>
-<p>Implementation based on:
-Albert Bifet, Geoff Holmes, Richard Kirkby, Bernhard Pfahringer (2010);
-MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604</p>
-<dl class="docutils">
-<dt>max_byte_size: Int</dt>
-<dd>Maximum memory consumed by the tree.</dd>
-<dt>memory_estimate_period: Int</dt>
-<dd>How many instances between memory consumption checks.</dd>
-<dt>grace_period: Int</dt>
-<dd>The number of instances a leaf should observe between split attempts.</dd>
-<dt>split_criterion: String</dt>
-<dd>Split criterion to use.
+<p>Hoeffding Tree or VFDT</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_byte_size</strong> (<em>int</em>) &#8211; Maximum memory consumed by the tree.</li>
+<li><strong>memory_estimate_period</strong> (<em>int</em>) &#8211; How many instances between memory consumption checks.</li>
+<li><strong>grace_period</strong> (<em>int</em>) &#8211; The number of instances a leaf should observe between split attempts.</li>
+<li><strong>split_criterion</strong> (<em>string</em>) &#8211; Split criterion to use.
 &#8216;gini&#8217; - Gini
-&#8216;info_gain&#8217; - Information Gain</dd>
-<dt>split_confidence: Float</dt>
-<dd>Allowed error in split decision, a value closer to 0 takes longer to decide.</dd>
-<dt>tie_threshold: Float</dt>
-<dd>Threshold below which a split will be forced to break ties.</dd>
-<dt>binary_split: Boolean</dt>
-<dd>If True only allow binary splits.</dd>
-<dt>stop_mem_management: Boolean</dt>
-<dd>If True, stop growing as soon as memory limit is hit.</dd>
-<dt>remove_poor_atts: Boolean</dt>
-<dd>If True, disable poor attributes.</dd>
-<dt>no_pre_prune: Boolean</dt>
-<dd>If True, disable pre-pruning.</dd>
-<dt>leaf_prediction: String</dt>
-<dd>Prediction mechanism used at leafs.
+&#8216;info_gain&#8217; - Information Gain</li>
+<li><strong>split_confidence</strong> (<em>float</em>) &#8211; Allowed error in split decision, a value closer to 0 takes longer to decide.</li>
+<li><strong>tie_threshold</strong> (<em>float</em>) &#8211; Threshold below which a split will be forced to break ties.</li>
+<li><strong>binary_split</strong> (<em>boolean</em>) &#8211; If True only allow binary splits.</li>
+<li><strong>stop_mem_management</strong> (<em>boolean</em>) &#8211; If True, stop growing as soon as memory limit is hit.</li>
+<li><strong>remove_poor_atts</strong> (<em>boolean</em>) &#8211; If True, disable poor attributes.</li>
+<li><strong>no_preprune</strong> (<em>boolean</em>) &#8211; If True, disable pre-pruning.</li>
+<li><strong>leaf_prediction</strong> (<em>string</em>) &#8211; Prediction mechanism used at leafs.
 &#8216;mc&#8217; - Majority Class
 &#8216;nb&#8217; - Naive Bayes
-&#8216;nba&#8217; - Naive BAyes Adaptive</dd>
-<dt>nb_threshold: Int</dt>
-<dd>The number of instances a leaf should observe before permitting Naive Bayes.</dd>
-<dt>nominal_attributes: List</dt>
-<dd>List of Nominal attributes</dd>
-</dl>
+&#8216;nba&#8217; - Naive BAyes Adaptive</li>
+<li><strong>nb_threshold</strong> (<em>int</em>) &#8211; The number of instances a leaf should observe before permitting Naive Bayes.</li>
+<li><strong>nominal_attributes</strong> (<em>list</em>) &#8211; List of Nominal attributes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A Hoeffding Tree <a class="footnote-reference" href="#id3" id="id1">[1]</a> is an incremental, anytime decision tree induction algorithm that is capable of learning from
+massive data streams, assuming that the distribution generating examples does not change over time. Hoeffding trees
+exploit the fact that a small sample can often be enough to choose an optimal splitting attribute. This idea is
+supported mathematically by the Hoeffding bound, which quantifies the number of observations (in our case, examples)
+needed to estimate some statistics within a prescribed precision (in our case, the goodness of an attribute).</p>
+<p>A theoretically appealing feature of Hoeffding Trees not shared by other incremental decision tree learners is that
+it has sound guarantees of performance. Using the Hoeffding bound one can show that its output is asymptotically
+nearly identical to that of a non-incremental learner using infinitely many examples.</p>
+<p>Implementation based on MOA <a class="footnote-reference" href="#id4" id="id2">[2]</a>.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>G. Hulten, L. Spencer, and P. Domingos. Mining time-changing data streams.
+In KDD’01, pages 97–106, San Francisco, CA, 2001. ACM Press.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Albert Bifet, Geoff Holmes, Richard Kirkby, Bernhard Pfahringer.
+MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604, 2010.</td></tr>
+</tbody>
+</table>
 <dl class="class">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode">
 <em class="property">class </em><code class="descname">ActiveLearningNode</code><span class="sig-paren">(</span><em>initial_class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.ActiveLearningNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.LearningNode</span></code></p>
-<p>A Hoeffding Tree node that supports growth.</p>
+<p>A learning node that supports growth.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.disable_attribute">
 <code class="descname">disable_attribute</code><span class="sig-paren">(</span><em>att_idx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.ActiveLearningNode.disable_attribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.disable_attribute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Disable an attribute observer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>att_idx</strong> (<em>int</em>) &#8211; Attribute index.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.get_best_split_suggestions">
 <code class="descname">get_best_split_suggestions</code><span class="sig-paren">(</span><em>criterion</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.ActiveLearningNode.get_best_split_suggestions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.get_best_split_suggestions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of the possible split candidates.</p>
+<dd><p>Find possible split candidates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>criterion</strong> (<em>The splitting criterion to be used.</em>) &#8211; </li>
-<li><strong>ht</strong> (<em>The Hoeffding Tree</em>) &#8211; </li>
+<li><strong>criterion</strong> (<a class="reference internal" href="skmultiflow.classification.core.split_criteria.split_criterion.html#skmultiflow.classification.core.split_criteria.split_criterion.SplitCriterion" title="skmultiflow.classification.core.split_criteria.split_criterion.SplitCriterion"><em>SplitCriterion</em></a>) &#8211; The splitting criterion to be used.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The Hoeffding Tree</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Possible split candidates.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">A list of the possible split candidates.</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -285,26 +298,48 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.get_weight_seen">
 <code class="descname">get_weight_seen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.ActiveLearningNode.get_weight_seen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.get_weight_seen" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the total weight seen by the node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Total weight seen.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.get_weight_seen_at_last_split_evaluation">
 <code class="descname">get_weight_seen_at_last_split_evaluation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.ActiveLearningNode.get_weight_seen_at_last_split_evaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.get_weight_seen_at_last_split_evaluation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve the weight seen at last split evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Weight seen at last split evaluation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.learn_from_instance">
 <code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.ActiveLearningNode.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.learn_from_instance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the node with the supplied instance.</p>
+<dd><p>Update the node with the provided instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>X</strong> (<em>The attributes for updating the node</em>) &#8211; </li>
-<li><strong>y</strong> (<em>The class</em>) &#8211; </li>
-<li><strong>weight</strong> (<em>The instance's weight</em>) &#8211; </li>
-<li><strong>ht</strong> (<em>The Hoeffding Tree</em>) &#8211; </li>
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; The attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) &#8211; The class.</li>
+<li><strong>weight</strong> (<em>float</em>) &#8211; The instance&#8217;s weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The Hoeffding Tree to update.</li>
 </ul>
 </td>
 </tr>
@@ -315,7 +350,16 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation">
 <code class="descname">set_weight_seen_at_last_split_evaluation</code><span class="sig-paren">(</span><em>weight</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve the weight seen at last split evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>weight</strong> (<em>float</em>) &#8211; Weight seen at last split evaluation.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -323,16 +367,33 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode">
 <em class="property">class </em><code class="descname">FoundNode</code><span class="sig-paren">(</span><em>node=None</em>, <em>parent=None</em>, <em>parent_branch=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.FoundNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class for nodes in a Hoeffding Tree</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.InactiveLearningNode">
 <em class="property">class </em><code class="descname">InactiveLearningNode</code><span class="sig-paren">(</span><em>initial_class_observations=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.InactiveLearningNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.InactiveLearningNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.LearningNode</span></code></p>
+<p>An inactive learning node that does not grow.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.InactiveLearningNode.learn_from_instance">
 <code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.InactiveLearningNode.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.InactiveLearningNode.learn_from_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Update the node with the provided instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; The attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) &#8211; The class.</li>
+<li><strong>weight</strong> (<em>float</em>) &#8211; The instance&#8217;s weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The Hoeffding Tree to update.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -340,10 +401,26 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNode">
 <em class="property">class </em><code class="descname">LearningNode</code><span class="sig-paren">(</span><em>initial_class_observations=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.Node</span></code></p>
+<p>Base class for Learning Nodes in a Hoeffding Tree.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNode.learn_from_instance">
 <code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNode.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNode.learn_from_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Update the node with the provided instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; The attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) &#8211; The class.</li>
+<li><strong>weight</strong> (<em>float</em>) &#8211; The instance&#8217;s weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The Hoeffding Tree to update.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -351,15 +428,45 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNB">
 <em class="property">class </em><code class="descname">LearningNodeNB</code><span class="sig-paren">(</span><em>initial_class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNodeNB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.ActiveLearningNode</span></code></p>
+<p>A learning node that uses Naive Bayes models.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNB.disable_attribute">
 <code class="descname">disable_attribute</code><span class="sig-paren">(</span><em>att_index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNodeNB.disable_attribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNB.disable_attribute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Disable an attribute observer.</p>
+<p>Disabled in Nodes using Naive Bayes, since poor attributes are used in Naive Bayes calculation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>att_idx</strong> (<em>int</em>) &#8211; Attribute index.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNB.get_class_votes">
 <code class="descname">get_class_votes</code><span class="sig-paren">(</span><em>X</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNodeNB.get_class_votes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNB.get_class_votes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the votes per class for a given instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; Data instances.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The HoeffdingTree</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Class votes for the given instance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Dictionary (class_value, weight)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -367,15 +474,50 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNBAdaptive">
 <em class="property">class </em><code class="descname">LearningNodeNBAdaptive</code><span class="sig-paren">(</span><em>initial_class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNodeNBAdaptive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNBAdaptive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.LearningNodeNB</span></code></p>
+<p>A learning node that uses Adaptive Naive Bayes models.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNBAdaptive.get_class_votes">
 <code class="descname">get_class_votes</code><span class="sig-paren">(</span><em>X</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNodeNBAdaptive.get_class_votes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNBAdaptive.get_class_votes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the votes per class for a given instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; Data instances.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The HoeffdingTree</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Class votes for the given instance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Dictionary (class_value, weight)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNBAdaptive.learn_from_instance">
 <code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.LearningNodeNBAdaptive.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNBAdaptive.learn_from_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Update the node with the provided instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; The attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) &#8211; The class.</li>
+<li><strong>weight</strong> (<em>float</em>) &#8211; The instance&#8217;s weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The Hoeffding Tree to update.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -383,31 +525,100 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node">
 <em class="property">class </em><code class="descname">Node</code><span class="sig-paren">(</span><em>class_observations=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Base class for Nodes in a Hoeffding Tree</p>
+<p>Class for leaf nodes in a Hoeffding Tree</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.calc_byte_size_including_subtree">
 <code class="descname">calc_byte_size_including_subtree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.calc_byte_size_including_subtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.calc_byte_size_including_subtree" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the size of the node including its sub-tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Size of the node and its sub-tree in bytes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.calculate_promise">
 <code class="descname">calculate_promise</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.calculate_promise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.calculate_promise" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate node&#8217;s promise.</p>
+<p>Returns
+int</p>
+<blockquote>
+<div>A small value indicates that the node has seen more samples of a given class than the other classes.</div></blockquote>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.describe_subtree">
 <code class="descname">describe_subtree</code><span class="sig-paren">(</span><em>ht</em>, <em>buffer</em>, <em>indent=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.describe_subtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.describe_subtree" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Walk the tree and write its structure to a buffer string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The tree to describe.</li>
+<li><strong>buffer</strong> (<em>string</em>) &#8211; The string buffer where the tree&#8217;s structure will be stored</li>
+<li><strong>indent</strong> (<em>int</em>) &#8211; Indentation level (number of white spaces for current node.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.filter_instance_to_leaf">
 <code class="descname">filter_instance_to_leaf</code><span class="sig-paren">(</span><em>X</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.filter_instance_to_leaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.filter_instance_to_leaf" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Travers down the tree to locate the corresponding leaf for an instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) &#8211; Data instances.</li>
+<li><strong>parent</strong> (<a class="reference internal" href="skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.Node" title="skmultiflow.data.generators.random_tree_generator.Node"><em>Node</em></a>) &#8211; Parent node.</li>
+<li><strong>parent_branch</strong> (<em>Int</em>) &#8211; Parent branch index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode">FoundNode</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.get_class_votes">
 <code class="descname">get_class_votes</code><span class="sig-paren">(</span><em>X</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.get_class_votes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.get_class_votes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the votes per class for a given instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; Data instances.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The HoeffdingTree</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Class votes for the given instance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Dictionary (class_value, weight)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.get_description">
@@ -417,22 +628,66 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.get_observed_class_distribution">
 <code class="descname">get_observed_class_distribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.get_observed_class_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.get_observed_class_distribution" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the current observed class distribution at the node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Class distribution at the node.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Dictionary (class_value, weight)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="staticmethod">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.is_leaf">
 <em class="property">static </em><code class="descname">is_leaf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.is_leaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.is_leaf" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Determine if the node is a leaf.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">True if leaf, False otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.observed_class_distribution_is_pure">
 <code class="descname">observed_class_distribution_is_pure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.observed_class_distribution_is_pure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.observed_class_distribution_is_pure" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Check if observed class distribution is pure, i.e. if all samples belong to the same class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if observed number of classes is less than 2, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.subtree_depth">
 <code class="descname">subtree_depth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.Node.subtree_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.subtree_depth" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the depth of the sub-tree from this node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Subtree depth, 0 if the node is a leaf.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -440,51 +695,156 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode">
 <em class="property">class </em><code class="descname">SplitNode</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em>, <em>size=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.Node</span></code></p>
-<p>Class for a node that splits the data in a Hoeffding Tree</p>
+<p>Class for a node that splits the data in a Hoeffding Tree.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.calc_byte_size_including_subtree">
 <code class="descname">calc_byte_size_including_subtree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.calc_byte_size_including_subtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.calc_byte_size_including_subtree" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the size of the node including its subtree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Size of the node and its subtree in bytes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.describe_subtree">
 <code class="descname">describe_subtree</code><span class="sig-paren">(</span><em>ht</em>, <em>buffer</em>, <em>indent=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.describe_subtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.describe_subtree" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Walk the tree and write its structure to a buffer string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) &#8211; The tree to describe.</li>
+<li><strong>buffer</strong> (<em>string</em>) &#8211; The buffer where the tree&#8217;s structure will be stored.</li>
+<li><strong>indent</strong> (<em>int</em>) &#8211; Indentation level (number of white spaces for current node).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.filter_instance_to_leaf">
 <code class="descname">filter_instance_to_leaf</code><span class="sig-paren">(</span><em>X</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.filter_instance_to_leaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.filter_instance_to_leaf" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Travers down the tree to locate the corresponding leaf for an instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) &#8211; Data instances.</li>
+<li><strong>parent</strong> (<a class="reference internal" href="skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.Node" title="skmultiflow.data.generators.random_tree_generator.Node"><em>Node</em></a>) &#8211; Parent node.</li>
+<li><strong>parent_branch</strong> (<em>int</em>) &#8211; Parent branch index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Leaf node for the instance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode">FoundNode</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.get_child">
 <code class="descname">get_child</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.get_child"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.get_child" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve a node&#8217;s child given its index (branch).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Node&#8217;s index (branch).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The child node.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.Node" title="skmultiflow.data.generators.random_tree_generator.Node">Node</a> or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.instance_child_index">
 <code class="descname">instance_child_index</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.instance_child_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.instance_child_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the branch index for a given instance at the current node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The index (branch), -1 if unknown.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="staticmethod">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.is_leaf">
 <em class="property">static </em><code class="descname">is_leaf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.is_leaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.is_leaf" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Determine if the node is a leaf.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if leaf, False otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.num_children">
 <code class="descname">num_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.num_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.num_children" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Count the number of children for a node.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.set_child">
 <code class="descname">set_child</code><span class="sig-paren">(</span><em>index</em>, <em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.set_child"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.set_child" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set node as child.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<em>int</em>) &#8211; Index (branch) where the node will be inserted.</li>
+<li><strong>node</strong> (<a class="reference internal" href="skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.Node" title="skmultiflow.data.generators.random_tree_generator.Node"><em>Node</em></a>) &#8211; The node to insert.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.subtree_depth">
 <code class="descname">subtree_depth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.SplitNode.subtree_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.subtree_depth" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the depth of the sub-tree from this node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Subtree depth, 0 if leaf.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -496,22 +856,56 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="staticmethod">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.compute_hoeffding_bound">
 <em class="property">static </em><code class="descname">compute_hoeffding_bound</code><span class="sig-paren">(</span><em>range_val</em>, <em>confidence</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.compute_hoeffding_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.compute_hoeffding_bound" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compute the Hoeffding bound, used to decide how many samples are necessary at each node.</p>
+<p class="rubric">Notes</p>
+<p>The Hoeffding bound is defined as:</p>
+<div class="math">
+\[\epsilon = \sqrt{\frac{R^2\ln(1/\delta))}{2n}}\]</div>
+<p>where:</p>
+<p><span class="math">\(\epsilon\)</span>: Hoeffding bound.</p>
+<p><span class="math">\(R\)</span>: Range of a random variable. For a probability the range is 1, and for an information gain the range
+is log <em>c</em>, where <em>c</em> is the number of classes.</p>
+<p><span class="math">\(\delta\)</span>: Confidence. 1 minus the desired probability of choosing the correct attribute at any given node.</p>
+<p><span class="math">\(n\)</span>: Number of samples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>range_val</strong> (<em>float</em>) &#8211; Range value.</li>
+<li><strong>confidence</strong> (<em>float</em>) &#8211; Confidence of choosing the correct attribute.</li>
+<li><strong>n</strong> (<em>int</em>) &#8211; Number of samples.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The Hoeffding bound.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.deactivate_all_leaves">
 <code class="descname">deactivate_all_leaves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.deactivate_all_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.deactivate_all_leaves" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Deactivate all leaves.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.enforce_tracker_limit">
 <code class="descname">enforce_tracker_limit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.enforce_tracker_limit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.enforce_tracker_limit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Track the size of the tree and disable/enable nodes if required.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.estimate_model_byte_size">
 <code class="descname">estimate_model_byte_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.estimate_model_byte_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.estimate_model_byte_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the size of the model and trigger tracker function if the actual model size exceeds the max size
+in the configuration.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.fit">
@@ -521,22 +915,69 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Collect information about the Hoeffding Tree configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Information about the Hoeffding Tree.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_model_description">
 <code class="descname">get_model_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.get_model_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_model_description" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Walk the tree and return its structure in a buffer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The description of the model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_model_measurements">
 <code class="descname">get_model_measurements</code><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_model_measurements" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Collect metrics for the current status of the tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string buffer containing the measurements of the tree.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_votes_for_instance">
 <code class="descname">get_votes_for_instance</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.get_votes_for_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_votes_for_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get class votes for a single instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of length equal to the number of features.</em>) &#8211; Data instances.</li>
+<li><strong>Returns</strong> &#8211; <p>Dictionary (class_value, weight)</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.grace_period">
@@ -561,12 +1002,34 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.measure_byte_size">
 <code class="descname">measure_byte_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.measure_byte_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.measure_byte_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the size of the tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Size of the tree in bytes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.measure_tree_depth">
 <code class="descname">measure_tree_depth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.measure_tree_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.measure_tree_depth" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the depth of the tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Depth of the tree.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.memory_estimate_period">
@@ -581,7 +1044,8 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.new_split_node">
 <code class="descname">new_split_node</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em>, <em>size=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.new_split_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.new_split_node" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create a new split node.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.no_preprune">
@@ -596,23 +1060,28 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.partial_fit">
 <code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.partial_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trains the model on samples X and targets y.</p>
+<dd><p>Trains the model on samples X and corresponding targets y.</p>
+<p>Following tasks are performed:</p>
+<ul class="simple">
+<li>Verify instance weight, if not provided then uniform weights (1.0) are assumed.</li>
+<li>If more than one instances are passed, then loop through matrix X and pass single instances.</li>
+<li>Update weight seen by model.</li>
+<li>If the tree is empty create a leaf node as the root.</li>
+<li>If the tree is already initialized then find the corresponding leaf for the instance and update the leaf node
+statistics.</li>
+<li>If growth is allowed and the number of instances that the leaf has observed between split attempts</li>
+</ul>
+<p>exceed the grace period then attempt to split.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) &#8211; Data instances.</li>
-<li><strong>y</strong> (<em>Array-like</em>) &#8211; Contains the classification targets for all samples in X.</li>
+<li><strong>y</strong> (<em>array_like</em>) &#8211; Contains the classification targets for all samples in X.</li>
 <li><strong>classes</strong> (<em>Not used.</em>) &#8211; </li>
 <li><strong>weight</strong> (<em>Float</em><em> or </em><em>Array-like</em>) &#8211; Instance weight. If not provided, uniform weights are assumed.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
 </td>
 </tr>
 </tbody>
@@ -629,7 +1098,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) &#8211; All the samples we want to predict the label for.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list containing the predicted labels for all instances in X.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Predicted labels for all instances in X.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
@@ -650,7 +1119,8 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.reset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Reset the Hoeffding Tree to default values.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.score">

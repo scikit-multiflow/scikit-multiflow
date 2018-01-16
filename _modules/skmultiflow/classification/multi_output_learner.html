@@ -180,14 +180,15 @@
 <div class="viewcode-block" id="MultiOutputLearner"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner">[docs]</a><span class="k">class</span> <span class="nc">MultiOutputLearner</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; MultiOutputLearner</span>
 <span class="sd">    </span>
-<span class="sd">    A Meta Learner. Does either classifier or regression, depending on </span>
-<span class="sd">    base learner (which by default is LogisticRegression). It will keep </span>
-<span class="sd">    one instance of the base learner for each classification task, in </span>
-<span class="sd">    a way that each classifier is in charge of a single classification </span>
-<span class="sd">    problem.</span>
+<span class="sd">    A Multi-Output Learner learns to predict multiple outputs for each</span>
+<span class="sd">    instance. The outputs may either be discrete (i.e., classification),</span>
+<span class="sd">    or continuous (i.e., regression). This class takes any base learner</span>
+<span class="sd">    (which by default is LogisticRegression) and builds a separate model</span>
+<span class="sd">    for each output, and will distribute each instance to each model</span>
+<span class="sd">    for individual learning and classification. </span>
 <span class="sd">    </span>
-<span class="sd">    Should be used to make single output predictors capable of learning </span>
-<span class="sd">    a multi output problem.</span>
+<span class="sd">    Use this classifier to make single output predictors capable of learning </span>
+<span class="sd">    a multi output problem, by applying them individually to each output.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -246,7 +247,7 @@
     <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hop</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)]</span>
 
-<div class="viewcode-block" id="MultiOutputLearner.fit"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiOutputLearner.fit"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; fit</span>
 
 <span class="sd">        Fit the N classifiers, one for each classification task.</span>
@@ -256,7 +257,7 @@
 <span class="sd">        X : Numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">            The array of samples used to fit the model.</span>
 
-<span class="sd">        y: Array-like</span>
+<span class="sd">        Y: Array-like</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
 
 <span class="sd">        classes: Not used.</span>
@@ -269,26 +270,26 @@
 <span class="sd">            self</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">N</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">N</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hop</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)]</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="MultiOutputLearner.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 
 <span class="sd">        Partially fit each of the classifiers on the X matrix and the </span>
-<span class="sd">        corresponding entry at the y array.</span>
+<span class="sd">        corresponding Y matrix.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        X : Numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">            The array of samples used to fit the model.</span>
 
-<span class="sd">        y: Array-like</span>
+<span class="sd">        Y: Numpy.ndarray of shape (n_samples, n_labels)</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
 
 <span class="sd">        classes: Array-like</span>
@@ -305,18 +306,20 @@
 <span class="sd">            self</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">y</span>
+
+        <span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
             <span class="k">if</span> <span class="s2">&quot;weight&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_varnames</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
             <span class="k">elif</span> <span class="s2">&quot;sample_weight&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_varnames</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -333,9 +336,9 @@
 <span class="sd">            </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Array-like</span>
-<span class="sd">            An array-like with all the predictions for the samples in X.</span>
-<span class="sd">        </span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            Numpy.ndarray of shape (n_samples, n_labels)</span>
+<span class="sd">            All the predictions for the samples in X.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>

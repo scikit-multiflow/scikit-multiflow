@@ -175,9 +175,7 @@
 
 
 <div class="viewcode-block" id="AttributeClassObserver"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.attribute_class_observers.attribute_class_observer.html#skmultiflow.classification.core.attribute_class_observers.attribute_class_observer.AttributeClassObserver">[docs]</a><span class="k">class</span> <span class="nc">AttributeClassObserver</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; AttributeClassObserver</span>
-
-<span class="sd">    Abstract class for observing the class data distribution for an attribute.</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for observing the class data distribution for an attribute.</span>
 <span class="sd">    This observer monitors the class distribution of a given attribute.</span>
 
 <span class="sd">    This class should not me instantiated, as none of its methods are implemented.</span>
@@ -193,41 +191,38 @@
 
     <span class="nd">@abstractmethod</span>
 <div class="viewcode-block" id="AttributeClassObserver.observe_attribute_class"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.attribute_class_observers.attribute_class_observer.html#skmultiflow.classification.core.attribute_class_observers.attribute_class_observer.AttributeClassObserver.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; observe_attribute_class</span>
-
-<span class="sd">        Updates statistics of this observer given an attribute value, a class</span>
-<span class="sd">        and the weight of the instance observed</span>
+        <span class="sd">&quot;&quot;&quot;Update statistics of this observer given an attribute value, a class and the weight of the instance observed.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        att_val : The value of the attribute</span>
+<span class="sd">        att_val : float</span>
+<span class="sd">            The value of the attribute.</span>
 
-<span class="sd">        class_val: The class</span>
+<span class="sd">        class_val: int</span>
+<span class="sd">            The class value.</span>
 
-<span class="sd">        weight: The weight of the instance</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        self</span>
+<span class="sd">        weight: float</span>
+<span class="sd">            The weight of the instance.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
     <span class="nd">@abstractmethod</span>
 <div class="viewcode-block" id="AttributeClassObserver.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.attribute_class_observers.attribute_class_observer.html#skmultiflow.classification.core.attribute_class_observers.attribute_class_observer.AttributeClassObserver.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; probability_of_attribute_value_given_class</span>
-
-<span class="sd">        Gets the probability for an attribute value given a class</span>
+        <span class="sd">&quot;&quot;&quot;Get the probability for an attribute value given a class.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        att_val : The value of the attribute</span>
+<span class="sd">        att_val: float</span>
+<span class="sd">            The value of the attribute.</span>
 
-<span class="sd">        class_val: The class</span>
+<span class="sd">        class_val: int</span>
+<span class="sd">            The class value.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Probability for an attribute value given a class</span>
+<span class="sd">        float</span>
+<span class="sd">            Probability for an attribute value given a class.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>

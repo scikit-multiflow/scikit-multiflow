@@ -175,9 +175,7 @@
 
 
 <div class="viewcode-block" id="InstanceConditionalTest"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest">[docs]</a><span class="k">class</span> <span class="nc">InstanceConditionalTest</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; InstanceConditionalTest</span>
-
-<span class="sd">    Abstract class for instance conditional test to split nodes in Hoeffding Trees.</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for instance conditional test to split nodes in Hoeffding Trees.</span>
 
 <span class="sd">    This class should not me instantiated, as none of its methods are implemented.</span>
 
@@ -192,17 +190,17 @@
 
     <span class="nd">@abstractmethod</span>
 <div class="viewcode-block" id="InstanceConditionalTest.branch_for_instance"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.branch_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">branch_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; branch_for_instance</span>
-
-<span class="sd">        Returns the number of the branch for an instance, -1 if unknown.</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of the branch for an instance, -1 if unknown.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X : The instance to be used</span>
+<span class="sd">        X : Numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            The instance to be used.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        The number of the branch for an instance, -1 if unknown.</span>
+<span class="sd">        int</span>
+<span class="sd">            The index of the branch for the instance, -1 if unknown.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
@@ -210,51 +208,40 @@
     <span class="nd">@staticmethod</span>
     <span class="nd">@abstractmethod</span>
 <div class="viewcode-block" id="InstanceConditionalTest.max_branches"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.max_branches">[docs]</a>    <span class="k">def</span> <span class="nf">max_branches</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot; branch_for_instance</span>
-
-<span class="sd">        Gets the number of maximum branches, -1 if unknown.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        None</span>
+        <span class="sd">&quot;&quot;&quot;Get the max number branches, -1 if unknown.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        The number of maximum branches, -1 if unknown.</span>
+<span class="sd">        The max number of branches, -1 if unknown.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
     <span class="nd">@abstractmethod</span>
 <div class="viewcode-block" id="InstanceConditionalTest.describe_condition_for_branch"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.describe_condition_for_branch">[docs]</a>    <span class="k">def</span> <span class="nf">describe_condition_for_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; describe_condition_for_branch</span>
-
-<span class="sd">        Gets the text that describes the condition of a branch. It is used to describe the branch.</span>
+        <span class="sd">&quot;&quot;&quot;Describe the condition of a branch. It is used to describe the branch.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        branch: The number of the branch to describe</span>
+<span class="sd">        branch: int</span>
+<span class="sd">            The index of the branch to describe</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        The text that describes the condition of the branch</span>
+<span class="sd">        string</span>
+<span class="sd">            The description of the condition for the branch</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
     <span class="nd">@abstractmethod</span>
 <div class="viewcode-block" id="InstanceConditionalTest.get_atts_test_depends_on"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.get_atts_test_depends_on">[docs]</a>    <span class="k">def</span> <span class="nf">get_atts_test_depends_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_atts_test_depends_on</span>
-
-<span class="sd">        Returns an array with the attributes that the test depends on.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        self</span>
+        <span class="sd">&quot;&quot;&quot;Return an array with the attributes that the test depends on.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        An array with the attributes that the test depends on.</span>
+<span class="sd">        array_like</span>
+<span class="sd">            The attributes that the test depends on.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
