@@ -200,26 +200,26 @@
 
 
 <div class="viewcode-block" id="HoeffdingTree"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree">[docs]</a><span class="k">class</span> <span class="nc">HoeffdingTree</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Hoeffding Tree or VFDT</span>
+    <span class="sd">&quot;&quot;&quot;Hoeffding Tree or VFDT.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    max_byte_size: int</span>
 <span class="sd">        Maximum memory consumed by the tree.</span>
 <span class="sd">    memory_estimate_period: int</span>
-<span class="sd">        How many instances between memory consumption checks.</span>
+<span class="sd">        Number of instances between memory consumption checks.</span>
 <span class="sd">    grace_period: int</span>
-<span class="sd">        The number of instances a leaf should observe between split attempts.</span>
+<span class="sd">        Number of instances a leaf should observe between split attempts.</span>
 <span class="sd">    split_criterion: string</span>
-<span class="sd">        Split criterion to use.</span>
-<span class="sd">        &#39;gini&#39; - Gini</span>
-<span class="sd">        &#39;info_gain&#39; - Information Gain</span>
+<span class="sd">        | Split criterion to use.</span>
+<span class="sd">        | &#39;gini&#39; - Gini</span>
+<span class="sd">        | &#39;info_gain&#39; - Information Gain</span>
 <span class="sd">    split_confidence: float</span>
 <span class="sd">        Allowed error in split decision, a value closer to 0 takes longer to decide.</span>
 <span class="sd">    tie_threshold: float</span>
 <span class="sd">        Threshold below which a split will be forced to break ties.</span>
 <span class="sd">    binary_split: boolean</span>
-<span class="sd">        If True only allow binary splits.</span>
+<span class="sd">        If True, only allow binary splits.</span>
 <span class="sd">    stop_mem_management: boolean</span>
 <span class="sd">        If True, stop growing as soon as memory limit is hit.</span>
 <span class="sd">    remove_poor_atts: boolean</span>
@@ -227,14 +227,14 @@
 <span class="sd">    no_preprune: boolean</span>
 <span class="sd">        If True, disable pre-pruning.</span>
 <span class="sd">    leaf_prediction: string</span>
-<span class="sd">        Prediction mechanism used at leafs.</span>
-<span class="sd">        &#39;mc&#39; - Majority Class</span>
-<span class="sd">        &#39;nb&#39; - Naive Bayes</span>
-<span class="sd">        &#39;nba&#39; - Naive BAyes Adaptive</span>
+<span class="sd">        | Prediction mechanism used at leafs.</span>
+<span class="sd">        | &#39;mc&#39; - Majority Class</span>
+<span class="sd">        | &#39;nb&#39; - Naive Bayes</span>
+<span class="sd">        | &#39;nba&#39; - Naive Bayes Adaptive</span>
 <span class="sd">    nb_threshold: int</span>
-<span class="sd">        The number of instances a leaf should observe before permitting Naive Bayes.</span>
+<span class="sd">        Number of instances a leaf should observe before allowing Naive Bayes.</span>
 <span class="sd">    nominal_attributes: list</span>
-<span class="sd">        List of Nominal attributes</span>
+<span class="sd">        List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -261,8 +261,18 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="HoeffdingTree.FoundNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode">[docs]</a>    <span class="k">class</span> <span class="nc">FoundNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Base class for nodes in a Hoeffding Tree&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Base class for tree nodes.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node: SplitNode or LearningNode</span>
+<span class="sd">            The node object.</span>
+<span class="sd">        parent: SplitNode or None</span>
+<span class="sd">            The node&#39;s parent.</span>
+<span class="sd">        parent_branch: int</span>
+<span class="sd">            The parent node&#39;s branch.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent_branch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; FoundNode class constructor. &quot;&quot;&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>
@@ -270,7 +280,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parent_branch</span> <span class="o">=</span> <span class="n">parent_branch</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.Node"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Class for leaf nodes in a Hoeffding Tree&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Base class for nodes in a Hoeffding Tree.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        class_observations: dict (class_value, weight) or None</span>
+<span class="sd">            Class observations.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; Node class constructor. &quot;&quot;&quot;</span>
@@ -294,9 +311,9 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            X: numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">               Data instances.</span>
-<span class="sd">            parent: Node</span>
+<span class="sd">            parent: HoeffdingTree.Node</span>
 <span class="sd">                Parent node.</span>
 <span class="sd">            parent_branch: Int</span>
 <span class="sd">                Parent branch index</span>
@@ -304,6 +321,7 @@
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            FoundNode</span>
+<span class="sd">                The corresponding leaf.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">FoundNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
@@ -313,7 +331,7 @@
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
-<span class="sd">            Dictionary (class_value, weight)</span>
+<span class="sd">            dict (class_value, weight)</span>
 <span class="sd">                Class distribution at the node.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -324,14 +342,14 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">            X: numpy.ndarray of length equal to the number of features.</span>
 <span class="sd">               Data instances.</span>
 <span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                The HoeffdingTree</span>
+<span class="sd">                The Hoeffding Tree.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
-<span class="sd">            Dictionary (class_value, weight)</span>
+<span class="sd">            dict (class_value, weight)</span>
 <span class="sd">                Class votes for the given instance.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -355,7 +373,7 @@
             <span class="k">return</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">2</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.Node.subtree_depth"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.subtree_depth">[docs]</a>        <span class="k">def</span> <span class="nf">subtree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Calculate the depth of the sub-tree from this node.</span>
+            <span class="sd">&quot;&quot;&quot;Calculate the depth of the subtree from this node.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
@@ -391,12 +409,12 @@
             <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HoeffdingTree.Node.calc_byte_size_including_subtree"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node.calc_byte_size_including_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size_including_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Calculate the size of the node including its sub-tree.</span>
+            <span class="sd">&quot;&quot;&quot;Calculate the size of the node including its subtree.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            int</span>
-<span class="sd">                Size of the node and its sub-tree in bytes.</span>
+<span class="sd">                Size of the node and its subtree in bytes.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span></div>
@@ -423,7 +441,18 @@
             <span class="k">pass</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.SplitNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode">[docs]</a>    <span class="k">class</span> <span class="nc">SplitNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Class for a node that splits the data in a Hoeffding Tree.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Node that splits the data in a Hoeffding Tree.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        split_test: InstanceConditionalTest</span>
+<span class="sd">            Split test.</span>
+<span class="sd">        class_observations: dict (class_value, weight) or None</span>
+<span class="sd">            Class observations</span>
+<span class="sd">        size: int</span>
+<span class="sd">            Number of splits.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">,</span> <span class="n">size</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;SplitNode class constructor.&quot;&quot;&quot;</span>
@@ -445,9 +474,9 @@
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
 <span class="sd">            index: int</span>
-<span class="sd">                Index (branch) where the node will be inserted.</span>
+<span class="sd">                Branch index where the node will be inserted.</span>
 
-<span class="sd">            node: Node</span>
+<span class="sd">            node: HoeffdingTree.Node</span>
 <span class="sd">                The node to insert.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -456,17 +485,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.SplitNode.get_child"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.get_child">[docs]</a>        <span class="k">def</span> <span class="nf">get_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Retrieve a node&#39;s child given its index (branch).</span>
+            <span class="sd">&quot;&quot;&quot;Retrieve a node&#39;s child given its branch index.</span>
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
 <span class="sd">            index: int</span>
-<span class="sd">                Node&#39;s index (branch).</span>
+<span class="sd">                Node&#39;s branch index.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            Node or None</span>
-<span class="sd">                The child node.</span>
+<span class="sd">                Child node.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
@@ -477,7 +506,7 @@
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            int</span>
-<span class="sd">                The index (branch), -1 if unknown.</span>
+<span class="sd">                Branch index, -1 if unknown.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_test</span><span class="o">.</span><span class="n">branch_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
@@ -489,7 +518,7 @@
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            boolean</span>
-<span class="sd">                True if leaf, False otherwise</span>
+<span class="sd">                True if node is a leaf, False otherwise</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="kc">False</span></div>
@@ -499,12 +528,12 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            X: numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">               Data instances.</span>
-<span class="sd">            parent: Node</span>
+<span class="sd">            parent: HoeffdingTree.Node</span>
 <span class="sd">                Parent node.</span>
 <span class="sd">            parent_branch: int</span>
-<span class="sd">                Parent branch index</span>
+<span class="sd">                Parent branch index.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
@@ -523,12 +552,12 @@
                 <span class="k">return</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">FoundNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.SplitNode.subtree_depth"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode.subtree_depth">[docs]</a>        <span class="k">def</span> <span class="nf">subtree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Calculate the depth of the sub-tree from this node.</span>
+            <span class="sd">&quot;&quot;&quot;Calculate the depth of the subtree from this node.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            int</span>
-<span class="sd">                Subtree depth, 0 if leaf.</span>
+<span class="sd">                Subtree depth, 0 if node is a leaf.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">max_child_depth</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">:</span>
@@ -555,6 +584,7 @@
 <span class="sd">            -------</span>
 <span class="sd">            int</span>
 <span class="sd">                Size of the node and its subtree in bytes.</span>
+
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">byte_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">:</span>
@@ -584,7 +614,14 @@
                     <span class="n">child</span><span class="o">.</span><span class="n">describe_subtree</span><span class="p">(</span><span class="n">ht</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indent</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.LearningNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Base class for Learning Nodes in a Hoeffding Tree. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Base class for Learning Nodes in a Hoeffding Tree.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        initial_class_observations: dict (class_value, weight) or None</span>
+<span class="sd">            Initial class observations</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; LearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -594,20 +631,27 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of length equal to the number of features.</span>
-<span class="sd">                The attributes for updating the node.</span>
+<span class="sd">            X: numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">                Instance attributes for updating the node.</span>
 <span class="sd">            y: int</span>
-<span class="sd">                The class.</span>
+<span class="sd">                Instance class.</span>
 <span class="sd">            weight: float</span>
-<span class="sd">                The instance&#39;s weight.</span>
+<span class="sd">                Instance weight.</span>
 <span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                The Hoeffding Tree to update.</span>
+<span class="sd">                Hoeffding Tree to update.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">pass</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.InactiveLearningNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.InactiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">InactiveLearningNode</span><span class="p">(</span><span class="n">LearningNode</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;An inactive learning node that does not grow. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Inactive learning node that does not grow.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        initial_class_observations: dict (class_value, weight) or None</span>
+<span class="sd">            Initial class observations</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; InactiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -617,14 +661,14 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of length equal to the number of features.</span>
-<span class="sd">                The attributes for updating the node.</span>
+<span class="sd">            X: numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">                Instance attributes for updating the node.</span>
 <span class="sd">            y: int</span>
-<span class="sd">                The class.</span>
+<span class="sd">                Instance class.</span>
 <span class="sd">            weight: float</span>
-<span class="sd">                The instance&#39;s weight.</span>
+<span class="sd">                Instance weight.</span>
 <span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                The Hoeffding Tree to update.</span>
+<span class="sd">                Hoeffding Tree to update.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
@@ -634,7 +678,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.ActiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">ActiveLearningNode</span><span class="p">(</span><span class="n">LearningNode</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;A learning node that supports growth. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Learning node that supports growth.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        initial_class_observations: dict (class_value, weight) or None</span>
+<span class="sd">            Initial class observations</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; ActiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -647,14 +698,14 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of length equal to the number of features.</span>
-<span class="sd">                The attributes for updating the node.</span>
+<span class="sd">            X: numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">                Instance attributes for updating the node.</span>
 <span class="sd">            y: int</span>
-<span class="sd">                The class.</span>
+<span class="sd">                Instance class.</span>
 <span class="sd">            weight: float</span>
-<span class="sd">                The instance&#39;s weight.</span>
+<span class="sd">                Instance weight.</span>
 <span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                The Hoeffding Tree to update.</span>
+<span class="sd">                Hoeffding Tree to update.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_initialized</span><span class="p">:</span>
@@ -715,12 +766,12 @@
 <span class="sd">            criterion: SplitCriterion</span>
 <span class="sd">                The splitting criterion to be used.</span>
 <span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                The Hoeffding Tree</span>
+<span class="sd">                Hoeffding Tree.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            list</span>
-<span class="sd">                Possible split candidates.</span>
+<span class="sd">                Split candidates.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">best_suggestions</span> <span class="o">=</span> <span class="p">[]</span>
@@ -750,7 +801,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">att_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">NullAttributeClassObserver</span><span class="p">()</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.LearningNodeNB"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNB</span><span class="p">(</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;A learning node that uses Naive Bayes models.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Learning node that uses Naive Bayes models.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        initial_class_observations: dict (class_value, weight) or None</span>
+<span class="sd">            Initial class observations</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; LearningNodeNB class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -760,14 +818,14 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of length equal to the number of features.</span>
-<span class="sd">               Data instances.</span>
+<span class="sd">            X: numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">                Instance attributes.</span>
 <span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                The HoeffdingTree</span>
+<span class="sd">                Hoeffding Tree.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
-<span class="sd">            Dictionary (class_value, weight)</span>
+<span class="sd">            dict (class_value, weight)</span>
 <span class="sd">                Class votes for the given instance.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -790,7 +848,14 @@
             <span class="k">pass</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.LearningNodeNBAdaptive"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNodeNBAdaptive">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNBAdaptive</span><span class="p">(</span><span class="n">LearningNodeNB</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;A learning node that uses Adaptive Naive Bayes models.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Learning node that uses Adaptive Naive Bayes models.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        initial_class_observations: dict (class_value, weight) or None</span>
+<span class="sd">            Initial class observations</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;LearningNodeNBAdaptive class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -802,10 +867,10 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of length equal to the number of features.</span>
-<span class="sd">                The attributes for updating the node.</span>
+<span class="sd">            X: numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">                Instance attributes for updating the node.</span>
 <span class="sd">            y: int</span>
-<span class="sd">                The class.</span>
+<span class="sd">                Instance class.</span>
 <span class="sd">            weight: float</span>
 <span class="sd">                The instance&#39;s weight.</span>
 <span class="sd">            ht: HoeffdingTree</span>
@@ -828,14 +893,14 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            X: Numpy.ndarray of length equal to the number of features.</span>
-<span class="sd">               Data instances.</span>
+<span class="sd">            X: numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">                Instance attributes.</span>
 <span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                The HoeffdingTree</span>
+<span class="sd">                Hoeffding Tree.</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
-<span class="sd">            Dictionary (class_value, weight)</span>
+<span class="sd">            dict (class_value, weight)</span>
 <span class="sd">                Class votes for the given instance.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -1037,27 +1102,31 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.partial_fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Trains the model on samples X and corresponding targets y.</span>
+        <span class="sd">&quot;&quot;&quot;Incrementally trains the model. Train samples (instances) are compossed of X attributes and their</span>
+<span class="sd">        corresponding targets y.</span>
 
-<span class="sd">        Following tasks are performed:</span>
+<span class="sd">        Tasks performed before training:</span>
 
-<span class="sd">        * Verify instance weight, if not provided then uniform weights (1.0) are assumed.</span>
-<span class="sd">        * If more than one instances are passed, then loop through matrix X and pass single instances.</span>
+<span class="sd">        * Verify instance weight. iI not provided, uniform weights (1.0) are assumed.</span>
+<span class="sd">        * If more than one instance is passed, loop through X and pass instances one at a time.</span>
 <span class="sd">        * Update weight seen by model.</span>
-<span class="sd">        * If the tree is empty create a leaf node as the root.</span>
-<span class="sd">        * If the tree is already initialized then find the corresponding leaf for the instance and update the leaf node</span>
+
+<span class="sd">        Training tasks:</span>
+
+<span class="sd">        * If the tree is empty, create a leaf node as the root.</span>
+<span class="sd">        * If the tree is already initialized, find the corresponding leaf for the instance and update the leaf node</span>
 <span class="sd">          statistics.</span>
 <span class="sd">        * If growth is allowed and the number of instances that the leaf has observed between split attempts</span>
-<span class="sd">        exceed the grace period then attempt to split.</span>
+<span class="sd">          exceed the grace period then attempt to split.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X: Numpy.ndarray of shape (n_samples, n_features)</span>
-<span class="sd">            Data instances.</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            Instance attributes.</span>
 <span class="sd">        y: array_like</span>
-<span class="sd">            Contains the classification targets for all samples in X.</span>
+<span class="sd">            Classes (targets) for all samples in X.</span>
 <span class="sd">        classes: Not used.</span>
-<span class="sd">        weight: Float or Array-like</span>
+<span class="sd">        weight: float or array-like</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1080,12 +1149,12 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X: Numpy.ndarray of shape (n_samples, n_features)</span>
-<span class="sd">            Data instances.</span>
-<span class="sd">        y: Array-like</span>
-<span class="sd">            Contains the classification targets for all samples in X.</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            Instance attributes.</span>
+<span class="sd">        y: array_like</span>
+<span class="sd">            Classes (targets) for all samples in X.</span>
 <span class="sd">        classes: Not used.</span>
-<span class="sd">        weight: Float or array_like</span>
+<span class="sd">        weight: float or array-like</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1116,12 +1185,12 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X: Numpy.ndarray of length equal to the number of features.</span>
-<span class="sd">            Data instances.</span>
+<span class="sd">        X: numpy.ndarray of length equal to the number of features.</span>
+<span class="sd">            Instance attributes.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">            -------</span>
-<span class="sd">            Dictionary (class_value, weight)</span>
+<span class="sd">            dict (class_value, weight)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree_root</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1138,8 +1207,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X: Numpy.ndarray of shape (n_samples, n_features)</span>
-<span class="sd">            All the samples we want to predict the label for.</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            Samples for which we want to predict the labels.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1164,7 +1233,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">get_model_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Collect metrics for the current status of the tree.</span>
+        <span class="sd">&quot;&quot;&quot;Collect metrics corresponding to the current status of the tree.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1271,7 +1340,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SplitNode</span><span class="p">(</span><span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_attempt_to_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">ActiveLearningNode</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">SplitNode</span><span class="p">,</span> <span class="n">parent_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Attempt to split a node. If the samples seen so far are not from the same class then:</span>
+        <span class="sd">&quot;&quot;&quot;Attempt to split a node.</span>
+
+<span class="sd">        If the samples seen so far are not from the same class then:</span>
 
 <span class="sd">        1. Find split candidates and select the top 2.</span>
 <span class="sd">        2. Compute the Hoeffding bound.</span>
@@ -1280,16 +1351,16 @@
 <span class="sd">           3.2 Add a new leaf node on each branch of the new split node.</span>
 <span class="sd">           3.3 Update tree&#39;s metrics</span>
 
-<span class="sd">        Extra: Disable poor attributes, depending on the tree&#39;s configuration.</span>
+<span class="sd">        Optional: Disable poor attribute. Depends on the tree&#39;s configuration.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        node: ActiveLearningNode</span>
-<span class="sd">            The node to evaluate for split</span>
+<span class="sd">            The node to evaluate.</span>
 <span class="sd">        parent: SplitNode</span>
-<span class="sd">            The node&#39;s parent</span>
+<span class="sd">            The node&#39;s parent.</span>
 <span class="sd">        parent_idx: int</span>
-<span class="sd">            Parent node&#39;s index (branch).</span>
+<span class="sd">            Parent node&#39;s branch index.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">observed_class_distribution_is_pure</span><span class="p">():</span>
@@ -1421,9 +1492,9 @@
 <span class="sd">        to_deactivate: ActiveLearningNode</span>
 <span class="sd">            The node to deactivate.</span>
 <span class="sd">        parent: SplitNode</span>
-<span class="sd">            The node&#39;s parent</span>
+<span class="sd">            The node&#39;s parent.</span>
 <span class="sd">        parent_branch: int</span>
-<span class="sd">            Parent node&#39;s branch.</span>
+<span class="sd">            Parent node&#39;s branch index.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_leaf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">(</span><span class="n">to_deactivate</span><span class="o">.</span><span class="n">get_observed_class_distribution</span><span class="p">())</span>
@@ -1442,9 +1513,9 @@
 <span class="sd">        to_activate: InactiveLearningNode</span>
 <span class="sd">            The node to activate.</span>
 <span class="sd">        parent: SplitNode</span>
-<span class="sd">            The node&#39;s parent</span>
+<span class="sd">            The node&#39;s parent.</span>
 <span class="sd">        parent_branch: int</span>
-<span class="sd">            Parent node&#39;s branch.</span>
+<span class="sd">            Parent node&#39;s branch index.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_leaf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new_learning_node</span><span class="p">(</span><span class="n">to_activate</span><span class="o">.</span><span class="n">get_observed_class_distribution</span><span class="p">())</span>
@@ -1472,7 +1543,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        node: Node</span>
+<span class="sd">        node: HoeffdingTree.Node</span>
 <span class="sd">            The node to start the search.</span>
 <span class="sd">        parent: LearningNode or SplitNode</span>
 <span class="sd">            The node&#39;s parent.</span>
@@ -1496,12 +1567,12 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.get_info"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Collect information about the Hoeffding Tree configuration.</span>
+        <span class="sd">&quot;&quot;&quot;Collect information about the Hoeffding Tree configuration.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        string</span>
-<span class="sd">            Information about the Hoeffding Tree.</span>
+<span class="sd">            Configuration for the Hoeffding Tree.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">description</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
         <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;max_byte_size: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_byte_size</span><span class="p">)</span>
