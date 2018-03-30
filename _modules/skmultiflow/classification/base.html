@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -193,8 +193,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="BaseClassifier.fit"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClassifier.fit"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.fit">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; fit</span>
 <span class="sd">        </span>
 <span class="sd">        Fit the model under a batch setting.</span>
@@ -207,10 +207,10 @@
 <span class="sd">        y: Array-like</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
 <span class="sd">            </span>
-<span class="sd">        classes: Array-like</span>
+<span class="sd">        classes: Array-like, optional</span>
 <span class="sd">            Contains all labels that may appear in samples. Applicability varies depending on the algorithm.</span>
 
-<span class="sd">        weight: Array-like</span>
+<span class="sd">        weight: Array-like, optional</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 <span class="sd">            Applicability varies depending on the algorithm.</span>
 <span class="sd">            </span>
@@ -218,11 +218,11 @@
 <span class="sd">        -------</span>
 <span class="sd">        self</span>
 <span class="sd">            </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="BaseClassifier.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClassifier.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.partial_fit">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 <span class="sd">        </span>
 <span class="sd">        Partial (incremental) fit the model under an online learning setting.</span>
@@ -235,11 +235,10 @@
 <span class="sd">        y: Array-like</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
 <span class="sd">            </span>
-<span class="sd">        classes: Array-like</span>
+<span class="sd">        classes: Array-like, optional</span>
 <span class="sd">            Contains all labels that may appear in samples. Applicability varies depending on the algorithm.</span>
-<span class="sd">            Optional parameter except during the first partial_fit call, when it&#39;s obligatory.</span>
 
-<span class="sd">        weight: Array-like</span>
+<span class="sd">        weight: Array-like, optional</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 <span class="sd">            Applicability varies depending on the algorithm.</span>
 <span class="sd">        </span>
@@ -247,11 +246,11 @@
 <span class="sd">        -------</span>
 <span class="sd">        self</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="BaseClassifier.predict"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClassifier.predict"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.predict">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
 <span class="sd">        </span>
 <span class="sd">        Predicts labels using the model.</span>
@@ -265,11 +264,11 @@
 <span class="sd">        -------</span>
 <span class="sd">        An array-like with all the predictions for the samples in X.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="BaseClassifier.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClassifier.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.predict_proba">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict_proba</span>
 <span class="sd">        </span>
 <span class="sd">        Estimates the probability of each sample in X belonging to each of </span>
@@ -287,11 +286,11 @@
 <span class="sd">        index [i] contains len(self.classes) elements, each of which represents </span>
 <span class="sd">        the probability that the i-th sample of X belongs to a certain label.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="BaseClassifier.reset"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClassifier.reset"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.reset">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset</span>
 <span class="sd">        </span>
 <span class="sd">        Resets the classifier&#39;s parameters.</span>
@@ -301,11 +300,11 @@
 <span class="sd">        BaseClassifier</span>
 <span class="sd">            self</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="BaseClassifier.score"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClassifier.score"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.score">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; score</span>
 <span class="sd">        </span>
 <span class="sd">        This function isn&#39;t natively implemented on all classifiers. But if </span>
@@ -325,15 +324,15 @@
 <span class="sd">        float</span>
 <span class="sd">            The classifier&#39;s score.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="BaseClassifier.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;estimator&#39;</span></div>
+<div class="viewcode-block" id="BaseClassifier.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;estimator&#39;</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="BaseClassifier.get_info"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+<div class="viewcode-block" id="BaseClassifier.get_info"><a class="viewcode-back" href="../../../skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier.get_info">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </pre></div>
 
            </div>
@@ -379,7 +378,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

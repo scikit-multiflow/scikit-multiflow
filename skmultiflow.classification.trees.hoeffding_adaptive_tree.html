@@ -168,28 +168,82 @@
 <span id="skmultiflow-classification-trees-hoeffding-adaptive-tree-module"></span><h1>skmultiflow.classification.trees.hoeffding_adaptive_tree module<a class="headerlink" href="#module-skmultiflow.classification.trees.hoeffding_adaptive_tree" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT">
-<em class="property">class </em><code class="descclassname">skmultiflow.classification.trees.hoeffding_adaptive_tree.</code><code class="descname">HAT</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree</span></code></a></p>
+<em class="property">class </em><code class="descclassname">skmultiflow.classification.trees.hoeffding_adaptive_tree.</code><code class="descname">HAT</code><span class="sig-paren">(</span><em>max_byte_size=33554432</em>, <em>memory_estimate_period=1000000</em>, <em>grace_period=200</em>, <em>split_criterion='info_gain'</em>, <em>split_confidence=1e-07</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>no_preprune=False</em>, <em>leaf_prediction='nba'</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree</span></code></a></p>
 <p>Hoeffding Adaptive Tree for evolving data streams.</p>
-<p>This adaptive Hoeffding Tree uses ADWIN to monitor performance of branches on the tree and to replace them with new
-branches when their accuracy decreases if the new branches are more accurate.</p>
-<blockquote>
-<div><p>See details in:</p>
-<p>Adaptive Learning from Evolving Data Streams.
-Albert Bifet, Ricard Gavaldà. IDA 2009</p>
-</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>TODO</strong> &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_byte_size</strong> (<em>int</em><em> (</em><em>default=33554432</em><em>)</em>) – Maximum memory consumed by the tree.</li>
+<li><strong>memory_estimate_period</strong> (<em>int</em><em> (</em><em>default=1000000</em><em>)</em>) – Number of instances between memory consumption checks.</li>
+<li><strong>grace_period</strong> (<em>int</em><em> (</em><em>default=200</em><em>)</em>) – Number of instances a leaf should observe between split attempts.</li>
+<li><strong>split_criterion</strong> (<em>string</em><em> (</em><em>default='info_gain'</em><em>)</em>) – <p>Split criterion to use.</p>
+<ul>
+<li>’gini’ - Gini</li>
+<li>’info_gain’ - Information Gain</li>
+</ul>
+</li>
+<li><strong>split_confidence</strong> (<em>float</em><em> (</em><em>default=0.0000001</em><em>)</em>) – Allowed error in split decision, a value closer to 0 takes longer to decide.</li>
+<li><strong>tie_threshold</strong> (<em>float</em><em> (</em><em>default=0.05</em><em>)</em>) – Threshold below which a split will be forced to break ties.</li>
+<li><strong>binary_split</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, only allow binary splits.</li>
+<li><strong>stop_mem_management</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, stop growing as soon as memory limit is hit.</li>
+<li><strong>remove_poor_atts</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, disable poor attributes.</li>
+<li><strong>no_preprune</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, disable pre-pruning.</li>
+<li><strong>leaf_prediction</strong> (<em>string</em><em> (</em><em>default='nba'</em><em>)</em>) – <p>Prediction mechanism used at leafs.</p>
+<ul>
+<li>’mc’ - Majority Class</li>
+<li>’nb’ - Naive Bayes</li>
+<li>’nba’ - Naive Bayes Adaptive</li>
+</ul>
+</li>
+<li><strong>nb_threshold</strong> (<em>int</em><em> (</em><em>default=0</em><em>)</em>) – Number of instances a leaf should observe before allowing Naive Bayes.</li>
+<li><strong>nominal_attributes</strong> (<em>list</em><em>, </em><em>optional</em>) – List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>The Hoeffding Adaptive Tree <a class="footnote-reference" href="#id3" id="id1">[1]</a> uses ADWIN <a class="footnote-reference" href="#id4" id="id2">[2]</a> to monitor performance of branches on the tree and to replace them
+with new branches when their accuracy decreases if the new branches are more accurate.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Bifet, Albert, and Ricard Gavaldà. “Adaptive learning from evolving data streams.”    In International Symposium on Intelligent Data Analysis, pp. 249-260. Springer, Berlin, Heidelberg, 2009.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><p class="first">Bifet, Albert, and Ricard Gavaldà. “Learning from time-changing data with adaptive windowing.”    In Proceedings of the 2007 SIAM international conference on data mining, pp. 443-448. Society for Industrial    and Applied Mathematics, 2007.</p>
+<p class="last">Examples</p>
+</td></tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.classification.trees.hoeffding_adaptive_tree</span> <span class="k">import</span> <span class="n">HAT</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.options.file_option</span> <span class="k">import</span> <span class="n">FileOption</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_prequential</span> <span class="k">import</span> <span class="n">EvaluatePrequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the File Stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt</span> <span class="o">=</span> <span class="n">FileOption</span><span class="p">(</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span> <span class="s2">&quot;OPT_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;/skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;CSV&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="n">HAT</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">eval</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">pretrain_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_instances</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                           <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_type</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                           <span class="n">plot_options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa_t&#39;</span><span class="p">,</span> <span class="s1">&#39;performance&#39;</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="class">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode">
 <em class="property">class </em><code class="descname">AdaLearningNode</code><span class="sig-paren">(</span><em>initial_class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.LearningNodeNBAdaptive</span></code>, <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_adaptive_tree.NewNode</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.LearningNodeNBAdaptive</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_adaptive_tree.NewNode</span></code></p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.calc_byte_size">
 <code class="descname">calc_byte_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode.calc_byte_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.calc_byte_size" title="Permalink to this definition">¶</a></dt>
@@ -197,13 +251,32 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.filter_instance_to_leaves">
-<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>split_parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_class_votes">
 <code class="descname">get_class_votes</code><span class="sig-paren">(</span><em>X</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode.get_class_votes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_class_votes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the votes per class for a given instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Class votes for the given instance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict (class_value, weight)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_error_estimation">
@@ -221,14 +294,29 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.kill_tree_childs">
-<code class="descname">kill_tree_childs</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode.kill_tree_childs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.kill_tree_childs" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.kill_tree_children">
+<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.kill_tree_children" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.learn_from_instance">
 <code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>hat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaLearningNode.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.learn_from_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Update the node with the provided instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) – Instance class.</li>
+<li><strong>weight</strong> (<em>float</em>) – The instance’s weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – The Hoeffding Tree to update.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.number_leaves">
@@ -239,16 +327,27 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 
 <dl class="class">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode">
-<em class="property">class </em><code class="descname">AdaSplitNode</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em>, <em>size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaSplitNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.SplitNode</span></code>, <code class="xref py py-class docutils literal"><span class="pre">skmultiflow.classification.trees.hoeffding_adaptive_tree.NewNode</span></code></p>
+<em class="property">class </em><code class="descname">AdaSplitNode</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaSplitNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.SplitNode</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_adaptive_tree.NewNode</span></code></p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.calc_byte_size_including_subtree">
 <code class="descname">calc_byte_size_including_subtree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaSplitNode.calc_byte_size_including_subtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.calc_byte_size_including_subtree" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the size of the node including its subtree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Size of the node and its subtree in bytes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.filter_instance_to_leaves">
-<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaSplitNode.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_counts=False</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaSplitNode.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -267,8 +366,8 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.kill_tree_childs">
-<code class="descname">kill_tree_childs</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaSplitNode.kill_tree_childs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.kill_tree_childs" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.kill_tree_children">
+<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.AdaSplitNode.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.kill_tree_children" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -286,11 +385,11 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 <dl class="class">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode">
 <em class="property">class </em><code class="descname">NewNode</code><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.NewNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Abstract Class to create a New Node for HoeffdingAdaptiveTree(HAT)</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract Class to create a New Node for HoeffdingAdaptiveTree (HAT)</p>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.filter_instance_to_leaves">
-<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_count</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.NewNode.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.NewNode.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -309,8 +408,8 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.kill_tree_childs">
-<code class="descname">kill_tree_childs</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.NewNode.kill_tree_childs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.kill_tree_childs" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.kill_tree_children">
+<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.NewNode.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.kill_tree_children" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -327,39 +426,22 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.filter_instance_to_leaves">
-<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>split_parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>split_parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.get_votes_for_instance">
 <code class="descname">get_votes_for_instance</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.get_votes_for_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.get_votes_for_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.new_split_node">
-<code class="descname">new_split_node</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em>, <em>size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.new_split_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.new_split_node" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.partial_fit">
-<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.partial_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trains the model on samples X and targets y.</p>
+<dd><p>Get class votes for a single instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) &#8211; Data instances.</li>
-<li><strong>y</strong> (<em>Array-like</em>) &#8211; Contains the classification targets for all samples in X.</li>
-<li><strong>classes</strong> (<em>Not used.</em>) &#8211; </li>
-<li><strong>weight</strong> (<em>Float</em><em> or </em><em>Array-like</em>) &#8211; Instance weight. If not provided, uniform weights are assumed.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes.</li>
+<li><strong>Returns</strong> – <p>dict (class_value, weight)</p>
+</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
 </td>
 </tr>
 </tbody>
@@ -367,36 +449,85 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.new_split_node">
+<code class="descname">new_split_node</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.new_split_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.new_split_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new split node.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Predicts the label of the X instance(s)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Samples for which we want to predict the labels.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Predicted labels for all instances in X.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.predict_proba">
 <code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Estimates the probability of each sample in X belonging to each of
+the existing labels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The matrix of samples one wants to predict.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>An array of shape (n_samples, n_labels), in which each outer entry is</em></li>
+<li><em>associated with the X entry of the same index. And where the list in</em></li>
+<li><em>index [i] contains len(self.classes) elements, each of which represents</em></li>
+<li><em>the probability that the i-th sample of X belongs to a certain label.</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.reset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Reset the Hoeffding Tree to default values.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.score">
 <code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#HAT.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.score" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dd><p>This function isn’t natively implemented on all classifiers. But if
+it’s, it will return the performance base metric for that classifier
+at that moment and having the X matrix as input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_sample</em><em>, </em><em>n_features</em><em>)</em>) – The features matrix.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the class labels for all samples in X.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The classifier’s score.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="function">
-<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.max_index">
-<code class="descclassname">skmultiflow.classification.trees.hoeffding_adaptive_tree.</code><code class="descname">max_index</code><span class="sig-paren">(</span><em>dictionary</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#max_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.max_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="skmultiflow.classification.trees.hoeffding_adaptive_tree.normalize">
-<code class="descclassname">skmultiflow.classification.trees.hoeffding_adaptive_tree.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>sum_value</em>, <em>dictionary</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_adaptive_tree.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_adaptive_tree.normalize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+</dd></dl>
 
 </div>
 
@@ -444,7 +575,7 @@ Albert Bifet, Ricard Gavaldà. IDA 2009</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

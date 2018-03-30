@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -231,8 +231,8 @@
 <span class="sd">            The used stream.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_measure_stream_speed</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">stream</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_measure_stream_speed</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">stream</span>
 
     <span class="k">def</span> <span class="nf">_measure_stream_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
@@ -278,17 +278,17 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">max_time</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;output_file&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">value</span></div>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">value</span>
 
-<div class="viewcode-block" id="EvaluateStreamGenerationSpeed.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_stream_gen_speed.html#skmultiflow.evaluation.evaluate_stream_gen_speed.EvaluateStreamGenerationSpeed.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;estimator&#39;</span></div>
+<div class="viewcode-block" id="EvaluateStreamGenerationSpeed.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_stream_gen_speed.html#skmultiflow.evaluation.evaluate_stream_gen_speed.EvaluateStreamGenerationSpeed.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;estimator&#39;</span>
 
 <div class="viewcode-block" id="EvaluateStreamGenerationSpeed.get_info"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_stream_gen_speed.html#skmultiflow.evaluation.evaluate_stream_gen_speed.EvaluateStreamGenerationSpeed.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;EvaluateStreamGenerationSpeed: num_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - max_time: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_time</span><span class="p">))</span> <span class="o">+</span> \
-               <span class="s1">&#39; - output_file: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - batch_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span></div></div>
+               <span class="s1">&#39; - output_file: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span> <span class="o">+</span> \</div></div>
+               <span class="s1">&#39; - batch_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="n">EvaluateStreamGenerationSpeed</span><span class="p">()</span>
@@ -340,7 +340,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

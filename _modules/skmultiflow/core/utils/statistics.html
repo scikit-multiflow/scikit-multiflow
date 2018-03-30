@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -200,8 +200,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">y</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">error_function_complemented</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">y</span>
-    <span class="k">return</span> <span class="n">y</span></div>
+            <span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">y</span></div>
+    <span class="k">return</span> <span class="n">y</span>
 
 
 <div class="viewcode-block" id="error_function"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.error_function">[docs]</a><span class="k">def</span> <span class="nf">error_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -232,8 +232,8 @@
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">error_function_complemented</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">pol_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="n">p1_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">y</span></div>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">pol_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="n">p1_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">y</span>
 
 
 <div class="viewcode-block" id="error_function_complemented"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.error_function_complemented">[docs]</a><span class="k">def</span> <span class="nf">error_function_complemented</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -317,8 +317,8 @@
             <span class="k">return</span> <span class="mf">2.0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
-
-    <span class="k">return</span> <span class="n">y</span></div>
+</div>
+    <span class="k">return</span> <span class="n">y</span>
 
 
 <div class="viewcode-block" id="pol_evl"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.pol_evl">[docs]</a><span class="k">def</span> <span class="nf">pol_evl</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -339,8 +339,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ans</span> <span class="o">=</span> <span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">ans</span></div>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+    <span class="k">return</span> <span class="n">ans</span>
 
 
 <div class="viewcode-block" id="p1_evl"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.p1_evl">[docs]</a><span class="k">def</span> <span class="nf">p1_evl</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -363,8 +363,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ans</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">ans</span></div>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+    <span class="k">return</span> <span class="n">ans</span>
 </pre></div>
 
            </div>
@@ -410,7 +410,7 @@
       <script type="text/javascript" src="../../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

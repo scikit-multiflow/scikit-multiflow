@@ -1,0 +1,447 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.classification.trees.arf_hoeffding_tree module &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="_static/skmultiflow-logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>skmultiflow.classification.trees.arf_hoeffding_tree module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/skmultiflow.classification.trees.arf_hoeffding_tree.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-skmultiflow.classification.trees.arf_hoeffding_tree">
+<span id="skmultiflow-classification-trees-arf-hoeffding-tree-module"></span><h1>skmultiflow.classification.trees.arf_hoeffding_tree module<a class="headerlink" href="#module-skmultiflow.classification.trees.arf_hoeffding_tree" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree">
+<em class="property">class </em><code class="descclassname">skmultiflow.classification.trees.arf_hoeffding_tree.</code><code class="descname">ARFHoeffdingTree</code><span class="sig-paren">(</span><em>max_byte_size=33554432</em>, <em>memory_estimate_period=2000000</em>, <em>grace_period=50</em>, <em>split_criterion='info_gain'</em>, <em>split_confidence=0.01</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>no_preprune=False</em>, <em>leaf_prediction='nba'</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em>, <em>max_features=2</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree</span></code></a></p>
+<p>Adaptive Random Forest Hoeffding Tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_byte_size</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=33554432</em><em>)</em>) – Maximum memory consumed by the tree.</li>
+<li><strong>memory_estimate_period</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=2000000</em><em>)</em>) – Number of instances between memory consumption checks.</li>
+<li><strong>grace_period</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=50</em><em>)</em>) – Number of instances a leaf should observe between split attempts.</li>
+<li><strong>split_criterion</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='info_gain'</em><em>)</em>) – <p>Split criterion to use.</p>
+<ul>
+<li>’gini’ - Gini</li>
+<li>’info_gain’ - Information Gain</li>
+</ul>
+</li>
+<li><strong>split_confidence</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.01</em><em>)</em>) – Allowed error in split decision, a value closer to 0 takes longer to decide.</li>
+<li><strong>tie_threshold</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.05</em><em>)</em>) – Threshold below which a split will be forced to break ties.</li>
+<li><strong>binary_split</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – If True, only allow binary splits.</li>
+<li><strong>stop_mem_management</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – If True, stop growing as soon as memory limit is hit.</li>
+<li><strong>remove_poor_atts</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – If True, disable poor attributes.</li>
+<li><strong>no_preprune</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – If True, disable pre-pruning.</li>
+<li><strong>leaf_prediction</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='nba'</em><em>)</em>) – <p>Prediction mechanism used at leafs.</p>
+<ul>
+<li>’mc’ - Majority Class</li>
+<li>’nb’ - Naive Bayes</li>
+<li>’nba’ - Naive Bayes Adaptive</li>
+</ul>
+</li>
+<li><strong>nb_threshold</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – Number of instances a leaf should observe before allowing Naive Bayes.</li>
+<li><strong>nominal_attributes</strong> (<em>list</em><em>, </em><em>optional</em>) – List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is the base model for the Adaptive Random Forest ensemble learner
+(See skmultiflow.classification.meta.adaptive_random_forests).
+This Hoeffding Tree includes a max_features parameter, which defines the number of randomly selected features to
+be considered at each split.</p>
+<dl class="class">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNB">
+<em class="property">class </em><code class="descname">LearningNodeNB</code><span class="sig-paren">(</span><em>initial_class_observations</em>, <em>max_features</em>, <em>random_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.LearningNodeNB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.arf_hoeffding_tree.RandomLearningNode</span></code></p>
+<p>Naive Bayes learning node class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>initial_class_observations</strong> (<em>dict</em><em> (</em><em>class_value</em><em>, </em><em>weight</em><em>) or </em><em>None</em>) – Initial class observations.</li>
+<li><strong>max_features</strong> (<em>int</em>) – Number of attributes per subset for each node split.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNB.get_class_votes">
+<code class="descname">get_class_votes</code><span class="sig-paren">(</span><em>X</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.LearningNodeNB.get_class_votes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNB.get_class_votes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the votes per class for a given instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Class votes for the given instance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict (class_value, weight)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive">
+<em class="property">class </em><code class="descname">LearningNodeNBAdaptive</code><span class="sig-paren">(</span><em>initial_class_observations</em>, <em>max_features</em>, <em>random_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.LearningNodeNBAdaptive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.arf_hoeffding_tree.LearningNodeNB</span></code></p>
+<p>Naive Bayes Adaptive learning node class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>initial_class_observations</strong> (<em>dict</em><em> (</em><em>class_value</em><em>, </em><em>weight</em><em>) or </em><em>None</em>) – Initial class observations.</li>
+<li><strong>max_features</strong> (<em>int</em>) – Number of attributes per subset for each node split.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive.get_class_votes">
+<code class="descname">get_class_votes</code><span class="sig-paren">(</span><em>X</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.LearningNodeNBAdaptive.get_class_votes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive.get_class_votes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the votes per class for a given instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Class votes for the given instance.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict (class_value, weight)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive.learn_from_instance">
+<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.LearningNodeNBAdaptive.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive.learn_from_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the node with the provided instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) – Instance class.</li>
+<li><strong>weight</strong> (<em>float</em>) – The instance’s weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – The Hoeffding Tree to update.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.RandomLearningNode">
+<em class="property">class </em><code class="descname">RandomLearningNode</code><span class="sig-paren">(</span><em>initial_class_observations</em>, <em>max_features</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.RandomLearningNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.RandomLearningNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_tree.ActiveLearningNode</span></code></p>
+<p>Random learning node class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>initial_class_observations</strong> (<em>dict</em><em> (</em><em>class_value</em><em>, </em><em>weight</em><em>) or </em><em>None</em>) – Initial class observations.</li>
+<li><strong>max_features</strong> (<em>int</em>) – Number of attributes per subset for each node split.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.RandomLearningNode.learn_from_instance">
+<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>ht</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.RandomLearningNode.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.RandomLearningNode.learn_from_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the node with the provided instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) – Instance class.</li>
+<li><strong>weight</strong> (<em>float</em>) – Instance weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.is_randomizable">
+<em class="property">static </em><code class="descname">is_randomizable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.is_randomizable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.is_randomizable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.new_instance">
+<code class="descname">new_instance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/arf_hoeffding_tree.html#ARFHoeffdingTree.new_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.new_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -292,14 +292,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">attributes_header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;att&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="WaveformGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span></div>
+<div class="viewcode-block" id="WaveformGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
 
-<div class="viewcode-block" id="WaveformGenerator.estimated_remaining_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.estimated_remaining_instances">[docs]</a>    <span class="k">def</span> <span class="nf">estimated_remaining_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+<div class="viewcode-block" id="WaveformGenerator.estimated_remaining_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.estimated_remaining_instances">[docs]</a>    <span class="k">def</span> <span class="nf">estimated_remaining_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
-<div class="viewcode-block" id="WaveformGenerator.has_more_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.has_more_instances">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+<div class="viewcode-block" id="WaveformGenerator.has_more_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.has_more_instances">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="WaveformGenerator.next_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.next_instance">[docs]</a>    <span class="k">def</span> <span class="nf">next_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_instance</span>
@@ -354,66 +354,66 @@
             <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">waveform</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_attributes</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_attributes</span><span class="p">:]</span>
+</div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_attributes</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_attributes</span><span class="p">:]))</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_attributes</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_attributes</span><span class="p">:]))</span></div>
-
-<div class="viewcode-block" id="WaveformGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+<div class="viewcode-block" id="WaveformGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="WaveformGenerator.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">pass</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="WaveformGenerator.has_more_mini_batch"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.has_more_mini_batch">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_mini_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+<div class="viewcode-block" id="WaveformGenerator.has_more_mini_batch"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.has_more_mini_batch">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_mini_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="WaveformGenerator.has_noise"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.has_noise">[docs]</a>    <span class="k">def</span> <span class="nf">has_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_noise</span></div>
+<div class="viewcode-block" id="WaveformGenerator.has_noise"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.has_noise">[docs]</a>    <span class="k">def</span> <span class="nf">has_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_noise</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_num_nominal_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_nominal_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_nominal_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_num_nominal_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_nominal_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_nominal_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_num_numerical_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_numerical_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_numerical_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_num_numerical_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_numerical_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_numerical_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_num_values_per_nominal_attribute"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_values_per_nominal_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_values_per_nominal_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_values_per_nominal_att</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_num_values_per_nominal_attribute"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_values_per_nominal_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_values_per_nominal_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_values_per_nominal_att</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_num_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_values_per_nominal_att</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_num_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_values_per_nominal_att</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_num_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_num_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_attributes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_attributes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes_header</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_attributes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_attributes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes_header</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_classes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_classes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes_header</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_classes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_classes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes_header</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_last_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_last_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span><span class="p">)</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_last_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_last_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span><span class="p">)</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_plot_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_plot_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_plot_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Waveform Generator - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; class labels&quot;</span></div>
+<div class="viewcode-block" id="WaveformGenerator.get_plot_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_plot_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_plot_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s2">&quot;Waveform Generator - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; class labels&quot;</span>
 
 <div class="viewcode-block" id="WaveformGenerator.get_classes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_classes">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">):</span>
-            <span class="n">c</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">c</span></div>
+            <span class="n">c</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">c</span>
 
 <div class="viewcode-block" id="WaveformGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">add_noise</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_noise</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span>
         <span class="k">return</span> <span class="s1">&#39;Waveform Generator: num_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39;  -  num_numerical_attributes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39;  -  num_nominal_attributes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39;  -  add_noise: &#39;</span> <span class="o">+</span> <span class="n">add_noise</span> <span class="o">+</span> \
-               <span class="s1">&#39;  -  random_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span></div>
+               <span class="s1">&#39;  -  add_noise: &#39;</span> <span class="o">+</span> <span class="n">add_noise</span> <span class="o">+</span> \</div>
+               <span class="s1">&#39;  -  random_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
 
-<div class="viewcode-block" id="WaveformGenerator.get_num_targeting_tasks"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_targeting_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targeting_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">1</span></div></div>
+<div class="viewcode-block" id="WaveformGenerator.get_num_targeting_tasks"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator.get_num_targeting_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targeting_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
+        <span class="k">return</span> <span class="mi">1</span>
 
 <div class="viewcode-block" id="demo"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.demo">[docs]</a><span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
     <span class="n">wfg</span> <span class="o">=</span> <span class="n">WaveformGenerator</span><span class="p">()</span>
@@ -428,8 +428,8 @@
     <span class="n">oi</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">oi</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">oi</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generation time: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">))</span></div>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generation time: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">))</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">demo</span><span class="p">()</span>
@@ -478,7 +478,7 @@
       <script type="text/javascript" src="../../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

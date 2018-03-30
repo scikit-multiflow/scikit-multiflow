@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -214,11 +214,11 @@
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">in_file</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ignore_char</span><span class="p">):</span>
                     <span class="k">pass</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+                <span class="k">else</span><span class="p">:</span></div>
+                    <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
-<div class="viewcode-block" id="arff_sparse_to_csv"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.file_scripts.html#skmultiflow.core.utils.file_scripts.arff_sparse_to_csv">[docs]</a><span class="k">def</span> <span class="nf">arff_sparse_to_csv</span><span class="p">(</span><span class="n">arff_file</span><span class="p">,</span> <span class="n">csv_output</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<div class="viewcode-block" id="arff_sparse_to_csv"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.file_scripts.html#skmultiflow.core.utils.file_scripts.arff_sparse_to_csv">[docs]</a><span class="k">def</span> <span class="nf">arff_sparse_to_csv</span><span class="p">(</span><span class="n">arff_file</span><span class="p">,</span> <span class="n">csv_output</span><span class="p">):</span></div>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 <div class="viewcode-block" id="RemoveHeader"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.file_scripts.html#skmultiflow.core.utils.file_scripts.RemoveHeader">[docs]</a><span class="k">class</span> <span class="nc">RemoveHeader</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; RemoveHeader</span>
@@ -267,17 +267,17 @@
                 <span class="n">file_type</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">file_type</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">base_path</span> <span class="o">+=</span> <span class="s1">&#39;_no_header&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">new_file</span> <span class="o">=</span> <span class="n">base_path</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">file_type</span> <span class="k">if</span> <span class="n">file_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">base_path</span></div>
+            <span class="n">base_path</span> <span class="o">+=</span> <span class="s1">&#39;_no_header&#39;</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_file</span> <span class="o">=</span> <span class="n">base_path</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">file_type</span> <span class="k">if</span> <span class="n">file_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">base_path</span>
 
 
 <div class="viewcode-block" id="RemoveHeader.get_info"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.file_scripts.html#skmultiflow.core.utils.file_scripts.RemoveHeader.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Remove Header: base_file: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_file</span> <span class="o">+</span> \
-               <span class="s1">&#39;  -  new_file: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_file</span> <span class="o">+</span> \
-               <span class="s1">&#39;  -  ignore_char: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_char</span></div>
+               <span class="s1">&#39;  -  new_file: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_file</span> <span class="o">+</span> \</div>
+               <span class="s1">&#39;  -  ignore_char: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_char</span>
 
-<div class="viewcode-block" id="RemoveHeader.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.file_scripts.html#skmultiflow.core.utils.file_scripts.RemoveHeader.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;file_utils&#39;</span></div>
+<div class="viewcode-block" id="RemoveHeader.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.file_scripts.html#skmultiflow.core.utils.file_scripts.RemoveHeader.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;file_utils&#39;</span>
 
 <div class="viewcode-block" id="RemoveHeader.clean_file"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.file_scripts.html#skmultiflow.core.utils.file_scripts.RemoveHeader.clean_file">[docs]</a>    <span class="k">def</span> <span class="nf">clean_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">in_file</span><span class="p">:</span>
@@ -285,8 +285,8 @@
                 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">in_file</span><span class="p">:</span>
                     <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_char</span><span class="p">):</span>
                         <span class="k">pass</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div></div>
+                    <span class="k">else</span><span class="p">:</span></div></div>
+                        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -340,7 +340,7 @@
       <script type="text/javascript" src="../../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

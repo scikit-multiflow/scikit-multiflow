@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -232,13 +232,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">max_size</span><span class="p">,</span> <span class="n">object_list</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastBuffer.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div>
+<div class="viewcode-block" id="FastBuffer.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span>
 
 <div class="viewcode-block" id="FastBuffer.configure"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_size</span><span class="p">,</span> <span class="n">object_list</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">max_size</span>
-        <span class="k">if</span> <span class="n">object_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">object_list</span></div>
+        <span class="k">if</span> <span class="n">object_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">object_list</span>
 
 <div class="viewcode-block" id="FastBuffer.add_element"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_element</span>
@@ -275,8 +275,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">element_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">aux</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">element_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
-            <span class="k">return</span> <span class="n">aux</span></div>
+                <span class="n">aux</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">element_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span></div>
+            <span class="k">return</span> <span class="n">aux</span>
 
 <div class="viewcode-block" id="FastBuffer.get_next_element"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_next_element">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_element</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_next_element</span>
@@ -288,11 +288,11 @@
 <span class="sd">        int or float</span>
 <span class="sd">            The first element in the queue.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastBuffer.clear_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.clear_queue">[docs]</a>    <span class="k">def</span> <span class="nf">clear_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_clear_all</span><span class="p">()</span></div>
+<div class="viewcode-block" id="FastBuffer.clear_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.clear_queue">[docs]</a>    <span class="k">def</span> <span class="nf">clear_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clear_all</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_clear_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:]</span>
@@ -300,17 +300,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastBuffer.print_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.print_queue">[docs]</a>    <span class="k">def</span> <span class="nf">print_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span></div>
+<div class="viewcode-block" id="FastBuffer.print_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.print_queue">[docs]</a>    <span class="k">def</span> <span class="nf">print_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastBuffer.isfull"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.isfull">[docs]</a>    <span class="k">def</span> <span class="nf">isfull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span></div>
+<div class="viewcode-block" id="FastBuffer.isfull"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.isfull">[docs]</a>    <span class="k">def</span> <span class="nf">isfull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span>
 
-<div class="viewcode-block" id="FastBuffer.isempty"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.isempty">[docs]</a>    <span class="k">def</span> <span class="nf">isempty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="mi">0</span></div>
+<div class="viewcode-block" id="FastBuffer.isempty"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.isempty">[docs]</a>    <span class="k">def</span> <span class="nf">isempty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="FastBuffer.get_current_size"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_current_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span></div>
+<div class="viewcode-block" id="FastBuffer.get_current_size"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_current_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span>
 
 <div class="viewcode-block" id="FastBuffer.peek"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.peek">[docs]</a>    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; peek</span>
@@ -325,14 +325,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span></div>
+            <span class="k">return</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="FastBuffer.get_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_queue">[docs]</a>    <span class="k">def</span> <span class="nf">get_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span></div>
+<div class="viewcode-block" id="FastBuffer.get_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_queue">[docs]</a>    <span class="k">def</span> <span class="nf">get_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span>
 
-<div class="viewcode-block" id="FastBuffer.get_info"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;FastBuffer: max_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - current_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_size</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="FastBuffer.get_info"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastBuffer.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;FastBuffer: max_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - current_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_size</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="FastComplexBuffer"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer">[docs]</a><span class="k">class</span> <span class="nc">FastComplexBuffer</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -375,12 +375,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">max_size</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastComplexBuffer.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div>
+<div class="viewcode-block" id="FastComplexBuffer.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span>
 
 <div class="viewcode-block" id="FastComplexBuffer.configure"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_size</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">max_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">max_size</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
 
 <div class="viewcode-block" id="FastComplexBuffer.add_element"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_element</span>
@@ -452,8 +452,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">aux</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
-            <span class="k">return</span> <span class="n">aux</span></div>
+                <span class="n">aux</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span></div>
+            <span class="k">return</span> <span class="n">aux</span>
 
 <div class="viewcode-block" id="FastComplexBuffer.get_next_element"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_next_element">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_element</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_next_element</span>
@@ -465,11 +465,11 @@
 <span class="sd">        tuple</span>
 <span class="sd">            The first element of the queue.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastComplexBuffer.clear_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.clear_queue">[docs]</a>    <span class="k">def</span> <span class="nf">clear_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_clear_all</span><span class="p">()</span></div>
+<div class="viewcode-block" id="FastComplexBuffer.clear_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.clear_queue">[docs]</a>    <span class="k">def</span> <span class="nf">clear_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clear_all</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_clear_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:]</span>
@@ -477,17 +477,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastComplexBuffer.print_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.print_queue">[docs]</a>    <span class="k">def</span> <span class="nf">print_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span></div>
+<div class="viewcode-block" id="FastComplexBuffer.print_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.print_queue">[docs]</a>    <span class="k">def</span> <span class="nf">print_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FastComplexBuffer.isfull"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.isfull">[docs]</a>    <span class="k">def</span> <span class="nf">isfull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span></div>
+<div class="viewcode-block" id="FastComplexBuffer.isfull"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.isfull">[docs]</a>    <span class="k">def</span> <span class="nf">isfull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span>
 
-<div class="viewcode-block" id="FastComplexBuffer.isempty"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.isempty">[docs]</a>    <span class="k">def</span> <span class="nf">isempty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="mi">0</span></div>
+<div class="viewcode-block" id="FastComplexBuffer.isempty"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.isempty">[docs]</a>    <span class="k">def</span> <span class="nf">isempty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span> <span class="o">==</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="FastComplexBuffer.get_current_size"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_current_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span></div>
+<div class="viewcode-block" id="FastComplexBuffer.get_current_size"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_current_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_size</span>
 
 <div class="viewcode-block" id="FastComplexBuffer.peek"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.peek">[docs]</a>    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; peek</span>
@@ -502,15 +502,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span></div>
+            <span class="k">return</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="FastComplexBuffer.get_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_queue">[docs]</a>    <span class="k">def</span> <span class="nf">get_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span></div>
+<div class="viewcode-block" id="FastComplexBuffer.get_queue"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_queue">[docs]</a>    <span class="k">def</span> <span class="nf">get_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span>
 
 <div class="viewcode-block" id="FastComplexBuffer.get_info"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.FastComplexBuffer.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;FastBuffer: max_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - current_size: &#39;</span> \
-               <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - width: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;FastBuffer: max_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - current_size: &#39;</span> \</div></div>
+               <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - width: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ConfusionMatrix"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix">[docs]</a><span class="k">class</span> <span class="nc">ConfusionMatrix</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -559,8 +559,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">n_targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">pass</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -606,8 +606,8 @@
                     <span class="k">return</span> <span class="kc">False</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="nb">max</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="nb">max</span><span class="p">)</span></div>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ConfusionMatrix.remove"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; remove</span>
@@ -640,8 +640,8 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">else</span><span class="p">:</span></div>
+            <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
@@ -659,8 +659,8 @@
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="kc">True</span></div>
+</div>
+        <span class="k">return</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="ConfusionMatrix.shape"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; shape</span>
@@ -670,8 +670,8 @@
 <span class="sd">        tuple</span>
 <span class="sd">            The confusion matrix&#39;s shape.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span>
 
 <div class="viewcode-block" id="ConfusionMatrix.value_at"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.value_at">[docs]</a>    <span class="k">def</span> <span class="nf">value_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; value_at</span>
@@ -689,8 +689,8 @@
 <span class="sd">        int</span>
 <span class="sd">            The current occurrence count at position [i, j].</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
 
 <div class="viewcode-block" id="ConfusionMatrix.row"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.row">[docs]</a>    <span class="k">def</span> <span class="nf">row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; row</span>
@@ -705,8 +705,8 @@
 <span class="sd">        numpy.array</span>
 <span class="sd">            The complete row indexed by r.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">r</span><span class="p">:</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">r</span><span class="p">:</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
 
 <div class="viewcode-block" id="ConfusionMatrix.column"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.column">[docs]</a>    <span class="k">def</span> <span class="nf">column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; column</span>
@@ -721,8 +721,8 @@
 <span class="sd">        numpy.array</span>
 <span class="sd">            The complete column indexed by c.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[:,</span> <span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[:,</span> <span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
 
 <div class="viewcode-block" id="ConfusionMatrix.get_sum_main_diagonal"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.get_sum_main_diagonal">[docs]</a>    <span class="k">def</span> <span class="nf">get_sum_main_diagonal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_sum_main_diagonal</span>
@@ -738,8 +738,8 @@
         <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span>
         <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-            <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
-        <span class="k">return</span> <span class="nb">sum</span></div>
+            <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="nb">sum</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -754,11 +754,11 @@
 
 <div class="viewcode-block" id="ConfusionMatrix.get_info"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;ConfusionMatrix: n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - dtype: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+               <span class="s1">&#39; - sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \</div>
+               <span class="s1">&#39; - dtype: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ConfusionMatrix.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
+<div class="viewcode-block" id="ConfusionMatrix.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.ConfusionMatrix.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span>
 
 
 <div class="viewcode-block" id="MOLConfusionMatrix"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix">[docs]</a><span class="k">class</span> <span class="nc">MOLConfusionMatrix</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -813,8 +813,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">n_targets</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="k">pass</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+        <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">true</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">pred</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -858,8 +858,8 @@
                 <span class="k">if</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">:</span>
                     <span class="k">return</span> <span class="kc">False</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.remove"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pred</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; remove</span>
@@ -890,8 +890,8 @@
         <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">target</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">target</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">true</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">true</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&lt;=</span> <span class="n">p</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">else</span><span class="p">:</span></div>
+            <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
@@ -906,11 +906,11 @@
         <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="MOLConfusionMatrix.shape"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span></div>
+<div class="viewcode-block" id="MOLConfusionMatrix.shape"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.value_at"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.value_at">[docs]</a>    <span class="k">def</span> <span class="nf">value_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; value_at</span>
@@ -931,8 +931,8 @@
 <span class="sd">        int</span>
 <span class="sd">            The current occurrence count at position [target, i, j].</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">target</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">target</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.row"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.row">[docs]</a>    <span class="k">def</span> <span class="nf">row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; row</span>
@@ -947,8 +947,8 @@
 <span class="sd">        numpy.array</span>
 <span class="sd">            The complete row indexed by r.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">r</span><span class="p">:</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">r</span><span class="p">:</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.column"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.column">[docs]</a>    <span class="k">def</span> <span class="nf">column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; column</span>
@@ -963,8 +963,8 @@
 <span class="sd">        numpy.array</span>
 <span class="sd">            The complete column indexed by c.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[:,</span> <span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[:,</span> <span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.target"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.target">[docs]</a>    <span class="k">def</span> <span class="nf">target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; target</span>
@@ -979,8 +979,8 @@
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The complete target indexed by t.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.get_sum_main_diagonal"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.get_sum_main_diagonal">[docs]</a>    <span class="k">def</span> <span class="nf">get_sum_main_diagonal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_sum_main_diagonal</span>
@@ -997,8 +997,8 @@
         <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
             <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-            <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="nb">sum</span></div>
+            <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="nb">sum</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.get_total_sum"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.get_total_sum">[docs]</a>    <span class="k">def</span> <span class="nf">get_total_sum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_total_sum</span>
@@ -1008,8 +1008,8 @@
 <span class="sd">        int</span>
 <span class="sd">            The sum of occurrences in the metrix.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">)</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.get_total_discordance"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.get_total_discordance">[docs]</a>    <span class="k">def</span> <span class="nf">get_total_discordance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_total_discordance</span>
@@ -1023,8 +1023,8 @@
 <span class="sd">        float</span>
 <span class="sd">            The total discordance from all target&#39;s matrices.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_total_sum</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sum_main_diagonal</span><span class="p">()</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_total_sum</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sum_main_diagonal</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1036,11 +1036,11 @@
 <div class="viewcode-block" id="MOLConfusionMatrix.get_info"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MOLConfusionMatrix: n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - total_sum: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_total_sum</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - total_discordance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_total_discordance</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - dtype: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+               <span class="s1">&#39; - total_discordance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_total_discordance</span><span class="p">())</span> <span class="o">+</span> \</div>
+               <span class="s1">&#39; - dtype: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MOLConfusionMatrix.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
+<div class="viewcode-block" id="MOLConfusionMatrix.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.MOLConfusionMatrix.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span>
 
 <div class="viewcode-block" id="InstanceWindow"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow">[docs]</a><span class="k">class</span> <span class="nc">InstanceWindow</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; InstanceWindow</span>
@@ -1096,8 +1096,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">max_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span> <span class="o">=</span> <span class="n">num_target_tasks</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_attributes</span><span class="o">+</span><span class="n">num_target_tasks</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_attributes</span><span class="o">+</span><span class="n">num_target_tasks</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
 
 <div class="viewcode-block" id="InstanceWindow.add_element"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_element </span>
@@ -1137,8 +1137,8 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;None type not supported as the buffer, call __configure() to correctly set up the InstanceWindow&quot;</span><span class="p">)</span>
 
         <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">aux</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="mi">1</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">aux</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="mi">1</span>
 
 <div class="viewcode-block" id="InstanceWindow.delete_element"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.delete_element">[docs]</a>    <span class="k">def</span> <span class="nf">delete_element</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete_element</span>
@@ -1146,14 +1146,14 @@
 <span class="sd">        Delete the oldest element from the sample window.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-=</span> <span class="mi">1</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span>
 
-<div class="viewcode-block" id="InstanceWindow.get_attributes_matrix"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.get_attributes_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">]</span></div>
+<div class="viewcode-block" id="InstanceWindow.get_attributes_matrix"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.get_attributes_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">]</span>
 
-<div class="viewcode-block" id="InstanceWindow.get_targets_matrix"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.get_targets_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_targets_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">:]</span></div>
+<div class="viewcode-block" id="InstanceWindow.get_targets_matrix"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.get_targets_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_targets_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">:]</span>
 
 <div class="viewcode-block" id="InstanceWindow.at_index"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.at_index">[docs]</a>    <span class="k">def</span> <span class="nf">at_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; at_index</span>
@@ -1171,8 +1171,8 @@
 <span class="sd">            A tuple containing both the attributes and the targets from sample </span>
 <span class="sd">            indexed of index.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_attributes_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_targets_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">]</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_attributes_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_targets_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1190,15 +1190,15 @@
     <span class="k">def</span> <span class="nf">_num_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span>
 
-<div class="viewcode-block" id="InstanceWindow.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div>
+<div class="viewcode-block" id="InstanceWindow.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span>
 
 <div class="viewcode-block" id="InstanceWindow.get_info"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.data_structures.html#skmultiflow.core.utils.data_structures.InstanceWindow.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;InstanceWindow: n_attributes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_target_tasks: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - max_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - dtype: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div></div>
+               <span class="s1">&#39; - max_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">)</span> <span class="o">+</span> \</div></div>
+               <span class="s1">&#39; - dtype: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;/asddfdsd/&#39;</span>
@@ -1251,7 +1251,7 @@
       <script type="text/javascript" src="../../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

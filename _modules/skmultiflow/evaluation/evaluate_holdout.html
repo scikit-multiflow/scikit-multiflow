@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -407,8 +407,8 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_plot</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">visualizer</span><span class="o">.</span><span class="n">hold</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span></div>
+</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span>
 
     <span class="k">def</span> <span class="nf">__periodic_holdout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; __periodic_holdout</span>
@@ -644,8 +644,8 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classifiers</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">else</span><span class="p">:</span></div>
+            <span class="k">return</span> <span class="bp">self</span>
 
 <div class="viewcode-block" id="EvaluateHoldout.predict"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_holdout.html#skmultiflow.evaluation.evaluate_holdout.EvaluateHoldout.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
@@ -670,8 +670,8 @@
             <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classifiers</span><span class="p">):</span>
                 <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">predictions</span></div>
+</div>
+        <span class="k">return</span> <span class="n">predictions</span>
 
     <span class="k">def</span> <span class="nf">__update_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_x</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; __update_plot</span>
@@ -875,8 +875,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;pretrain_size&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;test_size&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">value</span></div>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;test_size&#39;</span><span class="p">:</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">__start_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_wait</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; __start_plot</span>
@@ -890,7 +890,7 @@
 <span class="sd">            The dataset name, will be part of the plot name.</span>
 <span class="sd">             </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">visualizer</span> <span class="o">=</span> <span class="n">EvaluationVisualizer</span><span class="p">(</span><span class="n">n_wait</span><span class="o">=</span><span class="n">n_wait</span><span class="p">,</span> <span class="n">dataset_name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span> <span class="n">plots</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_options</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visualizer</span> <span class="o">=</span> <span class="n">EvaluationVisualizer</span><span class="p">(</span><span class="n">task_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_type</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="n">n_wait</span><span class="p">,</span> <span class="n">dataset_name</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span> <span class="n">plots</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_options</span><span class="p">,</span>
                                                <span class="n">n_learners</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classifiers</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__reset_globals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -906,8 +906,8 @@
                <span class="s1">&#39; - test_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - task_type: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">+</span> \
                <span class="s1">&#39; - show_plot&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_plot</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - plot_options: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_options</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - dynamic_test_set: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_test_set</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span></div></div>
+               <span class="s1">&#39; - plot_options: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_options</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span> <span class="o">+</span> \</div></div>
+               <span class="s1">&#39; - dynamic_test_set: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_test_set</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -953,7 +953,7 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -202,15 +202,15 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_dist</span>
             <span class="k">if</span> <span class="n">att_val</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">val_dist</span><span class="p">:</span>
                 <span class="n">val_dist</span><span class="p">[</span><span class="n">att_val</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">][</span><span class="n">att_val</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_total_weight_observed</span> <span class="o">+=</span> <span class="n">weight</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">][</span><span class="n">att_val</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_weight_observed</span> <span class="o">+=</span> <span class="n">weight</span>
 
 <div class="viewcode-block" id="NominalAttributeClassObserver.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.html#skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.NominalAttributeClassObserver.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">class_val</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">obs</span><span class="p">[</span><span class="n">att_val</span><span class="p">]</span> <span class="k">if</span> <span class="n">att_val</span> <span class="ow">in</span> <span class="n">obs</span> <span class="k">else</span> <span class="mf">0.0</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">))</span>
-        <span class="k">return</span> <span class="mf">0.0</span></div>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="mf">0.0</span>
 
 <div class="viewcode-block" id="NominalAttributeClassObserver.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.html#skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.NominalAttributeClassObserver.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="p">):</span>
         <span class="n">best_suggestion</span> <span class="o">=</span> <span class="kc">None</span>
@@ -224,8 +224,8 @@
             <span class="n">merit</span> <span class="o">=</span> <span class="n">criterion</span><span class="o">.</span><span class="n">get_merit_of_split</span><span class="p">(</span><span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">post_split_dist</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">best_suggestion</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">merit</span> <span class="o">&gt;</span> <span class="n">best_suggestion</span><span class="o">.</span><span class="n">merit</span><span class="p">:</span>
                 <span class="n">best_suggestion</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="n">NominalAttributeBinaryTest</span><span class="p">(</span><span class="n">att_idx</span><span class="p">,</span> <span class="n">val_idx</span><span class="p">),</span>
-                                                           <span class="n">post_split_dist</span><span class="p">,</span> <span class="n">merit</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">best_suggestion</span></div>
+                                                           <span class="n">post_split_dist</span><span class="p">,</span> <span class="n">merit</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">best_suggestion</span>
 
 <div class="viewcode-block" id="NominalAttributeClassObserver.get_class_dist_from_multiway_split"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.html#skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.NominalAttributeClassObserver.get_class_dist_from_multiway_split">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_dist_from_multiway_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">resulting_dist</span> <span class="o">=</span> <span class="p">{}</span>
@@ -236,8 +236,8 @@
                 <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resulting_dist</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
                     <span class="n">resulting_dist</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
                 <span class="n">resulting_dist</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
-        <span class="n">distributions</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">resulting_dist</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
-        <span class="k">return</span> <span class="n">distributions</span></div>
+        <span class="n">distributions</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">resulting_dist</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span></div>
+        <span class="k">return</span> <span class="n">distributions</span>
 
 <div class="viewcode-block" id="NominalAttributeClassObserver.get_class_dist_from_binary_split"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.html#skmultiflow.classification.core.attribute_class_observers.nominal_attribute_class_observer.NominalAttributeClassObserver.get_class_dist_from_binary_split">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_dist_from_binary_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val_idx</span><span class="p">):</span>
         <span class="n">equal_dist</span> <span class="o">=</span> <span class="p">{}</span>
@@ -251,8 +251,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">not_equal_dist</span><span class="p">:</span>
                         <span class="n">not_equal_dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-                    <span class="n">not_equal_dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">equal_dist</span><span class="p">,</span> <span class="n">not_equal_dist</span><span class="p">]</span></div></div>
+                    <span class="n">not_equal_dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span></div></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">equal_dist</span><span class="p">,</span> <span class="n">not_equal_dist</span><span class="p">]</span>
 </pre></div>
 
            </div>
@@ -298,7 +298,7 @@
       <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

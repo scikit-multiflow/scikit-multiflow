@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -276,11 +276,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span> <span class="o">=</span> <span class="n">n_targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span> <span class="o">=</span> <span class="n">n_labels</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.estimated_remaining_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.estimated_remaining_instances">[docs]</a>    <span class="k">def</span> <span class="nf">estimated_remaining_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span><span class="p">)</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.estimated_remaining_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.estimated_remaining_instances">[docs]</a>    <span class="k">def</span> <span class="nf">estimated_remaining_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.has_more_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.has_more_instances">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.has_more_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.has_more_instances">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MultilabelGenerator.next_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.next_instance">[docs]</a>    <span class="k">def</span> <span class="nf">next_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_instance</span>
@@ -310,62 +310,62 @@
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="kc">None</span>
+</div>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span><span class="p">)</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.has_more_mini_batch"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.has_more_mini_batch">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_mini_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.has_more_mini_batch"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.has_more_mini_batch">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_mini_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_num_nominal_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_nominal_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_nominal_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_nominal_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_nominal_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_nominal_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_num_numerical_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_numerical_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_numerical_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_numerical_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_numerical_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_numerical_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_num_values_per_nominal_attribute"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_values_per_nominal_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_values_per_nominal_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_values_per_nominal_attribute"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_values_per_nominal_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_values_per_nominal_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_num_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_num_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_attributes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_attributes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_attributes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_attributes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_classes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_classes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_classes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_classes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_last_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_last_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_last_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_last_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">pass</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_plot_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_plot_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_plot_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;Multilabel dataset&#39;</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_plot_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_plot_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_plot_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;Multilabel dataset&#39;</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_classes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_classes">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_classes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_classes">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="MultilabelGenerator.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;stream&#39;</span></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;stream&#39;</span>
 
 <div class="viewcode-block" id="MultilabelGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MultilabelGenerator: n_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_features</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - n_labels:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span><span class="p">)</span></div>
+               <span class="s1">&#39; - n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span><span class="p">)</span> <span class="o">+</span> \</div>
+               <span class="s1">&#39; - n_labels:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_targeting_tasks"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_targeting_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targeting_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span></div></div>
+<div class="viewcode-block" id="MultilabelGenerator.get_num_targeting_tasks"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_targeting_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targeting_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span>
 </pre></div>
 
            </div>
@@ -411,7 +411,7 @@
       <script type="text/javascript" src="../../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

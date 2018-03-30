@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../skmultiflow.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -188,8 +188,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="InstanceConditionalTest.branch_for_instance"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.branch_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">branch_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="InstanceConditionalTest.branch_for_instance"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.branch_for_instance">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">branch_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of the branch for an instance, -1 if unknown.</span>
 
 <span class="sd">        Parameters</span>
@@ -202,23 +202,23 @@
 <span class="sd">        int</span>
 <span class="sd">            The index of the branch for the instance, -1 if unknown.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="InstanceConditionalTest.max_branches"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.max_branches">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="InstanceConditionalTest.max_branches"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.max_branches">[docs]</a>    <span class="k">def</span> <span class="nf">max_branches</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">max_branches</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;Get the max number branches, -1 if unknown.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        The max number of branches, -1 if unknown.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="InstanceConditionalTest.describe_condition_for_branch"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.describe_condition_for_branch">[docs]</a>    <span class="k">def</span> <span class="nf">describe_condition_for_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
+<div class="viewcode-block" id="InstanceConditionalTest.describe_condition_for_branch"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.describe_condition_for_branch">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">describe_condition_for_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Describe the condition of a branch. It is used to describe the branch.</span>
 
 <span class="sd">        Parameters</span>
@@ -231,11 +231,11 @@
 <span class="sd">        string</span>
 <span class="sd">            The description of the condition for the branch</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@abstractmethod</span>
-<div class="viewcode-block" id="InstanceConditionalTest.get_atts_test_depends_on"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.get_atts_test_depends_on">[docs]</a>    <span class="k">def</span> <span class="nf">get_atts_test_depends_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="InstanceConditionalTest.get_atts_test_depends_on"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.conditional_tests.instance_conditional_test.html#skmultiflow.classification.core.conditional_tests.instance_conditional_test.InstanceConditionalTest.get_atts_test_depends_on">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_atts_test_depends_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return an array with the attributes that the test depends on.</span>
 
 <span class="sd">        Returns</span>
@@ -243,8 +243,8 @@
 <span class="sd">        array_like</span>
 <span class="sd">            The attributes that the test depends on.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </pre></div>
 
            </div>
@@ -290,7 +290,7 @@
       <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
