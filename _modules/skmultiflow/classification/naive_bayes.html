@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,12 +168,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.naive_bayes</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.base</span> <span class="k">import</span> <span class="n">BaseClassifier</span>
+<span></span><span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
 <span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="k">import</span> <span class="n">MultinomialNB</span>
 
-<div class="viewcode-block" id="NaiveBayes"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes">[docs]</a><span class="k">class</span> <span class="nc">NaiveBayes</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">):</span>
+
+<div class="viewcode-block" id="NaiveBayes"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes">[docs]</a><span class="k">class</span> <span class="nc">NaiveBayes</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; NaiveBayes</span>
 <span class="sd">    </span>
 <span class="sd">    A mask for scikit-learn&#39;s Naive Bayes classifier.</span>
@@ -212,8 +211,8 @@
 <span class="sd">            self</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="NaiveBayes.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
@@ -239,8 +238,8 @@
 <span class="sd">            self</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="NaiveBayes.predict"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
@@ -257,8 +256,8 @@
 <span class="sd">        list</span>
 <span class="sd">            A list containing the predicted labels for all instances in X.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NaiveBayes.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict_proba</span>
@@ -279,8 +278,8 @@
 <span class="sd">            index [i] contains len(self.classes) elements, each of which represents </span>
 <span class="sd">            the probability that the i-th sample of X belongs to a certain label.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NaiveBayes.score"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; score</span>
@@ -300,11 +299,11 @@
 <span class="sd">        float</span>
 <span class="sd">            The classifier&#39;s score.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NaiveBayes.get_info"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
-        <span class="k">return</span> <span class="s1">&#39;NaiveBayes: N/A&#39;</span>
+<div class="viewcode-block" id="NaiveBayes.get_info"><a class="viewcode-back" href="../../../skmultiflow.classification.naive_bayes.html#skmultiflow.classification.naive_bayes.NaiveBayes.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;NaiveBayes: N/A&#39;</span></div></div>
 </pre></div>
 
            </div>

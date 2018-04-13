@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,41 +168,37 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.data.synth</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="o">*</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 
 <div class="viewcode-block" id="make_logical"><a class="viewcode-back" href="../../../skmultiflow.data.synth.html#skmultiflow.data.synth.make_logical">[docs]</a><span class="k">def</span> <span class="nf">make_logical</span><span class="p">(</span><span class="n">n_tiles</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a toy dataset with three labels that represent the logical functions: OR, XOR, AND</span>
+<span class="sd">        (functions of the 2D input).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Make a toy dataset with three labels that represent the logical functions: OR, XOR, AND (functions of the 2D input).</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="c1"># X  X  Y  Y  Y</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
-    <span class="n">pat</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span>
-       <span class="c1"># X X Y Y Y</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-    <span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-
-    <span class="n">N</span><span class="p">,</span><span class="n">E</span> <span class="o">=</span> <span class="n">pat</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">pat</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">L</span> <span class="o">=</span> <span class="n">E</span> <span class="o">-</span> <span class="n">D</span>
 
-    <span class="n">pat2</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">E</span><span class="p">))</span>
-    <span class="n">pat2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="p">]</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[:,</span><span class="n">D</span><span class="p">:</span><span class="n">E</span><span class="p">]</span>
-    <span class="n">pat2</span><span class="p">[:,</span><span class="n">L</span><span class="p">:</span><span class="n">E</span><span class="p">]</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span>
-    <span class="n">pat2</span> <span class="o">=</span> <span class="n">tile</span><span class="p">(</span><span class="n">pat2</span><span class="p">,</span> <span class="p">(</span><span class="n">n_tiles</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">pat2</span><span class="p">)</span>
+    <span class="n">pat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>
+    <span class="n">pat2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="p">]</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[:,</span> <span class="n">D</span><span class="p">:</span><span class="n">E</span><span class="p">]</span>
+    <span class="n">pat2</span><span class="p">[:,</span> <span class="n">L</span><span class="p">:</span><span class="n">E</span><span class="p">]</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span>
+    <span class="n">pat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">pat2</span><span class="p">,</span> <span class="p">(</span><span class="n">n_tiles</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">pat2</span><span class="p">)</span>
 
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">pat2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">pat2</span><span class="p">[:,</span><span class="n">L</span><span class="p">:</span><span class="n">E</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-</div>
-    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pat2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pat2</span><span class="p">[:,</span> <span class="n">L</span><span class="p">:</span><span class="n">E</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_logical</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span></div>
 </pre></div>
 
            </div>

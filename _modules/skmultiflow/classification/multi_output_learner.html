@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,16 +168,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.multi_output_learner</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Jesse Read&#39;</span>
-
-<span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">cp</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="o">*</span>
+<span></span><span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">cp</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">linear_model</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.base</span> <span class="k">import</span> <span class="n">BaseClassifier</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.evaluation.metrics.metrics</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="MultiOutputLearner"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner">[docs]</a><span class="k">class</span> <span class="nc">MultiOutputLearner</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="MultiOutputLearner"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner">[docs]</a><span class="k">class</span> <span class="nc">MultiOutputLearner</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; MultiOutputLearner</span>
 <span class="sd">    </span>
 <span class="sd">    A Multi-Output Learner learns to predict multiple outputs for each</span>
@@ -187,9 +184,10 @@
 <span class="sd">    for each output, and will distribute each instance to each model</span>
 <span class="sd">    for individual learning and classification. </span>
 <span class="sd">    </span>
-<span class="sd">    Use this classifier to make single output predictors capable of learning </span>
-<span class="sd">    a multi output problem, by applying them individually to each output.</span>
-<span class="sd">    </span>
+<span class="sd">    Use this meta learner to make single output predictors capable of learning </span>
+<span class="sd">    a multi output problem, by applying them individually to each output. In </span>
+<span class="sd">    the classification context, this is the &quot;binary relevance&quot; classifier.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    h: classifier (extension of the BaseClassifier)</span>
@@ -202,27 +200,24 @@
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.classification.multi_output_learner import MultiOutputLearner</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.core.pipeline import Pipeline</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.evaluation.metrics.metrics import *</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.options.file_option import FileOption</span>
 <span class="sd">    &gt;&gt;&gt; from sklearn.linear_model.perceptron import Perceptron</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the file stream</span>
-<span class="sd">    &gt;&gt;&gt; opt = FileOption(&quot;FILE&quot;, &quot;OPT_NAME&quot;, &quot;skmultiflow/datasets/music.csv&quot;, &quot;CSV&quot;, False)</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(opt, 0, 6)</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&quot;skmultiflow/datasets/music.csv&quot;, 0, 6)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the MultiOutputLearner using sklearn Perceptrons</span>
 <span class="sd">    &gt;&gt;&gt; classifier = MultiOutputLearner(h=Perceptron())</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the pipeline</span>
 <span class="sd">    &gt;&gt;&gt; pipe = Pipeline([(&#39;classifier&#39;, classifier)])</span>
 <span class="sd">    &gt;&gt;&gt; # Pre training the classifier with 150 samples</span>
-<span class="sd">    &gt;&gt;&gt; X, y = stream.next_instance(150)</span>
-<span class="sd">    &gt;&gt;&gt; pipe = pipe.partial_fit(X, y, classes=stream.get_classes())</span>
+<span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(150)</span>
+<span class="sd">    &gt;&gt;&gt; pipe = pipe.partial_fit(X, y, classes=stream.get_targets())</span>
 <span class="sd">    &gt;&gt;&gt; # Keeping track of sample count, true labels and predictions to later </span>
 <span class="sd">    &gt;&gt;&gt; # compute the classifier&#39;s hamming score</span>
 <span class="sd">    &gt;&gt;&gt; count = 0</span>
 <span class="sd">    &gt;&gt;&gt; true_labels = []</span>
 <span class="sd">    &gt;&gt;&gt; predicts = []</span>
-<span class="sd">    &gt;&gt;&gt; while stream.has_more_instances():</span>
-<span class="sd">    ...     X, y = stream.next_instance()</span>
+<span class="sd">    &gt;&gt;&gt; while stream.has_more_samples():</span>
+<span class="sd">    ...     X, y = stream.next_sample()</span>
 <span class="sd">    ...     p = pipe.predict(X)</span>
 <span class="sd">    ...     pipe = pipe.partial_fit(X, y)</span>
 <span class="sd">    ...     predicts.extend(p)</span>
@@ -247,7 +242,7 @@
     <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hop</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)]</span>
 
-<div class="viewcode-block" id="MultiOutputLearner.fit"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiOutputLearner.fit"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; fit</span>
 
 <span class="sd">        Fit the N classifiers, one for each classification task.</span>
@@ -257,7 +252,7 @@
 <span class="sd">        X : Numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">            The array of samples used to fit the model.</span>
 
-<span class="sd">        Y: Array-like</span>
+<span class="sd">        y: Array-like</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
 
 <span class="sd">        classes: Not used.</span>
@@ -270,26 +265,26 @@
 <span class="sd">            self</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">N</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">N</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hop</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)]</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span></div>
-        <span class="k">return</span> <span class="bp">self</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="MultiOutputLearner.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 
 <span class="sd">        Partially fit each of the classifiers on the X matrix and the </span>
-<span class="sd">        corresponding Y matrix.</span>
+<span class="sd">        corresponding y matrix.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        X : Numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">            The array of samples used to fit the model.</span>
 
-<span class="sd">        Y: Numpy.ndarray of shape (n_samples, n_labels)</span>
+<span class="sd">        y: Numpy.ndarray of shape (n_samples, n_labels)</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
 
 <span class="sd">        classes: Array-like</span>
@@ -320,8 +315,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
-</div>
-        <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="MultiOutputLearner.predict"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; predict</span>
@@ -341,10 +336,10 @@
 <span class="sd">            All the predictions for the samples in X.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">Y</span>
+            <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Y</span></div>
 
 <div class="viewcode-block" id="MultiOutputLearner.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict_proba</span>
@@ -371,20 +366,20 @@
         <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="n">P</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]</span></div>
-        <span class="k">return</span> <span class="n">P</span>
+            <span class="n">P</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">P</span></div>
 
 <div class="viewcode-block" id="MultiOutputLearner.get_info"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MultiOutputLearner: h: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - n_learners: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">))</span> <span class="o">+</span> \</div>
-               <span class="s1">&#39; - n_classification_tasks: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+               <span class="s1">&#39; - n_learners: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">))</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_classification_tasks: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="MultiOutputLearner.score"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="MultiOutputLearner.score"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="MultiOutputLearner.reset"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="MultiOutputLearner.reset"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.MultiOutputLearner.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 <div class="viewcode-block" id="demo"><a class="viewcode-back" href="../../../skmultiflow.classification.multi_output_learner.html#skmultiflow.classification.multi_output_learner.demo">[docs]</a><span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">sys</span>
@@ -394,16 +389,17 @@
     <span class="n">X</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">make_logical</span><span class="p">()</span>
     <span class="n">N</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
 
-    <span class="n">h</span> <span class="o">=</span> <span class="n">MultiOutputLearner</span><span class="p">(</span><span class="n">linear_model</span><span class="o">.</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">n_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">MultiOutputLearner</span><span class="p">(</span><span class="n">linear_model</span><span class="o">.</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
     <span class="n">h</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
 
     <span class="n">p</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">ham</span> <span class="o">=</span> <span class="n">hamming_score</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">ham</span><span class="p">)</span>
+
     <span class="c1"># Test</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vs&quot;</span><span class="p">)</span></div>
-    <span class="nb">print</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span></div>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">demo</span><span class="p">()</span>

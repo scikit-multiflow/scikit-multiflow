@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,9 +168,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.evaluation.metrics.metrics</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <div class="viewcode-block" id="hamming_score"><a class="viewcode-back" href="../../../../skmultiflow.evaluation.metrics.metrics.html#skmultiflow.evaluation.metrics.metrics.hamming_score">[docs]</a><span class="k">def</span> <span class="nf">hamming_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>
@@ -208,8 +206,8 @@
         <span class="n">true_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">true_labels</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">predicts</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">):</span>
         <span class="n">predicts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">predicts</span><span class="p">)</span>
-    <span class="n">N</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="n">true_labels</span><span class="o">.</span><span class="n">shape</span></div>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">true_labels</span> <span class="o">==</span> <span class="n">predicts</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="n">L</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="n">true_labels</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">true_labels</span> <span class="o">==</span> <span class="n">predicts</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="n">L</span></div>
 
 <div class="viewcode-block" id="j_index"><a class="viewcode-back" href="../../../../skmultiflow.evaluation.metrics.metrics.html#skmultiflow.evaluation.metrics.metrics.j_index">[docs]</a><span class="k">def</span> <span class="nf">j_index</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; j_index</span>
@@ -255,8 +253,8 @@
         <span class="k">if</span> <span class="n">union</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="n">inter</span> <span class="o">/</span> <span class="n">union</span>
         <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">true_labels</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">+=</span> <span class="mf">1.</span></div>
-    <span class="k">return</span> <span class="n">s</span> <span class="o">*</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">N</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="mf">1.</span>
+    <span class="k">return</span> <span class="n">s</span> <span class="o">*</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">N</span></div>
 
 <div class="viewcode-block" id="exact_match"><a class="viewcode-back" href="../../../../skmultiflow.evaluation.metrics.metrics.html#skmultiflow.evaluation.metrics.metrics.exact_match">[docs]</a><span class="k">def</span> <span class="nf">exact_match</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; exact_match</span>
@@ -292,8 +290,8 @@
         <span class="n">true_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">true_labels</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">predicts</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">):</span>
         <span class="n">predicts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">predicts</span><span class="p">)</span>
-    <span class="n">N</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="n">true_labels</span><span class="o">.</span><span class="n">shape</span></div>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">true_labels</span> <span class="o">==</span> <span class="n">predicts</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">L</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="n">true_labels</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">true_labels</span> <span class="o">==</span> <span class="n">predicts</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">L</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">N</span></div>
 </pre></div>
 
            </div>

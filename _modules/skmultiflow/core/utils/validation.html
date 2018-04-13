@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -176,6 +176,7 @@
 
 <div class="viewcode-block" id="check_random_state"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.validation.html#skmultiflow.core.utils.validation.check_random_state">[docs]</a><span class="k">def</span> <span class="nf">check_random_state</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Turn seed into a np.random.RandomState instance.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    seed : None | int | instance of RandomState</span>
@@ -183,35 +184,52 @@
 <span class="sd">        If seed is an int, return a new RandomState instance seeded with seed.</span>
 <span class="sd">        If seed is already a RandomState instance, return it.</span>
 <span class="sd">        Otherwise raise ValueError.</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    Code from sklearn</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">seed</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">mtrand</span><span class="o">.</span><span class="n">_rand</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">)):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">seed</span></div>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> cannot be used to seed a numpy.random.RandomState instance&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">seed</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">seed</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> cannot be used to seed a numpy.random.RandomState instance&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">seed</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="check_weights"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.validation.html#skmultiflow.core.utils.validation.check_weights">[docs]</a><span class="k">def</span> <span class="nf">check_weights</span><span class="p">(</span><span class="n">weight</span><span class="p">):</span>
+<div class="viewcode-block" id="check_weights"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.validation.html#skmultiflow.core.utils.validation.check_weights">[docs]</a><span class="k">def</span> <span class="nf">check_weights</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">expand_length</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if weights are valid</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    weight : int, float, list, np.ndarray</span>
-<span class="sd">        If weight is a number (int, float), returns it inside a np.array</span>
-<span class="sd">        If weight is a list of numbers, returns it</span>
+<span class="sd">        If weight is a number, returns it inside an np.ndarray</span>
+<span class="sd">        If weight is a list or np.ndarray, returns it</span>
 <span class="sd">        Otherwise raise ValueError.</span>
+<span class="sd">    expand_length : int, optional (default=1)</span>
+<span class="sd">        If the value passed is larger than 1 and weight is a single value, then the weight is replicated n times inside</span>
+<span class="sd">        an np.array. If weight is not a single value, raises an error</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">weight</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">weight</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)):</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">weight</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span></div>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid weight(s): </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weight</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">expand_length</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">weight</span><span class="p">]</span> <span class="o">*</span> <span class="n">expand_length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">weight</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">expand_length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">weight</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">weight</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">weight</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">expand_length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">weight</span>
+        <span class="k">elif</span> <span class="n">weight</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">expand_length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">weight</span>
+            <span class="k">elif</span> <span class="n">expand_length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">weight</span><span class="p">]</span> <span class="o">*</span> <span class="n">expand_length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid weight(s): </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weight</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

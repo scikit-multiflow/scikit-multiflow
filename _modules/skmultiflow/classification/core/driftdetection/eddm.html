@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,9 +168,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.core.driftdetection.eddm</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.core.driftdetection.base_drift_detector</span> <span class="k">import</span> <span class="n">BaseDriftDetector</span>
 
 
@@ -255,8 +253,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">m_lastd</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_mean</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_std_temp</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m_m2s_max</span> <span class="o">=</span> <span class="mf">0.0</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_m2s_max</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="EDDM.add_element"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.eddm.html#skmultiflow.classification.core.driftdetection.eddm.EDDM.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add a new element to the statistics</span>
@@ -308,23 +306,24 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">m_m2s_max</span> <span class="o">=</span> <span class="n">m2s</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">p</span> <span class="o">=</span> <span class="n">m2s</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_m2s_max</span>
-                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_MIN_NUM_INSTANCES</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_num_errors</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_min_num_errors</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                    <span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_OUTCONTROL</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_MIN_NUM_INSTANCES</span><span class="p">)</span> <span class="ow">and</span> \
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_num_errors</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_min_num_errors</span><span class="p">)</span> <span class="ow">and</span> \
+                        <span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_OUTCONTROL</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span> <span class="o">=</span> <span class="kc">True</span>
 
-                <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_MIN_NUM_INSTANCES</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_num_errors</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_min_num_errors</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                    <span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_WARNING</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_MIN_NUM_INSTANCES</span><span class="p">)</span> <span class="ow">and</span> \
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_num_errors</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_min_num_errors</span><span class="p">)</span> <span class="ow">and</span> \
+                        <span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">FDDM_WARNING</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span> <span class="o">=</span> <span class="kc">True</span>
 
-                <span class="k">else</span><span class="p">:</span></div>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span> <span class="o">=</span> <span class="kc">False</span>
-
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="EDDM.get_info"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.eddm.html#skmultiflow.classification.core.driftdetection.eddm.EDDM.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;EDDM: min_num_errors: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_min_num_errors</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_n</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - mean: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_mean</span><span class="p">)</span> <span class="o">+</span> \</div></div>
-               <span class="s1">&#39; - std_dev: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_std_temp</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">m_num_errors</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+               <span class="s1">&#39; - mean: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_mean</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - std_dev: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_std_temp</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">m_num_errors</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span></div></div>
 </pre></div>
 
            </div>

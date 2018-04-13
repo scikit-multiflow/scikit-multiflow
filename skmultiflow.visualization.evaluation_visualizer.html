@@ -35,7 +35,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/> 
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.visualization package" href="skmultiflow.visualization.html"/>
+        <link rel="prev" title="skmultiflow.visualization.base_listener module" href="skmultiflow.visualization.base_listener.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,12 +94,28 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skmultiflow.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skmultiflow.html">skmultiflow package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skmultiflow.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.classification.html">skmultiflow.classification package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.core.html">skmultiflow.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.data.html">skmultiflow.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.evaluation.html">skmultiflow.evaluation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.options.html">skmultiflow.options package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.transform.html">skmultiflow.transform package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="skmultiflow.visualization.html">skmultiflow.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.html#module-skmultiflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -143,6 +161,12 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.visualization.html">skmultiflow.visualization package</a> &raquo;</li>
+        
       <li>skmultiflow.visualization.evaluation_visualizer module</li>
     
     
@@ -168,7 +192,7 @@
 <span id="skmultiflow-visualization-evaluation-visualizer-module"></span><h1>skmultiflow.visualization.evaluation_visualizer module<a class="headerlink" href="#module-skmultiflow.visualization.evaluation_visualizer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer">
-<em class="property">class </em><code class="descclassname">skmultiflow.visualization.evaluation_visualizer.</code><code class="descname">EvaluationVisualizer</code><span class="sig-paren">(</span><em>task_type=None</em>, <em>n_wait=200</em>, <em>dataset_name='Unnamed graph'</em>, <em>plots=None</em>, <em>n_learners=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.visualization.evaluation_visualizer.</code><code class="descname">EvaluationVisualizer</code><span class="sig-paren">(</span><em>task_type=None</em>, <em>n_sliding=0</em>, <em>dataset_name='Unnamed graph'</em>, <em>plots=None</em>, <em>n_learners=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.visualization.base_listener.html#skmultiflow.visualization.base_listener.BaseListener" title="skmultiflow.visualization.base_listener.BaseListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.visualization.base_listener.BaseListener</span></code></a></p>
 <p>This class is responsible for maintaining and updating the plot modules
 for all the evaluators in scikit-multiflow.</p>
@@ -188,7 +212,7 @@ same data stream.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n_wait</strong> (<em>int</em><em> (</em><em>Default: 200</em><em>)</em>) – The interval between each plot point.</li>
+<li><strong>n_sliding</strong> (<em>int</em>) – The number of samples in the sliding window to track recent performance.</li>
 <li><strong>dataset_name</strong> (<em>string</em><em> (</em><em>Default: 'Unnamed graph'</em><em>)</em>) – The title of the plot. Algorithmically it’s not important.</li>
 <li><strong>plots</strong> (<em>list</em>) – A list containing all the subplots to plot. Can be any of:
 ‘performance’, ‘kappa’, ‘scatter’, ‘hamming_score’, ‘hamming_loss’,
@@ -303,6 +327,13 @@ the metric name and the value its corresponding measurement.</li>
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="skmultiflow.visualization.base_listener.html" class="btn btn-neutral" title="skmultiflow.visualization.base_listener module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

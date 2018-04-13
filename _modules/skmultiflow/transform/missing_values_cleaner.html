@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.filtering.base_filters &mdash; scikit-multiflow 0.1.0 documentation</title>
+  <title>skmultiflow.transform.missing_values_cleaner &mdash; scikit-multiflow 0.1.0 documentation</title>
   
 
   
@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -146,14 +146,14 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>skmultiflow.filtering.base_filters</li>
+      <li>skmultiflow.transform.missing_values_cleaner</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/filtering/base_filters.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/transform/missing_values_cleaner.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -167,17 +167,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for skmultiflow.filtering.base_filters</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+  <h1>Source code for skmultiflow.transform.missing_values_cleaner</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.filtering.base_transform</span> <span class="k">import</span> <span class="n">BaseTransform</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.transform.base_transform</span> <span class="k">import</span> <span class="n">StreamTransform</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.data_structures</span> <span class="k">import</span> <span class="n">FastBuffer</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span>
 
 
-<div class="viewcode-block" id="MissingValuesCleaner"><a class="viewcode-back" href="../../../skmultiflow.filtering.base_filters.html#skmultiflow.filtering.base_filters.MissingValuesCleaner">[docs]</a><span class="k">class</span> <span class="nc">MissingValuesCleaner</span><span class="p">(</span><span class="n">BaseTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner">[docs]</a><span class="k">class</span> <span class="nc">MissingValuesCleaner</span><span class="p">(</span><span class="n">StreamTransform</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; MissingValuesCleaner</span>
 <span class="sd">    </span>
 <span class="sd">    This is a transform object. It provides a simple way to replace missing </span>
@@ -213,29 +211,27 @@
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.options.file_option import FileOption</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.filtering.base_filters import MissingValuesCleaner</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.transform.missing_values_cleaner import MissingValuesCleaner</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up a stream</span>
-<span class="sd">    &gt;&gt;&gt; opt = FileOption(&#39;FILE&#39;, &#39;OPT_NAME&#39;, &#39;skmultiflow/datasets/covtype.csv&#39;, &#39;csv&#39;, False)</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(opt, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&#39;skmultiflow/datasets/covtype.csv&#39;, -1, 1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the filter to substitute values -47 by the median of the </span>
 <span class="sd">    &gt;&gt;&gt; # last 10 samples</span>
-<span class="sd">    &gt;&gt;&gt; filter = MissingValuesCleaner(-47, &#39;median&#39;, 10)</span>
-<span class="sd">    &gt;&gt;&gt; X, y = stream.next_instance(10)</span>
+<span class="sd">    &gt;&gt;&gt; cleaner = MissingValuesCleaner(-47, &#39;median&#39;, 10)</span>
+<span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(10)</span>
 <span class="sd">    &gt;&gt;&gt; X[9, 0] = -47</span>
 <span class="sd">    &gt;&gt;&gt; # We will use this list to keep track of values</span>
 <span class="sd">    &gt;&gt;&gt; list = []</span>
 <span class="sd">    &gt;&gt;&gt; # Iterate over the first 9 samples, to build a sample window</span>
 <span class="sd">    &gt;&gt;&gt; for i in range(9):</span>
-<span class="sd">    ...     X_transf = filter.partial_fit_transform([X[i].tolist()])</span>
-<span class="sd">    ...     list.append(X_transf[0][0])</span>
-<span class="sd">    ...     print(X_transf)</span>
+<span class="sd">    &gt;&gt;&gt;     X_transf = cleaner.partial_fit_transform([X[i].tolist()])</span>
+<span class="sd">    &gt;&gt;&gt;     list.append(X_transf[0][0])</span>
+<span class="sd">    &gt;&gt;&gt;     print(X_transf)</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Transform last sample. The first feature should be replaced by the list&#39;s </span>
 <span class="sd">    &gt;&gt;&gt; # median value</span>
-<span class="sd">    &gt;&gt;&gt; X_transf = filter.partial_fit_transform([X[9].tolist()])</span>
+<span class="sd">    &gt;&gt;&gt; X_transf = cleaner.partial_fit_transform([X[9].tolist()])</span>
 <span class="sd">    &gt;&gt;&gt; print(X_transf)</span>
 <span class="sd">    &gt;&gt;&gt; np.median(list)</span>
 <span class="sd">    </span>
@@ -243,7 +239,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;zero&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">new_value</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1">#default_values</span>
+        <span class="c1"># dDefault_values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="s1">&#39;zero&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="mi">200</span>
@@ -264,7 +260,7 @@
         <span class="k">if</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MissingValuesCleaner.transform"><a class="viewcode-back" href="../../../skmultiflow.filtering.base_filters.html#skmultiflow.filtering.base_filters.MissingValuesCleaner.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner.transform"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform</span>
 <span class="sd">        </span>
 <span class="sd">        Does the transformation process in the samples in X.</span>
@@ -280,8 +276,8 @@
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span><span class="p">:</span>
                     <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_substitute</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-</div>
-        <span class="k">return</span> <span class="n">X</span>
+
+        <span class="k">return</span> <span class="n">X</span></div>
 
     <span class="k">def</span> <span class="nf">_get_substitute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; _get_substitute</span>
@@ -319,7 +315,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span>
 
-<div class="viewcode-block" id="MissingValuesCleaner.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.filtering.base_filters.html#skmultiflow.filtering.base_filters.MissingValuesCleaner.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit_transform</span>
 <span class="sd">        </span>
 <span class="sd">        Partially fits the model and then apply the transform to the data.</span>
@@ -341,10 +337,10 @@
         <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-</div>
-        <span class="k">return</span> <span class="n">X</span>
 
-<div class="viewcode-block" id="MissingValuesCleaner.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.filtering.base_filters.html#skmultiflow.filtering.base_filters.MissingValuesCleaner.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">X</span></div>
+
+<div class="viewcode-block" id="MissingValuesCleaner.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 <span class="sd">        </span>
 <span class="sd">        Partial fits the model.</span>
@@ -364,18 +360,15 @@
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;meadian&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-
-<div class="viewcode-block" id="MissingValuesCleaner.get_info"><a class="viewcode-back" href="../../../skmultiflow.filtering.base_filters.html#skmultiflow.filtering.base_filters.MissingValuesCleaner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner.get_info"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MissingValueCleaner: missing_value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - strategy: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">+</span> \
-               <span class="s1">&#39; - window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="o">+</span> \</div></div>
-               <span class="s1">&#39; - new_value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)</span>
-
-
+               <span class="s1">&#39; - window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - new_value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

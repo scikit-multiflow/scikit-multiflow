@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,14 +168,12 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.data.generators.sea_generator</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">from</span> <span class="nn">skmultiflow.data.base_instance_stream</span> <span class="k">import</span> <span class="n">BaseInstanceStream</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.core.base_object</span> <span class="k">import</span> <span class="n">BaseObject</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.data.base_stream</span> <span class="k">import</span> <span class="n">Stream</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="SEAGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator">[docs]</a><span class="k">class</span> <span class="nc">SEAGenerator</span><span class="p">(</span><span class="n">BaseInstanceStream</span><span class="p">,</span> <span class="n">BaseObject</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator">[docs]</a><span class="k">class</span> <span class="nc">SEAGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; SEAGenerator</span>
 <span class="sd">    </span>
 <span class="sd">    This generator is an implementation of the data stream with abrupt </span>
@@ -206,7 +204,7 @@
 <span class="sd">        Which of the four classification functions to use for the generation. </span>
 <span class="sd">        This value can vary from 0 to 3, and the thresholds are, 8, 9, 7 and 9.5.</span>
 <span class="sd">         </span>
-<span class="sd">    instance_seed: int (Default: 42)</span>
+<span class="sd">    sample_seed: int (Default: None)</span>
 <span class="sd">        The seed used to initialize the random generator, which is an instance </span>
 <span class="sd">        of numpy&#39;s random.</span>
 <span class="sd">        </span>
@@ -230,14 +228,14 @@
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.generators.sea_generator import SEAGenerator</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = SEAGenerator(classification_function = 2, instance_seed = 112, balance_classes = False, </span>
+<span class="sd">    &gt;&gt;&gt; stream = SEAGenerator(classification_function = 2, sample_seed = 112, balance_classes = False,</span>
 <span class="sd">    ... noise_percentage = 0.28)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Retrieving one sample</span>
-<span class="sd">    &gt;&gt;&gt; stream.next_instance()</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample()</span>
 <span class="sd">    (array([[ 3.75057129,  6.4030462 ,  9.50016579]]), array([ 0.]))</span>
 <span class="sd">    &gt;&gt;&gt; # Retrieving 10 samples</span>
-<span class="sd">    &gt;&gt;&gt; stream.next_instance(10)</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample(10)</span>
 <span class="sd">    (array([[ 7.76929659,  8.32745763,  0.5480574 ],</span>
 <span class="sd">       [ 8.85351458,  7.22346511,  0.02556032],</span>
 <span class="sd">       [ 3.43419851,  0.94759888,  3.94642589],</span>
@@ -249,62 +247,49 @@
 <span class="sd">       [ 6.8373245 ,  7.21957381,  2.14152091],</span>
 <span class="sd">       [ 0.75216155,  6.10890702,  4.25630425]]), array([ 1.,  1.,  1.,  1.,  1.,  0.,  0.,  1.,  1.,  1.]))</span>
 <span class="sd">    &gt;&gt;&gt; # Generators will have infinite remaining instances, so it returns -1</span>
-<span class="sd">    &gt;&gt;&gt; stream.estimated_remaining_instances()</span>
+<span class="sd">    &gt;&gt;&gt; stream.n_remaining_samples()</span>
 <span class="sd">    -1</span>
-<span class="sd">    &gt;&gt;&gt; stream.has_more_instances()</span>
+<span class="sd">    &gt;&gt;&gt; stream.has_more_samples()</span>
 <span class="sd">    True</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification_function</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">instance_seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span> <span class="n">balance_classes</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">noise_percentage</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification_function</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sample_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">balance_classes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1">#classification functions to use</span>
+        <span class="c1"># Classification functions to use</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classification_functions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_zero</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_one</span><span class="p">,</span>
                                          <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_two</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_three</span><span class="p">]</span>
 
-        <span class="c1">#default values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_values_per_nominal_att</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_index</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">noise_percentage</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">class_header</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">attributes_header</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">(</span><span class="n">classification_function</span><span class="p">,</span> <span class="n">instance_seed</span><span class="p">,</span> <span class="n">balance_classes</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification_function</span><span class="p">,</span> <span class="n">instance_seed</span><span class="p">,</span> <span class="n">balance_classes</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_index</span> <span class="o">=</span> <span class="n">classification_function</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span> <span class="o">=</span> <span class="n">instance_seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">classification_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_seed</span> <span class="o">=</span> <span class="n">sample_seed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span> <span class="o">=</span> <span class="n">balance_classes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">noise_percentage</span> <span class="o">=</span> <span class="n">noise_percentage</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">class_header</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">attributes_header</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">attributes_header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;NumAtt&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
 
+    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="SEAGenerator.estimated_remaining_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.estimated_remaining_instances">[docs]</a>    <span class="k">def</span> <span class="nf">estimated_remaining_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;att_num_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 
-<div class="viewcode-block" id="SEAGenerator.has_more_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.has_more_instances">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+<div class="viewcode-block" id="SEAGenerator.n_remaining_samples"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.next_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.next_instance">[docs]</a>    <span class="k">def</span> <span class="nf">next_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; next_instance</span>
+<div class="viewcode-block" id="SEAGenerator.has_more_samples"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SEAGenerator.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; next_sample</span>
 <span class="sd">        </span>
 <span class="sd">        The sample generation works as follows: The three attributes are </span>
 <span class="sd">        generated with the random generator, initialized with the seed passed </span>
@@ -329,26 +314,27 @@
 <span class="sd">            the batch_size samples that were requested.</span>
 <span class="sd">         </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
 
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
             <span class="n">att1</span> <span class="o">=</span> <span class="n">att2</span> <span class="o">=</span> <span class="n">att3</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="n">group</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">desired_class_found</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">while</span> <span class="ow">not</span> <span class="n">desired_class_found</span><span class="p">:</span>
-                <span class="n">att1</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-                <span class="n">att2</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-                <span class="n">att3</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-                <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_functions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_index</span><span class="p">](</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">)</span>
+                <span class="n">att1</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+                <span class="n">att2</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+                <span class="n">att3</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+                <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_functions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">](</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span><span class="p">:</span>
                     <span class="n">desired_class_found</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="ow">and</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="ow">or</span> \
+                            <span class="p">((</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)):</span>
                         <span class="n">desired_class_found</span> <span class="o">=</span> <span class="kc">True</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span>
 
-            <span class="k">if</span> <span class="p">((</span><span class="mf">0.01</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_percentage</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="mf">0.01</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_percentage</span><span class="p">:</span>
                 <span class="n">group</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
 
             <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">att1</span>
@@ -356,49 +342,44 @@
             <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">att3</span>
             <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">:]</span>
-</div>
-        <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-<div class="viewcode-block" id="SEAGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+<div class="viewcode-block" id="SEAGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SEAGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="SEAGenerator.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.has_more_mini_batch"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.has_more_mini_batch">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_mini_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+<div class="viewcode-block" id="SEAGenerator.get_n_cat_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_n_cat_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_cat_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_num_nominal_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_num_nominal_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_nominal_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span>
+<div class="viewcode-block" id="SEAGenerator.get_n_num_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_n_num_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_num_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_num_numerical_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_num_numerical_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_numerical_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span>
+<div class="viewcode-block" id="SEAGenerator.get_n_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_n_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_num_values_per_nominal_attribute"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_num_values_per_nominal_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_values_per_nominal_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_values_per_nominal_att</span>
+<div class="viewcode-block" id="SEAGenerator.get_n_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_n_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_num_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_num_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nominal_attributes</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_values_per_nominal_att</span><span class="p">)</span>
+<div class="viewcode-block" id="SEAGenerator.get_feature_names"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_feature_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_feature_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_num_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_num_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span>
+<div class="viewcode-block" id="SEAGenerator.get_target_names"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_target_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs_labels</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_attributes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_attributes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes_header</span>
+<div class="viewcode-block" id="SEAGenerator.last_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.last_sample">[docs]</a>    <span class="k">def</span> <span class="nf">last_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_classes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_classes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_header</span>
-
-<div class="viewcode-block" id="SEAGenerator.get_last_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_last_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span><span class="p">)</span>
-
-<div class="viewcode-block" id="SEAGenerator.classification_function_zero"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_zero">[docs]</a>    <span class="k">def</span> <span class="nf">classification_function_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_zero"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_zero</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_zero</span>
 <span class="sd">        </span>
 <span class="sd">        Decides the sample class label based on the sum of att1 and att2, </span>
@@ -420,10 +401,11 @@
 <span class="sd">        int</span>
 <span class="sd">            Returns the sample class label, either 0 or 1.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.classification_function_one"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_one">[docs]</a>    <span class="k">def</span> <span class="nf">classification_function_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_one"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_one</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_one</span>
 
 <span class="sd">        Decides the sample class label based on the sum of att1 and att2, </span>
@@ -445,10 +427,11 @@
 <span class="sd">        int</span>
 <span class="sd">            Returns the sample class label, either 0 or 1.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.classification_function_two"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_two">[docs]</a>    <span class="k">def</span> <span class="nf">classification_function_two</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_two"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_two</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_two</span>
 
 <span class="sd">        Decides the sample class label based on the sum of att1 and att2, </span>
@@ -470,10 +453,11 @@
 <span class="sd">        int</span>
 <span class="sd">            Returns the sample class label, either 0 or 1.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.classification_function_three"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_three">[docs]</a>    <span class="k">def</span> <span class="nf">classification_function_three</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_three"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_three</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_three</span>
 
 <span class="sd">        Decides the sample class label based on the sum of att1 and att2, </span>
@@ -495,39 +479,26 @@
 <span class="sd">        int</span>
 <span class="sd">            Returns the sample class label, either 0 or 1.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mf">9.5</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mf">9.5</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_plot_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_plot_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_plot_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="s2">&quot;SEA Generator - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; class labels&quot;</span>
+<div class="viewcode-block" id="SEAGenerator.get_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;SEA Generator - </span><span class="si">{}</span><span class="s2"> target, </span><span class="si">{}</span><span class="s2"> classes&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_classes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_classes">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">):</span>
-            <span class="n">c</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">c</span>
+<div class="viewcode-block" id="SEAGenerator.get_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)]</span></div>
 
 <div class="viewcode-block" id="SEAGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;SEAGenerator: classification_function: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_index</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - instance_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - balance_classes: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span> <span class="o">+</span> \</div>
-               <span class="s1">&#39; - noise_percentage: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_percentage</span><span class="p">)</span>
-
-<div class="viewcode-block" id="SEAGenerator.get_num_targeting_tasks"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.get_num_targeting_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targeting_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="s1">&#39;SEAGenerator: classification_function: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_seed</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - balance_classes: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - noise_percentage: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_percentage</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEAGenerator.generate_drift"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sea_generator.html#skmultiflow.data.generators.sea_generator.SEAGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-        <span class="k">while</span> <span class="n">new_function</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_index</span><span class="p">:</span>
-            <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span></div></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_index</span> <span class="o">=</span> <span class="n">new_function</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">sg</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="n">classification_function</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">next_instance</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">new_function</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">:</span>
+            <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">new_function</span></div></div>
 </pre></div>
 
            </div>

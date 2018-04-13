@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,15 +168,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.trees.hoeffding_adaptive_tree</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Alessandro Longobardi&#39;</span>
-
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span><span class="p">,</span> <span class="n">get_max_value_key</span><span class="p">,</span> <span class="n">normalize_values_in_dict</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.core.driftdetection.adwin</span> <span class="k">import</span> <span class="n">ADWIN</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.core.utils.utils</span> <span class="k">import</span> <span class="n">do_naive_bayes_prediction</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.trees.hoeffding_tree</span> <span class="k">import</span> <span class="n">HoeffdingTree</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -252,28 +250,26 @@
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] Bifet, Albert, and Ricard Gavaldà. &quot;Adaptive learning from evolving data streams.&quot;\</span>
-<span class="sd">    In International Symposium on Intelligent Data Analysis, pp. 249-260. Springer, Berlin, Heidelberg, 2009.</span>
+<span class="sd">       In International Symposium on Intelligent Data Analysis, pp. 249-260. Springer, Berlin, Heidelberg, 2009.</span>
 <span class="sd">    .. [2] Bifet, Albert, and Ricard Gavaldà. &quot;Learning from time-changing data with adaptive windowing.&quot;\</span>
-<span class="sd">    In Proceedings of the 2007 SIAM international conference on data mining, pp. 443-448. Society for Industrial\</span>
-<span class="sd">    and Applied Mathematics, 2007.</span>
+<span class="sd">       In Proceedings of the 2007 SIAM international conference on data mining, pp. 443-448. Society for Industrial\</span>
+<span class="sd">       and Applied Mathematics, 2007.</span>
 
-<span class="sd">     Examples</span>
+<span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.classification.trees.hoeffding_adaptive_tree import HAT</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.options.file_option import FileOption</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.evaluation.evaluate_prequential import EvaluatePrequential</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the File Stream</span>
-<span class="sd">    &gt;&gt;&gt; opt = FileOption(&quot;FILE&quot;, &quot;OPT_NAME&quot;, &quot;/skmultiflow/datasets/covtype.csv&quot;, &quot;CSV&quot;, False)</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(opt, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&quot;/skmultiflow/datasets/covtype.csv&quot;, -1, 1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; classifier = HAT()</span>
-<span class="sd">    &gt;&gt;&gt; eval = EvaluatePrequential(pretrain_size=200, max_instances=50000, batch_size=1, n_wait=200, max_time=1000,</span>
-<span class="sd">    &gt;&gt;&gt;                            output_file=None, task_type=&#39;classification&#39;, show_plot=True,</span>
-<span class="sd">    &gt;&gt;&gt;                            plot_options=[&#39;kappa&#39;, &#39;kappa_t&#39;, &#39;performance&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; evaluator = EvaluatePrequential(pretrain_size=200, max_samples=50000, batch_size=1, n_wait=200, max_time=1000,</span>
+<span class="sd">    &gt;&gt;&gt;                                 output_file=None, show_plot=True, metrics=[&#39;kappa&#39;, &#39;kappa_t&#39;, &#39;performance&#39;])</span>
 <span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; eval.eval(stream=stream, classifier=classifier)</span>
+<span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=classifier)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="HAT.NewNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode">[docs]</a>    <span class="k">class</span> <span class="nc">NewNode</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
@@ -282,33 +278,33 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="HAT.NewNode.number_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.number_leaves">[docs]</a>        <span class="nd">@abstractmethod</span>
-        <span class="k">def</span> <span class="nf">number_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">number_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="HAT.NewNode.get_error_estimation"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.get_error_estimation">[docs]</a>        <span class="nd">@abstractmethod</span>
-        <span class="k">def</span> <span class="nf">get_error_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">get_error_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="HAT.NewNode.get_error_width"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.get_error_width">[docs]</a>        <span class="nd">@abstractmethod</span>
-        <span class="k">def</span> <span class="nf">get_error_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">get_error_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="HAT.NewNode.is_null_error"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.is_null_error">[docs]</a>        <span class="nd">@abstractmethod</span>
-        <span class="k">def</span> <span class="nf">is_null_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">is_null_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="HAT.NewNode.kill_tree_children"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.kill_tree_children">[docs]</a>        <span class="nd">@abstractmethod</span>
-        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hat</span><span class="p">):</span></div>
-            <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hat</span><span class="p">):</span>
+            <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="HAT.NewNode.learn_from_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.learn_from_instance">[docs]</a>        <span class="nd">@abstractmethod</span>
-        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">hat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span></div>
-            <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">hat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
+            <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="HAT.NewNode.filter_instance_to_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.NewNode.filter_instance_to_leaves">[docs]</a>        <span class="nd">@abstractmethod</span>
         <span class="k">def</span> <span class="nf">filter_instance_to_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">,</span>
-                                      <span class="n">update_splitter_counts</span><span class="p">,</span> <span class="n">found_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span></div></div>
-            <span class="k">pass</span>
+                                      <span class="n">update_splitter_counts</span><span class="p">,</span> <span class="n">found_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">pass</span></div></div>
 
 <div class="viewcode-block" id="HAT.AdaSplitNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode">[docs]</a>    <span class="k">class</span> <span class="nc">AdaSplitNode</span><span class="p">(</span><span class="n">SplitNode</span><span class="p">,</span> <span class="n">NewNode</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">):</span>
@@ -317,7 +313,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">error_change</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_random_seed</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_classifier_random</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_random_seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_classifier_random</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_random_seed</span><span class="p">)</span>
 
         <span class="c1"># Override SplitNode</span>
 <div class="viewcode-block" id="HAT.AdaSplitNode.calc_byte_size_including_subtree"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.calc_byte_size_including_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size_including_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -330,8 +326,8 @@
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">byte_size</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">calc_byte_size_including_subtree</span><span class="p">()</span>
-</div>
-            <span class="k">return</span> <span class="n">byte_size</span>
+
+            <span class="k">return</span> <span class="n">byte_size</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="HAT.AdaSplitNode.number_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.number_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">number_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -339,24 +335,24 @@
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">num_of_leaves</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">number_leaves</span><span class="p">()</span>
-</div>
-            <span class="k">return</span> <span class="n">num_of_leaves</span>
+
+            <span class="k">return</span> <span class="n">num_of_leaves</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="HAT.AdaSplitNode.get_error_estimation"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.get_error_estimation">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">_estimation</span>
+<div class="viewcode-block" id="HAT.AdaSplitNode.get_error_estimation"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.get_error_estimation">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">_estimation</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="HAT.AdaSplitNode.get_error_width"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.get_error_width">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="n">w</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_null_error</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">_width</span>
-</div>
-            <span class="k">return</span> <span class="n">w</span>
+
+            <span class="k">return</span> <span class="n">w</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="HAT.AdaSplitNode.is_null_error"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.is_null_error">[docs]</a>        <span class="k">def</span> <span class="nf">is_null_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="kc">None</span>
+<div class="viewcode-block" id="HAT.AdaSplitNode.is_null_error"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.is_null_error">[docs]</a>        <span class="k">def</span> <span class="nf">is_null_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="kc">None</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="HAT.AdaSplitNode.learn_from_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">hat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
@@ -365,7 +361,7 @@
             <span class="n">class_prediction</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_instance_to_leaf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span><span class="o">.</span><span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">class_prediction</span> <span class="o">=</span> <span class="n">get_max_value_index</span><span class="p">(</span>
+                <span class="n">class_prediction</span> <span class="o">=</span> <span class="n">get_max_value_key</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">filter_instance_to_leaf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">get_class_votes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">hat</span><span class="p">))</span>
 
             <span class="n">bl_correct</span> <span class="o">=</span> <span class="p">(</span><span class="n">true_class</span> <span class="o">==</span> <span class="n">class_prediction</span><span class="p">)</span>
@@ -425,8 +421,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">hat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span>
             <span class="n">child_branch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_child_index</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
             <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="n">child_branch</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span></div>
-                <span class="n">child</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">hat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">child</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">hat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="HAT.AdaSplitNode.kill_tree_children"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.kill_tree_children">[docs]</a>        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hat</span><span class="p">):</span>
@@ -443,8 +439,8 @@
                         <span class="n">child</span> <span class="o">=</span> <span class="kc">None</span>
                         <span class="n">hat</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span>
                     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">HAT</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
-                        <span class="n">child</span> <span class="o">=</span> <span class="kc">None</span></div>
-                        <span class="n">hat</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span>
+                        <span class="n">child</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="n">hat</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span></div>
 
         <span class="c1"># override NewNode</span>
 <div class="viewcode-block" id="HAT.AdaSplitNode.filter_instance_to_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaSplitNode.filter_instance_to_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">filter_instance_to_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">,</span>
@@ -465,8 +461,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">found_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">FoundNode</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">child_index</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">filter_instance_to_leaves</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">999</span><span class="p">,</span></div></div>
-                                                               <span class="n">update_splitter_counts</span><span class="p">,</span> <span class="n">found_nodes</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">filter_instance_to_leaves</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">999</span><span class="p">,</span>
+                                                               <span class="n">update_splitter_counts</span><span class="p">,</span> <span class="n">found_nodes</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="HAT.AdaLearningNode"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">AdaLearningNode</span><span class="p">(</span><span class="n">LearningNodeNBAdaptive</span><span class="p">,</span> <span class="n">NewNode</span><span class="p">):</span>
 
@@ -475,44 +471,44 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ErrorChange</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_randomSeed</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_classifierRandom</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_randomSeed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_classifier_random</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_randomSeed</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HAT.AdaLearningNode.calc_byte_size"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.calc_byte_size">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="n">byte_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">byte_size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">get_length_estimation</span><span class="p">()</span></div>
-            <span class="k">return</span> <span class="n">byte_size</span>
+                <span class="n">byte_size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">get_length_estimation</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">byte_size</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="HAT.AdaLearningNode.number_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.number_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">number_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">return</span> <span class="mi">1</span>
+<div class="viewcode-block" id="HAT.AdaLearningNode.number_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.number_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">number_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">1</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="HAT.AdaLearningNode.get_error_estimation"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_error_estimation">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">_estimation</span>
+<div class="viewcode-block" id="HAT.AdaLearningNode.get_error_estimation"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_error_estimation">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">_estimation</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="HAT.AdaLearningNode.get_error_width"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_error_width">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">_width</span>
+<div class="viewcode-block" id="HAT.AdaLearningNode.get_error_width"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_error_width">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">_width</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="HAT.AdaLearningNode.is_null_error"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.is_null_error">[docs]</a>        <span class="k">def</span> <span class="nf">is_null_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+<div class="viewcode-block" id="HAT.AdaLearningNode.is_null_error"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.is_null_error">[docs]</a>        <span class="k">def</span> <span class="nf">is_null_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HAT.AdaLearningNode.kill_tree_children"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.kill_tree_children">[docs]</a>        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hat</span><span class="p">):</span></div>
-            <span class="k">pass</span>
+<div class="viewcode-block" id="HAT.AdaLearningNode.kill_tree_children"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.kill_tree_children">[docs]</a>        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hat</span><span class="p">):</span>
+            <span class="k">pass</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="HAT.AdaLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">hat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
             <span class="n">true_class</span> <span class="o">=</span> <span class="n">y</span>
 
-            <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_classifierRandom</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">k</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_classifier_random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="c1"># if k &gt; 0:</span>
+                <span class="c1"># weight = weight * k</span>
 
             <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_class_votes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">hat</span><span class="p">)</span>
 
-            <span class="n">class_prediction</span> <span class="o">=</span> <span class="n">get_max_value_index</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">class_prediction</span> <span class="o">=</span> <span class="n">get_max_value_key</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
 
             <span class="n">bl_correct</span> <span class="o">=</span> <span class="p">(</span><span class="n">true_class</span> <span class="o">==</span> <span class="n">class_prediction</span><span class="p">)</span>
 
@@ -538,8 +534,8 @@
             <span class="n">weight_seen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight_seen</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">weight_seen</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight_seen_at_last_split_evaluation</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">hat</span><span class="o">.</span><span class="n">grace_period</span><span class="p">:</span>
-                <span class="n">hat</span><span class="o">.</span><span class="n">_attempt_to_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
-                <span class="bp">self</span><span class="o">.</span><span class="n">set_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="n">weight_seen</span><span class="p">)</span>
+                <span class="n">hat</span><span class="o">.</span><span class="n">_attempt_to_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="n">weight_seen</span><span class="p">)</span></div>
 
         <span class="c1"># Override LearningNodeNBAdaptive</span>
 <div class="viewcode-block" id="HAT.AdaLearningNode.get_class_votes"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
@@ -563,15 +559,15 @@
 
             <span class="k">if</span> <span class="n">normalization_factor</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
                 <span class="n">normalize_values_in_dict</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">normalization_factor</span><span class="p">)</span>
-</div>
-            <span class="k">return</span> <span class="n">dist</span>
+
+            <span class="k">return</span> <span class="n">dist</span></div>
 
         <span class="c1"># Override NewNode, New for option votes</span>
 <div class="viewcode-block" id="HAT.AdaLearningNode.filter_instance_to_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.AdaLearningNode.filter_instance_to_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">filter_instance_to_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">,</span>
                                       <span class="n">update_splitter_counts</span><span class="p">,</span> <span class="n">found_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">found_nodes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">found_nodes</span> <span class="o">=</span> <span class="p">[]</span></div></div>
-            <span class="n">found_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">FoundNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">))</span>
+                <span class="n">found_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">found_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">FoundNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">))</span></div></div>
 
     <span class="c1"># =============================================</span>
     <span class="c1"># == Hoeffding Adaptive Tree implementation ===</span>
@@ -613,8 +609,8 @@
 <div class="viewcode-block" id="HAT.reset"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_trees</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pruned_alternate_trees</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_switch_alternate_trees</span> <span class="o">=</span> <span class="mi">0</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tree_root</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_switch_alternate_trees</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tree_root</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="c1"># Override HoeffdingTree</span>
     <span class="k">def</span> <span class="nf">_partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
@@ -627,8 +623,8 @@
 <div class="viewcode-block" id="HAT.filter_instance_to_leaves"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.filter_instance_to_leaves">[docs]</a>    <span class="k">def</span> <span class="nf">filter_instance_to_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">split_parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">,</span> <span class="n">update_splitter_counts</span><span class="p">):</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tree_root</span><span class="o">.</span><span class="n">filter_instance_to_leaves</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">split_parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">,</span>
-                                                  <span class="n">update_splitter_counts</span><span class="p">,</span> <span class="n">nodes</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">nodes</span>
+                                                  <span class="n">update_splitter_counts</span><span class="p">,</span> <span class="n">nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nodes</span></div>
 
     <span class="c1"># Override HoeffdingTree</span>
 <div class="viewcode-block" id="HAT.get_votes_for_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.get_votes_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_votes_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
@@ -641,8 +637,8 @@
                     <span class="k">if</span> <span class="n">leaf_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">leaf_node</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">parent</span>
                     <span class="n">dist</span> <span class="o">=</span> <span class="n">leaf_node</span><span class="o">.</span><span class="n">get_class_votes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-                    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>  <span class="c1"># add elements to dictionary</span></div>
-        <span class="k">return</span> <span class="n">result</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>  <span class="c1"># add elements to dictionary</span>
+        <span class="k">return</span> <span class="n">result</span></div>
 
     <span class="c1"># Override HoeffdingTree/BaseClassifier</span>
 <div class="viewcode-block" id="HAT.predict"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
@@ -654,22 +650,22 @@
                 <span class="c1"># Tree is empty, all classes equal, default to zero</span>
                 <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">votes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">votes</span><span class="o">.</span><span class="n">get</span><span class="p">))</span></div>
-        <span class="k">return</span> <span class="n">predictions</span>
+                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">votes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">votes</span><span class="o">.</span><span class="n">get</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">predictions</span></div>
 
-<div class="viewcode-block" id="HAT.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="HAT.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="HAT.predict_proba"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="HAT.predict_proba"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
     <span class="c1"># Override HoeffdingTree</span>
     <span class="k">def</span> <span class="nf">_new_learning_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AdaLearningNode</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
     <span class="c1"># Override HoeffdingTree</span>
-<div class="viewcode-block" id="HAT.new_split_node"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.new_split_node">[docs]</a>    <span class="k">def</span> <span class="nf">new_split_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">):</span></div></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AdaSplitNode</span><span class="p">(</span><span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">)</span>
+<div class="viewcode-block" id="HAT.new_split_node"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.hoeffding_adaptive_tree.html#skmultiflow.classification.trees.hoeffding_adaptive_tree.HAT.new_split_node">[docs]</a>    <span class="k">def</span> <span class="nf">new_split_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AdaSplitNode</span><span class="p">(</span><span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

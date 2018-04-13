@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,9 +168,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.core.driftdetection.base_drift_detector</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.base_object</span> <span class="k">import</span> <span class="n">BaseObject</span>
 
 
@@ -204,8 +202,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span> <span class="o">=</span> <span class="mf">0.0</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="BaseDriftDetector.detected_change"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector.detected_change">[docs]</a>    <span class="k">def</span> <span class="nf">detected_change</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; detected_change</span>
@@ -217,8 +215,8 @@
 <span class="sd">        bool</span>
 <span class="sd">            Whether concept drift was detected or not.</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span></div>
 
 <div class="viewcode-block" id="BaseDriftDetector.detected_warning_zone"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector.detected_warning_zone">[docs]</a>    <span class="k">def</span> <span class="nf">detected_warning_zone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; detected_warning_zone</span>
@@ -231,8 +229,8 @@
 <span class="sd">        bool</span>
 <span class="sd">            Whether the change detector is in the warning zone or not.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span></div>
 
 <div class="viewcode-block" id="BaseDriftDetector.get_length_estimation"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector.get_length_estimation">[docs]</a>    <span class="k">def</span> <span class="nf">get_length_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_length_estimation</span>
@@ -244,8 +242,8 @@
 <span class="sd">        int</span>
 <span class="sd">            The length estimation</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span></div>
 
 <div class="viewcode-block" id="BaseDriftDetector.add_element"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector.add_element">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_value</span><span class="p">):</span>
@@ -263,15 +261,15 @@
 <span class="sd">        BaseDriftDetector</span>
 <span class="sd">            self, optional</span>
 <span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="BaseDriftDetector.get_info"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector.get_info">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="BaseDriftDetector.get_class_type"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
-        <span class="k">return</span> <span class="s1">&#39;drift_detector&#39;</span>
+<div class="viewcode-block" id="BaseDriftDetector.get_class_type"><a class="viewcode-back" href="../../../../../skmultiflow.classification.core.driftdetection.base_drift_detector.html#skmultiflow.classification.core.driftdetection.base_drift_detector.BaseDriftDetector.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;drift_detector&#39;</span></div></div>
 </pre></div>
 
            </div>

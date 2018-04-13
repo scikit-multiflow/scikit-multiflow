@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,17 +168,14 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.meta.oza_bagging_adwin</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span></span><span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">cp</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.lazy.knn_adwin</span> <span class="k">import</span> <span class="n">KNNAdwin</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.base</span> <span class="k">import</span> <span class="n">BaseClassifier</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.core.driftdetection.adwin</span> <span class="k">import</span> <span class="n">ADWIN</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="OzaBaggingAdwin"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin">[docs]</a><span class="k">class</span> <span class="nc">OzaBaggingAdwin</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">):</span>
+<div class="viewcode-block" id="OzaBaggingAdwin"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin">[docs]</a><span class="k">class</span> <span class="nc">OzaBaggingAdwin</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; OzaBagging Classifier with ADWIN change detector</span>
 <span class="sd">    </span>
 <span class="sd">    This online ensemble learner method is an improvement from the Online </span>
@@ -232,10 +229,10 @@
 <span class="sd">    &gt;&gt;&gt; sample_count = 0</span>
 <span class="sd">    &gt;&gt;&gt; corrects = 0</span>
 <span class="sd">    &gt;&gt;&gt; # Pre training the classifier with 200 samples</span>
-<span class="sd">    &gt;&gt;&gt; X, y = stream.next_instance(200)</span>
-<span class="sd">    &gt;&gt;&gt; clf = clf.partial_fit(X, y, classes=stream.get_classes())</span>
+<span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(200)</span>
+<span class="sd">    &gt;&gt;&gt; clf = clf.partial_fit(X, y, classes=stream.get_targets())</span>
 <span class="sd">    &gt;&gt;&gt; for i in range(2000):</span>
-<span class="sd">    ...     X, y = stream.next_instance()</span>
+<span class="sd">    ...     X, y = stream.next_sample()</span>
 <span class="sd">    ...     pred = clf.predict(X)</span>
 <span class="sd">    ...     clf = clf.partial_fit(X, y)</span>
 <span class="sd">    ...     if pred is not None:</span>
@@ -268,8 +265,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span> <span class="o">=</span> <span class="n">ensemble_length</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span><span class="p">)]</span>
 
-<div class="viewcode-block" id="OzaBaggingAdwin.fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="OzaBaggingAdwin.fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="OzaBaggingAdwin.partial_fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
@@ -364,8 +361,8 @@
             <span class="k">if</span> <span class="n">imax</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">imax</span><span class="p">]</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">adwin_ensemble</span><span class="p">[</span><span class="n">imax</span><span class="p">]</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
-</div>
-        <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="k">def</span> <span class="nf">__adjust_ensemble_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">):</span>
@@ -374,7 +371,6 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">))</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">adwin_ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ADWIN</span><span class="p">())</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span> <span class="o">+=</span> <span class="mi">1</span>
-
 
 <div class="viewcode-block" id="OzaBaggingAdwin.predict"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
@@ -399,8 +395,8 @@
         <span class="k">if</span> <span class="n">probs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]))])</span></div>
-        <span class="k">return</span> <span class="n">preds</span>
+            <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]))])</span>
+        <span class="k">return</span> <span class="n">preds</span></div>
 
 <div class="viewcode-block" id="OzaBaggingAdwin.predict_proba"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict_proba</span>
@@ -455,21 +451,21 @@
             <span class="n">total_sum</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probs</span><span class="p">)]</span>
         <span class="n">aux</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">probs</span><span class="p">)):</span>
-            <span class="n">aux</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span> <span class="o">/</span> <span class="n">total_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span></div>
-        <span class="k">return</span> <span class="n">aux</span>
+            <span class="n">aux</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span> <span class="o">/</span> <span class="n">total_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="n">aux</span></div>
 
-<div class="viewcode-block" id="OzaBaggingAdwin.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="OzaBaggingAdwin.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="OzaBaggingAdwin.reset"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adwin_ensemble</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span><span class="p">):</span></div>
-            <span class="bp">self</span><span class="o">.</span><span class="n">adwin_ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ADWIN</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">adwin_ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ADWIN</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="OzaBaggingAdwin.get_info"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.oza_bagging_adwin.html#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;OzaBagging Classifier: h: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> \</div></div>
-               <span class="s1">&#39; - ensemble_length: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;OzaBagging Classifier: h: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - ensemble_length: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble_length</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

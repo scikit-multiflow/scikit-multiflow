@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,20 +168,19 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.data.generators.multilabel_generator</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.data.base_instance_stream</span> <span class="k">import</span> <span class="n">BaseInstanceStream</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.data.base_stream</span> <span class="k">import</span> <span class="n">Stream</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_multilabel_classification</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="MultilabelGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator">[docs]</a><span class="k">class</span> <span class="nc">MultilabelGenerator</span><span class="p">(</span><span class="n">BaseInstanceStream</span><span class="p">):</span>
+<div class="viewcode-block" id="MultilabelGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator">[docs]</a><span class="k">class</span> <span class="nc">MultilabelGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; MultilabelGenerator</span>
 
 <span class="sd">    This generator creates a stream of samples for a multilabel problem. </span>
 <span class="sd">    It uses the make_multilabel_classification function from scikit-learn, </span>
 <span class="sd">    which creates a batch setting multilabel classification problem. These </span>
-<span class="sd">    samples are then sequentially fed by the next_instance function.</span>
+<span class="sd">    samples are then sequentially fed by the next_sample function.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -192,98 +191,106 @@
 <span class="sd">        Number of features to generate.</span>
 
 <span class="sd">    n_targets: int (Default: 1)</span>
-<span class="sd">        Number of targeting tasks to generate.</span>
+<span class="sd">        Number of targets to generate.</span>
 <span class="sd">        </span>
 <span class="sd">    n_labels: int (Default: 2)</span>
-<span class="sd">        Number of labels to generate.</span>
+<span class="sd">        Average number of labels per instance.</span>
+
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">        If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">        If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">        If None, the random number generator is the RandomState instance used by `np.random`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This is a wrapper for scikit-lean&#39;s `make_multilabel_classification`</span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.generators.multilabel_generator import MultilabelGenerator</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = MultilabelGenerator(n_samples=40000, n_features=10, n_targets=4, n_labels=4)</span>
+<span class="sd">    &gt;&gt;&gt; stream = MultilabelGenerator(n_samples=100, n_features=20, n_targets=4, n_labels=4, random_state=0)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Retrieving one sample</span>
-<span class="sd">    &gt;&gt;&gt; stream.next_instance()</span>
-<span class="sd">    (array([[ 7.,  2.,  7.,  5.,  3.,  2.,  6.,  8.,  3.,  6.]]), array([[1, 1, 1, 1]]))</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample()</span>
+<span class="sd">    (array([[3., 0., 1., 3., 6., 2., 5., 0., 5., 6., 3., 5., 1., 2., 0., 3.,</span>
+<span class="sd">         3., 2., 2., 1.]]), array([[0, 1, 1, 1]]))</span>
 <span class="sd">    &gt;&gt;&gt; # Retrieving 10 samples</span>
-<span class="sd">    &gt;&gt;&gt; stream.next_instance(10)</span>
-<span class="sd">    (array([[  2.,   2.,   5.,   2.,   5.,   5.,   4.,   2.,   3.,   5.],</span>
-<span class="sd">       [  2.,   1.,   5.,   5.,   1.,   1.,   7.,  10.,   5.,   4.],</span>
-<span class="sd">       [  6.,   5.,  11.,   6.,  11.,   0.,   4.,   6.,   0.,   1.],</span>
-<span class="sd">       [  9.,   6.,   4.,   4.,   3.,   9.,   6.,   8.,   9.,   0.],</span>
-<span class="sd">       [  5.,   3.,   5.,   2.,   5.,   3.,   4.,  10.,   5.,   1.],</span>
-<span class="sd">       [ 12.,   8.,   9.,   9.,   2.,   5.,   8.,   8.,   4.,   2.],</span>
-<span class="sd">       [  9.,   8.,   3.,   3.,   4.,   5.,   8.,  11.,   3.,   2.],</span>
-<span class="sd">       [  5.,   5.,   3.,   0.,   7.,   4.,   7.,   8.,   9.,   0.],</span>
-<span class="sd">       [  4.,   2.,  11.,   4.,   7.,   2.,   4.,   4.,   3.,   4.],</span>
-<span class="sd">       [  5.,   0.,  10.,   6.,   6.,   6.,   5.,   4.,  11.,   3.]]), array([[0, 1, 1, 1],</span>
-<span class="sd">       [1, 1, 1, 1],</span>
-<span class="sd">       [1, 0, 0, 0],</span>
-<span class="sd">       [0, 0, 1, 1],</span>
-<span class="sd">       [1, 1, 1, 1],</span>
-<span class="sd">       [1, 0, 1, 1],</span>
-<span class="sd">       [1, 0, 1, 0],</span>
-<span class="sd">       [0, 1, 1, 1],</span>
-<span class="sd">       [1, 1, 1, 1],</span>
-<span class="sd">       [0, 1, 1, 1]]))</span>
-<span class="sd">    &gt;&gt;&gt; stream.estimated_remaining_instances()</span>
-<span class="sd">    39989</span>
-<span class="sd">    &gt;&gt;&gt; stream.has_more_instances()</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample(10)</span>
+<span class="sd">    (array([[4., 0., 2., 6., 2., 2., 1., 1., 3., 1., 3., 0., 1., 4., 0., 1.,</span>
+<span class="sd">         2., 2., 1., 1.],</span>
+<span class="sd">        [2., 2., 1., 6., 4., 0., 3., 1., 2., 4., 2., 2., 1., 2., 2., 1.,</span>
+<span class="sd">         3., 2., 1., 1.],</span>
+<span class="sd">        [7., 3., 3., 5., 6., 1., 4., 3., 3., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="sd">         3., 2., 1., 8.],</span>
+<span class="sd">        [1., 5., 1., 3., 4., 2., 2., 0., 4., 3., 2., 2., 2., 2., 3., 1.,</span>
+<span class="sd">         5., 0., 2., 0.],</span>
+<span class="sd">        [7., 3., 2., 7., 4., 6., 2., 1., 4., 1., 1., 0., 1., 0., 1., 0.,</span>
+<span class="sd">         1., 1., 1., 4.],</span>
+<span class="sd">        [0., 2., 1., 1., 6., 3., 4., 2., 5., 3., 0., 3., 0., 1., 3., 0.,</span>
+<span class="sd">         3., 3., 2., 3.],</span>
+<span class="sd">        [5., 1., 2., 3., 4., 1., 0., 3., 3., 3., 8., 0., 0., 2., 0., 0.,</span>
+<span class="sd">         0., 2., 1., 1.],</span>
+<span class="sd">        [2., 5., 6., 0., 5., 2., 5., 2., 5., 4., 1., 1., 4., 1., 1., 0.,</span>
+<span class="sd">         1., 8., 3., 4.],</span>
+<span class="sd">        [2., 4., 6., 2., 3., 8., 2., 2., 3., 3., 5., 1., 0., 0., 1., 4.,</span>
+<span class="sd">         0., 1., 0., 3.],</span>
+<span class="sd">        [4., 2., 2., 2., 6., 5., 3., 3., 6., 1., 1., 0., 2., 2., 1., 2.,</span>
+<span class="sd">         3., 5., 1., 5.]]), array([[1, 1, 1, 1],</span>
+<span class="sd">        [0, 1, 1, 0],</span>
+<span class="sd">        [0, 1, 0, 1],</span>
+<span class="sd">        [1, 0, 1, 0],</span>
+<span class="sd">        [0, 1, 0, 1],</span>
+<span class="sd">        [1, 0, 1, 1],</span>
+<span class="sd">        [0, 1, 0, 0],</span>
+<span class="sd">        [1, 1, 1, 0],</span>
+<span class="sd">        [0, 1, 0, 0],</span>
+<span class="sd">        [1, 1, 1, 1]]))</span>
+<span class="sd">    &gt;&gt;&gt; stream.n_remaining_samples()</span>
+<span class="sd">    89</span>
+<span class="sd">    &gt;&gt;&gt; stream.has_more_samples()</span>
 <span class="sd">    True</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_labels</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_labels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span><span class="p">,</span> <span class="n">n_targets</span><span class="p">,</span> <span class="n">n_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">n_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="n">n_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">n_targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_labels</span> <span class="o">=</span> <span class="n">n_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">=</span> <span class="n">n_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span><span class="p">,</span> <span class="n">n_targets</span><span class="p">,</span> <span class="n">n_labels</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; __configure</span>
 
 <span class="sd">        Uses the make_multilabel_classification function from scikit-learn </span>
 <span class="sd">        to generate a multilabel classification problem. This problem will </span>
 <span class="sd">        be kept in memory and provided as demanded.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        n_samples: int</span>
-<span class="sd">            Total amount of samples to generate.</span>
-
-<span class="sd">        n_features: int</span>
-<span class="sd">            Number of features to generate.</span>
-
-<span class="sd">        n_targets: int</span>
-<span class="sd">            Number of targeting tasks to generate.</span>
-<span class="sd">        </span>
-<span class="sd">        n_labels: int</span>
-<span class="sd">            Number of labels to generate.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">make_multilabel_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="n">n_features</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="n">n_targets</span><span class="p">,</span> <span class="n">n_labels</span><span class="o">=</span><span class="n">n_labels</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="n">n_samples</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">n_features</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span> <span class="o">=</span> <span class="n">n_targets</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span> <span class="o">=</span> <span class="n">n_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">make_multilabel_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">,</span>
+                                                        <span class="n">n_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">,</span>
+                                                        <span class="n">n_classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span>
+                                                        <span class="n">n_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_labels</span><span class="p">,</span>
+                                                        <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;target_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;att_num_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">)]</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.estimated_remaining_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.estimated_remaining_instances">[docs]</a>    <span class="k">def</span> <span class="nf">estimated_remaining_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span><span class="p">)</span>
+<div class="viewcode-block" id="MultilabelGenerator.n_remaining_samples"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.has_more_instances"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.has_more_instances">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<div class="viewcode-block" id="MultilabelGenerator.has_more_samples"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.next_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.next_instance">[docs]</a>    <span class="k">def</span> <span class="nf">next_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; next_instance</span>
+<div class="viewcode-block" id="MultilabelGenerator.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; next_sample</span>
 <span class="sd">        </span>
 <span class="sd">        Return batch_size samples from the X and y matrices stored in</span>
 <span class="sd">        memory.</span>
@@ -300,72 +307,68 @@
 <span class="sd">            the batch_size samples that were requested.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">+=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">+=</span> <span class="n">batch_size</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">-</span> <span class="n">batch_size</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span><span class="p">,:]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span> <span class="o">-</span> <span class="n">batch_size</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_index</span><span class="p">,:]</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">-</span> <span class="n">batch_size</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">-</span> <span class="n">batch_size</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span> <span class="o">=</span> <span class="kc">None</span>
-</div>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="MultilabelGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.has_more_mini_batch"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.has_more_mini_batch">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_mini_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_nominal_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_nominal_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_nominal_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_n_cat_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_n_cat_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_cat_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_numerical_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_numerical_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_numerical_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_n_num_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_n_num_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_num_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_values_per_nominal_attribute"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_values_per_nominal_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_values_per_nominal_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_n_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_n_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_attributes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_n_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_n_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_num_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_feature_names"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_feature_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_feature_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_attributes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_attributes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_target_names"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_target_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs_labels</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_classes_header"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_classes_header">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.last_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.last_sample">[docs]</a>    <span class="k">def</span> <span class="nf">last_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_last_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_last_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_instance_y</span>
+<div class="viewcode-block" id="MultilabelGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Multilabel Generator - </span><span class="si">{}</span><span class="s1"> targets&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_plot_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_plot_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_plot_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="s1">&#39;Multilabel dataset&#39;</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="MultilabelGenerator.get_classes"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_classes">[docs]</a>    <span class="k">def</span> <span class="nf">get_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-
-<div class="viewcode-block" id="MultilabelGenerator.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="s1">&#39;stream&#39;</span>
+<div class="viewcode-block" id="MultilabelGenerator.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;stream&#39;</span></div>
 
 <div class="viewcode-block" id="MultilabelGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;MultilabelGenerator: n_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - n_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_features</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span><span class="p">)</span> <span class="o">+</span> \</div>
-               <span class="s1">&#39; - n_labels:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span><span class="p">)</span>
-
-<div class="viewcode-block" id="MultilabelGenerator.get_num_targeting_tasks"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.multilabel_generator.html#skmultiflow.data.generators.multilabel_generator.MultilabelGenerator.get_num_targeting_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targeting_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_tasks</span>
+        <span class="k">return</span> <span class="s1">&#39;MultilabelGenerator: n_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_labels:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_labels</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

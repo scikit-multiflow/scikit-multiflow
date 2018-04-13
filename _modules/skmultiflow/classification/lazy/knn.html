@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,18 +168,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.lazy.knn</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.base</span> <span class="k">import</span> <span class="n">BaseClassifier</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.lazy.neighbors.distances</span> <span class="k">import</span> <span class="n">euclidean_distance</span><span class="p">,</span> <span class="n">mixed_distance</span>
+<span></span><span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.data_structures</span> <span class="k">import</span> <span class="n">InstanceWindow</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.lazy.neighbors.kdtree</span> <span class="k">import</span> <span class="n">KDTree</span>
 <span class="kn">import</span> <span class="nn">sklearn.neighbors</span> <span class="k">as</span> <span class="nn">sk</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="KNN"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN">[docs]</a><span class="k">class</span> <span class="nc">KNN</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">):</span>
+<div class="viewcode-block" id="KNN"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN">[docs]</a><span class="k">class</span> <span class="nc">KNN</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; K-Nearest Neighbors Classifier</span>
 <span class="sd">    </span>
 <span class="sd">    This is a non-parametric classification method. The output of this</span>
@@ -241,20 +236,18 @@
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.classification.lazy.knn import KNN</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.options.file_option import FileOption</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
-<span class="sd">    &gt;&gt;&gt; opt = FileOption(&#39;FILE&#39;, &#39;OPT_NAME&#39;, &#39;skmultiflow/datasets/sea_big.csv&#39;, &#39;csv&#39;, False)</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(opt, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&#39;skmultiflow/datasets/sea_big.csv&#39;, -1, 1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Pre training the classifier with 200 samples</span>
-<span class="sd">    &gt;&gt;&gt; X, y = stream.next_instance(200)</span>
+<span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(200)</span>
 <span class="sd">    &gt;&gt;&gt; knn = KNN(k=8, max_window_size=2000, leaf_size=40)</span>
 <span class="sd">    &gt;&gt;&gt; knn.partial_fit(X, y)</span>
 <span class="sd">    &gt;&gt;&gt; # Preparing the processing of 5000 samples and correct prediction count</span>
 <span class="sd">    &gt;&gt;&gt; n_samples = 0</span>
 <span class="sd">    &gt;&gt;&gt; corrects = 0</span>
 <span class="sd">    &gt;&gt;&gt; while n_samples &lt; 5000:</span>
-<span class="sd">    ...     X, y = stream.next_instance()</span>
+<span class="sd">    ...     X, y = stream.next_sample()</span>
 <span class="sd">    ...     my_pred = knn.predict(X)</span>
 <span class="sd">    ...     if y[0] == my_pred[0]:</span>
 <span class="sd">    ...         corrects += 1</span>
@@ -317,8 +310,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">InstanceWindow</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]]]))</span></div>
-        <span class="k">return</span> <span class="bp">self</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]]]))</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="KNN.partial_fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
@@ -355,12 +348,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">InstanceWindow</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]]]))</span></div>
-        <span class="k">return</span> <span class="bp">self</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]]]))</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="KNN.reset"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span></div>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="KNN.predict"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
@@ -383,8 +376,8 @@
         <span class="n">probs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">preds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]))])</span></div>
-        <span class="k">return</span> <span class="n">preds</span>
+            <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]))])</span>
+        <span class="k">return</span> <span class="n">preds</span></div>
 
     <span class="k">def</span> <span class="nf">_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -430,8 +423,8 @@
             <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">new_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                 <span class="n">classes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_targets_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">])]</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">probs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">new_ind</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">])</span>
-</div>
-        <span class="k">return</span> <span class="n">probs</span>
+
+        <span class="k">return</span> <span class="n">probs</span></div>
 
     <span class="k">def</span> <span class="nf">__predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; __predict_proba</span>
@@ -462,12 +455,12 @@
         <span class="n">dist</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dist</span><span class="p">,</span> <span class="n">ind</span>
 
-<div class="viewcode-block" id="KNN.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="KNN.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="KNN.get_info"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn.html#skmultiflow.classification.lazy.knn.KNN.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;KNN Classifier: max_window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span> <span class="o">+</span> \</div></div>
-            <span class="s1">&#39; - leaf_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;KNN Classifier: max_window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span> <span class="o">+</span> \
+            <span class="s1">&#39; - leaf_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

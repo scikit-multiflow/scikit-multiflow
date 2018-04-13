@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,9 +168,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.core.gaussian_estimator</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Jacob Montiel&#39;</span>
-
-<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">isinf</span><span class="p">,</span> <span class="n">exp</span>
+<span></span><span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">isinf</span><span class="p">,</span> <span class="n">exp</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.statistics</span> <span class="k">import</span> <span class="n">normal_probability</span>
 
 
@@ -208,20 +206,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">+=</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">last_mean</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_variance_sum</span> <span class="o">+=</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">last_mean</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">=</span> <span class="n">value</span></div>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span> <span class="o">=</span> <span class="n">weight</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span> <span class="o">=</span> <span class="n">weight</span></div>
 
-<div class="viewcode-block" id="GaussianEstimator.get_total_weight_observed"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_total_weight_observed">[docs]</a>    <span class="k">def</span> <span class="nf">get_total_weight_observed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span>
+<div class="viewcode-block" id="GaussianEstimator.get_total_weight_observed"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_total_weight_observed">[docs]</a>    <span class="k">def</span> <span class="nf">get_total_weight_observed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span></div>
 
-<div class="viewcode-block" id="GaussianEstimator.get_mean"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_mean">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span>
+<div class="viewcode-block" id="GaussianEstimator.get_mean"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_mean">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span></div>
 
-<div class="viewcode-block" id="GaussianEstimator.get_std_dev"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_std_dev">[docs]</a>    <span class="k">def</span> <span class="nf">get_std_dev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_variance</span><span class="p">())</span>
+<div class="viewcode-block" id="GaussianEstimator.get_std_dev"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_std_dev">[docs]</a>    <span class="k">def</span> <span class="nf">get_std_dev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_variance</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="GaussianEstimator.get_variance"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_variance">[docs]</a>    <span class="k">def</span> <span class="nf">get_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variance_sum</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="mf">0.0</span>
+<div class="viewcode-block" id="GaussianEstimator.get_variance"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.get_variance">[docs]</a>    <span class="k">def</span> <span class="nf">get_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variance_sum</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="GaussianEstimator.probability_density"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.probability_density">[docs]</a>    <span class="k">def</span> <span class="nf">probability_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; probability_density</span>
@@ -244,8 +242,8 @@
                 <span class="n">diff</span> <span class="o">=</span> <span class="n">value</span> <span class="o">-</span> <span class="n">mean</span>
                 <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_NORMAL_CONSTANT</span> <span class="o">*</span> <span class="n">std_dev</span><span class="p">))</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">diff</span> <span class="o">*</span> <span class="n">diff</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">std_dev</span> <span class="o">*</span> <span class="n">std_dev</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">mean</span><span class="p">:</span>
-                <span class="k">return</span> <span class="mf">1.0</span></div>
-        <span class="k">return</span> <span class="mf">0.0</span>
+                <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="k">return</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="GaussianEstimator.estimated_weight_lessthan_equalto_greaterthan_value"><a class="viewcode-back" href="../../../skmultiflow.core.gaussian_estimator.html#skmultiflow.core.gaussian_estimator.GaussianEstimator.estimated_weight_lessthan_equalto_greaterthan_value">[docs]</a>    <span class="k">def</span> <span class="nf">estimated_weight_lessthan_equalto_greaterthan_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">equalto_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability_density</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span>
@@ -261,8 +259,8 @@
         <span class="n">greaterthan_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_sum</span> <span class="o">-</span> <span class="n">equalto_weight</span> <span class="o">-</span> <span class="n">lessthan_weight</span>
         <span class="k">if</span> <span class="n">greaterthan_weight</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="n">greaterthan_weight</span> <span class="o">=</span> <span class="mf">0.0</span>
-</div></div>
-        <span class="k">return</span> <span class="p">[</span><span class="n">lessthan_weight</span><span class="p">,</span> <span class="n">equalto_weight</span><span class="p">,</span> <span class="n">greaterthan_weight</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">lessthan_weight</span><span class="p">,</span> <span class="n">equalto_weight</span><span class="p">,</span> <span class="n">greaterthan_weight</span><span class="p">]</span></div></div>
 </pre></div>
 
            </div>

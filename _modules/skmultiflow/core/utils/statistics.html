@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,9 +168,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.core.utils.statistics</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Jacob Montiel&#39;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="n">SQRTH</span> <span class="o">=</span> <span class="mf">7.07106781186547524401E-1</span>
 <span class="n">MAXLOG</span> <span class="o">=</span> <span class="mf">7.09782712893383996732E2</span>
@@ -200,8 +198,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">y</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">error_function_complemented</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">y</span></div>
-    <span class="k">return</span> <span class="n">y</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">y</span></div>
 
 
 <div class="viewcode-block" id="error_function"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.error_function">[docs]</a><span class="k">def</span> <span class="nf">error_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -218,22 +216,22 @@
 <span class="sd">    Error Function erf(x)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="mf">9.60497373987051638749E0</span><span class="p">,</span>
-      <span class="mf">9.00260197203842689217E1</span><span class="p">,</span>
-      <span class="mf">2.23200534594684319226E3</span><span class="p">,</span>
-      <span class="mf">7.00332514112805075473E3</span><span class="p">,</span>
-      <span class="mf">5.55923013010394962768E4</span><span class="p">]</span>
+         <span class="mf">9.00260197203842689217E1</span><span class="p">,</span>
+         <span class="mf">2.23200534594684319226E3</span><span class="p">,</span>
+         <span class="mf">7.00332514112805075473E3</span><span class="p">,</span>
+         <span class="mf">5.55923013010394962768E4</span><span class="p">]</span>
     <span class="n">U</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.35617141647503099647E1</span><span class="p">,</span>
-      <span class="mf">5.21357949780152679795E2</span><span class="p">,</span>
-      <span class="mf">4.59432382970980127987E3</span><span class="p">,</span>
-      <span class="mf">2.26290000613890934246E4</span><span class="p">,</span>
-      <span class="mf">4.92673942608635921086E4</span><span class="p">]</span>
+         <span class="mf">5.21357949780152679795E2</span><span class="p">,</span>
+         <span class="mf">4.59432382970980127987E3</span><span class="p">,</span>
+         <span class="mf">2.26290000613890934246E4</span><span class="p">,</span>
+         <span class="mf">4.92673942608635921086E4</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">error_function_complemented</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">pol_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="n">p1_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">y</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">pol_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="n">p1_evl</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
 
 
 <div class="viewcode-block" id="error_function_complemented"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.error_function_complemented">[docs]</a><span class="k">def</span> <span class="nf">error_function_complemented</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -317,8 +315,8 @@
             <span class="k">return</span> <span class="mf">2.0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
-</div>
-    <span class="k">return</span> <span class="n">y</span>
+
+    <span class="k">return</span> <span class="n">y</span></div>
 
 
 <div class="viewcode-block" id="pol_evl"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.pol_evl">[docs]</a><span class="k">def</span> <span class="nf">pol_evl</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -339,8 +337,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ans</span> <span class="o">=</span> <span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
-    <span class="k">return</span> <span class="n">ans</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ans</span></div>
 
 
 <div class="viewcode-block" id="p1_evl"><a class="viewcode-back" href="../../../../skmultiflow.core.utils.statistics.html#skmultiflow.core.utils.statistics.p1_evl">[docs]</a><span class="k">def</span> <span class="nf">p1_evl</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -363,8 +361,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ans</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
-    <span class="k">return</span> <span class="n">ans</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ans</span></div>
 </pre></div>
 
            </div>

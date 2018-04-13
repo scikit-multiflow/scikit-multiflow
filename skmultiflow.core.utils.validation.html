@@ -35,7 +35,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/> 
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.core.utils package" href="skmultiflow.core.utils.html"/>
+        <link rel="next" title="skmultiflow.core.base module" href="skmultiflow.core.base.html"/>
+        <link rel="prev" title="skmultiflow.core.utils.utils module" href="skmultiflow.core.utils.utils.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,12 +95,28 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skmultiflow.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skmultiflow.html">skmultiflow package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skmultiflow.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.classification.html">skmultiflow.classification package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="skmultiflow.core.html">skmultiflow.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.data.html">skmultiflow.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.evaluation.html">skmultiflow.evaluation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.options.html">skmultiflow.options package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.transform.html">skmultiflow.transform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.visualization.html">skmultiflow.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.html#module-skmultiflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -143,6 +162,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.core.html">skmultiflow.core package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.core.utils.html">skmultiflow.core.utils package</a> &raquo;</li>
+        
       <li>skmultiflow.core.utils.validation module</li>
     
     
@@ -170,16 +197,16 @@
 <dl class="function">
 <dt id="skmultiflow.core.utils.validation.check_random_state">
 <code class="descclassname">skmultiflow.core.utils.validation.</code><code class="descname">check_random_state</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/utils/validation.html#check_random_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.utils.validation.check_random_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turn seed into a np.random.RandomState instance.
-:param seed: If seed is None, return the RandomState singleton used by np.random.</p>
-<blockquote>
-<div>If seed is an int, return a new RandomState instance seeded with seed.
-If seed is already a RandomState instance, return it.
-Otherwise raise ValueError.</div></blockquote>
+<dd><p>Turn seed into a np.random.RandomState instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> (<em>None | int | instance of RandomState</em>) – If seed is None, return the RandomState singleton used by np.random.
+If seed is an int, return a new RandomState instance seeded with seed.
+If seed is already a RandomState instance, return it.
+Otherwise raise ValueError.</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
@@ -188,16 +215,21 @@ Otherwise raise ValueError.</div></blockquote>
 
 <dl class="function">
 <dt id="skmultiflow.core.utils.validation.check_weights">
-<code class="descclassname">skmultiflow.core.utils.validation.</code><code class="descname">check_weights</code><span class="sig-paren">(</span><em>weight</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/utils/validation.html#check_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.utils.validation.check_weights" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if weights are valid
-:param weight: If weight is a number (int, float), returns it inside a np.array</p>
-<blockquote>
-<div>If weight is a list of numbers, returns it
-Otherwise raise ValueError.</div></blockquote>
+<code class="descclassname">skmultiflow.core.utils.validation.</code><code class="descname">check_weights</code><span class="sig-paren">(</span><em>weight</em>, <em>expand_length=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/core/utils/validation.html#check_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.utils.validation.check_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if weights are valid</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>weight</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>list</em><em>, </em><em>np.ndarray</em>) – If weight is a number, returns it inside an np.ndarray
+If weight is a list or np.ndarray, returns it
+Otherwise raise ValueError.</li>
+<li><strong>expand_length</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=1</em><em>)</em>) – If the value passed is larger than 1 and weight is a single value, then the weight is replicated n times inside
+an np.array. If weight is not a single value, raises an error</li>
+</ul>
+</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -211,6 +243,15 @@ Otherwise raise ValueError.</div></blockquote>
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.core.base.html" class="btn btn-neutral float-right" title="skmultiflow.core.base module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.core.utils.utils.html" class="btn btn-neutral" title="skmultiflow.core.utils.utils module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

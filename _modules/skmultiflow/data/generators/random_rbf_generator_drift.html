@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,14 +168,12 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.data.generators.random_rbf_generator_drift</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Guilherme Matsumoto&#39;</span>
-
-<span class="kn">from</span> <span class="nn">skmultiflow.data.generators.random_rbf_generator</span> <span class="k">import</span> <span class="n">RandomRBFGenerator</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.core.base_object</span> <span class="k">import</span> <span class="n">BaseObject</span>
+<span></span><span class="kn">from</span> <span class="nn">skmultiflow.data.generators.random_rbf_generator</span> <span class="k">import</span> <span class="n">RandomRBFGenerator</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="RandomRBFGeneratorDrift"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift">[docs]</a><span class="k">class</span> <span class="nc">RandomRBFGeneratorDrift</span><span class="p">(</span><span class="n">RandomRBFGenerator</span><span class="p">,</span> <span class="n">BaseObject</span><span class="p">):</span>
+<div class="viewcode-block" id="RandomRBFGeneratorDrift"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift">[docs]</a><span class="k">class</span> <span class="nc">RandomRBFGeneratorDrift</span><span class="p">(</span><span class="n">RandomRBFGenerator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; RandomRBFGeneratorDrift</span>
 <span class="sd">    </span>
 <span class="sd">    This class is an extension from the RandomRBFGenerator. It functions </span>
@@ -188,20 +186,20 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    model_seed: int (Default: 21)</span>
+<span class="sd">    model_seed: int (Default: None)</span>
 <span class="sd">        The seed to be used by the model random generator.</span>
 <span class="sd">        </span>
-<span class="sd">    instance_seed: int (Default: 5)</span>
+<span class="sd">    instance_seed: int (Default: None)</span>
 <span class="sd">        The seed to be used by the instance random generator.</span>
 <span class="sd">        </span>
-<span class="sd">    num_classes: int (Default: 2)</span>
+<span class="sd">    n_classes: int (Default: 2)</span>
 <span class="sd">        The number of class labels to generate.</span>
 <span class="sd">        </span>
-<span class="sd">    num_att: int (Default: 10)</span>
-<span class="sd">        The total number of attributes to generate.</span>
-<span class="sd">        </span>
-<span class="sd">    num_centroids: int (Default: 50)</span>
-<span class="sd">        The total number of centroids to generate.</span>
+<span class="sd">    n_features: int (Default: 10)</span>
+<span class="sd">        The number of numerical attributes to generate.</span>
+
+<span class="sd">    n_centroids: int (Default: 50)</span>
+<span class="sd">        The number of centroids to generate.</span>
 <span class="sd">        </span>
 <span class="sd">    change_speed: float (Default: 0.0)</span>
 <span class="sd">        The concept drift speed.</span>
@@ -214,15 +212,15 @@
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.generators.random_rbf_generator_drift import RandomRBFGeneratorDrift</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = RandomRBFGeneratorDrift(model_seed=99, instance_seed = 50, num_classes = 4, num_att = 10, </span>
-<span class="sd">    ... num_centroids = 50, change_speed=0.87, num_drift_centroids=50)</span>
+<span class="sd">    &gt;&gt;&gt; stream = RandomRBFGeneratorDrift(model_seed=99, sample_seed = 50, n_classes = 4, n_features = 10,</span>
+<span class="sd">    ... n_centroids = 50, change_speed=0.87, num_drift_centroids=50)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Retrieving one sample</span>
-<span class="sd">    &gt;&gt;&gt; stream.next_instance()</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample()</span>
 <span class="sd">    (array([[ 0.87640769,  1.11561069,  0.61592869,  1.0580048 ,  0.34237265,</span>
 <span class="sd">         0.44265564,  0.8714499 ,  0.47178835,  1.07098717,  0.29090414]]), array([ 3.]))</span>
 <span class="sd">    &gt;&gt;&gt; # Retrieving 10 samples</span>
-<span class="sd">    &gt;&gt;&gt; stream.next_instance(10)</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample(10)</span>
 <span class="sd">    (array([[ 0.78413886,  0.98797944,  0.26981191,  0.92217135,  0.61152321,</span>
 <span class="sd">         1.02183543,  0.99855968,  0.71545227,  0.55584282,  0.32919095],</span>
 <span class="sd">       [ 0.45714164,  0.2610933 ,  0.07065982,  0.62751192,  0.75317802,</span>
@@ -242,27 +240,31 @@
 <span class="sd">       [ 0.27969972, -0.06563579,  0.02834469,  0.05250523,  0.52713213,</span>
 <span class="sd">         0.73472713,  0.15381198, -0.07735765,  0.9792027 ,  0.92673772],</span>
 <span class="sd">       [ 0.52641196,  0.3009952 ,  0.56104759,  0.40478501,  0.63097374,</span>
-<span class="sd">         0.3797032 , -0.00446842,  0.52913688,  0.24908855,  0.22779074]]), array([ 3.,  3.,  3.,  2.,  3.,  2.,  0.,  2.,  0.,  2.]))</span>
+<span class="sd">         0.3797032 , -0.00446842,  0.52913688,  0.24908855,  0.22779074]]),</span>
+<span class="sd">        array([ 3.,  3.,  3.,  2.,  3.,  2.,  0.,  2.,  0.,  2.]))</span>
 <span class="sd">    &gt;&gt;&gt; # Generators will have infinite remaining instances, so it returns -1</span>
-<span class="sd">    &gt;&gt;&gt; stream.estimated_remaining_instances()</span>
+<span class="sd">    &gt;&gt;&gt; stream.n_remaining_samples()</span>
 <span class="sd">    -1</span>
-<span class="sd">    &gt;&gt;&gt; stream.has_more_instances()</span>
+<span class="sd">    &gt;&gt;&gt; stream.has_more_samples()</span>
 <span class="sd">    True</span>
 <span class="sd">          </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_seed</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">instance_seed</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_att</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">num_centroids</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instance_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_centroids</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                  <span class="n">change_speed</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">num_drift_centroids</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model_seed</span><span class="p">,</span> <span class="n">instance_seed</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">num_att</span><span class="p">,</span> <span class="n">num_centroids</span><span class="p">)</span>
-        <span class="c1">#default values</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model_seed</span><span class="o">=</span><span class="n">model_seed</span><span class="p">,</span> <span class="n">instance_seed</span><span class="o">=</span><span class="n">instance_seed</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="n">n_classes</span><span class="p">,</span>
+                         <span class="n">n_features</span><span class="o">=</span><span class="n">n_features</span><span class="p">,</span> <span class="n">n_centroids</span><span class="o">=</span><span class="n">n_centroids</span><span class="p">)</span>
+
+        <span class="c1"># Default values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">change_speed</span> <span class="o">=</span> <span class="n">change_speed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_drift_centroids</span> <span class="o">=</span> <span class="n">num_drift_centroids</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">centroid_speed</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="RandomRBFGeneratorDrift.next_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.next_instance">[docs]</a>    <span class="k">def</span> <span class="nf">next_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; next_instance</span>
-<span class="sd">        </span>
-<span class="sd">        Return batch_size samples generated by choosing a centroid at </span>
+<div class="viewcode-block" id="RandomRBFGeneratorDrift.get_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Random RBF Generator with drift - </span><span class="si">{}</span><span class="s2"> target, </span><span class="si">{}</span><span class="s2"> classes&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandomRBFGeneratorDrift.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return batch_size samples generated by choosing a centroid at</span>
 <span class="sd">        random and randomly offsetting its attributes so that it is </span>
 <span class="sd">        placed inside the hypersphere of that centroid.</span>
 <span class="sd">        </span>
@@ -281,23 +283,25 @@
 <span class="sd">            the batch_size samples that were requested. </span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
-            <span class="nb">len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_drift_centroids</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_centroids</span><span class="p">):</span>
-                <span class="nb">len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_centroids</span>
+            <span class="n">num_drift_centroids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_drift_centroids</span>
+            <span class="k">if</span> <span class="n">num_drift_centroids</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_centroids</span><span class="p">:</span>
+                <span class="n">num_drift_centroids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_centroids</span>
 
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_drift_centroids</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">centre</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">centroid_speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">change_speed</span>
 
-                    <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">centre</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">centre</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">centre</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">centre</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">centre</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">centre</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">centroid_speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">centroid_speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-            <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">next_instance</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-</div>
-        <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+            <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
 <div class="viewcode-block" id="RandomRBFGeneratorDrift.generate_centroids"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.generate_centroids">[docs]</a>    <span class="k">def</span> <span class="nf">generate_centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; generate_centroids</span>
@@ -312,54 +316,43 @@
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">generate_centroids</span><span class="p">()</span>
-        <span class="n">model_random</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span>
-        <span class="n">model_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_seed</span><span class="p">)</span>
-        <span class="nb">len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_drift_centroids</span>
+        <span class="n">model_random</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_seed</span><span class="p">)</span>
+        <span class="n">num_drift_centroids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_drift_centroids</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">centroid_speed</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_centroids</span><span class="p">):</span>
-            <span class="nb">len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_centroids</span>
+        <span class="k">if</span> <span class="n">num_drift_centroids</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_centroids</span><span class="p">:</span>
+            <span class="n">num_drift_centroids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_centroids</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_drift_centroids</span><span class="p">):</span>
             <span class="n">rand_speed</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">norm_speed</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">):</span>
                 <span class="n">rand_speed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_random</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span>
                 <span class="n">norm_speed</span> <span class="o">+=</span> <span class="n">rand_speed</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">rand_speed</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
 
             <span class="n">norm_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm_speed</span><span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">):</span>
                 <span class="n">rand_speed</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="n">norm_speed</span>
-</div>
-            <span class="bp">self</span><span class="o">.</span><span class="n">centroid_speed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rand_speed</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RandomRBFGeneratorDrift.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">centroid_speed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rand_speed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandomRBFGeneratorDrift.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="RandomRBFGeneratorDrift.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">generate_centroids</span><span class="p">()</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_centroids</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random_state</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RandomRBFGeneratorDrift.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;RandomRBFGenerator: model_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_seed</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - instance_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - num_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - num_att: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_numerical_attributes</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - num_centroids: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_centroids</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - change_speed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_speed</span><span class="p">)</span> <span class="o">+</span> \</div>
-               <span class="s1">&#39; - num_drift_centroids: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_drift_centroids</span><span class="p">)</span>
-
-<div class="viewcode-block" id="RandomRBFGeneratorDrift.get_num_targeting_tasks"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_rbf_generator_drift.html#skmultiflow.data.generators.random_rbf_generator_drift.RandomRBFGeneratorDrift.get_num_targeting_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_targeting_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
-        <span class="k">return</span> <span class="mi">1</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">stream</span> <span class="o">=</span> <span class="n">RandomRBFGeneratorDrift</span><span class="p">(</span><span class="n">change_speed</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">num_drift_centroids</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    <span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
-
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_instance</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;RandomRBFGenerator: model_random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_seed</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - num_att: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_centroids: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_centroids</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - change_speed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">change_speed</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - num_drift_centroids: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_drift_centroids</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

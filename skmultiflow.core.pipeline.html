@@ -35,7 +35,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/> 
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.core package" href="skmultiflow.core.html"/>
+        <link rel="next" title="skmultiflow.data package" href="skmultiflow.data.html"/>
+        <link rel="prev" title="skmultiflow.core.gaussian_estimator module" href="skmultiflow.core.gaussian_estimator.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,12 +95,28 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skmultiflow.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skmultiflow.html">skmultiflow package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skmultiflow.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.classification.html">skmultiflow.classification package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="skmultiflow.core.html">skmultiflow.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.data.html">skmultiflow.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.evaluation.html">skmultiflow.evaluation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.options.html">skmultiflow.options package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.transform.html">skmultiflow.transform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.visualization.html">skmultiflow.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.html#module-skmultiflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -142,6 +161,12 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.core.html">skmultiflow.core package</a> &raquo;</li>
         
       <li>skmultiflow.core.pipeline module</li>
     
@@ -206,11 +231,9 @@ is required. Each tuple should be of the format (‘name’, estimator).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.core.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_prequential</span> <span class="k">import</span> <span class="n">EvaluatePrequential</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.options.file_option</span> <span class="k">import</span> <span class="n">FileOption</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.filtering.one_hot_to_categorical</span> <span class="k">import</span> <span class="n">OneHotToCategorical</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.transform.one_hot_to_categorical</span> <span class="k">import</span> <span class="n">OneHotToCategorical</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">opt</span> <span class="o">=</span> <span class="n">FileOption</span><span class="p">(</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span> <span class="s2">&quot;OPT_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;CSV&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">OneHotToCategorical</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span>
@@ -220,9 +243,9 @@ is required. Each tuple should be of the format (‘name’, estimator).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the pipeline</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">&#39;transform&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;passive_aggressive&#39;</span><span class="p">,</span> <span class="n">classifier</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the evaluator</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">eval</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretrain_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_instances</span><span class="o">=</span><span class="mi">500000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretrain_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_samples</span><span class="o">=</span><span class="mi">500000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Evaluate</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">pipe</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pipe</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -412,6 +435,15 @@ model.</li>
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.data.html" class="btn btn-neutral float-right" title="skmultiflow.data package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.core.gaussian_estimator.html" class="btn btn-neutral" title="skmultiflow.core.gaussian_estimator module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

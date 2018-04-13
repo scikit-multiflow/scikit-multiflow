@@ -35,7 +35,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/> 
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.core.utils package" href="skmultiflow.core.utils.html"/>
+        <link rel="next" title="skmultiflow.core.utils.file_scripts module" href="skmultiflow.core.utils.file_scripts.html"/>
+        <link rel="prev" title="skmultiflow.core.utils package" href="skmultiflow.core.utils.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,12 +95,28 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skmultiflow.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skmultiflow.html">skmultiflow package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skmultiflow.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.classification.html">skmultiflow.classification package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="skmultiflow.core.html">skmultiflow.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.data.html">skmultiflow.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.evaluation.html">skmultiflow.evaluation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.options.html">skmultiflow.options package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.transform.html">skmultiflow.transform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.visualization.html">skmultiflow.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.html#module-skmultiflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -142,6 +161,14 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.core.html">skmultiflow.core package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.core.utils.html">skmultiflow.core.utils package</a> &raquo;</li>
         
       <li>skmultiflow.core.utils.data_structures module</li>
     
@@ -416,18 +443,16 @@ values from this list.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.core.utils.data_structures</span> <span class="k">import</span> <span class="n">FastBuffer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.classification.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.options.file_option</span> <span class="k">import</span> <span class="n">FileOption</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file_option</span> <span class="o">=</span> <span class="n">FileOption</span><span class="p">(</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span> <span class="s2">&quot;OPT_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;CSV&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file_stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">file_option</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file_stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">file_stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initially we need to partial_fit at least k=8 samples</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">file_stream</span><span class="o">.</span><span class="n">next_instance</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">file_stream</span><span class="o">.</span><span class="n">get_classes</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">file_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">file_stream</span><span class="o">.</span><span class="n">get_targets</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predictions_buffer</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">true_labels_buffer</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">file_stream</span><span class="o">.</span><span class="n">next_instance</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">file_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">true_label_popped</span> <span class="o">=</span> <span class="n">true_labels_buffer</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">prediction_popped</span> <span class="o">=</span> <span class="n">predictions_buffer</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -1126,6 +1151,15 @@ possible labels.</p>
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.core.utils.file_scripts.html" class="btn btn-neutral float-right" title="skmultiflow.core.utils.file_scripts module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.core.utils.html" class="btn btn-neutral" title="skmultiflow.core.utils package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

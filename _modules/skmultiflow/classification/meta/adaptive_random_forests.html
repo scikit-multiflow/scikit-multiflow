@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,9 +168,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.meta.adaptive_random_forests</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Anderson Carlos Ferreira da Silva&#39;</span>
-
-<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.base_object</span> <span class="k">import</span> <span class="n">BaseObject</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.core.driftdetection.base_drift_detector</span> <span class="k">import</span> <span class="n">BaseDriftDetector</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.trees.hoeffding_tree</span> <span class="k">import</span> <span class="o">*</span>
@@ -180,7 +178,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">check_weights</span>
 
 
-<div class="viewcode-block" id="AdaptiveRandomForest"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest">[docs]</a><span class="k">class</span> <span class="nc">AdaptiveRandomForest</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">):</span>
+<div class="viewcode-block" id="AdaptiveRandomForest"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest">[docs]</a><span class="k">class</span> <span class="nc">AdaptiveRandomForest</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adaptive Random Forest (ARF).</span>
 
 <span class="sd">        Parameters</span>
@@ -359,20 +357,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nb_threshold</span> <span class="o">=</span> <span class="n">nb_threshold</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nominal_attributes</span> <span class="o">=</span> <span class="n">nominal_attributes</span>
 
-<div class="viewcode-block" id="AdaptiveRandomForest.fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="AdaptiveRandomForest.fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
     
 <div class="viewcode-block" id="AdaptiveRandomForest.partial_fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">weight</span> <span class="o">=</span> <span class="n">check_weights</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
             <span class="n">row_cnt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-            <span class="n">wrow_cnt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">row_cnt</span> <span class="o">!=</span> <span class="n">wrow_cnt</span><span class="p">:</span>
-                <span class="n">weight</span> <span class="o">=</span> <span class="p">[</span><span class="n">weight</span><span class="p">]</span> <span class="o">*</span> <span class="n">row_cnt</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">check_weights</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">expand_length</span><span class="o">=</span><span class="n">row_cnt</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row_cnt</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">+=</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">+=</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
         
     <span class="k">def</span> <span class="nf">_partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">instances_seen</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -407,24 +402,24 @@
                 <span class="c1"># Ensemble is empty, all classes equal, default to zero</span>
                 <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">votes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">votes</span><span class="o">.</span><span class="n">get</span><span class="p">))</span></div>
-        <span class="k">return</span> <span class="n">predictions</span>
+                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">votes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">votes</span><span class="o">.</span><span class="n">get</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">predictions</span></div>
 
-<div class="viewcode-block" id="AdaptiveRandomForest.predict_proba"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="AdaptiveRandomForest.predict_proba"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
         
 <div class="viewcode-block" id="AdaptiveRandomForest.reset"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>        
         <span class="sd">&quot;&quot;&quot;Reset ARF.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_features</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instances_seen</span> <span class="o">=</span> <span class="mi">0</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instances_seen</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
-<div class="viewcode-block" id="AdaptiveRandomForest.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="AdaptiveRandomForest.score"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
         
-<div class="viewcode-block" id="AdaptiveRandomForest.get_info"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="AdaptiveRandomForest.get_info"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="AdaptiveRandomForest.get_votes_for_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.get_votes_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_votes_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -447,8 +442,8 @@
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">combined_votes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">vote</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
                     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                        <span class="n">combined_votes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">vote</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
-        <span class="k">return</span> <span class="n">combined_votes</span>
+                        <span class="n">combined_votes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">vote</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">combined_votes</span></div>
         
 <div class="viewcode-block" id="AdaptiveRandomForest.init_ensemble"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.init_ensemble">[docs]</a>    <span class="k">def</span> <span class="nf">init_ensemble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_ensemble</span>
@@ -474,8 +469,8 @@
                                                                <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">),</span>
                                               <span class="bp">self</span><span class="o">.</span><span class="n">instances_seen</span><span class="p">,</span>
                                               <span class="bp">self</span><span class="o">.</span><span class="n">drift_detection_method</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">warning_detection_method</span><span class="p">,</span></div>
-                                              <span class="kc">False</span><span class="p">)</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">warning_detection_method</span><span class="p">,</span>
+                                              <span class="kc">False</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_set_max_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_features</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_features</span> <span class="o">==</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">:</span>
@@ -506,8 +501,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">max_features</span> <span class="o">=</span> <span class="n">n</span>
 
 <div class="viewcode-block" id="AdaptiveRandomForest.is_randomizable"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.AdaptiveRandomForest.is_randomizable">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">is_randomizable</span><span class="p">():</span></div></div>
-        <span class="k">return</span> <span class="kc">True</span>                  
+    <span class="k">def</span> <span class="nf">is_randomizable</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>                  </div></div>
 
 
 <div class="viewcode-block" id="ARFBaseLearner"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner">[docs]</a><span class="k">class</span> <span class="nc">ARFBaseLearner</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -584,8 +579,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">created_on</span> <span class="o">=</span> <span class="n">instances_seen</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drift_detection</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaluator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_method</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drift_detection</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_method</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ARFBaseLearner.partial_fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">instances_seen</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
@@ -622,20 +617,20 @@
         <span class="c1"># Check if there was a change</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_detection</span><span class="o">.</span><span class="n">detected_change</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_drift_on</span> <span class="o">=</span> <span class="n">instances_seen</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">nb_drifts_detected</span> <span class="o">+=</span> <span class="mi">1</span></div>
-            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">instances_seen</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nb_drifts_detected</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">instances_seen</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ARFBaseLearner.predict"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<div class="viewcode-block" id="ARFBaseLearner.predict"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="ARFBaseLearner.get_votes_for_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.get_votes_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_votes_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">get_votes_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<div class="viewcode-block" id="ARFBaseLearner.get_votes_for_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.get_votes_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_votes_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">get_votes_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ARFBaseLearner.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="viewcode-block" id="ARFBaseLearner.get_class_type"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="ARFBaseLearner.get_info"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div></div>
-        <span class="k">return</span> <span class="s2">&quot;NotImplementedError&quot;</span>
+<div class="viewcode-block" id="ARFBaseLearner.get_info"><a class="viewcode-back" href="../../../../skmultiflow.classification.meta.adaptive_random_forests.html#skmultiflow.classification.meta.adaptive_random_forests.ARFBaseLearner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;NotImplementedError&quot;</span></div></div>
 </pre></div>
 
            </div>

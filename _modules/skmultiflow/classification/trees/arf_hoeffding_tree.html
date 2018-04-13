@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -168,9 +168,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.classification.trees.arf_hoeffding_tree</h1><div class="highlight"><pre>
-<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Anderson Carlos Ferreira da Silva&#39;</span>
-
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.trees.hoeffding_tree</span> <span class="k">import</span> <span class="o">*</span>
+<span></span><span class="kn">from</span> <span class="nn">skmultiflow.classification.trees.hoeffding_tree</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
@@ -294,12 +292,12 @@
                         <span class="n">obs</span> <span class="o">=</span> <span class="n">NominalAttributeClassObserver</span><span class="p">()</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">obs</span> <span class="o">=</span> <span class="n">GaussianNumericAttributeClassObserver</span><span class="p">()</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span></div>
-                <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">weight</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
+                <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">weight</span><span class="p">)</span></div>
 
         <span class="k">def</span> <span class="nf">_sample_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_features</span><span class="p">):</span>
-            <span class="n">rnd</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span></div>
-            <span class="k">return</span> <span class="n">rnd</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_features</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">rnd</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">rnd</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_features</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ARFHoeffdingTree.LearningNodeNB"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.arf_hoeffding_tree.html#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNB</span><span class="p">(</span><span class="n">RandomLearningNode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Naive Bayes learning node class.</span>
@@ -340,8 +338,8 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight_seen</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">ht</span><span class="o">.</span><span class="n">nb_threshold</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">do_naive_bayes_prediction</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span></div></div>
-                <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_class_votes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_class_votes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="ARFHoeffdingTree.LearningNodeNBAdaptive"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.arf_hoeffding_tree.html#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNBAdaptive</span><span class="p">(</span><span class="n">LearningNodeNB</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Naive Bayes Adaptive learning node class.</span>
@@ -389,8 +387,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_mc_correct_weight</span> <span class="o">+=</span> <span class="n">weight</span>
             <span class="n">nb_prediction</span> <span class="o">=</span> <span class="n">do_naive_bayes_prediction</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">nb_prediction</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">nb_prediction</span><span class="o">.</span><span class="n">get</span><span class="p">)</span> <span class="o">==</span> <span class="n">y</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_nb_correct_weight</span> <span class="o">+=</span> <span class="n">weight</span></div>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_nb_correct_weight</span> <span class="o">+=</span> <span class="n">weight</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ARFHoeffdingTree.LearningNodeNBAdaptive.get_class_votes"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.arf_hoeffding_tree.html#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.LearningNodeNBAdaptive.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the votes per class for a given instance.</span>
@@ -409,8 +407,8 @@
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mc_correct_weight</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nb_correct_weight</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span></div></div>
-            <span class="k">return</span> <span class="n">do_naive_bayes_prediction</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span>
+            <span class="k">return</span> <span class="n">do_naive_bayes_prediction</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">)</span></div></div>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">max_byte_size</span><span class="o">=</span><span class="mi">33554432</span><span class="p">,</span>
@@ -464,8 +462,8 @@
                                                <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ARFHoeffdingTree.is_randomizable"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.arf_hoeffding_tree.html#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.is_randomizable">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">is_randomizable</span><span class="p">():</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">def</span> <span class="nf">is_randomizable</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="ARFHoeffdingTree.new_instance"><a class="viewcode-back" href="../../../../skmultiflow.classification.trees.arf_hoeffding_tree.html#skmultiflow.classification.trees.arf_hoeffding_tree.ARFHoeffdingTree.new_instance">[docs]</a>    <span class="k">def</span> <span class="nf">new_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ARFHoeffdingTree</span><span class="p">(</span><span class="n">max_byte_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_byte_size</span><span class="p">,</span>
@@ -481,8 +479,8 @@
                                 <span class="n">leaf_prediction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span><span class="p">,</span>
                                 <span class="n">nb_threshold</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_threshold</span><span class="p">,</span>
                                 <span class="n">nominal_attributes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nominal_attributes</span><span class="p">,</span>
-                                <span class="n">max_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_features</span><span class="p">,</span></div></div>
-                                <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+                                <span class="n">max_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_features</span><span class="p">,</span>
+                                <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

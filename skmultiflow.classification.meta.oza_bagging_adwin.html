@@ -35,7 +35,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/> 
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.classification.meta package" href="skmultiflow.classification.meta.html"/>
+        <link rel="next" title="skmultiflow.classification.trees package" href="skmultiflow.classification.trees.html"/>
+        <link rel="prev" title="skmultiflow.classification.meta.oza_bagging module" href="skmultiflow.classification.meta.oza_bagging.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,12 +95,28 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skmultiflow.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skmultiflow.html">skmultiflow package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skmultiflow.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="skmultiflow.classification.html">skmultiflow.classification package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.core.html">skmultiflow.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.data.html">skmultiflow.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.evaluation.html">skmultiflow.evaluation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.options.html">skmultiflow.options package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.transform.html">skmultiflow.transform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skmultiflow.visualization.html">skmultiflow.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.html#module-skmultiflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
 </ul>
 
@@ -143,6 +162,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.classification.html">skmultiflow.classification package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.classification.meta.html">skmultiflow.classification.meta package</a> &raquo;</li>
+        
       <li>skmultiflow.classification.meta.oza_bagging_adwin module</li>
     
     
@@ -169,7 +196,7 @@
 <dl class="class">
 <dt id="skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin">
 <em class="property">class </em><code class="descclassname">skmultiflow.classification.meta.oza_bagging_adwin.</code><code class="descname">OzaBaggingAdwin</code><span class="sig-paren">(</span><em>h=&lt;skmultiflow.classification.lazy.knn_adwin.KNNAdwin object&gt;</em>, <em>ensemble_length=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/meta/oza_bagging_adwin.html#OzaBaggingAdwin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier" title="skmultiflow.classification.base.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.classification.base.BaseClassifier</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>OzaBagging Classifier with ADWIN change detector</p>
 <p>This online ensemble learner method is an improvement from the Online
 Bagging algorithm described in Oza and Russel’s ‘Online Bagging and
@@ -221,10 +248,10 @@ value of 2, adapted to binary classification tasks.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_instance</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">get_classes</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">get_targets</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_instance</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">pred</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -242,7 +269,7 @@ value of 2, adapted to binary classification tasks.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/meta/oza_bagging_adwin.html#OzaBaggingAdwin.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the model under a batch setting.</p>
+<dd><p>Fit the model under the batch setting.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -250,8 +277,8 @@ value of 2, adapted to binary classification tasks.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The array of samples used to fit the model.</li>
 <li><strong>y</strong> (<em>Array-like</em>) – An array-like with the labels of all samples in X.</li>
-<li><strong>classes</strong> (<em>Array-like</em><em>, </em><em>optional</em>) – Contains all labels that may appear in samples. Applicability varies depending on the algorithm.</li>
-<li><strong>weight</strong> (<em>Array-like</em><em>, </em><em>optional</em>) – Instance weight. If not provided, uniform weights are assumed.
+<li><strong>classes</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible labels. Applicability varies depending on the algorithm.</li>
+<li><strong>weight</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Instance weight. If not provided, uniform weights are assumed.
 Applicability varies depending on the algorithm.</li>
 </ul>
 </td>
@@ -381,14 +408,14 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/meta/oza_bagging_adwin.html#OzaBaggingAdwin.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets the classifier’s parameters.</p>
+<dd><p>Resets the model to its initial state.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.classification.base.html#skmultiflow.classification.base.BaseClassifier" title="skmultiflow.classification.base.BaseClassifier">BaseClassifier</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel">StreamModel</a></td>
 </tr>
 </tbody>
 </table>
@@ -397,20 +424,20 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 <dl class="method">
 <dt id="skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.score">
 <code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/meta/oza_bagging_adwin.html#OzaBaggingAdwin.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.meta.oza_bagging_adwin.OzaBaggingAdwin.score" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function isn’t natively implemented on all classifiers. But if
-it’s, it will return the performance base metric for that classifier
-at that moment and having the X matrix as input.</p>
+<dd><p>Calculate the performance base metric for the model in its current state.</p>
+<p class="rubric">Notes</p>
+<p>This function isn’t natively implemented on all models.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_sample</em><em>, </em><em>n_features</em><em>)</em>) – The features matrix.</li>
-<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the class labels for all samples in X.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the targets for all samples in X.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The classifier’s score.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The model’s score.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
@@ -431,6 +458,15 @@ at that moment and having the X matrix as input.</p>
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.classification.trees.html" class="btn btn-neutral float-right" title="skmultiflow.classification.trees package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.classification.meta.oza_bagging.html" class="btn btn-neutral" title="skmultiflow.classification.meta.oza_bagging module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
