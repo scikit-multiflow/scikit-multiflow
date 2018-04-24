@@ -25,25 +25,17 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -60,7 +52,7 @@
 
           
             
-            <img src="../../../_static/skmultiflow-logo.png" class="logo" />
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -95,8 +87,8 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//installation/">Installation</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io//quick-start-guide/">Quick-Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
@@ -111,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">scikit-multiflow</a>
@@ -119,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -150,12 +143,6 @@
     
     
       <li class="wy-breadcrumbs-aside">
-        
-            
-            
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/evaluation/base_evaluator.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
         
       </li>
     
@@ -501,7 +488,6 @@
             <span class="n">shift</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>   <span class="c1"># Adjust index due to training after testing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_outputs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">+</span> <span class="n">shift</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">)</span>
 
-
     <span class="k">def</span> <span class="nf">_update_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_x</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update outputs of the evaluation. &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_file</span><span class="p">(</span><span class="n">current_x</span><span class="p">)</span>
@@ -514,47 +500,43 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# TEST CONFIGURATION BEGIN&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">,</span> <span class="s1">&#39;get_info&#39;</span><span class="p">):</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">get_info</span><span class="p">())</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_models</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;get_info&#39;</span><span class="p">):</span>
-                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_info</span><span class="p">())</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;get_info&#39;</span><span class="p">):</span>
-                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_info</span><span class="p">())</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_info</span><span class="p">())</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">get_info</span><span class="p">()))</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;get_info&#39;</span><span class="p">):</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># [</span><span class="si">{}</span><span class="s2">] </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_info</span><span class="p">()))</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_info</span><span class="p">()))</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># TEST CONFIGURATION END&quot;</span><span class="p">)</span>
                 <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">id&#39;</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PERFORMANCE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_performance_</span><span class="si">{}</span><span class="s1">,sliding_performance_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_performance_[</span><span class="si">{}</span><span class="s1">],sliding_performance_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_kappa_</span><span class="si">{}</span><span class="s1">,sliding_kappa_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_kappa_[</span><span class="si">{}</span><span class="s1">],sliding_kappa_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_T</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_kappa_t_</span><span class="si">{}</span><span class="s1">,sliding_kappa_t_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_kappa_t_[</span><span class="si">{}</span><span class="s1">],sliding_kappa_t_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_M</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_kappa_m_</span><span class="si">{}</span><span class="s1">,sliding_kappa_m_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_kappa_m_[</span><span class="si">{}</span><span class="s1">],sliding_kappa_m_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_SCORE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_hamming_score_</span><span class="si">{}</span><span class="s1">,sliding_hamming_score_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_hamming_score_[</span><span class="si">{}</span><span class="s1">],sliding_hamming_score_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_LOSS</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_hamming_loss_</span><span class="si">{}</span><span class="s1">,sliding_hamming_loss_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_hamming_loss_[</span><span class="si">{}</span><span class="s1">],sliding_hamming_loss_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXACT_MATCH</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_exact_match_</span><span class="si">{}</span><span class="s1">,sliding_exact_match_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_exact_match_[</span><span class="si">{}</span><span class="s1">],sliding_exact_match_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">J_INDEX</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_j_index_</span><span class="si">{}</span><span class="s1">,sliding_j_index_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_j_index_[</span><span class="si">{}</span><span class="s1">],sliding_j_index_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MSE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_mse_</span><span class="si">{}</span><span class="s1">,sliding_mse_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_mse_[</span><span class="si">{}</span><span class="s1">],sliding_mse_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_mae_</span><span class="si">{}</span><span class="s1">,sliding_mae_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_mae_[</span><span class="si">{}</span><span class="s1">],sliding_mae_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_update_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_x</span><span class="p">,</span> <span class="p">):</span>
@@ -636,9 +618,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -650,7 +630,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -669,6 +649,7 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'0.1.0',
+            LANGUAGE:'en',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -687,14 +668,13 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
