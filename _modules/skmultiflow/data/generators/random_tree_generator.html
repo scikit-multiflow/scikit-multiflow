@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.data.generators.random_tree_generator &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="../../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>skmultiflow.data.generators.random_tree_generator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for skmultiflow.data.generators.random_tree_generator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">array</span> <span class="k">import</span> <span class="n">array</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.data.base_stream</span> <span class="k">import</span> <span class="n">Stream</span>
+
+
+<div class="viewcode-block" id="RandomTreeGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator">[docs]</a><span class="k">class</span> <span class="nc">RandomTreeGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; RandomTreeGenerator</span>
+<span class="sd">       </span>
+<span class="sd">    This generator is built based on its description in Domingo and Hulten&#39;s </span>
+<span class="sd">    &#39;Knowledge Discovery and Data Mining&#39;. The generator is based on a random </span>
+<span class="sd">    tree that splits features at random and sets labels to its leafs.</span>
+<span class="sd">    </span>
+<span class="sd">    The tree structure is composed on Node objects, which can be either inner </span>
+<span class="sd">    nodes or leaf nodes. The choice comes as a function fo the parameters </span>
+<span class="sd">    passed to its initializer.</span>
+<span class="sd">    </span>
+<span class="sd">    Since the concepts are generated and classified according to a tree </span>
+<span class="sd">    structure, in theory, it should favour decision tree learners.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tree_seed: int (Default: None)</span>
+<span class="sd">        Seed for random generation of tree.</span>
+<span class="sd">    </span>
+<span class="sd">    instance_seed: int (Default: None)</span>
+<span class="sd">        Seed for random generation of instances.</span>
+<span class="sd">    </span>
+<span class="sd">    n_classes: int (Default: 2)</span>
+<span class="sd">        The number of classes to generate.</span>
+<span class="sd">    </span>
+<span class="sd">    n_cat_features: int (Default: 5)</span>
+<span class="sd">        The number of categorical features to generate. Categorical features are binary encoded, the actual number of</span>
+<span class="sd">        categorical features is `n_cat_features`x`n_categories_per_cat_feature`</span>
+<span class="sd">    </span>
+<span class="sd">    n_num_features: int (Default: 5)</span>
+<span class="sd">        The number of numerical features to generate.</span>
+<span class="sd">    </span>
+<span class="sd">    n_categories_per_cat_feature: int (Default: 5)</span>
+<span class="sd">        The number of values to generate per categorical feature.</span>
+<span class="sd">    </span>
+<span class="sd">    max_tree_depth: int (Default: 5)</span>
+<span class="sd">        The maximum depth of the tree concept.</span>
+<span class="sd">    </span>
+<span class="sd">    min_leaf_depth: int (Default: 3)</span>
+<span class="sd">        The first level of the tree above MaxTreeDepth that can have leaves.</span>
+<span class="sd">    </span>
+<span class="sd">    fraction_leaves_per_level: float (Default: 0.15)</span>
+<span class="sd">        The fraction of leaves per level from min_leaf_depth onwards.</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # Imports</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.data.generators.random_tree_generator import RandomTreeGenerator</span>
+<span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
+<span class="sd">    &gt;&gt;&gt; stream = RandomTreeGenerator(tree_seed=8873, sample_seed=69, n_classes=2, n_cat_features=2,</span>
+<span class="sd">    ... n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=6, min_leaf_depth=3,</span>
+<span class="sd">    ... fraction_leaves_per_level=0.15)</span>
+<span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
+<span class="sd">    &gt;&gt;&gt; # Retrieving one sample</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample()</span>
+<span class="sd">    (array([[ 0.16268102,  0.1105941 ,  0.7172657 ,  0.13021257,  0.61664241,</span>
+<span class="sd">         1.        ,  0.        ,  0.        ,  0.        ,  0.        ,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  1.        ,  0.        ]]), array([ 0.]))</span>
+<span class="sd">    &gt;&gt;&gt; # Retrieving 10 samples</span>
+<span class="sd">    &gt;&gt;&gt; stream.next_sample(10)</span>
+<span class="sd">    (array([[ 0.23752865,  0.58739728,  0.33649431,  0.62104964,  0.85182531,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  0.        ,  1.        ,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  0.        ,  1.        ],</span>
+<span class="sd">       [ 0.80996022,  0.71970756,  0.49121675,  0.18175096,  0.41738968,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  1.        ,  0.        ,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  0.        ,  1.        ],</span>
+<span class="sd">       [ 0.3450778 ,  0.27301117,  0.52986614,  0.68253015,  0.79836113,</span>
+<span class="sd">         0.        ,  0.        ,  1.        ,  0.        ,  0.        ,</span>
+<span class="sd">         1.        ,  0.        ,  0.        ,  0.        ,  0.        ],</span>
+<span class="sd">       [ 0.28974746,  0.64385678,  0.11726876,  0.14956833,  0.90919843,</span>
+<span class="sd">         0.        ,  1.        ,  0.        ,  0.        ,  0.        ,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  1.        ,  0.        ],</span>
+<span class="sd">       [ 0.85404693,  0.77693923,  0.25851095,  0.13574941,  0.01739845,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  0.        ,  1.        ,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  0.        ,  1.        ],</span>
+<span class="sd">       [ 0.23404205,  0.67644455,  0.65199858,  0.22742471,  0.01895565,</span>
+<span class="sd">         1.        ,  0.        ,  0.        ,  0.        ,  0.        ,</span>
+<span class="sd">         0.        ,  0.        ,  1.        ,  0.        ,  0.        ],</span>
+<span class="sd">       [ 0.12843591,  0.56112384,  0.08013747,  0.46674409,  0.48333615,</span>
+<span class="sd">         0.        ,  0.        ,  1.        ,  0.        ,  0.        ,</span>
+<span class="sd">         1.        ,  0.        ,  0.        ,  0.        ,  0.        ],</span>
+<span class="sd">       [ 0.52058342,  0.51999097,  0.28294293,  0.11435212,  0.83731519,</span>
+<span class="sd">         0.        ,  1.        ,  0.        ,  0.        ,  0.        ,</span>
+<span class="sd">         1.        ,  0.        ,  0.        ,  0.        ,  0.        ],</span>
+<span class="sd">       [ 0.82455551,  0.3758063 ,  0.02672009,  0.87081727,  0.3165448 ,</span>
+<span class="sd">         1.        ,  0.        ,  0.        ,  0.        ,  0.        ,</span>
+<span class="sd">         0.        ,  0.        ,  0.        ,  1.        ,  0.        ],</span>
+<span class="sd">       [ 0.03012729,  0.30479727,  0.65407304,  0.14532937,  0.47670874,</span>
+<span class="sd">         0.        ,  1.        ,  0.        ,  0.        ,  0.        ,</span>
+<span class="sd">         0.        ,  0.        ,  1.        ,  0.        ,  0.        ]]),</span>
+<span class="sd">        array([ 1.,  1.,  1.,  1.,  0.,  1.,  1.,  0.,  0.,  0.]))</span>
+<span class="sd">    &gt;&gt;&gt; # Generators will have infinite remaining instances, so it returns -1</span>
+<span class="sd">    &gt;&gt;&gt; stream.n_remaining_samples()</span>
+<span class="sd">    -1</span>
+<span class="sd">    &gt;&gt;&gt; stream.has_more_samples()</span>
+<span class="sd">    True</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instance_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_cat_features</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                 <span class="n">n_num_features</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_categories_per_cat_feature</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_tree_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_leaf_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">fraction_leaves_per_level</span><span class="o">=</span><span class="mf">0.15</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_seed</span> <span class="o">=</span> <span class="n">tree_seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span> <span class="o">=</span> <span class="n">instance_seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="n">n_classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">=</span> <span class="n">n_num_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">=</span> <span class="n">n_cat_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span> <span class="o">=</span> <span class="n">n_categories_per_cat_feature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tree_depth</span> <span class="o">=</span> <span class="n">max_tree_depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_leaf_depth</span> <span class="o">=</span> <span class="n">min_leaf_depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fraction_of_leaves_per_level</span> <span class="o">=</span> <span class="n">fraction_leaves_per_level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_root</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;att_num_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;att_nom_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_val&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+
+<div class="viewcode-block" id="RandomTreeGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.generate_random_tree"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.generate_random_tree">[docs]</a>    <span class="k">def</span> <span class="nf">generate_random_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; generate_random_tree</span>
+<span class="sd">        </span>
+<span class="sd">        Generates the random tree, starting from the root node and following </span>
+<span class="sd">        the constraints passed as parameters to the initializer. </span>
+<span class="sd">        </span>
+<span class="sd">        The tree is recursively generated, node by node, until it reaches the</span>
+<span class="sd">        maximum tree depth.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Starting random generators and parameter arrays</span>
+        <span class="n">tree_rand</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span>
+        <span class="n">tree_rand</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree_seed</span><span class="p">)</span>
+        <span class="n">nominal_att_candidates</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
+        <span class="n">min_numeric_value</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+        <span class="n">max_numeric_value</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">):</span>
+            <span class="n">min_numeric_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">max_numeric_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span><span class="p">):</span>
+            <span class="n">nominal_att_candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_random_tree_node</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nominal_att_candidates</span><span class="p">,</span> <span class="n">min_numeric_value</span><span class="p">,</span> <span class="n">max_numeric_value</span><span class="p">,</span>
+                                                        <span class="n">tree_rand</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.generate_random_tree_node"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.generate_random_tree_node">[docs]</a>    <span class="k">def</span> <span class="nf">generate_random_tree_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_depth</span><span class="p">,</span> <span class="n">nominal_att_candidates</span><span class="p">,</span> <span class="n">min_numeric_value</span><span class="p">,</span> <span class="n">max_numeric_value</span><span class="p">,</span>
+                                  <span class="n">random_state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; generate_random_tree_node</span>
+<span class="sd">        </span>
+<span class="sd">        Creates a node, choosing at random the splitting feature and the</span>
+<span class="sd">        split value. Fill the features with random feature values, and then </span>
+<span class="sd">        recursively generates its children. If the split feature is a</span>
+<span class="sd">        numerical feature there are going to be two children nodes, one</span>
+<span class="sd">        for samples where the value for the split feature is smaller than</span>
+<span class="sd">        the split value, and one for the other case.</span>
+<span class="sd">        </span>
+<span class="sd">        Once the recursion passes the leaf minimum depth, it probabilistic </span>
+<span class="sd">        chooses if the node is a leaf or not. If not, the recursion follow </span>
+<span class="sd">        the same way as before. If it decides the node is a leaf, a class </span>
+<span class="sd">        label is chosen for the leaf at random.</span>
+<span class="sd">        </span>
+<span class="sd">        Furthermore, if the current_depth is equal or higher than the tree </span>
+<span class="sd">        maximum depth, a leaf node is immediately returned.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        current_depth: int</span>
+<span class="sd">            The current tree depth.</span>
+<span class="sd">        </span>
+<span class="sd">        nominal_att_candidates: array</span>
+<span class="sd">            A list containing all the, still not chosen for the split, </span>
+<span class="sd">            nominal attributes.</span>
+<span class="sd">        </span>
+<span class="sd">        min_numeric_value: array</span>
+<span class="sd">            The minimum value reachable, at this branch of the </span>
+<span class="sd">            tree, for all numeric attributes.</span>
+<span class="sd">        </span>
+<span class="sd">        max_numeric_value: array</span>
+<span class="sd">            The minimum value reachable, at this branch of the </span>
+<span class="sd">            tree, for all numeric attributes.</span>
+<span class="sd">            </span>
+<span class="sd">        random_state: numpy.random</span>
+<span class="sd">            A numpy random generator instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        random_tree_generator.Node</span>
+<span class="sd">            Returns the node, either a inner node or a leaf node.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If the splitting attribute of a node happens to be a nominal attribute </span>
+<span class="sd">        we guarantee that none of its children will split on the same attribute, </span>
+<span class="sd">        as it would have no use for that split.</span>
+<span class="sd">         </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">current_depth</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_tree_depth</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="p">((</span><span class="n">current_depth</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_leaf_depth</span><span class="p">)</span> <span class="ow">and</span>
+                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fraction_of_leaves_per_level</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()))):</span>
+            <span class="n">leaf</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+            <span class="n">leaf</span><span class="o">.</span><span class="n">class_label</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">leaf</span>
+
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+        <span class="n">chosen_att</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nominal_att_candidates</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">chosen_att</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">:</span>
+            <span class="n">numeric_index</span> <span class="o">=</span> <span class="n">chosen_att</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">split_att_index</span> <span class="o">=</span> <span class="n">numeric_index</span>
+            <span class="n">min_val</span> <span class="o">=</span> <span class="n">min_numeric_value</span><span class="p">[</span><span class="n">numeric_index</span><span class="p">]</span>
+            <span class="n">max_val</span> <span class="o">=</span> <span class="n">max_numeric_value</span><span class="p">[</span><span class="n">numeric_index</span><span class="p">]</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">split_att_value</span> <span class="o">=</span> <span class="p">((</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">*</span> <span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">+</span> <span class="n">min_val</span><span class="p">)</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">new_max_value</span> <span class="o">=</span> <span class="n">max_numeric_value</span><span class="p">[:]</span>
+            <span class="n">new_max_value</span><span class="p">[</span><span class="n">numeric_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">split_att_value</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generate_random_tree_node</span><span class="p">(</span><span class="n">current_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nominal_att_candidates</span><span class="p">,</span>
+                                                                <span class="n">min_numeric_value</span><span class="p">,</span> <span class="n">new_max_value</span><span class="p">,</span> <span class="n">random_state</span><span class="p">))</span>
+
+            <span class="n">new_min_value</span> <span class="o">=</span> <span class="n">min_numeric_value</span><span class="p">[:]</span>
+            <span class="n">new_min_value</span><span class="p">[</span><span class="n">numeric_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">split_att_value</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generate_random_tree_node</span><span class="p">(</span><span class="n">current_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nominal_att_candidates</span><span class="p">,</span>
+                                                                <span class="n">new_min_value</span><span class="p">,</span> <span class="n">max_numeric_value</span><span class="p">,</span> <span class="n">random_state</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">split_att_index</span> <span class="o">=</span> <span class="n">nominal_att_candidates</span><span class="p">[</span><span class="n">chosen_att</span><span class="p">]</span>
+            <span class="n">new_nominal_candidates</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">nominal_att_candidates</span><span class="p">)</span>
+            <span class="n">new_nominal_candidates</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">split_att_index</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">):</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generate_random_tree_node</span><span class="p">(</span><span class="n">current_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">new_nominal_candidates</span><span class="p">,</span>
+                                                                    <span class="n">min_numeric_value</span><span class="p">,</span> <span class="n">max_numeric_value</span><span class="p">,</span> <span class="n">random_state</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">node</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.classify_instance"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.classify_instance">[docs]</a>    <span class="k">def</span> <span class="nf">classify_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">att_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classify_instance</span>
+<span class="sd">        </span>
+<span class="sd">        After a sample is generated it passes through this function, which </span>
+<span class="sd">        advances the tree structure until it finds a leaf node.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node: Node object</span>
+<span class="sd">            The Node that will be verified. Either it&#39;s a leaf, and then the </span>
+<span class="sd">            label is returned, or it&#39;s a inner node, and so the algorithm </span>
+<span class="sd">            will continue to advance in the structure.</span>
+<span class="sd">            </span>
+<span class="sd">        att_values: numpy.array</span>
+<span class="sd">            The set of generated feature values of the sample.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple or tuple list</span>
+<span class="sd">            Return a tuple with the features matrix and the labels matrix </span>
+<span class="sd">            for the batch_size samples that were requested.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">class_label</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">split_att_index</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">:</span>
+            <span class="n">aux</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">att_values</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">split_att_index</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">split_att_value</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify_instance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">aux</span><span class="p">],</span> <span class="n">att_values</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify_instance</span><span class="p">(</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_integer_nominal_attribute_representation</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">split_att_index</span><span class="p">,</span> <span class="n">att_values</span><span class="p">)],</span>
+                <span class="n">att_values</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__get_integer_nominal_attribute_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nominal_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">att_values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; __get_integer_nominal_attribute_representation</span>
+<span class="sd">        </span>
+<span class="sd">        Utility function, to determine a nominal index when coded in one-hot </span>
+<span class="sd">        fashion.</span>
+<span class="sd">        </span>
+<span class="sd">        The nominal_index uses as reference the number of nominal attributes </span>
+<span class="sd">        plus the number of numerical attributes. </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nominal_index: int</span>
+<span class="sd">            The nominal feature index.</span>
+<span class="sd">            </span>
+<span class="sd">        att_values: np.array</span>
+<span class="sd">            The features array.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            This function returns the index of the active variable in a nominal </span>
+<span class="sd">            attribute &#39;hot one&#39; representation.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">min_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> \
+                    <span class="o">+</span> <span class="p">(</span><span class="n">nominal_index</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">att_values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">min_index</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">i</span>
+            <span class="n">min_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="RandomTreeGenerator.n_remaining_samples"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.has_more_samples"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; next_sample</span>
+<span class="sd">        </span>
+<span class="sd">        Randomly generates attributes values, and then classify each instance </span>
+<span class="sd">        generated.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        batch_size: int</span>
+<span class="sd">            The number of samples to return.</span>
+<span class="sd">         </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple or tuple list</span>
+<span class="sd">            Return a tuple with the features matrix and the labels matrix for the </span>
+<span class="sd">            batch_size samples that were requested.</span>
+<span class="sd">         </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_attributes</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span>
+                                                            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span>
+                           <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">),</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">):</span>
+                <span class="n">aux</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">aux</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">)]</span> \
+                <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify_instance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree_root</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span>
+                                                                 <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span>
+                                                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">):]</span>
+
+            <span class="n">num_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span>
+                                                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="n">num_attributes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">num_attributes</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.is_restartable"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.is_restartable">[docs]</a>    <span class="k">def</span> <span class="nf">is_restartable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.restart"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_random_tree</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_n_cat_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_n_cat_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_cat_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_n_num_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_n_num_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_num_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_n_features"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_n_features">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_n_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_n_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_feature_names"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_feature_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_feature_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_labels</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_target_names"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_target_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs_labels</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.last_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.last_sample">[docs]</a>    <span class="k">def</span> <span class="nf">last_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_name"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Random Tree Generator - </span><span class="si">{}</span><span class="s2"> target, </span><span class="si">{}</span><span class="s2"> classes&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_targets"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_targets">[docs]</a>    <span class="k">def</span> <span class="nf">get_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="RandomTreeGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.RandomTreeGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;RandomTreeGenerator: tree_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree_seed</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - instance_seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_seed</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_nominal_attributes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_numerical_attributes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_values_per_nominal_attribute: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_categories_per_cat_feature</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - max_depth: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tree_depth</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - min_leaf_depth: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_leaf_depth</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - fraction_leaves_per_level: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fraction_of_leaves_per_level</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.random_tree_generator.html#skmultiflow.data.generators.random_tree_generator.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Node</span>
+<span class="sd">    </span>
+<span class="sd">    Class that stores the attributes of a node. No further methods.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    class_label: int, optional</span>
+<span class="sd">        If given it means the node is a leaf and the class label associated </span>
+<span class="sd">        with it is class_label.</span>
+<span class="sd">        </span>
+<span class="sd">    split_att_index: int, optional</span>
+<span class="sd">        If given it means the node is an inner node and the split attribute </span>
+<span class="sd">        is split_att_index.</span>
+<span class="sd">        </span>
+<span class="sd">    split_att_value: int, optional</span>
+<span class="sd">        If given it means the node is an inner node and the split value is </span>
+<span class="sd">        split_att_value.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">split_att_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">split_att_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_label</span> <span class="o">=</span> <span class="n">class_label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_att_index</span> <span class="o">=</span> <span class="n">split_att_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_att_value</span> <span class="o">=</span> <span class="n">split_att_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

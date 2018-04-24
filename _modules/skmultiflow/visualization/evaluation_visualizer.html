@@ -1,0 +1,1107 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.visualization.evaluation_visualizer &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>skmultiflow.visualization.evaluation_visualizer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for skmultiflow.visualization.evaluation_visualizer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.visualization.base_listener</span> <span class="k">import</span> <span class="n">BaseListener</span>
+<span class="kn">from</span> <span class="nn">matplotlib.rcsetup</span> <span class="k">import</span> <span class="n">cycler</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<div class="viewcode-block" id="EvaluationVisualizer"><a class="viewcode-back" href="../../../skmultiflow.visualization.evaluation_visualizer.html#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer">[docs]</a><span class="k">class</span> <span class="nc">EvaluationVisualizer</span><span class="p">(</span><span class="n">BaseListener</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; EvaluationVisualizer</span>
+<span class="sd">    </span>
+<span class="sd">    This class is responsible for maintaining and updating the plot modules </span>
+<span class="sd">    for all the evaluators in scikit-multiflow. </span>
+<span class="sd">    </span>
+<span class="sd">    It uses matplotlib&#39;s pyplot modules to create the main plot, which </span>
+<span class="sd">    depending on the options passed to it as parameter, will create multiple </span>
+<span class="sd">    subplots to better display all requested metrics.</span>
+<span class="sd">    </span>
+<span class="sd">    The plots are updated on the go, at each n_wait samples. The plot is </span>
+<span class="sd">    redrawn at each step, which may cause significant slow down, depending on </span>
+<span class="sd">    the processor used and the plotting options.</span>
+<span class="sd">    </span>
+<span class="sd">    Line objects are used to describe performance measurements and scatter </span>
+<span class="sd">    instances will represent true labels and predictions, when requested.</span>
+<span class="sd">    </span>
+<span class="sd">    It supports the visualization of multiple learners per subplot as a way </span>
+<span class="sd">    of comparing the performance of different learning algorithms facing the </span>
+<span class="sd">    same data stream.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_sliding: int</span>
+<span class="sd">        The number of samples in the sliding window to track recent performance.</span>
+<span class="sd">    </span>
+<span class="sd">    dataset_name: string (Default: &#39;Unnamed graph&#39;)</span>
+<span class="sd">        The title of the plot. Algorithmically it&#39;s not important.</span>
+<span class="sd">    </span>
+<span class="sd">    plots: list</span>
+<span class="sd">        A list containing all the subplots to plot. Can be any of: </span>
+<span class="sd">        &#39;performance&#39;, &#39;kappa&#39;, &#39;scatter&#39;, &#39;hamming_score&#39;, &#39;hamming_loss&#39;, </span>
+<span class="sd">        &#39;exact_match&#39;, &#39;j_index&#39;, &#39;mean_square_error&#39;, &#39;mean_absolute_error&#39;, </span>
+<span class="sd">        &#39;true_vs_predicts&#39;, &#39;kappa_t&#39;, &#39;kappa_m&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    n_learners: int</span>
+<span class="sd">        The number of learners to compare.</span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError: A ValueError can be raised for a series of reasons. If no plots </span>
+<span class="sd">    are passed as parameter to the constructor a ValueError is raised. If the wrong </span>
+<span class="sd">    type of parameter is passed to on_new_train_step the same error is raised.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Using more than 3 plot types at a time is not recommended, as it will </span>
+<span class="sd">    significantly slow down processing. Also, for the same reason comparing </span>
+<span class="sd">    more than 3 learners at a time is not recommended.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_sliding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dataset_name</span><span class="o">=</span><span class="s1">&#39;Unnamed graph&#39;</span><span class="p">,</span> <span class="n">plots</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_learners</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Default values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scatter_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_legend_set</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_cnt</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">true_values</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_performance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_performance</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_t</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_t</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_m</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_m</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_score</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_score</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_loss</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_loss</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_exact_match</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_exact_match</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_j_index</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_j_index</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_mse</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_mse</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_mae</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_mae</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression_true</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression_pred</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Configuration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_plots</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Lines</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_performance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_performance</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_t</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_t</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_m</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_m</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_score</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_score</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_loss</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_loss</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_exact_match</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_exact_match</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_j_index</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_j_index</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mse</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mse</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mae</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mae</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_true</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_pred</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Subplot default</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_scatter_points</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">task_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Task type for visualizer object is undefined.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">task_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="s1">&#39;multi_output&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">=</span> <span class="n">task_type</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid task type: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task_type</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">plots</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">plots</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No plots were given.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">(</span><span class="n">n_sliding</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">plots</span><span class="p">,</span> <span class="n">n_learners</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No plots were given.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EvaluationVisualizer.on_new_train_step"><a class="viewcode-back" href="../../../skmultiflow.visualization.evaluation_visualizer.html#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.on_new_train_step">[docs]</a>    <span class="k">def</span> <span class="nf">on_new_train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_step</span><span class="p">,</span> <span class="n">metrics_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; on_new_train_step</span>
+<span class="sd">        </span>
+<span class="sd">        This is the listener main function, which gives it the ability to </span>
+<span class="sd">        &#39;listen&#39; for the caller. Whenever the EvaluationVisualiser should </span>
+<span class="sd">        be aware of some new data, the caller will call this function, </span>
+<span class="sd">        passing the new data as parameter.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        train_step: int</span>
+<span class="sd">            The number of samples processed to this moment.</span>
+<span class="sd">        </span>
+<span class="sd">        metrics_dict: dictionary</span>
+<span class="sd">            A dictionary containing metric measurements, where the key is</span>
+<span class="sd">            the metric name and the value its corresponding measurement.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError: If wrong data formats are passed as parameter this error </span>
+<span class="sd">        is raised.</span>
+<span class="sd">         </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">train_step</span><span class="p">,</span> <span class="n">metrics_dict</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Failed when trying to draw plot. &#39;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvaluationVisualizer.on_new_scatter_data"><a class="viewcode-back" href="../../../skmultiflow.visualization.evaluation_visualizer.html#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.on_new_scatter_data">[docs]</a>    <span class="k">def</span> <span class="nf">on_new_scatter_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_sliding</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">plots</span><span class="p">,</span> <span class="n">n_learners</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; __configure</span>
+<span class="sd">        </span>
+<span class="sd">        This function will verify which subplots it should create. For each one </span>
+<span class="sd">        of those, it will initialize all relevant objects to keep track of the </span>
+<span class="sd">        plotting points.</span>
+<span class="sd">        </span>
+<span class="sd">        Basic structures needed to keep track of plot values (for each subplot) </span>
+<span class="sd">        are: lists of values and matplotlib&#39;s line objects.</span>
+<span class="sd">        </span>
+<span class="sd">        The __configure function will also initialize each subplot with the </span>
+<span class="sd">        correct name and setup the axis.</span>
+<span class="sd">        </span>
+<span class="sd">        The subplot size will self adjust to each screen size, so that data can </span>
+<span class="sd">        be better viewed in different contexts.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_sliding: int</span>
+<span class="sd">            The number of samples in the sliding window to track recent performance.</span>
+<span class="sd">    </span>
+<span class="sd">        dataset_name: string (Default: &#39;Unnamed graph&#39;)</span>
+<span class="sd">            The title of the plot. Algorithmically it&#39;s not important.</span>
+<span class="sd">    </span>
+<span class="sd">        plots: list</span>
+<span class="sd">            A list containing all the subplots to plot. Can be any of: </span>
+<span class="sd">            &#39;performance&#39;, &#39;kappa&#39;, &#39;scatter&#39;, &#39;hamming_score&#39;, &#39;hamming_loss&#39;, </span>
+<span class="sd">            &#39;exact_match&#39;, &#39;j_index&#39;, &#39;mean_square_error&#39;, &#39;mean_absolute_error&#39;, </span>
+<span class="sd">            &#39;true_vs_predicts&#39;, &#39;kappa_t&#39;, &#39;kappa_m&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        n_learners: int</span>
+<span class="sd">            The number of learners to compare.</span>
+<span class="sd">         </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">font_size_small</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">font_size_medium</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">font_size_large</span> <span class="o">=</span> <span class="mi">12</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">font_size_small</span><span class="p">)</span>  <span class="c1"># controls default text sizes</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="n">font_size_medium</span><span class="p">)</span>  <span class="c1"># font size of the axes title</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">font_size_small</span><span class="p">)</span>  <span class="c1"># font size of the x and y labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">font_size_small</span><span class="p">)</span>  <span class="c1"># font size of the tick labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">font_size_small</span><span class="p">)</span>  <span class="c1"># font size of the tick labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;legend&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size_small</span><span class="p">)</span>  <span class="c1"># legend font size</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;figure&#39;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="n">font_size_large</span><span class="p">)</span>  <span class="c1"># font size of the figure title</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;.*GUI is implemented.*&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;.*left==right.*&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;.*Passing 1d.*&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span> <span class="o">=</span> <span class="n">n_sliding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_name</span> <span class="o">=</span> <span class="n">dataset_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="n">plots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span> <span class="o">=</span> <span class="n">n_learners</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_plots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="mi">11</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_plots</span> <span class="o">*</span> <span class="mi">100</span>  <span class="c1"># 3-digit integer describing the position of the subplot.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="s1">&#39;scikit-multiflow&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;performance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_performance</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_performance</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Performance ratio&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_performance</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_performance</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_performance</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">partial_performance</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_performance</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_performance</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_performance</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_performance</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kappa&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Kappa&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Kappa statistic&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kappa_t&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_t</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_t</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Kappa T&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Kappa T statistic&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_t</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_t</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kappa_m&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_m</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_m</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Kappa M&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Kappa M statistic&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_m</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_m</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;hamming_score&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_score</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_score</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Hamming score&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Hamming score&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_score</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_score</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;hamming_loss&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_loss</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_loss</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Hamming loss&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Hamming loss&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_loss</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_loss</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;exact_match&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_exact_match</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_exact_match</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Exact matches&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Exact matches&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_exact_match</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_exact_match</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;j_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_j_index</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_j_index</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;J index&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;J index&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_j_index</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_j_index</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;mean_square_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_mse</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_mse</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Mean Squared Error&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;MSE&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mse</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mse</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;mean_absolute_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_mae</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_mae</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Mean Absolute Error&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;MAE&#39;</span><span class="p">)</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mae</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mae</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1">  (sliding </span><span class="si">{}</span><span class="s1"> samples)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_fig_legend</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;true_vs_predicts&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">true_values</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;True vs Predicted&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">set_prop_cycle</span><span class="p">(</span><span class="n">cycler</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">]))</span>
+            <span class="n">base</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_true</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_values</span><span class="p">,</span>
+                                                                     <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True value&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_true</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_values</span><span class="p">,</span>
+                                                                     <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True value&#39;</span><span class="p">)</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">line_true</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_pred</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">)]</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">line_pred</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                                            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+                                                                            <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">line_pred</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                                            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Model </span><span class="si">{}</span><span class="s1"> (global)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+                                                                            <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_pred</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Samples&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">04</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">],</span> <span class="n">pad</span><span class="o">=</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_fig_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handles</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_legend_set</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_legend_set</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="EvaluationVisualizer.draw"><a class="viewcode-back" href="../../../skmultiflow.visualization.evaluation_visualizer.html#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_step</span><span class="p">,</span> <span class="n">metrics_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; draw</span>
+<span class="sd">        </span>
+<span class="sd">        Updates and redraws the plot.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        train_step: int</span>
+<span class="sd">            The number of samples processed to this moment.</span>
+<span class="sd">        </span>
+<span class="sd">        metrics_dict: dictionary</span>
+<span class="sd">            A dictionary containing tuples, where the first element is the </span>
+<span class="sd">            string that identifies one of the plot&#39;s subplot names, and the </span>
+<span class="sd">            second element is its numerical value.</span>
+<span class="sd">             </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_step</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">xy_pos_default</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.01</span><span class="p">,</span> <span class="o">.</span><span class="mi">90</span><span class="p">)</span>  <span class="c1"># Default xy position for metric annotations</span>
+
+        <span class="k">if</span> <span class="s1">&#39;performance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_performance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_performance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_performance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_performance</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_performance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_performance</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                                <span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_performance</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kappa&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span> <span class="n">annotation_clip</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kappa_t&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;kappa_t&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;kappa_t&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+                <span class="n">minimum</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">])),</span> <span class="nb">min</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_t</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_t</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">minimum</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s1">&#39;kappa_m&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;kappa_m&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;kappa_m&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+                <span class="n">minimum</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">])),</span> <span class="nb">min</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">partial_kappa_m</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_kappa_m</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;hamming_score&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;hamming_score&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;hamming_score&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_score</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;hamming_loss&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;hamming_loss&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;hamming_loss&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_hamming_loss</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_hamming_loss</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;exact_match&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;exact_match&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;exact_match&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_exact_match</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_exact_match</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;j_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;j_index&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;j_index&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_j_index</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_j_index</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;mean_square_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">maximum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;mean_square_error&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;mean_square_error&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+                <span class="c1"># minimum = min([min(self.global_mse[i]), min(self.partial_mse[i]), minimum])</span>
+                <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_mse</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">partial_mse</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">maximum</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mse</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="mf">1.2</span><span class="o">*</span><span class="n">maximum</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;mean_absolute_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">maximum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># y axis shift for plot annotations</span>
+            <span class="n">xy_pos</span> <span class="o">=</span> <span class="n">xy_pos_default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{: &lt;8}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1"> | </span><span class="si">{: ^14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="s1">&#39;Sliding&#39;</span><span class="p">),</span>
+                <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{: ^12d}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">   </span><span class="si">{: ^14.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xy</span><span class="o">=</span><span class="n">xy_pos</span><span class="p">,</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
+                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">shift_y</span><span class="p">),</span>
+                    <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">))</span>
+                <span class="n">shift_y</span> <span class="o">+=</span> <span class="n">shift_y</span>
+                <span class="c1"># minimum = min([min(self.global_mae[i]), min(self.partial_mae[i]), minimum])</span>
+                <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_mae</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">partial_mae</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">maximum</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_mae</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="mf">1.2</span><span class="o">*</span><span class="n">maximum</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;true_vs_predicts&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">true_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;true_vs_predicts&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line_true</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_values</span><span class="p">)</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">maximum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_learners</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics_dict</span><span class="p">[</span><span class="s1">&#39;true_vs_predicts&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">minimum</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">true_values</span><span class="p">),</span> <span class="n">minimum</span><span class="p">])</span>
+                <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_values</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">true_values</span><span class="p">),</span> <span class="n">maximum</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">minimum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">maximum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">subplot_true_vs_predicts</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.01</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_cnt</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.72</span><span class="p">)</span>   <span class="c1"># Adjust subplots to include metrics</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_cnt</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="EvaluationVisualizer.draw_scatter_points"><a class="viewcode-back" href="../../../skmultiflow.visualization.evaluation_visualizer.html#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.draw_scatter_points">[docs]</a>    <span class="k">def</span> <span class="nf">draw_scatter_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">predict</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="EvaluationVisualizer.hold"><a class="viewcode-back" href="../../../skmultiflow.visualization.evaluation_visualizer.html#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.hold">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">hold</span><span class="p">():</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvaluationVisualizer.get_info"><a class="viewcode-back" href="../../../skmultiflow.visualization.evaluation_visualizer.html#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">ev</span> <span class="o">=</span> <span class="n">EvaluationVisualizer</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">get_class_type</span><span class="p">())</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

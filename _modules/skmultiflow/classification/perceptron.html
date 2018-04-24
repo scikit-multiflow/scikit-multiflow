@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.classification.perceptron &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>skmultiflow.classification.perceptron</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for skmultiflow.classification.perceptron</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model.perceptron</span> <span class="k">import</span> <span class="n">Perceptron</span>
+
+
+<div class="viewcode-block" id="PerceptronMask"><a class="viewcode-back" href="../../../skmultiflow.classification.perceptron.html#skmultiflow.classification.perceptron.PerceptronMask">[docs]</a><span class="k">class</span> <span class="nc">PerceptronMask</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; PerceptronMask</span>
+
+<span class="sd">    A mask for scikit-learn&#39;s Perceptron classifier.</span>
+
+<span class="sd">    Because scikit-multiflow&#39;s framework require a few interfaces, not present </span>
+<span class="sd">    int scikit-learn, this mask allows the first to use classifiers native to </span>
+<span class="sd">    the latter.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">Perceptron</span><span class="p">(</span><span class="n">n_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PerceptronMask.fit"><a class="viewcode-back" href="../../../skmultiflow.classification.perceptron.html#skmultiflow.classification.perceptron.PerceptronMask.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; fit</span>
+
+<span class="sd">        Calls the Perceptron fit function from sklearn.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            The feature&#39;s matrix.</span>
+
+<span class="sd">        y: Array-like</span>
+<span class="sd">            The class labels for all samples in X.</span>
+
+<span class="sd">        classes: Not used.</span>
+
+<span class="sd">        weight: Instance weight. If not provided, uniform weights are assumed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PerceptronMask</span>
+<span class="sd">            self</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="PerceptronMask.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.classification.perceptron.html#skmultiflow.classification.perceptron.PerceptronMask.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; partial_fit</span>
+
+<span class="sd">        Calls the Perceptron partial_fit from sklearn.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            The feature&#39;s matrix.</span>
+
+<span class="sd">        y: Array-like</span>
+<span class="sd">            The class labels for all samples in X.</span>
+
+<span class="sd">        classes: list, optional</span>
+<span class="sd">            A list with all the possible labels of the classification problem.</span>
+
+<span class="sd">        weight: Instance weight. If not provided, uniform weights are assumed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PerceptronMask</span>
+<span class="sd">            self</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="PerceptronMask.predict"><a class="viewcode-back" href="../../../skmultiflow.classification.perceptron.html#skmultiflow.classification.perceptron.PerceptronMask.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; predict</span>
+
+<span class="sd">        Uses the current model to predict samples in X.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            The feature&#39;s matrix.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            A list containing the predicted labels for all instances in X.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerceptronMask.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.classification.perceptron.html#skmultiflow.classification.perceptron.PerceptronMask.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; predict_proba</span>
+
+<span class="sd">        Predicts the probability of each sample belonging to each one of the </span>
+<span class="sd">        known classes.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: Numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            A matrix of the samples we want to predict.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            An array of shape (n_samples, n_features), in which each outer entry is </span>
+<span class="sd">            associated with the X entry of the same index. And where the list in </span>
+<span class="sd">            index [i] contains len(self.classes) elements, each of which represents </span>
+<span class="sd">            the probability that the i-th sample of X belongs to a certain label.</span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerceptronMask.score"><a class="viewcode-back" href="../../../skmultiflow.classification.perceptron.html#skmultiflow.classification.perceptron.PerceptronMask.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; score</span>
+
+<span class="sd">        Returns the predict performance for the samples in X.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray of shape (n_sample, n_features)</span>
+<span class="sd">            The features matrix.</span>
+
+<span class="sd">        y: Array-like</span>
+<span class="sd">            An array-like containing the class labels for all samples in X.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The classifier&#39;s score.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerceptronMask.get_info"><a class="viewcode-back" href="../../../skmultiflow.classification.perceptron.html#skmultiflow.classification.perceptron.PerceptronMask.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;penalty&#39;</span><span class="p">]</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span> <span class="k">if</span> <span class="n">penalty</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">penalty</span>
+        <span class="n">fit_int</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;fit_intercept&#39;</span><span class="p">]</span>
+        <span class="n">fit_int</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="n">fit_int</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">shuffle</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;shuffle&#39;</span><span class="p">]</span>
+        <span class="n">shuffle</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="n">shuffle</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;Perceptron: penalty: &#39;</span> <span class="o">+</span> <span class="n">penalty</span> <span class="o">+</span> \
+               <span class="s1">&#39;  -  alpha: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> \
+               <span class="s1">&#39;  -  fit_intercept: &#39;</span> <span class="o">+</span> <span class="n">fit_int</span> <span class="o">+</span> \
+               <span class="s1">&#39;  -  n_iter: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;n_iter&#39;</span><span class="p">])</span> <span class="o">+</span> \
+               <span class="s1">&#39;  -  shuffle: &#39;</span> <span class="o">+</span> <span class="n">shuffle</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>
