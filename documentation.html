@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Documentation &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skmultiflow.data.base_stream" href="_autosummary/skmultiflow.data.base_stream.html" />
+    <link rel="prev" title="Quick-Start Guide" href="user-guide.quick-start.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-skmultiflow.data.generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-skmultiflow.classification">Classification: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.multi_output_learner.html">skmultiflow.classification.multi_output_learner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.naive_bayes.html">skmultiflow.classification.naive_bayes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-skmultiflow.classification.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-skmultiflow.classification.trees">Tree methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#package-indices-and-search">Package, Indices and Search</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">skmultiflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/documentation.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<p>This is the API documentation for <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code>.</p>
+<div class="section" id="module-skmultiflow.data">
+<span id="data-skmultiflow-data"></span><h2>Data: <a class="reference internal" href="skmultiflow.data.html#module-skmultiflow.data" title="skmultiflow.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><a class="headerlink" href="#module-skmultiflow.data" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.base_stream.html#module-skmultiflow.data.base_stream" title="skmultiflow.data.base_stream"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.base_stream</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.dataset_stream.html#module-skmultiflow.data.dataset_stream" title="skmultiflow.data.dataset_stream"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.dataset_stream</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.file_stream.html#module-skmultiflow.data.file_stream" title="skmultiflow.data.file_stream"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.file_stream</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="module-skmultiflow.data.generators">
+<span id="stream-generators"></span><h3>Stream Generators<a class="headerlink" href="#module-skmultiflow.data.generators" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.generators.agrawal_generator.html#module-skmultiflow.data.generators.agrawal_generator" title="skmultiflow.data.generators.agrawal_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.agrawal_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.generators.hyper_plane_generator.html#module-skmultiflow.data.generators.hyper_plane_generator" title="skmultiflow.data.generators.hyper_plane_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.hyper_plane_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.generators.led_generator.html#module-skmultiflow.data.generators.led_generator" title="skmultiflow.data.generators.led_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.led_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.generators.led_generator_drift.html#module-skmultiflow.data.generators.led_generator_drift" title="skmultiflow.data.generators.led_generator_drift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.led_generator_drift</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.generators.mixed_generator.html#module-skmultiflow.data.generators.mixed_generator" title="skmultiflow.data.generators.mixed_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.mixed_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.generators.random_rbf_generator.html#module-skmultiflow.data.generators.random_rbf_generator" title="skmultiflow.data.generators.random_rbf_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.random_rbf_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.generators.random_rbf_generator_drift.html#module-skmultiflow.data.generators.random_rbf_generator_drift" title="skmultiflow.data.generators.random_rbf_generator_drift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.random_rbf_generator_drift</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.generators.random_tree_generator.html#module-skmultiflow.data.generators.random_tree_generator" title="skmultiflow.data.generators.random_tree_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.random_tree_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.generators.sea_generator.html#module-skmultiflow.data.generators.sea_generator" title="skmultiflow.data.generators.sea_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.sea_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.generators.sine_generator.html#module-skmultiflow.data.generators.sine_generator" title="skmultiflow.data.generators.sine_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.sine_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.generators.stagger_generator.html#module-skmultiflow.data.generators.stagger_generator" title="skmultiflow.data.generators.stagger_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.stagger_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.generators.waveform_generator.html#module-skmultiflow.data.generators.waveform_generator" title="skmultiflow.data.generators.waveform_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.waveform_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.data.generators.multilabel_generator.html#module-skmultiflow.data.generators.multilabel_generator" title="skmultiflow.data.generators.multilabel_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.multilabel_generator</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.data.generators.regression_generator.html#module-skmultiflow.data.generators.regression_generator" title="skmultiflow.data.generators.regression_generator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.data.generators.regression_generator</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-skmultiflow.classification">
+<span id="classification-skmultiflow-classification"></span><h2>Classification: <a class="reference internal" href="skmultiflow.classification.html#module-skmultiflow.classification" title="skmultiflow.classification"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><a class="headerlink" href="#module-skmultiflow.classification" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.multi_output_learner.html#module-skmultiflow.classification.multi_output_learner" title="skmultiflow.classification.multi_output_learner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.multi_output_learner</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.classification.naive_bayes.html#module-skmultiflow.classification.naive_bayes" title="skmultiflow.classification.naive_bayes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.naive_bayes</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.perceptron.html#module-skmultiflow.classification.perceptron" title="skmultiflow.classification.perceptron"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.perceptron</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="module-skmultiflow.classification.meta">
+<span id="ensemble-methods"></span><h3>Ensemble methods<a class="headerlink" href="#module-skmultiflow.classification.meta" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.meta.batch_incremental.html#module-skmultiflow.classification.meta.batch_incremental" title="skmultiflow.classification.meta.batch_incremental"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.meta.batch_incremental</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.classification.meta.oza_bagging.html#module-skmultiflow.classification.meta.oza_bagging" title="skmultiflow.classification.meta.oza_bagging"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.meta.oza_bagging</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.meta.oza_bagging_adwin.html#module-skmultiflow.classification.meta.oza_bagging_adwin" title="skmultiflow.classification.meta.oza_bagging_adwin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.meta.oza_bagging_adwin</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.classification.meta.leverage_bagging.html#module-skmultiflow.classification.meta.leverage_bagging" title="skmultiflow.classification.meta.leverage_bagging"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.meta.leverage_bagging</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.meta.adaptive_random_forests.html#module-skmultiflow.classification.meta.adaptive_random_forests" title="skmultiflow.classification.meta.adaptive_random_forests"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.meta.adaptive_random_forests</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-skmultiflow.classification.trees">
+<span id="tree-methods"></span><h3>Tree methods<a class="headerlink" href="#module-skmultiflow.classification.trees" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#module-skmultiflow.classification.trees.hoeffding_tree" title="skmultiflow.classification.trees.hoeffding_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_tree</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.classification.trees.hoeffding_adaptive_tree.html#module-skmultiflow.classification.trees.hoeffding_adaptive_tree" title="skmultiflow.classification.trees.hoeffding_adaptive_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.hoeffding_adaptive_tree</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.trees.arf_hoeffding_tree.html#module-skmultiflow.classification.trees.arf_hoeffding_tree" title="skmultiflow.classification.trees.arf_hoeffding_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.trees.arf_hoeffding_tree</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-skmultiflow.classification.lazy">
+<span id="nearest-neighbors-methods"></span><h3>Nearest Neighbors methods<a class="headerlink" href="#module-skmultiflow.classification.lazy" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.lazy.knn.html#module-skmultiflow.classification.lazy.knn" title="skmultiflow.classification.lazy.knn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.lazy.knn</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.classification.lazy.knn_adwin.html#module-skmultiflow.classification.lazy.knn_adwin" title="skmultiflow.classification.lazy.knn_adwin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.lazy.knn_adwin</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.lazy.sam_knn.html#module-skmultiflow.classification.lazy.sam_knn" title="skmultiflow.classification.lazy.sam_knn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.lazy.sam_knn</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-skmultiflow.classification.core.driftdetection">
+<span id="drift-detection-skmultiflow-classification-core-driftdetection"></span><h2>Drift Detection: <a class="reference internal" href="skmultiflow.classification.core.driftdetection.html#module-skmultiflow.classification.core.driftdetection" title="skmultiflow.classification.core.driftdetection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><a class="headerlink" href="#module-skmultiflow.classification.core.driftdetection" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.core.driftdetection.adwin.html#module-skmultiflow.classification.core.driftdetection.adwin" title="skmultiflow.classification.core.driftdetection.adwin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection.adwin</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.classification.core.driftdetection.ddm.html#module-skmultiflow.classification.core.driftdetection.ddm" title="skmultiflow.classification.core.driftdetection.ddm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection.ddm</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.classification.core.driftdetection.eddm.html#module-skmultiflow.classification.core.driftdetection.eddm" title="skmultiflow.classification.core.driftdetection.eddm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection.eddm</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.classification.core.driftdetection.page_hinkley.html#module-skmultiflow.classification.core.driftdetection.page_hinkley" title="skmultiflow.classification.core.driftdetection.page_hinkley"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection.page_hinkley</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-skmultiflow.evaluation">
+<span id="evaluation-skmultiflow-evaluation"></span><h2>Evaluation: <a class="reference internal" href="skmultiflow.evaluation.html#module-skmultiflow.evaluation" title="skmultiflow.evaluation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><a class="headerlink" href="#module-skmultiflow.evaluation" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="skmultiflow.evaluation.evaluate_holdout.html#module-skmultiflow.evaluation.evaluate_holdout" title="skmultiflow.evaluation.evaluate_holdout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.evaluation.evaluate_holdout</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="skmultiflow.evaluation.evaluate_prequential.html#module-skmultiflow.evaluation.evaluate_prequential" title="skmultiflow.evaluation.evaluate_prequential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skmultiflow.evaluation.evaluate_prequential</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="package-indices-and-search">
+<h2>Package, Indices and Search<a class="headerlink" href="#package-indices-and-search" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">skmultiflow</a></li>
+</ul>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/skmultiflow.data.base_stream.html" class="btn btn-neutral float-right" title="skmultiflow.data.base_stream" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="user-guide.quick-start.html" class="btn btn-neutral" title="Quick-Start Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
