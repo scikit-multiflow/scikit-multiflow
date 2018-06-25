@@ -108,7 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../documentation.html">Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -119,14 +119,14 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -207,12 +207,12 @@
   <h1>Source code for skmultiflow.classification.lazy.knn_adwin</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.classification.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.classification.core.driftdetection.adwin</span> <span class="k">import</span> <span class="n">ADWIN</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.drift_detection.adwin</span> <span class="k">import</span> <span class="n">ADWIN</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.data_structures</span> <span class="k">import</span> <span class="n">InstanceWindow</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="KNNAdwin"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn_adwin.html#skmultiflow.classification.lazy.knn_adwin.KNNAdwin">[docs]</a><span class="k">class</span> <span class="nc">KNNAdwin</span><span class="p">(</span><span class="n">KNN</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn_adwin.html#skmultiflow.classification.lazy.KNNAdwin">[docs]</a><span class="k">class</span> <span class="nc">KNNAdwin</span><span class="p">(</span><span class="n">KNN</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; K-Nearest Neighbors Classifier with ADWIN Change detector </span>
 <span class="sd">    </span>
 <span class="sd">    This Classifier is an improvement from the regular KNN classifier, </span>
@@ -221,7 +221,7 @@
 <span class="sd">    and by doing so it regulates the sample window size.</span>
 <span class="sd">     </span>
 <span class="sd">    To know more about the ADWIN change detector, please visit </span>
-<span class="sd">    skmultiflow.classification.core.driftdetection.adwin</span>
+<span class="sd">    skmultiflow.classification.core.drift_detection.adwin</span>
 
 <span class="sd">    It uses the regular KNN Classifier as a base class, with the </span>
 <span class="sd">    major difference that this class keeps a variable size window, </span>
@@ -293,7 +293,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="KNNAdwin.reset"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn_adwin.html#skmultiflow.classification.lazy.knn_adwin.KNNAdwin.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin.reset"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn_adwin.html#skmultiflow.classification.lazy.KNNAdwin.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset</span>
 <span class="sd">        </span>
 <span class="sd">        Resets the adwin algorithm as well as the base model </span>
@@ -308,7 +308,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="KNNAdwin.partial_fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn_adwin.html#skmultiflow.classification.lazy.knn_adwin.KNNAdwin.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin.partial_fit"><a class="viewcode-back" href="../../../../skmultiflow.classification.lazy.knn_adwin.html#skmultiflow.classification.lazy.KNNAdwin.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 <span class="sd">        </span>
 <span class="sd">        Partially fits the model. This is done by updating the window </span>

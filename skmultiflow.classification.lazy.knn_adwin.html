@@ -110,7 +110,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -121,14 +121,14 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -232,7 +232,7 @@ as it is resistant to concept drift. It utilises the ADWIN change
 detector to decide which samples to keep and which ones to forget,
 and by doing so it regulates the sample window size.</p>
 <p>To know more about the ADWIN change detector, please visit
-skmultiflow.classification.core.driftdetection.adwin</p>
+skmultiflow.classification.core.drift_detection.adwin</p>
 <p>It uses the regular KNN Classifier as a base class, with the
 major difference that this class keeps a variable size window,
 instead of a fixed size one and also it updates the adwin algorithm
@@ -318,7 +318,7 @@ samples in X.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">self</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.classification.lazy.knn_adwin.KNNAdwin" title="skmultiflow.classification.lazy.knn_adwin.KNNAdwin">KNNAdwin</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="skmultiflow.classification.lazy.html#skmultiflow.classification.lazy.KNNAdwin" title="skmultiflow.classification.lazy.KNNAdwin">KNNAdwin</a></p>
 </td>
 </tr>
 </tbody>
@@ -336,7 +336,7 @@ kept by the KNN base class.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#skmultiflow.classification.lazy.knn_adwin.KNNAdwin" title="skmultiflow.classification.lazy.knn_adwin.KNNAdwin">KNNAdwin</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.classification.lazy.html#skmultiflow.classification.lazy.KNNAdwin" title="skmultiflow.classification.lazy.KNNAdwin">KNNAdwin</a></td>
 </tr>
 </tbody>
 </table>

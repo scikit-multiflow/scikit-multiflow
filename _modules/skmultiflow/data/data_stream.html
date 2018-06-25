@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.data.dataset_stream &mdash; scikit-multiflow 0.1.0 documentation</title>
+  <title>skmultiflow.data.data_stream &mdash; scikit-multiflow 0.1.0 documentation</title>
   
 
   
@@ -108,7 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -119,14 +119,14 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -189,7 +189,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>skmultiflow.data.dataset_stream</li>
+      <li>skmultiflow.data.data_stream</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -204,14 +204,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for skmultiflow.data.dataset_stream</h1><div class="highlight"><pre>
+  <h1>Source code for skmultiflow.data.data_stream</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.data.base_stream</span> <span class="k">import</span> <span class="n">Stream</span>
 
 
-<div class="viewcode-block" id="DatasetStream"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream">[docs]</a><span class="k">class</span> <span class="nc">DatasetStream</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; DatasetStream</span>
+<div class="viewcode-block" id="DataStream"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream">[docs]</a><span class="k">class</span> <span class="nc">DataStream</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; DataStream</span>
 
 <span class="sd">    A stream generated from the entries of a dataset ( numpy array or pandas</span>
 <span class="sd">    DataFrame).</span>
@@ -220,10 +220,19 @@
 <span class="sd">    a way that old samples cannot be accessed in a later time. This is done</span>
 <span class="sd">    so that a stream context can be correctly simulated.</span>
 
+<span class="sd">    DataStream takes the whole data set are separates the X and Y or takes X and Y</span>
+<span class="sd">    separately.</span>
+<span class="sd">    For the first case target_idx and n_targets need to be provided, in the next</span>
+<span class="sd">    case they are not needed.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    raw_data:</span>
-<span class="sd">        The dataset.</span>
+<span class="sd">    data: np.ndarray or pd.DataFrame (Default=None)</span>
+<span class="sd">        The features&#39; columns and targets&#39; columns or the feature columns</span>
+<span class="sd">        only if they are passed separately.</span>
+<span class="sd">    y: np.ndarray or pd.DataFrame, optional (Default=None)</span>
+<span class="sd">        The targets&#39; columns.</span>
+
 <span class="sd">    target_idx: int, optional (default=-1)</span>
 <span class="sd">        The column index from which the targets start.</span>
 
@@ -236,59 +245,131 @@
 
     <span class="n">_CLASSIFICATION</span> <span class="o">=</span> <span class="s1">&#39;classification&#39;</span>
     <span class="n">_REGRESSION</span> <span class="o">=</span> <span class="s1">&#39;regression&#39;</span>
+    <span class="n">_Y_is_defined</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">,</span> <span class="n">target_idx</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cat_features_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_idx</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cat_features_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">cat_features_idx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cat_features_idx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">n_targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">=</span> <span class="n">target_idx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">raw_data</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y_is_defined</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;X and y should have the same number of rows&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the targets&#39; columns.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray:</span>
+<span class="sd">            the targets&#39; columns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span>
+
+    <span class="nd">@y</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the targets&#39; columns</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: pd.DataFrame or np.ndarray</span>
+<span class="sd">            the targets&#39; columns</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y_is_defined</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Y_is_defined</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y_is_defined</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;np.ndarray or pd.DataFrame y object expected, and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">X</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the features&#39; columns.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray:</span>
+<span class="sd">            the features&#39; columns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_X</span>
+
+    <span class="nd">@X</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">X</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the features&#39; columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: pd.DataFrame or np.ndarray</span>
+<span class="sd">            the features&#39; columns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span>  <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y_is_defined</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_X</span> <span class="o">=</span> <span class="n">X</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;np.ndarray or pd.DataFrame X object expected, and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">)))</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the data set used to generate the stream.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        DataFrame:</span>
-<span class="sd">            raw_data</span>
+<span class="sd">        pd.DataFrame:</span>
+<span class="sd">            Data set.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
 
-    <span class="nd">@raw_data</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">):</span>
+    <span class="nd">@data</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets the data set used to generate the stream.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        raw_data: DataFrame or np.ndarray</span>
+<span class="sd">        data: DataFrame or np.ndarray</span>
+<span class="sd">            the data set</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_type</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()))</span> <span class="ow">and</span> <span class="ow">not</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_type</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]))):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Raw data should be Pands DataFrame or Numpy Array, and </span><span class="si">{}</span><span class="s1"> object was &#39;</span>
-                             <span class="s1">&#39;passed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;data  must be set , a NoneType is not accepted&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;np.ndarray or pd.DataFrame data object expected, and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
 
-    <span class="nd">@raw_data</span><span class="o">.</span><span class="n">deleter</span>
-    <span class="k">def</span> <span class="nf">raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="nd">@data</span><span class="o">.</span><span class="n">deleter</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Deletes raw_data</span>
+<span class="sd">            Deletes data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">target_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -364,36 +445,66 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_cat_features_idx</span> <span class="o">=</span> <span class="n">cat_features_idx</span>
 
-<div class="viewcode-block" id="DatasetStream.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; prepare_for_use</span>
 
 <span class="sd">        Prepares the stream for use. This functions should always be</span>
 <span class="sd">        called after the stream initialization.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_load_data</span><span class="p">()</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y_is_defined</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_X_y</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_data</span><span class="p">()</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span></div>
 
+    <span class="k">def</span> <span class="nf">_load_X_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Categorical feature index in </span><span class="si">{}</span><span class="s1"> &#39;</span>
+                                 <span class="s1">&#39;exceeds n_features </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CLASSIFICATION</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_values</span><span class="p">()</span>
+
     <span class="k">def</span> <span class="nf">_load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">rows</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">==</span> <span class="n">cols</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># Take everything to the right of target_idx</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Take only n_targets columns to the right of target_idx, use the rest as features</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
         <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span><span class="p">:</span>
@@ -409,9 +520,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">target_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_values</span><span class="p">()</span>
 
-<div class="viewcode-block" id="DatasetStream.restart"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.restart"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; restart</span>
 
 <span class="sd">        Restarts the stream&#39;s sample feeding, while keeping all of its</span>
@@ -425,7 +537,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="DatasetStream.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
 <span class="sd">        If there is enough instances to supply at least batch_size samples, those</span>
@@ -456,7 +568,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="DatasetStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the estimated number of remaining samples.</span>
 
 <span class="sd">        Returns</span>
@@ -466,7 +578,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="DatasetStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks if stream has more samples.</span>
 
@@ -477,7 +589,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span></div>
 
-<div class="viewcode-block" id="DatasetStream.print_df"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.print_df">[docs]</a>    <span class="k">def</span> <span class="nf">print_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.print_df"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.print_df">[docs]</a>    <span class="k">def</span> <span class="nf">print_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints all the samples in the stream.</span>
 
@@ -485,7 +597,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DatasetStream.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CLASSIFICATION</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> target(s), </span><span class="si">{}</span><span class="s2"> target_values&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span><span class="p">:</span>
@@ -500,7 +612,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span>
 
-<div class="viewcode-block" id="DatasetStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.dataset_stream.html#skmultiflow.data.dataset_stream.DatasetStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Dataset Stream:&#39;</span> <span class="o">+</span> <span class="s1">&#39;  -  n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div></div>
 </pre></div>
 

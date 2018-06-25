@@ -30,7 +30,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="skmultiflow.evaluation.metrics package" href="skmultiflow.evaluation.metrics.html" />
-    <link rel="prev" title="skmultiflow.data.synth module" href="skmultiflow.data.synth.html" /> 
+    <link rel="prev" title="skmultiflow.drift_detection.page_hinkley module" href="skmultiflow.drift_detection.page_hinkley.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -110,7 +110,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -121,14 +121,14 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -247,6 +247,401 @@
 </div>
 <div class="section" id="module-skmultiflow.evaluation">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skmultiflow.evaluation" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-skmultiflow.evaluation" title="skmultiflow.evaluation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a> module includes evaluation methods for stream learning.</p>
+<dl class="class">
+<dt id="skmultiflow.evaluation.EvaluatePrequential">
+<em class="property">class </em><code class="descclassname">skmultiflow.evaluation.</code><code class="descname">EvaluatePrequential</code><span class="sig-paren">(</span><em>n_wait=200</em>, <em>max_samples=100000</em>, <em>batch_size=1</em>, <em>pretrain_size=200</em>, <em>max_time=inf</em>, <em>metrics=None</em>, <em>output_file=None</em>, <em>show_plot=False</em>, <em>restart_stream=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.evaluation.base_evaluator.html#skmultiflow.evaluation.base_evaluator.StreamEvaluator" title="skmultiflow.evaluation.base_evaluator.StreamEvaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.evaluation.base_evaluator.StreamEvaluator</span></code></a></p>
+<p>The prequential evaluation method, or interleaved test-then-train method,
+is an alternative to the traditional holdout evaluation, inherited from
+batch setting problems.</p>
+<p>The prequential evaluation is designed specifically for stream settings,
+in the sense that each sample serves two purposes, and that samples are
+analysed sequentially, in order of arrival, and become immediately
+inaccessible by the means of the stream.</p>
+<p>This method consists of using each sample to test the model, which means
+to make a predictions or a regression, and then the same sample is used
+to train the learner (partial fit it). This way the learner is always
+being tested on samples that it hasn’t seen yet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_wait</strong> (<em>int</em><em> (</em><em>Default: 200</em><em>)</em>) – The number of samples to process between each test. Also defines when to update the plot if <cite>show_plot=True</cite>.</li>
+<li><strong>max_samples</strong> (<em>int</em><em> (</em><em>Default: 100000</em><em>)</em>) – The maximum number of samples to process during the evaluation.</li>
+<li><strong>batch_size</strong> (<em>int</em><em> (</em><em>Default: 1</em><em>)</em>) – The number of samples to pass at a time to the model(s).</li>
+<li><strong>pretrain_size</strong> (<em>int</em><em> (</em><em>Default: 200</em><em>)</em>) – The number of samples to use to train the model before starting the evaluation. Used to enforce a ‘warm’ start.</li>
+<li><strong>max_time</strong> (<em>float</em><em> (</em><em>Default: float</em><em>(</em><em>&quot;inf&quot;</em><em>)</em><em>)</em>) – The maximum duration of the simulation (in seconds).</li>
+<li><strong>metrics</strong> (<em>list</em><em>, </em><em>optional</em><em> (</em><em>Default:</em><em> [</em><em>'performance'</em><em>, </em><em>'kappa'</em><em>]</em><em>)</em>) – The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots
+and/or logged into the output file. Valid options are ‘performance’, ‘kappa’, ‘kappa_t’, ‘kappa_m’,
+‘hamming_score’, ‘hamming_loss’, ‘exact_match’, ‘j_index’, ‘mean_square_error’, ‘mean_absolute_error’,
+‘true_vs_predicts’.</li>
+<li><strong>output_file</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>Default: None</em><em>)</em>) – File name to save the summary of the evaluation.</li>
+<li><strong>show_plot</strong> (<em>bool</em><em> (</em><em>Default: False</em><em>)</em>) – If True, a plot will show the progress of the evaluation. Warning: Plotting will slow down the evaluation
+process.</li>
+<li><strong>restart_stream</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – If True, the stream is restarted once the evaluation is complete.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li>This evaluator can process a single learner to track its performance; or multiple learners  at a time, to
+compare different models on the same stream.</li>
+<li>The metric ‘true_vs_predicts’ is intended to be informative only. It corresponds to evaluations at a specific
+moment which might not represent the actual learner performance across all instances. Values are not logged into
+the result file.</li>
+</ol>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The first example demonstrates how to use the evaluator to evaluate one learner</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.linear_model.passive_aggressive</span> <span class="k">import</span> <span class="n">PassiveAggressiveClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.core.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_prequential</span> <span class="k">import</span> <span class="n">EvaluatePrequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the File Stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the classifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="n">PassiveAggressiveClassifier</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">&#39;Classifier&#39;</span><span class="p">,</span> <span class="n">classifier</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the evaluator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">pretrain_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa_t&#39;</span><span class="p">,</span> <span class="s1">&#39;performance&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Evaluate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pipe</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The second example will demonstrate how to compare two classifiers with</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the EvaluatePrequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.linear_model.passive_aggressive</span> <span class="k">import</span> <span class="n">PassiveAggressiveClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.classification.lazy.knn_adwin</span> <span class="k">import</span> <span class="n">KNNAdwin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.core.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_prequential</span> <span class="k">import</span> <span class="n">EvaluatePrequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the File Stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the classifiers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf_one</span> <span class="o">=</span> <span class="n">PassiveAggressiveClassifier</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf_two</span> <span class="o">=</span> <span class="n">KNNAdwin</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the pipeline for clf_one</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">&#39;Classifier&#39;</span><span class="p">,</span> <span class="n">clf_one</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create the list to hold both classifiers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="p">[</span><span class="n">pipe</span><span class="p">,</span> <span class="n">clf_two</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the evaluator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">pretrain_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa_t&#39;</span><span class="p">,</span> <span class="s1">&#39;performance&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Evaluate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluatePrequential.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>stream</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates a learner or set of learners by feeding them with the stream
+samples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<em>A stream</em><em> (</em><em>an extension from BaseInstanceStream</em><em>)</em>) – The stream from which to draw the samples.</li>
+<li><strong>model</strong> (<em>A learner</em><em> (</em><em>an extension from BaseClassifier</em><em>) or </em><em>a list of learners.</em>) – The learner or learners on which to train the model and measure the
+performance metrics.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The trained classifiers.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">BaseClassifier extension or list of BaseClassifier extensions</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluatePrequential.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluatePrequential.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partially fit all the learners on the given data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data upon which the algorithm will create its model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the classification targets for all samples in X.</li>
+<li><strong>classes</strong> (<em>list</em>) – Stores all the target_values that may be encountered during the classification task.</li>
+<li><strong>weight</strong> (<em>Array-like</em>) – Instance weight. If not provided, uniform weights are assumed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">self</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.evaluation.EvaluatePrequential" title="skmultiflow.evaluation.EvaluatePrequential">EvaluatePrequential</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluatePrequential.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts the labels of the X samples, by calling the predict
+function of all the learners.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – All the samples we want to predict the label for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list containing the predicted labels for all instances in X in
+all learners.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluatePrequential.set_params">
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>parameter_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential.set_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function allows the users to change some of the evaluator’s parameters,
+by passing a dictionary where keys are the parameters names, and values are
+the new parameters’ values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parameter_dict</strong> (<em>Dictionary</em>) – A dictionary where the keys are the names of attributes the user
+wants to change, and the values are the new values of those attributes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.evaluation.EvaluateHoldout">
+<em class="property">class </em><code class="descclassname">skmultiflow.evaluation.</code><code class="descname">EvaluateHoldout</code><span class="sig-paren">(</span><em>n_wait=10000</em>, <em>max_samples=100000</em>, <em>batch_size=1</em>, <em>max_time=inf</em>, <em>metrics=None</em>, <em>output_file=None</em>, <em>show_plot=False</em>, <em>restart_stream=True</em>, <em>test_size=5000</em>, <em>dynamic_test_set=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_holdout.html#EvaluateHoldout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluateHoldout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.evaluation.base_evaluator.html#skmultiflow.evaluation.base_evaluator.StreamEvaluator" title="skmultiflow.evaluation.base_evaluator.StreamEvaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.evaluation.base_evaluator.StreamEvaluator</span></code></a></p>
+<p>The holdout evaluation method, or periodic holdout evaluation method, analyses
+each arriving sample, without computing performance metrics, nor predicting
+labels or regressing values, but by updating its statistics.</p>
+<p>The performance evaluation happens at every n_wait analysed samples, at which
+moment the evaluator will test the learners performance on a test set, formed
+by yet unseen samples, which will be used to evaluate performance, but not to
+train the model.</p>
+<p>It’s possible to use the same test set for every test made, but it’s also
+possible to dynamically create test sets, so that they differ from each other.
+If dynamic test sets are enabled, we use the data stream to create test sets
+on the go. This process is more likely to generate test sets that follow the
+current concept, in comparison to static test sets.</p>
+<p>Thus, if concept drift is known to be present in the dataset/generator enabling
+dynamic test sets is highly recommended. If no concept drift is expected,
+disabling this parameter will speed up the evaluation process.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_wait</strong> (<em>int</em><em> (</em><em>Default: 10000</em><em>)</em>) – The number of samples to process between each test. Also defines when to update the plot if <cite>show_plot=True</cite>.</li>
+<li><strong>max_samples</strong> (<em>int</em><em> (</em><em>Default: 100000</em><em>)</em>) – The maximum number of samples to process during the evaluation.</li>
+<li><strong>batch_size</strong> (<em>int</em><em> (</em><em>Default: 1</em><em>)</em>) – The number of samples to pass at a time to the model(s).</li>
+<li><strong>max_time</strong> (<em>float</em><em> (</em><em>Default: float</em><em>(</em><em>&quot;inf&quot;</em><em>)</em><em>)</em>) – The maximum duration of the simulation (in seconds).</li>
+<li><strong>metrics</strong> (<em>list</em><em>, </em><em>optional</em><em> (</em><em>Default:</em><em> [</em><em>'performance'</em><em>]</em><em>)</em>) – The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots
+and/or logged into the output file. Valid options are ‘performance’, ‘kappa’, ‘kappa_t’, ‘kappa_m’,
+‘hamming_score’, ‘hamming_loss’, ‘exact_match’, ‘j_index’, ‘mean_square_error’, ‘mean_absolute_error’,
+‘true_vs_predicts’.</li>
+<li><strong>output_file</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>Default: None</em><em>)</em>) – File name to save the summary of the evaluation.</li>
+<li><strong>show_plot</strong> (<em>bool</em><em> (</em><em>Default: False</em><em>)</em>) – If True, a plot will show the progress of the evaluation. Warning: Plotting will slow down the evaluation
+process.</li>
+<li><strong>restart_stream</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – If True, the stream is restarted once the evaluation is complete.</li>
+<li><strong>test_size</strong> (<em>int</em><em> (</em><em>Default: 20000</em><em>)</em>) – The size of the test set.</li>
+<li><strong>dynamic_test_set</strong> (<em>bool</em><em> (</em><em>Default: False</em><em>)</em>) – If True, will continuously change the test set, otherwise will use the same test set for all tests.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>It’s important to note that testing the model too often, which means choosing
+a <cite>n_wait</cite> parameter too small, will significantly slow the evaluation process,
+depending on the test size.</p>
+<p>This evaluator accepts to types of evaluation processes. It can either evaluate
+a single learner while computing its metrics or it can evaluate multiple learners
+at a time, as a means of comparing different approaches to the same problem.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The first example demonstrates how to use the evaluator to evaluate one learner</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.linear_model.passive_aggressive</span> <span class="k">import</span> <span class="n">PassiveAggressiveClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.core.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_holdout</span> <span class="k">import</span> <span class="n">EvaluateHoldout</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the File Stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the classifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="n">PassiveAggressiveClassifier</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">&#39;Classifier&#39;</span><span class="p">,</span> <span class="n">classifier</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the evaluator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluateHoldout</span><span class="p">(</span><span class="n">max_samples</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                            <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;performance&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                            <span class="n">test_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">dynamic_test_set</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Evaluate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pipe</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The second example will demonstrate how to compare two classifiers with</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the EvaluateHoldout</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.generators.waveform_generator</span> <span class="k">import</span> <span class="n">WaveformGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.linear_model.stochastic_gradient</span> <span class="k">import</span> <span class="n">SGDClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_holdout</span> <span class="k">import</span> <span class="n">EvaluateHoldout</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.classification.lazy.knn_adwin</span> <span class="k">import</span> <span class="n">KNNAdwin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">WaveformGenerator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf_one</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf_two</span> <span class="o">=</span> <span class="n">KNNAdwin</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="p">[</span><span class="n">clf_one</span><span class="p">,</span> <span class="n">clf_two</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluateHoldout</span><span class="p">(</span><span class="n">test_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">dynamic_test_set</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_samples</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                            <span class="n">n_wait</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                            <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;performance&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluateHoldout.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>stream</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_holdout.html#EvaluateHoldout.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluateHoldout.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<em>A stream</em><em> (</em><em>an extension from BaseInstanceStream</em><em>)</em>) – The stream from which to draw the samples.</li>
+<li><strong>model</strong> (<em>A learner</em><em> (</em><em>an extension from BaseClassifier</em><em>) or </em><em>a list of learners.</em>) – The learner or learners on which to train the model and measure the
+performance metrics.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The trained classifier’s at the end of the evaluation process.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">BaseClassifier extension or list of BaseClassifier extensions</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluateHoldout.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_holdout.html#EvaluateHoldout.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluateHoldout.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluateHoldout.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_holdout.html#EvaluateHoldout.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluateHoldout.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partially fit all the learners on the given data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data upon which the algorithm will create its model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the classification targets for all samples in X.</li>
+<li><strong>classes</strong> (<em>list</em>) – Stores all the target_values that may be encountered during the classification task.</li>
+<li><strong>weight</strong> (<em>Array-like</em>) – Instance weight. If not provided, uniform weights are assumed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">self</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.evaluation.EvaluateHoldout" title="skmultiflow.evaluation.EvaluateHoldout">EvaluateHoldout</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluateHoldout.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_holdout.html#EvaluateHoldout.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluateHoldout.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts the labels of the X samples, by calling the predict
+function of all the learners.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – All the samples we want to predict the label for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list containing the predicted labels for all instances in X in
+all learners.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.EvaluateHoldout.set_params">
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>parameter_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_holdout.html#EvaluateHoldout.set_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluateHoldout.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function allows the users to change some of the evaluator’s parameters,
+by passing a dictionary where keys are the parameters names, and values are
+the new parameters’ values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dict</strong> (<em>Dictionary</em>) – A dictionary where the keys are the names of attributes the user
+wants to change, and the values are the new values of those attributes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -261,7 +656,7 @@
         <a href="skmultiflow.evaluation.metrics.html" class="btn btn-neutral float-right" title="skmultiflow.evaluation.metrics package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.data.synth.html" class="btn btn-neutral" title="skmultiflow.data.synth module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.drift_detection.page_hinkley.html" class="btn btn-neutral" title="skmultiflow.drift_detection.page_hinkley module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

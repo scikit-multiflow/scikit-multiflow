@@ -108,7 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -119,14 +119,14 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -211,7 +211,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.data.base_stream</span> <span class="k">import</span> <span class="n">Stream</span>
 
 
-<div class="viewcode-block" id="FileStream"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream">[docs]</a><span class="k">class</span> <span class="nc">FileStream</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream">[docs]</a><span class="k">class</span> <span class="nc">FileStream</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; FileStream</span>
 <span class="sd">    </span>
 <span class="sd">    A stream generated from the entries of a file. For the moment only </span>
@@ -367,7 +367,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_cat_features_idx</span> <span class="o">=</span> <span class="n">cat_features_idx</span>
 
-<div class="viewcode-block" id="FileStream.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; prepare_for_use</span>
 <span class="sd">        </span>
 <span class="sd">        Prepares the stream for use. This functions should always be </span>
@@ -391,14 +391,14 @@
 
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">==</span> <span class="n">cols</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># Take everything to the right of target_idx</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:]</span><span class="o">.</span><span class="n">values</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Take only n_targets columns to the right of target_idx, use the rest as features</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">target_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">]</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
             <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
@@ -420,7 +420,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> file reading failed.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">))</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="FileStream.restart"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.restart"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; restart</span>
 <span class="sd">        </span>
 <span class="sd">        Restarts the stream&#39;s sample feeding, while keeping all of its </span>
@@ -434,7 +434,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="FileStream.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 <span class="sd">        </span>
 <span class="sd">        If there is enough instances to supply at least batch_size samples, those </span>
@@ -465,7 +465,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="FileStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the estimated number of remaining samples.</span>
 
 <span class="sd">        Returns</span>
@@ -475,7 +475,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="FileStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks if stream has more samples.</span>
 
@@ -486,7 +486,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span></div>
 
-<div class="viewcode-block" id="FileStream.print_df"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.print_df">[docs]</a>    <span class="k">def</span> <span class="nf">print_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.print_df"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.print_df">[docs]</a>    <span class="k">def</span> <span class="nf">print_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints all the samples in the stream.</span>
 
@@ -494,13 +494,13 @@
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FileStream.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CLASSIFICATION</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> - </span><span class="si">{}</span><span class="s2"> target(s), </span><span class="si">{}</span><span class="s2"> target_values&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> - </span><span class="si">{}</span><span class="s2"> target(s)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FileStream.get_target_values"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.get_target_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.get_target_values"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.get_target_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -509,7 +509,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
 
-<div class="viewcode-block" id="FileStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;File Stream: filename: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basename</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39;  -  n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div></div>
 </pre></div>

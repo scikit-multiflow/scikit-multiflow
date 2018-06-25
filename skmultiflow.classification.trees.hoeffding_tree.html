@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="skmultiflow.classification.multi_output_learner module" href="skmultiflow.classification.multi_output_learner.html" />
+    <link rel="next" title="skmultiflow.classification.classifier_chains module" href="skmultiflow.classification.classifier_chains.html" />
     <link rel="prev" title="skmultiflow.classification.trees.hoeffding_adaptive_tree module" href="skmultiflow.classification.trees.hoeffding_adaptive_tree.html" /> 
 
   
@@ -110,7 +110,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -121,14 +121,14 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -323,7 +323,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>criterion</strong> (<a class="reference internal" href="skmultiflow.classification.core.split_criteria.split_criterion.html#skmultiflow.classification.core.split_criteria.split_criterion.SplitCriterion" title="skmultiflow.classification.core.split_criteria.split_criterion.SplitCriterion"><em>SplitCriterion</em></a>) – The splitting criterion to be used.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
 </ul>
 </td>
 </tr>
@@ -381,7 +381,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
 <li><strong>y</strong> (<em>int</em>) – Instance class.</li>
 <li><strong>weight</strong> (<em>float</em>) – Instance weight.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
 </ul>
 </td>
 </tr>
@@ -415,8 +415,8 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode"><em>SplitNode</em></a><em> or </em><a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNode" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.LearningNode"><em>LearningNode</em></a>) – The node object.</li>
-<li><strong>parent</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.SplitNode"><em>SplitNode</em></a><em> or </em><em>None</em>) – The node’s parent.</li>
+<li><strong>node</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.SplitNode" title="skmultiflow.classification.trees.HoeffdingTree.SplitNode"><em>SplitNode</em></a><em> or </em><a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.LearningNode" title="skmultiflow.classification.trees.HoeffdingTree.LearningNode"><em>LearningNode</em></a>) – The node object.</li>
+<li><strong>parent</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.SplitNode" title="skmultiflow.classification.trees.HoeffdingTree.SplitNode"><em>SplitNode</em></a><em> or </em><em>None</em>) – The node’s parent.</li>
 <li><strong>parent_branch</strong> (<em>int</em>) – The parent node’s branch.</li>
 </ul>
 </td>
@@ -450,7 +450,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
 <li><strong>y</strong> (<em>int</em>) – Instance class.</li>
 <li><strong>weight</strong> (<em>float</em>) – Instance weight.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
 </ul>
 </td>
 </tr>
@@ -485,7 +485,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
 <li><strong>y</strong> (<em>int</em>) – Instance class.</li>
 <li><strong>weight</strong> (<em>float</em>) – Instance weight.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
 </ul>
 </td>
 </tr>
@@ -533,7 +533,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
 </ul>
 </td>
 </tr>
@@ -572,7 +572,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree.</li>
 </ul>
 </td>
 </tr>
@@ -598,7 +598,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
 <li><strong>y</strong> (<em>int</em>) – Instance class.</li>
 <li><strong>weight</strong> (<em>float</em>) – The instance’s weight.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – The Hoeffding Tree to update.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – The Hoeffding Tree to update.</li>
 </ul>
 </td>
 </tr>
@@ -662,7 +662,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – The tree to describe.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – The tree to describe.</li>
 <li><strong>buffer</strong> (<em>string</em>) – The string buffer where the tree’s structure will be stored</li>
 <li><strong>indent</strong> (<em>int</em>) – Indentation level (number of white spaces for current node.)</li>
 </ul>
@@ -682,7 +682,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Data instances.</li>
-<li><strong>parent</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node"><em>HoeffdingTree.Node</em></a>) – Parent node.</li>
+<li><strong>parent</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.Node" title="skmultiflow.classification.trees.HoeffdingTree.Node"><em>HoeffdingTree.Node</em></a>) – Parent node.</li>
 <li><strong>parent_branch</strong> (<em>Int</em>) – Parent branch index</li>
 </ul>
 </td>
@@ -690,7 +690,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The corresponding leaf.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode">FoundNode</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.FoundNode" title="skmultiflow.classification.trees.HoeffdingTree.FoundNode">FoundNode</a></p>
 </td>
 </tr>
 </tbody>
@@ -707,7 +707,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Data instances.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – The Hoeffding Tree.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – The Hoeffding Tree.</li>
 </ul>
 </td>
 </tr>
@@ -834,7 +834,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ht</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><em>HoeffdingTree</em></a>) – The tree to describe.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree" title="skmultiflow.classification.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – The tree to describe.</li>
 <li><strong>buffer</strong> (<em>string</em>) – The buffer where the tree’s structure will be stored.</li>
 <li><strong>indent</strong> (<em>int</em>) – Indentation level (number of white spaces for current node).</li>
 </ul>
@@ -854,7 +854,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Data instances.</li>
-<li><strong>parent</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node"><em>HoeffdingTree.Node</em></a>) – Parent node.</li>
+<li><strong>parent</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.Node" title="skmultiflow.classification.trees.HoeffdingTree.Node"><em>HoeffdingTree.Node</em></a>) – Parent node.</li>
 <li><strong>parent_branch</strong> (<em>int</em>) – Parent branch index.</li>
 </ul>
 </td>
@@ -862,7 +862,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Leaf node for the instance.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.FoundNode">FoundNode</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.FoundNode" title="skmultiflow.classification.trees.HoeffdingTree.FoundNode">FoundNode</a></p>
 </td>
 </tr>
 </tbody>
@@ -881,7 +881,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Child node.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node">HoeffdingTree.Node</a> or None</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.Node" title="skmultiflow.classification.trees.HoeffdingTree.Node">HoeffdingTree.Node</a> or None</td>
 </tr>
 </tbody>
 </table>
@@ -935,7 +935,7 @@ MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>index</strong> (<em>int</em>) – Branch index where the node will be inserted.</li>
-<li><strong>node</strong> (<a class="reference internal" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.Node"><em>HoeffdingTree.Node</em></a>) – The node to insert.</li>
+<li><strong>node</strong> (<a class="reference internal" href="skmultiflow.classification.trees.html#skmultiflow.classification.trees.HoeffdingTree.Node" title="skmultiflow.classification.trees.HoeffdingTree.Node"><em>HoeffdingTree.Node</em></a>) – The node to insert.</li>
 </ul>
 </td>
 </tr>
@@ -1247,19 +1247,16 @@ exceed the grace period then attempt to split.</li>
 <dl class="method">
 <dt id="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.predict_proba">
 <code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/classification/trees/hoeffding_tree.html#HoeffdingTree.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>On classifiers, estimates the probability of each sample in X belonging to each of the existing labels.</p>
+<dd><p>Predicts probabilities of all label of the X instance(s)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The matrix of samples one wants to predict.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Samples for which we want to predict the labels.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><em>An array of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the same</em></li>
-<li><em>index. And where the list in index [i] contains len(self.target_values) elements, each of which represents the</em></li>
-<li><em>probability that the i-th sample of X belongs to a certain label.</em></li>
-</ul>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Predicted the probabilities of all the labels for all instances in X.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
 </tbody>
 </table>
@@ -1334,7 +1331,7 @@ exceed the grace period then attempt to split.</li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="skmultiflow.classification.multi_output_learner.html" class="btn btn-neutral float-right" title="skmultiflow.classification.multi_output_learner module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="skmultiflow.classification.classifier_chains.html" class="btn btn-neutral float-right" title="skmultiflow.classification.classifier_chains module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="skmultiflow.classification.trees.hoeffding_adaptive_tree.html" class="btn btn-neutral" title="skmultiflow.classification.trees.hoeffding_adaptive_tree module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

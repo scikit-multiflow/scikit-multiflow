@@ -108,7 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../documentation.html">Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -119,14 +119,14 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -209,7 +209,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.data.generators.led_generator</span> <span class="k">import</span> <span class="n">LEDGenerator</span>
 
 
-<div class="viewcode-block" id="LEDGeneratorDrift"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.generators.led_generator_drift.LEDGeneratorDrift">[docs]</a><span class="k">class</span> <span class="nc">LEDGeneratorDrift</span><span class="p">(</span><span class="n">LEDGenerator</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift">[docs]</a><span class="k">class</span> <span class="nc">LEDGeneratorDrift</span><span class="p">(</span><span class="n">LEDGenerator</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; LEDGeneratorDrift</span>
 
@@ -303,7 +303,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_numberAttribute</span><span class="p">[</span><span class="n">value1</span><span class="p">]</span> <span class="o">=</span> <span class="n">value2</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_numberAttribute</span><span class="p">[</span><span class="n">value2</span><span class="p">]</span> <span class="o">=</span> <span class="n">value1</span>
 
-<div class="viewcode-block" id="LEDGeneratorDrift.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.generators.led_generator_drift.LEDGeneratorDrift.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
@@ -342,10 +342,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span></div>
 
-<div class="viewcode-block" id="LEDGeneratorDrift.get_data_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.generators.led_generator_drift.LEDGeneratorDrift.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift.get_data_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Led Generator with drift - </span><span class="si">{}</span><span class="s2"> features&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LEDGeneratorDrift.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.generators.led_generator_drift.LEDGeneratorDrift.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;  -  n_num_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39;  -  n_cat_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39;  -  has_noise: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">has_noise</span><span class="p">)</span> <span class="o">+</span> \

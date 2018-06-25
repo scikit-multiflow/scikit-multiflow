@@ -108,7 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../documentation.html">Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -119,14 +119,14 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -210,7 +210,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="SineGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator">[docs]</a><span class="k">class</span> <span class="nc">SineGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="SineGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator">[docs]</a><span class="k">class</span> <span class="nc">SineGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; SineGenerator</span>
 
 <span class="sd">    This generator is an implementation of the dara stream with abrupt</span>
@@ -397,7 +397,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;has_noise should be boolean, </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">has_noise</span><span class="p">))</span>
 
-<div class="viewcode-block" id="SineGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SineGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Should be called before generating the samples.</span>
 
@@ -407,7 +407,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="SineGenerator.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="SineGenerator.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
 <span class="sd">        The sample generation works as follows: The two attributes are</span>
@@ -469,7 +469,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="SineGenerator.generate_drift"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SineGenerator.generate_drift"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate drift by switching the classification function randomly.</span>
 
@@ -479,7 +479,7 @@
             <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">new_function</span></div>
 
-<div class="viewcode-block" id="SineGenerator.classification_function_zero"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SineGenerator.classification_function_zero"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_zero</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_zero</span>
 
@@ -502,7 +502,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">att2</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SineGenerator.classification_function_one"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SineGenerator.classification_function_one"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_one</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_one</span>
 
@@ -524,7 +524,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">att2</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SineGenerator.classification_function_two"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SineGenerator.classification_function_two"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_two</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_two</span>
 
@@ -546,7 +546,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">att2</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SineGenerator.classification_function_three"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SineGenerator.classification_function_three"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_three</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_three</span>
 
@@ -568,7 +568,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">att2</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SineGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.generators.sine_generator.SineGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SineGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.sine_generator.html#skmultiflow.data.SineGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;SineGenerator: classification_function: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - balance_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span><span class="p">)</span> <span class="o">+</span> \

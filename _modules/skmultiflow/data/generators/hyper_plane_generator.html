@@ -108,7 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../documentation.html">Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.dataset_stream.html">skmultiflow.data.dataset_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
 </ul>
@@ -119,14 +119,14 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Nearest Neighbors methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.classification.core.driftdetection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification.core.driftdetection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.adwin.html">skmultiflow.classification.core.driftdetection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.ddm.html">skmultiflow.classification.core.driftdetection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.eddm.html">skmultiflow.classification.core.driftdetection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.classification.core.driftdetection.page_hinkley.html">skmultiflow.classification.core.driftdetection.page_hinkley</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
@@ -210,7 +210,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.core.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="HyperplaneGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.generators.hyper_plane_generator.HyperplaneGenerator">[docs]</a><span class="k">class</span> <span class="nc">HyperplaneGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator">[docs]</a><span class="k">class</span> <span class="nc">HyperplaneGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; HyperplaneGenerator</span>
 <span class="sd">    Generates a problem of prediction class of a rotation hyperplane. It was</span>
 <span class="sd">    used as testbed for CVFDT and VFDT in [1]_.</span>
@@ -383,7 +383,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;sigma percentage should be in [0.0..1.0], </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sigma_percentage</span><span class="p">))</span>
 
-<div class="viewcode-block" id="HyperplaneGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.generators.hyper_plane_generator.HyperplaneGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator.prepare_for_use"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Should be called before generating the samples.</span>
 
@@ -395,7 +395,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_drift_features</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="HyperplaneGenerator.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.generators.hyper_plane_generator.HyperplaneGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator.next_sample"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
 <span class="sd">        The sample generation works as follows: The n_features are generated</span>
@@ -452,7 +452,7 @@
             <span class="k">if</span> <span class="p">(</span><span class="mf">0.01</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma_percentage</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
 
-<div class="viewcode-block" id="HyperplaneGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.generators.hyper_plane_generator.HyperplaneGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator.get_info"><a class="viewcode-back" href="../../../../skmultiflow.data.generators.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;HyperplaneGenerator: - random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span> <span class="o">+</span> \
