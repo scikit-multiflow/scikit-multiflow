@@ -112,16 +112,15 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.classification">Classification: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.multi_output_learner.html">skmultiflow.classification.multi_output_learner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.naive_bayes.html">skmultiflow.classification.naive_bayes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.trees">Tree methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -216,10 +215,10 @@
 <h1>Quick-Start Guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="train-and-test-a-stream-classification-model-in-scikit-multiflow">
 <h2>Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code><a class="headerlink" href="#train-and-test-a-stream-classification-model-in-scikit-multiflow" title="Permalink to this headline">¶</a></h2>
-<p>In this example, we will use a data stream to train a <a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">HoeffdingTree</span></code></a> classifier and will measure its performance using prequential evaluation:</p>
+<p>In this example, we will use a data stream to train a <code class="xref py py-class docutils literal notranslate"><span class="pre">HoeffdingTree</span></code> classifier and will measure its performance using prequential evaluation:</p>
 <ol class="arabic">
 <li><p class="first">Create a stream</p>
-<p>The <a class="reference internal" href="skmultiflow.data.generators.waveform_generator.html#skmultiflow.data.generators.waveform_generator.WaveformGenerator" title="skmultiflow.data.generators.waveform_generator.WaveformGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">WaveformGenerator</span></code></a> generates by default samples with 21 numeric attributes and 3 target_values, based on a random differentiation of some base waveforms:</p>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">WaveformGenerator</span></code> generates by default samples with 21 numeric attributes and 3 target_values, based on a random differentiation of some base waveforms:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stream</span> <span class="o">=</span> <span class="n">WaveformGenerator</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -311,7 +310,7 @@
 </div>
 <div class="section" id="load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">
 <h2>Load data from a file as a stream and save test results into a file.<a class="headerlink" href="#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file" title="Permalink to this headline">¶</a></h2>
-<p>There are cases where we want to use data stored in files. In this example we will train a <a class="reference internal" href="skmultiflow.classification.trees.hoeffding_tree.html#skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree" title="skmultiflow.classification.trees.hoeffding_tree.HoeffdingTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">HoeffdingTree</span></code></a> classifier, but this time we will read the data from a (csv) file and will write the results of the evaluation into a (csv) file.</p>
+<p>There are cases where we want to use data stored in files. In this example we will train a <code class="xref py py-class docutils literal notranslate"><span class="pre">HoeffdingTree</span></code> classifier, but this time we will read the data from a (csv) file and will write the results of the evaluation into a (csv) file.</p>
 <ol class="arabic">
 <li><p class="first">Load the data set as a stream</p>
 <p>For this purpose we will use the <a class="reference internal" href="skmultiflow.data.file_stream.html#skmultiflow.data.file_stream.FileStream" title="skmultiflow.data.file_stream.FileStream"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileStream</span></code></a> class:</p>

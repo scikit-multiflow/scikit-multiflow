@@ -112,16 +112,15 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.classification">Classification: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.multi_output_learner.html">skmultiflow.classification.multi_output_learner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.naive_bayes.html">skmultiflow.classification.naive_bayes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.trees">Tree methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -265,7 +264,7 @@ moments of the detector, when the weight of one sample is important.</td>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># increase in error rate</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">999</span><span class="p">,</span> <span class="mi">1500</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Adding stream elements to ADWIN and verifying if drift occurred</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Adding stream elements to DDM and verifying if drift occurred</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">ddm</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">ddm</span><span class="o">.</span><span class="n">detected_warning_zone</span><span class="p">():</span>

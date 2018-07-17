@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.data.regression_generator module &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skmultiflow.data.sea_generator module" href="skmultiflow.data.sea_generator.html" />
+    <link rel="prev" title="skmultiflow.data.random_tree_generator module" href="skmultiflow.data.random_tree_generator.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="documentation.html#package-indices-and-search">Package, Indices and Search</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">skmultiflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="documentation.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.data.html">skmultiflow.data package</a> &raquo;</li>
+        
+      <li>skmultiflow.data.regression_generator module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/skmultiflow.data.regression_generator.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-skmultiflow.data.regression_generator">
+<span id="skmultiflow-data-regression-generator-module"></span><h1>skmultiflow.data.regression_generator module<a class="headerlink" href="#module-skmultiflow.data.regression_generator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator">
+<em class="property">class </em><code class="descclassname">skmultiflow.data.regression_generator.</code><code class="descname">RegressionGenerator</code><span class="sig-paren">(</span><em>n_samples=40000</em>, <em>n_features=100</em>, <em>n_informative=10</em>, <em>n_targets=1</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.data.base_stream.Stream</span></code></a></p>
+<p>This generator creates a stream of samples for a regression problem. It
+uses the make_regression function from scikit-learn, which creates a
+batch setting regression problem. These samples are then sequentially
+fed by the next_sample function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_samples</strong> (<em>int</em><em> (</em><em>Default: 40000</em><em>)</em>) – Total amount of samples to generate.</li>
+<li><strong>n_features</strong> (<em>int</em><em> (</em><em>Default: 100</em><em>)</em>) – Number of features to generate.</li>
+<li><strong>n_informative</strong> (<em>int</em><em> (</em><em>Default: 10</em><em>)</em>) – Number of relevant features, in other words, the number of features
+that influence the class label.</li>
+<li><strong>n_targets</strong> (<em>int</em><em> (</em><em>Default: 1</em><em>)</em>) – Number of target_values (outputs) to generate.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is a wrapper for scikit-lean’s <cite>make_regression</cite></p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.regression_generator</span> <span class="k">import</span> <span class="n">RegressionGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">RegressionGenerator</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_informative</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving one sample</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
+<span class="go">(array([[ 0.16422776,  0.56729028, -0.76149221,  0.38728048, -1.69810582,</span>
+<span class="go">      0.85792392, -0.2226751 , -0.98551074,  1.46657872,  1.64813493,</span>
+<span class="go">      0.03863055,  1.14110187, -1.6567151 , -0.29183736, -1.02250684,</span>
+<span class="go">     -1.47183501, -1.61647419,  0.85255194, -2.25556423, -0.35343175]]),</span>
+<span class="go">     array([[-227.21175382, -208.69356686, -430.10330937, -439.69284148]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving 10 samples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">(array([[-0.30309825,  0.44103291,  0.41287082, -0.14456682,  0.3595044 ,</span>
+<span class="go">     -0.1983989 ,  0.17879287, -0.40594173, -1.14761094,  1.38526155,</span>
+<span class="go">     -0.93788023,  0.0941923 ,  0.43310795,  0.28912051,  1.06458514,</span>
+<span class="go">      0.7243685 ,  0.24078751, -0.35811408, -0.36159928, -0.7994224 ],</span>
+<span class="go">    [ 1.04297759,  0.41409135, -0.94893281,  0.16464381,  1.04008625,</span>
+<span class="go">      0.13191176, -0.50723446, -0.32656098,  0.76877064, -0.52261942,</span>
+<span class="go">      0.38909397, -1.98056559,  1.17104106, -0.03926799,  1.47376482,</span>
+<span class="go">     -0.00820988,  1.04156839, -0.42132759,  0.88518754,  0.15466883],</span>
+<span class="go">    [-0.83912419, -1.01177408,  0.75746833, -0.6432576 ,  1.58776152,</span>
+<span class="go">     -0.01005647,  0.08496814, -0.0451133 , -1.04059923,  0.85053068,</span>
+<span class="go">     -0.14876615,  1.23800694,  0.0960042 ,  1.86668315,  0.99675964,</span>
+<span class="go">      0.07912172, -1.37305354, -0.31560312, -1.13359283, -1.60643969],</span>
+<span class="go">    [ 0.9508337 ,  0.55929898,  1.30718385, -1.64134861,  1.39053397,</span>
+<span class="go">     -0.46744101, -1.06369559, -0.33868219,  0.85910419,  1.05417791,</span>
+<span class="go">     -0.49579549, -0.86015338,  1.21657771,  0.67755703,  0.06606026,</span>
+<span class="go">      2.03476254,  0.57275137, -0.80962658, -0.15503581, -0.43109634],</span>
+<span class="go">    [-0.80149689, -0.64718143,  1.99795608, -0.96460642,  1.32646164,</span>
+<span class="go">     -0.85654931,  0.47224715,  0.93639854,  2.59442459,  0.27117018,</span>
+<span class="go">     -0.76211451, -1.5415874 , -0.88778014, -1.42191987, -0.21252304,</span>
+<span class="go">     -0.52564059, -0.1753164 , -0.40403229,  0.05989468,  0.9304085 ],</span>
+<span class="go">    [-0.21120598, -0.12040664, -1.74418776,  0.87569568, -0.46931074,</span>
+<span class="go">      1.66060756, -1.47931598,  1.02122474, -2.8022028 ,  2.45122972,</span>
+<span class="go">     -0.48024204, -1.41660348, -0.52325094, -0.44876701,  1.94709864,</span>
+<span class="go">      0.70869527, -0.7214313 , -1.18842442, -1.36516288, -0.33210228],</span>
+<span class="go">    [ 0.49949823, -0.06205313,  1.76992139, -0.03093626, -1.1046166 ,</span>
+<span class="go">     -0.16821422,  1.25916713,  0.26902407,  1.32435875,  1.26741165,</span>
+<span class="go">     -0.56643985,  0.3779101 , -0.30769128,  2.52636824, -0.79550055,</span>
+<span class="go">      0.52491786, -1.49567952, -0.17220079,  1.57886519,  0.70411102],</span>
+<span class="go">    [ 0.8640523 , -2.23960406, -0.5854312 , -0.91307922, -0.22260568,</span>
+<span class="go">     -0.26164545,  0.40149906,  0.93674246, -0.20289684, -2.36958691,</span>
+<span class="go">      0.24211796, -0.18224478, -0.88872026, -1.27968917, -0.88897136,</span>
+<span class="go">      1.41232771,  0.06485611, -0.10988278, -1.68121822,  1.22487056],</span>
+<span class="go">    [ 0.61645931,  0.53659652,  0.08595197, -1.96273201, -0.89636972,</span>
+<span class="go">      0.75194659,  0.40469546,  0.87096178, -1.19498681,  1.29614987,</span>
+<span class="go">     -1.13900819,  0.56298972, -1.21440138, -0.45408036,  0.64796779,</span>
+<span class="go">     -0.87797062,  0.8805112 , -0.50040967,  1.58482053,  0.19145087],</span>
+<span class="go">    [ 1.30184623, -0.62808756,  1.13689136,  1.02017271, -0.11054066,</span>
+<span class="go">      0.09772497, -0.48102712, -1.04525337, -0.39944903,  0.68981816,</span>
+<span class="go">      0.28634369,  0.58295368,  0.60884383, -0.1359497 ,  1.53637705,</span>
+<span class="go">      1.21114529, -1.06001582,  0.37005589, -0.69204985,  2.3039167 ]]),</span>
+<span class="go">      array([[  31.59103587,   19.35028127,   33.49418263,   22.27335009],</span>
+<span class="go">      [ 153.04501993,  245.02067196,  338.82484458,  365.47183945],</span>
+<span class="go">      [  43.14398252,   47.75322041,    1.17298222,   44.35274394],</span>
+<span class="go">      [  93.58627672,  -65.01446316,   79.20394868,   46.55266948],</span>
+<span class="go">      [  -9.74401621, -137.01970244, -144.66863494, -123.09407564],</span>
+<span class="go">      [ -51.78237536,  103.64689371,  -37.00451143,  -15.08925677],</span>
+<span class="go">      [ -32.06049627, -127.04540624,  -21.14164295,  -80.71667   ],</span>
+<span class="go">      [-121.50880042, -197.05839429, -278.61694828, -291.47192161],</span>
+<span class="go">      [ -72.53226633, -280.00028587,  -44.57428097, -166.31003398],</span>
+<span class="go">      [  41.74351609,  220.43038917,  151.95222469,  182.65729147]]))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
+<span class="go">89</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">has_more_samples</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator.get_data_info">
+<code class="descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator.get_data_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator.get_data_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>get_name</p>
+<p>Gets the name of the plot, which is a string that will appear
+in evaluation methods, to represent the stream.</p>
+<p>The default format is: ‘Stream name - x labels’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string representing the plot name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator.has_more_samples">
+<code class="descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator.has_more_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator.has_more_samples" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if stream has more samples.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator.n_remaining_samples">
+<code class="descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator.n_remaining_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of samples remaining.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator.next_sample">
+<code class="descname">next_sample</code><span class="sig-paren">(</span><em>batch_size=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator.next_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator.next_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns batch_size samples from the generated regression problem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch_size</strong> (<em>int</em>) – The number of sample to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Return a tuple with the features matrix and the labels matrix for
+the batch_size samples that were requested.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple or tuple list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator.prepare_for_use">
+<code class="descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator.prepare_for_use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator.prepare_for_use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare the stream for use. Can be the reading of a file, or
+the generation of a function, or anything necessary for the
+stream to work after its initialization.</p>
+<p class="rubric">Notes</p>
+<p>Every time a stream is created this function has to be called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.regression_generator.RegressionGenerator.restart">
+<code class="descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/regression_generator.html#RegressionGenerator.restart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.regression_generator.RegressionGenerator.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restart the stream to the initial state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.data.sea_generator.html" class="btn btn-neutral float-right" title="skmultiflow.data.sea_generator module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.data.random_tree_generator.html" class="btn btn-neutral" title="skmultiflow.data.random_tree_generator module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

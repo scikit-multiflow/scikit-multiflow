@@ -1,0 +1,1009 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.data.agrawal_generator &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#package-indices-and-search">Package, Indices and Search</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules.html">skmultiflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>skmultiflow.data.agrawal_generator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for skmultiflow.data.agrawal_generator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.data.base_stream</span> <span class="k">import</span> <span class="n">Stream</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
+
+
+<div class="viewcode-block" id="AGRAWALGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator">[docs]</a><span class="k">class</span> <span class="nc">AGRAWALGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; AGRAWAL stream generator</span>
+
+<span class="sd">    The generator was introduced by Agrawal et al in [1]_, and was common source</span>
+<span class="sd">    of data for early work on scaling up decision tree learners.</span>
+<span class="sd">    The generator produces a stream containing nine features, six numeric and</span>
+<span class="sd">    three categorical.</span>
+<span class="sd">    There are ten functions defined for generating binary class labels from the</span>
+<span class="sd">    features. Presumably these determine whether the loan should be approved.</span>
+<span class="sd">    The features and functions are listed in the original paper [1]_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    classification_function: int (Default=0)</span>
+<span class="sd">        Which of the four classification functions to use for the generation.</span>
+<span class="sd">        The value can vary from 0 to 9.</span>
+
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">        If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">        If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">        If None, the random number generator is the RandomState instance used</span>
+<span class="sd">        by `np.random`.</span>
+
+<span class="sd">    balance_classes: bool (Default: False)</span>
+<span class="sd">        Whether to balance classes or not. If balanced, the class</span>
+<span class="sd">        distribution will converge to a uniform distribution.</span>
+
+<span class="sd">    perturbation: float (Default: 0.0)</span>
+<span class="sd">        The probability that noise will happen in the generation. At each</span>
+<span class="sd">        new sample generated, the sample with will perturbed by the amount of</span>
+<span class="sd">        perturbation.</span>
+<span class="sd">        Values go from 0.0 to 1.0.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ---------</span>
+<span class="sd">    .. [1] Rakesh Agrawal, Tomasz Imielinksi, and Arun Swami. &quot;Database</span>
+<span class="sd">       Mining: A Performance Perspective&quot;, IEEE Transactions on Knowledge and</span>
+<span class="sd">       Data Engineering, 5(6), December 1993.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification_function</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">balance_classes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Classification functions to use</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_classification_functions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_zero</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_one</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_two</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_three</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_four</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_five</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_six</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_seven</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_eight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_nine</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">classification_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span> <span class="o">=</span> <span class="n">balance_classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">=</span> <span class="n">perturbation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;AGRAWAL Generator&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;target_0&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;salary&quot;</span><span class="p">,</span> <span class="s2">&quot;commission&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;elevel&quot;</span><span class="p">,</span> <span class="s2">&quot;car&quot;</span><span class="p">,</span> <span class="s2">&quot;zipcode&quot;</span><span class="p">,</span> <span class="s2">&quot;hvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;hyears&quot;</span><span class="p">,</span> <span class="s2">&quot;loan&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">classification_function_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Retrieve the index of the current classification function.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            index of the classification function, from 0 to 9</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_classification_function_idx</span>
+
+    <span class="nd">@classification_function_idx</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">classification_function_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification_function_idx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the index of the current classification function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        classification_function_idx: int</span>
+<span class="sd">            from 0 to 9</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">classification_function_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_classification_function_idx</span> <span class="o">=</span> <span class="n">classification_function_idx</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;classification_function_idx takes values from 0 to 9,&quot;</span>
+                             <span class="s2">&quot; and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classification_function_idx</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">balance_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Retrieve the value of the option: Balance classes</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Boolean</span>
+<span class="sd">            True is the classes are balanced</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_balance_classes</span>
+
+    <span class="nd">@balance_classes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">balance_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">balance_classes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the value of the option: Balance classes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        balance_classes: Boolean</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">balance_classes</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_balance_classes</span> <span class="o">=</span> <span class="n">balance_classes</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;balance_classes should be boolean, and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">balance_classes</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">perturbation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Retrieve the value of the option: Noise percentage</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perturbation</span>
+
+    <span class="nd">@perturbation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">perturbation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the value of the option: Perturbation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        perturbation: float</span>
+<span class="sd">            from 0.0 to 1.0.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">perturbation</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">perturbation</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_perturbation</span> <span class="o">=</span> <span class="n">perturbation</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;noise percentage should be in [0.0..1.0], and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">perturbation</span><span class="p">))</span>
+
+<div class="viewcode-block" id="AGRAWALGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Should be called before generating the samples.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; next_sample</span>
+
+<span class="sd">        The sample generation works as follows: The 9 features are generated</span>
+<span class="sd">        with the random generator, initialized with the seed passed by the</span>
+<span class="sd">        user. Then, the classification function decides, as a function of all</span>
+<span class="sd">        the attributes, whether to classify the instance as class 0 or class</span>
+<span class="sd">        1. The next step is to verify if the classes should be balanced, and</span>
+<span class="sd">        if so, balance the classes. The last step is to add noise, if the noise</span>
+<span class="sd">        percentage is higher than 0.0.</span>
+
+<span class="sd">        The generated sample will have 9 features and 1 label (it has one</span>
+<span class="sd">        classification task).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        batch_size: int</span>
+<span class="sd">            The number of samples to return.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple or tuple list</span>
+<span class="sd">            Return a tuple with the features matrix and the labels matrix for</span>
+<span class="sd">            the batch_size samples that were requested.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">salary</span> <span class="o">=</span> <span class="n">commission</span> <span class="o">=</span> <span class="n">age</span> <span class="o">=</span> <span class="n">elevel</span> <span class="o">=</span> <span class="n">car</span> <span class="o">=</span> <span class="n">zipcode</span> <span class="o">=</span> <span class="n">hvalue</span> <span class="o">=</span> <span class="n">hyears</span> <span class="o">=</span> <span class="n">loan</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">desired_class_found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">desired_class_found</span><span class="p">:</span>
+                <span class="n">salary</span> <span class="o">=</span> <span class="mi">20000</span> <span class="o">+</span> <span class="mi">130000</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+                <span class="n">commission</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&gt;=</span> <span class="mi">75000</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="mi">10000</span> <span class="o">+</span> <span class="mi">75000</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span>
+                <span class="n">age</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">61</span><span class="p">)</span>
+                <span class="n">elevel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                <span class="n">car</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+                <span class="n">zipcode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+                <span class="n">hvalue</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="n">zipcode</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100000</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span>
+                <span class="n">hyears</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+                <span class="n">loan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100000</span>
+                <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_classification_functions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">](</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span>
+                                                                                         <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span>
+                                                                                         <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span>
+                                                                                         <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span><span class="p">:</span>
+                    <span class="n">desired_class_found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_next_class_should_be_zero</span> <span class="ow">and</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="ow">or</span> \
+                            <span class="p">((</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_class_should_be_zero</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)):</span>
+                        <span class="n">desired_class_found</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_next_class_should_be_zero</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_class_should_be_zero</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">salary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_value</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="mi">150000</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">commission</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">commission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_value</span><span class="p">(</span><span class="n">commission</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">75000</span><span class="p">)</span>
+                <span class="n">age</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_value</span><span class="p">(</span><span class="n">age</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+                <span class="n">hvalue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_value</span><span class="p">(</span><span class="n">hvalue</span><span class="p">,</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="n">zipcode</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">135000</span><span class="p">)</span>
+                <span class="n">hyears</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_value</span><span class="p">(</span><span class="n">hyears</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+                <span class="n">loan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_value</span><span class="p">(</span><span class="n">loan</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">500000</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.perturb_value"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.perturb_value">[docs]</a>    <span class="k">def</span> <span class="nf">perturb_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">val_range</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perturbs the values of the features after prediction the class</span>
+<span class="sd">        if the perturbation is higher than 0.0.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        val</span>
+<span class="sd">        val_min</span>
+<span class="sd">        val_max</span>
+<span class="sd">        val_range</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        val</span>
+<span class="sd">            The value after perturbation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">val_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">val_range</span> <span class="o">=</span> <span class="n">val_max</span> <span class="o">-</span> <span class="n">val_min</span>
+        <span class="n">val</span> <span class="o">+=</span> <span class="n">val_range</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">val_min</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val_min</span>
+        <span class="k">elif</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="n">val_max</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val_max</span>
+        <span class="k">return</span> <span class="n">val</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.generate_drift"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate drift by switching the classification function randomly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">new_function</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">:</span>
+            <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">new_function</span></div>
+
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_zero"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_zero</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_zero</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">60</span> <span class="o">&lt;=</span> <span class="n">age</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_one"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_one</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_one</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">50000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">100000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">75000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">125000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_two"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_two</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_two</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_three"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_three</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_three</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">50000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">100000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">50000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">100000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">75000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">125000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">4</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">50000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">100000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_four"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_four">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_four</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_four</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="mi">50000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">100000</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">100000</span> <span class="o">&lt;=</span> <span class="n">loan</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loan</span> <span class="o">&lt;=</span> <span class="mi">300000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">200000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">400000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="mi">75000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">125000</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">200000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loan</span> <span class="o">&lt;=</span> <span class="mi">400000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">300000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">500000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">300000</span> <span class="o">&lt;=</span> <span class="n">loan</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loan</span> <span class="o">&lt;=</span> <span class="mi">500000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">75000</span> <span class="o">&lt;=</span> <span class="n">loan</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loan</span> <span class="o">&lt;=</span> <span class="mi">300000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_five"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_five">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_five</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_five</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">totalsalary</span> <span class="o">=</span> <span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span>
+
+        <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">50000</span> <span class="o">&lt;=</span> <span class="n">totalsalary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">totalsalary</span> <span class="o">&lt;=</span> <span class="mi">100000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">75000</span> <span class="o">&lt;=</span> <span class="n">totalsalary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">totalsalary</span> <span class="o">&lt;=</span> <span class="mi">125000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">totalsalary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">totalsalary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_six"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_six">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_six</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_six</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">loan</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">20000</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_seven"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_seven">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_seven</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_seven</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">5000</span> <span class="o">*</span> <span class="n">elevel</span> <span class="o">-</span> <span class="mi">20000</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_eight"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_eight">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_eight</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_eight</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">5000</span> <span class="o">*</span> <span class="n">elevel</span> <span class="o">-</span> <span class="n">loan</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">10000</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_nine"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_nine">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">classification_function_nine</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; classification_function_nine</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        age: float</span>
+<span class="sd">            First numeric attribute.</span>
+
+<span class="sd">        commission: float</span>
+<span class="sd">            Second numeric attribute.</span>
+
+<span class="sd">        age: int</span>
+<span class="sd">            Third numeric attribute.</span>
+
+<span class="sd">        elevel: int</span>
+<span class="sd">            Forth numeric attribute.</span>
+
+<span class="sd">        car: int</span>
+<span class="sd">            fifth numeric attribute.</span>
+
+<span class="sd">        zipcode; int</span>
+<span class="sd">            sixth numeric attribute.</span>
+
+<span class="sd">        hvalue: flaot</span>
+<span class="sd">            seventh numeric attribute.</span>
+
+<span class="sd">        hyears: float</span>
+<span class="sd">            eighth numeric attribute.</span>
+
+<span class="sd">        loan: float</span>
+<span class="sd">            ninth numeric attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Returns the sample class label, either 0 or 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">equity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">hyears</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">equity</span> <span class="o">=</span> <span class="n">hvalue</span> <span class="o">*</span> <span class="p">(</span><span class="n">hyears</span> <span class="o">-</span> <span class="mi">20</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span>
+        <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">5000</span> <span class="o">*</span> <span class="n">elevel</span> <span class="o">+</span> <span class="n">equity</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">10000</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="AGRAWALGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;AGRAWAL Generator: classification_function: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - balance_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - perturbation: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

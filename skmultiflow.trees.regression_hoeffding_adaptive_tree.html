@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.trees.regression_hoeffding_adaptive_tree module &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skmultiflow.trees.regression_hoeffding_tree module" href="skmultiflow.trees.regression_hoeffding_tree.html" />
+    <link rel="prev" title="skmultiflow.trees.numeric_attribute_binary_test module" href="skmultiflow.trees.numeric_attribute_binary_test.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="documentation.html#package-indices-and-search">Package, Indices and Search</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">skmultiflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="documentation.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.trees.html">skmultiflow.trees package</a> &raquo;</li>
+        
+      <li>skmultiflow.trees.regression_hoeffding_adaptive_tree module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/skmultiflow.trees.regression_hoeffding_adaptive_tree.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-skmultiflow.trees.regression_hoeffding_adaptive_tree">
+<span id="skmultiflow-trees-regression-hoeffding-adaptive-tree-module"></span><h1>skmultiflow.trees.regression_hoeffding_adaptive_tree module<a class="headerlink" href="#module-skmultiflow.trees.regression_hoeffding_adaptive_tree" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT">
+<em class="property">class </em><code class="descclassname">skmultiflow.trees.regression_hoeffding_adaptive_tree.</code><code class="descname">RegressionHAT</code><span class="sig-paren">(</span><em>max_byte_size=33554432</em>, <em>memory_estimate_period=1000000</em>, <em>grace_period=200</em>, <em>split_confidence=1e-07</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>leaf_prediction='perceptron'</em>, <em>no_preprune=False</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em>, <em>learning_ratio_perceptron=0.02</em>, <em>learning_ratio_decay=0.001</em>, <em>learning_ratio_const=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree" title="skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree</span></code></a></p>
+<p>Regression Hoeffding trees known as Fast incremental model tree with drift detection (FIMT-DD).</p>
+<p>The tree uses ADWIN to detect drift and PERCEPTRON to make predictions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_byte_size</strong> (<em>int</em><em> (</em><em>default=33554432</em><em>)</em>) – Maximum memory consumed by the tree.</li>
+<li><strong>memory_estimate_period</strong> (<em>int</em><em> (</em><em>default=1000000</em><em>)</em>) – Number of instances between memory consumption checks.</li>
+<li><strong>grace_period</strong> (<em>int</em><em> (</em><em>default=200</em><em>)</em>) – Number of instances a leaf should observe between split attempts.</li>
+<li><strong>split_confidence</strong> (<em>float</em><em> (</em><em>default=0.0000001</em><em>)</em>) – Allowed error in split decision, a value closer to 0 takes longer to decide.</li>
+<li><strong>tie_threshold</strong> (<em>float</em><em> (</em><em>default=0.05</em><em>)</em>) – Threshold below which a split will be forced to break ties.</li>
+<li><strong>binary_split</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, only allow binary splits.</li>
+<li><strong>stop_mem_management</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, stop growing as soon as memory limit is hit.</li>
+<li><strong>remove_poor_atts</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, disable poor attributes.</li>
+<li><strong>no_preprune</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, disable pre-pruning.</li>
+<li><strong>leaf_prediction</strong> (<em>string</em><em> (</em><em>default='nba'</em><em>)</em>) – <div class="line-block">
+<div class="line">Prediction mechanism used at leafs.</div>
+<div class="line">’tm’ - Target mean</div>
+<div class="line">’perceptron’ - Perceptron</div>
+</div>
+</li>
+<li><strong>nb_threshold</strong> (<em>int</em><em> (</em><em>default=0</em><em>)</em>) – Number of instances a leaf should observe before allowing Naive Bayes.</li>
+<li><strong>nominal_attributes</strong> (<em>list</em><em>, </em><em>optional</em>) – List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</li>
+<li><strong>learning_ratio_perceptron</strong> (<em>flaot</em>) – The learning rate of the perceptron.</li>
+<li><strong>learning_ratio_decay</strong> (<em>float</em>) – Decay multiplier for the learning rate of the perceptron</li>
+<li><strong>learning_ratio_const</strong> (<em>Bool</em>) – If False the learning ratio will decay with the number of examples seen</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression">
+<em class="property">class </em><code class="descname">AdaLearningNodeForRegression</code><span class="sig-paren">(</span><em>initial_class_observations</em>, <em>perceptron_weight</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.regression_hoeffding_tree.LearningNodePerceptron</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.regression_hoeffding_adaptive_tree.NewNode</span></code></p>
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.calc_byte_size">
+<code class="descname">calc_byte_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.calc_byte_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.calc_byte_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.filter_instance_to_leaves">
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.get_error_estimation">
+<code class="descname">get_error_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.get_error_estimation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.get_error_estimation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.get_error_width">
+<code class="descname">get_error_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.get_error_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.get_error_width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.is_null_error">
+<code class="descname">is_null_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.is_null_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.is_null_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.kill_tree_children">
+<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.kill_tree_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.learn_from_instance">
+<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>Rhat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.learn_from_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the node with the provided instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
+<li><strong>y</strong> (<em>int</em>) – Instance class.</li>
+<li><strong>weight</strong> (<em>float</em>) – Instance weight.</li>
+<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree" title="skmultiflow.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.number_leaves">
+<code class="descname">number_leaves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.number_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.number_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression">
+<em class="property">class </em><code class="descname">AdaSplitNodeForRegression</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.hoeffding_tree.SplitNode</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.regression_hoeffding_adaptive_tree.NewNode</span></code></p>
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.calc_byte_size_including_subtree">
+<code class="descname">calc_byte_size_including_subtree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.calc_byte_size_including_subtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.calc_byte_size_including_subtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the size of the node including its subtree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Size of the node and its subtree in bytes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.filter_instance_to_leaves">
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_counts=False</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.get_error_estimation">
+<code class="descname">get_error_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.get_error_estimation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.get_error_estimation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.get_error_width">
+<code class="descname">get_error_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.get_error_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.get_error_width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.is_null_error">
+<code class="descname">is_null_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.is_null_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.is_null_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.kill_tree_children">
+<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>Rhat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.kill_tree_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.learn_from_instance">
+<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>Rhat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.learn_from_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.number_leaves">
+<code class="descname">number_leaves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.number_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.number_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode">
+<em class="property">class </em><code class="descname">NewNode</code><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract Class to create a New Node for RegressionHoeffdingAdaptiveTree (RegressionHAT)</p>
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.filter_instance_to_leaves">
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em>, <em>found_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.get_error_estimation">
+<code class="descname">get_error_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode.get_error_estimation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.get_error_estimation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.get_error_width">
+<code class="descname">get_error_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode.get_error_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.get_error_width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.is_null_error">
+<code class="descname">is_null_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode.is_null_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.is_null_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.kill_tree_children">
+<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>hat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.kill_tree_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.learn_from_instance">
+<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>hat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.learn_from_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.number_leaves">
+<code class="descname">number_leaves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.NewNode.number_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.NewNode.number_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.filter_instance_to_leaves">
+<code class="descname">filter_instance_to_leaves</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>split_parent</em>, <em>parent_branch</em>, <em>update_splitter_counts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.filter_instance_to_leaves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.filter_instance_to_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.get_normalized_error">
+<code class="descname">get_normalized_error</code><span class="sig-paren">(</span><em>prediction</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.get_normalized_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.get_normalized_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.leaf_prediction">
+<code class="descname">leaf_prediction</code><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.leaf_prediction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.new_split_node">
+<code class="descname">new_split_node</code><span class="sig-paren">(</span><em>split_test</em>, <em>class_observations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.new_split_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.new_split_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new split node.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.trees.regression_hoeffding_tree.html" class="btn btn-neutral float-right" title="skmultiflow.trees.regression_hoeffding_tree module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.trees.numeric_attribute_binary_test.html" class="btn btn-neutral" title="skmultiflow.trees.numeric_attribute_binary_test module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

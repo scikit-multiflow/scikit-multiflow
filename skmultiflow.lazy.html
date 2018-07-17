@@ -1,0 +1,1109 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.lazy package &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skmultiflow.lazy.distances module" href="skmultiflow.lazy.distances.html" />
+    <link rel="prev" title="skmultiflow.evaluation.evaluate_stream_gen_speed module" href="skmultiflow.evaluation.evaluate_stream_gen_speed.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="documentation.html#package-indices-and-search">Package, Indices and Search</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">skmultiflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="documentation.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+      <li>skmultiflow.lazy package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/skmultiflow.lazy.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="skmultiflow-lazy-package">
+<h1>skmultiflow.lazy package<a class="headerlink" href="#skmultiflow-lazy-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="skmultiflow.lazy.distances.html">skmultiflow.lazy.distances module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skmultiflow.lazy.kdtree.html">skmultiflow.lazy.kdtree module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skmultiflow.lazy.knn.html">skmultiflow.lazy.knn module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skmultiflow.lazy.knn_adwin.html">skmultiflow.lazy.knn_adwin module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skmultiflow.lazy.sam_knn.html">skmultiflow.lazy.sam_knn module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-skmultiflow.lazy">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skmultiflow.lazy" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-skmultiflow.lazy" title="skmultiflow.lazy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.lazy</span></code></a> module includes lazy learning methods in which generalization of the training
+data is delayed until a query is received, this is, on-demand.</p>
+<dl class="class">
+<dt id="skmultiflow.lazy.KNN">
+<em class="property">class </em><code class="descclassname">skmultiflow.lazy.</code><code class="descname">KNN</code><span class="sig-paren">(</span><em>k=5</em>, <em>max_window_size=1000</em>, <em>leaf_size=30</em>, <em>categorical_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<p>K-Nearest Neighbors Classifier</p>
+<p>This is a non-parametric classification method. The output of this
+algorithm are the k closest training examples to the query sample
+X.</p>
+<p>It works by keeping track of a fixed number of training samples, in
+our case it keeps track of the last max_window_size training samples.
+Then, whenever a query request is executed, the algorithm will search
+its stored samples and find the closest ones using a selected distance
+metric.</p>
+<p>To store the samples, while reducing search times, we use a structure
+called KD Tree (a K Dimensional Tree, for k dimensional problems).
+Although we do have our own KDTree implementation, which accepts
+custom metrics, we recommend using the standard scikit-learn KDTree,
+that even though doesn’t accept custom metrics, is optimized and will
+function faster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>k</strong> (<em>int</em>) – The number of nearest neighbors to search for.</li>
+<li><strong>max_window_size</strong> (<em>int</em>) – The maximum size of the window storing the last viewed samples.</li>
+<li><strong>leaf_size</strong> (<em>int</em>) – The maximum number of samples that can be stored in one leaf node,
+which determines from which point the algorithm will switch for a
+brute-force approach. The bigger this number the faster the tree
+construction time, but the slower the query time will be.</li>
+<li><strong>categorical_list</strong> (<em>An array-like</em>) – Each entry is the index of a categorical feature. May be requested
+further filtering.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li>NotImplementedError: A few of the functions described here are not</li>
+<li>implemented since they have no application in this context.</li>
+<li>ValueError: A ValueError is raised if the predict function is called</li>
+<li>before at least k samples have been analyzed by the algorithm.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>For a KDTree functionality explanation, please see our KDTree
+documentation, under skmultiflow.lazy.neighbors.kdtree.</p>
+<p>This classifier is not optimal for a mixture of categorical and
+numerical features.</p>
+<p>If you wish to use our KDTree implementation please refer to this class’
+function __predict_proba</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s1">&#39;skmultiflow/data/datasets/sea_big.csv&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">knn</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">knn</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Preparing the processing of 5000 samples and correct prediction count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">while</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="mi">5000</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">my_pred</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">my_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+<span class="gp">... </span>        <span class="n">corrects</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">knn</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">n_samples</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Displaying results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;KNN usage example&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; samples analyzed.&#39;</span><span class="p">)</span>
+<span class="go">5000 samples analyzed.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;KNN&#39;s performance: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">corrects</span><span class="o">/</span><span class="n">n_samples</span><span class="p">))</span>
+<span class="go">KNN&#39;s performance: 0.868</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="skmultiflow.lazy.KNN.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits the model on the samples X and targets y. This is actually the
+function as the partial fit.</p>
+<p>For the K-Nearest Neighbors Classifier, fitting the model is the
+equivalent of inserting the newer samples in the observed window,
+and if the size_limit is reached, removing older results. To store
+the viewed samples we use a InstanceWindow object. For this class’
+documentation please visit skmultiflow.core.utils.data_structures</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data upon which the algorithm will create its model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the classification targets for all
+samples in X.</li>
+<li><strong>classes</strong> (<em>Not used.</em>) – </li>
+<li><strong>weight</strong> (<em>Not used.</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">self</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.lazy.KNN" title="skmultiflow.lazy.KNN">KNN</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KNN.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KNN.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits the model on the samples X and targets y.</p>
+<p>For the K-Nearest Neighbors Classifier, fitting the model is the
+equivalent of inserting the newer samples in the observed window,
+and if the size_limit is reached, removing older results. To store
+the viewed samples we use a InstanceWindow object. For this class’
+documentation please visit skmultiflow.core.utils.data_structures</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data upon which the algorithm will create its model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the classification targets for all
+samples in X.</li>
+<li><strong>classes</strong> (<em>Not used.</em>) – </li>
+<li><strong>weight</strong> (<em>Not used.</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">self</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.lazy.KNN" title="skmultiflow.lazy.KNN">KNN</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KNN.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts the label of the X sample, by searching the KDTree for
+the k-Nearest Neighbors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – All the samples we want to predict the label for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list containing the predicted labels for all instances in X.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KNN.predict_proba">
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the probability of each sample in X belonging to each
+of the labels, based on the knn algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – </p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li>ValueError: If there is an attempt to call this function before,</li>
+<li>at least, k samples have been analyzed by the learner, a ValueError</li>
+<li>is raised.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array of shape (n_samples, n_features), in which each outer entry is
+associated with the X entry of the same index. And where the list in
+index [i] contains len(self.target_value) elements, each of which represents
+the probability that the i-th sample of X belongs to a certain label.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KNN.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the model to its initial state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel">StreamModel</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KNN.score">
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn.html#KNN.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNN.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the performance base metric for the model in its current state.</p>
+<p class="rubric">Notes</p>
+<p>This function isn’t natively implemented on all models.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_sample</em><em>, </em><em>n_features</em><em>)</em>) – The features matrix.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the targets for all samples in X.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The model’s score.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.lazy.KNNAdwin">
+<em class="property">class </em><code class="descclassname">skmultiflow.lazy.</code><code class="descname">KNNAdwin</code><span class="sig-paren">(</span><em>k=5</em>, <em>max_window_size=9223372036854775807</em>, <em>leaf_size=30</em>, <em>categorical_list=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn_adwin.html#KNNAdwin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.lazy.knn.html#skmultiflow.lazy.knn.KNN" title="skmultiflow.lazy.knn.KNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.lazy.knn.KNN</span></code></a></p>
+<p>K-Nearest Neighbors Classifier with ADWIN Change detector</p>
+<p>This Classifier is an improvement from the regular KNN classifier,
+as it is resistant to concept drift. It utilises the ADWIN change
+detector to decide which samples to keep and which ones to forget,
+and by doing so it regulates the sample window size.</p>
+<p>To know more about the ADWIN change detector, please visit
+skmultiflow.classification.core.drift_detection.adwin</p>
+<p>It uses the regular KNN Classifier as a base class, with the
+major difference that this class keeps a variable size window,
+instead of a fixed size one and also it updates the adwin algorithm
+at each partial_fit call.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>k</strong> (<em>int</em>) – The number of nearest neighbors to search for.</li>
+<li><strong>max_window_size</strong> (<em>int</em>) – The maximum size of the window storing the last viewed samples.</li>
+<li><strong>leaf_size</strong> (<em>int</em>) – The maximum number of samples that can be stored in one leaf node,
+which determines from which point the algorithm will switch for a
+brute-force approach. The bigger this number the faster the tree
+construction time, but the slower the query time will be.</li>
+<li><strong>categorical_list</strong> (<em>An array-like</em>) – Each entry is the index of a categorical feature. May be requested
+further filtering.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li>NotImplementedError: A few of the functions described here are not</li>
+<li>implemented since they have no application in this context.</li>
+<li>ValueError: A ValueError is raised if the predict function is called</li>
+<li>before at least k samples have been analyzed by the algorithm.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn_adwin</span> <span class="k">import</span> <span class="n">KNNAdwin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s1">&#39;skmultiflow/data/datasets/covtype.csv&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the KNNAdwin classifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">knn_adwin</span> <span class="o">=</span> <span class="n">KNNAdwin</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">knn_adwin</span> <span class="o">=</span> <span class="n">knn_adwin</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Keeping track of sample count and correct prediction count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">while</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="mi">5000</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">knn_adwin</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+<span class="gp">... </span>        <span class="n">corrects</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">knn_adwin</span> <span class="o">=</span> <span class="n">knn_adwin</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">n_samples</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Displaying the results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;KNN usage example&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; samples analyzed.&#39;</span><span class="p">)</span>
+<span class="go">5000 samples analyzed.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;KNNAdwin&#39;s performance: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">corrects</span><span class="o">/</span><span class="n">n_samples</span><span class="p">))</span>
+<span class="go">KNNAdwin&#39;s performance: 0.7798</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="skmultiflow.lazy.KNNAdwin.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn_adwin.html#KNNAdwin.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partially fits the model. This is done by updating the window
+with new samples while also updating the adwin algorithm. Then
+we verify if a change was detected, and if so, the window is
+correctly split at the drift moment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data upon which the algorithm will create its model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the classification targets for all
+samples in X.</li>
+<li><strong>classes</strong> (<em>Not used.</em>) – </li>
+<li><strong>weight</strong> (<em>Not used.</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">self</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#skmultiflow.lazy.KNNAdwin" title="skmultiflow.lazy.KNNAdwin">KNNAdwin</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KNNAdwin.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn_adwin.html#KNNAdwin.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the adwin algorithm as well as the base model
+kept by the KNN base class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#skmultiflow.lazy.KNNAdwin" title="skmultiflow.lazy.KNNAdwin">KNNAdwin</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.lazy.SAMKNN">
+<em class="property">class </em><code class="descclassname">skmultiflow.lazy.</code><code class="descname">SAMKNN</code><span class="sig-paren">(</span><em>n_neighbors=5</em>, <em>knnWeights='distance'</em>, <em>maxSize=5000</em>, <em>LTMSizeProportion=0.4</em>, <em>minSTMSize=50</em>, <em>STMSizeAdaption='maxACCApprox'</em>, <em>useLTM=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<p>SAMKNN - Self Adjusting Memory (SAM) coupled with the k Nearest Neighbor classifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_neighbors</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=5</em><em>)</em>) – number of evaluated nearest neighbors.</li>
+<li><strong>knnWeights</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='distance'</em><em>)</em>) – Type of weighting of the nearest neighbors. It must be either ‘distance’
+or ‘uniform’ (majority voting).</li>
+<li><strong>maxSize</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=5000</em><em>)</em>) – Maximum number of overall stored data points.</li>
+<li><strong>LTMSizeProportion</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.4</em><em>)</em>) – Proportion of the overall instances that may be used for the LTM. This is
+only relevant when the maximum number(maxSize) of stored instances is reached.</li>
+<li><strong>STMSizeAdaption</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='maxACCApprox'</em><em>)</em>) – Type of STM size adaption.
+‘maxACC’ calculates the Interleaved test-train error exactly for each of the
+evaluated window sizes, which means it has often to be recalculated from the
+scratch.
+‘maxACCApprox’ approximates the Interleaved test-train error and is
+significantly faster than the exact version. If set to None, the STM is not
+adapted at all. When additionally useLTM=false, this algorithm is simply a kNN
+with fixed sliding window size.</li>
+<li><strong>minSTMSize</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=50</em><em>)</em>) – Minimum STM size which is evaluated during the STM size adaption.</li>
+<li><strong>useLTM</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Specifies whether the LTM should be used at all.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.sam_knn</span> <span class="k">import</span> <span class="n">SAMKNN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_prequential</span> <span class="k">import</span> <span class="n">EvaluatePrequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the File Stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/data/datasets/movingSquares.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the classifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="n">SAMKNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">knnWeights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">maxSize</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">STMSizeAdaption</span><span class="o">=</span><span class="s1">&#39;maxACCApprox&#39;</span><span class="p">,</span> <span class="n">useLTM</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the evaluator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">pretrain_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_samples</span><span class="o">=</span><span class="mi">200000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa_t&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Evaluate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The Self Adjusting Memory (SAM) <a class="footnote-reference" href="#id2" id="id1">[1]</a> model builds an ensemble with models targeting current
+or former concepts. SAM is built using two memories: STM for the current concept, and
+the LTM to retain information about past concepts. A cleaning process is in charge of
+controlling the size of the STM while keeping the information in the LTM consistent
+with the STM.</p>
+<p>This modules uses the libNearestNeighbor, a C++ library used to speed up some of
+the algorithm’s computations. When invoking the library’s functions it’s important
+to pass the right argument type. Although most of this framework’s functionality
+will work with python standard types, the C++ library will work with 8-bit labels,
+which is already done by the SAMKNN class, but may be absent in custom classes that
+use SAMKNN static methods, or other custom functions that use the C++ library.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Losing, Viktor, Barbara Hammer, and Heiko Wersing. “Knn classifier with self adjusting memory for
+heterogeneous concept drift.” In Data Mining (ICDM), 2016 IEEE 16th International Conference on,
+pp. 291-300. IEEE, 2016.</td></tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="skmultiflow.lazy.SAMKNN.LTMLabels">
+<code class="descname">LTMLabels</code><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.LTMLabels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.lazy.SAMKNN.LTMSamples">
+<code class="descname">LTMSamples</code><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.LTMSamples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.lazy.SAMKNN.STMLabels">
+<code class="descname">STMLabels</code><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.STMLabels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.lazy.SAMKNN.STMSamples">
+<code class="descname">STMSamples</code><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.STMSamples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.clean_samples">
+<code class="descname">clean_samples</code><span class="sig-paren">(</span><em>samplesCl</em>, <em>labelsCl</em>, <em>onlyLast=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.clean_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.clean_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes distance-based all instances from the input samples that contradict those in the STM.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.cluster_down">
+<code class="descname">cluster_down</code><span class="sig-paren">(</span><em>samples</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.cluster_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.cluster_down" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs classwise kMeans++ clustering for given samples with corresponding labels. The number of samples is halved per class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model under the batch setting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The array of samples used to fit the model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like with the labels of all samples in X.</li>
+<li><strong>classes</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible labels. Applicability varies depending on the algorithm.</li>
+<li><strong>weight</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Instance weight. If not provided, uniform weights are assumed.
+Applicability varies depending on the algorithm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.get_complexity">
+<code class="descname">get_complexity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.get_complexity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.get_complexity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.get_complexity_num_parameter_metric">
+<code class="descname">get_complexity_num_parameter_metric</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.get_complexity_num_parameter_metric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.get_complexity_num_parameter_metric" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="skmultiflow.lazy.SAMKNN.get_distance_weighted_label">
+<em class="property">static </em><code class="descname">get_distance_weighted_label</code><span class="sig-paren">(</span><em>distances</em>, <em>labels</em>, <em>numNeighbours</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.get_distance_weighted_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.get_distance_weighted_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the the distance weighted label of the k nearest neighbors.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="skmultiflow.lazy.SAMKNN.get_distances">
+<em class="property">static </em><code class="descname">get_distances</code><span class="sig-paren">(</span><em>sample</em>, <em>samples</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.get_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.get_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate distances from sample to all samples.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="skmultiflow.lazy.SAMKNN.get_maj_label">
+<em class="property">static </em><code class="descname">get_maj_label</code><span class="sig-paren">(</span><em>distances</em>, <em>labels</em>, <em>numNeighbours</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.get_maj_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.get_maj_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the majority label of the k nearest neighbors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes a new sample.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts targets using the model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The matrix of samples one wants to predict.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">An array-like with all the predictions for the samples in X.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.predict_proba">
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>On classifiers, estimates the probability of each sample in X belonging to each of the existing labels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The matrix of samples one wants to predict.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>An array of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the same</em></li>
+<li><em>index. And where the list in index [i] contains len(self.target_values) elements, each of which represents the</em></li>
+<li><em>probability that the i-th sample of X belongs to a certain label.</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the model to its initial state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel">StreamModel</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.score">
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the performance base metric for the model in its current state.</p>
+<p class="rubric">Notes</p>
+<p>This function isn’t natively implemented on all models.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_sample</em><em>, </em><em>n_features</em><em>)</em>) – The features matrix.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the targets for all samples in X.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The model’s score.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.size_check_STMLTM">
+<code class="descname">size_check_STMLTM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.size_check_STMLTM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.size_check_STMLTM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes sure that the STM and LTM combined doe not surpass the maximum size, only used when useLTM=True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.SAMKNN.size_check_fade_out">
+<code class="descname">size_check_fade_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.size_check_fade_out"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.SAMKNN.size_check_fade_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes sure that the STM does not surpass the maximum size, only used when useLTM=False.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.lazy.KDTree">
+<em class="property">class </em><code class="descclassname">skmultiflow.lazy.</code><code class="descname">KDTree</code><span class="sig-paren">(</span><em>X</em>, <em>metric='mixed'</em>, <em>categorical_list=None</em>, <em>return_distance=False</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/kdtree.html#KDTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base_object.html#skmultiflow.core.base_object.BaseObject" title="skmultiflow.core.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base_object.BaseObject</span></code></a></p>
+<p>KD Tree</p>
+<p>A K dimensional tree implementation, adapted for k dimensional problems.</p>
+<p>A KD Tree is a space partitioning (in axis-aligned hyperrectangles) tree
+structure, where each node is associated with a feature and a splitting
+value. Each node can have up to two children nodes, with the property that
+all the samples stored by the left child have their feature value smaller
+then the node’s splitting value, and all the samples stored by the right
+child have their relevant feature greater than or equal to the node’s
+splitting value.</p>
+<p>The algorithm used to select the splitting feature and the splitting
+value for each node is called the sliding midpoint rule, as defined in
+Maneewongvatana and Mount 1999. The idea is that we don’t need a balanced
+distribution of samples in all nodes, for the query time to be efficient,
+as long as there are ‘fat’ nodes around. This algorithm guarantees that
+the nodes won’t become long and thin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data upon which the object is going to create its tree.</li>
+<li><strong>metric</strong> (<em>a string representation of a metric.</em>) – In the future custom metrics are going to be accepted.</li>
+<li><strong>categorical_list</strong> (<em>a list of the categorical feature's indexes.</em>) – It may be used by some custom metric to differentiate between
+categorical and numerical attributes.</li>
+<li><strong>return_distance</strong> (<em>bool</em>) – Whether to return only the indexes of the closes neighbors or
+also their distances.</li>
+<li><strong>leaf_size</strong> (<em>int</em>) – The number of samples that can be held by a leaf node, at which
+point the query algorithm will switch to brute force. The greater
+the number the faster the tree will be build, and the slower the
+query will be.</li>
+<li><strong>kwargs</strong> (<em>Additional keyword arguments</em>) – Additional keyword arguments will be passed to the metric function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li>May raise ValueErrors if the parameters passed don’t have the correct</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">types.</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This implementation is not faster than scikit-learn’s implementation,
+nor than scipy’s implementation, but it allow users to use a custom
+metric for the distance calculation.
+term</p>
+<dl class="attribute">
+<dt id="skmultiflow.lazy.KDTree.METRICS">
+<code class="descname">METRICS</code><em class="property"> = ['mixed', 'euclidean']</em><a class="headerlink" href="#skmultiflow.lazy.KDTree.METRICS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KDTree.get_class_type">
+<code class="descname">get_class_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/kdtree.html#KDTree.get_class_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.get_class_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class type is a string that identifies the type of object
+generated by that module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">The class type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KDTree.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/kdtree.html#KDTree.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KDTree.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>X</em>, <em>k=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/kdtree.html#KDTree.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches the tree for the k nearest neighbors of X</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Array-like of size n_features</em><em> or </em><em>matrix of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Stores the samples we want to find the nearest neighbors for.</li>
+<li><strong>k</strong> (<em>int</em>) – The number of nearest neighbors to query for.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Either a list containing all the indexes from the closest neighbors (if
+return_distance is False) or two lists, one with the neighbors indexes
+and another one with their distance to the samples in X.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list or tuple list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.lazy.KDTree.query_radius">
+<code class="descname">query_radius</code><span class="sig-paren">(</span><em>X</em>, <em>r</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/kdtree.html#KDTree.query_radius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.query_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radius based query</p>
+<p>Queries the tree based on a limited radius rather than a number of
+neighbors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Array-like of size n_features</em><em> or </em><em>matrix of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Stores the samples we want to find the nearest neighbors for.</li>
+<li><strong>r</strong> (<em>float</em>) – The maximum radius for the query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of indexes, or indexes and distances (if return_distance is True),
+from all the neighbors within the maximum query radius.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list or tuple list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.lazy.distances.html" class="btn btn-neutral float-right" title="skmultiflow.lazy.distances module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.evaluation.evaluate_stream_gen_speed.html" class="btn btn-neutral" title="skmultiflow.evaluation.evaluate_stream_gen_speed module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -110,16 +110,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification">Classification: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.multi_output_learner.html">skmultiflow.classification.multi_output_learner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.naive_bayes.html">skmultiflow.classification.naive_bayes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -209,7 +208,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">tosequence</span>
 
 
-<div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Pipeline</span>
 <span class="sd">        </span>
 <span class="sd">    A pipeline structure that holds a set of sequential Transforms, followed </span>
@@ -245,13 +244,13 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.classification.lazy.knn_adwin import KNNAdwin</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.lazy.knn_adwin import KNNAdwin</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.core.pipeline import Pipeline</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.evaluation.evaluate_prequential import EvaluatePrequential</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.transform.one_hot_to_categorical import OneHotToCategorical</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(&quot;skmultiflow/datasets/covtype.csv&quot;, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&quot;skmultiflow/data/datasets/covtype.csv&quot;, -1, 1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; transform = OneHotToCategorical([[10, 11, 12, 13],</span>
 <span class="sd">    ... [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,</span>
@@ -283,7 +282,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_steps</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Pipeline.predict"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.predict"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
 <span class="sd">         </span>
 <span class="sd">        Sequentially applies all transforms and then predict with last step.</span>
@@ -305,7 +304,7 @@
                 <span class="n">Xt</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Xt</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xt</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pipeline.fit"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.fit"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; fit </span>
 <span class="sd">        </span>
 <span class="sd">        Sequentially fit and transform data in all but last step, then fit </span>
@@ -340,7 +339,7 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="Pipeline.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit </span>
 <span class="sd">        </span>
 <span class="sd">        Sequentially partial fit and transform data in all but last step, </span>
@@ -382,7 +381,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_final_estimator</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="Pipeline.partial_fit_predict"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.partial_fit_predict">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.partial_fit_predict"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.partial_fit_predict">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit_predict</span>
 <span class="sd">        </span>
 <span class="sd">        Partial fits and transforms data in all but last step, then partial </span>
@@ -416,7 +415,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_estimator</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">Xt</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xt</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pipeline.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit_trasnform </span>
 <span class="sd">        </span>
 <span class="sd">        Partial fits and transforms data in all but last step, then </span>
@@ -439,7 +438,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="Pipeline.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;estimator&#39;</span></div>
 
     <span class="k">def</span> <span class="nf">_validate_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -475,7 +474,7 @@
         <span class="k">if</span> <span class="n">classifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="s2">&quot;partial_fit&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="Pipeline.named_steps"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.named_steps">[docs]</a>    <span class="k">def</span> <span class="nf">named_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.named_steps"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.named_steps">[docs]</a>    <span class="k">def</span> <span class="nf">named_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; named_steps</span>
 <span class="sd">         </span>
 <span class="sd">        Generates a dictionary to access all the steps&#39; properties.</span>
@@ -488,7 +487,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pipeline.get_info"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.pipeline.Pipeline.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.get_info"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">info</span> <span class="o">=</span> <span class="s2">&quot;Pipeline: &quot;</span>
         <span class="n">names</span><span class="p">,</span> <span class="n">estimators</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">estimators</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>

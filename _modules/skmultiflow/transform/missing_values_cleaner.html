@@ -110,16 +110,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification">Classification: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.multi_output_learner.html">skmultiflow.classification.multi_output_learner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.naive_bayes.html">skmultiflow.classification.naive_bayes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -208,11 +207,11 @@
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.transform.base_transform</span> <span class="k">import</span> <span class="n">StreamTransform</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.data_structures</span> <span class="k">import</span> <span class="n">FastBuffer</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils.data_structures</span> <span class="k">import</span> <span class="n">FastBuffer</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span>
 
 
-<div class="viewcode-block" id="MissingValuesCleaner"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner">[docs]</a><span class="k">class</span> <span class="nc">MissingValuesCleaner</span><span class="p">(</span><span class="n">StreamTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner">[docs]</a><span class="k">class</span> <span class="nc">MissingValuesCleaner</span><span class="p">(</span><span class="n">StreamTransform</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; MissingValuesCleaner</span>
 <span class="sd">    </span>
 <span class="sd">    This is a transform object. It provides a simple way to replace missing </span>
@@ -251,7 +250,7 @@
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.transform.missing_values_cleaner import MissingValuesCleaner</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up a stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(&#39;skmultiflow/datasets/covtype.csv&#39;, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&#39;skmultiflow/data/datasets/covtype.csv&#39;, -1, 1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the filter to substitute values -47 by the median of the </span>
 <span class="sd">    &gt;&gt;&gt; # last 10 samples</span>
@@ -297,7 +296,7 @@
         <span class="k">if</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MissingValuesCleaner.transform"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner.transform"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform</span>
 <span class="sd">        </span>
 <span class="sd">        Does the transformation process in the samples in X.</span>
@@ -352,7 +351,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span>
 
-<div class="viewcode-block" id="MissingValuesCleaner.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit_transform</span>
 <span class="sd">        </span>
 <span class="sd">        Partially fits the model and then apply the transform to the data.</span>
@@ -377,7 +376,7 @@
 
         <span class="k">return</span> <span class="n">X</span></div>
 
-<div class="viewcode-block" id="MissingValuesCleaner.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 <span class="sd">        </span>
 <span class="sd">        Partial fits the model.</span>
@@ -401,7 +400,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="MissingValuesCleaner.get_info"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.missing_values_cleaner.MissingValuesCleaner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MissingValuesCleaner.get_info"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MissingValueCleaner: missing_value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - strategy: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">+</span> \
                <span class="s1">&#39; - window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="o">+</span> \

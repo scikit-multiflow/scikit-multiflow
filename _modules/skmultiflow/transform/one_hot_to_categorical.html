@@ -110,16 +110,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification">Classification: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.multi_output_learner.html">skmultiflow.classification.multi_output_learner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.naive_bayes.html">skmultiflow.classification.naive_bayes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -207,10 +206,10 @@
   <h1>Source code for skmultiflow.transform.one_hot_to_categorical</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.transform.base_transform</span> <span class="k">import</span> <span class="n">StreamTransform</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.core.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span>
 
 
-<div class="viewcode-block" id="OneHotToCategorical"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.one_hot_to_categorical.OneHotToCategorical">[docs]</a><span class="k">class</span> <span class="nc">OneHotToCategorical</span><span class="p">(</span><span class="n">StreamTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="OneHotToCategorical"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.OneHotToCategorical">[docs]</a><span class="k">class</span> <span class="nc">OneHotToCategorical</span><span class="p">(</span><span class="n">StreamTransform</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; OneHotToCategorical</span>
 <span class="sd">    </span>
 <span class="sd">    Transform that receives a features matrix, with some features coded as </span>
@@ -228,10 +227,10 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">categorical_list</span> <span class="o">=</span> <span class="n">categorical_list</span>
 
-<div class="viewcode-block" id="OneHotToCategorical.get_info"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.one_hot_to_categorical.OneHotToCategorical.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OneHotToCategorical.get_info"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.OneHotToCategorical.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;OneHotToCategorical: categorical_list: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categorical_list</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OneHotToCategorical.transform"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.one_hot_to_categorical.OneHotToCategorical.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="OneHotToCategorical.transform"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.OneHotToCategorical.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform</span>
 <span class="sd">        </span>
 <span class="sd">        Transform one hot features in the X matrix into int coded </span>
@@ -285,13 +284,13 @@
 
         <span class="k">return</span> <span class="n">ret</span>
 
-<div class="viewcode-block" id="OneHotToCategorical.fit"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.one_hot_to_categorical.OneHotToCategorical.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="OneHotToCategorical.fit"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.OneHotToCategorical.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="OneHotToCategorical.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.one_hot_to_categorical.OneHotToCategorical.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="OneHotToCategorical.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.OneHotToCategorical.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OneHotToCategorical.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.one_hot_to_categorical.OneHotToCategorical.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="OneHotToCategorical.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.transform.one_hot_to_categorical.html#skmultiflow.transform.OneHotToCategorical.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span></div></div>
 </pre></div>
 

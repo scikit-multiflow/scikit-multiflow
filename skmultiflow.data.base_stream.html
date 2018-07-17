@@ -29,8 +29,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="skmultiflow.data.data_stream module" href="skmultiflow.data.data_stream.html" />
-    <link rel="prev" title="skmultiflow.data.generators.waveform_generator module" href="skmultiflow.data.generators.waveform_generator.html" /> 
+    <link rel="next" title="skmultiflow.data.concept_drift_stream module" href="skmultiflow.data.concept_drift_stream.html" />
+    <link rel="prev" title="skmultiflow.data.agrawal_generator module" href="skmultiflow.data.agrawal_generator.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -112,16 +112,15 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.data.generators">Stream Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.classification">Classification: <code class="docutils literal notranslate"><span class="pre">skmultiflow.classification</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.multi_output_learner.html">skmultiflow.classification.multi_output_learner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.naive_bayes.html">skmultiflow.classification.naive_bayes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.classification.perceptron.html">skmultiflow.classification.perceptron</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.meta">Ensemble methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.classification.lazy">Lazy learning methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.trees">Tree methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -395,12 +394,12 @@ in evaluation methods, to represent the stream.</p>
 <dl class="attribute">
 <dt id="skmultiflow.data.base_stream.Stream.n_targets">
 <code class="descname">n_targets</code><a class="headerlink" href="#skmultiflow.data.base_stream.Stream.n_targets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the number of target_values</p>
+<dd><p>Retrieve the number of targets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of target_values in the stream.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of targets in the stream.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
@@ -462,12 +461,12 @@ stream to work after its initialization.</p>
 <dl class="attribute">
 <dt id="skmultiflow.data.base_stream.Stream.target_names">
 <code class="descname">target_names</code><a class="headerlink" href="#skmultiflow.data.base_stream.Stream.target_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the names of the target_values.</p>
+<dd><p>Retrieve the names of the targets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the names of the target_values in the stream.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the names of the targets in the stream.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
@@ -503,10 +502,10 @@ stream to work after its initialization.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="skmultiflow.data.data_stream.html" class="btn btn-neutral float-right" title="skmultiflow.data.data_stream module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="skmultiflow.data.concept_drift_stream.html" class="btn btn-neutral float-right" title="skmultiflow.data.concept_drift_stream module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.data.generators.waveform_generator.html" class="btn btn-neutral" title="skmultiflow.data.generators.waveform_generator module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.data.agrawal_generator.html" class="btn btn-neutral" title="skmultiflow.data.agrawal_generator module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

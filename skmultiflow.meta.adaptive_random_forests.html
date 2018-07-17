@@ -1,0 +1,628 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.meta.adaptive_random_forests module &mdash; scikit-multiflow 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skmultiflow.meta.batch_incremental module" href="skmultiflow.meta.batch_incremental.html" />
+    <link rel="prev" title="skmultiflow.meta package" href="skmultiflow.meta.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="documentation.html#package-indices-and-search">Package, Indices and Search</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="modules.html">skmultiflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="documentation.html">Documentation</a> &raquo;</li>
+        
+          <li><a href="modules.html">skmultiflow</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.html">skmultiflow package</a> &raquo;</li>
+        
+          <li><a href="skmultiflow.meta.html">skmultiflow.meta package</a> &raquo;</li>
+        
+      <li>skmultiflow.meta.adaptive_random_forests module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/skmultiflow.meta.adaptive_random_forests.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-skmultiflow.meta.adaptive_random_forests">
+<span id="skmultiflow-meta-adaptive-random-forests-module"></span><h1>skmultiflow.meta.adaptive_random_forests module<a class="headerlink" href="#module-skmultiflow.meta.adaptive_random_forests" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.meta.adaptive_random_forests.ARFBaseLearner">
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.adaptive_random_forests.</code><code class="descname">ARFBaseLearner</code><span class="sig-paren">(</span><em>index_original</em>, <em>classifier: skmultiflow.trees.arf_hoeffding_tree.ARFHoeffdingTree</em>, <em>instances_seen</em>, <em>drift_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</em>, <em>warning_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</em>, <em>is_background_learner</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#ARFBaseLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.ARFBaseLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base_object.html#skmultiflow.core.base_object.BaseObject" title="skmultiflow.core.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base_object.BaseObject</span></code></a></p>
+<p>ARF Base Learner class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index_original</strong> (<em>int</em>) – Tree index within the ensemble.</li>
+<li><strong>classifier</strong> (<a class="reference internal" href="skmultiflow.trees.arf_hoeffding_tree.html#skmultiflow.trees.arf_hoeffding_tree.ARFHoeffdingTree" title="skmultiflow.trees.arf_hoeffding_tree.ARFHoeffdingTree"><em>ARFHoeffdingTree</em></a>) – Tree classifier.</li>
+<li><strong>instances_seen</strong> (<em>int</em>) – Number of instances seen by the tree.</li>
+<li><strong>drift_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a>) – Drift Detection method.</li>
+<li><strong>warning_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a>) – Warning Detection method.</li>
+<li><strong>is_background_learner</strong> (<em>bool</em>) – True if the tree is a background learner.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Inner class that represents a single tree member of the forest.
+Contains analysis information, such as the numberOfDriftsDetected.</p>
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.get_class_type">
+<code class="descname">get_class_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#ARFBaseLearner.get_class_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.get_class_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class type is a string that identifies the type of object
+generated by that module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">The class type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#ARFBaseLearner.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.get_votes_for_instance">
+<code class="descname">get_votes_for_instance</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#ARFBaseLearner.get_votes_for_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.get_votes_for_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>instances_seen</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#ARFBaseLearner.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#ARFBaseLearner.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><em>instances_seen</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#ARFBaseLearner.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.ARFBaseLearner.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest">
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.adaptive_random_forests.</code><code class="descname">AdaptiveRandomForest</code><span class="sig-paren">(</span><em>nb_ensemble=10</em>, <em>max_features='auto'</em>, <em>disable_weighted_vote=False</em>, <em>lambda_value=6</em>, <em>performance_metric='acc'</em>, <em>drift_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector = &lt;skmultiflow.drift_detection.adwin.ADWIN object&gt;</em>, <em>warning_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector = &lt;skmultiflow.drift_detection.adwin.ADWIN object&gt;</em>, <em>max_byte_size=33554432</em>, <em>memory_estimate_period=2000000</em>, <em>grace_period=50</em>, <em>split_criterion='info_gain'</em>, <em>split_confidence=0.01</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>no_preprune=False</em>, <em>leaf_prediction='nba'</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<p>Adaptive Random Forest (ARF).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nb_ensemble</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=10</em><em>)</em>) – Number of trees oin the ensemble.</li>
+<li><strong>max_features</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>string</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;auto&quot;</em><em>)</em>) – <p>Max number of attributes for each node split.</p>
+<ul>
+<li>If int, then consider <code class="docutils literal notranslate"><span class="pre">max_features</span></code> features at each split.</li>
+<li>If float, then <code class="docutils literal notranslate"><span class="pre">max_features</span></code> is a percentage and <code class="docutils literal notranslate"><span class="pre">int(max_features</span> <span class="pre">*</span> <span class="pre">n_features)</span></code>
+features are considered at each split.</li>
+<li>If “auto”, then <code class="docutils literal notranslate"><span class="pre">max_features=sqrt(n_features)</span></code>.</li>
+<li>If “sqrt”, then <code class="docutils literal notranslate"><span class="pre">max_features=sqrt(n_features)</span></code> (same as “auto”).</li>
+<li>If “log2”, then <code class="docutils literal notranslate"><span class="pre">max_features=log2(n_features)</span></code>.</li>
+<li>If None, then <code class="docutils literal notranslate"><span class="pre">max_features=n_features</span></code>.</li>
+</ul>
+</li>
+<li><strong>disable_weighted_vote</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Weighted vote option.</li>
+<li><strong>lambda_value</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=6</em><em>)</em>) – The lambda value for bagging (lambda=6 corresponds to Leverage Bagging).</li>
+<li><strong>performance_metric</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;acc&quot;</em><em>)</em>) – <p>Metric used to track trees performance within the ensemble.</p>
+<ul>
+<li>’acc’ - Accuracy</li>
+<li>’kappa’ - Accuracy</li>
+</ul>
+</li>
+<li><strong>drift_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a><em> or </em><em>None</em><em>,</em><em>, </em><em>optional</em><em> (</em><em>default=ADWIN</em><em>(</em><em>0.001</em><em>)</em><em>)</em>) – Drift Detection method. Set to None to disable Drift detection.</li>
+<li><strong>warning_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a><em> or </em><em>None</em><em>, </em><em>default</em><em>(</em><a class="reference internal" href="skmultiflow.drift_detection.html#skmultiflow.drift_detection.ADWIN" title="skmultiflow.drift_detection.ADWIN"><em>ADWIN</em></a><em>(</em><em>0.01</em><em>)</em><em>)</em>) – Warning Detection method. Set to None to disable warning detection.</li>
+<li><strong>max_byte_size</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=33554432</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+Maximum memory consumed by the tree.</li>
+<li><strong>memory_estimate_period</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=2000000</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+Number of instances between memory consumption checks.</li>
+<li><strong>grace_period</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=50</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+Number of instances a leaf should observe between split attempts.</li>
+<li><strong>split_criterion</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='info_gain'</em><em>)</em>) – <p>(<cite>ARFHoeffdingTree</cite> parameter)
+Split criterion to use.</p>
+<ul>
+<li>’gini’ - Gini</li>
+<li>’info_gain’ - Information Gain</li>
+</ul>
+</li>
+<li><strong>split_confidence</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.01</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+Allowed error in split decision, a value closer to 0 takes longer to decide.</li>
+<li><strong>tie_threshold</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.05</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+Threshold below which a split will be forced to break ties.</li>
+<li><strong>binary_split</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+If True, only allow binary splits.</li>
+<li><strong>stop_mem_management</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+If True, stop growing as soon as memory limit is hit.</li>
+<li><strong>remove_poor_atts</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+If True, disable poor attributes.</li>
+<li><strong>no_preprune</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+If True, disable pre-pruning.</li>
+<li><strong>leaf_prediction</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='nba'</em><em>)</em>) – <p>(<cite>ARFHoeffdingTree</cite> parameter)
+Prediction mechanism used at leafs.</p>
+<ul>
+<li>’mc’ - Majority Class</li>
+<li>’nb’ - Naive Bayes</li>
+<li>’nba’ - Naive Bayes Adaptive</li>
+</ul>
+</li>
+<li><strong>nb_threshold</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+Number of instances a leaf should observe before allowing Naive Bayes.</li>
+<li><strong>nominal_attributes</strong> (<em>list</em><em>, </em><em>optional</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
+List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The 3 most important aspects of Adaptive Random Forest <a class="footnote-reference" href="#id2" id="id1">[1]</a> are:
+(1) inducing diversity through re-sampling;
+(2) inducing diversity through randomly selecting subsets of features for node splits (see
+skmultiflow.classification.trees.arf_hoeffding_tree);
+(3) drift detectors per base tree, which cause selective resets in response to drifts.
+It also allows training background trees, which start training if a warning is detected and replace the active
+tree if the warning escalates to a drift.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Heitor Murilo Gomes, Albert Bifet, Jesse Read, Jean Paul Barddal, Fabricio Enembreck,
+Bernhard Pfharinger, Geoff Holmes, Talel Abdessalem.
+Adaptive random forests for evolving data stream classification.
+In Machine Learning, DOI: 10.1007/s10994-017-5642-8, Springer, 2017.</td></tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model under the batch setting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The array of samples used to fit the model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like with the labels of all samples in X.</li>
+<li><strong>classes</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible labels. Applicability varies depending on the algorithm.</li>
+<li><strong>weight</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Instance weight. If not provided, uniform weights are assumed.
+Applicability varies depending on the algorithm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.get_votes_for_instance">
+<code class="descname">get_votes_for_instance</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.get_votes_for_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.get_votes_for_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.init_ensemble">
+<code class="descname">init_ensemble</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.init_ensemble"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.init_ensemble" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.is_randomizable">
+<em class="property">static </em><code class="descname">is_randomizable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.is_randomizable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.is_randomizable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partial (incremental) fit the model under the stream learning setting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The array of samples used to fit the model.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like with the labels of all samples in X.</li>
+<li><strong>classes</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible labels. Applicability varies depending on the algorithm.</li>
+<li><strong>weight</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Instance weight. If not provided, uniform weights are assumed.
+Applicability varies depending on the algorithm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts the label of the X instance(s)
+:param X: Samples for which we want to predict the labels.
+:type X: numpy.ndarray of shape (n_samples, n_features)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Predicted labels for all instances in X.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.predict_proba">
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>On classifiers, estimates the probability of each sample in X belonging to each of the existing labels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The matrix of samples one wants to predict.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>An array of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the same</em></li>
+<li><em>index. And where the list in index [i] contains len(self.target_values) elements, each of which represents the</em></li>
+<li><em>probability that the i-th sample of X belongs to a certain label.</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset ARF.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.score">
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.adaptive_random_forests.AdaptiveRandomForest.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the performance base metric for the model in its current state.</p>
+<p class="rubric">Notes</p>
+<p>This function isn’t natively implemented on all models.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_sample</em><em>, </em><em>n_features</em><em>)</em>) – The features matrix.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the targets for all samples in X.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The model’s score.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.meta.batch_incremental.html" class="btn btn-neutral float-right" title="skmultiflow.meta.batch_incremental module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.meta.html" class="btn btn-neutral" title="skmultiflow.meta package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
