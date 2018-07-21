@@ -221,7 +221,7 @@
 <span id="skmultiflow-meta-leverage-bagging-module"></span><h1>skmultiflow.meta.leverage_bagging module<a class="headerlink" href="#module-skmultiflow.meta.leverage_bagging" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.meta.leverage_bagging.LeverageBagging">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.leverage_bagging.</code><code class="descname">LeverageBagging</code><span class="sig-paren">(</span><em>h=&lt;skmultiflow.lazy.knn.KNN object&gt;</em>, <em>ensemble_length=2</em>, <em>w=6</em>, <em>delta=0.002</em>, <em>enable_code_matrix=False</em>, <em>leverage_algorithm='leveraging_bag'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.leverage_bagging.LeverageBagging" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.leverage_bagging.</code><code class="descname">LeverageBagging</code><span class="sig-paren">(</span><em>base_estimator=&lt;skmultiflow.lazy.knn.KNN object&gt;</em>, <em>n_estimators=2</em>, <em>w=6</em>, <em>delta=0.002</em>, <em>enable_code_matrix=False</em>, <em>leverage_algorithm='leveraging_bag'</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.leverage_bagging.LeverageBagging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>Leverage Bagging Classifier</p>
 <p>An ensemble method, which represents an improvement from the online Oza
@@ -247,9 +247,9 @@ ensemble’s classifier, which is done by comparing the adwins’ window sizes.<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h</strong> (<em>classifier</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble classifier type, each ensemble classifier is going
-to be a copy of the h classifier.</li>
-<li><strong>ensemble_length</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a>) – This is the ensemble classifier type, each ensemble classifier will be a
+copy of the base_estimator.</li>
+<li><strong>n_estimators</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
 <li><strong>w</strong> (<em>int</em>) – The poisson distribution’s parameter, which is used to simulate
 re-sampling.</li>
 <li><strong>delta</strong> (<em>float</em>) – The delta parameter for the ADWIN change detector.</li>
@@ -257,6 +257,9 @@ re-sampling.</li>
 <li><strong>leverage_algorithm</strong> (<em>string</em>) – A string representing the bagging algorithm to use. Can be one of the
 following: ‘leveraging_bag’, ‘leveraging_bag_me’, ‘leveraging_bag_half’,
 ‘leveraging_bag_wt’, ‘leveraging_subag’</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
 </ul>
 </td>
 </tr>
@@ -271,7 +274,7 @@ following: ‘leveraging_bag’, ‘leveraging_bag_me’, ‘leveraging_bag_half
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>To choose the correct ensemble_length (a value too high or too low may
+<p>To choose the correct n_estimators (a value too high or too low may
 deteriorate performance) there are different techniques. One of them is
 called ‘The law of diminishing returns in ensemble construction’ by Bonab
 and Can. This theoretical framework claims, with experimental results, that
@@ -287,7 +290,7 @@ value of 2, adapted to binary classification tasks.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">6.7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the LeverageBagging classifier to work with KNN classifiers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">LeverageBagging</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">ensemble_length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">LeverageBagging</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Keeping track of sample count and correct prediction count</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
@@ -453,8 +456,8 @@ then taking the absolute probability from the ensemble itself.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li>ValueError: A ValueError is raised if the number of classes in the h</li>
-<li>learner differs from that of the ensemble learner.</li>
+<li>ValueError: A ValueError is raised if the number of classes in the base</li>
+<li>learner exceed that of the ensemble learner.</li>
 </ul>
 </td>
 </tr>
@@ -474,8 +477,7 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 <dl class="method">
 <dt id="skmultiflow.meta.leverage_bagging.LeverageBagging.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.leverage_bagging.LeverageBagging.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets all the classifiers, as well as all the ADWIN change
-detectors.</p>
+<dd><p>Resets all the estimators, as well as all the ADWIN change detectors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

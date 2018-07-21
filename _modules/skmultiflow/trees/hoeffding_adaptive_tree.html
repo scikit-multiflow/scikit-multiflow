@@ -676,23 +676,7 @@
                     <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>  <span class="c1"># add elements to dictionary</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-    <span class="c1"># Override HoeffdingTree/BaseClassifier</span>
-<div class="viewcode-block" id="HAT.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_adaptive_tree.html#skmultiflow.trees.HAT.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="n">r</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="n">votes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_votes_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">votes</span> <span class="o">==</span> <span class="p">{}:</span>
-                <span class="c1"># Tree is empty, all classes equal, default to zero</span>
-                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">votes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">votes</span><span class="o">.</span><span class="n">get</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">predictions</span></div>
-
 <div class="viewcode-block" id="HAT.score"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_adaptive_tree.html#skmultiflow.trees.HAT.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
-
-<div class="viewcode-block" id="HAT.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_adaptive_tree.html#skmultiflow.trees.HAT.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
     <span class="c1"># Override HoeffdingTree</span>

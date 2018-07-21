@@ -221,7 +221,7 @@
 <span id="skmultiflow-lazy-knn-adwin-module"></span><h1>skmultiflow.lazy.knn_adwin module<a class="headerlink" href="#module-skmultiflow.lazy.knn_adwin" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.lazy.knn_adwin.KNNAdwin">
-<em class="property">class </em><code class="descclassname">skmultiflow.lazy.knn_adwin.</code><code class="descname">KNNAdwin</code><span class="sig-paren">(</span><em>k=5</em>, <em>max_window_size=9223372036854775807</em>, <em>leaf_size=30</em>, <em>categorical_list=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn_adwin.html#KNNAdwin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.knn_adwin.KNNAdwin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.lazy.knn_adwin.</code><code class="descname">KNNAdwin</code><span class="sig-paren">(</span><em>n_neighbors=5</em>, <em>max_window_size=9223372036854775807</em>, <em>leaf_size=30</em>, <em>categorical_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn_adwin.html#KNNAdwin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.knn_adwin.KNNAdwin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.lazy.knn.html#skmultiflow.lazy.knn.KNN" title="skmultiflow.lazy.knn.KNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.lazy.knn.KNN</span></code></a></p>
 <p>K-Nearest Neighbors Classifier with ADWIN Change detector</p>
 <p>This Classifier is an improvement from the regular KNN classifier,
@@ -239,7 +239,7 @@ at each partial_fit call.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>k</strong> (<em>int</em>) – The number of nearest neighbors to search for.</li>
+<li><strong>n_neighbors</strong> (<em>int</em>) – The number of nearest neighbors to search for.</li>
 <li><strong>max_window_size</strong> (<em>int</em>) – The maximum size of the window storing the last viewed samples.</li>
 <li><strong>leaf_size</strong> (<em>int</em>) – The maximum number of samples that can be stored in one leaf node,
 which determines from which point the algorithm will switch for a
@@ -263,13 +263,12 @@ further filtering.</li>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn_adwin</span> <span class="k">import</span> <span class="n">KNNAdwin</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s1">&#39;skmultiflow/data/datasets/covtype.csv&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s1">&#39;skmultiflow/data/datasets/covtype.csv&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the KNNAdwin classifier</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">knn_adwin</span> <span class="o">=</span> <span class="n">KNNAdwin</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">knn_adwin</span> <span class="o">=</span> <span class="n">KNNAdwin</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">knn_adwin</span> <span class="o">=</span> <span class="n">knn_adwin</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -292,6 +291,24 @@ further filtering.</li>
 <span class="go">KNNAdwin&#39;s performance: 0.7798</span>
 </pre></div>
 </div>
+<dl class="method">
+<dt id="skmultiflow.lazy.knn_adwin.KNNAdwin.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn_adwin.html#KNNAdwin.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.knn_adwin.KNNAdwin.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="skmultiflow.lazy.knn_adwin.KNNAdwin.partial_fit">
 <code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/knn_adwin.html#KNNAdwin.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.knn_adwin.KNNAdwin.partial_fit" title="Permalink to this definition">¶</a></dt>

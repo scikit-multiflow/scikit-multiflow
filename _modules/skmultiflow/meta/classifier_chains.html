@@ -206,117 +206,156 @@
   <h1>Source code for skmultiflow.meta.classifier_chains</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">SGDClassifier</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="ClassifierChain"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain">[docs]</a><span class="k">class</span> <span class="nc">ClassifierChain</span><span class="p">()</span> <span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Classifier Chain</span>
-<span class="sd">        ----------------</span>
+<div class="viewcode-block" id="ClassifierChain"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain">[docs]</a><span class="k">class</span> <span class="nc">ClassifierChain</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Classifier Chains for multi-label learning.</span>
 
-<span class="sd">        TODO: much of this can be shared with Regressor Chains, and thus </span>
-<span class="sd">        probably we should use some kind of base class to inherit here. </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    base_estimator: StreamModel or sklearn model</span>
+<span class="sd">        This is the ensemble classifier type, each ensemble classifier is going</span>
+<span class="sd">        to be a copy of the base_estimator.</span>
 
-<span class="sd">        Note: ScikitLearn also includes &#39;ClassifierChain&#39;. A difference is </span>
-<span class="sd">        probabilistic extensions are included here. </span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    order : str</span>
+<span class="sd">        `None` to use default order, &#39;random&#39; for random order.</span>
 
-    <span class="n">h</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">L</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">        If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">        If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">        If None, the random number generator is the RandomState instance used by `np.random`.</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; init</span>
+<span class="sd">    TODO: much of this can be shared with Regressor Chains, probably should use a base class to inherit here.</span>
 
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            h : sklearn model</span>
-<span class="sd">                The base classifier</span>
-<span class="sd">            order : str</span>
-<span class="sd">                None to use default order, &#39;random&#39; for random order.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span> <span class="o">=</span> <span class="n">h</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Classifier Chains_[1] is a popular method for multi-label learning. It exploits correlation between labels</span>
+<span class="sd">    by incrementally building binary classifiers for each label.</span>
+
+<span class="sd">    scikit-learn also includes &#39;ClassifierChain&#39;. A difference is probabilistic extensions are included here.</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Read, Jesse, Bernhard Pfahringer, Geoff Holmes, and Eibe Frank. &quot;Classifier chains for multi-label</span>
+<span class="sd">       classification.&quot; In Joint European Conference on Machine Learning and Knowledge Discovery in Databases,</span>
+<span class="sd">       pp. 254-269. Springer, Berlin, Heidelberg, 2009.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span> <span class="o">=</span> <span class="n">base_estimator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ClassifierChain.fit"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; fit</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot; fit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span>
         <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">==</span> <span class="s1">&#39;random&#39;</span><span class="p">:</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">)</span>
 
         <span class="c1"># Set the chain order</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">]</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">]</span>
 
         <span class="c1"># Train</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">)]</span>
         <span class="n">XY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">XY</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
-        <span class="n">XY</span><span class="p">[:,</span><span class="n">D</span><span class="p">:]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">XY</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="n">XY</span><span class="p">[:,</span> <span class="n">D</span><span class="p">:]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">XY</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">XY</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">D</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="ClassifierChain.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; partial_fit</span>
+        <span class="sd">&quot;&quot;&quot; partial_fit</span>
 
 <span class="sd">            N.B. Assume that fit has already been called</span>
 <span class="sd">            (i.e., this is more of an &#39;update&#39;)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># This was not the first time that the model is fit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
         <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span>
         <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="c1"># Set the chain order</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">]</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">]</span>
 
         <span class="n">XY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">XY</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
-        <span class="n">XY</span><span class="p">[:,</span><span class="n">D</span><span class="p">:]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">XY</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="n">XY</span><span class="p">[:,</span> <span class="n">D</span><span class="p">:]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">XY</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">XY</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">D</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="ClassifierChain.predict"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; predict</span>
+        <span class="sd">&quot;&quot;&quot; predict</span>
 
 <span class="sd">            Returns predictions for X</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">j</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-            <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
         <span class="c1"># Unset the chain order (back to default)</span>
-        <span class="k">return</span> <span class="n">Y</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">)]</span></div>
+        <span class="k">return</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">)]</span></div>
 
 <div class="viewcode-block" id="ClassifierChain.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; predict_proba</span>
+        <span class="sd">&quot;&quot;&quot; predict_proba</span>
 
-<span class="sd">            Returns marginals [P(y_1=1|x),...,P(y_L=1|x,y_1,...,y_{L-1})] </span>
-<span class="sd">            i.e., confidence predictionss given inputs, for each instance.</span>
+<span class="sd">            Returns marginals [P(y_1=1|x),...,P(y_L=1|x,y_1,...,y_{L-1})]</span>
+<span class="sd">            i.e., confidence predictions given inputs, for each instance.</span>
 
 <span class="sd">            N.B. This function suitable for multi-label (binary) data</span>
-<span class="sd">                 only at the moment (may give index-out-of-bounds error if </span>
+<span class="sd">                 only at the moment (may give index-out-of-bounds error if</span>
 <span class="sd">                 uni- or multi-target (of &gt; 2 values) data is used in training).</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">j</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-            <span class="n">Y</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">Y</span></div></div>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Y</span></div>
+
+<div class="viewcode-block" id="ClassifierChain.score"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="ClassifierChain.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ClassifierChain.get_info"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ClassifierChain Classifier:&#39;</span> \
+               <span class="s1">&#39; - base_estimator: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - order: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - random_state: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="P"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.P">[docs]</a><span class="k">def</span> <span class="nf">P</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">payoff</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Payoff function, P(Y=y|X=x)</span>
+    <span class="sd">&quot;&quot;&quot; Payoff function, P(Y=y|X=x)</span>
 
 <span class="sd">        What payoff do we get for predicting y | x, under model cc.</span>
 
@@ -330,7 +369,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        A single number; the payoff of predicting y | x.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">D</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
@@ -338,19 +377,36 @@
     <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="n">L</span><span class="p">)</span>
     <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
-        <span class="n">P_j</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># e.g., [0.9, 0.1] wrt 0, 1</span>
-        <span class="n">xy</span><span class="p">[</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>                                            <span class="c1"># e.g., 1</span>
-        <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_j</span><span class="p">[</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>                                          <span class="c1"># e.g., 0.1</span>
-                                                                  <span class="c1">#   or, y[j] = 0 is predicted with probability p[j] = 0.9</span>
+        <span class="n">P_j</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># e.g., [0.9, 0.1] wrt 0, 1</span>
+        <span class="n">xy</span><span class="p">[</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>                                           <span class="c1"># e.g., 1</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_j</span><span class="p">[</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>                                         <span class="c1"># e.g., 0.1</span>
+                                                                 <span class="c1"># or, y[j] = 0 is predicted with probability p[j] = 0.9</span>
     <span class="k">return</span> <span class="n">payoff</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
 
+
 <div class="viewcode-block" id="ProbabilisticClassifierChain"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ProbabilisticClassifierChain">[docs]</a><span class="k">class</span> <span class="nc">ProbabilisticClassifierChain</span><span class="p">(</span><span class="n">ClassifierChain</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Probabilistic Classifier Chains (PCC)</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot; Probabilistic Classifier Chains (PCC)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    base_estimator: StreamModel or sklearn model</span>
+<span class="sd">        This is the ensemble classifier type, each ensemble classifier is going</span>
+<span class="sd">        to be a copy of the base_estimator.</span>
+
+<span class="sd">    order : str</span>
+<span class="sd">        `None` to use default order, &#39;random&#39; for random order.</span>
+
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">        If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">        If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">        If None, the random number generator is the RandomState instance used by `np.random`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">base_estimator</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ProbabilisticClassifierChain.predict"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ProbabilisticClassifierChain.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Predict</span>
+        <span class="sd">&quot;&quot;&quot; Predict</span>
 
 <span class="sd">            Explores all possible branches of the probability tree.</span>
 <span class="sd">            (i.e., all possible 2^L label combinations).</span>
@@ -358,9 +414,9 @@
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            Predictions Y.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">Yp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">Yp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
 
         <span class="c1"># for each instance</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
@@ -368,45 +424,62 @@
             <span class="c1"># for each and every possible label combination</span>
             <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
                 <span class="c1"># put together a label vector</span>
-                <span class="n">y_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))))</span>
+                <span class="n">y_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))))</span>
                 <span class="c1"># ... and gauge a probability for it (given x)</span>
-                <span class="n">w_</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">w_</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span>
                 <span class="c1"># if it performs well, keep it, and record the max</span>
                 <span class="k">if</span> <span class="n">w_</span> <span class="o">&gt;</span> <span class="n">w_max</span><span class="p">:</span>
-                    <span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">y_</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">y_</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                     <span class="n">w_max</span> <span class="o">=</span> <span class="n">w_</span>
 
-        <span class="k">return</span> <span class="n">Yp</span></div></div>
+        <span class="k">return</span> <span class="n">Yp</span></div>
+
+<div class="viewcode-block" id="ProbabilisticClassifierChain.get_info"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ProbabilisticClassifierChain.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ProbabilisticClassifierChain Classifier:&#39;</span> \
+               <span class="s1">&#39; - base_estimator: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - order: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - random_state: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="MCC"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.MCC">[docs]</a><span class="k">class</span> <span class="nc">MCC</span><span class="p">(</span><span class="n">ProbabilisticClassifierChain</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Monte Carlo Sampling Classifier Chains</span>
-<span class="sd">        </span>
+    <span class="sd">&quot;&quot;&quot; Monte Carlo Sampling Classifier Chains</span>
+
 <span class="sd">        PCC, using Monte Carlo sampling, published as &#39;MCC&#39;.</span>
 
 <span class="sd">        M samples are taken from the posterior distribution. Therefore we need</span>
-<span class="sd">        a probabilistic interpretation of the output, and thus, this is a </span>
+<span class="sd">        a probabilistic interpretation of the output, and thus, this is a</span>
 <span class="sd">        particular variety of ProbabilisticClassifierChain.</span>
 
 <span class="sd">        N.B. Multi-label (binary) only at this moment.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">M</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    base_estimator: StreamModel or sklearn model</span>
+<span class="sd">        This is the ensemble classifier type, each ensemble classifier is going</span>
+<span class="sd">        to be a copy of the base_estimator.</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">M</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Do M iterations, unless overridded by M at predict()tion time &#39;&#39;&#39;</span>
-        <span class="n">ClassifierChain</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
+<span class="sd">    M: int</span>
+<span class="sd">        Number of samples to take from the posterior distribution.</span>
+
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">        If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">        If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">        If None, the random number generator is the RandomState instance used by `np.random`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">M</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Do M iterations, unless overridden by M at prediction time</span>
+        <span class="n">ClassifierChain</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_estimator</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
 
 <div class="viewcode-block" id="MCC.sample"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.MCC.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Sample y ~ P(y|x)</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
 <span class="sd">            y: a sampled label vector</span>
 <span class="sd">            p: the associated probabilities, i.e., p(y_j=1)=p_j</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">D</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
@@ -415,16 +488,16 @@
         <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">):</span>
-            <span class="n">P_j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">y_j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">P_j</span><span class="p">)</span>
+            <span class="n">P_j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">D</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y_j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">P_j</span><span class="p">)</span>
             <span class="n">xy</span><span class="p">[</span><span class="n">D</span><span class="o">+</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_j</span>
             <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_j</span>
             <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_j</span><span class="p">[</span><span class="n">y_j</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">p</span></div>
 
-<div class="viewcode-block" id="MCC.predict"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.MCC.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Predict</span>
+<div class="viewcode-block" id="MCC.predict"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.MCC.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Predict</span>
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
@@ -432,30 +505,33 @@
 <span class="sd">            M: Number of sampling iterations</span>
 
 <span class="sd">            -------</span>
-<span class="sd">            NB: quite similar to PCC&#39;s predict function.</span>
-<span class="sd">            Depending on the implementation, y_max, w_max may be initially set to 0, </span>
+<span class="sd">            Notes</span>
+<span class="sd">            -----</span>
+<span class="sd">            Quite similar to `PCC.predict()` function.</span>
+
+<span class="sd">            Depending on the implementation, y_max, w_max may be initially set to 0,</span>
 <span class="sd">            if we wish to rely solely on the sampling. Setting the w_max based on a naive CC prediction</span>
 <span class="sd">            gives a good baseline to work from.</span>
 
 <span class="sd">            return predictions for X</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">Yp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">Yp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">M</span> <span class="o">==</span> <span class="s1">&#39;default&#39;</span><span class="p">:</span>
             <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span>
 
         <span class="c1"># for each instance</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
-            <span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">ClassifierChain</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-            <span class="n">w_max</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span><span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ClassifierChain</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">w_max</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span>
             <span class="c1"># for M times</span>
             <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
-                <span class="n">y_</span><span class="p">,</span> <span class="n">p_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="c1"># N.B. in fact, the calcualtion p_ is done again in P.</span>
-                <span class="n">w_</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">y_</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span><span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">y_</span><span class="p">,</span> <span class="n">p_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>  <span class="c1"># N.B. in fact, the calculation p_ is done again in P.</span>
+                <span class="n">w_</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">y_</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span>
                 <span class="c1"># if it performs well, keep it, and record the max</span>
                 <span class="k">if</span> <span class="n">w_</span> <span class="o">&gt;</span> <span class="n">w_max</span><span class="p">:</span>
-                    <span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">y_</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">Yp</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">y_</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                     <span class="n">w_max</span> <span class="o">=</span> <span class="n">w_</span>
 
         <span class="k">return</span> <span class="n">Yp</span></div></div>
@@ -463,28 +539,28 @@
 
 <div class="viewcode-block" id="demo"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.demo">[docs]</a><span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">sys</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="s1">&#39;../data&#39;</span> <span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../data&#39;</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">skmultiflow.data.synth</span> <span class="k">import</span> <span class="n">make_logical</span>
 
-    <span class="n">X</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">make_logical</span><span class="p">()</span>
-    <span class="n">N</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">make_logical</span><span class="p">()</span>
+    <span class="c1"># N, L = Y.shape</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TRUE: &quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CC&quot;</span><span class="p">)</span>
-    <span class="n">cc</span> <span class="o">=</span> <span class="n">ClassifierChain</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">))</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="n">ClassifierChain</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">))</span>
     <span class="n">cc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RCC&quot;</span><span class="p">)</span>
-    <span class="n">cc</span> <span class="o">=</span> <span class="n">ClassifierChain</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">),</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">)</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="n">ClassifierChain</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">cc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MCC&quot;</span><span class="p">)</span>
-    <span class="n">mcc</span> <span class="o">=</span> <span class="n">MCC</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">),</span><span class="n">M</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">mcc</span> <span class="o">=</span> <span class="n">MCC</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">),</span> <span class="n">M</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
     <span class="n">mcc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
     <span class="n">Yp</span> <span class="o">=</span> <span class="n">mcc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;with 50 iterations ...&quot;</span><span class="p">)</span>
@@ -494,15 +570,13 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">Yp</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PCC&quot;</span><span class="p">)</span>
-    <span class="n">pcc</span> <span class="o">=</span> <span class="n">ProbabilisticClassifierChain</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">))</span>
+    <span class="n">pcc</span> <span class="o">=</span> <span class="n">ProbabilisticClassifierChain</span><span class="p">(</span><span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">))</span>
     <span class="n">pcc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">pcc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span></div>
 
 
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">demo</span><span class="p">()</span>
-
 </pre></div>
 
            </div>

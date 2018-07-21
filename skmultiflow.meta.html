@@ -237,7 +237,7 @@
 <p>The <a class="reference internal" href="#module-skmultiflow.meta" title="skmultiflow.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.meta</span></code></a> module includes meta learning methods.</p>
 <dl class="class">
 <dt id="skmultiflow.meta.AdaptiveRandomForest">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">AdaptiveRandomForest</code><span class="sig-paren">(</span><em>nb_ensemble=10</em>, <em>max_features='auto'</em>, <em>disable_weighted_vote=False</em>, <em>lambda_value=6</em>, <em>performance_metric='acc'</em>, <em>drift_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector = &lt;skmultiflow.drift_detection.adwin.ADWIN object&gt;</em>, <em>warning_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector = &lt;skmultiflow.drift_detection.adwin.ADWIN object&gt;</em>, <em>max_byte_size=33554432</em>, <em>memory_estimate_period=2000000</em>, <em>grace_period=50</em>, <em>split_criterion='info_gain'</em>, <em>split_confidence=0.01</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>no_preprune=False</em>, <em>leaf_prediction='nba'</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AdaptiveRandomForest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">AdaptiveRandomForest</code><span class="sig-paren">(</span><em>n_estimators=10</em>, <em>max_features='auto'</em>, <em>disable_weighted_vote=False</em>, <em>lambda_value=6</em>, <em>performance_metric='acc'</em>, <em>drift_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector = &lt;skmultiflow.drift_detection.adwin.ADWIN object&gt;</em>, <em>warning_detection_method: skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector = &lt;skmultiflow.drift_detection.adwin.ADWIN object&gt;</em>, <em>max_byte_size=33554432</em>, <em>memory_estimate_period=2000000</em>, <em>grace_period=50</em>, <em>split_criterion='info_gain'</em>, <em>split_confidence=0.01</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>no_preprune=False</em>, <em>leaf_prediction='nba'</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/adaptive_random_forests.html#AdaptiveRandomForest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AdaptiveRandomForest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>Adaptive Random Forest (ARF).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -245,7 +245,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nb_ensemble</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=10</em><em>)</em>) – Number of trees oin the ensemble.</li>
+<li><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=10</em><em>)</em>) – Number of trees oin the ensemble.</li>
 <li><strong>max_features</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>string</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;auto&quot;</em><em>)</em>) – <p>Max number of attributes for each node split.</p>
 <ul>
 <li>If int, then consider <code class="docutils literal notranslate"><span class="pre">max_features</span></code> features at each split.</li>
@@ -313,7 +313,7 @@ If None, the random number generator is the RandomState instance used by <cite>n
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>The 3 most important aspects of Adaptive Random Forest <a class="footnote-reference" href="#id2" id="id1">[1]</a> are:
+<p>The 3 most important aspects of Adaptive Random Forest <a href="#id5"><span class="problematic" id="id1">[1]_</span></a> are:
 (1) inducing diversity through re-sampling;
 (2) inducing diversity through randomly selecting subsets of features for node splits (see
 skmultiflow.classification.trees.arf_hoeffding_tree);
@@ -324,7 +324,7 @@ tree if the warning escalates to a drift.</p>
 <table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Heitor Murilo Gomes, Albert Bifet, Jesse Read, Jean Paul Barddal, Fabricio Enembreck,
+<tr><td class="label">[1]</td><td>Heitor Murilo Gomes, Albert Bifet, Jesse Read, Jean Paul Barddal, Fabricio Enembreck,
 Bernhard Pfharinger, Geoff Holmes, Talel Abdessalem.
 Adaptive random forests for evolving data stream classification.
 In Machine Learning, DOI: 10.1007/s10994-017-5642-8, Springer, 2017.</td></tr>
@@ -492,7 +492,7 @@ Applicability varies depending on the algorithm.</li>
 
 <dl class="class">
 <dt id="skmultiflow.meta.BatchIncremental">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">BatchIncremental</code><span class="sig-paren">(</span><em>h=&lt;class 'sklearn.tree.tree.DecisionTreeClassifier'&gt;</em>, <em>window_size=100</em>, <em>ensemble_length=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/batch_incremental.html#BatchIncremental"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.BatchIncremental" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">BatchIncremental</code><span class="sig-paren">(</span><em>base_estimator=&lt;class 'sklearn.tree.tree.DecisionTreeClassifier'&gt;</em>, <em>window_size=100</em>, <em>n_estimators=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/batch_incremental.html#BatchIncremental"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.BatchIncremental" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>Batch Incremental.</p>
 <p>This is a wrapper that allows the application of any batch model to a
@@ -505,11 +505,10 @@ oldest model is deleted when this number is exceeded).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>h</strong> (<em>learner</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble learner type, each ensemble model is a copy of
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a>) – This is the ensemble learner type, each ensemble model is a copy of
 this one.</li>
-<li><strong>window_size</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
-<li><strong>ensemble_length</strong> (<em>int</em>) – The maximum size of the ensemble, i.e., the maximum number of
-classifiers to store at any point in time.</li>
+<li><strong>(</strong><strong>int</strong><strong>)</strong> (<em>n_estimators</em>) – The size of the training window (batch), in other words, how many instances are kept for training.</li>
+<li><strong>(</strong><strong>int</strong><strong>)</strong> – Number of estimators in the ensemble.</li>
 </ul>
 </td>
 </tr>
@@ -539,6 +538,24 @@ Applicability varies depending on the algorithm.</li>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.BatchIncremental.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/batch_incremental.html#BatchIncremental.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.BatchIncremental.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
 </tr>
 </tbody>
 </table>
@@ -614,7 +631,7 @@ Applicability varies depending on the algorithm.</li>
 
 <dl class="class">
 <dt id="skmultiflow.meta.LeverageBagging">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">LeverageBagging</code><span class="sig-paren">(</span><em>h=&lt;skmultiflow.lazy.knn.KNN object&gt;</em>, <em>ensemble_length=2</em>, <em>w=6</em>, <em>delta=0.002</em>, <em>enable_code_matrix=False</em>, <em>leverage_algorithm='leveraging_bag'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">LeverageBagging</code><span class="sig-paren">(</span><em>base_estimator=&lt;skmultiflow.lazy.knn.KNN object&gt;</em>, <em>n_estimators=2</em>, <em>w=6</em>, <em>delta=0.002</em>, <em>enable_code_matrix=False</em>, <em>leverage_algorithm='leveraging_bag'</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>Leverage Bagging Classifier</p>
 <p>An ensemble method, which represents an improvement from the online Oza
@@ -640,9 +657,9 @@ ensemble’s classifier, which is done by comparing the adwins’ window sizes.<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h</strong> (<em>classifier</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble classifier type, each ensemble classifier is going
-to be a copy of the h classifier.</li>
-<li><strong>ensemble_length</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a>) – This is the ensemble classifier type, each ensemble classifier will be a
+copy of the base_estimator.</li>
+<li><strong>n_estimators</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
 <li><strong>w</strong> (<em>int</em>) – The poisson distribution’s parameter, which is used to simulate
 re-sampling.</li>
 <li><strong>delta</strong> (<em>float</em>) – The delta parameter for the ADWIN change detector.</li>
@@ -650,6 +667,9 @@ re-sampling.</li>
 <li><strong>leverage_algorithm</strong> (<em>string</em>) – A string representing the bagging algorithm to use. Can be one of the
 following: ‘leveraging_bag’, ‘leveraging_bag_me’, ‘leveraging_bag_half’,
 ‘leveraging_bag_wt’, ‘leveraging_subag’</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
 </ul>
 </td>
 </tr>
@@ -664,7 +684,7 @@ following: ‘leveraging_bag’, ‘leveraging_bag_me’, ‘leveraging_bag_half
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>To choose the correct ensemble_length (a value too high or too low may
+<p>To choose the correct n_estimators (a value too high or too low may
 deteriorate performance) there are different techniques. One of them is
 called ‘The law of diminishing returns in ensemble construction’ by Bonab
 and Can. This theoretical framework claims, with experimental results, that
@@ -680,7 +700,7 @@ value of 2, adapted to binary classification tasks.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">6.7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the LeverageBagging classifier to work with KNN classifiers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">LeverageBagging</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">ensemble_length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">LeverageBagging</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Keeping track of sample count and correct prediction count</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
@@ -846,8 +866,8 @@ then taking the absolute probability from the ensemble itself.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li>ValueError: A ValueError is raised if the number of classes in the h</li>
-<li>learner differs from that of the ensemble learner.</li>
+<li>ValueError: A ValueError is raised if the number of classes in the base</li>
+<li>learner exceed that of the ensemble learner.</li>
 </ul>
 </td>
 </tr>
@@ -867,8 +887,7 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets all the classifiers, as well as all the ADWIN change
-detectors.</p>
+<dd><p>Resets all the estimators, as well as all the ADWIN change detectors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -911,7 +930,7 @@ detectors.</p>
 
 <dl class="class">
 <dt id="skmultiflow.meta.OzaBagging">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">OzaBagging</code><span class="sig-paren">(</span><em>h=&lt;skmultiflow.lazy.knn_adwin.KNNAdwin object&gt;</em>, <em>ensemble_length=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging.html#OzaBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">OzaBagging</code><span class="sig-paren">(</span><em>base_estimator=&lt;skmultiflow.lazy.knn_adwin.KNNAdwin object&gt;</em>, <em>n_estimators=2</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging.html#OzaBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>OzaBagging Classifier</p>
 <p>Oza Bagging is an ensemble learning method first introduced by Oza and
@@ -934,9 +953,12 @@ that to be a good ‘drawing with replacement’.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h</strong> (<em>classifier</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble classifier type, each ensemble classifier is going
-to be a copy of the h classifier.</li>
-<li><strong>ensemble_length</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a>) – This is the ensemble classifier type, each ensemble classifier is going
+to be a copy of the base_estimator.</li>
+<li><strong>n_estimators</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
 </ul>
 </td>
 </tr>
@@ -951,7 +973,7 @@ to be a copy of the h classifier.</li>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>To choose the correct ensemble_length (a value too high or too low may
+<p>To choose the correct n_estimators (a value too high or too low may
 deteriorate performance) there are different techniques. One of them is
 called ‘The law of diminishing returns in ensemble construction’ by Bonab
 and Can. This theoretical framework claims, with experimental results, that
@@ -967,13 +989,13 @@ value of 2, adapted to binary classification tasks.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">6.7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the OzaBagging classifier to work with KNN classifiers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OzaBagging</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">ensemble_length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OzaBagging</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Keeping track of sample count and correct prediction count</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">get_targets</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -1106,7 +1128,7 @@ known classes.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li>ValueError: A ValueError is raised if the number of classes in the h</li>
+<li>ValueError: A ValueError is raised if the number of classes in the base_estimator</li>
 <li>learner differs from that of the ensemble learner.</li>
 </ul>
 </td>
@@ -1170,8 +1192,8 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 
 <dl class="class">
 <dt id="skmultiflow.meta.OzaBaggingAdwin">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">OzaBaggingAdwin</code><span class="sig-paren">(</span><em>h=&lt;skmultiflow.lazy.knn_adwin.KNNAdwin object&gt;</em>, <em>ensemble_length=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">OzaBaggingAdwin</code><span class="sig-paren">(</span><em>base_estimator=&lt;skmultiflow.lazy.knn_adwin.KNNAdwin object&gt;</em>, <em>n_estimators=2</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.meta.oza_bagging.html#skmultiflow.meta.oza_bagging.OzaBagging" title="skmultiflow.meta.oza_bagging.OzaBagging"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.meta.oza_bagging.OzaBagging</span></code></a></p>
 <p>OzaBagging Classifier with ADWIN change detector</p>
 <p>This online ensemble learner method is an improvement from the Online
 Bagging algorithm described in Oza and Russel’s ‘Online Bagging and
@@ -1185,9 +1207,12 @@ perform cuts in its window to better adapt the learning algorithms.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h</strong> (<em>classifier</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble classifier type, each ensemble classifier is going
-to be a copy of the h classifier.</li>
-<li><strong>ensemble_length</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a>) – This is the ensemble classifier type, each ensemble classifier is going
+to be a copy of the base_estimator.</li>
+<li><strong>n_estimators</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
 </ul>
 </td>
 </tr>
@@ -1202,7 +1227,7 @@ to be a copy of the h classifier.</li>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>To choose the correct ensemble_length (a value too high or too low may
+<p>To choose the correct n_estimators (a value too high or too low may
 deteriorate performance) there are different techniques. One of them is
 called ‘The law of diminishing returns in ensemble construction’ by Bonab
 and Can. This theoretical framework claims, with experimental results, that
@@ -1218,13 +1243,13 @@ value of 2, adapted to binary classification tasks.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">6.7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the OzaBagginAdwin classifier to work with KNN classifiers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OzaBaggingAdwin</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">ensemble_length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OzaBaggingAdwin</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Keeping track of sample count and correct prediction count</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">get_targets</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -1241,33 +1266,6 @@ value of 2, adapted to binary classification tasks.</p>
 <span class="go">OzaBaggingAdwin classifier performance: 0.9645</span>
 </pre></div>
 </div>
-<dl class="method">
-<dt id="skmultiflow.meta.OzaBaggingAdwin.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the model under the batch setting.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The array of samples used to fit the model.</li>
-<li><strong>y</strong> (<em>Array-like</em>) – An array-like with the labels of all samples in X.</li>
-<li><strong>classes</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible labels. Applicability varies depending on the algorithm.</li>
-<li><strong>weight</strong> (<em>Array-like</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Instance weight. If not provided, uniform weights are assumed.
-Applicability varies depending on the algorithm.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="skmultiflow.meta.OzaBaggingAdwin.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin.get_info" title="Permalink to this definition">¶</a></dt>
@@ -1331,56 +1329,6 @@ for the first partial_fit call, when it becomes obligatory.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBaggingAdwin.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>The predict function will average the predictions from all its learners
-to find the most likely prediction for the sample matrix X.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – A matrix of the samples we want to predict.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list with the label prediction for all the samples in X.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.meta.OzaBaggingAdwin.predict_proba">
-<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predicts the probability of each sample belonging to each one of the
-known classes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – A matrix of the samples we want to predict.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li>ValueError: A ValueError is raised if the number of classes in the h</li>
-<li>learner differs from that of the ensemble learner.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array of shape (n_samples, n_features), in which each outer entry is
-associated with the X entry of the same index. And where the list in
-index [i] contains len(self.target_values) elements, each of which represents
-the probability that the i-th sample of X belongs to a certain label.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="skmultiflow.meta.OzaBaggingAdwin.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the model to its initial state.</p>
@@ -1396,9 +1344,110 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.meta.ClassifierChain">
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">ClassifierChain</code><span class="sig-paren">(</span><em>base_estimator=LogisticRegression(C=1.0</em>, <em>class_weight=None</em>, <em>dual=False</em>, <em>fit_intercept=True</em>, <em>intercept_scaling=1</em>, <em>max_iter=100</em>, <em>multi_class='ovr'</em>, <em>n_jobs=1</em>, <em>penalty='l2'</em>, <em>random_state=None</em>, <em>solver='liblinear'</em>, <em>tol=0.0001</em>, <em>verbose=0</em>, <em>warm_start=False)</em>, <em>order=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<p>Classifier Chains for multi-label learning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a><em> or </em><em>sklearn model</em>) – This is the ensemble classifier type, each ensemble classifier is going
+to be a copy of the base_estimator.</li>
+<li><strong>order</strong> (<em>str</em>) – <cite>None</cite> to use default order, ‘random’ for random order.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
+<li><strong>TODO</strong> (<em>much of this can be shared with Regressor Chains</em><em>, </em><em>probably should use a base class to inherit here.</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Classifier Chains_[1] is a popular method for multi-label learning. It exploits correlation between labels
+by incrementally building binary classifiers for each label.</p>
+<p>scikit-learn also includes ‘ClassifierChain’. A difference is probabilistic extensions are included here.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td>Read, Jesse, Bernhard Pfahringer, Geoff Holmes, and Eibe Frank. “Classifier chains for multi-label
+classification.” In Joint European Conference on Machine Learning and Knowledge Discovery in Databases,
+pp. 254-269. Springer, Berlin, Heidelberg, 2009.</td></tr>
+</tbody>
+</table>
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBaggingAdwin.score">
-<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging_adwin.html#OzaBaggingAdwin.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBaggingAdwin.score" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.meta.ClassifierChain.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.ClassifierChain.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.ClassifierChain.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>N.B. Assume that fit has already been called
+(i.e., this is more of an ‘update’)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.ClassifierChain.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns predictions for X</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.ClassifierChain.predict_proba">
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns marginals [P(y_1=1|x),…,P(y_L=1|x,y_1,…,y_{L-1})]
+i.e., confidence predictions given inputs, for each instance.</p>
+<dl class="docutils">
+<dt>N.B. This function suitable for multi-label (binary) data</dt>
+<dd>only at the moment (may give index-out-of-bounds error if
+uni- or multi-target (of &gt; 2 values) data is used in training).</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.ClassifierChain.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the model to its initial state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel">StreamModel</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.ClassifierChain.score">
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the performance base metric for the model in its current state.</p>
 <p class="rubric">Notes</p>
 <p>This function isn’t natively implemented on all models.</p>
@@ -1425,75 +1474,59 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="skmultiflow.meta.ClassifierChain">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">ClassifierChain</code><span class="sig-paren">(</span><em>h=LogisticRegression(C=1.0</em>, <em>class_weight=None</em>, <em>dual=False</em>, <em>fit_intercept=True</em>, <em>intercept_scaling=1</em>, <em>max_iter=100</em>, <em>multi_class='ovr'</em>, <em>n_jobs=1</em>, <em>penalty='l2'</em>, <em>random_state=None</em>, <em>solver='liblinear'</em>, <em>tol=0.0001</em>, <em>verbose=0</em>, <em>warm_start=False)</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>TODO: much of this can be shared with Regressor Chains, and thus
-probably we should use some kind of base class to inherit here.</p>
-<p>Note: ScikitLearn also includes ‘ClassifierChain’. A difference is
-probabilistic extensions are included here.</p>
-<dl class="attribute">
-<dt id="skmultiflow.meta.ClassifierChain.L">
-<code class="descname">L</code><em class="property"> = -1</em><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.L" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.meta.ClassifierChain.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.meta.ClassifierChain.h">
-<code class="descname">h</code><em class="property"> = None</em><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.h" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.meta.ClassifierChain.partial_fit">
-<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.partial_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>N.B. Assume that fit has already been called
-(i.e., this is more of an ‘update’)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.meta.ClassifierChain.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns predictions for X</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.meta.ClassifierChain.predict_proba">
-<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/classifier_chains.html#ClassifierChain.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.ClassifierChain.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns marginals [P(y_1=1|x),…,P(y_L=1|x,y_1,…,y_{L-1})]
-i.e., confidence predictionss given inputs, for each instance.</p>
-<dl class="docutils">
-<dt>N.B. This function suitable for multi-label (binary) data</dt>
-<dd>only at the moment (may give index-out-of-bounds error if
-uni- or multi-target (of &gt; 2 values) data is used in training).</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="skmultiflow.meta.RegressorChain">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">RegressorChain</code><span class="sig-paren">(</span><em>h=SGDRegressor(alpha=0.0001</em>, <em>average=False</em>, <em>epsilon=0.1</em>, <em>eta0=0.01</em>, <em>fit_intercept=True</em>, <em>l1_ratio=0.15</em>, <em>learning_rate='invscaling'</em>, <em>loss='squared_loss'</em>, <em>max_iter=None</em>, <em>n_iter=None</em>, <em>penalty='l2'</em>, <em>power_t=0.25</em>, <em>random_state=None</em>, <em>shuffle=True</em>, <em>tol=None</em>, <em>verbose=0</em>, <em>warm_start=False)</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/regressor_chains.html#RegressorChain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.RegressorChain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Regressor Chain</p>
-<p>See also: <cite>classifier_chains.py</cite></p>
-<dl class="attribute">
-<dt id="skmultiflow.meta.RegressorChain.L">
-<code class="descname">L</code><em class="property"> = -1</em><a class="headerlink" href="#skmultiflow.meta.RegressorChain.L" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">RegressorChain</code><span class="sig-paren">(</span><em>base_estimator=SGDRegressor(alpha=0.0001</em>, <em>average=False</em>, <em>epsilon=0.1</em>, <em>eta0=0.01</em>, <em>fit_intercept=True</em>, <em>l1_ratio=0.15</em>, <em>learning_rate='invscaling'</em>, <em>loss='squared_loss'</em>, <em>max_iter=None</em>, <em>n_iter=None</em>, <em>penalty='l2'</em>, <em>power_t=0.25</em>, <em>random_state=None</em>, <em>shuffle=True</em>, <em>tol=None</em>, <em>verbose=0</em>, <em>warm_start=False)</em>, <em>order=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/regressor_chains.html#RegressorChain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.RegressorChain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<p>Classifier Chains for multi-label learning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a><em> or </em><em>sklearn model</em>) – This is the ensemble classifier type, each ensemble classifier is going
+to be a copy of the base_estimator.</li>
+<li><strong>order</strong> (<em>str</em>) – <cite>None</cite> to use default order, ‘random’ for random order.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Regressor Chains are an extension of Classifier Chains_[1] for regression.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td>Read, Jesse, Bernhard Pfahringer, Geoff Holmes, and Eibe Frank. “Classifier chains for multi-label
+classification.” In Joint European Conference on Machine Learning and Knowledge Discovery in Databases,
+pp. 254-269. Springer, Berlin, Heidelberg, 2009.</td></tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="skmultiflow.meta.RegressorChain.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/regressor_chains.html#RegressorChain.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.RegressorChain.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="skmultiflow.meta.RegressorChain.h">
-<code class="descname">h</code><em class="property"> = None</em><a class="headerlink" href="#skmultiflow.meta.RegressorChain.h" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="method">
+<dt id="skmultiflow.meta.RegressorChain.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/regressor_chains.html#RegressorChain.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.RegressorChain.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.RegressorChain.partial_fit">
@@ -1508,30 +1541,73 @@ uni- or multi-target (of &gt; 2 values) data is used in training).</dd>
 <dd><p>Returns predictions for X</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="skmultiflow.meta.RegressorChain.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/regressor_chains.html#RegressorChain.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.RegressorChain.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the model to its initial state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel">StreamModel</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.RegressorChain.score">
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/regressor_chains.html#RegressorChain.score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.RegressorChain.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the performance base metric for the model in its current state.</p>
+<p class="rubric">Notes</p>
+<p>This function isn’t natively implemented on all models.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_sample</em><em>, </em><em>n_features</em><em>)</em>) – The features matrix.</li>
+<li><strong>y</strong> (<em>Array-like</em>) – An array-like containing the targets for all samples in X.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The model’s score.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="skmultiflow.meta.MultiOutputLearner">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">MultiOutputLearner</code><span class="sig-paren">(</span><em>h=SGDClassifier(alpha=0.0001</em>, <em>average=False</em>, <em>class_weight=None</em>, <em>epsilon=0.1</em>, <em>eta0=0.0</em>, <em>fit_intercept=True</em>, <em>l1_ratio=0.15</em>, <em>learning_rate='optimal'</em>, <em>loss='hinge'</em>, <em>max_iter=100</em>, <em>n_iter=None</em>, <em>n_jobs=1</em>, <em>penalty='l2'</em>, <em>power_t=0.5</em>, <em>random_state=None</em>, <em>shuffle=True</em>, <em>tol=None</em>, <em>verbose=0</em>, <em>warm_start=False)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/multi_output_learner.html#MultiOutputLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.MultiOutputLearner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">MultiOutputLearner</code><span class="sig-paren">(</span><em>base_estimator=SGDClassifier(alpha=0.0001</em>, <em>average=False</em>, <em>class_weight=None</em>, <em>epsilon=0.1</em>, <em>eta0=0.0</em>, <em>fit_intercept=True</em>, <em>l1_ratio=0.15</em>, <em>learning_rate='optimal'</em>, <em>loss='hinge'</em>, <em>max_iter=100</em>, <em>n_iter=None</em>, <em>n_jobs=1</em>, <em>penalty='l2'</em>, <em>power_t=0.5</em>, <em>random_state=None</em>, <em>shuffle=True</em>, <em>tol=None</em>, <em>verbose=0</em>, <em>warm_start=False)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/multi_output_learner.html#MultiOutputLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.MultiOutputLearner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a><em> or </em><em>sklearn model</em>) – This is the ensemble classifier type, each ensemble classifier is going
+to be a copy of the base_estimator classifier.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Use this meta learner to make single output predictors capable of learning
+a multi output problem, by applying them individually to each output. In
+the classification context, this is the “binary relevance” estimator.</p>
 <p>A Multi-Output Learner learns to predict multiple outputs for each
 instance. The outputs may either be discrete (i.e., classification),
 or continuous (i.e., regression). This class takes any base learner
 (which by default is LogisticRegression) and builds a separate model
 for each output, and will distribute each instance to each model
 for individual learning and classification.</p>
-<p>Use this meta learner to make single output predictors capable of learning
-a multi output problem, by applying them individually to each output. In
-the classification context, this is the “binary relevance” classifier.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>h</strong> (<em>classifier</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble classifier type, each ensemble classifier is going
-to be a copy of the h classifier.</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Examples</p>
 <p># Imports
 &gt;&gt;&gt; from skmultiflow.meta.multi_output_learner import MultiOutputLearner
@@ -1542,7 +1618,7 @@ to be a copy of the h classifier.</td>
 &gt;&gt;&gt; stream = FileStream(“skmultiflow/data/datasets/music.csv”, 0, 6)
 &gt;&gt;&gt; stream.prepare_for_use()
 &gt;&gt;&gt; # Setup the MultiOutputLearner using sklearn Perceptrons
-&gt;&gt;&gt; classifier = MultiOutputLearner(h=Perceptron())
+&gt;&gt;&gt; classifier = MultiOutputLearner(base_estimator=Perceptron())
 &gt;&gt;&gt; # Setup the pipeline
 &gt;&gt;&gt; pipe = Pipeline([(‘classifier’, classifier)])
 &gt;&gt;&gt; # Pre training the classifier with 150 samples
@@ -1564,11 +1640,6 @@ to be a copy of the h classifier.</td>
 &gt;&gt;&gt; perf = hamming_score(true_labels, predicts)
 &gt;&gt;&gt; print(‘Total samples analyzed: ‘ + str(count))
 &gt;&gt;&gt; print(“The classifier’s static Hamming score    : ” + str(perf))</p>
-<dl class="attribute">
-<dt id="skmultiflow.meta.MultiOutputLearner.L">
-<code class="descname">L</code><em class="property"> = -1</em><a class="headerlink" href="#skmultiflow.meta.MultiOutputLearner.L" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="skmultiflow.meta.MultiOutputLearner.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/multi_output_learner.html#MultiOutputLearner.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.MultiOutputLearner.fit" title="Permalink to this definition">¶</a></dt>
@@ -1612,11 +1683,6 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.meta.MultiOutputLearner.h">
-<code class="descname">h</code><em class="property"> = None</em><a class="headerlink" href="#skmultiflow.meta.MultiOutputLearner.h" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.MultiOutputLearner.partial_fit">

@@ -222,18 +222,18 @@
 <span class="sd">    n_neighbors : int, optional (default=5)</span>
 <span class="sd">        number of evaluated nearest neighbors.</span>
 <span class="sd">        </span>
-<span class="sd">    knnWeights: string, optional (default=&#39;distance&#39;)</span>
+<span class="sd">    weighting: string, optional (default=&#39;distance&#39;)</span>
 <span class="sd">        Type of weighting of the nearest neighbors. It must be either &#39;distance&#39; </span>
 <span class="sd">        or &#39;uniform&#39; (majority voting).</span>
 <span class="sd">         </span>
-<span class="sd">    maxSize : int, optional (default=5000)</span>
+<span class="sd">    max_window_size : int, optional (default=5000)</span>
 <span class="sd">         Maximum number of overall stored data points.</span>
 <span class="sd">         </span>
-<span class="sd">    LTMSizeProportion: float, optional (default=0.4)</span>
+<span class="sd">    ltm_size: float, optional (default=0.4)</span>
 <span class="sd">        Proportion of the overall instances that may be used for the LTM. This is </span>
 <span class="sd">        only relevant when the maximum number(maxSize) of stored instances is reached.</span>
 <span class="sd">        </span>
-<span class="sd">    STMSizeAdaption : string, optional (default=&#39;maxACCApprox&#39;)</span>
+<span class="sd">    stm_size_option : string, optional (default=&#39;maxACCApprox&#39;)</span>
 <span class="sd">        Type of STM size adaption.</span>
 <span class="sd">        &#39;maxACC&#39; calculates the Interleaved test-train error exactly for each of the </span>
 <span class="sd">        evaluated window sizes, which means it has often to be recalculated from the </span>
@@ -243,10 +243,10 @@
 <span class="sd">        adapted at all. When additionally useLTM=false, this algorithm is simply a kNN </span>
 <span class="sd">        with fixed sliding window size.</span>
 <span class="sd">        </span>
-<span class="sd">    minSTMSize : int, optional (default=50)</span>
+<span class="sd">    min_stm_size : int, optional (default=50)</span>
 <span class="sd">        Minimum STM size which is evaluated during the STM size adaption.</span>
 <span class="sd">        </span>
-<span class="sd">    useLTM : boolean, optional (default=True)</span>
+<span class="sd">    use_ltm : boolean, optional (default=True)</span>
 <span class="sd">        Specifies whether the LTM should be used at all.</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
@@ -258,7 +258,8 @@
 <span class="sd">    &gt;&gt;&gt; stream = FileStream(&quot;skmultiflow/data/datasets/movingSquares.csv&quot;, -1, 1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the classifier</span>
-<span class="sd">    &gt;&gt;&gt; classifier = SAMKNN(n_neighbors=5, knnWeights=&#39;distance&#39;, maxSize=1000, STMSizeAdaption=&#39;maxACCApprox&#39;, useLTM=False)</span>
+<span class="sd">    &gt;&gt;&gt; classifier = SAMKNN(n_neighbors=5, weighting=&#39;distance&#39;, max_window_size=1000, stm_size_option=&#39;maxACCApprox&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;                     use_ltm=False)</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the evaluator</span>
 <span class="sd">    &gt;&gt;&gt; evaluator = EvaluatePrequential(pretrain_size=0, max_samples=200000, batch_size=1, n_wait=100, max_time=1000,</span>
 <span class="sd">    &gt;&gt;&gt;                                 output_file=None, show_plot=True, metrics=[&#39;performance&#39;, &#39;kappa_t&#39;])</span>
@@ -288,26 +289,27 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">knnWeights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">maxSize</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">LTMSizeProportion</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">minSTMSize</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">STMSizeAdaption</span><span class="o">=</span><span class="s1">&#39;maxACCApprox&#39;</span><span class="p">,</span> <span class="n">useLTM</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">ltm_size</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">min_stm_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">stm_size_option</span><span class="o">=</span><span class="s1">&#39;maxACCApprox&#39;</span><span class="p">,</span> <span class="n">use_ltm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">n_neighbors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_STMSamples</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_STMLabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_LTMSamples</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_LTMLabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maxLTMSize</span> <span class="o">=</span> <span class="n">LTMSizeProportion</span> <span class="o">*</span> <span class="n">maxSize</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maxSTMSize</span> <span class="o">=</span> <span class="n">maxSize</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxLTMSize</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">minSTMSize</span> <span class="o">=</span> <span class="n">minSTMSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxLTMSize</span> <span class="o">=</span> <span class="n">ltm_size</span> <span class="o">*</span> <span class="n">max_window_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxSTMSize</span> <span class="o">=</span> <span class="n">max_window_size</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxLTMSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minSTMSize</span> <span class="o">=</span> <span class="n">min_stm_size</span>
 
-        <span class="k">if</span> <span class="n">STMSizeAdaption</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">STMDistances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">maxSize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">maxSize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">knnWeights</span> <span class="o">==</span> <span class="s1">&#39;distance&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stm_size_option</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">STMDistances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">max_window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">weighting</span> <span class="o">==</span> <span class="s1">&#39;distance&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">getLabelsFct</span> <span class="o">=</span> <span class="n">SAMKNN</span><span class="o">.</span><span class="n">get_distance_weighted_label</span>
-        <span class="k">elif</span> <span class="n">knnWeights</span> <span class="o">==</span> <span class="s1">&#39;uniform&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">weighting</span> <span class="o">==</span> <span class="s1">&#39;uniform&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">getLabelsFct</span> <span class="o">=</span> <span class="n">SAMKNN</span><span class="o">.</span><span class="n">get_maj_label</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">STMSizeAdaption</span> <span class="o">=</span> <span class="n">STMSizeAdaption</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">useLTM</span> <span class="o">=</span> <span class="n">useLTM</span>
-        <span class="k">if</span> <span class="n">useLTM</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STMSizeAdaption</span> <span class="o">=</span> <span class="n">stm_size_option</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">useLTM</span> <span class="o">=</span> <span class="n">use_ltm</span>
+        <span class="k">if</span> <span class="n">use_ltm</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">predictFct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predict_by_all_memories</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sizeCheckFct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_check_STMLTM</span>
         <span class="k">else</span><span class="p">:</span>
@@ -336,7 +338,8 @@
         <span class="k">return</span> <span class="n">libNearestNeighbor</span><span class="o">.</span><span class="n">get1ToNDistances</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SAMKNN.cluster_down"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.cluster_down">[docs]</a>    <span class="k">def</span> <span class="nf">cluster_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Performs classwise kMeans++ clustering for given samples with corresponding labels. The number of samples is halved per class.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Performs classwise kMeans++ clustering for given samples with corresponding labels.</span>
+<span class="sd">        The number of samples is halved per class.&quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;cluster Down </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainStepCount</span><span class="p">)</span>
         <span class="n">uniqueLabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
         <span class="n">newSamples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>

@@ -241,8 +241,8 @@
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
 <span class="sd">    &gt;&gt;&gt; file_stream = FileStream(&quot;skmultiflow/data/datasets/covtype.csv&quot;, -1, 1)</span>
 <span class="sd">    &gt;&gt;&gt; file_stream.prepare_for_use()</span>
-<span class="sd">    &gt;&gt;&gt; clf = KNN(k=8, max_window_size=2000, leaf_size=40)</span>
-<span class="sd">    &gt;&gt;&gt; # Initially we need to partial_fit at least k=8 samples</span>
+<span class="sd">    &gt;&gt;&gt; clf = KNN(n_neighbors=8, max_window_size=2000, leaf_size=40)</span>
+<span class="sd">    &gt;&gt;&gt; # Initially we need to partial_fit at least n_neighbors=8 samples</span>
 <span class="sd">    &gt;&gt;&gt; X, y = file_stream.next_sample(8)</span>
 <span class="sd">    &gt;&gt;&gt; clf = clf.partial_fit(X, y, classes=file_stream.target_values)</span>
 <span class="sd">    &gt;&gt;&gt; predictions_buffer = FastBuffer(1000)</span>

@@ -1250,7 +1250,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        list</span>
+<span class="sd">        numpy.array</span>
 <span class="sd">            Predicted labels for all instances in X.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1258,9 +1258,9 @@
         <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">y_proba</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="n">y_proba</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">y_proba</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_proba</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">predictions</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Predicts probabilities of all label of the X instance(s)</span>
@@ -1272,7 +1272,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        list</span>
+<span class="sd">        numpy.array</span>
 <span class="sd">            Predicted the probabilities of all the labels for all instances in X.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1290,7 +1290,7 @@
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">votes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">y_proba</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_proba</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">predictions</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">get_model_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

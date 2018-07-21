@@ -221,7 +221,7 @@
 <span id="skmultiflow-meta-batch-incremental-module"></span><h1>skmultiflow.meta.batch_incremental module<a class="headerlink" href="#module-skmultiflow.meta.batch_incremental" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.meta.batch_incremental.BatchIncremental">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.batch_incremental.</code><code class="descname">BatchIncremental</code><span class="sig-paren">(</span><em>h=&lt;class 'sklearn.tree.tree.DecisionTreeClassifier'&gt;</em>, <em>window_size=100</em>, <em>ensemble_length=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/batch_incremental.html#BatchIncremental"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.batch_incremental.BatchIncremental" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.batch_incremental.</code><code class="descname">BatchIncremental</code><span class="sig-paren">(</span><em>base_estimator=&lt;class 'sklearn.tree.tree.DecisionTreeClassifier'&gt;</em>, <em>window_size=100</em>, <em>n_estimators=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/batch_incremental.html#BatchIncremental"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.batch_incremental.BatchIncremental" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>Batch Incremental.</p>
 <p>This is a wrapper that allows the application of any batch model to a
@@ -234,11 +234,10 @@ oldest model is deleted when this number is exceeded).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>h</strong> (<em>learner</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble learner type, each ensemble model is a copy of
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a>) – This is the ensemble learner type, each ensemble model is a copy of
 this one.</li>
-<li><strong>window_size</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
-<li><strong>ensemble_length</strong> (<em>int</em>) – The maximum size of the ensemble, i.e., the maximum number of
-classifiers to store at any point in time.</li>
+<li><strong>(</strong><strong>int</strong><strong>)</strong> (<em>n_estimators</em>) – The size of the training window (batch), in other words, how many instances are kept for training.</li>
+<li><strong>(</strong><strong>int</strong><strong>)</strong> – Number of estimators in the ensemble.</li>
 </ul>
 </td>
 </tr>
@@ -268,6 +267,24 @@ Applicability varies depending on the algorithm.</li>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.batch_incremental.BatchIncremental.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/batch_incremental.html#BatchIncremental.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.batch_incremental.BatchIncremental.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sum up of all important characteristics of a class.</p>
+<p>The default format of the return string is as follows:
+ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
 </tr>
 </tbody>
 </table>

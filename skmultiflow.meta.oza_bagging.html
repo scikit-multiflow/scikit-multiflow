@@ -221,7 +221,7 @@
 <span id="skmultiflow-meta-oza-bagging-module"></span><h1>skmultiflow.meta.oza_bagging module<a class="headerlink" href="#module-skmultiflow.meta.oza_bagging" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.meta.oza_bagging.OzaBagging">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.oza_bagging.</code><code class="descname">OzaBagging</code><span class="sig-paren">(</span><em>h=&lt;skmultiflow.lazy.knn_adwin.KNNAdwin object&gt;</em>, <em>ensemble_length=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging.html#OzaBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.oza_bagging.OzaBagging" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.oza_bagging.</code><code class="descname">OzaBagging</code><span class="sig-paren">(</span><em>base_estimator=&lt;skmultiflow.lazy.knn_adwin.KNNAdwin object&gt;</em>, <em>n_estimators=2</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/oza_bagging.html#OzaBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.oza_bagging.OzaBagging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>OzaBagging Classifier</p>
 <p>Oza Bagging is an ensemble learning method first introduced by Oza and
@@ -244,9 +244,12 @@ that to be a good ‘drawing with replacement’.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h</strong> (<em>classifier</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble classifier type, each ensemble classifier is going
-to be a copy of the h classifier.</li>
-<li><strong>ensemble_length</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a>) – This is the ensemble classifier type, each ensemble classifier is going
+to be a copy of the base_estimator.</li>
+<li><strong>n_estimators</strong> (<em>int</em>) – The size of the ensemble, in other words, how many classifiers to train.</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</li>
 </ul>
 </td>
 </tr>
@@ -261,7 +264,7 @@ to be a copy of the h classifier.</li>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>To choose the correct ensemble_length (a value too high or too low may
+<p>To choose the correct n_estimators (a value too high or too low may
 deteriorate performance) there are different techniques. One of them is
 called ‘The law of diminishing returns in ensemble construction’ by Bonab
 and Can. This theoretical framework claims, with experimental results, that
@@ -277,13 +280,13 @@ value of 2, adapted to binary classification tasks.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">6.7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the OzaBagging classifier to work with KNN classifiers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OzaBagging</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">ensemble_length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OzaBagging</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Keeping track of sample count and correct prediction count</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">get_targets</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -416,7 +419,7 @@ known classes.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li>ValueError: A ValueError is raised if the number of classes in the h</li>
+<li>ValueError: A ValueError is raised if the number of classes in the base_estimator</li>
 <li>learner differs from that of the ensemble learner.</li>
 </ul>
 </td>

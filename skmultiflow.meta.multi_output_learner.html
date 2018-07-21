@@ -221,26 +221,27 @@
 <span id="skmultiflow-meta-multi-output-learner-module"></span><h1>skmultiflow.meta.multi_output_learner module<a class="headerlink" href="#module-skmultiflow.meta.multi_output_learner" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.meta.multi_output_learner.MultiOutputLearner">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.multi_output_learner.</code><code class="descname">MultiOutputLearner</code><span class="sig-paren">(</span><em>h=SGDClassifier(alpha=0.0001</em>, <em>average=False</em>, <em>class_weight=None</em>, <em>epsilon=0.1</em>, <em>eta0=0.0</em>, <em>fit_intercept=True</em>, <em>l1_ratio=0.15</em>, <em>learning_rate='optimal'</em>, <em>loss='hinge'</em>, <em>max_iter=100</em>, <em>n_iter=None</em>, <em>n_jobs=1</em>, <em>penalty='l2'</em>, <em>power_t=0.5</em>, <em>random_state=None</em>, <em>shuffle=True</em>, <em>tol=None</em>, <em>verbose=0</em>, <em>warm_start=False)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/multi_output_learner.html#MultiOutputLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.multi_output_learner.MultiOutputLearner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.multi_output_learner.</code><code class="descname">MultiOutputLearner</code><span class="sig-paren">(</span><em>base_estimator=SGDClassifier(alpha=0.0001</em>, <em>average=False</em>, <em>class_weight=None</em>, <em>epsilon=0.1</em>, <em>eta0=0.0</em>, <em>fit_intercept=True</em>, <em>l1_ratio=0.15</em>, <em>learning_rate='optimal'</em>, <em>loss='hinge'</em>, <em>max_iter=100</em>, <em>n_iter=None</em>, <em>n_jobs=1</em>, <em>penalty='l2'</em>, <em>power_t=0.5</em>, <em>random_state=None</em>, <em>shuffle=True</em>, <em>tol=None</em>, <em>verbose=0</em>, <em>warm_start=False)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/multi_output_learner.html#MultiOutputLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.multi_output_learner.MultiOutputLearner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><em>StreamModel</em></a><em> or </em><em>sklearn model</em>) – This is the ensemble classifier type, each ensemble classifier is going
+to be a copy of the base_estimator classifier.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Use this meta learner to make single output predictors capable of learning
+a multi output problem, by applying them individually to each output. In
+the classification context, this is the “binary relevance” estimator.</p>
 <p>A Multi-Output Learner learns to predict multiple outputs for each
 instance. The outputs may either be discrete (i.e., classification),
 or continuous (i.e., regression). This class takes any base learner
 (which by default is LogisticRegression) and builds a separate model
 for each output, and will distribute each instance to each model
 for individual learning and classification.</p>
-<p>Use this meta learner to make single output predictors capable of learning
-a multi output problem, by applying them individually to each output. In
-the classification context, this is the “binary relevance” classifier.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>h</strong> (<em>classifier</em><em> (</em><em>extension of the BaseClassifier</em><em>)</em>) – This is the ensemble classifier type, each ensemble classifier is going
-to be a copy of the h classifier.</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Examples</p>
 <p># Imports
 &gt;&gt;&gt; from skmultiflow.meta.multi_output_learner import MultiOutputLearner
@@ -251,7 +252,7 @@ to be a copy of the h classifier.</td>
 &gt;&gt;&gt; stream = FileStream(“skmultiflow/data/datasets/music.csv”, 0, 6)
 &gt;&gt;&gt; stream.prepare_for_use()
 &gt;&gt;&gt; # Setup the MultiOutputLearner using sklearn Perceptrons
-&gt;&gt;&gt; classifier = MultiOutputLearner(h=Perceptron())
+&gt;&gt;&gt; classifier = MultiOutputLearner(base_estimator=Perceptron())
 &gt;&gt;&gt; # Setup the pipeline
 &gt;&gt;&gt; pipe = Pipeline([(‘classifier’, classifier)])
 &gt;&gt;&gt; # Pre training the classifier with 150 samples
@@ -273,11 +274,6 @@ to be a copy of the h classifier.</td>
 &gt;&gt;&gt; perf = hamming_score(true_labels, predicts)
 &gt;&gt;&gt; print(‘Total samples analyzed: ‘ + str(count))
 &gt;&gt;&gt; print(“The classifier’s static Hamming score    : ” + str(perf))</p>
-<dl class="attribute">
-<dt id="skmultiflow.meta.multi_output_learner.MultiOutputLearner.L">
-<code class="descname">L</code><em class="property"> = -1</em><a class="headerlink" href="#skmultiflow.meta.multi_output_learner.MultiOutputLearner.L" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="skmultiflow.meta.multi_output_learner.MultiOutputLearner.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/multi_output_learner.html#MultiOutputLearner.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.multi_output_learner.MultiOutputLearner.fit" title="Permalink to this definition">¶</a></dt>
@@ -321,11 +317,6 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.meta.multi_output_learner.MultiOutputLearner.h">
-<code class="descname">h</code><em class="property"> = None</em><a class="headerlink" href="#skmultiflow.meta.multi_output_learner.MultiOutputLearner.h" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.multi_output_learner.MultiOutputLearner.partial_fit">
@@ -442,11 +433,6 @@ in each of the classification tasks.</td>
 </dd></dl>
 
 </dd></dl>
-
-<dl class="function">
-<dt id="skmultiflow.meta.multi_output_learner.demo">
-<code class="descclassname">skmultiflow.meta.multi_output_learner.</code><code class="descname">demo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/multi_output_learner.html#demo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.multi_output_learner.demo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 

@@ -214,7 +214,7 @@
     <span class="sd">&quot;&quot;&quot; K-Nearest Neighbors Classifier</span>
 <span class="sd">    </span>
 <span class="sd">    This is a non-parametric classification method. The output of this</span>
-<span class="sd">    algorithm are the k closest training examples to the query sample </span>
+<span class="sd">    algorithm are the n_neighbors closest training examples to the query sample</span>
 <span class="sd">    X.</span>
 <span class="sd">    </span>
 <span class="sd">    It works by keeping track of a fixed number of training samples, in </span>
@@ -224,7 +224,7 @@
 <span class="sd">    metric.</span>
 <span class="sd">    </span>
 <span class="sd">    To store the samples, while reducing search times, we use a structure </span>
-<span class="sd">    called KD Tree (a K Dimensional Tree, for k dimensional problems). </span>
+<span class="sd">    called KD Tree (a K Dimensional Tree, for n_neighbors dimensional problems).</span>
 <span class="sd">    Although we do have our own KDTree implementation, which accepts </span>
 <span class="sd">    custom metrics, we recommend using the standard scikit-learn KDTree,  </span>
 <span class="sd">    that even though doesn&#39;t accept custom metrics, is optimized and will </span>
@@ -232,7 +232,7 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    k: int</span>
+<span class="sd">    n_neighbors: int</span>
 <span class="sd">        The number of nearest neighbors to search for.</span>
 <span class="sd">        </span>
 <span class="sd">    max_window_size: int</span>
@@ -244,7 +244,7 @@
 <span class="sd">        brute-force approach. The bigger this number the faster the tree </span>
 <span class="sd">        construction time, but the slower the query time will be.</span>
 <span class="sd">        </span>
-<span class="sd">    categorical_list: An array-like</span>
+<span class="sd">    categorical_list: array-like</span>
 <span class="sd">        Each entry is the index of a categorical feature. May be requested </span>
 <span class="sd">        further filtering.</span>
 <span class="sd">    </span>
@@ -254,7 +254,7 @@
 <span class="sd">    implemented since they have no application in this context.</span>
 <span class="sd">    </span>
 <span class="sd">    ValueError: A ValueError is raised if the predict function is called </span>
-<span class="sd">    before at least k samples have been analyzed by the algorithm.</span>
+<span class="sd">    before at least n_neighbors samples have been analyzed by the algorithm.</span>
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -277,7 +277,7 @@
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Pre training the classifier with 200 samples</span>
 <span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(200)</span>
-<span class="sd">    &gt;&gt;&gt; knn = KNN(k=8, max_window_size=2000, leaf_size=40)</span>
+<span class="sd">    &gt;&gt;&gt; knn = KNN(n_neighbors=8, max_window_size=2000, leaf_size=40)</span>
 <span class="sd">    &gt;&gt;&gt; knn.partial_fit(X, y)</span>
 <span class="sd">    &gt;&gt;&gt; # Preparing the processing of 5000 samples and correct prediction count</span>
 <span class="sd">    &gt;&gt;&gt; n_samples = 0</span>
@@ -299,9 +299,9 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">categorical_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">categorical_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">n_neighbors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span> <span class="o">=</span> <span class="n">max_window_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">InstanceWindow</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="n">max_window_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -398,7 +398,7 @@
         <span class="sd">&quot;&quot;&quot; predict</span>
 <span class="sd">        </span>
 <span class="sd">        Predicts the label of the X sample, by searching the KDTree for </span>
-<span class="sd">        the k-Nearest Neighbors.</span>
+<span class="sd">        the n_neighbors-Nearest Neighbors.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -412,11 +412,11 @@
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="n">probs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="n">preds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">proba</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]))])</span>
-        <span class="k">return</span> <span class="n">preds</span></div>
+            <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">proba</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">predictions</span></div>
 
     <span class="k">def</span> <span class="nf">_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -434,7 +434,7 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError: If there is an attempt to call this function before, </span>
-<span class="sd">        at least, k samples have been analyzed by the learner, a ValueError </span>
+<span class="sd">        at least, n_neighbors samples have been analyzed by the learner, a ValueError</span>
 <span class="sd">        is raised.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
@@ -446,24 +446,21 @@
 <span class="sd">            the probability that the i-th sample of X belongs to a certain label.</span>
 <span class="sd">         </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;KNN should be partially fitted on at least k samples before doing any prediction.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;KNN should be partially fitted on at least k samples before doing any prediction.&quot;</span><span class="p">)</span>
-        <span class="n">probs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;KNN must be partially fitted on n_neighbors samples before doing any prediction.&quot;</span><span class="p">)</span>
+        <span class="n">proba</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_targets_matrix</span><span class="p">())))</span>
 
         <span class="n">new_dist</span><span class="p">,</span> <span class="n">new_ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-
+        <span class="n">votes</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">))]</span>
             <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">new_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                <span class="n">classes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_targets_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">])]</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">probs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">new_ind</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">])</span>
+                <span class="n">votes</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_targets_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">])]</span> <span class="o">+=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_ind</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">proba</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">votes</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">probs</span></div>
+        <span class="k">return</span> <span class="n">proba</span></div>
 
     <span class="k">def</span> <span class="nf">__predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; __predict_proba</span>
@@ -487,19 +484,21 @@
 <span class="sd">        second lines.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#tree = KDTree(self.window.get_attributes_matrix(), metric=&#39;euclidean&#39;,</span>
+        <span class="c1"># tree = KDTree(self.window.get_attributes_matrix(), metric=&#39;euclidean&#39;,</span>
         <span class="c1">#              categorical_list=self.categorical_list, return_distance=True)</span>
 
         <span class="n">tree</span> <span class="o">=</span> <span class="n">sk</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_attributes_matrix</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
-        <span class="n">dist</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">dist</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dist</span><span class="p">,</span> <span class="n">ind</span>
 
 <div class="viewcode-block" id="KNN.score"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn.html#skmultiflow.lazy.KNN.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="KNN.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn.html#skmultiflow.lazy.KNN.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;KNN Classifier: max_window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span> <span class="o">+</span> \
-            <span class="s1">&#39; - leaf_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;KNN Classifier:&#39;</span> \
+               <span class="s1">&#39; - n_neighbors: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - max_window_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - leaf_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

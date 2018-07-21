@@ -205,8 +205,8 @@
             
   <h1>Source code for skmultiflow.lazy.knn_adwin</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.drift_detection.adwin</span> <span class="k">import</span> <span class="n">ADWIN</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.lazy</span> <span class="k">import</span> <span class="n">KNN</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.drift_detection</span> <span class="k">import</span> <span class="n">ADWIN</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.data_structures</span> <span class="k">import</span> <span class="n">InstanceWindow</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 
@@ -229,7 +229,7 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    k: int</span>
+<span class="sd">    n_neighbors: int</span>
 <span class="sd">        The number of nearest neighbors to search for.</span>
 <span class="sd">        </span>
 <span class="sd">    max_window_size: int</span>
@@ -257,13 +257,12 @@
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.lazy.knn_adwin import KNNAdwin</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.lazy.knn import KNN</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(&#39;skmultiflow/data/datasets/covtype.csv&#39;, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&#39;skmultiflow/data/datasets/covtype.csv&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the KNNAdwin classifier</span>
-<span class="sd">    &gt;&gt;&gt; knn_adwin = KNNAdwin(k=8, leaf_size=40, max_window_size=2000)</span>
+<span class="sd">    &gt;&gt;&gt; knn_adwin = KNNAdwin(n_neighbors=8, leaf_size=40, max_window_size=2000)</span>
 <span class="sd">    &gt;&gt;&gt; # Pre training the classifier with 200 samples</span>
 <span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(200)</span>
 <span class="sd">    &gt;&gt;&gt; knn_adwin = knn_adwin.partial_fit(X, y)</span>
@@ -287,8 +286,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">categorical_list</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="n">max_window_size</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="n">leaf_size</span><span class="p">,</span> <span class="n">categorical_list</span><span class="o">=</span><span class="n">categorical_list</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">categorical_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="n">max_window_size</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="n">leaf_size</span><span class="p">,</span>
+                         <span class="n">categorical_list</span><span class="o">=</span><span class="n">categorical_list</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -343,20 +343,26 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]]]))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]]]))</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">:</span>
                 <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]]))</span> <span class="o">==</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">add</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">:</span>
             <span class="n">changed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span><span class="o">.</span><span class="n">detected_change</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span><span class="o">.</span><span class="n">_width</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">_num_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span><span class="o">.</span><span class="n">_width</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">delete_element</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="KNNAdwin.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn_adwin.html#skmultiflow.lazy.KNNAdwin.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;KNNAdwin Classifier:&#39;</span> \
+               <span class="s1">&#39; - n_neighbors: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - max_window_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - leaf_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

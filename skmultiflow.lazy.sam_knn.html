@@ -221,7 +221,7 @@
 <span id="skmultiflow-lazy-sam-knn-module"></span><h1>skmultiflow.lazy.sam_knn module<a class="headerlink" href="#module-skmultiflow.lazy.sam_knn" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.lazy.sam_knn.SAMKNN">
-<em class="property">class </em><code class="descclassname">skmultiflow.lazy.sam_knn.</code><code class="descname">SAMKNN</code><span class="sig-paren">(</span><em>n_neighbors=5</em>, <em>knnWeights='distance'</em>, <em>maxSize=5000</em>, <em>LTMSizeProportion=0.4</em>, <em>minSTMSize=50</em>, <em>STMSizeAdaption='maxACCApprox'</em>, <em>useLTM=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.sam_knn.SAMKNN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.lazy.sam_knn.</code><code class="descname">SAMKNN</code><span class="sig-paren">(</span><em>n_neighbors=5</em>, <em>weighting='distance'</em>, <em>max_window_size=5000</em>, <em>ltm_size=0.4</em>, <em>min_stm_size=50</em>, <em>stm_size_option='maxACCApprox'</em>, <em>use_ltm=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.sam_knn.SAMKNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>SAMKNN - Self Adjusting Memory (SAM) coupled with the k Nearest Neighbor classifier.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -230,12 +230,12 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>n_neighbors</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=5</em><em>)</em>) – number of evaluated nearest neighbors.</li>
-<li><strong>knnWeights</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='distance'</em><em>)</em>) – Type of weighting of the nearest neighbors. It must be either ‘distance’
+<li><strong>weighting</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='distance'</em><em>)</em>) – Type of weighting of the nearest neighbors. It must be either ‘distance’
 or ‘uniform’ (majority voting).</li>
-<li><strong>maxSize</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=5000</em><em>)</em>) – Maximum number of overall stored data points.</li>
-<li><strong>LTMSizeProportion</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.4</em><em>)</em>) – Proportion of the overall instances that may be used for the LTM. This is
+<li><strong>max_window_size</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=5000</em><em>)</em>) – Maximum number of overall stored data points.</li>
+<li><strong>ltm_size</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.4</em><em>)</em>) – Proportion of the overall instances that may be used for the LTM. This is
 only relevant when the maximum number(maxSize) of stored instances is reached.</li>
-<li><strong>STMSizeAdaption</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='maxACCApprox'</em><em>)</em>) – Type of STM size adaption.
+<li><strong>stm_size_option</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>default='maxACCApprox'</em><em>)</em>) – Type of STM size adaption.
 ‘maxACC’ calculates the Interleaved test-train error exactly for each of the
 evaluated window sizes, which means it has often to be recalculated from the
 scratch.
@@ -243,8 +243,8 @@ scratch.
 significantly faster than the exact version. If set to None, the STM is not
 adapted at all. When additionally useLTM=false, this algorithm is simply a kNN
 with fixed sliding window size.</li>
-<li><strong>minSTMSize</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=50</em><em>)</em>) – Minimum STM size which is evaluated during the STM size adaption.</li>
-<li><strong>useLTM</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Specifies whether the LTM should be used at all.</li>
+<li><strong>min_stm_size</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=50</em><em>)</em>) – Minimum STM size which is evaluated during the STM size adaption.</li>
+<li><strong>use_ltm</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Specifies whether the LTM should be used at all.</li>
 </ul>
 </td>
 </tr>
@@ -258,7 +258,8 @@ with fixed sliding window size.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/data/datasets/movingSquares.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the classifier</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="n">SAMKNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">knnWeights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">maxSize</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">STMSizeAdaption</span><span class="o">=</span><span class="s1">&#39;maxACCApprox&#39;</span><span class="p">,</span> <span class="n">useLTM</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="n">SAMKNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">stm_size_option</span><span class="o">=</span><span class="s1">&#39;maxACCApprox&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="n">use_ltm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the evaluator</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">pretrain_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_samples</span><span class="o">=</span><span class="mi">200000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                                <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa_t&#39;</span><span class="p">])</span>
@@ -316,7 +317,8 @@ pp. 291-300. IEEE, 2016.</td></tr>
 <dl class="method">
 <dt id="skmultiflow.lazy.sam_knn.SAMKNN.cluster_down">
 <code class="descname">cluster_down</code><span class="sig-paren">(</span><em>samples</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/sam_knn.html#SAMKNN.cluster_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.sam_knn.SAMKNN.cluster_down" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs classwise kMeans++ clustering for given samples with corresponding labels. The number of samples is halved per class.</p>
+<dd><p>Performs classwise kMeans++ clustering for given samples with corresponding labels.
+The number of samples is halved per class.</p>
 </dd></dl>
 
 <dl class="method">

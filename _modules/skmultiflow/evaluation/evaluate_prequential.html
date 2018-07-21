@@ -302,7 +302,7 @@
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the classifiers</span>
 <span class="sd">    &gt;&gt;&gt; clf_one = PassiveAggressiveClassifier()</span>
-<span class="sd">    &gt;&gt;&gt; clf_two = KNNAdwin(k=8)</span>
+<span class="sd">    &gt;&gt;&gt; clf_two = KNNAdwin(n_neighbors=8)</span>
 <span class="sd">    &gt;&gt;&gt; # Setup the pipeline for clf_one</span>
 <span class="sd">    &gt;&gt;&gt; pipe = Pipeline([(&#39;Classifier&#39;, clf_one)])</span>
 <span class="sd">    &gt;&gt;&gt; # Create the list to hold both classifiers</span>
@@ -435,7 +435,11 @@
                     <span class="c1"># Test</span>
                     <span class="n">prediction</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                        <span class="n">prediction</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">prediction</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+                        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unexpected value when getting predictions from </span><span class="si">{}</span><span class="s2">&quot;</span>
+                                            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
 
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
