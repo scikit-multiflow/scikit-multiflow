@@ -235,7 +235,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="HoeffdingTree"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree">[docs]</a><span class="k">class</span> <span class="nc">HoeffdingTree</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree">[docs]</a><span class="k">class</span> <span class="nc">HoeffdingTree</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Hoeffding Tree or VFDT.</span>
 
 <span class="sd">    Parameters</span>
@@ -296,7 +296,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="HoeffdingTree.FoundNode"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.FoundNode">[docs]</a>    <span class="k">class</span> <span class="nc">FoundNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.FoundNode"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.FoundNode">[docs]</a>    <span class="k">class</span> <span class="nc">FoundNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Base class for tree nodes.</span>
 
 <span class="sd">        Parameters</span>
@@ -315,7 +315,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parent_branch</span> <span class="o">=</span> <span class="n">parent_branch</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Base class for nodes in a Hoeffding Tree.</span>
 
 <span class="sd">        Parameters</span>
@@ -331,7 +331,7 @@
                 <span class="n">class_observations</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Dictionary (class_value, weight)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span> <span class="o">=</span> <span class="n">class_observations</span>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.is_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.is_leaf">[docs]</a>        <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.is_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.is_leaf">[docs]</a>        <span class="nd">@staticmethod</span>
         <span class="k">def</span> <span class="nf">is_leaf</span><span class="p">():</span>
             <span class="sd">&quot;&quot;&quot;Determine if the node is a leaf.</span>
 
@@ -342,7 +342,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.filter_instance_to_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.filter_instance_to_leaf">[docs]</a>        <span class="k">def</span> <span class="nf">filter_instance_to_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.filter_instance_to_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.filter_instance_to_leaf">[docs]</a>        <span class="k">def</span> <span class="nf">filter_instance_to_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Travers down the tree to locate the corresponding leaf for an instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -362,7 +362,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">FoundNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.get_observed_class_distribution"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.get_observed_class_distribution">[docs]</a>        <span class="k">def</span> <span class="nf">get_observed_class_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.get_observed_class_distribution"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.get_observed_class_distribution">[docs]</a>        <span class="k">def</span> <span class="nf">get_observed_class_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the current observed class distribution at the node.</span>
 
 <span class="sd">            Returns</span>
@@ -373,7 +373,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the votes per class for a given instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -391,7 +391,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.observed_class_distribution_is_pure"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.observed_class_distribution_is_pure">[docs]</a>        <span class="k">def</span> <span class="nf">observed_class_distribution_is_pure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.observed_class_distribution_is_pure"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.observed_class_distribution_is_pure">[docs]</a>        <span class="k">def</span> <span class="nf">observed_class_distribution_is_pure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Check if observed class distribution is pure, i.e. if all samples belong to the same class.</span>
 
 <span class="sd">            Returns</span>
@@ -408,7 +408,7 @@
                         <span class="k">break</span>
             <span class="k">return</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">2</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.subtree_depth"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.subtree_depth">[docs]</a>        <span class="k">def</span> <span class="nf">subtree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.subtree_depth"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.subtree_depth">[docs]</a>        <span class="k">def</span> <span class="nf">subtree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate the depth of the subtree from this node.</span>
 
 <span class="sd">            Returns</span>
@@ -419,7 +419,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.calculate_promise"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.calculate_promise">[docs]</a>        <span class="k">def</span> <span class="nf">calculate_promise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.calculate_promise"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.calculate_promise">[docs]</a>        <span class="k">def</span> <span class="nf">calculate_promise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate node&#39;s promise.</span>
 
 <span class="sd">            Returns</span>
@@ -445,7 +445,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.calc_byte_size_including_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.calc_byte_size_including_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size_including_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.calc_byte_size_including_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.calc_byte_size_including_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size_including_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate the size of the node including its subtree.</span>
 
 <span class="sd">            Returns</span>
@@ -456,7 +456,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.Node.describe_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.describe_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">describe_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ht</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.describe_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.describe_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">describe_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ht</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Walk the tree and write its structure to a buffer string.</span>
 
 <span class="sd">            Parameters</span>
@@ -474,10 +474,10 @@
             <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;Class </span><span class="si">{}</span><span class="s1"> | </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">class_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">)</span></div>
 
         <span class="c1"># TODO</span>
-<div class="viewcode-block" id="HoeffdingTree.Node.get_description"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.get_description">[docs]</a>        <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.Node.get_description"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.Node.get_description">[docs]</a>        <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">pass</span></div></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode">[docs]</a>    <span class="k">class</span> <span class="nc">SplitNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode">[docs]</a>    <span class="k">class</span> <span class="nc">SplitNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Node that splits the data in a Hoeffding Tree.</span>
 
 <span class="sd">        Parameters</span>
@@ -496,11 +496,11 @@
             <span class="c1"># Dict of tuples (branch, child)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_children</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.num_children"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.num_children">[docs]</a>        <span class="k">def</span> <span class="nf">num_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.num_children"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.num_children">[docs]</a>        <span class="k">def</span> <span class="nf">num_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Count the number of children for a node.&quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.set_child"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.set_child">[docs]</a>        <span class="k">def</span> <span class="nf">set_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.set_child"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.set_child">[docs]</a>        <span class="k">def</span> <span class="nf">set_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Set node as child.</span>
 
 <span class="sd">            Parameters</span>
@@ -516,7 +516,7 @@
                 <span class="k">raise</span> <span class="ne">IndexError</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.get_child"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.get_child">[docs]</a>        <span class="k">def</span> <span class="nf">get_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.get_child"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.get_child">[docs]</a>        <span class="k">def</span> <span class="nf">get_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Retrieve a node&#39;s child given its branch index.</span>
 
 <span class="sd">            Parameters</span>
@@ -535,7 +535,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.instance_child_index"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.instance_child_index">[docs]</a>        <span class="k">def</span> <span class="nf">instance_child_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.instance_child_index"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.instance_child_index">[docs]</a>        <span class="k">def</span> <span class="nf">instance_child_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the branch index for a given instance at the current node.</span>
 
 <span class="sd">            Returns</span>
@@ -546,7 +546,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_test</span><span class="o">.</span><span class="n">branch_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.is_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.is_leaf">[docs]</a>        <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.is_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.is_leaf">[docs]</a>        <span class="nd">@staticmethod</span>
         <span class="k">def</span> <span class="nf">is_leaf</span><span class="p">():</span>
             <span class="sd">&quot;&quot;&quot;Determine if the node is a leaf.</span>
 
@@ -558,7 +558,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.filter_instance_to_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.filter_instance_to_leaf">[docs]</a>        <span class="k">def</span> <span class="nf">filter_instance_to_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.filter_instance_to_leaf"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.filter_instance_to_leaf">[docs]</a>        <span class="k">def</span> <span class="nf">filter_instance_to_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Travers down the tree to locate the corresponding leaf for an instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -586,7 +586,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">FoundNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.subtree_depth"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.subtree_depth">[docs]</a>        <span class="k">def</span> <span class="nf">subtree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.subtree_depth"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.subtree_depth">[docs]</a>        <span class="k">def</span> <span class="nf">subtree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate the depth of the subtree from this node.</span>
 
 <span class="sd">            Returns</span>
@@ -612,7 +612,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">)</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_split_test</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.calc_byte_size_including_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.calc_byte_size_including_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size_including_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.calc_byte_size_including_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.calc_byte_size_including_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size_including_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate the size of the node including its subtree.</span>
 
 <span class="sd">            Returns</span>
@@ -627,7 +627,7 @@
                     <span class="n">byte_size</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">calc_byte_size_including_subtree</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">byte_size</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.SplitNode.describe_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.describe_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">describe_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ht</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.describe_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.SplitNode.describe_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">describe_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ht</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Walk the tree and write its structure to a buffer string.</span>
 
 <span class="sd">            Parameters</span>
@@ -648,7 +648,7 @@
                     <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;:</span><span class="se">\n</span><span class="s1">&#39;</span>
                     <span class="n">child</span><span class="o">.</span><span class="n">describe_subtree</span><span class="p">(</span><span class="n">ht</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indent</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Base class for Learning Nodes in a Hoeffding Tree.</span>
 
 <span class="sd">        Parameters</span>
@@ -661,7 +661,7 @@
             <span class="sd">&quot;&quot;&quot; LearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -678,7 +678,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">pass</span></div></div>
 
-<div class="viewcode-block" id="HoeffdingTree.InactiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.InactiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">InactiveLearningNode</span><span class="p">(</span><span class="n">LearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.InactiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.InactiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">InactiveLearningNode</span><span class="p">(</span><span class="n">LearningNode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Inactive learning node that does not grow.</span>
 
 <span class="sd">        Parameters</span>
@@ -691,7 +691,7 @@
             <span class="sd">&quot;&quot;&quot; InactiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HoeffdingTree.InactiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.InactiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.InactiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.InactiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -711,7 +711,7 @@
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span></div></div>
 
-<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">ActiveLearningNode</span><span class="p">(</span><span class="n">LearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">ActiveLearningNode</span><span class="p">(</span><span class="n">LearningNode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Learning node that supports growth.</span>
 
 <span class="sd">        Parameters</span>
@@ -726,7 +726,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_weight_seen_at_last_split_evaluation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight_seen</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -757,7 +757,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
                 <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">weight</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.get_weight_seen"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.get_weight_seen">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.get_weight_seen"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.get_weight_seen">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate the total weight seen by the node.</span>
 
 <span class="sd">            Returns</span>
@@ -768,7 +768,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.get_weight_seen_at_last_split_evaluation"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.get_weight_seen_at_last_split_evaluation">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.get_weight_seen_at_last_split_evaluation"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.get_weight_seen_at_last_split_evaluation">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Retrieve the weight seen at last split evaluation.</span>
 
 <span class="sd">            Returns</span>
@@ -779,7 +779,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_seen_at_last_split_evaluation</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation">[docs]</a>        <span class="k">def</span> <span class="nf">set_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation">[docs]</a>        <span class="k">def</span> <span class="nf">set_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Retrieve the weight seen at last split evaluation.</span>
 
 <span class="sd">            Parameters</span>
@@ -790,7 +790,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_weight_seen_at_last_split_evaluation</span> <span class="o">=</span> <span class="n">weight</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.get_best_split_suggestions"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.get_best_split_suggestions">[docs]</a>        <span class="k">def</span> <span class="nf">get_best_split_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.get_best_split_suggestions"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.get_best_split_suggestions">[docs]</a>        <span class="k">def</span> <span class="nf">get_best_split_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Find possible split candidates.</span>
 
 <span class="sd">            Parameters</span>
@@ -820,7 +820,7 @@
                     <span class="n">best_suggestions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_suggestion</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">best_suggestions</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.disable_attribute"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.disable_attribute">[docs]</a>        <span class="k">def</span> <span class="nf">disable_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.disable_attribute"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.disable_attribute">[docs]</a>        <span class="k">def</span> <span class="nf">disable_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Disable an attribute observer.</span>
 
 <span class="sd">            Parameters</span>
@@ -832,7 +832,7 @@
             <span class="k">if</span> <span class="n">att_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">att_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">NullAttributeClassObserver</span><span class="p">()</span></div></div>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNodeNB"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNB</span><span class="p">(</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNodeNB"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNB</span><span class="p">(</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Learning node that uses Naive Bayes models.</span>
 
 <span class="sd">        Parameters</span>
@@ -845,7 +845,7 @@
             <span class="sd">&quot;&quot;&quot; LearningNodeNB class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNodeNB.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNodeNB.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the votes per class for a given instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -866,7 +866,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_class_votes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNodeNB.disable_attribute"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB.disable_attribute">[docs]</a>        <span class="k">def</span> <span class="nf">disable_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_index</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNodeNB.disable_attribute"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB.disable_attribute">[docs]</a>        <span class="k">def</span> <span class="nf">disable_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_index</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Disable an attribute observer.</span>
 
 <span class="sd">            Disabled in Nodes using Naive Bayes, since poor attributes are used in Naive Bayes calculation.</span>
@@ -879,7 +879,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">pass</span></div></div>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNodeNBAdaptive"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNBAdaptive">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNBAdaptive</span><span class="p">(</span><span class="n">LearningNodeNB</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNodeNBAdaptive"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNodeNBAdaptive">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNBAdaptive</span><span class="p">(</span><span class="n">LearningNodeNB</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Learning node that uses Adaptive Naive Bayes models.</span>
 
 <span class="sd">        Parameters</span>
@@ -894,7 +894,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_mc_correct_weight</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_nb_correct_weight</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNodeNBAdaptive.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNBAdaptive.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNodeNBAdaptive.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNodeNBAdaptive.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -920,7 +920,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_nb_correct_weight</span> <span class="o">+=</span> <span class="n">weight</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.LearningNodeNBAdaptive.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNBAdaptive.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.LearningNodeNBAdaptive.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.LearningNodeNBAdaptive.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the votes per class for a given instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -1115,7 +1115,7 @@
             <span class="n">size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree_root</span><span class="o">.</span><span class="n">calc_byte_size_including_subtree</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">size</span>
 
-<div class="viewcode-block" id="HoeffdingTree.measure_byte_size"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.measure_byte_size">[docs]</a>    <span class="k">def</span> <span class="nf">measure_byte_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.measure_byte_size"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.measure_byte_size">[docs]</a>    <span class="k">def</span> <span class="nf">measure_byte_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the size of the tree.</span>
 
 <span class="sd">        Returns</span>
@@ -1126,7 +1126,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.reset"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.reset"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reset the Hoeffding Tree to default values.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tree_root</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_decision_node_cnt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1140,10 +1140,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_remove_poor_atts</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.fit"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.fit"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Incrementally trains the model. Train samples (instances) are compossed of X attributes and their</span>
 <span class="sd">        corresponding targets y.</span>
 
@@ -1222,7 +1222,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_estimate_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">estimate_model_byte_size</span><span class="p">()</span>
 
-<div class="viewcode-block" id="HoeffdingTree.get_votes_for_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.get_votes_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_votes_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.get_votes_for_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.get_votes_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_votes_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get class votes for a single instance.</span>
 
 <span class="sd">        Parameters</span>
@@ -1244,7 +1244,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{}</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Predicts the label of the X instance(s)</span>
 
 <span class="sd">        Parameters</span>
@@ -1266,7 +1266,7 @@
             <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Predicts probabilities of all label of the X instance(s)</span>
 
 <span class="sd">        Parameters</span>
@@ -1316,7 +1316,7 @@
                         <span class="p">}</span>
         <span class="k">return</span> <span class="n">measurements</span>
 
-<div class="viewcode-block" id="HoeffdingTree.measure_tree_depth"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.measure_tree_depth">[docs]</a>    <span class="k">def</span> <span class="nf">measure_tree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.measure_tree_depth"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.measure_tree_depth">[docs]</a>    <span class="k">def</span> <span class="nf">measure_tree_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the depth of the tree.</span>
 
 <span class="sd">        Returns</span>
@@ -1339,7 +1339,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">LearningNodeNBAdaptive</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HoeffdingTree.get_model_description"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.get_model_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.get_model_description"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.get_model_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Walk the tree and return its structure in a buffer.</span>
 
 <span class="sd">        Returns</span>
@@ -1356,11 +1356,11 @@
                 <span class="n">description</span> <span class="o">+=</span> <span class="n">buffer</span><span class="p">[</span><span class="n">line</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">description</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.is_randomizable"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.is_randomizable">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="HoeffdingTree.is_randomizable"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.is_randomizable">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">is_randomizable</span><span class="p">():</span>  <span class="c1"># TODO do we need this?</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.compute_hoeffding_bound"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.compute_hoeffding_bound">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="HoeffdingTree.compute_hoeffding_bound"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.compute_hoeffding_bound">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">compute_hoeffding_bound</span><span class="p">(</span><span class="n">range_val</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the Hoeffding bound, used to decide how many samples are necessary at each node.</span>
 
@@ -1400,7 +1400,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">range_val</span> <span class="o">*</span> <span class="n">range_val</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">confidence</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.new_split_node"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.new_split_node">[docs]</a>    <span class="k">def</span> <span class="nf">new_split_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.new_split_node"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.new_split_node">[docs]</a>    <span class="k">def</span> <span class="nf">new_split_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new split node.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SplitNode</span><span class="p">(</span><span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">)</span></div>
 
@@ -1487,7 +1487,7 @@
                 <span class="c1"># Manage memory</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">enforce_tracker_limit</span><span class="p">()</span>
 
-<div class="viewcode-block" id="HoeffdingTree.enforce_tracker_limit"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.enforce_tracker_limit">[docs]</a>    <span class="k">def</span> <span class="nf">enforce_tracker_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.enforce_tracker_limit"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.enforce_tracker_limit">[docs]</a>    <span class="k">def</span> <span class="nf">enforce_tracker_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Track the size of the tree and disable/enable nodes if required.&quot;&quot;&quot;</span>
         <span class="n">byte_size</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_byte_size_estimate</span>
                      <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_byte_size_estimate</span><span class="p">)</span> \
@@ -1517,7 +1517,7 @@
                                              <span class="n">learning_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
                                              <span class="n">learning_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">parent_branch</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.estimate_model_byte_size"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.estimate_model_byte_size">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_model_byte_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.estimate_model_byte_size"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.estimate_model_byte_size">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_model_byte_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the size of the model and trigger tracker function if the actual model size exceeds the max size</span>
 <span class="sd">        in the configuration.&quot;&quot;&quot;</span>
         <span class="n">learning_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_learning_nodes</span><span class="p">()</span>
@@ -1539,7 +1539,7 @@
         <span class="k">if</span> <span class="n">actual_model_size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_byte_size</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">enforce_tracker_limit</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.deactivate_all_leaves"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.deactivate_all_leaves">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate_all_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.deactivate_all_leaves"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.deactivate_all_leaves">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate_all_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Deactivate all leaves.&quot;&quot;&quot;</span>
         <span class="n">learning_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_learning_nodes</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">learning_nodes</span><span class="p">)):</span>
@@ -1627,10 +1627,10 @@
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">split_node</span><span class="o">.</span><span class="n">num_children</span><span class="p">()):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__find_learning_nodes</span><span class="p">(</span><span class="n">split_node</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">split_node</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HoeffdingTree.score"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.score"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.get_info"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HoeffdingTree.get_info"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Collect information about the Hoeffding Tree configuration.</span>
 
 <span class="sd">        Returns</span>

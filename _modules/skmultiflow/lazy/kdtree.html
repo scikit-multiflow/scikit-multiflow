@@ -214,7 +214,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="KDTree"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree">[docs]</a><span class="k">class</span> <span class="nc">KDTree</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree">[docs]</a><span class="k">class</span> <span class="nc">KDTree</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; KD Tree</span>
 <span class="sd">    </span>
 <span class="sd">    A K dimensional tree implementation, adapted for k dimensional problems.</span>
@@ -352,7 +352,7 @@
                                <span class="n">split_axis</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">split_value</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">distance_function</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span><span class="p">,</span>
                                <span class="n">leaf_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="KDTree.query"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree.query"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Searches the tree for the k nearest neighbors of X</span>
 
 <span class="sd">        Parameters</span>
@@ -402,7 +402,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">ind_all</span></div>
 
-<div class="viewcode-block" id="KDTree.query_radius"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.query_radius">[docs]</a>    <span class="k">def</span> <span class="nf">query_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree.query_radius"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.query_radius">[docs]</a>    <span class="k">def</span> <span class="nf">query_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Radius based query</span>
 <span class="sd">        </span>
 <span class="sd">        Queries the tree based on a limited radius rather than a number of</span>
@@ -429,12 +429,12 @@
     <span class="k">def</span> <span class="nf">_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
 
-<div class="viewcode-block" id="KDTree.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;KDTree: leaf_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - metric: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - return_distance&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_distance</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="KDTree.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div></div>
 
 

@@ -216,28 +216,35 @@
 <div class="viewcode-block" id="ADWIN"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN">[docs]</a><span class="k">class</span> <span class="nc">ADWIN</span><span class="p">(</span><span class="n">BaseDriftDetector</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; ADWIN change detector for concept change detection</span>
 <span class="sd">    </span>
-<span class="sd">    ADWIN stands for Adaptive Windowing, and is an adaptive sliding window </span>
-<span class="sd">    algorithm for detecting change, and keeping updated statistics about </span>
-<span class="sd">    a data stream. Allows algorithms not adapted for drifting data, to be </span>
-<span class="sd">    more resistant to this phenomenon.</span>
-<span class="sd">    </span>
-<span class="sd">    The ADWIN algorithm is described in Bifet and Gavaldà&#39;s &#39;Learning from </span>
-<span class="sd">    Time-Changing Data with Adaptive Windowing&#39;. The general idea is to keep </span>
-<span class="sd">    statistics from a window of variable size while detecting concept drift. </span>
-<span class="sd">    </span>
-<span class="sd">    The algorithm will decide the size of the window by cutting the statistics&#39; </span>
-<span class="sd">    window at different points and analysing the average of some statistic over </span>
-<span class="sd">    these two windows. If the absolute value of the difference between the two </span>
-<span class="sd">    averages surpasses a pre-defined threshold, change is detected at that point </span>
-<span class="sd">    and all data before that time is discarded. </span>
-<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    delta : float</span>
 <span class="sd">        The delta parameter for the ADWIN algorithm.</span>
 <span class="sd">    clock : int</span>
 <span class="sd">        The base clock value for the ADWIN algorithm.</span>
-<span class="sd">        </span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ADWIN [1]_ (ADaptive WINdowing) is an adaptive sliding window algorithm</span>
+<span class="sd">    for detecting change, and keeping updated statistics about a data stream.</span>
+<span class="sd">    ADWIN allows algorithms not adapted for drifting data, to be resistant</span>
+<span class="sd">    to this phenomenon.</span>
+
+<span class="sd">    The general idea is to keep statistics from a window of variable size while</span>
+<span class="sd">    detecting concept drift.</span>
+
+<span class="sd">    The algorithm will decide the size of the window by cutting the statistics&#39;</span>
+<span class="sd">    window at different points and analysing the average of some statistic over</span>
+<span class="sd">    these two windows. If the absolute value of the difference between the two</span>
+<span class="sd">    averages surpasses a pre-defined threshold, change is detected at that point</span>
+<span class="sd">    and all data before that time is discarded.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Bifet, Albert, and Ricard Gavalda. &quot;Learning from time-changing data with adaptive windowing.&quot;</span>
+<span class="sd">       In Proceedings of the 2007 SIAM international conference on data mining, pp. 443-448.</span>
+<span class="sd">       Society for Industrial and Applied Mathematics, 2007.</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
@@ -253,20 +260,20 @@
 <span class="sd">    &gt;&gt;&gt; for i in range(2000):</span>
 <span class="sd">    ...     adwin.add_element(data_stream[i])</span>
 <span class="sd">    ...     if adwin.detected_change():</span>
-<span class="sd">    ...         print(&#39;Change has been detected in data: &#39; + str(data_stream[i]) + &#39; - of index: &#39; + str(i))</span>
+<span class="sd">    ...         print(&#39;Change detected in data: &#39; + str(data_stream[i]) + &#39; - at index: &#39; + str(i))</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">MAXBUCKETS</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">MAX_BUCKETS</span> <span class="o">=</span> <span class="mi">5</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=.</span><span class="mi">002</span><span class="p">,</span> <span class="n">clock</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=.</span><span class="mi">002</span><span class="p">,</span> <span class="n">clock</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># default values affected by init_bucket()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_bucket_row</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">VARIANCE</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variance</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_number</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__init_buckets</span><span class="p">()</span>
@@ -279,7 +286,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mdbl_width</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">detect</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_detections</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_detections</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">detect_twice</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mint_clock</span> <span class="o">=</span> <span class="mi">32</span> <span class="k">if</span> <span class="n">clock</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">clock</span>
 
@@ -326,29 +333,33 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_num_max</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span>
+    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_number_detections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_detections</span>
+    <span class="k">def</span> <span class="nf">n_detections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_detections</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span>
+    <span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">VARIANCE</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span>
+    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variance</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
+
+    <span class="nd">@estimation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_width_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">width_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdbl_width</span>
 
     <span class="k">def</span> <span class="nf">__init_buckets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -359,9 +370,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span> <span class="o">=</span> <span class="n">List</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_bucket_row</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">VARIANCE</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variance</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_number</span> <span class="o">=</span> <span class="mi">0</span>
 
 <div class="viewcode-block" id="ADWIN.add_element"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -389,16 +400,16 @@
 <span class="sd">        This function should be used at every new sample analysed.</span>
 <span class="sd">         </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__insert_element_bucket</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">_first</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__insert_element_bucket</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
         <span class="n">incremental_variance</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">incremental_variance</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> \
-                                   <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">incremental_variance</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> \
+                                   <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">VARIANCE</span> <span class="o">+=</span> <span class="n">incremental_variance</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variance</span> <span class="o">+=</span> <span class="n">incremental_variance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">+=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__compress_buckets</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__insert_element_bucket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variance</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
@@ -408,7 +419,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_number</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_num_max</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bucket_num_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_number</span>
 
-<div class="viewcode-block" id="ADWIN.bucket_size"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN.bucket_size">[docs]</a>    <span class="k">def</span> <span class="nf">bucket_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+<div class="viewcode-block" id="ADWIN.bucket_size"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN.bucket_size">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">bucket_size</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ADWIN.delete_element"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN.delete_element">[docs]</a>    <span class="k">def</span> <span class="nf">delete_element</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -422,14 +434,14 @@
 <span class="sd">            The bucket size from the updated bucket</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">_last</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">last</span>
         <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_bucket_row</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">-=</span> <span class="n">n1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">-=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_total</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">-=</span> <span class="n">n1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">-=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_total</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">u1</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_total</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">n1</span>
-        <span class="n">incremental_variance</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_variance</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">n1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span> <span class="o">*</span> <span class="p">(</span><span class="n">u1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span><span class="p">)</span> <span class="o">*</span> \
-                                                      <span class="p">(</span><span class="n">u1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">VARIANCE</span> <span class="o">-=</span> <span class="n">incremental_variance</span>
+        <span class="n">incremental_variance</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_variance</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">n1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">*</span> <span class="p">(</span><span class="n">u1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">)</span> <span class="o">*</span> \
+                               <span class="p">(</span><span class="n">u1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variance</span> <span class="o">-=</span> <span class="n">incremental_variance</span>
         <span class="n">node</span><span class="o">.</span><span class="n">remove_bucket</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_number</span> <span class="o">-=</span> <span class="mi">1</span>
 
@@ -440,16 +452,15 @@
         <span class="k">return</span> <span class="n">n1</span></div>
 
     <span class="k">def</span> <span class="nf">__compress_buckets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">next_node</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">_first</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">first</span>
         <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">cursor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">while</span> <span class="n">cursor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">k</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">bucket_size_row</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAXBUCKETS</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">next_node</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">_next</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_BUCKETS</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">next_node</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">get_next_item</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">next_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">add_to_tail</span><span class="p">()</span>
-                    <span class="n">next_node</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">_next</span>
+                    <span class="n">next_node</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">get_next_item</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">last_bucket_row</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_size</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                 <span class="n">n2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_size</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -461,12 +472,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">bucket_number</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">cursor</span><span class="o">.</span><span class="n">compress_bucket_row</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">next_node</span><span class="o">.</span><span class="n">bucket_size_row</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAXBUCKETS</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">next_node</span><span class="o">.</span><span class="n">bucket_size_row</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_BUCKETS</span><span class="p">:</span>
                     <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">break</span>
 
-            <span class="n">cursor</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">_next</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">get_next_item</span><span class="p">()</span>
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
 <div class="viewcode-block" id="ADWIN.detected_change"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN.detected_change">[docs]</a>    <span class="k">def</span> <span class="nf">detected_change</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -487,7 +498,7 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        If change was detected, one should verify the new window size, by reading </span>
-<span class="sd">        the _width property.</span>
+<span class="sd">        the width property.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bln_change</span> <span class="o">=</span> <span class="kc">False</span>
@@ -495,20 +506,20 @@
         <span class="n">bln_bucket_deleted</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mint_time</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">n0</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mint_time</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_clock</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_longitude</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mint_time</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_clock</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_longitude</span><span class="p">):</span>
             <span class="n">bln_reduce_width</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">while</span> <span class="n">bln_reduce_width</span><span class="p">:</span>
                 <span class="n">bln_reduce_width</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">bln_reduce_width</span>
                 <span class="n">bln_exit</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="n">n0</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span>
+                <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
                 <span class="n">u0</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">u1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total</span>
+                <span class="n">u1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span>
                 <span class="n">v0</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VARIANCE</span>
+                <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variance</span>
                 <span class="n">n2</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="n">u2</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">_last</span>
+                <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_row_bucket</span><span class="o">.</span><span class="n">last</span>
                 <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_bucket_row</span>
 
                 <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bln_exit</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cursor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
@@ -532,8 +543,8 @@
                             <span class="k">break</span>
 
                         <span class="n">abs_value</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="p">((</span><span class="n">u0</span><span class="o">/</span><span class="n">n0</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">u1</span><span class="o">/</span><span class="n">n1</span><span class="p">))</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="n">n1</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_length</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">n0</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_length</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__bln_cut_expression</span><span class="p">(</span><span class="n">n0</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">abs_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">n1</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_length</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">n0</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_length</span><span class="p">)</span>\
+                                <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bln_cut_expression</span><span class="p">(</span><span class="n">n0</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">abs_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)):</span>
                             <span class="n">bln_bucket_deleted</span> <span class="o">=</span> <span class="kc">True</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">detect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_time</span>
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -543,35 +554,35 @@
 
                             <span class="n">bln_reduce_width</span> <span class="o">=</span> <span class="kc">True</span>
                             <span class="n">bln_change</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                                 <span class="n">n0</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete_element</span><span class="p">()</span>
                                 <span class="n">bln_exit</span> <span class="o">=</span> <span class="kc">True</span>
                                 <span class="k">break</span>
 
-                    <span class="n">cursor</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">_previous</span>
+                    <span class="n">cursor</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">get_previous</span><span class="p">()</span>
                     <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mdbl_width</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdbl_width</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
         <span class="k">if</span> <span class="n">bln_change</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">num_detections</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_detections</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span> <span class="o">=</span> <span class="n">bln_change</span>
         <span class="k">return</span> <span class="n">bln_change</span></div>
 
     <span class="k">def</span> <span class="nf">__bln_cut_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">abs_value</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
         <span class="n">dd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">delta</span><span class="p">)</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variance</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variance</span>
         <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">n0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mint_min_window_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span><span class="n">dd</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dd</span> <span class="o">*</span> <span class="n">m</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">abs_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">)</span>
+        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">dd</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dd</span> <span class="o">*</span> <span class="n">m</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">abs_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span>
 
 <div class="viewcode-block" id="ADWIN.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;ADWIN: delta: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - clock: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mint_clock</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - total: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TOTAL</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - variance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VARIANCE</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - width: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WIDTH</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - total: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - variance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variance</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - width: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - time: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mint_time</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - num_detections: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_detections</span><span class="p">)</span></div></div>
+               <span class="s1">&#39; - n_detections: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_detections</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="List"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List">[docs]</a><span class="k">class</span> <span class="nc">List</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -579,72 +590,63 @@
 <span class="sd">    </span>
 <span class="sd">    Used for storing ADWIN&#39;s bucket list. Is composed of Item objects. </span>
 <span class="sd">    Acts as a linked list, where each element points to its predecessor </span>
-<span class="sd">    and successor. </span>
-<span class="sd">    </span>
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    _size: int </span>
-<span class="sd">        Read-only attribute to access the List&#39;s count</span>
-<span class="sd">    _first: Item object</span>
-<span class="sd">        The first bucket in the list</span>
-<span class="sd">    _last: Item object</span>
-<span class="sd">        The last bucket in the list</span>
+<span class="sd">    and successor.</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_to_head</span><span class="p">()</span>
 
 <div class="viewcode-block" id="List.reset"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="List.add_to_head"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List.add_to_head">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_head</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">first</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_first</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first</span></div>
 
 <div class="viewcode-block" id="List.remove_from_head"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List.remove_from_head">[docs]</a>    <span class="k">def</span> <span class="nf">remove_from_head</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">_next</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">set_previous</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first</span><span class="o">.</span><span class="n">get_next_item</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_first</span><span class="o">.</span><span class="n">set_previous</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">-=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="List.add_to_tail"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List.add_to_tail">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="List.remove_from_tail"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List.remove_from_tail">[docs]</a>    <span class="k">def</span> <span class="nf">remove_from_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">_previous</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">set_next</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span><span class="o">.</span><span class="n">get_previous</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last</span><span class="o">.</span><span class="n">set_next_item</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">-=</span><span class="mi">1</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">-=</span> <span class="mi">1</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">first</span>
+    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span>
+    <span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span>
 
 <div class="viewcode-block" id="List.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;List: count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s1">&#39;List: count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_count</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="List.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div></div>
@@ -672,9 +674,9 @@
         <span class="k">if</span> <span class="n">next_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">next_item</span><span class="o">.</span><span class="n">previous</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="k">if</span> <span class="n">previous_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">previous_item</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="n">previous_item</span><span class="o">.</span><span class="n">set_next_item</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_size_row</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_buckets</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="o">.</span><span class="n">MAXBUCKETS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_buckets</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="o">.</span><span class="n">MAX_BUCKETS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_buckets</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_variance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_buckets</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -689,7 +691,7 @@
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_size_row</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ADWIN</span><span class="o">.</span><span class="n">MAXBUCKETS</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ADWIN</span><span class="o">.</span><span class="n">MAX_BUCKETS</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__clear_buckets</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
@@ -708,25 +710,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">compress_bucket_row</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Item.compress_bucket_row"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.Item.compress_bucket_row">[docs]</a>    <span class="k">def</span> <span class="nf">compress_bucket_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_deleted</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_deleted</span><span class="p">,</span> <span class="n">ADWIN</span><span class="o">.</span><span class="n">MAXBUCKETS</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_deleted</span><span class="p">,</span> <span class="n">ADWIN</span><span class="o">.</span><span class="n">MAX_BUCKETS</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bucket_total</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">num_deleted</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_total</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bucket_variance</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">num_deleted</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_variance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_deleted</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__clear_buckets</span><span class="p">(</span><span class="n">ADWIN</span><span class="o">.</span><span class="n">MAXBUCKETS</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clear_buckets</span><span class="p">(</span><span class="n">ADWIN</span><span class="o">.</span><span class="n">MAX_BUCKETS</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_size_row</span> <span class="o">-=</span> <span class="n">num_deleted</span></div>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span>
+<div class="viewcode-block" id="Item.get_next_item"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.Item.get_next_item">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span></div>
 
-<div class="viewcode-block" id="Item.set_next"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.Item.set_next">[docs]</a>    <span class="k">def</span> <span class="nf">set_next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">next</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="nb">next</span></div>
+<div class="viewcode-block" id="Item.set_next_item"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.Item.set_next_item">[docs]</a>    <span class="k">def</span> <span class="nf">set_next_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">next_item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">next_item</span></div>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_previous</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous</span>
+<div class="viewcode-block" id="Item.get_previous"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.Item.get_previous">[docs]</a>    <span class="k">def</span> <span class="nf">get_previous</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous</span></div>
 
 <div class="viewcode-block" id="Item.set_previous"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.Item.set_previous">[docs]</a>    <span class="k">def</span> <span class="nf">set_previous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">previous</span> <span class="o">=</span> <span class="n">previous</span></div>

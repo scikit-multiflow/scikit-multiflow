@@ -105,6 +105,10 @@
 <li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.streams-intro.html">Using Streams in scikit-multiflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.streams-intro.html#stream-generators">Stream generators</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
@@ -224,18 +228,6 @@
 <em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.adwin.</code><code class="descname">ADWIN</code><span class="sig-paren">(</span><em>delta=0.002</em>, <em>clock=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</span></code></a></p>
 <p>ADWIN change detector for concept change detection</p>
-<p>ADWIN stands for Adaptive Windowing, and is an adaptive sliding window
-algorithm for detecting change, and keeping updated statistics about
-a data stream. Allows algorithms not adapted for drifting data, to be
-more resistant to this phenomenon.</p>
-<p>The ADWIN algorithm is described in Bifet and Gavaldà’s ‘Learning from
-Time-Changing Data with Adaptive Windowing’. The general idea is to keep
-statistics from a window of variable size while detecting concept drift.</p>
-<p>The algorithm will decide the size of the window by cutting the statistics’
-window at different points and analysing the average of some statistic over
-these two windows. If the absolute value of the difference between the two
-averages surpasses a pre-defined threshold, change is detected at that point
-and all data before that time is discarded.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -246,6 +238,27 @@ and all data before that time is discarded.</p>
 </ul>
 </td>
 </tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>ADWIN <a class="footnote-reference" href="#id2" id="id1">[1]</a> (ADaptive WINdowing) is an adaptive sliding window algorithm
+for detecting change, and keeping updated statistics about a data stream.
+ADWIN allows algorithms not adapted for drifting data, to be resistant
+to this phenomenon.</p>
+<p>The general idea is to keep statistics from a window of variable size while
+detecting concept drift.</p>
+<p>The algorithm will decide the size of the window by cutting the statistics’
+window at different points and analysing the average of some statistic over
+these two windows. If the absolute value of the difference between the two
+averages surpasses a pre-defined threshold, change is detected at that point
+and all data before that time is discarded.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Bifet, Albert, and Ricard Gavalda. “Learning from time-changing data with adaptive windowing.”
+In Proceedings of the 2007 SIAM international conference on data mining, pp. 443-448.
+Society for Industrial and Applied Mathematics, 2007.</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -262,12 +275,12 @@ and all data before that time is discarded.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">adwin</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">adwin</span><span class="o">.</span><span class="n">detected_change</span><span class="p">():</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Change has been detected in data: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; - of index: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Change detected in data: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_stream</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; - at index: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 </pre></div>
 </div>
 <dl class="attribute">
-<dt id="skmultiflow.drift_detection.adwin.ADWIN.MAXBUCKETS">
-<code class="descname">MAXBUCKETS</code><em class="property"> = 5</em><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.MAXBUCKETS" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.drift_detection.adwin.ADWIN.MAX_BUCKETS">
+<code class="descname">MAX_BUCKETS</code><em class="property"> = 5</em><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.MAX_BUCKETS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -296,9 +309,9 @@ either 0’s or 1’s, that are interpreted as follows:
 <p>This function should be used at every new sample analysed.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="skmultiflow.drift_detection.adwin.ADWIN.bucket_size">
-<code class="descname">bucket_size</code><span class="sig-paren">(</span><em>row</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN.bucket_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.bucket_size" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">bucket_size</code><span class="sig-paren">(</span><em>row</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN.bucket_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.bucket_size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -339,7 +352,7 @@ the sliding window, to verify if there is a significant change in concept.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>If change was detected, one should verify the new window size, by reading
-the _width property.</p>
+the width property.</p>
 </dd></dl>
 
 <dl class="method">
@@ -358,6 +371,11 @@ whether it’s inside the warning zone or not.</p>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.ADWIN.estimation">
+<code class="descname">estimation</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.estimation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.ADWIN.get_change">
@@ -393,6 +411,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.ADWIN.n_detections">
+<code class="descname">n_detections</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.n_detections" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.ADWIN.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.reset" title="Permalink to this definition">¶</a></dt>
@@ -418,6 +441,26 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.ADWIN.set_clock">
 <code class="descname">set_clock</code><span class="sig-paren">(</span><em>clock</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN.set_clock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.set_clock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.ADWIN.total">
+<code class="descname">total</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.total" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.ADWIN.variance">
+<code class="descname">variance</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.ADWIN.width">
+<code class="descname">width</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.ADWIN.width_t">
+<code class="descname">width_t</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.ADWIN.width_t" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -483,6 +526,16 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </dd></dl>
 
 <dl class="method">
+<dt id="skmultiflow.drift_detection.adwin.Item.get_next_item">
+<code class="descname">get_next_item</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#Item.get_next_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.Item.get_next_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.drift_detection.adwin.Item.get_previous">
+<code class="descname">get_previous</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#Item.get_previous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.Item.get_previous" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.Item.get_total">
 <code class="descname">get_total</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#Item.get_total"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.Item.get_total" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -519,8 +572,8 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.drift_detection.adwin.Item.set_next">
-<code class="descname">set_next</code><span class="sig-paren">(</span><em>next</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#Item.set_next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.Item.set_next" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.drift_detection.adwin.Item.set_next_item">
+<code class="descname">set_next_item</code><span class="sig-paren">(</span><em>next_item</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#Item.set_next_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.Item.set_next_item" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -548,24 +601,6 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <p>Used for storing ADWIN’s bucket list. Is composed of Item objects.
 Acts as a linked list, where each element points to its predecessor
 and successor.</p>
-<dl class="attribute">
-<dt id="skmultiflow.drift_detection.adwin.List._size">
-<code class="descname">_size</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List._size" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int</em> – Read-only attribute to access the List’s count</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.drift_detection.adwin.List._first">
-<code class="descname">_first</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List._first" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>Item object</em> – The first bucket in the list</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.drift_detection.adwin.List._last">
-<code class="descname">_last</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List._last" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>Item object</em> – The last bucket in the list</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.List.add_to_head">
 <code class="descname">add_to_head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#List.add_to_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List.add_to_head" title="Permalink to this definition">¶</a></dt>
@@ -574,6 +609,11 @@ and successor.</p>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.List.add_to_tail">
 <code class="descname">add_to_tail</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#List.add_to_tail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List.add_to_tail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.List.first">
+<code class="descname">first</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List.first" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -611,6 +651,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.List.last">
+<code class="descname">last</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List.last" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.List.remove_from_head">
 <code class="descname">remove_from_head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#List.remove_from_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List.remove_from_head" title="Permalink to this definition">¶</a></dt>
@@ -624,6 +669,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <dl class="method">
 <dt id="skmultiflow.drift_detection.adwin.List.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#List.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.drift_detection.adwin.List.size">
+<code class="descname">size</code><a class="headerlink" href="#skmultiflow.drift_detection.adwin.List.size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

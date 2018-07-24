@@ -222,7 +222,7 @@
 <span class="n">NAIVE_BAYES_ADAPTIVE</span> <span class="o">=</span> <span class="s1">&#39;nba&#39;</span>
 
 
-<div class="viewcode-block" id="LCHT"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT">[docs]</a><span class="k">class</span> <span class="nc">LCHT</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT">[docs]</a><span class="k">class</span> <span class="nc">LCHT</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Label Combination Hoeffding Tree</span>
 
 <span class="sd">    Label combination transforms the problem from multilabel to multiclass.</span>
@@ -314,12 +314,12 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of labels must be specified&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_labels</span> <span class="o">=</span> <span class="n">n_labels</span>
 
-<div class="viewcode-block" id="LCHT.LCActiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCActiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">LCActiveLearningNode</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCActiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCActiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">LCActiveLearningNode</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LCHT.LCActiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCActiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCActiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCActiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
 
             <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">ht</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">NAIVE_BAYES_ADAPTIVE</span><span class="p">):</span>
                 <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">y</span><span class="p">)</span>
@@ -341,13 +341,13 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
                 <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">weight</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="LCHT.LCInactiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCInactiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">LCInactiveLearningNode</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCInactiveLearningNode"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCInactiveLearningNode">[docs]</a>    <span class="k">class</span> <span class="nc">LCInactiveLearningNode</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; LCInactiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LCHT.LCInactiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCInactiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCInactiveLearningNode.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCInactiveLearningNode.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
 
             <span class="n">i</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">y</span><span class="p">)</span>
             <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -356,13 +356,13 @@
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span></div></div>
 
-<div class="viewcode-block" id="LCHT.LCLearningNodeNB"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCLearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LCLearningNodeNB</span><span class="p">(</span><span class="n">LCActiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCLearningNodeNB"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCLearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LCLearningNodeNB</span><span class="p">(</span><span class="n">LCActiveLearningNode</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; LCLearningNodeNB class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LCHT.LCLearningNodeNB.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCLearningNodeNB.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCLearningNodeNB.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCLearningNodeNB.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the votes per class for a given instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -383,7 +383,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_class_votes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LCHT.LCLearningNodeNB.disable_attribute"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCLearningNodeNB.disable_attribute">[docs]</a>        <span class="k">def</span> <span class="nf">disable_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_index</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCLearningNodeNB.disable_attribute"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCLearningNodeNB.disable_attribute">[docs]</a>        <span class="k">def</span> <span class="nf">disable_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_index</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Disable an attribute observer.</span>
 
 <span class="sd">            Disabled in Nodes using Naive Bayes, since poor attributes are used in Naive Bayes calculation.</span>
@@ -396,7 +396,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">pass</span></div></div>
 
-<div class="viewcode-block" id="LCHT.LCLearningNodeNBA"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCLearningNodeNBA">[docs]</a>    <span class="k">class</span> <span class="nc">LCLearningNodeNBA</span><span class="p">(</span><span class="n">LCLearningNodeNB</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCLearningNodeNBA"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCLearningNodeNBA">[docs]</a>    <span class="k">class</span> <span class="nc">LCLearningNodeNBA</span><span class="p">(</span><span class="n">LCLearningNodeNB</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;LCLearningNodeNBA class constructor. &quot;&quot;&quot;</span>
@@ -404,7 +404,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_mc_correct_weight</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_nb_correct_weight</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-<div class="viewcode-block" id="LCHT.LCLearningNodeNBA.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCLearningNodeNBA.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCLearningNodeNBA.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCLearningNodeNBA.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -434,7 +434,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_nb_correct_weight</span> <span class="o">+=</span> <span class="n">weight</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LCHT.LCLearningNodeNBA.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.LCLearningNodeNBA.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.LCLearningNodeNBA.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.LCLearningNodeNBA.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Get the votes per class for a given instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -454,7 +454,7 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span>
             <span class="k">return</span> <span class="n">do_naive_bayes_prediction</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="LCHT.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.lc_hoeffding_tree.html#skmultiflow.trees.LCHT.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="LCHT.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.LCHT.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Predicts the label of the X instance(s)</span>
 
 <span class="sd">        Parameters</span>

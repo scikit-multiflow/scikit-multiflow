@@ -218,7 +218,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span>
 
 
-<div class="viewcode-block" id="SAMKNN"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN">[docs]</a><span class="k">class</span> <span class="nc">SAMKNN</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN">[docs]</a><span class="k">class</span> <span class="nc">SAMKNN</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; SAMKNN - Self Adjusting Memory (SAM) coupled with the k Nearest Neighbor classifier.</span>
 
 <span class="sd">    Parameters</span>
@@ -336,12 +336,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">classifierChoice</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">predHistory</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="SAMKNN.get_distances"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.get_distances">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SAMKNN.get_distances"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.get_distances">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_distances</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">samples</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate distances from sample to all samples.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">libNearestNeighbor</span><span class="o">.</span><span class="n">get1ToNDistances</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SAMKNN.cluster_down"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.cluster_down">[docs]</a>    <span class="k">def</span> <span class="nf">cluster_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.cluster_down"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.cluster_down">[docs]</a>    <span class="k">def</span> <span class="nf">cluster_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Performs classwise kMeans++ clustering for given samples with corresponding labels.</span>
 <span class="sd">        The number of samples is halved per class.&quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;cluster Down </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainStepCount</span><span class="p">)</span>
@@ -357,7 +357,7 @@
             <span class="n">newLabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newLabels</span><span class="p">,</span> <span class="n">label</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">newLength</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">newSamples</span><span class="p">,</span> <span class="n">newLabels</span></div>
 
-<div class="viewcode-block" id="SAMKNN.size_check_fade_out"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.size_check_fade_out">[docs]</a>    <span class="k">def</span> <span class="nf">size_check_fade_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.size_check_fade_out"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.size_check_fade_out">[docs]</a>    <span class="k">def</span> <span class="nf">size_check_fade_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Makes sure that the STM does not surpass the maximum size, only used when useLTM=False.&quot;&quot;&quot;</span>
         <span class="n">STMShortened</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_STMLabels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxSTMSize</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxLTMSize</span><span class="p">:</span>
@@ -382,7 +382,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">interLeavedPredHistories</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">STMShortened</span></div>
 
-<div class="viewcode-block" id="SAMKNN.size_check_STMLTM"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.size_check_STMLTM">[docs]</a>    <span class="k">def</span> <span class="nf">size_check_STMLTM</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.size_check_STMLTM"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.size_check_STMLTM">[docs]</a>    <span class="k">def</span> <span class="nf">size_check_STMLTM</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Makes sure that the STM and LTM combined doe not surpass the maximum size, only used when useLTM=True.&quot;&quot;&quot;</span>
         <span class="n">STMShortened</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_STMLabels</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_LTMLabels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxSTMSize</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxLTMSize</span><span class="p">:</span>
@@ -406,7 +406,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">interLeavedPredHistories</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">STMShortened</span></div>
 
-<div class="viewcode-block" id="SAMKNN.clean_samples"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.clean_samples">[docs]</a>    <span class="k">def</span> <span class="nf">clean_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samplesCl</span><span class="p">,</span> <span class="n">labelsCl</span><span class="p">,</span> <span class="n">onlyLast</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.clean_samples"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.clean_samples">[docs]</a>    <span class="k">def</span> <span class="nf">clean_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samplesCl</span><span class="p">,</span> <span class="n">labelsCl</span><span class="p">,</span> <span class="n">onlyLast</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Removes distance-based all instances from the input samples that contradict those in the STM.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_STMLabels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="ow">and</span> <span class="n">samplesCl</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">onlyLast</span><span class="p">:</span>
@@ -561,10 +561,10 @@
             <span class="n">predictedLabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLabelsFct</span><span class="p">(</span><span class="n">distancesSTM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_STMLabels</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">currLen</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">predictedLabel</span>
 
-<div class="viewcode-block" id="SAMKNN.fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SAMKNN.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Processes a new sample.&quot;&quot;&quot;</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_STMSamples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -576,7 +576,7 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SAMKNN.predict"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.predict"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">predictedLabel</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_STMSamples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -588,16 +588,16 @@
             <span class="n">predictedLabel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predictFct</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distancesSTM</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">predictedLabel</span></div>
 
-<div class="viewcode-block" id="SAMKNN.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="SAMKNN.reset"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.reset"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="SAMKNN.score"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.score"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="SAMKNN.get_maj_label"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.get_maj_label">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SAMKNN.get_maj_label"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.get_maj_label">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_maj_label</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">numNeighbours</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the majority label of the k nearest neighbors.&quot;&quot;&quot;</span>
 
@@ -612,7 +612,7 @@
 
         <span class="k">return</span> <span class="n">predLabels</span></div>
 
-<div class="viewcode-block" id="SAMKNN.get_distance_weighted_label"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.get_distance_weighted_label">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SAMKNN.get_distance_weighted_label"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.get_distance_weighted_label">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_distance_weighted_label</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">numNeighbours</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the the distance weighted label of the k nearest neighbors.&quot;&quot;&quot;</span>
         <span class="n">nnIndices</span> <span class="o">=</span> <span class="n">libNearestNeighbor</span><span class="o">.</span><span class="n">nArgMin</span><span class="p">(</span><span class="n">numNeighbours</span><span class="p">,</span> <span class="n">distances</span><span class="p">)</span>
@@ -625,10 +625,10 @@
         <span class="n">predLabels</span> <span class="o">=</span> <span class="n">libNearestNeighbor</span><span class="o">.</span><span class="n">getLinearWeightedLabels</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">nnIndices</span><span class="p">],</span> <span class="n">sqrtDistances</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">predLabels</span></div>
 
-<div class="viewcode-block" id="SAMKNN.get_complexity"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.get_complexity">[docs]</a>    <span class="k">def</span> <span class="nf">get_complexity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.get_complexity"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.get_complexity">[docs]</a>    <span class="k">def</span> <span class="nf">get_complexity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="SAMKNN.get_complexity_num_parameter_metric"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.get_complexity_num_parameter_metric">[docs]</a>    <span class="k">def</span> <span class="nf">get_complexity_num_parameter_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.get_complexity_num_parameter_metric"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.get_complexity_num_parameter_metric">[docs]</a>    <span class="k">def</span> <span class="nf">get_complexity_num_parameter_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
     <span class="nd">@property</span>
@@ -647,7 +647,7 @@
     <span class="k">def</span> <span class="nf">LTMLabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_LTMLabels</span>
 
-<div class="viewcode-block" id="SAMKNN.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.sam_knn.html#skmultiflow.lazy.SAMKNN.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SAMKNN.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.SAMKNN.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;avg. STMSize </span><span class="si">%f</span><span class="s1"> LTMSize </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STMSizes</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LTMSizes</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;num correct STM </span><span class="si">%d</span><span class="s1"> LTM </span><span class="si">%d</span><span class="s1"> CM </span><span class="si">%d</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numSTMCorrect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLTMCorrect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">numCMCorrect</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span>
