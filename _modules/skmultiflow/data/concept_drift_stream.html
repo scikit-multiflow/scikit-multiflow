@@ -25,17 +25,25 @@
   
 
   
+  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
    
   <div class="wy-grid-for-nav">
@@ -52,7 +60,7 @@
 
           
             
-            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" />
           
           </a>
 
@@ -156,7 +164,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">scikit-multiflow</a>
@@ -164,10 +172,9 @@
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
@@ -197,6 +204,12 @@
     
       <li class="wy-breadcrumbs-aside">
         
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/data/concept_drift_stream.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
     
   </ul>
@@ -220,46 +233,51 @@
 <span class="sd">    A stream generator that adds concept drift or change by joining several streams.</span>
 <span class="sd">    This is done by building a weighted combination of two pure distributions that</span>
 <span class="sd">    characterizes the target concepts before and after the change.</span>
-<span class="sd">    MOA uses the sigmoid function as an elegant and practical solution to define</span>
-<span class="sd">    the probability that each new instance of the stream belongs to the new concept after the drift.</span>
-<span class="sd">    The sigmoid function introduces a gradual, smooth transition whose duration is controlled with</span>
-<span class="sd">    two parameters: p, the position where the change occurs, and the length w of the transition</span>
-<span class="sd">    :math:`f(t) = 1/(1+\e^{-4*(t-p)/w})`</span>
+
+<span class="sd">    The sigmoid function is an elegant and practical solution to define the probability that ech</span>
+<span class="sd">    new instance of the stream belongs to the new concept after the drift. The sigmoid function</span>
+<span class="sd">    introduces a gradual, smooth transition whose duration is controlled with two parameters:</span>
+
+<span class="sd">    - `p`, the position where the change occurs</span>
+<span class="sd">    - `w`, the width of the transition</span>
+
+<span class="sd">    The sigmoid funtion at sample `t` is</span>
+
+<span class="sd">    :math:`f(t) = 1/(1+e^{-4*(t-p)/w})`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    stream_option: generator (Default= AGRAWALGenerator(random_state=112))</span>
+<span class="sd">    stream_option: generator (default= AGRAWALGenerator(random_state=112))</span>
 <span class="sd">        stream generator</span>
 
-<span class="sd">    drift_stream_option: generator (Default= AGRAWALGenerator(random_state=112,classification_function=2))</span>
+<span class="sd">    drift_stream_option: generator (default= AGRAWALGenerator(random_state=112, classification_function=2))</span>
 <span class="sd">        stream generator that adds drift</span>
 
-<span class="sd">     random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
 <span class="sd">        If int, random_state is the seed used by the random number generator;</span>
 <span class="sd">        If RandomState instance, random_state is the random number generator;</span>
 <span class="sd">        If None, the random number generator is the RandomState instance used</span>
 <span class="sd">        by `np.random`.</span>
 
 <span class="sd">    alpha_option: float (Default: 0.0)</span>
-<span class="sd">        Angle alpha of change grade</span>
-<span class="sd">        Values go from 0.0 to 90.0</span>
+<span class="sd">        Angle alpha of change grade.</span>
+<span class="sd">        Values go from 0.0 to 90.0.</span>
 
 <span class="sd">    position_option: int (Default: 0)</span>
-<span class="sd">        Central position of concept drift change</span>
+<span class="sd">        Central position of concept drift change.</span>
 
-<span class="sd">    position_option: int (Default: 1000)</span>
-<span class="sd">        Width of concept drift change</span>
-
-
+<span class="sd">    width_option: int (Default: 1000)</span>
+<span class="sd">        Width of concept drift change.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream_option</span><span class="o">=</span><span class="n">AGRAWALGenerator</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">112</span><span class="p">),</span>
                  <span class="n">drift_stream_option</span><span class="o">=</span><span class="n">AGRAWALGenerator</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">classification_function</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
-                 <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha_option</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                 <span class="n">position_option</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width_option</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                 <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">alpha_option</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">position_option</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">width_option</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ConceptDriftStream</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_samples</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_targets</span>
@@ -329,14 +347,14 @@
             <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_option</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width_option</span><span class="p">)</span>
             <span class="n">probability_drift</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">probability_drift</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
@@ -349,11 +367,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConceptDriftStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.concept_drift_stream.html#skmultiflow.data.concept_drift_stream.ConceptDriftStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div></div>
+        <span class="sd">&quot;&quot;&quot;Collects information about the generator.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string</span>
+<span class="sd">            Configuration for the generator object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;First Stream: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;Drift Stream: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;alpha: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha_option</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;position: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position_option</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;width: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width_option</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">description</span></div></div>
 </pre></div>
 
            </div>
-           
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
@@ -365,7 +398,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -384,7 +417,6 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'0.1.0',
-            LANGUAGE:'en',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -403,11 +435,14 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

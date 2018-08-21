@@ -25,19 +25,27 @@
   
 
   
+  
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="skmultiflow.data.data_stream module" href="skmultiflow.data.data_stream.html" />
-    <link rel="prev" title="skmultiflow.data.base_stream module" href="skmultiflow.data.base_stream.html" /> 
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="index.html"/>
+        <link rel="up" title="skmultiflow.data package" href="skmultiflow.data.html"/>
+        <link rel="next" title="skmultiflow.data.data_stream module" href="skmultiflow.data.data_stream.html"/>
+        <link rel="prev" title="skmultiflow.data.base_stream module" href="skmultiflow.data.base_stream.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
    
   <div class="wy-grid-for-nav">
@@ -54,7 +62,7 @@
 
           
             
-            <img src="_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+            <img src="_static/skmultiflow-logo.png" class="logo" />
           
           </a>
 
@@ -103,6 +111,10 @@
 <li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start.html">Quick-Start Guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.streams-intro.html">Using Streams in scikit-multiflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.streams-intro.html#stream-generators">Stream generators</a></li>
 </ul>
 </li>
 </ul>
@@ -154,7 +166,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">scikit-multiflow</a>
@@ -162,10 +174,9 @@
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
@@ -225,31 +236,31 @@
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.data.base_stream.Stream</span></code></a></p>
 <p>A stream generator that adds concept drift or change by joining several streams.
 This is done by building a weighted combination of two pure distributions that
-characterizes the target concepts before and after the change.
-MOA uses the sigmoid function as an elegant and practical solution to define
-the probability that each new instance of the stream belongs to the new concept after the drift.
-The sigmoid function introduces a gradual, smooth transition whose duration is controlled with
-two parameters: p, the position where the change occurs, and the length w of the transition
-<span class="math notranslate nohighlight">\(f(t) = 1/(1+\e^{-4*(t-p)/w})\)</span></p>
+characterizes the target concepts before and after the change.</p>
+<p>The sigmoid function is an elegant and practical solution to define the probability that ech
+new instance of the stream belongs to the new concept after the drift. The sigmoid function
+introduces a gradual, smooth transition whose duration is controlled with two parameters:</p>
+<ul class="simple">
+<li><cite>p</cite>, the position where the change occurs</li>
+<li><cite>w</cite>, the width of the transition</li>
+</ul>
+<p>The sigmoid funtion at sample <cite>t</cite> is</p>
+<p><span class="math notranslate nohighlight">\(f(t) = 1/(1+e^{-4*(t-p)/w})\)</span></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>stream_option</strong> (<em>generator</em><em> (</em><em>Default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>)</em><em>)</em>) – stream generator</li>
-<li><strong>drift_stream_option</strong> (<em>generator</em><em> (</em><em>Default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>,</em><em>classification_function=2</em><em>)</em><em>)</em>) – <p>stream generator that adds drift</p>
-<dl class="docutils">
-<dt>random_state: int, RandomState instance or None, optional (default=None)</dt>
-<dd>If int, random_state is the seed used by the random number generator;
+<li><strong>stream_option</strong> (<em>generator</em><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>)</em><em>)</em>) – stream generator</li>
+<li><strong>drift_stream_option</strong> (<em>generator</em><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>, </em><em>classification_function=2</em><em>)</em><em>)</em>) – stream generator that adds drift</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
 If RandomState instance, random_state is the random number generator;
 If None, the random number generator is the RandomState instance used
-by <cite>np.random</cite>.</dd>
-</dl>
-</li>
-<li><strong>alpha_option</strong> (<em>float</em><em> (</em><em>Default: 0.0</em><em>)</em>) – Angle alpha of change grade
-Values go from 0.0 to 90.0</li>
-<li><strong>position_option</strong> (<em>int</em><em> (</em><em>Default: 1000</em><em>)</em>) – Central position of concept drift change</li>
-<li><strong>position_option</strong> – Width of concept drift change</li>
+by <cite>np.random</cite>.</li>
+<li><strong>alpha_option</strong> (<em>float</em><em> (</em><em>Default: 0.0</em><em>)</em>) – Angle alpha of change grade.
+Values go from 0.0 to 90.0.</li>
+<li><strong>position_option</strong> (<em>int</em><em> (</em><em>Default: 0</em><em>)</em>) – Central position of concept drift change.</li>
+<li><strong>width_option</strong> (<em>int</em><em> (</em><em>Default: 1000</em><em>)</em>) – Width of concept drift change.</li>
 </ul>
 </td>
 </tr>
@@ -258,16 +269,14 @@ Values go from 0.0 to 90.0</li>
 <dl class="method">
 <dt id="skmultiflow.data.concept_drift_stream.ConceptDriftStream.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.concept_drift_stream.ConceptDriftStream.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dd><p>Collects information about the generator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Configuration for the generator object.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
 </tr>
 </tbody>
 </table>
@@ -356,7 +365,9 @@ stream to work after its initialization.</p>
 
 
            </div>
-           
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
@@ -377,7 +388,7 @@ stream to work after its initialization.</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -396,7 +407,6 @@ stream to work after its initialization.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'0.1.0',
-            LANGUAGE:'en',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -415,11 +425,14 @@ stream to work after its initialization.</p>
     <script type="text/javascript" src="_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>
