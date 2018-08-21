@@ -3,6 +3,27 @@ from abc import ABCMeta, abstractmethod
 
 
 class CFCluster(SphereCluster, metaclass=ABCMeta):
+    """CFCluster
+
+    Cluster feature is a triple summarizing, which is maintained
+    about a cluster.
+    It is a triple  vector, which  include the number of the data
+    points, the linear sum of data points, and  the  squared  sum
+    of them [1]_.
+                CF = (N,:math:`\vect(LS)`, SS)
+    * N is the number of data points in a cluster
+    * :math:`\vect(LS) = \sum^{N}_{i=1} \vect(X_i)` is the linear
+      sum of the N data points
+    * SS = :math:`\sum^{N}_{i=1} X_i ^ 2` is the square sum of
+      data points
+
+    References
+    ----------
+    .. [1] A. Amini, T. Ying Wah. Density Micro-Clustering Algorithms on Data
+       Streams: A Review.
+
+
+    """
 
     def __init__(self, X=None, weight=None, dimensions=None, cluster=None):
         super().__init__()
@@ -24,7 +45,7 @@ class CFCluster(SphereCluster, metaclass=ABCMeta):
             self.SS = cluster.SS.copy()
 
     def add(self, cluster):
-        self.N = cluster.N
+        self.N += cluster.N
         self.add_vectors(self.LS, cluster.LS)
         self.add_vectors(self.SS, cluster.SS)
 

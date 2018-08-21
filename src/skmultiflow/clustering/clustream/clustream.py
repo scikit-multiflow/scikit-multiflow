@@ -1,14 +1,46 @@
 from skmultiflow.core.base import StreamModel
 from skmultiflow.utils.utils import *
 from skmultiflow.clustering.clustream.clustream_kernel import ClustreamKernel
-from skmultiflow.clustering.sphere_cluster import SphereCluster
+
 import sys
 import numpy as np
+from sklearn.cluster import KMeans
 
 
 class Clustream(StreamModel):
+    """Clustream
 
-    def __init__(self, time_window=1000, max_kernels=100, kernel_radius_factor=2):
+    It maintains statistical information about the data using micro-clusters.
+    These micro-clusters are temporal extensions of cluster feature vectors.
+    The micro-clusters are stored at snapshots in time following a pyramidal
+    pattern. This pattern allows to recall summary statistics from different
+    time horizons in [1]_.
+
+    Parameters
+    ----------
+
+    time_window: int (Default : 1000)
+      The rang of the window
+      if the current time is T and the time window is h, we should only consider
+      about the data that arrived within the period (T-h,T)
+
+    max_kernels: int (Default: 100)
+      The Maximum number of micro kernels to use
+
+    kernel_radius_factor: int (Default: 2)
+       Multiplier for the kernel radius
+
+    number_of_clusters: int (Default : 5)
+        the clusters returned by the Kmeans algorithm using the summaries statistics
+
+
+    References
+    ----------
+    .. [1] A. Kumar , A. Singh, and R. Singh. An efficient hybrid-clustream algorithm
+       for stream mining
+
+    """
+    def __init__(self, time_window=1000, max_kernels=100, kernel_radius_factor=2, number_of_clusters=5):
         super().__init__()
         self.time_window = time_window
         self.time_stamp = -1
@@ -18,6 +50,7 @@ class Clustream(StreamModel):
         self.buffer_size = max_kernels
         self.T = kernel_radius_factor
         self.M = max_kernels
+        self.k = number_of_clusters
         self._train_weight_seen_by_model = 0.0
 
     def partial_fit(self, X, weight=None):
@@ -41,7 +74,7 @@ class Clustream(StreamModel):
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
-            Instance attributes.
+            Inst    ance attributes.
 
         weight: float or array-like
             Instance weight. If not provided, uniform weights are assumed.
@@ -68,16 +101,10 @@ class Clustream(StreamModel):
             if len(self.buffer) < self.buffer_size:
                 self.buffer.append(ClustreamKernel(X, weight, dim, self.time_stamp, self.T, self.M))
                 return
-            temp = len(self.kernels)
-            assert temp <= self.buffer_size
-            centers = [None]*temp
-            for i in range(temp):
-                centers[i] = self.buffer[i]
-            kmeans_clustering = self.kMeans(temp, centers, self.buffer)
-
-            for i in range(len(kmeans_clustering)):
-                self.kernels[i] = ClustreamKernel(X=centers[i].get_center(), weight=1.0, dimensions=dim,
-                                                  timestamp=self.time_stamp, T=self.T, M=self.M)
+            else:
+                for i in range(self.buffer_size):
+                    self.kernels[i] = ClustreamKernel(X=self.buffer[i].get_center(), weight=1.0, dimensions=dim,
+                                                      timestamp=self.time_stamp, T=self.T, M=self.M)
             self.buffer.clear()
             self.initialized = True
 
@@ -118,8 +145,10 @@ class Clustream(StreamModel):
 
         for i in range(len(self.kernels)):
             if self.kernels[i].get_relevance_stamp() < threshold:
+
                 self.kernels[i] = ClustreamKernel(X=X, weight=weight, dimensions=dim, timestamp=self.time_stamp,
                                                   T=self.T, M=self.M)
+
                 return
 
         """try to merge closest two kernels"""
@@ -149,58 +178,75 @@ class Clustream(StreamModel):
             res[i] = ClustreamKernel(cluster=self.kernels[i], T=self.T, M=self.M)
         return res
 
-    def kMeans(self, k, centers, data):
+    def get_clustering_result(self):
 
-        assert (k > 0)
-        assert len(centers) == k
+        if not self.initialized:
+            return []
+        micro_cluster_centers = np.array([micro_cluster.get_center() for
+                                          micro_cluster in self.get_micro_clustering_result()])
 
-        dimensions = len(centers[0].get_center())
-        clustering = [[] for _ in range(k)]
-        repetitions = 100
+        kmeans = KMeans(n_clusters=self.k).fit(micro_cluster_centers)
+        return kmeans
 
-        while repetitions - 1 >= 0:
-            repetitions -= 1
-            for _, point in enumerate(data):
-                min_distance = self._distance(point.get_center(), centers[0].get_center())
-                closest_cluster = 0
-                for i in range(1, k):
-                    distance = self._distance(point.get_center(), centers[i].get_center())
-                    if distance < min_distance:
-                        closest_cluster = i
-                        min_distance = distance
-                clustering[closest_cluster].append(point)
-            new_centers = [None]*len(centers)
-            for i in range(k):
-                new_centers[i] = self._calculate_center(clustering[i], dimensions)
-                clustering[i].clear()
-            centers = new_centers
+    def fit_predict(self, X, weight=None):
+        """
+        Compute cluster centers and predict cluster index for each sample.
 
-        return centers
+        Convenience method; equivalent to calling partial_fit(X) followed by predict(X).
 
-    def _calculate_center(self, clusters, dimensions):
+        Parameters
+        ----------
+        X: numpy.ndarray of shape (n_samples, n_features)
+            Inst    ance attributes.
 
-        res = [0.0]*dimensions
-        if len(clusters) == 0:
-            return SphereCluster(center=res, radius=0.0, weighted_size=1.0)
-        for _, cluster in enumerate(clusters):
-            center = cluster.get_center()
-            for i in range(len(res)):
-                res[i] += center[i]
-        """normalize"""
-        for i in range(len(res)):
-            res[i] /= len(clusters)
-        """calculate radius"""
-        radius = 0.0
-        for _, cluster in enumerate(clusters):
-            dist = self._distance(res, cluster.get_center())
-            if dist > radius:
-                radius = dist
+        weight: float or array-like
+            Instance weight. If not provided, uniform weights are assumed.
 
-        sphere_cluster = SphereCluster(center=res, radius=radius, weighted_size=len(clusters))
-        return sphere_cluster
+        Returns
+        -------
+        y : ndarray, shape (n_samples,)
+            Cluster labels
+        """
+
+        if weight is None:
+            weight = np.array([1.0])
+        row_cnt, _ = get_dimensions(X)
+        weight_row_cnt, _ = get_dimensions(weight)
+        if row_cnt != weight_row_cnt:
+            weight = [weight[0]] * row_cnt
+        for i in range(row_cnt):
+            if weight[i] != 0.0:
+                self._train_weight_seen_by_model += weight[i]
+                self._partial_fit(X[i], weight[i])
+
+        micro_cluster_centers = np.array([micro_cluster.get_center() for
+                                          micro_cluster in self.get_micro_clustering_result()])
+
+        kmeans = KMeans(n_clusters=self.k).fit(micro_cluster_centers)
+
+        y = []
+        for i in range(len(X)):
+            index, _ = self._get_closest_kernel(X[i], micro_cluster_centers)
+
+            y.append(kmeans.labels_[index])
+
+        return y
 
     @staticmethod
-    def implements_micro_clustering(self):
+    def _get_closest_kernel(X, micro_clusters):
+        min_distance = sys.float_info.max
+        closest_kernel = None
+        closest_kernel_index = -1
+        for i, micro_cluster in enumerate(micro_clusters):
+            distance = np.linalg.norm(micro_cluster.get_center() - X)
+            if distance < min_distance:
+                min_distance = distance
+                closest_kernel = micro_cluster
+                closest_kernel_index = i
+        return closest_kernel_index, min_distance
+
+    @staticmethod
+    def implements_micro_clustering():
         return True
 
     def get_name(self):
@@ -214,14 +260,20 @@ class Clustream(StreamModel):
             distance += d * d
         return np.sqrt(distance)
 
-    def fit(self, X, y, classes=None, weight=None):
-        pass
-
-    def get_info(self):
-        pass
-
     def predict(self, X):
-        pass
+
+        micro_cluster_centers = np.array([micro_cluster.get_center() for
+                                          micro_cluster in self.get_micro_clustering_result()])
+
+        kmeans = KMeans(n_clusters=self.k).fit(micro_cluster_centers)
+
+        y = []
+        for i in range(len(X)):
+            index, _ = self._get_closest_kernel(X[i], self.get_micro_clustering_result())
+
+            y.append(kmeans.labels_[index])
+
+        return y
 
     def predict_proba(self, X):
         pass
@@ -232,7 +284,11 @@ class Clustream(StreamModel):
     def score(self, X, y):
         pass
 
+    def fit(self, X, y, classes=None, weight=None):
+        pass
 
+    def get_info(self):
+        pass
 
 
 

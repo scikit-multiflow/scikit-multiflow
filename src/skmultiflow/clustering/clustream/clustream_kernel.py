@@ -1,4 +1,4 @@
-from skmultiflow.clustering.micro_cluster import CFCluster
+from skmultiflow.clustering.cluster_feature import CFCluster
 import numpy as np
 
 EPSILON = 0.00005
@@ -8,17 +8,14 @@ MIN_VARIANCE = 1e-50
 class ClustreamKernel(CFCluster):
 
     def __init__(self, X=None, weight=None, cluster=None, dimensions=None, timestamp=None, T=None, M=None):
-
+        self.T = T
+        self.M = M
         if X is not None and weight is not None and dimensions is not None:
             super().__init__(X=X, weight=weight, dimensions=dimensions)
-            self.T = T
-            self.M = M
             self.LST = timestamp * weight
             self.SST = timestamp * timestamp * weight
         elif cluster is not None:
             super().__init__(cluster=cluster)
-            self.T = T
-            self.M = M
             self.LST = cluster.LST
             self.SST = cluster.SST
 
@@ -35,8 +32,6 @@ class ClustreamKernel(CFCluster):
     def get_radius(self):
         if self.N == 1:
             return 0
-        if self.T == 1:
-            self.T = 1
         return self.get_deviation() * self.radius_factor
 
     def get_deviation(self):
@@ -121,5 +116,6 @@ class ClustreamKernel(CFCluster):
 
     def get_CF(self):
         return self
+
     def sample(self, random_state):
         pass
