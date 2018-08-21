@@ -74,7 +74,7 @@ class Clustream(StreamModel):
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
-            Inst    ance attributes.
+            Instance attributes.
 
         weight: float or array-like
             Instance weight. If not provided, uniform weights are assumed.
