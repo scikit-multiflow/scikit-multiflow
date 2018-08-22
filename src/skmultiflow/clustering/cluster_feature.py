@@ -27,7 +27,7 @@ class CFCluster(SphereCluster, metaclass=ABCMeta):
 
     def __init__(self, X=None, weight=None, dimensions=None, cluster=None):
         super().__init__()
-        self.radius_factor = 1.8
+
         if X is None and weight is None and cluster is None and dimensions is not None:
             self.N = 0
             self.LS = [0.0] * dimensions

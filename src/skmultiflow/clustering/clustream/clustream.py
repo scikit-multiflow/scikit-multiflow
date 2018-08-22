@@ -1,10 +1,9 @@
 from skmultiflow.core.base import StreamModel
 from skmultiflow.utils.utils import *
 from skmultiflow.clustering.clustream.clustream_kernel import ClustreamKernel
-
+from sklearn.cluster import KMeans
 import sys
 import numpy as np
-from sklearn.cluster import KMeans
 
 
 class Clustream(StreamModel):
@@ -18,6 +17,12 @@ class Clustream(StreamModel):
 
     Parameters
     ----------
+    random_state: int, RandomState instance or None, optional (default=None)
+       If int, random_state is the seed used by the random number generator;
+       If RandomState instance, random_state is the random number generator;
+       If None, the random number generator is the RandomState instance used
+       by `np.random`.
+       It is used in the kmeans algorithm for the offline clustering
 
     time_window: int (Default : 1000)
       The rang of the window
@@ -28,7 +33,11 @@ class Clustream(StreamModel):
       The Maximum number of micro kernels to use
 
     kernel_radius_factor: int (Default: 2)
-       Multiplier for the kernel radius
+      Multiplier for the kernel radius
+      When deciding to add a new data point to a micro-cluster, the maximum boundary
+      is defined as a factor of the kernel_radius_factor of the RMS deviation of the
+      data points in the micro-cluster from the centroid
+
 
     number_of_clusters: int (Default : 5)
         the clusters returned by the Kmeans algorithm using the summaries statistics
@@ -40,7 +49,11 @@ class Clustream(StreamModel):
        for stream mining
 
     """
-    def __init__(self, time_window=1000, max_kernels=100, kernel_radius_factor=2, number_of_clusters=5):
+    def __init__(self, random_state=None,
+                 time_window=1000,
+                 max_kernels=100,
+                 kernel_radius_factor=2,
+                 number_of_clusters=5):
         super().__init__()
         self.time_window = time_window
         self.time_stamp = -1
@@ -52,8 +65,10 @@ class Clustream(StreamModel):
         self.M = max_kernels
         self.k = number_of_clusters
         self._train_weight_seen_by_model = 0.0
+        self.random_state = random_state
 
     def partial_fit(self, X, weight=None):
+
         """Incrementally trains the model. Train samples (instances) are composed of X attributes .
 
         Tasks performed before training:
@@ -185,7 +200,7 @@ class Clustream(StreamModel):
         micro_cluster_centers = np.array([micro_cluster.get_center() for
                                           micro_cluster in self.get_micro_clustering_result()])
 
-        kmeans = KMeans(n_clusters=self.k).fit(micro_cluster_centers)
+        kmeans = KMeans(n_clusters=self.k, random_state=self.random_state).fit(micro_cluster_centers)
         return kmeans
 
     def fit_predict(self, X, weight=None):
@@ -197,7 +212,7 @@ class Clustream(StreamModel):
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
-            Inst    ance attributes.
+            Instance attributes.
 
         weight: float or array-like
             Instance weight. If not provided, uniform weights are assumed.
@@ -222,7 +237,7 @@ class Clustream(StreamModel):
         micro_cluster_centers = np.array([micro_cluster.get_center() for
                                           micro_cluster in self.get_micro_clustering_result()])
 
-        kmeans = KMeans(n_clusters=self.k).fit(micro_cluster_centers)
+        kmeans = KMeans(n_clusters=self.k, random_state=self.random_state).fit(micro_cluster_centers)
 
         y = []
         for i in range(len(X)):
@@ -234,6 +249,26 @@ class Clustream(StreamModel):
 
     @staticmethod
     def _get_closest_kernel(X, micro_clusters):
+
+        """
+        Compute closest micro cluster to a given instance
+
+        Parameters
+        ----------
+        X: numpy.ndarray of shape (n_samples, n_features)
+            Instance attributes
+
+        micro_clusters: array-like
+            Instance weight. If not provided, uniform weights are assumed
+
+        Returns
+        -------
+        closest_kernel_index : int
+            index of closest kernel to a given instance
+
+        min_distance: float
+            distance between closest kernel to a given instance
+             """
         min_distance = sys.float_info.max
         closest_kernel = None
         closest_kernel_index = -1
@@ -261,11 +296,27 @@ class Clustream(StreamModel):
         return np.sqrt(distance)
 
     def predict(self, X):
+        """
+         predict cluster index for each sample.
+
+        Convenience method; equivalent to calling partial_fit(X) followed by predict(X).
+
+        Parameters
+        ----------
+        X: numpy.ndarray of shape (n_samples, n_features)
+            Instance attributes.
+
+        Returns
+        -------
+        y : ndarray, shape (n_samples,)
+            Cluster labels
+        """
+
 
         micro_cluster_centers = np.array([micro_cluster.get_center() for
                                           micro_cluster in self.get_micro_clustering_result()])
 
-        kmeans = KMeans(n_clusters=self.k).fit(micro_cluster_centers)
+        kmeans = KMeans(n_clusters=self.k, random_state=self.random_state).fit(micro_cluster_centers)
 
         y = []
         for i in range(len(X)):

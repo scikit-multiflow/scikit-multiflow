@@ -32,7 +32,7 @@ class ClustreamKernel(CFCluster):
     def get_radius(self):
         if self.N == 1:
             return 0
-        return self.get_deviation() * self.radius_factor
+        return self.get_deviation() * self.T
 
     def get_deviation(self):
         variance = self.get_variance_vector()
