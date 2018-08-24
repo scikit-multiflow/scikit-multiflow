@@ -54,5 +54,6 @@ class SphereCluster(Cluster):
             return 1.0
 
         return 0.0
+
     def sample(self, random_state):
-        pass
+        raise NotImplementedError

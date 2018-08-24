@@ -118,4 +118,4 @@ class ClustreamKernel(CFCluster):
         return self
 
     def sample(self, random_state):
-        pass
+        raise NotImplementedError

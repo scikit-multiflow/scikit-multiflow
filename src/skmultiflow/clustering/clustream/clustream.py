@@ -327,19 +327,19 @@ class Clustream(StreamModel):
         return y
 
     def predict_proba(self, X):
-        pass
+        raise NotImplementedError
 
     def reset(self):
-        pass
+        raise NotImplementedError
 
     def score(self, X, y):
-        pass
+        raise NotImplementedError
 
     def fit(self, X, y, classes=None, weight=None):
-        pass
+        raise NotImplementedError
 
     def get_info(self):
-        pass
+        raise NotImplementedError
 
 
 
