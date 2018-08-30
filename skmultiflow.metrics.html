@@ -267,15 +267,16 @@ kappa, kappa_t, kappa_m, majority_class and error rate.</p>
 <p class="rubric">Examples</p>
 <dl class="method">
 <dt id="skmultiflow.metrics.ClassificationMeasurements.add_result">
-<code class="descname">add_result</code><span class="sig-paren">(</span><em>sample</em>, <em>prediction</em>, <em>weight=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#ClassificationMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.ClassificationMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em>, <em>weight=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#ClassificationMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.ClassificationMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates its statistics with the results of a prediction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sample</strong> (<em>int</em>) – The true label.</li>
-<li><strong>prediction</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>y_true</strong> (<em>int</em>) – The true label.</li>
+<li><strong>y_pred</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>weight</strong> (<em>float</em>) – Sample’s weight</li>
 </ul>
 </td>
 </tr>
@@ -412,7 +413,7 @@ temporal correlation between samples.</p>
 
 <dl class="method">
 <dt id="skmultiflow.metrics.ClassificationMeasurements.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#ClassificationMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.ClassificationMeasurements.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#ClassificationMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.ClassificationMeasurements.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -428,15 +429,15 @@ any moment. The relevant metrics kept by an instance of this class
 are: MSE (mean square error) and MAE (mean absolute error).</p>
 <dl class="method">
 <dt id="skmultiflow.metrics.RegressionMeasurements.add_result">
-<code class="descname">add_result</code><span class="sig-paren">(</span><em>sample</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#RegressionMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.RegressionMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#RegressionMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.RegressionMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use the true label and the prediction to update the statistics.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sample</strong> (<em>int</em>) – The true label.</li>
-<li><strong>prediction</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>y_true</strong> (<em>int</em>) – The true label.</li>
+<li><strong>y_pred</strong> (<em>int</em>) – The classifier’s prediction</li>
 </ul>
 </td>
 </tr>
@@ -552,7 +553,7 @@ hamming_score, exact_match and j_index.</p>
 <p class="rubric">Examples</p>
 <dl class="method">
 <dt id="skmultiflow.metrics.MultiOutputMeasurements.add_result">
-<code class="descname">add_result</code><span class="sig-paren">(</span><em>sample</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#MultiOutputMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.MultiOutputMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#MultiOutputMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.MultiOutputMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates its statistics with the results of a prediction.</p>
 <p>Adds the result to the MOLConfusionMatrix and update exact_matches and
 j-index sum counts.</p>
@@ -561,8 +562,8 @@ j-index sum counts.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sample</strong> (<em>int</em>) – The true label.</li>
-<li><strong>prediction</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>y_true</strong> (<em>list</em><em> or </em><em>numpy.ndarray</em>) – The true label.</li>
+<li><strong>y_pred</strong> (<em>list</em><em> or </em><em>numpy.ndarray</em>) – The classifier’s prediction</li>
 </ul>
 </td>
 </tr>
@@ -688,7 +689,7 @@ labels by the union of predicted and true labels.</p>
 
 <dl class="method">
 <dt id="skmultiflow.metrics.MultiOutputMeasurements.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#MultiOutputMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.MultiOutputMeasurements.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#MultiOutputMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.MultiOutputMeasurements.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -703,7 +704,7 @@ current metrics about the classifier, measured inside the window.</p>
 <p>To keep track of statistics inside a window, the class will use a
 ConfusionMatrix object, alongside FastBuffers, to simulate fixed sized
 windows of the important classifier’s attributes.</p>
-<p>Its functionalities are somewhat similar to those of the
+<p>Its functionality is somewhat similar to those of the
 ClassificationMeasurements class. The difference is that the statistics
 kept by this class are local, or partial, while the statistics kept by
 the ClassificationMeasurements class are global.</p>
@@ -726,7 +727,7 @@ can see.</li>
 <p class="rubric">Examples</p>
 <dl class="method">
 <dt id="skmultiflow.metrics.WindowClassificationMeasurements.add_result">
-<code class="descname">add_result</code><span class="sig-paren">(</span><em>sample</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowClassificationMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowClassificationMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates its statistics with the results of a prediction. If needed it
 will remove samples from the observation window.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -734,8 +735,8 @@ will remove samples from the observation window.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sample</strong> (<em>int</em>) – The true label.</li>
-<li><strong>prediction</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>y_true</strong> (<em>int</em>) – The true label.</li>
+<li><strong>y_pred</strong> (<em>int</em>) – The classifier’s prediction</li>
 </ul>
 </td>
 </tr>
@@ -872,7 +873,12 @@ the temporal correlation between samples.</p>
 
 <dl class="method">
 <dt id="skmultiflow.metrics.WindowClassificationMeasurements.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowClassificationMeasurements.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowClassificationMeasurements.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.metrics.WindowClassificationMeasurements.sample_count">
+<code class="descname">sample_count</code><a class="headerlink" href="#skmultiflow.metrics.WindowClassificationMeasurements.sample_count" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -889,15 +895,15 @@ any moment. The relevant metrics kept by an instance of this class
 are: MSE (mean square error) and MAE (mean absolute error).</p>
 <dl class="method">
 <dt id="skmultiflow.metrics.WindowRegressionMeasurements.add_result">
-<code class="descname">add_result</code><span class="sig-paren">(</span><em>sample</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowRegressionMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowRegressionMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowRegressionMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowRegressionMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use the true label and the prediction to update the statistics.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sample</strong> (<em>int</em>) – The true label.</li>
-<li><strong>prediction</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>y_true</strong> (<em>int</em>) – The true label.</li>
+<li><strong>y_pred</strong> (<em>int</em>) – The classifier’s prediction</li>
 </ul>
 </td>
 </tr>
@@ -982,6 +988,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowRegressionMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowRegressionMeasurements.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="skmultiflow.metrics.WindowRegressionMeasurements.sample_count">
+<code class="descname">sample_count</code><a class="headerlink" href="#skmultiflow.metrics.WindowRegressionMeasurements.sample_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -997,7 +1008,7 @@ using a confusion matrix adapted to multi output problems, the
 MOLConfusionMatrix, alongside other of the classifier’s relevant
 attributes stored in ComplexFastBuffer objects, which will simulate
 fixed sized windows.</p>
-<p>Its functionalities are somewhat similar to those of the
+<p>Its functionality is somewhat similar to those of the
 MultiOutputMeasurements class. The difference is that the statistics
 kept by this class are local, or partial, while the statistics kept by
 the MultiOutputMeasurements class are global.</p>
@@ -1020,7 +1031,7 @@ can see.</li>
 <p class="rubric">Examples</p>
 <dl class="method">
 <dt id="skmultiflow.metrics.WindowMultiOutputMeasurements.add_result">
-<code class="descname">add_result</code><span class="sig-paren">(</span><em>sample</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowMultiOutputMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowMultiOutputMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowMultiOutputMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowMultiOutputMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates its statistics with the results of a prediction.</p>
 <p>Adds the result to the MOLConfusionMatrix, and updates the
 ComplexFastBuffer objects.</p>
@@ -1029,8 +1040,8 @@ ComplexFastBuffer objects.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sample</strong> (<em>int</em>) – The true label.</li>
-<li><strong>prediction</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>y_true</strong> (<em>list</em><em> or </em><em>numpy.ndarray</em>) – The true label.</li>
+<li><strong>y_pred</strong> (<em>list</em><em> or </em><em>numpy.ndarray</em>) – The classifier’s prediction</li>
 </ul>
 </td>
 </tr>
@@ -1155,9 +1166,19 @@ classified labels by the union of predicted and true labels.</p>
 <code class="descname">get_total_sum</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowMultiOutputMeasurements.get_total_sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowMultiOutputMeasurements.get_total_sum" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="skmultiflow.metrics.WindowMultiOutputMeasurements.matrix">
+<code class="descname">matrix</code><a class="headerlink" href="#skmultiflow.metrics.WindowMultiOutputMeasurements.matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="skmultiflow.metrics.WindowMultiOutputMeasurements.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowMultiOutputMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowMultiOutputMeasurements.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowMultiOutputMeasurements.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowMultiOutputMeasurements.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.metrics.WindowMultiOutputMeasurements.sample_count">
+<code class="descname">sample_count</code><a class="headerlink" href="#skmultiflow.metrics.WindowMultiOutputMeasurements.sample_count" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1259,6 +1280,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="skmultiflow.metrics.ConfusionMatrix.matrix">
+<code class="descname">matrix</code><a class="headerlink" href="#skmultiflow.metrics.ConfusionMatrix.matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="skmultiflow.metrics.ConfusionMatrix.remove">
 <code class="descname">remove</code><span class="sig-paren">(</span><em>i=None</em>, <em>j=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#ConfusionMatrix.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.ConfusionMatrix.remove" title="Permalink to this definition">¶</a></dt>
@@ -1277,7 +1303,7 @@ cells.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the removal was successful and False otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bools</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
 </td>
 </tr>
 </tbody>
@@ -1509,13 +1535,18 @@ indexed by [t, i, j] where i and j are different.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The sum of occurrences in the metrix.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The sum of occurrences in the matrix.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.metrics.MOLConfusionMatrix.matrix">
+<code class="descname">matrix</code><a class="headerlink" href="#skmultiflow.metrics.MOLConfusionMatrix.matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.metrics.MOLConfusionMatrix.remove">
@@ -1536,7 +1567,7 @@ indexed by [t, i, j] where i and j are different.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the removal was successful, False otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bools</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
 </td>
 </tr>
 </tbody>

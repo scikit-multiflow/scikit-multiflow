@@ -237,7 +237,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="RegressionHoeffdingTree"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree">[docs]</a><span class="k">class</span> <span class="nc">RegressionHoeffdingTree</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree">[docs]</a><span class="k">class</span> <span class="nc">RegressionHoeffdingTree</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Regression Hoeffding trees known as Fast incremental model tree with drift detection (FIMT-DD).</span>
 
@@ -283,13 +283,13 @@
 <span class="sd">    .. [1] Elena Ikonomovska, João Gama, and Sašo Džeroski. 2011. Learning model trees from</span>
 <span class="sd">           evolving data streams. Data Min. Knowl. Discov. 23, 1 (July 2011), 128-168.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodeForRegression"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodeForRegression">[docs]</a>    <span class="k">class</span> <span class="nc">InactiveLearningNodeForRegression</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodeForRegression"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodeForRegression">[docs]</a>    <span class="k">class</span> <span class="nc">InactiveLearningNodeForRegression</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; InactiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span>
@@ -300,13 +300,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span></div></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.ActiveLearningNodeForRegression"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.ActiveLearningNodeForRegression">[docs]</a>    <span class="k">class</span> <span class="nc">ActiveLearningNodeForRegression</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.ActiveLearningNodeForRegression"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.ActiveLearningNodeForRegression">[docs]</a>    <span class="k">class</span> <span class="nc">ActiveLearningNodeForRegression</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; ActiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.ActiveLearningNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.ActiveLearningNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.ActiveLearningNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.ActiveLearningNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -341,7 +341,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
                 <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.ActiveLearningNodeForRegression.get_weight_seen"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.ActiveLearningNodeForRegression.get_weight_seen">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.ActiveLearningNodeForRegression.get_weight_seen"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.ActiveLearningNodeForRegression.get_weight_seen">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate the total weight seen by the node.</span>
 
 <span class="sd">            Returns</span>
@@ -355,7 +355,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodePerceptron</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodePerceptron</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
@@ -371,7 +371,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="n">perceptron_weight</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -421,7 +421,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
                 <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.update_weights"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.update_weights">[docs]</a>        <span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.update_weights"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.update_weights">[docs]</a>        <span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Update the perceptron weights</span>
 <span class="sd">            Parameters</span>
@@ -442,10 +442,10 @@
                                            <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">((</span><span class="n">normalized_target_value</span> <span class="o">-</span> <span class="n">normalized_pred</span><span class="p">),</span>
                                                        <span class="n">normalized_sample</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.predict">[docs]</a>        <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.predict">[docs]</a>        <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.get_weight_seen"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.get_weight_seen">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.get_weight_seen"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.get_weight_seen">[docs]</a>        <span class="k">def</span> <span class="nf">get_weight_seen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Calculate the total weight seen by the node.</span>
 
 <span class="sd">            Returns</span>
@@ -459,7 +459,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron">[docs]</a>    <span class="k">class</span> <span class="nc">InactiveLearningNodePerceptron</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron">[docs]</a>    <span class="k">class</span> <span class="nc">InactiveLearningNodePerceptron</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -468,7 +468,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="n">perceptron_weight</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">==</span> <span class="p">[]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -494,7 +494,7 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">weight</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">update_weights</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.update_weights"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.update_weights">[docs]</a>        <span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.update_weights"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.update_weights">[docs]</a>        <span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="n">normalized_sample</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">normalize_sample</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
             <span class="n">normalized_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">normalized_sample</span><span class="p">)</span>
             <span class="n">normalized_target_value</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">normalized_target_value</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
@@ -502,7 +502,7 @@
                                            <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">((</span><span class="n">normalized_pred</span> <span class="o">-</span> <span class="n">normalized_target_value</span><span class="p">),</span>
                                                        <span class="n">normalized_sample</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.predict">[docs]</a>        <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.predict">[docs]</a>        <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div></div>
 
 
@@ -528,6 +528,7 @@
                  <span class="n">learning_ratio_decay</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
                  <span class="n">learning_ratio_const</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_criterion</span> <span class="o">=</span> <span class="s1">&#39;variance reduction&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_byte_size</span> <span class="o">=</span> <span class="n">max_byte_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memory_estimate_period</span> <span class="o">=</span> <span class="n">memory_estimate_period</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grace_period</span> <span class="o">=</span> <span class="n">grace_period</span>
@@ -573,7 +574,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_prediction</span> <span class="o">=</span> <span class="n">leaf_prediction</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.normalize_sample"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.normalize_sample">[docs]</a>    <span class="k">def</span> <span class="nf">normalize_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">split_criterion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_criterion</span>
+
+    <span class="nd">@split_criterion</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">split_criterion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_criterion</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">split_criterion</span> <span class="o">!=</span> <span class="s1">&#39;variance reduction&#39;</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalid option </span><span class="si">{}</span><span class="s2">&#39;, will use default &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_criterion</span><span class="p">,</span> <span class="s1">&#39;variance reduction&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_split_criterion</span> <span class="o">=</span> <span class="s1">&#39;variance reduction&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_split_criterion</span> <span class="o">=</span> <span class="n">split_criterion</span>
+
+<div class="viewcode-block" id="RegressionHoeffdingTree.normalize_sample"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.normalize_sample">[docs]</a>    <span class="k">def</span> <span class="nf">normalize_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Normalize the features in order to ave the same influence during the process of</span>
 <span class="sd">        training.</span>
@@ -602,7 +615,7 @@
             <span class="n">normalized_sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">normalized_sample</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.normalized_target_value"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.normalized_target_value">[docs]</a>    <span class="k">def</span> <span class="nf">normalized_target_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.normalized_target_value"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.normalized_target_value">[docs]</a>    <span class="k">def</span> <span class="nf">normalized_target_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Normalize the target in order to ave the same influence during the process of</span>
 <span class="sd">        training.</span>
@@ -635,7 +648,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">PERCEPTRON</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">LearningNodePerceptron</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.get_weights_for_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.get_weights_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.get_weights_for_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.get_weights_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get class votes for a single instance.</span>
 
 <span class="sd">        Parameters</span>
@@ -658,7 +671,7 @@
             <span class="k">return</span> <span class="p">[]</span></div>
 
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Incrementally trains the model. Train samples (instances) are compossed of X attributes and their</span>
 <span class="sd">        corresponding targets y.</span>
 
@@ -750,7 +763,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_estimate_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">estimate_model_byte_size</span><span class="p">()</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Predicts the target value using mean class or the perceptron.</span>
 
 <span class="sd">        Parameters</span>
@@ -788,10 +801,10 @@
                     <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">predictions</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.enforce_tracker_limit"><a class="viewcode-back" href="../../../skmultiflow.trees.html#skmultiflow.trees.RegressionHoeffdingTree.enforce_tracker_limit">[docs]</a>    <span class="k">def</span> <span class="nf">enforce_tracker_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.enforce_tracker_limit"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.enforce_tracker_limit">[docs]</a>    <span class="k">def</span> <span class="nf">enforce_tracker_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
     <span class="k">def</span> <span class="nf">_attempt_to_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>

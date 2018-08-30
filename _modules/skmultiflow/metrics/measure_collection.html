@@ -265,14 +265,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">ConfusionMatrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_sample</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
 
-<div class="viewcode-block" id="ClassificationMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+<div class="viewcode-block" id="ClassificationMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -280,34 +281,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">restart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_result</span>
 
 <span class="sd">        Updates its statistics with the results of a prediction.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sample: int</span>
+<span class="sd">        y_true: int</span>
 <span class="sd">            The true label.</span>
 
-<span class="sd">        prediction: int</span>
+<span class="sd">        y_pred: int</span>
 <span class="sd">            The classifier&#39;s prediction</span>
+
+<span class="sd">        weight: float</span>
+<span class="sd">            Sample&#39;s weight</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_weights</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
 
-        <span class="n">true_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">true_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">true_y</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="n">weight</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="o">==</span> <span class="n">sample</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">+</span> <span class="n">weight</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">==</span> <span class="n">sample</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">+</span> <span class="n">weight</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_last"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_last">[docs]</a>    <span class="k">def</span> <span class="nf">get_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
@@ -328,12 +332,12 @@
         <span class="n">majority_class</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">max_prob</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">):</span>
-            <span class="nb">sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">):</span>
-                <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
-            <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
-            <span class="k">if</span> <span class="nb">sum</span> <span class="o">&gt;</span> <span class="n">max_prob</span><span class="p">:</span>
-                <span class="n">max_prob</span> <span class="o">=</span> <span class="nb">sum</span>
+                <span class="n">sum_value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="n">sum_value</span> <span class="o">=</span> <span class="n">sum_value</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
+            <span class="k">if</span> <span class="n">sum_value</span> <span class="o">&gt;</span> <span class="n">max_prob</span><span class="p">:</span>
+                <span class="n">max_prob</span> <span class="o">=</span> <span class="n">sum_value</span>
                 <span class="n">majority_class</span> <span class="o">=</span> <span class="n">i</span>
 
         <span class="k">return</span> <span class="n">majority_class</span></div>
@@ -361,7 +365,7 @@
 <div class="viewcode-block" id="ClassificationMeasurements.get_incorrectly_classified_ratio"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_incorrectly_classified_ratio">[docs]</a>    <span class="k">def</span> <span class="nf">get_incorrectly_classified_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_get_target_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">add</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_target_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">add_label</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; _get_target_index</span>
 
 <span class="sd">        Computes the index of an element in the self.targets list.</span>
@@ -373,7 +377,7 @@
 <span class="sd">        target: int</span>
 <span class="sd">            A class label.</span>
 
-<span class="sd">        add: bool</span>
+<span class="sd">        add_label: bool</span>
 <span class="sd">            Either to add new found labels to the targets list or not.</span>
 
 <span class="sd">        Returns</span>
@@ -382,14 +386,14 @@
 <span class="sd">            The target index in the self.targets list.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">add</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">add_label</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">add</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">add_label</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">add</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="ow">and</span> <span class="n">add_label</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
@@ -411,8 +415,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
         <span class="n">pc</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">n</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rows</span><span class="p">):</span>
             <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
             <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
@@ -467,16 +471,16 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">_matrix</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">matrix</span>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;ClassificationMeasurements: targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - performance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - kappa: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - kappa_t: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - kappa_m: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - majority_class: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - performance: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - kappa: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - kappa_t: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - kappa_m: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - majority_class: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
@@ -493,7 +497,7 @@
 <span class="sd">    ConfusionMatrix object, alongside FastBuffers, to simulate fixed sized</span>
 <span class="sd">    windows of the important classifier&#39;s attributes.</span>
 
-<span class="sd">    Its functionalities are somewhat similar to those of the</span>
+<span class="sd">    Its functionality is somewhat similar to those of the</span>
 <span class="sd">    ClassificationMeasurements class. The difference is that the statistics</span>
 <span class="sd">    kept by this class are local, or partial, while the statistics kept by</span>
 <span class="sd">    the ClassificationMeasurements class are global.</span>
@@ -534,15 +538,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_sample</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="n">window_size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="n">window_size</span><span class="p">)</span>
 
-<div class="viewcode-block" id="WindowClassificationMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+<div class="viewcode-block" id="WindowClassificationMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">=</span> <span class="mi">0</span>
@@ -551,7 +556,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WindowClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_result</span>
 
 <span class="sd">        Updates its statistics with the results of a prediction. If needed it</span>
@@ -559,36 +564,36 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sample: int</span>
+<span class="sd">        y_true: int</span>
 <span class="sd">            The true label.</span>
 
-<span class="sd">        prediction: int</span>
+<span class="sd">        y_pred: int</span>
 <span class="sd">            The classifier&#39;s prediction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">true_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">old_true</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sample</span><span class="p">]))</span>
-        <span class="n">old_predict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">prediction</span><span class="p">]))</span>
+        <span class="n">true_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">old_true</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y_true</span><span class="p">]))</span>
+        <span class="n">old_predict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y_pred</span><span class="p">]))</span>
 
-        <span class="c1"># Verify if its needed to decrease the count of any label</span>
+        <span class="c1"># Verify if it&#39;s needed to decrease the count of any label</span>
         <span class="c1"># pair in the confusion matrix</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">old_true</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">old_predict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">old_true</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-                                                 <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">old_predict</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">old_true</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                         <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">old_predict</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
 
-        <span class="c1"># Verify if its needed to decrease the majority_classifier count</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="o">==</span> <span class="n">sample</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Verify if it&#39;s needed to decrease the majority_classifier count</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
 
-        <span class="c1"># Verify if its needed to decrease the correct_no_change</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">==</span> <span class="n">sample</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Verify if it&#39;s needed to decrease the correct_no_change</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
@@ -596,8 +601,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">true_y</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_last"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_last">[docs]</a>    <span class="k">def</span> <span class="nf">get_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
@@ -618,12 +623,12 @@
         <span class="n">majority_class</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">max_prob</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">):</span>
-            <span class="nb">sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">):</span>
-                <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
-            <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nb">sum</span> <span class="o">&gt;</span> <span class="n">max_prob</span><span class="p">:</span>
-                <span class="n">max_prob</span> <span class="o">=</span> <span class="nb">sum</span>
+                <span class="n">sum_value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="n">sum_value</span> <span class="o">=</span> <span class="n">sum_value</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">sum_value</span> <span class="o">&gt;</span> <span class="n">max_prob</span><span class="p">:</span>
+                <span class="n">max_prob</span> <span class="o">=</span> <span class="n">sum_value</span>
                 <span class="n">majority_class</span> <span class="o">=</span> <span class="n">i</span>
 
         <span class="k">return</span> <span class="n">majority_class</span></div>
@@ -679,7 +684,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
         <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">add</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">add</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">and</span> <span class="n">add</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
@@ -701,8 +706,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
         <span class="n">pc</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">n</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rows</span><span class="p">):</span>
             <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
             <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
@@ -728,8 +733,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">pc</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">pc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -748,8 +753,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">pc</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">pc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -758,24 +763,24 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">_matrix</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">matrix</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;ClassificationMeasurements: targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - performance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - kappa: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - kappa_t: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - kappa_m: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - majority_class: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">())</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - window_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - performance: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - kappa: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - kappa_t: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - kappa_m: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - majority_class: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">())</span></div></div>
 
 
 <div class="viewcode-block" id="MultiOutputMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiOutputMeasurements">[docs]</a><span class="k">class</span> <span class="nc">MultiOutputMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -821,9 +826,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">exact_match_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="MultiOutputMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiOutputMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+<div class="viewcode-block" id="MultiOutputMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiOutputMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -832,7 +837,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="MultiOutputMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiOutputMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiOutputMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiOutputMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_result</span>
 
 <span class="sd">        Updates its statistics with the results of a prediction.</span>
@@ -842,26 +847,26 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sample: int</span>
+<span class="sd">        y_true: list or numpy.ndarray</span>
 <span class="sd">            The true label.</span>
 
-<span class="sd">        prediction: int</span>
+<span class="sd">        y_pred: list or numpy.ndarray</span>
 <span class="sd">            The classifier&#39;s prediction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span>
         <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">):</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">size</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s1">&#39;append&#39;</span><span class="p">):</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">y_true</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">m</span>
         <span class="n">equal</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sample</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">y_true</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="c1"># update exact_match count</span>
-            <span class="k">if</span> <span class="n">sample</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">prediction</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">y_true</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                 <span class="n">equal</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># update exact_match</span>
@@ -869,11 +874,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">exact_match_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="c1"># update j_index count</span>
-        <span class="n">inter</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">sample</span> <span class="o">*</span> <span class="n">prediction</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span>
-        <span class="n">union</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">sample</span> <span class="o">+</span> <span class="n">prediction</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span>
+        <span class="n">inter</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">*</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span>
+        <span class="n">union</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">+</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span>
         <span class="k">if</span> <span class="n">union</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">+=</span> <span class="n">inter</span> <span class="o">/</span> <span class="n">union</span>
-        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span></div>
@@ -949,19 +954,15 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">_matrix</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">matrix</span>
 
 <div class="viewcode-block" id="MultiOutputMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiOutputMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;MultiOutputMeasurements: targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - hamming_loss: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - hamming_score: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - exact_match: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - j_index: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - hamming_loss: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - hamming_score: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - exact_match: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - j_index: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="MultiOutputMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiOutputMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
@@ -980,7 +981,7 @@
 <span class="sd">    attributes stored in ComplexFastBuffer objects, which will simulate</span>
 <span class="sd">    fixed sized windows.</span>
 
-<span class="sd">    Its functionalities are somewhat similar to those of the</span>
+<span class="sd">    Its functionality is somewhat similar to those of the</span>
 <span class="sd">    MultiOutputMeasurements class. The difference is that the statistics</span>
 <span class="sd">    kept by this class are local, or partial, while the statistics kept by</span>
 <span class="sd">    the MultiOutputMeasurements class are global.</span>
@@ -1017,12 +1018,14 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">window_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exact_match_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span> <span class="o">=</span> <span class="n">FastComplexBuffer</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span> <span class="o">=</span> <span class="n">FastComplexBuffer</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
 
-<div class="viewcode-block" id="WindowMultiOutputMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiOutputMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+<div class="viewcode-block" id="WindowMultiOutputMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiOutputMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">restart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
@@ -1031,7 +1034,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span> <span class="o">=</span> <span class="n">FastComplexBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span> <span class="o">=</span> <span class="n">FastComplexBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WindowMultiOutputMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiOutputMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowMultiOutputMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiOutputMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_result</span>
 
 <span class="sd">        Updates its statistics with the results of a prediction.</span>
@@ -1041,30 +1044,30 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sample: int</span>
+<span class="sd">        y_true: list or numpy.ndarray</span>
 <span class="sd">            The true label.</span>
 
-<span class="sd">        prediction: int</span>
+<span class="sd">        y_pred: list or numpy.ndarray</span>
 <span class="sd">            The classifier&#39;s prediction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span>
         <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">):</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">size</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s1">&#39;append&#39;</span><span class="p">):</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">y_true</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="s1">&#39;append&#39;</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">m</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sample</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">y_true</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
-        <span class="n">old_true</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
-        <span class="n">old_predict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+        <span class="n">old_true</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+        <span class="n">old_predict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">old_true</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">old_predict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-                <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">old_true</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">old_predict</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">old_true</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">old_predict</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="WindowMultiOutputMeasurements.get_last"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiOutputMeasurements.get_last">[docs]</a>    <span class="k">def</span> <span class="nf">get_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
@@ -1134,20 +1137,20 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">get_total_sum</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">_matrix</span>
+    <span class="k">def</span> <span class="nf">matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">matrix</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
 
 <div class="viewcode-block" id="WindowMultiOutputMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiOutputMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;WindowMultiOutputMeasurements: targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - hamming_loss: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - hamming_score: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - exact_match: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - j_index: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - hamming_loss: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - hamming_score: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - exact_match: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - j_index: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="WindowMultiOutputMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiOutputMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
@@ -1180,24 +1183,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="RegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_result</span>
 
 <span class="sd">        Use the true label and the prediction to update the statistics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sample: int</span>
+<span class="sd">        y_true: int</span>
 <span class="sd">            The true label.</span>
 
-<span class="sd">        prediction: int</span>
+<span class="sd">        y_pred: int</span>
 <span class="sd">            The classifier&#39;s prediction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">+=</span> <span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">+=</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="RegressionMeasurements.get_mean_square_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_mean_square_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_square_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1235,17 +1239,14 @@
 <div class="viewcode-block" id="RegressionMeasurements.get_last"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_last">[docs]</a>    <span class="k">def</span> <span class="nf">get_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
-
 <div class="viewcode-block" id="RegressionMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
 
 <div class="viewcode-block" id="RegressionMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;RegressionMeasurements: sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - mean_square_error: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - mean_absolute_error: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">())</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - mean_square_error: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - mean_absolute_error: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">())</span></div></div>
 
 
 <div class="viewcode-block" id="WindowRegressionMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements">[docs]</a><span class="k">class</span> <span class="nc">WindowRegressionMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -1279,28 +1280,28 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">average_error_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WindowRegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowRegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_result</span>
 
 <span class="sd">        Use the true label and the prediction to update the statistics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        sample: int</span>
+<span class="sd">        y_true: int</span>
 <span class="sd">            The true label.</span>
 
-<span class="sd">        prediction: int</span>
+<span class="sd">        y_pred: int</span>
 <span class="sd">            The classifier&#39;s prediction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">+=</span> <span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">+=</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span>
 
         <span class="n">old_square</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">((</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">))]))</span>
-        <span class="n">old_average</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_error_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">sample</span> <span class="o">-</span> <span class="n">prediction</span><span class="p">))]))</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">((</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">))]))</span>
+        <span class="n">old_average</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_error_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">))]))</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">old_square</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">old_average</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">+=</span> <span class="n">old_square</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1317,10 +1318,10 @@
 <span class="sd">            Returns the window/local mean square error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span></div>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_average_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_average_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get_average_error</span>
@@ -1333,25 +1334,26 @@
 <span class="sd">            Returns the window/local mean absolute error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span></div>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_last"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_last">[docs]</a>    <span class="k">def</span> <span class="nf">get_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sample_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error_correction</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;RegressionMeasurements: sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - mean_square_error: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">())</span> <span class="o">+</span> \
-               <span class="s1">&#39; - mean_absolute_error: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">())</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - mean_square_error: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - mean_absolute_error: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">())</span></div></div>
 
 
 <div class="viewcode-block" id="hamming_score"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.hamming_score">[docs]</a><span class="k">def</span> <span class="nf">hamming_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>

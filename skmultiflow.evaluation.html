@@ -244,7 +244,7 @@
 <p>The <a class="reference internal" href="#module-skmultiflow.evaluation" title="skmultiflow.evaluation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a> module includes evaluation methods for stream learning.</p>
 <dl class="class">
 <dt id="skmultiflow.evaluation.EvaluatePrequential">
-<em class="property">class </em><code class="descclassname">skmultiflow.evaluation.</code><code class="descname">EvaluatePrequential</code><span class="sig-paren">(</span><em>n_wait=200</em>, <em>max_samples=100000</em>, <em>batch_size=1</em>, <em>pretrain_size=200</em>, <em>max_time=inf</em>, <em>metrics=None</em>, <em>output_file=None</em>, <em>show_plot=False</em>, <em>restart_stream=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.evaluation.</code><code class="descname">EvaluatePrequential</code><span class="sig-paren">(</span><em>n_wait=200</em>, <em>max_samples=100000</em>, <em>batch_size=1</em>, <em>pretrain_size=200</em>, <em>max_time=inf</em>, <em>metrics=None</em>, <em>output_file=None</em>, <em>show_plot=False</em>, <em>restart_stream=True</em>, <em>data_points_for_classification=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/evaluate_prequential.html#EvaluatePrequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.EvaluatePrequential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.evaluation.base_evaluator.html#skmultiflow.evaluation.base_evaluator.StreamEvaluator" title="skmultiflow.evaluation.base_evaluator.StreamEvaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.evaluation.base_evaluator.StreamEvaluator</span></code></a></p>
 <p>The prequential evaluation method, or interleaved test-then-train method,
 is an alternative to the traditional holdout evaluation, inherited from
@@ -270,11 +270,13 @@ being tested on samples that it hasn’t seen yet.</p>
 <li><strong>metrics</strong> (<em>list</em><em>, </em><em>optional</em><em> (</em><em>Default:</em><em> [</em><em>'performance'</em><em>, </em><em>'kappa'</em><em>]</em><em>)</em>) – The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots
 and/or logged into the output file. Valid options are ‘performance’, ‘kappa’, ‘kappa_t’, ‘kappa_m’,
 ‘hamming_score’, ‘hamming_loss’, ‘exact_match’, ‘j_index’, ‘mean_square_error’, ‘mean_absolute_error’,
-‘true_vs_predicts’.</li>
+‘true_vs_predicted’.</li>
 <li><strong>output_file</strong> (<em>string</em><em>, </em><em>optional</em><em> (</em><em>Default: None</em><em>)</em>) – File name to save the summary of the evaluation.</li>
 <li><strong>show_plot</strong> (<em>bool</em><em> (</em><em>Default: False</em><em>)</em>) – If True, a plot will show the progress of the evaluation. Warning: Plotting will slow down the evaluation
 process.</li>
-<li><strong>restart_stream</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – If True, the stream is restarted once the evaluation is complete.</li>
+<li><strong>restart_stream</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default: True</em><em>)</em>) – If True, the stream is restarted once the evaluation is complete.</li>
+<li><strong>data_points_for_classification</strong> (<em>bool</em><em>(</em><em>Default: False</em><em>)</em>) – If True , the plot type is a data points
+(only works for classification)</li>
 </ul>
 </td>
 </tr>
@@ -284,9 +286,8 @@ process.</li>
 <ol class="arabic simple">
 <li>This evaluator can process a single learner to track its performance; or multiple learners  at a time, to
 compare different models on the same stream.</li>
-<li>The metric ‘true_vs_predicts’ is intended to be informative only. It corresponds to evaluations at a specific
-moment which might not represent the actual learner performance across all instances. Values are not logged into
-the result file.</li>
+<li>The metric ‘true_vs_predicted’ is intended to be informative only. It corresponds to evaluations at a specific
+moment which might not represent the actual learner performance across all instances.</li>
 </ol>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The first example demonstrates how to use the evaluator to evaluate one learner</span>
@@ -330,6 +331,28 @@ the result file.</li>
 <span class="gp">... </span><span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa_t&#39;</span><span class="p">,</span> <span class="s1">&#39;performance&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Evaluate</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The third example will demonstrate how to plot data points for a classifier with</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the EvaluatePrequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#PS: You can not in this case compare two classifers , the evaluator only takes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#one classifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.trees.hoeffding_tree</span> <span class="k">import</span> <span class="n">HoeffdingTree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.core.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.evaluation.evaluate_prequential</span> <span class="k">import</span> <span class="n">EvaluatePrequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the File Stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/data/datasets/sea_big.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the classifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifier</span> <span class="o">=</span> <span class="n">HoeffdingTree</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the pipeline for clf_one</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s1">&#39;Classifier&#39;</span><span class="p">,</span> <span class="n">classifier</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the evaluator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluatePrequential</span><span class="p">(</span><span class="n">pretrain_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_wait</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data_points_for_classification</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Evaluate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pipe</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="method">

@@ -238,20 +238,20 @@
 <span class="sd">    new instance of the stream belongs to the new concept after the drift. The sigmoid function</span>
 <span class="sd">    introduces a gradual, smooth transition whose duration is controlled with two parameters:</span>
 
-<span class="sd">    - `p`, the position where the change occurs</span>
-<span class="sd">    - `w`, the width of the transition</span>
+<span class="sd">    - :math:`p`, the position where the change occurs</span>
+<span class="sd">    - :math:`w`, the width of the transition</span>
 
-<span class="sd">    The sigmoid funtion at sample `t` is</span>
+<span class="sd">    The sigmoid function at sample `t` is</span>
 
 <span class="sd">    :math:`f(t) = 1/(1+e^{-4*(t-p)/w})`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    stream_option: generator (default= AGRAWALGenerator(random_state=112))</span>
-<span class="sd">        stream generator</span>
+<span class="sd">    stream: Stream (default= AGRAWALGenerator(random_state=112))</span>
+<span class="sd">        First stream</span>
 
-<span class="sd">    drift_stream_option: generator (default= AGRAWALGenerator(random_state=112, classification_function=2))</span>
-<span class="sd">        stream generator that adds drift</span>
+<span class="sd">    drift_stream: Stream (default= AGRAWALGenerator(random_state=112, classification_function=2))</span>
+<span class="sd">        Second stream which adds drift</span>
 
 <span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
 <span class="sd">        If int, random_state is the seed used by the random number generator;</span>
@@ -259,57 +259,72 @@
 <span class="sd">        If None, the random number generator is the RandomState instance used</span>
 <span class="sd">        by `np.random`.</span>
 
-<span class="sd">    alpha_option: float (Default: 0.0)</span>
-<span class="sd">        Angle alpha of change grade.</span>
-<span class="sd">        Values go from 0.0 to 90.0.</span>
+<span class="sd">    alpha: float (optional, default: 0.0)</span>
+<span class="sd">        Angle of change. If set will overwrite the width value. Valid values are in the range go from 0.0 to 90.0.</span>
 
-<span class="sd">    position_option: int (Default: 0)</span>
+<span class="sd">    position: int (default: 0)</span>
 <span class="sd">        Central position of concept drift change.</span>
 
-<span class="sd">    width_option: int (Default: 1000)</span>
+<span class="sd">    width: int (Default: 1000)</span>
 <span class="sd">        Width of concept drift change.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    An optional way to estimate the width of the transition :math:`w` is based on the angle :math:`\\alpha`:</span>
+<span class="sd">    :math:`w = 1/ tan(\\alpha)`. Since width corresponds to the number of samples for the transition, the width</span>
+<span class="sd">    is rounded-down to the nearest smaller integer. Notice that larger values of :math:`\\alpha` result in smaller</span>
+<span class="sd">    widths. For :math:`\\alpha&gt;45.0`, the width is smaller than 1 so values are round-up to 1 to avoid</span>
+<span class="sd">    division by zero errors.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream_option</span><span class="o">=</span><span class="n">AGRAWALGenerator</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">112</span><span class="p">),</span>
-                 <span class="n">drift_stream_option</span><span class="o">=</span><span class="n">AGRAWALGenerator</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">classification_function</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">AGRAWALGenerator</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">112</span><span class="p">),</span>
+                 <span class="n">drift_stream</span><span class="o">=</span><span class="n">AGRAWALGenerator</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">classification_function</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
                  <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">alpha_option</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                 <span class="n">position_option</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                 <span class="n">width_option</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">width</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConceptDriftStream</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_samples</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_targets</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_features</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_num_features</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_cat_features</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_classes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">cat_features_idx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">feature_names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">target_values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_values</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">target_values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">n_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">n_targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">n_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">n_num_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">n_cat_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">n_classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cat_features_idx</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">cat_features_idx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">feature_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">target_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_values</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">target_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">name</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span> <span class="o">=</span> <span class="n">random_state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">alpha_option</span> <span class="o">=</span> <span class="n">alpha_option</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">position_option</span> <span class="o">=</span> <span class="n">position_option</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">width_option</span> <span class="o">=</span> <span class="n">width_option</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span> <span class="o">=</span> <span class="n">stream_option</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span> <span class="o">=</span> <span class="n">drift_stream_option</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">stream_option</span><span class="o">.</span><span class="n">n_targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mf">90.0</span><span class="p">:</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">w</span> <span class="k">if</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid alpha value: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span> <span class="o">=</span> <span class="n">stream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span> <span class="o">=</span> <span class="n">drift_stream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">n_targets</span>
 
 <div class="viewcode-block" id="ConceptDriftStream.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.concept_drift_stream.html#skmultiflow.data.concept_drift_stream.ConceptDriftStream.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_option</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">width_option</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha_option</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConceptDriftStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.concept_drift_stream.html#skmultiflow.data.concept_drift_stream.ConceptDriftStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span></div>
+        <span class="n">n_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">n_samples</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">n_samples</span></div>
 
 <div class="viewcode-block" id="ConceptDriftStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.concept_drift_stream.html#skmultiflow.data.concept_drift_stream.ConceptDriftStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">has_more_samples</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">has_more_samples</span><span class="p">()</span></div>
@@ -339,22 +354,22 @@
 <span class="sd">            for the batch_size samples that were requested.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_option</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width_option</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
             <span class="n">probability_drift</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">probability_drift</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
@@ -364,7 +379,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
 <div class="viewcode-block" id="ConceptDriftStream.restart"><a class="viewcode-back" href="../../../skmultiflow.data.concept_drift_stream.html#skmultiflow.data.concept_drift_stream.ConceptDriftStream.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConceptDriftStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.concept_drift_stream.html#skmultiflow.data.concept_drift_stream.ConceptDriftStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Collects information about the generator.</span>
@@ -377,9 +395,9 @@
         <span class="n">description</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
         <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;First Stream: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_stream</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;Drift Stream: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_drift_stream</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;alpha: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha_option</span><span class="p">)</span>
-        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;position: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position_option</span><span class="p">)</span>
-        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;width: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width_option</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;alpha: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;position: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;width: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">description</span></div></div>
 </pre></div>
 

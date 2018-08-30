@@ -227,6 +227,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.visualization.evaluation_visualizer</span> <span class="k">import</span> <span class="n">EvaluationVisualizer</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.metrics</span> <span class="k">import</span> <span class="n">WindowClassificationMeasurements</span><span class="p">,</span> <span class="n">ClassificationMeasurements</span><span class="p">,</span> \
     <span class="n">MultiOutputMeasurements</span><span class="p">,</span> <span class="n">WindowMultiOutputMeasurements</span><span class="p">,</span> <span class="n">RegressionMeasurements</span><span class="p">,</span> <span class="n">WindowRegressionMeasurements</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">FastBuffer</span>
 
 
 <div class="viewcode-block" id="StreamEvaluator"><a class="viewcode-back" href="../../../skmultiflow.evaluation.base_evaluator.html#skmultiflow.evaluation.base_evaluator.StreamEvaluator">[docs]</a><span class="k">class</span> <span class="nc">StreamEvaluator</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
@@ -245,6 +246,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Constants</span>
+    <span class="n">DATA_POINTS</span> <span class="o">=</span> <span class="s1">&#39;data_points&#39;</span>
     <span class="n">PERFORMANCE</span> <span class="o">=</span> <span class="s1">&#39;performance&#39;</span>
     <span class="n">KAPPA</span> <span class="o">=</span> <span class="s1">&#39;kappa&#39;</span>
     <span class="n">KAPPA_T</span> <span class="o">=</span> <span class="s1">&#39;kappa_t&#39;</span>
@@ -255,7 +257,8 @@
     <span class="n">J_INDEX</span> <span class="o">=</span> <span class="s1">&#39;j_index&#39;</span>
     <span class="n">MSE</span> <span class="o">=</span> <span class="s1">&#39;mean_square_error&#39;</span>
     <span class="n">MAE</span> <span class="o">=</span> <span class="s1">&#39;mean_absolute_error&#39;</span>
-    <span class="n">TRUE_VS_PREDICT</span> <span class="o">=</span> <span class="s1">&#39;true_vs_predicts&#39;</span>
+    <span class="n">TRUE_VS_PREDICTED</span> <span class="o">=</span> <span class="s1">&#39;true_vs_predicted&#39;</span>
+
     <span class="n">PLOT_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="n">PERFORMANCE</span><span class="p">,</span>
                   <span class="n">KAPPA</span><span class="p">,</span>
                   <span class="n">KAPPA_T</span><span class="p">,</span>
@@ -266,15 +269,20 @@
                   <span class="n">J_INDEX</span><span class="p">,</span>
                   <span class="n">MSE</span><span class="p">,</span>
                   <span class="n">MAE</span><span class="p">,</span>
-                  <span class="n">TRUE_VS_PREDICT</span><span class="p">]</span>
+                  <span class="n">TRUE_VS_PREDICTED</span><span class="p">,</span>
+
+                  <span class="n">DATA_POINTS</span><span class="p">]</span>
     <span class="n">CLASSIFICATION_METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="n">PERFORMANCE</span><span class="p">,</span>
                               <span class="n">KAPPA</span><span class="p">,</span>
                               <span class="n">KAPPA_T</span><span class="p">,</span>
                               <span class="n">KAPPA_M</span><span class="p">,</span>
-                              <span class="n">TRUE_VS_PREDICT</span><span class="p">]</span>
+                              <span class="n">TRUE_VS_PREDICTED</span><span class="p">,</span>
+
+                              <span class="n">DATA_POINTS</span><span class="p">]</span>
     <span class="n">REGRESSION_METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="n">MSE</span><span class="p">,</span>
                           <span class="n">MAE</span><span class="p">,</span>
-                          <span class="n">TRUE_VS_PREDICT</span><span class="p">]</span>
+                          <span class="n">TRUE_VS_PREDICTED</span>
+                          <span class="p">]</span>
     <span class="n">MULTI_OUTPUT_METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="n">HAMMING_SCORE</span><span class="p">,</span>
                             <span class="n">HAMMING_LOSS</span><span class="p">,</span>
                             <span class="n">EXACT_MATCH</span><span class="p">,</span>
@@ -283,10 +291,12 @@
     <span class="n">REGRESSION</span> <span class="o">=</span> <span class="s1">&#39;regression&#39;</span>
     <span class="n">MULTI_OUTPUT</span> <span class="o">=</span> <span class="s1">&#39;multi_output&#39;</span>
     <span class="n">SINGLE_OUTPUT</span> <span class="o">=</span> <span class="s1">&#39;single-output&#39;</span>
+    <span class="n">UNDEFINED</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span>
     <span class="n">TASK_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="n">CLASSIFICATION</span><span class="p">,</span>
                   <span class="n">REGRESSION</span><span class="p">,</span>
                   <span class="n">MULTI_OUTPUT</span><span class="p">,</span>
-                  <span class="n">SINGLE_OUTPUT</span><span class="p">]</span>
+                  <span class="n">SINGLE_OUTPUT</span><span class="p">,</span>
+                  <span class="n">UNDEFINED</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Evaluator configuration</span>
@@ -301,6 +311,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">restart_stream</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_test_set</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_points_for_classification</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Metrics</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span> <span class="o">=</span> <span class="kc">None</span>
@@ -315,6 +326,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_models</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">visualizer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -464,7 +476,13 @@
             <span class="n">regression_metrics</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REGRESSION_METRICS</span><span class="p">)</span>
             <span class="n">evaluation_metrics</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">evaluation_metrics</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">classification_metrics</span><span class="p">)</span> <span class="o">==</span> <span class="n">classification_metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">evaluation_metrics</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">classification_metrics</span><span class="p">)</span> <span class="o">==</span> <span class="n">evaluation_metrics</span><span class="o">.</span><span class="n">intersection</span>\
+               <span class="p">(</span><span class="n">regression_metrics</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNDEFINED</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You need another metric with </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="n">evaluation_metrics</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">classification_metrics</span><span class="p">)</span> <span class="o">==</span> <span class="n">classification_metrics</span> <span class="ow">or</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data_points_for_classification</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CLASSIFICATION</span>
             <span class="k">elif</span> <span class="n">evaluation_metrics</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">regression_metrics</span><span class="p">)</span> <span class="o">==</span> <span class="n">regression_metrics</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">REGRESSION</span>
@@ -523,77 +541,92 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_points_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="s1">&#39;performance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_performance</span><span class="p">(),</span>
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()]</span>
-                                              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PERFORMANCE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">PERFORMANCE</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_performance</span><span class="p">(),</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()]</span>
+                                                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;kappa&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">(),</span>
-                                         <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">()]</span>
-                                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">KAPPA</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">(),</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">()]</span>
+                                           <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;kappa_t&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;kappa_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">(),</span>
-                                           <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">()]</span>
-                                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_T</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_T</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">(),</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">()]</span>
+                                             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;kappa_m&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;kappa_m&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">(),</span>
-                                           <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">()]</span>
-                                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_M</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_M</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">(),</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">()]</span>
+                                             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;hamming_score&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;hamming_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">(),</span>
-                                                 <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">()]</span>
-                                                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_SCORE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_SCORE</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">(),</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">()]</span>
+                                                   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;hamming_loss&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;hamming_loss&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">(),</span>
-                                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">()]</span>
-                                               <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_LOSS</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_LOSS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">(),</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">()]</span>
+                                                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;exact_match&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;exact_match&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">(),</span>
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">()]</span>
-                                              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXACT_MATCH</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">EXACT_MATCH</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">(),</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">()]</span>
+                                                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;j_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;j_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">(),</span>
-                                           <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">()]</span>
-                                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">J_INDEX</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">J_INDEX</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">(),</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">()]</span>
+                                             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;mean_square_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;mean_square_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">(),</span>
-                                                     <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">()]</span>
-                                                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MSE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MSE</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">(),</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">()]</span>
+                                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;mean_absolute_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">(),</span>
-                                                       <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">()]</span>
-                                                      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MAE</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">(),</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">()]</span>
+                                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;true_vs_predicts&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TRUE_VS_PREDICTED</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
             <span class="n">true</span><span class="p">,</span> <span class="n">pred</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                 <span class="n">t</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_last</span><span class="p">()</span>
                 <span class="n">true</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
                 <span class="n">pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-            <span class="n">new_points_dict</span><span class="p">[</span><span class="s1">&#39;true_vs_predicts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">true</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">TRUE_VS_PREDICTED</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">true</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA_POINTS</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+
+            <span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span>
+            <span class="n">pred</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_last</span><span class="p">()</span>
+                <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_last_sample</span><span class="p">()</span>
+
+                <span class="n">pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="n">samples</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="n">X</span><span class="p">])</span>
+
+            <span class="n">new_points_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">DATA_POINTS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">samples</span><span class="o">.</span><span class="n">get_queue</span><span class="p">()[</span><span class="n">i</span><span class="p">]],</span> <span class="n">targets</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                                                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
 
         <span class="n">shift</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">==</span> <span class="s1">&#39;prequential&#39;</span><span class="p">:</span>
             <span class="n">shift</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>   <span class="c1"># Adjust index due to training after testing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_outputs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">+</span> <span class="n">shift</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_update_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_x</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_update_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_sample_id</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update outputs of the evaluation. &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_update_file</span><span class="p">(</span><span class="n">current_x</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_update_plot</span><span class="p">(</span><span class="n">current_x</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_file</span><span class="p">(</span><span class="n">current_sample_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_plot</span><span class="p">(</span><span class="n">current_sample_id</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_init_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Note: &#39;TRUE_VS_PREDICTS&#39; or other informative data shall not be logged into the results file since they do</span>
-        <span class="c1"># not represent actual performance.</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# TEST CONFIGURATION BEGIN&quot;</span><span class="p">)</span>
@@ -645,12 +678,18 @@
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                         <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,global_mae_[</span><span class="si">{}</span><span class="s1">],sliding_mae_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span>\
                             <span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TRUE_VS_PREDICTED</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
+                        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;,true_value_[</span><span class="si">{}</span><span class="s1">],predicted_value_[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span>\
+                            <span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_update_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_x</span><span class="p">,</span> <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_update_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_sample_id</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Note: Must follow order set in _init_file()</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">current_x</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">current_sample_id</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PERFORMANCE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                     <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;,</span><span class="si">{:.6f}</span><span class="s1">,</span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_performance</span><span class="p">(),</span>
@@ -691,6 +730,13 @@
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                     <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;,</span><span class="si">{:.6f}</span><span class="s1">,</span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">(),</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TRUE_VS_PREDICTED</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
+                    <span class="n">t</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_last</span><span class="p">()</span>
+                    <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;,</span><span class="si">{:.6f}</span><span class="s1">,</span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
 
@@ -706,12 +752,12 @@
                                                    <span class="n">n_learners</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">,</span>
                                                    <span class="n">learner_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_update_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_x</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_update_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_sample_id</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update evaluation plot.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        current_x: int</span>
+<span class="sd">        current_sample_id: int</span>
 <span class="sd">            The current count of analysed samples.</span>
 
 <span class="sd">        new_points_dict: dictionary</span>
@@ -720,7 +766,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_plot</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">visualizer</span><span class="o">.</span><span class="n">on_new_train_step</span><span class="p">(</span><span class="n">current_x</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">visualizer</span><span class="o">.</span><span class="n">on_new_train_step</span><span class="p">(</span><span class="n">current_sample_id</span><span class="p">,</span> <span class="n">new_points_dict</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_reset_globals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">=</span> <span class="mi">0</span></div>

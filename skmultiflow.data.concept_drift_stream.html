@@ -232,7 +232,7 @@
 <span id="skmultiflow-data-concept-drift-stream-module"></span><h1>skmultiflow.data.concept_drift_stream module<a class="headerlink" href="#module-skmultiflow.data.concept_drift_stream" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.data.concept_drift_stream.ConceptDriftStream">
-<em class="property">class </em><code class="descclassname">skmultiflow.data.concept_drift_stream.</code><code class="descname">ConceptDriftStream</code><span class="sig-paren">(</span><em>stream_option=&lt;skmultiflow.data.agrawal_generator.AGRAWALGenerator object&gt;</em>, <em>drift_stream_option=&lt;skmultiflow.data.agrawal_generator.AGRAWALGenerator object&gt;</em>, <em>random_state=None</em>, <em>alpha_option=0.0</em>, <em>position_option=0</em>, <em>width_option=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.concept_drift_stream.ConceptDriftStream" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.data.concept_drift_stream.</code><code class="descname">ConceptDriftStream</code><span class="sig-paren">(</span><em>stream=&lt;skmultiflow.data.agrawal_generator.AGRAWALGenerator object&gt;</em>, <em>drift_stream=&lt;skmultiflow.data.agrawal_generator.AGRAWALGenerator object&gt;</em>, <em>random_state=None</em>, <em>alpha=0.0</em>, <em>position=0</em>, <em>width=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.concept_drift_stream.ConceptDriftStream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.data.base_stream.Stream</span></code></a></p>
 <p>A stream generator that adds concept drift or change by joining several streams.
 This is done by building a weighted combination of two pure distributions that
@@ -241,31 +241,36 @@ characterizes the target concepts before and after the change.</p>
 new instance of the stream belongs to the new concept after the drift. The sigmoid function
 introduces a gradual, smooth transition whose duration is controlled with two parameters:</p>
 <ul class="simple">
-<li><cite>p</cite>, the position where the change occurs</li>
-<li><cite>w</cite>, the width of the transition</li>
+<li><span class="math notranslate nohighlight">\(p\)</span>, the position where the change occurs</li>
+<li><span class="math notranslate nohighlight">\(w\)</span>, the width of the transition</li>
 </ul>
-<p>The sigmoid funtion at sample <cite>t</cite> is</p>
+<p>The sigmoid function at sample <cite>t</cite> is</p>
 <p><span class="math notranslate nohighlight">\(f(t) = 1/(1+e^{-4*(t-p)/w})\)</span></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>stream_option</strong> (<em>generator</em><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>)</em><em>)</em>) – stream generator</li>
-<li><strong>drift_stream_option</strong> (<em>generator</em><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>, </em><em>classification_function=2</em><em>)</em><em>)</em>) – stream generator that adds drift</li>
+<li><strong>stream</strong> (<a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><em>Stream</em></a><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>)</em><em>)</em>) – First stream</li>
+<li><strong>drift_stream</strong> (<a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><em>Stream</em></a><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>, </em><em>classification_function=2</em><em>)</em><em>)</em>) – Second stream which adds drift</li>
 <li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
 If RandomState instance, random_state is the random number generator;
 If None, the random number generator is the RandomState instance used
 by <cite>np.random</cite>.</li>
-<li><strong>alpha_option</strong> (<em>float</em><em> (</em><em>Default: 0.0</em><em>)</em>) – Angle alpha of change grade.
-Values go from 0.0 to 90.0.</li>
-<li><strong>position_option</strong> (<em>int</em><em> (</em><em>Default: 0</em><em>)</em>) – Central position of concept drift change.</li>
-<li><strong>width_option</strong> (<em>int</em><em> (</em><em>Default: 1000</em><em>)</em>) – Width of concept drift change.</li>
+<li><strong>alpha</strong> (<em>float</em><em> (</em><em>optional</em><em>, </em><em>default: 0.0</em><em>)</em>) – Angle of change. If set will overwrite the width value. Valid values are in the range go from 0.0 to 90.0.</li>
+<li><strong>position</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – Central position of concept drift change.</li>
+<li><strong>width</strong> (<em>int</em><em> (</em><em>Default: 1000</em><em>)</em>) – Width of concept drift change.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>An optional way to estimate the width of the transition <span class="math notranslate nohighlight">\(w\)</span> is based on the angle <span class="math notranslate nohighlight">\(\alpha\)</span>:
+<span class="math notranslate nohighlight">\(w = 1/ tan(\alpha)\)</span>. Since width corresponds to the number of samples for the transition, the width
+is rounded-down to the nearest smaller integer. Notice that larger values of <span class="math notranslate nohighlight">\(\alpha\)</span> result in smaller
+widths. For <span class="math notranslate nohighlight">\(\alpha&gt;45.0\)</span>, the width is smaller than 1 so values are round-up to 1 to avoid
+division by zero errors.</p>
 <dl class="method">
 <dt id="skmultiflow.data.concept_drift_stream.ConceptDriftStream.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.concept_drift_stream.ConceptDriftStream.get_info" title="Permalink to this definition">¶</a></dt>

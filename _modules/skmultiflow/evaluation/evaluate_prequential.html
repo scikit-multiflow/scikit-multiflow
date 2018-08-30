@@ -266,7 +266,7 @@
 <span class="sd">        The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots</span>
 <span class="sd">        and/or logged into the output file. Valid options are &#39;performance&#39;, &#39;kappa&#39;, &#39;kappa_t&#39;, &#39;kappa_m&#39;,</span>
 <span class="sd">        &#39;hamming_score&#39;, &#39;hamming_loss&#39;, &#39;exact_match&#39;, &#39;j_index&#39;, &#39;mean_square_error&#39;, &#39;mean_absolute_error&#39;,</span>
-<span class="sd">        &#39;true_vs_predicts&#39;.</span>
+<span class="sd">        &#39;true_vs_predicted&#39;.</span>
 <span class="sd">    </span>
 <span class="sd">    output_file: string, optional (Default: None)</span>
 <span class="sd">        File name to save the summary of the evaluation.</span>
@@ -275,17 +275,20 @@
 <span class="sd">        If True, a plot will show the progress of the evaluation. Warning: Plotting will slow down the evaluation</span>
 <span class="sd">        process.</span>
 
-<span class="sd">    restart_stream: bool, optional (default=True)</span>
+<span class="sd">    restart_stream: bool, optional (default: True)</span>
 <span class="sd">        If True, the stream is restarted once the evaluation is complete.</span>
+
+<span class="sd">    data_points_for_classification: bool(Default: False)</span>
+<span class="sd">        If True , the plot type is a data points</span>
+<span class="sd">        (only works for classification)</span>
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    1. This evaluator can process a single learner to track its performance; or multiple learners  at a time, to</span>
 <span class="sd">       compare different models on the same stream.</span>
 
-<span class="sd">    2. The metric &#39;true_vs_predicts&#39; is intended to be informative only. It corresponds to evaluations at a specific</span>
-<span class="sd">       moment which might not represent the actual learner performance across all instances. Values are not logged into</span>
-<span class="sd">       the result file.</span>
+<span class="sd">    2. The metric &#39;true_vs_predicted&#39; is intended to be informative only. It corresponds to evaluations at a specific</span>
+<span class="sd">       moment which might not represent the actual learner performance across all instances.</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -329,7 +332,27 @@
 <span class="sd">    ... output_file=None, show_plot=True, metrics=[&#39;kappa&#39;, &#39;kappa_t&#39;, &#39;performance&#39;])</span>
 <span class="sd">    &gt;&gt;&gt; # Evaluate</span>
 <span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=classifier)</span>
-<span class="sd">    </span>
+
+<span class="sd">    &gt;&gt;&gt; # The third example will demonstrate how to plot data points for a classifier with</span>
+<span class="sd">    &gt;&gt;&gt; # the EvaluatePrequential</span>
+<span class="sd">    &gt;&gt;&gt; #PS: You can not in this case compare two classifers , the evaluator only takes</span>
+<span class="sd">    &gt;&gt;&gt; #one classifier</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.trees.hoeffding_tree import HoeffdingTree</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.core.pipeline import Pipeline</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.evaluation.evaluate_prequential import EvaluatePrequential</span>
+<span class="sd">    &gt;&gt;&gt; # Setup the File Stream</span>
+<span class="sd">    &gt;&gt;&gt; stream = FileStream(&quot;skmultiflow/data/datasets/sea_big.csv&quot;, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
+<span class="sd">    &gt;&gt;&gt; # Setup the classifier</span>
+<span class="sd">    &gt;&gt;&gt; classifier = HoeffdingTree()</span>
+<span class="sd">    &gt;&gt;&gt; # Setup the pipeline for clf_one</span>
+<span class="sd">    &gt;&gt;&gt; pipe = Pipeline([(&#39;Classifier&#39;, classifier)])</span>
+<span class="sd">    &gt;&gt;&gt; # Setup the evaluator</span>
+<span class="sd">    &gt;&gt;&gt; evaluator = EvaluatePrequential(pretrain_size=200, max_samples=10000, batch_size=1, n_wait=200, max_time=1000,</span>
+<span class="sd">    ... output_file=None, show_plot=True, data_points_for_classification=True)</span>
+<span class="sd">    &gt;&gt;&gt; # Evaluate</span>
+<span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=pipe)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -341,7 +364,8 @@
                  <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">restart_stream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                 <span class="n">restart_stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">data_points_for_classification</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="s1">&#39;prequential&#39;</span>
@@ -352,10 +376,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_time</span> <span class="o">=</span> <span class="n">max_time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="o">=</span> <span class="n">output_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">show_plot</span> <span class="o">=</span> <span class="n">show_plot</span>
-        <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_points_for_classification</span> <span class="o">=</span> <span class="n">data_points_for_classification</span>
+
+        <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data_points_for_classification</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">PERFORMANCE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">data_points_for_classification</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">DATA_POINTS</span><span class="p">]</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="n">metrics</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">restart_stream</span> <span class="o">=</span> <span class="n">restart_stream</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_sliding</span> <span class="o">=</span> <span class="n">n_wait</span>
 
@@ -461,9 +492,12 @@
 
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">==</span> <span class="n">EvaluatePrequential</span><span class="o">.</span><span class="n">CLASSIFICATION</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">partial_classification_metrics</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_check_progress</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
 
                     <span class="c1"># Train</span>
@@ -500,34 +534,34 @@
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Total samples: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span><span class="p">))</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Global performance:&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-            <span class="k">if</span> <span class="s1">&#39;performance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PERFORMANCE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - Accuracy     : </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;kappa&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - Kappa        : </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;kappa_t&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_T</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - Kappa T      : </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;kappa_m&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">KAPPA_M</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - Kappa M      : </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;hamming_score&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_SCORE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - Hamming score: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;hamming_loss&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">HAMMING_LOSS</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - Hamming loss : </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_hamming_loss</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;exact_match&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXACT_MATCH</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - Exact matches: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_exact_match</span><span class="p">()))</span>
             <span class="k">if</span> <span class="s1">&#39;j_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - j index      : </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;mean_square_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MSE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - MSE          : </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_mean_square_error</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="s1">&#39;mean_absolute_error&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - MAE          : </span><span class="si">{:3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_classification_metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_average_error</span><span class="p">()))</span>
 

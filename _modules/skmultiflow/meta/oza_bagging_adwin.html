@@ -229,7 +229,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="OzaBaggingAdwin"><a class="viewcode-back" href="../../../skmultiflow.meta.oza_bagging_adwin.html#skmultiflow.meta.OzaBaggingAdwin">[docs]</a><span class="k">class</span> <span class="nc">OzaBaggingAdwin</span><span class="p">(</span><span class="n">OzaBagging</span><span class="p">):</span>
+<div class="viewcode-block" id="OzaBaggingAdwin"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.OzaBaggingAdwin">[docs]</a><span class="k">class</span> <span class="nc">OzaBaggingAdwin</span><span class="p">(</span><span class="n">OzaBagging</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; OzaBagging Classifier with ADWIN change detector</span>
 <span class="sd">    </span>
 <span class="sd">    This online ensemble learner method is an improvement from the Online </span>
@@ -329,10 +329,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span>
 
-<div class="viewcode-block" id="OzaBaggingAdwin.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.oza_bagging_adwin.html#skmultiflow.meta.OzaBaggingAdwin.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OzaBaggingAdwin.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.OzaBaggingAdwin.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OzaBaggingAdwin.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.meta.oza_bagging_adwin.html#skmultiflow.meta.OzaBaggingAdwin.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="OzaBaggingAdwin.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.OzaBaggingAdwin.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 
 <span class="sd">        Partially fits the model, based on the X and y matrix.</span>
@@ -436,7 +436,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">adwin_ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ADWIN</span><span class="p">())</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<div class="viewcode-block" id="OzaBaggingAdwin.get_info"><a class="viewcode-back" href="../../../skmultiflow.meta.oza_bagging_adwin.html#skmultiflow.meta.OzaBaggingAdwin.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OzaBaggingAdwin.get_info"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.OzaBaggingAdwin.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;OzaBagginAdwin Classifier: base_estimator: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_estimators: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="p">)</span></div></div>
 </pre></div>

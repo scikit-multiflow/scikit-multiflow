@@ -327,6 +327,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="skmultiflow.utils.data_structures.ConfusionMatrix.matrix">
+<code class="descname">matrix</code><a class="headerlink" href="#skmultiflow.utils.data_structures.ConfusionMatrix.matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="skmultiflow.utils.data_structures.ConfusionMatrix.remove">
 <code class="descname">remove</code><span class="sig-paren">(</span><em>i=None</em>, <em>j=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#ConfusionMatrix.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.ConfusionMatrix.remove" title="Permalink to this definition">¶</a></dt>
@@ -345,7 +350,7 @@ cells.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the removal was successful and False otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bools</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
 </td>
 </tr>
 </tbody>
@@ -477,10 +482,10 @@ values from this list.</li>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># In the following example we keep track of the last 1000 predictions</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># and true labels</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">FastBuffer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.utils.data_structures</span> <span class="k">import</span> <span class="n">FastBuffer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file_stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/data/datasets/covtype.csv&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file_stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s2">&quot;skmultiflow/data/datasets/covtype.csv&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">file_stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initially we need to partial_fit at least n_neighbors=8 samples</span>
@@ -506,7 +511,7 @@ a list, which in the end is returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_list</strong> (<em>list</em>) – A list with all the elements that are to be added to the queue.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_list</strong> (<em>list</em><em>, </em><em>numpy.ndarray</em>) – A list with all the elements that are to be added to the queue.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">If no elements need to be popped from the queue to make space for new
 entries there is no return. On the other hand, if elements need to be
@@ -590,13 +595,13 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.utils.data_structures.FastBuffer.isempty">
-<code class="descname">isempty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastBuffer.isempty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastBuffer.isempty" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.utils.data_structures.FastBuffer.is_empty">
+<code class="descname">is_empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastBuffer.is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastBuffer.is_empty" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.utils.data_structures.FastBuffer.isfull">
-<code class="descname">isfull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastBuffer.isfull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastBuffer.isfull" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.utils.data_structures.FastBuffer.is_full">
+<code class="descname">is_full</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastBuffer.is_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastBuffer.is_full" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -662,7 +667,7 @@ a list, which in the end is returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_list</strong> (<em>list</em>) – A list with all the elements that are to be added to the queue.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_list</strong> (<em>list</em><em> or </em><em>numpy.array</em>) – A list with all the elements that are to be added to the queue.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">If no elements need to be popped from the queue to make space for new
 entries there is no return. On the other hand, if elements need to be
@@ -746,13 +751,13 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.utils.data_structures.FastComplexBuffer.isempty">
-<code class="descname">isempty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastComplexBuffer.isempty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastComplexBuffer.isempty" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.utils.data_structures.FastComplexBuffer.is_empty">
+<code class="descname">is_empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastComplexBuffer.is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastComplexBuffer.is_empty" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.utils.data_structures.FastComplexBuffer.isfull">
-<code class="descname">isfull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastComplexBuffer.isfull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastComplexBuffer.isfull" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.utils.data_structures.FastComplexBuffer.is_full">
+<code class="descname">is_full</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#FastComplexBuffer.is_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.FastComplexBuffer.is_full" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -858,7 +863,7 @@ indexed of index.</td>
 
 <dl class="method">
 <dt id="skmultiflow.utils.data_structures.InstanceWindow.configure">
-<code class="descname">configure</code><span class="sig-paren">(</span><em>num_attributes</em>, <em>num_target_tasks</em>, <em>categorical_list=None</em>, <em>max_size=1000</em>, <em>dtype=&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#InstanceWindow.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.configure" title="Permalink to this definition">¶</a></dt>
+<code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#InstanceWindow.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.configure" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1042,13 +1047,18 @@ indexed by [t, i, j] where i and j are different.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The sum of occurrences in the metrix.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The sum of occurrences in the matrix.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.utils.data_structures.MOLConfusionMatrix.matrix">
+<code class="descname">matrix</code><a class="headerlink" href="#skmultiflow.utils.data_structures.MOLConfusionMatrix.matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.utils.data_structures.MOLConfusionMatrix.remove">
@@ -1069,7 +1079,7 @@ indexed by [t, i, j] where i and j are different.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the removal was successful, False otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bools</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
 </td>
 </tr>
 </tbody>
