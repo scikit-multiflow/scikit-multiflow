@@ -260,7 +260,8 @@
 <span class="sd">        by `np.random`.</span>
 
 <span class="sd">    alpha: float (optional, default: 0.0)</span>
-<span class="sd">        Angle of change. If set will overwrite the width value. Valid values are in the range go from 0.0 to 90.0.</span>
+<span class="sd">        Angle of change to estimate the width of concept drift change. If set will override the width parameter.</span>
+<span class="sd">        Valid values are in the range (0.0, 90.0].</span>
 
 <span class="sd">    position: int (default: 0)</span>
 <span class="sd">        Central position of concept drift change.</span>
@@ -272,7 +273,7 @@
 <span class="sd">    -----</span>
 <span class="sd">    An optional way to estimate the width of the transition :math:`w` is based on the angle :math:`\\alpha`:</span>
 <span class="sd">    :math:`w = 1/ tan(\\alpha)`. Since width corresponds to the number of samples for the transition, the width</span>
-<span class="sd">    is rounded-down to the nearest smaller integer. Notice that larger values of :math:`\\alpha` result in smaller</span>
+<span class="sd">    is round-down to the nearest smaller integer. Notice that larger values of :math:`\\alpha` result in smaller</span>
 <span class="sd">    widths. For :math:`\\alpha&gt;45.0`, the width is smaller than 1 so values are round-up to 1 to avoid</span>
 <span class="sd">    division by zero errors.</span>
 
@@ -334,13 +335,7 @@
 
 <div class="viewcode-block" id="ConceptDriftStream.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.concept_drift_stream.html#skmultiflow.data.concept_drift_stream.ConceptDriftStream.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
-        <span class="sd">&quot;&quot;&quot; next_sample</span>
-
-<span class="sd">        An instance is generated based on the parameters passed. If noise</span>
-<span class="sd">        is included the total number of attributes will be 24, if it&#39;s not</span>
-<span class="sd">        included there will be 7 attributes.</span>
-
-
+        <span class="sd">&quot;&quot;&quot; Returns the next `batch_size` samples.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

@@ -257,7 +257,8 @@ introduces a gradual, smooth transition whose duration is controlled with two pa
 If RandomState instance, random_state is the random number generator;
 If None, the random number generator is the RandomState instance used
 by <cite>np.random</cite>.</li>
-<li><strong>alpha</strong> (<em>float</em><em> (</em><em>optional</em><em>, </em><em>default: 0.0</em><em>)</em>) – Angle of change. If set will overwrite the width value. Valid values are in the range go from 0.0 to 90.0.</li>
+<li><strong>alpha</strong> (<em>float</em><em> (</em><em>optional</em><em>, </em><em>default: 0.0</em><em>)</em>) – Angle of change to estimate the width of concept drift change. If set will override the width parameter.
+Valid values are in the range (0.0, 90.0].</li>
 <li><strong>position</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – Central position of concept drift change.</li>
 <li><strong>width</strong> (<em>int</em><em> (</em><em>Default: 1000</em><em>)</em>) – Width of concept drift change.</li>
 </ul>
@@ -268,7 +269,7 @@ by <cite>np.random</cite>.</li>
 <p class="rubric">Notes</p>
 <p>An optional way to estimate the width of the transition <span class="math notranslate nohighlight">\(w\)</span> is based on the angle <span class="math notranslate nohighlight">\(\alpha\)</span>:
 <span class="math notranslate nohighlight">\(w = 1/ tan(\alpha)\)</span>. Since width corresponds to the number of samples for the transition, the width
-is rounded-down to the nearest smaller integer. Notice that larger values of <span class="math notranslate nohighlight">\(\alpha\)</span> result in smaller
+is round-down to the nearest smaller integer. Notice that larger values of <span class="math notranslate nohighlight">\(\alpha\)</span> result in smaller
 widths. For <span class="math notranslate nohighlight">\(\alpha&gt;45.0\)</span>, the width is smaller than 1 so values are round-up to 1 to avoid
 division by zero errors.</p>
 <dl class="method">
@@ -330,9 +331,7 @@ division by zero errors.</p>
 <dl class="method">
 <dt id="skmultiflow.data.concept_drift_stream.ConceptDriftStream.next_sample">
 <code class="descname">next_sample</code><span class="sig-paren">(</span><em>batch_size=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.next_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.concept_drift_stream.ConceptDriftStream.next_sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>An instance is generated based on the parameters passed. If noise
-is included the total number of attributes will be 24, if it’s not
-included there will be 7 attributes.</p>
+<dd><p>Returns the next <cite>batch_size</cite> samples.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
