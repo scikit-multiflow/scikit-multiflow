@@ -127,7 +127,7 @@ class EvaluatePrequential(StreamEvaluator):
     >>> # Setup the pipeline for clf_one
     >>> pipe = Pipeline([('Classifier', classifier)])
     >>> # Setup the evaluator
-    >>> evaluator = EvaluatePrequential(pretrain_size=200, max_samples=10000, batch_size=1, n_wait=200, max_time=1000,
+    >>> evaluator = EvaluatePrequential(pretrain_size=200, max_samples=10000, batch_size=1, n_wait=1, max_time=1000,
     ... output_file=None, show_plot=True, data_points_for_classification=True)
     >>> # Evaluate
     >>> evaluator.evaluate(stream=stream, model=pipe)
