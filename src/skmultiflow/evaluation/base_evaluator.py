@@ -5,6 +5,7 @@ from skmultiflow.visualization.evaluation_visualizer import EvaluationVisualizer
 from skmultiflow.metrics import WindowClassificationMeasurements, ClassificationMeasurements, \
     MultiOutputMeasurements, WindowMultiOutputMeasurements, RegressionMeasurements, WindowRegressionMeasurements
 from skmultiflow.utils import FastBuffer
+import numpy as np
 
 
 class StreamEvaluator(BaseObject, metaclass=ABCMeta):
@@ -107,6 +108,7 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
         self.visualizer = None
         self.n_sliding = 0
         self.global_sample_count = 0
+        self.buffer = FastBuffer(self.n_wait)
 
     @abstractmethod
     def evaluate(self, stream, classifier):
@@ -379,18 +381,11 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
         if self.DATA_POINTS in self.metrics:
 
             targets = self.stream.target_values
-            pred = []
-            samples = FastBuffer(5000)
 
-            for i in range(self.n_models):
-                _, p = self.global_classification_metrics[i].get_last()
-                X = self.global_classification_metrics[i].get_last_sample()
+            X = np.asarray([i[0][:] for i in self.buffer.get_queue()])
 
-                pred.append(p)
-                samples.add_element([X])
-
-            new_points_dict[self.DATA_POINTS] = [[[samples.get_queue()[i]], targets, pred[i]]
-                                                 for i in range(self.n_models)]
+            pred = np.asarray([i[1] for i in self.buffer.get_queue()])
+            new_points_dict[self.DATA_POINTS] = [X, targets, pred]
 
         shift = 0
         if self._method == 'prequential':

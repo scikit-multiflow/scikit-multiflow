@@ -73,6 +73,7 @@ class EvaluationVisualizer(BaseListener):
         self.X = None
         self.targets = None
         self.Flag = None
+        self.prediction = None
 
         self.true_values = None
         self.pred_values = None
@@ -167,6 +168,7 @@ class EvaluationVisualizer(BaseListener):
         self.subplot_mae = None
         self.subplot_true_vs_predicted = None
         self.subplot_prediction = None
+
 
         if task_type is None or task_type == "undefined":
             raise ValueError('Task type for visualizer object is undefined.')
@@ -594,7 +596,7 @@ class EvaluationVisualizer(BaseListener):
             self.Flag = True
             self.X = FastBuffer(5000)
             self.targets = []
-            self.prediction = []
+
             self.clusters = []
             self.subplot_scatter_points = self.fig.add_subplot(base)
             base += 1
@@ -796,33 +798,33 @@ class EvaluationVisualizer(BaseListener):
             self.subplot_true_vs_predicted.legend(loc=2, bbox_to_anchor=(1.01, 1.))
 
         if 'data_points' in self.plots:
-            self.X.add_element(metrics_dict['data_points'][0][0])
+            self.X.clear_queue()
+            self.X.add_element(metrics_dict['data_points'][0])
 
-            self.targets = metrics_dict['data_points'][0][1]
+            self.targets = metrics_dict['data_points'][1]
             if self.n_learners > 1:
                 raise ValueError("you can not compare classifiers in this type of plot.")
             else:
 
-                self.prediction.append(metrics_dict['data_points'][0][2])
+                self.prediction = metrics_dict['data_points'][2]
                 if self.Flag is True:
                     for j in range(len(self.targets)):
-                        self.clusters.append(FastBuffer(100))
+                        self.clusters.append(FastBuffer(200))
                 self.Flag = False
-
-                self.subplot_scatter_points.clear()
-
                 self.subplot_scatter_points.set_ylabel('X2')
                 self.subplot_scatter_points.set_xlabel('X1')
-                X1 = self.X.get_queue()[-1][0]
-                X2 = self.X.get_queue()[-1][1]
+                for i in range(len(self.prediction)):
+                    X1 = self.X.get_queue()[i][0]
+                    X2 = self.X.get_queue()[i][1]
+                    self.subplot_scatter_points.clear()
+                    for k, cluster in enumerate(self.clusters):
 
-                for k, cluster in enumerate(self.clusters):
-                    if self.prediction[-1] == k:
-                        self.clusters[k].add_element([(X1, X2)])
-                    if cluster.get_queue():
-                        temp = cluster.get_queue()
-                        self.subplot_scatter_points.scatter(*zip(*temp), label="class {k}".format(k=k))
-                        self.subplot_scatter_points.legend(loc="best")
+                        if self.prediction[i] == k:
+                            self.clusters[k].add_element([(X1, X2)])
+                        if cluster.get_queue():
+                            temp = cluster.get_queue()
+                            self.subplot_scatter_points.scatter(*zip(*temp), label="class {k}".format(k=k))
+                            self.subplot_scatter_points.legend(loc="best")
 
         if self._draw_cnt == 4:  # Refresh rate to mitigate re-drawing overhead for small changes
             plt.subplots_adjust(right=0.72)   # Adjust subplots to include metrics

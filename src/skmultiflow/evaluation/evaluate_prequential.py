@@ -3,6 +3,7 @@ import logging
 import warnings
 from timeit import default_timer as timer
 from skmultiflow.evaluation.base_evaluator import StreamEvaluator
+from skmultiflow.utils import FastBuffer
 
 
 class EvaluatePrequential(StreamEvaluator):
@@ -269,12 +270,12 @@ class EvaluatePrequential(StreamEvaluator):
 
                     for j in range(self.n_models):
                         for i in range(len(prediction[0])):
-                            if self._task_type == EvaluatePrequential.CLASSIFICATION:
-                                self.global_classification_metrics[j].add_result(y[i], prediction[j][i])
-                                self.partial_classification_metrics[j].add_result(y[i], prediction[j][i])
-                            else:
-                                self.global_classification_metrics[j].add_result(y[i], prediction[j][i])
-                                self.partial_classification_metrics[j].add_result(y[i], prediction[j][i])
+                            if self.data_points_for_classification is True:
+                                self.buffer.add_element([(X[i], prediction[j][i])])
+
+                            self.global_classification_metrics[j].add_result(y[i], prediction[j][i])
+                            self.partial_classification_metrics[j].add_result(y[i], prediction[j][i])
+
                     self._check_progress(n_samples)
 
                     # Train
@@ -294,6 +295,8 @@ class EvaluatePrequential(StreamEvaluator):
                             (self.global_sample_count / self.n_wait > update_count + 1)):
                         if prediction is not None:
                             self._update_metrics()
+                            if self.data_points_for_classification is True:
+                                self.buffer.clear_queue()
                         update_count += 1
 
                 end_time = timer()
