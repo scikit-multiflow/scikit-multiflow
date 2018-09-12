@@ -229,7 +229,8 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<span class="n">PERCEPTRON</span> <span class="o">=</span> <span class="s1">&#39;perceptron&#39;</span>
+<span class="n">_TARGET_MEAN</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span>
+<span class="n">_PERCEPTRON</span> <span class="o">=</span> <span class="s1">&#39;perceptron&#39;</span>
 <span class="n">error_width_threshold</span> <span class="o">=</span> <span class="mi">300</span>
 <span class="n">SplitNode</span> <span class="o">=</span> <span class="n">RegressionHoeffdingTree</span><span class="o">.</span><span class="n">SplitNode</span>
 <span class="n">LearningNodePerceptron</span> <span class="o">=</span> <span class="n">RegressionHoeffdingTree</span><span class="o">.</span><span class="n">LearningNodePerceptron</span>
@@ -267,7 +268,7 @@
 <span class="sd">        If True, disable pre-pruning.</span>
 <span class="sd">    leaf_prediction: string (default=&#39;nba&#39;)</span>
 <span class="sd">        | Prediction mechanism used at leafs.</span>
-<span class="sd">        | &#39;tm&#39; - Target mean</span>
+<span class="sd">        | &#39;mean&#39; - Target mean</span>
 <span class="sd">        | &#39;perceptron&#39; - Perceptron</span>
 <span class="sd">    nb_threshold: int (default=0)</span>
 <span class="sd">        Number of instances a leaf should observe before allowing Naive Bayes.</span>
@@ -279,6 +280,11 @@
 <span class="sd">        Decay multiplier for the learning rate of the perceptron</span>
 <span class="sd">    learning_ratio_const: Bool</span>
 <span class="sd">        If False the learning ratio will decay with the number of examples seen</span>
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">       If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">       If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">       If None, the random number generator is the RandomState instance used</span>
+<span class="sd">       by `np.random`. Used when leaf_prediction is &#39;perceptron&#39;.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -318,7 +324,7 @@
 
 <div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression">[docs]</a>    <span class="k">class</span> <span class="nc">AdaSplitNodeForRegression</span><span class="p">(</span><span class="n">SplitNode</span><span class="p">,</span> <span class="n">NewNode</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">):</span>
-            <span class="n">SplitNode</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">split_test</span><span class="p">,</span> <span class="n">class_observations</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">error_change</span> <span class="o">=</span> <span class="kc">False</span>
@@ -365,20 +371,19 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="kc">None</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">Rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
 
             <span class="n">true_target</span> <span class="o">=</span> <span class="n">y</span>
 
             <span class="n">normalized_error</span> <span class="o">=</span> <span class="mf">0.0</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_instance_to_leaf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span><span class="o">.</span><span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">target_prediction</span> <span class="o">=</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">X</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">normalized_error</span> <span class="o">=</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">get_normalized_error</span><span class="p">(</span><span class="n">target_prediction</span><span class="p">,</span><span class="n">true_target</span><span class="p">)</span>
+                <span class="n">target_prediction</span> <span class="o">=</span> <span class="n">rhat</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">X</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">normalized_error</span> <span class="o">=</span> <span class="n">rhat</span><span class="o">.</span><span class="n">get_normalized_error</span><span class="p">(</span><span class="n">target_prediction</span><span class="p">,</span> <span class="n">true_target</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
 
             <span class="n">old_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_error_estimation</span><span class="p">()</span>
-
 
             <span class="c1"># Add element to Change detector</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">normalized_error</span><span class="p">)</span>
@@ -392,9 +397,8 @@
 
             <span class="c1"># Check condition to build a new alternate tree</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_change</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-
-                <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="o">=</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">_new_learning_node</span><span class="p">()</span>
-                <span class="n">Rhat</span><span class="o">.</span><span class="n">_alternateTrees</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="o">=</span> <span class="n">rhat</span><span class="o">.</span><span class="n">_new_learning_node</span><span class="p">()</span>
+                <span class="n">rhat</span><span class="o">.</span><span class="n">alternate_trees_cnt</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="c1"># Condition to replace alternate tree</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">is_null_error</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -409,49 +413,49 @@
                     <span class="n">bound</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">old_error_rate</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">old_error_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">fDelta</span><span class="p">)</span> <span class="o">*</span> <span class="n">fN</span><span class="p">)</span>
                     <span class="c1"># To check, bound never less than (old_error_rate - alt_error_rate)</span>
                     <span class="k">if</span> <span class="n">bound</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">old_error_rate</span> <span class="o">-</span> <span class="n">alt_error_rate</span><span class="p">):</span>
-                        <span class="n">Rhat</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_leaves</span><span class="p">()</span>
-                        <span class="n">Rhat</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">number_leaves</span><span class="p">()</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">kill_tree_children</span><span class="p">(</span><span class="n">Rhat</span><span class="p">)</span>
+                        <span class="n">rhat</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_leaves</span><span class="p">()</span>
+                        <span class="n">rhat</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">number_leaves</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">kill_tree_children</span><span class="p">(</span><span class="n">rhat</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                             <span class="n">parent</span><span class="o">.</span><span class="n">set_child</span><span class="p">(</span><span class="n">parent_branch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">Rhat</span><span class="o">.</span><span class="n">_tree_root</span> <span class="o">=</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">_tree_root</span><span class="o">.</span><span class="n">_alternate_tree</span>
-                        <span class="n">Rhat</span><span class="o">.</span><span class="n">_switchAlternateTrees</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">rhat</span><span class="o">.</span><span class="n">_tree_root</span> <span class="o">=</span> <span class="n">rhat</span><span class="o">.</span><span class="n">_tree_root</span><span class="o">.</span><span class="n">_alternate_tree</span>
+                        <span class="n">rhat</span><span class="o">.</span><span class="n">switch_alternate_trees_cnt</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">elif</span> <span class="n">bound</span> <span class="o">&lt;</span> <span class="n">alt_error_rate</span> <span class="o">-</span> <span class="n">old_error_rate</span><span class="p">:</span>
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="p">,</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="o">=</span> <span class="kc">None</span>
                         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="p">,</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="o">=</span> <span class="kc">None</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">kill_tree_children</span><span class="p">(</span><span class="n">Rhat</span><span class="p">)</span>
-                        <span class="n">Rhat</span><span class="o">.</span><span class="n">_prunedalternateTree</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># hat._pruned_alternate_trees to check</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">kill_tree_children</span><span class="p">(</span><span class="n">rhat</span><span class="p">)</span>
+                        <span class="n">rhat</span><span class="o">.</span><span class="n">pruned_alternate_trees_cnt</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># hat.pruned_alternate_trees_cnt to check</span>
 
             <span class="c1"># Learn_From_Instance alternate Tree and Child nodes</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">Rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span>
             <span class="n">child_branch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_child_index</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
             <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="n">child_branch</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">child</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">Rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
+                <span class="n">child</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression.kill_tree_children"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression.kill_tree_children">[docs]</a>        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Rhat</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression.kill_tree_children"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression.kill_tree_children">[docs]</a>        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rhat</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="c1"># Delete alternate tree if it exists</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">AdaSplitNodeForRegression</span><span class="p">)</span> <span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">rhat</span><span class="o">.</span><span class="n">AdaSplitNodeForRegression</span><span class="p">)</span> <span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_pruned_alternate_trees</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="c1"># Recursive delete of SplitNodes</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">AdaSplitNodeForRegression</span><span class="p">):</span>
-                        <span class="n">child</span><span class="o">.</span><span class="n">kill_tree_children</span><span class="p">(</span><span class="n">Rhat</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">rhat</span><span class="o">.</span><span class="n">AdaSplitNodeForRegression</span><span class="p">):</span>
+                        <span class="n">child</span><span class="o">.</span><span class="n">kill_tree_children</span><span class="p">(</span><span class="n">rhat</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
                         <span class="n">child</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">Rhat</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span>
+                        <span class="n">rhat</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span>
                     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">InactiveLearningNode</span><span class="p">):</span>
                         <span class="n">child</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">Rhat</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span></div>
+                        <span class="n">rhat</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span></div>
 
         <span class="c1"># override NewNode</span>
 <div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression.filter_instance_to_leaves"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression.filter_instance_to_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">filter_instance_to_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">,</span>
@@ -486,17 +490,17 @@
 
 <div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression">[docs]</a>    <span class="k">class</span> <span class="nc">AdaLearningNodeForRegression</span><span class="p">(</span><span class="n">LearningNodePerceptron</span><span class="p">,</span> <span class="n">NewNode</span><span class="p">):</span>
 
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">):</span>
-            <span class="n">LearningNodePerceptron</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ErrorChange</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error_change</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_randomSeed</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_classifier_random</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_randomSeed</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.calc_byte_size"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.calc_byte_size">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="n">byte_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">byte_size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">get_length_estimation</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">byte_size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">get_length_estimation</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">byte_size</span></div>
 
         <span class="c1"># Override NewNode</span>
@@ -505,48 +509,48 @@
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.get_error_estimation"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.get_error_estimation">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_estimation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">estimation</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">estimation</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.get_error_width"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.get_error_width">[docs]</a>        <span class="k">def</span> <span class="nf">get_error_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">width</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">width</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.is_null_error"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.is_null_error">[docs]</a>        <span class="k">def</span> <span class="nf">is_null_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.kill_tree_children"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.kill_tree_children">[docs]</a>        <span class="k">def</span> <span class="nf">kill_tree_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hat</span><span class="p">):</span>
             <span class="k">pass</span></div>
 
         <span class="c1"># Override NewNode</span>
-<div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">Rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">rhat</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">):</span>
 
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">Rhat</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">learn_from_instance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">rhat</span><span class="p">)</span>
 
             <span class="n">true_target</span> <span class="o">=</span> <span class="n">y</span>
-            <span class="n">target_prediction</span> <span class="o">=</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">X</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">target_prediction</span> <span class="o">=</span> <span class="n">rhat</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">X</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="n">normalized_error</span> <span class="o">=</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">get_normalized_error</span><span class="p">(</span><span class="n">target_prediction</span><span class="p">,</span> <span class="n">true_target</span><span class="p">)</span>
+            <span class="n">normalized_error</span> <span class="o">=</span> <span class="n">rhat</span><span class="o">.</span><span class="n">get_normalized_error</span><span class="p">(</span><span class="n">target_prediction</span><span class="p">,</span> <span class="n">true_target</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
 
             <span class="n">old_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_error_estimation</span><span class="p">()</span>
 
             <span class="c1"># Add element to Adwin</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">normalized_error</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">normalized_error</span><span class="p">)</span>
             <span class="c1"># Detect change with Adwin</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ErrorChange</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimationErrorWeight</span><span class="o">.</span><span class="n">detected_change</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error_change</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">detected_change</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ErrorChange</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">old_error</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_error_estimation</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ErrorChange</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_change</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">old_error</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_error_estimation</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_error_change</span> <span class="o">=</span> <span class="kc">False</span>
 
             <span class="c1"># call ActiveLearningNode</span>
             <span class="n">weight_seen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight_seen</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="n">weight_seen</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight_seen_at_last_split_evaluation</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">Rhat</span><span class="o">.</span><span class="n">grace_period</span><span class="p">:</span>
-                <span class="n">Rhat</span><span class="o">.</span><span class="n">_attempt_to_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">weight_seen</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight_seen_at_last_split_evaluation</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">rhat</span><span class="o">.</span><span class="n">grace_period</span><span class="p">:</span>
+                <span class="n">rhat</span><span class="o">.</span><span class="n">_attempt_to_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="n">weight_seen</span><span class="p">)</span></div>
 
         <span class="c1"># Override NewNode, New for option votes</span>
@@ -575,7 +579,8 @@
                  <span class="n">nominal_attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">learning_ratio_perceptron</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
                  <span class="n">learning_ratio_decay</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
-                 <span class="n">learning_ratio_const</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                 <span class="n">learning_ratio_const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">RegressionHAT</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">max_byte_size</span><span class="o">=</span><span class="n">max_byte_size</span><span class="p">,</span>
                                             <span class="n">memory_estimate_period</span><span class="o">=</span><span class="n">memory_estimate_period</span><span class="p">,</span>
@@ -590,11 +595,12 @@
                                             <span class="n">nominal_attributes</span><span class="o">=</span><span class="n">nominal_attributes</span><span class="p">,</span>
                                             <span class="n">learning_ratio_perceptron</span><span class="o">=</span><span class="n">learning_ratio_perceptron</span><span class="p">,</span>
                                             <span class="n">learning_ratio_decay</span><span class="o">=</span><span class="n">learning_ratio_decay</span><span class="p">,</span>
-                                            <span class="n">learning_ratio_const</span><span class="o">=</span><span class="n">learning_ratio_const</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">=</span> <span class="n">leaf_prediction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_alternateTrees</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_switchAlternateTrees</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_prunedalternateTree</span> <span class="o">=</span> <span class="mi">0</span>
+                                            <span class="n">learning_ratio_const</span><span class="o">=</span><span class="n">learning_ratio_const</span><span class="p">,</span>
+                                            <span class="n">leaf_prediction</span><span class="o">=</span><span class="n">leaf_prediction</span><span class="p">,</span>
+                                            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alternate_trees_cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">switch_alternate_trees_cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pruned_alternate_trees_cnt</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">leaf_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -602,9 +608,9 @@
 
     <span class="nd">@leaf_prediction</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">leaf_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leaf_prediction</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">leaf_prediction</span> <span class="o">!=</span> <span class="n">PERCEPTRON</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalid option </span><span class="si">{}</span><span class="s2">&#39;, will use default &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">leaf_prediction</span><span class="p">,</span> <span class="n">PERCEPTRON</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_prediction</span> <span class="o">=</span> <span class="n">PERCEPTRON</span>
+        <span class="k">if</span> <span class="n">leaf_prediction</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="n">_TARGET_MEAN</span><span class="p">,</span> <span class="n">_PERCEPTRON</span><span class="p">}:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalid option </span><span class="si">{}</span><span class="s2">&#39;, will use default &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">leaf_prediction</span><span class="p">,</span> <span class="n">_PERCEPTRON</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_prediction</span> <span class="o">=</span> <span class="n">_PERCEPTRON</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_prediction</span> <span class="o">=</span> <span class="n">leaf_prediction</span>
 
@@ -613,7 +619,8 @@
         <span class="k">if</span> <span class="n">initial_class_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">initial_class_observations</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AdaLearningNodeForRegression</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AdaLearningNodeForRegression</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">,</span>
+                                                 <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Trains the model on samples X and corresponding targets y.</span>

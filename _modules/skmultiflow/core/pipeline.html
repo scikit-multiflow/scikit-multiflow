@@ -433,7 +433,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_estimator</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">Xt</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xt</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Pipeline.partial_fit_transform"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.partial_fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; partial_fit_trasnform </span>
+        <span class="sd">&quot;&quot;&quot; partial_fit_transform</span>
 <span class="sd">        </span>
 <span class="sd">        Partial fits and transforms data in all but last step, then </span>
 <span class="sd">        partial_fit in last step</span>
@@ -456,7 +456,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="Pipeline.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.core.pipeline.html#skmultiflow.core.Pipeline.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;estimator&#39;</span></div>
+        <span class="k">return</span> <span class="s1">&#39;pipeline&#39;</span></div>
 
     <span class="k">def</span> <span class="nf">_validate_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; validate_steps</span>
@@ -473,7 +473,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">names</span><span class="p">,</span> <span class="n">estimators</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
-        <span class="n">transforms</span> <span class="o">=</span> <span class="n">classifier</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">estimators</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">transforms</span> <span class="o">=</span> <span class="n">estimators</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 

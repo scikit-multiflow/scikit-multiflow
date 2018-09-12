@@ -222,13 +222,26 @@
             
   <h1>Source code for skmultiflow.data.synth</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="make_logical"><a class="viewcode-back" href="../../../skmultiflow.data.synth.html#skmultiflow.data.synth.make_logical">[docs]</a><span class="k">def</span> <span class="nf">make_logical</span><span class="p">(</span><span class="n">n_tiles</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Make a toy dataset with three labels that represent the logical functions: OR, XOR, AND</span>
-<span class="sd">        (functions of the 2D input).</span>
+<div class="viewcode-block" id="make_logical"><a class="viewcode-back" href="../../../skmultiflow.data.synth.html#skmultiflow.data.make_logical">[docs]</a><span class="k">def</span> <span class="nf">make_logical</span><span class="p">(</span><span class="n">n_tiles</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Make a toy dataset with three labels that represent the logical functions: OR, XOR, AND</span>
+<span class="sd">     (functions of the 2D input).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_tiles: int</span>
+<span class="sd">        Number of tiles to generate</span>
+
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">        If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">        If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">        If None, the random number generator is the RandomState instance used</span>
+<span class="sd">        by `np.random`.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="n">pat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
         <span class="c1"># X  X  Y  Y  Y</span>
@@ -246,7 +259,7 @@
     <span class="n">pat2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="p">]</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[:,</span> <span class="n">D</span><span class="p">:</span><span class="n">E</span><span class="p">]</span>
     <span class="n">pat2</span><span class="p">[:,</span> <span class="n">L</span><span class="p">:</span><span class="n">E</span><span class="p">]</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">D</span><span class="p">]</span>
     <span class="n">pat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">pat2</span><span class="p">,</span> <span class="p">(</span><span class="n">n_tiles</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">pat2</span><span class="p">)</span>
+    <span class="n">random_state</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">pat2</span><span class="p">)</span>
 
     <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pat2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pat2</span><span class="p">[:,</span> <span class="n">L</span><span class="p">:</span><span class="n">E</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>

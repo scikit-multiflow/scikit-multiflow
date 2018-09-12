@@ -226,7 +226,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.data.base_stream</span> <span class="k">import</span> <span class="n">Stream</span>
 
 
-<div class="viewcode-block" id="DataStream"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream">[docs]</a><span class="k">class</span> <span class="nc">DataStream</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream">[docs]</a><span class="k">class</span> <span class="nc">DataStream</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; DataStream</span>
 
 <span class="sd">    A stream generated from the entries of a dataset ( numpy array or pandas</span>
@@ -458,7 +458,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_cat_features_idx</span> <span class="o">=</span> <span class="n">cat_features_idx</span>
 
-<div class="viewcode-block" id="DataStream.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; prepare_for_use</span>
 
 <span class="sd">        Prepares the stream for use. This functions should always be</span>
@@ -536,7 +536,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">target_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_values</span><span class="p">()</span>
 
-<div class="viewcode-block" id="DataStream.restart"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.restart"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; restart</span>
 
 <span class="sd">        Restarts the stream&#39;s sample feeding, while keeping all of its</span>
@@ -550,7 +550,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="DataStream.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
 <span class="sd">        If there is enough instances to supply at least batch_size samples, those</span>
@@ -581,7 +581,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="DataStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the estimated number of remaining samples.</span>
 
 <span class="sd">        Returns</span>
@@ -591,7 +591,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="DataStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks if stream has more samples.</span>
 
@@ -602,7 +602,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span></div>
 
-<div class="viewcode-block" id="DataStream.print_df"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.print_df">[docs]</a>    <span class="k">def</span> <span class="nf">print_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.print_df"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.print_df">[docs]</a>    <span class="k">def</span> <span class="nf">print_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints all the samples in the stream.</span>
 
@@ -610,7 +610,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataStream.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CLASSIFICATION</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> target(s), </span><span class="si">{}</span><span class="s2"> classes&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span><span class="p">:</span>
@@ -625,7 +625,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_REGRESSION</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span>
 
-<div class="viewcode-block" id="DataStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.data_stream.html#skmultiflow.data.DataStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DataStream.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.DataStream.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Dataset Stream:&#39;</span> <span class="o">+</span> <span class="s1">&#39;  -  n_targets: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div></div>
 </pre></div>
 

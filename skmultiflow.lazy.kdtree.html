@@ -234,21 +234,7 @@
 <dt id="skmultiflow.lazy.kdtree.KDTree">
 <em class="property">class </em><code class="descclassname">skmultiflow.lazy.kdtree.</code><code class="descname">KDTree</code><span class="sig-paren">(</span><em>X</em>, <em>metric='mixed'</em>, <em>categorical_list=None</em>, <em>return_distance=False</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/kdtree.html#KDTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base_object.html#skmultiflow.core.base_object.BaseObject" title="skmultiflow.core.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base_object.BaseObject</span></code></a></p>
-<p>KD Tree</p>
-<p>A K dimensional tree implementation, adapted for k dimensional problems.</p>
-<p>A KD Tree is a space partitioning (in axis-aligned hyperrectangles) tree
-structure, where each node is associated with a feature and a splitting
-value. Each node can have up to two children nodes, with the property that
-all the samples stored by the left child have their feature value smaller
-then the node’s splitting value, and all the samples stored by the right
-child have their relevant feature greater than or equal to the node’s
-splitting value.</p>
-<p>The algorithm used to select the splitting feature and the splitting
-value for each node is called the sliding midpoint rule, as defined in
-Maneewongvatana and Mount 1999. The idea is that we don’t need a balanced
-distribution of samples in all nodes, for the query time to be efficient,
-as long as there are ‘fat’ nodes around. This algorithm guarantees that
-the nodes won’t become long and thin.</p>
+<p>A K-dimensional tree implementation, adapted for k dimensional problems.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -277,10 +263,22 @@ query will be.</li>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
+<p>A KD Tree is a space partitioning (in axis-aligned hyper-rectangles) tree
+structure, where each node is associated with a feature and a splitting
+value. Each node can have up to two children nodes, with the property that
+all the samples stored by the left child have their feature value smaller
+then the node’s splitting value, and all the samples stored by the right
+child have their relevant feature greater than or equal to the node’s
+splitting value.</p>
+<p>The algorithm used to select the splitting feature and the splitting
+value for each node is called the sliding midpoint rule, as defined in
+Maneewongvatana and Mount 1999. The idea is that we don’t need a balanced
+distribution of samples in all nodes, for the query time to be efficient,
+as long as there are ‘fat’ nodes around. This algorithm guarantees that
+the nodes won’t become long and thin.</p>
 <p>This implementation is not faster than scikit-learn’s implementation,
 nor than scipy’s implementation, but it allow users to use a custom
-metric for the distance calculation.
-term</p>
+metric for the distance calculation.</p>
 <dl class="attribute">
 <dt id="skmultiflow.lazy.kdtree.KDTree.METRICS">
 <code class="descname">METRICS</code><em class="property"> = ['mixed', 'euclidean']</em><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTree.METRICS" title="Permalink to this definition">¶</a></dt>
@@ -335,9 +333,8 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Either a list containing all the indexes from the closest neighbors (if
-return_distance is False) or two lists, one with the neighbors indexes
-and another one with their distance to the samples in X.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">idx: List containing all the indexes from the closest neighbors (if return_distance is False)
+(dist, idx): Distance to neighbors and corresponding index ()if return_distance is True).</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list or tuple list</p>
@@ -380,7 +377,6 @@ from all the neighbors within the maximum query radius.</p>
 <dt id="skmultiflow.lazy.kdtree.KDTreeNode">
 <em class="property">class </em><code class="descclassname">skmultiflow.lazy.kdtree.</code><code class="descname">KDTreeNode</code><span class="sig-paren">(</span><em>data</em>, <em>left_indexes</em>, <em>right_indexes</em>, <em>split_axis</em>, <em>split_value</em>, <em>distance_function</em>, <em>leaf_size</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/lazy/kdtree.html#KDTreeNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTreeNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base_object.html#skmultiflow.core.base_object.BaseObject" title="skmultiflow.core.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base_object.BaseObject</span></code></a></p>
-<p>KD Tree Node</p>
 <p>A node from a KD Tree. A node object will store the indexes of its children’s
 samples, and only a reference to the tree’s complete data.</p>
 <table class="docutils field-list" frame="void" rules="none">

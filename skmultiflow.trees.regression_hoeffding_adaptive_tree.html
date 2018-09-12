@@ -232,7 +232,7 @@
 <span id="skmultiflow-trees-regression-hoeffding-adaptive-tree-module"></span><h1>skmultiflow.trees.regression_hoeffding_adaptive_tree module<a class="headerlink" href="#module-skmultiflow.trees.regression_hoeffding_adaptive_tree" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT">
-<em class="property">class </em><code class="descclassname">skmultiflow.trees.regression_hoeffding_adaptive_tree.</code><code class="descname">RegressionHAT</code><span class="sig-paren">(</span><em>max_byte_size=33554432</em>, <em>memory_estimate_period=1000000</em>, <em>grace_period=200</em>, <em>split_confidence=1e-07</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>leaf_prediction='perceptron'</em>, <em>no_preprune=False</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em>, <em>learning_ratio_perceptron=0.02</em>, <em>learning_ratio_decay=0.001</em>, <em>learning_ratio_const=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.trees.regression_hoeffding_adaptive_tree.</code><code class="descname">RegressionHAT</code><span class="sig-paren">(</span><em>max_byte_size=33554432</em>, <em>memory_estimate_period=1000000</em>, <em>grace_period=200</em>, <em>split_confidence=1e-07</em>, <em>tie_threshold=0.05</em>, <em>binary_split=False</em>, <em>stop_mem_management=False</em>, <em>remove_poor_atts=False</em>, <em>leaf_prediction='perceptron'</em>, <em>no_preprune=False</em>, <em>nb_threshold=0</em>, <em>nominal_attributes=None</em>, <em>learning_ratio_perceptron=0.02</em>, <em>learning_ratio_decay=0.001</em>, <em>learning_ratio_const=True</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree" title="skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree</span></code></a></p>
 <p>Regression Hoeffding trees known as Fast incremental model tree with drift detection (FIMT-DD).</p>
 <p>The tree uses ADWIN to detect drift and PERCEPTRON to make predictions</p>
@@ -252,7 +252,7 @@
 <li><strong>no_preprune</strong> (<em>boolean</em><em> (</em><em>default=False</em><em>)</em>) – If True, disable pre-pruning.</li>
 <li><strong>leaf_prediction</strong> (<em>string</em><em> (</em><em>default='nba'</em><em>)</em>) – <div class="line-block">
 <div class="line">Prediction mechanism used at leafs.</div>
-<div class="line">’tm’ - Target mean</div>
+<div class="line">’mean’ - Target mean</div>
 <div class="line">’perceptron’ - Perceptron</div>
 </div>
 </li>
@@ -261,6 +261,10 @@
 <li><strong>learning_ratio_perceptron</strong> (<em>flaot</em>) – The learning rate of the perceptron.</li>
 <li><strong>learning_ratio_decay</strong> (<em>float</em>) – Decay multiplier for the learning rate of the perceptron</li>
 <li><strong>learning_ratio_const</strong> (<em>Bool</em>) – If False the learning ratio will decay with the number of examples seen</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <cite>np.random</cite>. Used when leaf_prediction is ‘perceptron’.</li>
 </ul>
 </td>
 </tr>
@@ -268,7 +272,7 @@
 </table>
 <dl class="class">
 <dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression">
-<em class="property">class </em><code class="descname">AdaLearningNodeForRegression</code><span class="sig-paren">(</span><em>initial_class_observations</em>, <em>perceptron_weight</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">AdaLearningNodeForRegression</code><span class="sig-paren">(</span><em>initial_class_observations</em>, <em>perceptron_weight</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.regression_hoeffding_tree.LearningNodePerceptron</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.trees.regression_hoeffding_adaptive_tree.NewNode</span></code></p>
 <dl class="method">
 <dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.calc_byte_size">
@@ -302,7 +306,7 @@
 
 <dl class="method">
 <dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.learn_from_instance">
-<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>Rhat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.learn_from_instance" title="Permalink to this definition">¶</a></dt>
+<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>rhat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaLearningNodeForRegression.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaLearningNodeForRegression.learn_from_instance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the node with the provided instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -312,7 +316,7 @@
 <li><strong>X</strong> (<em>numpy.ndarray of length equal to the number of features.</em>) – Instance attributes for updating the node.</li>
 <li><strong>y</strong> (<em>int</em>) – Instance class.</li>
 <li><strong>weight</strong> (<em>float</em>) – Instance weight.</li>
-<li><strong>ht</strong> (<a class="reference internal" href="skmultiflow.trees.html#skmultiflow.trees.HoeffdingTree" title="skmultiflow.trees.HoeffdingTree"><em>HoeffdingTree</em></a>) – Hoeffding Tree to update.</li>
+<li><strong>rht</strong> (<a class="reference internal" href="skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree" title="skmultiflow.trees.regression_hoeffding_tree.RegressionHoeffdingTree"><em>RegressionHoeffdingTree</em></a>) – Regression Hoeffding Tree to update.</li>
 </ul>
 </td>
 </tr>
@@ -369,12 +373,12 @@
 
 <dl class="method">
 <dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.kill_tree_children">
-<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>Rhat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.kill_tree_children" title="Permalink to this definition">¶</a></dt>
+<code class="descname">kill_tree_children</code><span class="sig-paren">(</span><em>rhat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.kill_tree_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.kill_tree_children" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.learn_from_instance">
-<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>Rhat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.learn_from_instance" title="Permalink to this definition">¶</a></dt>
+<code class="descname">learn_from_instance</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>weight</em>, <em>rhat</em>, <em>parent</em>, <em>parent_branch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/regression_hoeffding_adaptive_tree.html#RegressionHAT.AdaSplitNodeForRegression.learn_from_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.regression_hoeffding_adaptive_tree.RegressionHAT.AdaSplitNodeForRegression.learn_from_instance" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

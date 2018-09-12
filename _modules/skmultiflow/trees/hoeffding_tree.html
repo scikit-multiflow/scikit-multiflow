@@ -1384,10 +1384,6 @@
                 <span class="n">description</span> <span class="o">+=</span> <span class="n">buffer</span><span class="p">[</span><span class="n">line</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">description</span></div>
 
-<div class="viewcode-block" id="HoeffdingTree.is_randomizable"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.is_randomizable">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">is_randomizable</span><span class="p">():</span>  <span class="c1"># TODO do we need this?</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
-
 <div class="viewcode-block" id="HoeffdingTree.compute_hoeffding_bound"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.compute_hoeffding_bound">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">compute_hoeffding_bound</span><span class="p">(</span><span class="n">range_val</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the Hoeffding bound, used to decide how many samples are necessary at each node.</span>
@@ -1521,8 +1517,9 @@
                      <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_byte_size_estimate</span><span class="p">)</span> \
                     <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_byte_size_estimate_overhead_fraction</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">byte_size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_byte_size</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_growth_allowed</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">return</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_mem_management</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_growth_allowed</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span>
         <span class="n">learning_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_learning_nodes</span><span class="p">()</span>
         <span class="n">learning_nodes</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">calculate_promise</span><span class="p">())</span>
         <span class="n">max_active</span> <span class="o">=</span> <span class="mi">0</span>

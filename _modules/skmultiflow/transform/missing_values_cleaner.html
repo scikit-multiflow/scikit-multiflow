@@ -229,26 +229,14 @@
 
 
 <div class="viewcode-block" id="MissingValuesCleaner"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner">[docs]</a><span class="k">class</span> <span class="nc">MissingValuesCleaner</span><span class="p">(</span><span class="n">StreamTransform</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; MissingValuesCleaner</span>
-<span class="sd">    </span>
-<span class="sd">    This is a transform object. It provides a simple way to replace missing </span>
+    <span class="sd">&quot;&quot;&quot; This is a transform object. It provides a simple way to replace missing</span>
 <span class="sd">    values in samples with another value, which can be chosen from a set of </span>
 <span class="sd">    replacing strategies.</span>
 <span class="sd">    </span>
-<span class="sd">    A missing value in a sample can be coded in many different ways, but the </span>
-<span class="sd">    most common one is to use numpy&#39;s NaN, that&#39;s why that is the default </span>
-<span class="sd">    missing value parameter.</span>
-<span class="sd">    </span>
-<span class="sd">    The user should choose the correct substitution strategy for his use </span>
-<span class="sd">    case, as each strategy has its pros and cons. The strategy can be chosen </span>
-<span class="sd">    from a set of predefined strategies, which are: &#39;zero&#39;, &#39;mean&#39;, &#39;median&#39;, </span>
-<span class="sd">    &#39;mode&#39;, &#39;custom&#39;.</span>
-<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    missing_value: int, char (Default: numpy.nan)</span>
-<span class="sd">        The way a missed value is coded in the matrices that are to be </span>
-<span class="sd">        transformed.</span>
+<span class="sd">    missing_value: int, float or list (Default: numpy.nan)</span>
+<span class="sd">        Missing value to replace</span>
 <span class="sd">    </span>
 <span class="sd">    strategy: string (Default: &#39;zero&#39;)</span>
 <span class="sd">        The strategy adopted to find the missing value replacement. It can </span>
@@ -275,43 +263,49 @@
 <span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(10)</span>
 <span class="sd">    &gt;&gt;&gt; X[9, 0] = -47</span>
 <span class="sd">    &gt;&gt;&gt; # We will use this list to keep track of values</span>
-<span class="sd">    &gt;&gt;&gt; list = []</span>
+<span class="sd">    &gt;&gt;&gt; data = []</span>
 <span class="sd">    &gt;&gt;&gt; # Iterate over the first 9 samples, to build a sample window</span>
 <span class="sd">    &gt;&gt;&gt; for i in range(9):</span>
 <span class="sd">    &gt;&gt;&gt;     X_transf = cleaner.partial_fit_transform([X[i].tolist()])</span>
-<span class="sd">    &gt;&gt;&gt;     list.append(X_transf[0][0])</span>
-<span class="sd">    &gt;&gt;&gt;     print(X_transf)</span>
+<span class="sd">    &gt;&gt;&gt;     data.append(X_transf[0][0])</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Transform last sample. The first feature should be replaced by the list&#39;s </span>
 <span class="sd">    &gt;&gt;&gt; # median value</span>
 <span class="sd">    &gt;&gt;&gt; X_transf = cleaner.partial_fit_transform([X[9].tolist()])</span>
-<span class="sd">    &gt;&gt;&gt; print(X_transf)</span>
-<span class="sd">    &gt;&gt;&gt; np.median(list)</span>
-<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; np.median(data)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    A missing value in a sample can be coded in many different ways, but the</span>
+<span class="sd">    most common one is to use numpy&#39;s NaN, that&#39;s why that is the default</span>
+<span class="sd">    missing value parameter.</span>
+
+<span class="sd">    The user should choose the correct substitution strategy for his use</span>
+<span class="sd">    case, as each strategy has its pros and cons. The strategy can be chosen</span>
+<span class="sd">    from a set of predefined strategies, which are: &#39;zero&#39;, &#39;mean&#39;, &#39;median&#39;,</span>
+<span class="sd">    &#39;mode&#39;, &#39;custom&#39;.</span>
+
+<span class="sd">    Notice that `MissingValuesCleaner` can actually be used to replace arbitrary</span>
+<span class="sd">    values.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;zero&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">new_value</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1"># dDefault_values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="s1">&#39;zero&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="mi">200</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span> <span class="o">=</span> <span class="mi">1</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">(</span><span class="n">missing_value</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_value</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">new_value</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">missing_value</span><span class="p">,</span> <span class="s1">&#39;append&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">missing_value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span> <span class="o">=</span> <span class="n">missing_value</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">missing_value</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">window_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span> <span class="o">=</span> <span class="n">new_value</span>
 
-        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MissingValuesCleaner.transform"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform</span>
@@ -326,8 +320,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][:]])</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]):</span>
                     <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_substitute</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">X</span></div>
@@ -352,17 +348,18 @@
             <span class="k">return</span> <span class="mi">0</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">is_empty</span><span class="p">():</span>
-                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())[:,</span> <span class="n">column_index</span><span class="p">:</span><span class="n">column_index</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())[:,</span> <span class="n">column_index</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;median&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">is_empty</span><span class="p">():</span>
-                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())[:,</span> <span class="n">column_index</span><span class="p">:</span><span class="n">column_index</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())[:,</span> <span class="n">column_index</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">is_empty</span><span class="p">():</span>
-                <span class="k">return</span> <span class="n">stats</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())[:,</span> <span class="n">column_index</span><span class="p">:</span><span class="n">column_index</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+                <span class="k">return</span> <span class="n">stats</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())[:,</span> <span class="n">column_index</span><span class="p">],</span>
+                                  <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
@@ -388,8 +385,6 @@
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">X</span></div>
 
@@ -418,10 +413,11 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="MissingValuesCleaner.get_info"><a class="viewcode-back" href="../../../skmultiflow.transform.missing_values_cleaner.html#skmultiflow.transform.MissingValuesCleaner.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;MissingValueCleaner: missing_value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - strategy: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">+</span> \
-               <span class="s1">&#39; - window_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - new_value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)</span></div></div>
+        <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - strategy: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - window_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - new_value: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span></div></div>
 </pre></div>
 
            </div>

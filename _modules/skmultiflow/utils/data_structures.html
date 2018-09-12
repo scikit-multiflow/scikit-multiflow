@@ -1104,10 +1104,10 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    num_attributes: int</span>
-<span class="sd">        The total number of attributes to be expected.</span>
+<span class="sd">    n_features: int</span>
+<span class="sd">        The total number of features to be expected.</span>
 <span class="sd">    </span>
-<span class="sd">    num_target_tasks: int</span>
+<span class="sd">    n_targets: int</span>
 <span class="sd">        The total number of target tasks to be expected.</span>
 <span class="sd">    </span>
 <span class="sd">    categorical_list: list</span>
@@ -1130,21 +1130,21 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_attributes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_target_tasks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">categorical_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">categorical_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># default values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span> <span class="o">=</span> <span class="n">num_attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span> <span class="o">=</span> <span class="n">n_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">categorical_attributes</span> <span class="o">=</span> <span class="n">categorical_list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">max_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span> <span class="o">=</span> <span class="n">num_target_tasks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_target_tasks</span> <span class="o">=</span> <span class="n">n_targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span>
 
 <div class="viewcode-block" id="InstanceWindow.configure"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_target_tasks</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="InstanceWindow.add_element"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add_element </span>
@@ -1167,25 +1167,25 @@
 <span class="sd">        initialized, a TypeError may be raised.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span> <span class="o">!=</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">size</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span> <span class="o">!=</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_n_target_tasks</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">size</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_target_tasks</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of attributes in X is different from the objects buffer dimension. &quot;</span>
                                  <span class="s2">&quot;Call __configure() to correctly set up the InstanceWindow&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;None type not supported as the buffer, call configure() to set up the InstanceWindow&quot;</span><span class="p">)</span>
 
         <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">aux</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="mi">1</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">,</span> <span class="n">aux</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="InstanceWindow.delete_element"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.delete_element">[docs]</a>    <span class="k">def</span> <span class="nf">delete_element</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete_element</span>
@@ -1193,14 +1193,14 @@
 <span class="sd">        Delete the oldest element from the sample window.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span></div>
 
 <div class="viewcode-block" id="InstanceWindow.get_attributes_matrix"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.get_attributes_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_attributes_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="InstanceWindow.get_targets_matrix"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.get_targets_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_targets_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">:]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span><span class="p">:]</span></div>
 
 <div class="viewcode-block" id="InstanceWindow.at_index"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.at_index">[docs]</a>    <span class="k">def</span> <span class="nf">at_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; at_index</span>
@@ -1221,28 +1221,31 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_attributes_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_targets_matrix</span><span class="p">()[</span><span class="n">index</span><span class="p">]</span></div>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span>
+<div class="viewcode-block" id="InstanceWindow.reset"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_num_target_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span>
+    <span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_num_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span>
+    <span class="k">def</span> <span class="nf">n_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_target_tasks</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_num_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span>
+    <span class="k">def</span> <span class="nf">n_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_attributes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_samples</span>
 
 <div class="viewcode-block" id="InstanceWindow.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div>
 
 <div class="viewcode-block" id="InstanceWindow.get_info"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.InstanceWindow.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;InstanceWindow: n_attributes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_attributes</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - n_target_tasks: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_target_tasks</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="s1">&#39; - n_target_tasks: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - max_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - dtype: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div></div>

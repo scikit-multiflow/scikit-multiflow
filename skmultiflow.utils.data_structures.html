@@ -785,7 +785,7 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 
 <dl class="class">
 <dt id="skmultiflow.utils.data_structures.InstanceWindow">
-<em class="property">class </em><code class="descclassname">skmultiflow.utils.data_structures.</code><code class="descname">InstanceWindow</code><span class="sig-paren">(</span><em>num_attributes=0</em>, <em>num_target_tasks=1</em>, <em>categorical_list=None</em>, <em>max_size=1000</em>, <em>dtype=&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#InstanceWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.utils.data_structures.</code><code class="descname">InstanceWindow</code><span class="sig-paren">(</span><em>n_features=0</em>, <em>n_targets=1</em>, <em>categorical_list=None</em>, <em>max_size=1000</em>, <em>dtype=&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#InstanceWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base_object.html#skmultiflow.core.base_object.BaseObject" title="skmultiflow.core.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base_object.BaseObject</span></code></a></p>
 <p>Keeps a limited size window from the most recent instances seen.
 It updates its recorded instances by the FIFO method, which means
@@ -796,8 +796,8 @@ place to new instances.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>num_attributes</strong> (<em>int</em>) – The total number of attributes to be expected.</li>
-<li><strong>num_target_tasks</strong> (<em>int</em>) – The total number of target tasks to be expected.</li>
+<li><strong>n_features</strong> (<em>int</em>) – The total number of features to be expected.</li>
+<li><strong>n_targets</strong> (<em>int</em>) – The total number of target tasks to be expected.</li>
 <li><strong>categorical_list</strong> (<em>list</em>) – A list with the indexes from all the categorical attributes.</li>
 <li><strong>max_size</strong> (<em>int</em>) – The window’s maximum length.</li>
 <li><strong>dtype</strong> (<em>data type</em>) – A data type supported by numpy, by default it is a float.</li>
@@ -861,6 +861,11 @@ indexed of index.</td>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="skmultiflow.utils.data_structures.InstanceWindow.buffer">
+<code class="descname">buffer</code><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.buffer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="skmultiflow.utils.data_structures.InstanceWindow.configure">
 <code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#InstanceWindow.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.configure" title="Permalink to this definition">¶</a></dt>
@@ -915,6 +920,26 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <dl class="method">
 <dt id="skmultiflow.utils.data_structures.InstanceWindow.get_targets_matrix">
 <code class="descname">get_targets_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#InstanceWindow.get_targets_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.get_targets_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.utils.data_structures.InstanceWindow.n_attributes">
+<code class="descname">n_attributes</code><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.n_attributes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.utils.data_structures.InstanceWindow.n_samples">
+<code class="descname">n_samples</code><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.n_samples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="skmultiflow.utils.data_structures.InstanceWindow.n_targets">
+<code class="descname">n_targets</code><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.n_targets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.utils.data_structures.InstanceWindow.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#InstanceWindow.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.utils.data_structures.InstanceWindow.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -226,7 +226,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="AGRAWALGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator">[docs]</a><span class="k">class</span> <span class="nc">AGRAWALGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="AGRAWALGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator">[docs]</a><span class="k">class</span> <span class="nc">AGRAWALGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; AGRAWAL stream generator</span>
 
 <span class="sd">    The generator was introduced by Agrawal et al in [1]_, and was common source</span>
@@ -291,7 +291,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;target_0&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;salary&quot;</span><span class="p">,</span> <span class="s2">&quot;commission&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;elevel&quot;</span><span class="p">,</span> <span class="s2">&quot;car&quot;</span><span class="p">,</span> <span class="s2">&quot;zipcode&quot;</span><span class="p">,</span> <span class="s2">&quot;hvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;hyears&quot;</span><span class="p">,</span> <span class="s2">&quot;loan&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)]</span>
 
@@ -372,7 +372,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;noise percentage should be in [0.0..1.0], and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">perturbation</span><span class="p">))</span>
 
-<div class="viewcode-block" id="AGRAWALGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AGRAWALGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Should be called before generating the samples.</span>
 
@@ -381,7 +381,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="AGRAWALGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
 <span class="sd">        The sample generation works as follows: The 9 features are generated</span>
@@ -454,7 +454,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.perturb_value"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.perturb_value">[docs]</a>    <span class="k">def</span> <span class="nf">perturb_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">val_range</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AGRAWALGenerator.perturb_value"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.perturb_value">[docs]</a>    <span class="k">def</span> <span class="nf">perturb_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">val_range</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perturbs the values of the features after prediction the class</span>
 <span class="sd">        if the perturbation is higher than 0.0.</span>
@@ -479,7 +479,7 @@
             <span class="n">val</span> <span class="o">=</span> <span class="n">val_max</span>
         <span class="k">return</span> <span class="n">val</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.generate_drift"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AGRAWALGenerator.generate_drift"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate drift by switching the classification function randomly.</span>
 
@@ -490,7 +490,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">new_function</span></div>
 
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_zero"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_zero"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_zero</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_zero</span>
 
@@ -532,7 +532,7 @@
 
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">60</span> <span class="o">&lt;=</span> <span class="n">age</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_one"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_one"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_one</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_one</span>
 
@@ -579,7 +579,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_two"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_two"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_two</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_two</span>
 
@@ -626,7 +626,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">elevel</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_three"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_three"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_three</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_three</span>
 
@@ -682,7 +682,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_four"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_four">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_four"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_four">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_four</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_four</span>
 
@@ -738,7 +738,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">75000</span> <span class="o">&lt;=</span> <span class="n">loan</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loan</span> <span class="o">&lt;=</span> <span class="mi">300000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_five"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_five">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_five"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_five">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_five</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_five</span>
 
@@ -787,7 +787,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">((</span><span class="mi">25000</span> <span class="o">&lt;=</span> <span class="n">totalsalary</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">totalsalary</span> <span class="o">&lt;=</span> <span class="mi">75000</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_six"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_six">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_six"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_six">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_six</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_six</span>
 
@@ -829,7 +829,7 @@
         <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">loan</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">20000</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_seven"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_seven">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_seven"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_seven">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_seven</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_seven</span>
 
@@ -871,7 +871,7 @@
         <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">5000</span> <span class="o">*</span> <span class="n">elevel</span> <span class="o">-</span> <span class="mi">20000</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_eight"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_eight">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_eight"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_eight">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_eight</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_eight</span>
 
@@ -913,7 +913,7 @@
         <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">5000</span> <span class="o">*</span> <span class="n">elevel</span> <span class="o">-</span> <span class="n">loan</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">10000</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.classification_function_nine"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.classification_function_nine">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AGRAWALGenerator.classification_function_nine"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.classification_function_nine">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_nine</span><span class="p">(</span><span class="n">salary</span><span class="p">,</span> <span class="n">commission</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">elevel</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">zipcode</span><span class="p">,</span> <span class="n">hvalue</span><span class="p">,</span> <span class="n">hyears</span><span class="p">,</span> <span class="n">loan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_nine</span>
 
@@ -958,7 +958,7 @@
         <span class="n">disposable</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">salary</span> <span class="o">+</span> <span class="n">commission</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">5000</span> <span class="o">*</span> <span class="n">elevel</span> <span class="o">+</span> <span class="n">equity</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">10000</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">disposable</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="AGRAWALGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.AGRAWALGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AGRAWALGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.agrawal_generator.html#skmultiflow.data.AGRAWALGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;AGRAWAL Generator: classification_function: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - balance_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span><span class="p">)</span> <span class="o">+</span> \

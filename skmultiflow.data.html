@@ -257,7 +257,7 @@
 </div>
 <div class="section" id="module-skmultiflow.data">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skmultiflow.data" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="documentation.html#module-skmultiflow.data" title="skmultiflow.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a> module includes data stream methods including methods for batch-to-stream
+<p>The <a class="reference internal" href="#module-skmultiflow.data" title="skmultiflow.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a> module includes data stream methods including methods for batch-to-stream
 conversion and generators.</p>
 <dl class="class">
 <dt id="skmultiflow.data.DataStream">
@@ -1188,6 +1188,141 @@ if the perturbation is higher than 0.0.
 </dd></dl>
 
 <dl class="class">
+<dt id="skmultiflow.data.ConceptDriftStream">
+<em class="property">class </em><code class="descclassname">skmultiflow.data.</code><code class="descname">ConceptDriftStream</code><span class="sig-paren">(</span><em>stream=&lt;skmultiflow.data.agrawal_generator.AGRAWALGenerator object&gt;</em>, <em>drift_stream=&lt;skmultiflow.data.agrawal_generator.AGRAWALGenerator object&gt;</em>, <em>random_state=None</em>, <em>alpha=0.0</em>, <em>position=0</em>, <em>width=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.data.base_stream.Stream</span></code></a></p>
+<p>A stream generator that adds concept drift or change by joining several streams.
+This is done by building a weighted combination of two pure distributions that
+characterizes the target concepts before and after the change.</p>
+<p>The sigmoid function is an elegant and practical solution to define the probability that ech
+new instance of the stream belongs to the new concept after the drift. The sigmoid function
+introduces a gradual, smooth transition whose duration is controlled with two parameters:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(p\)</span>, the position where the change occurs</li>
+<li><span class="math notranslate nohighlight">\(w\)</span>, the width of the transition</li>
+</ul>
+<p>The sigmoid function at sample <cite>t</cite> is</p>
+<p><span class="math notranslate nohighlight">\(f(t) = 1/(1+e^{-4*(t-p)/w})\)</span></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>stream</strong> (<a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><em>Stream</em></a><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>)</em><em>)</em>) – First stream</li>
+<li><strong>drift_stream</strong> (<a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><em>Stream</em></a><em> (</em><em>default= AGRAWALGenerator</em><em>(</em><em>random_state=112</em><em>, </em><em>classification_function=2</em><em>)</em><em>)</em>) – Second stream which adds drift</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <cite>np.random</cite>.</li>
+<li><strong>alpha</strong> (<em>float</em><em> (</em><em>optional</em><em>, </em><em>default: 0.0</em><em>)</em>) – Angle of change to estimate the width of concept drift change. If set will override the width parameter.
+Valid values are in the range (0.0, 90.0].</li>
+<li><strong>position</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – Central position of concept drift change.</li>
+<li><strong>width</strong> (<em>int</em><em> (</em><em>Default: 1000</em><em>)</em>) – Width of concept drift change.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>An optional way to estimate the width of the transition <span class="math notranslate nohighlight">\(w\)</span> is based on the angle <span class="math notranslate nohighlight">\(\alpha\)</span>:
+<span class="math notranslate nohighlight">\(w = 1/ tan(\alpha)\)</span>. Since width corresponds to the number of samples for the transition, the width
+is round-down to the nearest smaller integer. Notice that larger values of <span class="math notranslate nohighlight">\(\alpha\)</span> result in smaller
+widths. For <span class="math notranslate nohighlight">\(\alpha&gt;45.0\)</span>, the width is smaller than 1 so values are round-up to 1 to avoid
+division by zero errors.</p>
+<dl class="method">
+<dt id="skmultiflow.data.ConceptDriftStream.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects information about the generator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Configuration for the generator object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.ConceptDriftStream.has_more_samples">
+<code class="descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.has_more_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream.has_more_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if stream has more samples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if stream has more samples.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.ConceptDriftStream.is_restartable">
+<code class="descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.is_restartable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream.is_restartable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the stream is restartable.
+:returns: True if stream is restartable.
+:rtype: Boolean</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.ConceptDriftStream.n_remaining_samples">
+<code class="descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.n_remaining_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the estimated number of remaining samples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Remaining number of samples. -1 if infinite (e.g. generator)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.ConceptDriftStream.next_sample">
+<code class="descname">next_sample</code><span class="sig-paren">(</span><em>batch_size=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.next_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream.next_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the next <cite>batch_size</cite> samples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch_size</strong> (<em>int</em>) – The number of samples to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Return a tuple with the features matrix
+for the batch_size samples that were requested.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple or tuple list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.ConceptDriftStream.prepare_for_use">
+<code class="descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.prepare_for_use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream.prepare_for_use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare the stream for use. Can be the reading of a file, or
+the generation of a function, or anything necessary for the
+stream to work after its initialization.</p>
+<p class="rubric">Notes</p>
+<p>Every time a stream is created this function has to be called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.ConceptDriftStream.restart">
+<code class="descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/concept_drift_stream.html#ConceptDriftStream.restart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.ConceptDriftStream.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restart the stream.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="skmultiflow.data.HyperplaneGenerator">
 <em class="property">class </em><code class="descclassname">skmultiflow.data.</code><code class="descname">HyperplaneGenerator</code><span class="sig-paren">(</span><em>random_state=None</em>, <em>n_features=10</em>, <em>n_drift_features=2</em>, <em>mag_change=0.0</em>, <em>noise_percentage=0.05</em>, <em>sigma_percentage=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/hyper_plane_generator.html#HyperplaneGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.HyperplaneGenerator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.data.base_stream.Stream</span></code></a></p>
@@ -1406,32 +1541,33 @@ Computer Sciences,2007.</td></tr>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving one sample</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
-<span class="go">array([[0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0., 1., 0., 1., 1.,</span>
-<span class="go"> 1., 0., 0., 1., 1., 0., 1., 1.]])</span>
+<span class="go">(array([[0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0., 1., 0., 1., 1.,</span>
+<span class="go">  1., 0., 0., 1., 1., 0., 1., 1.]]), array([4]))</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving 10 samples</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="go"> array([[0., 0., 1., 0., 0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 0., 0.,</span>
-<span class="go"> 1., 1., 1., 0., 0., 0., 1., 1.],</span>
-<span class="go">[1., 1., 1., 0., 1., 0., 1., 1., 1., 0., 1., 0., 0., 0., 1., 1.,</span>
-<span class="go"> 1., 1., 0., 0., 1., 0., 1., 0.],</span>
-<span class="go">[0., 1., 1., 0., 0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
-<span class="go"> 0., 1., 0., 1., 1., 1., 1., 1.],</span>
-<span class="go">[1., 1., 0., 0., 0., 1., 1., 1., 0., 1., 1., 0., 1., 1., 0., 0.,</span>
-<span class="go"> 1., 1., 1., 0., 0., 0., 1., 0.],</span>
-<span class="go">[1., 1., 1., 0., 0., 1., 0., 0., 1., 1., 0., 1., 1., 0., 1., 0.,</span>
-<span class="go"> 0., 0., 1., 0., 1., 0., 0., 0.],</span>
-<span class="go">[0., 1., 1., 0., 0., 1., 0., 0., 1., 1., 0., 1., 0., 1., 1., 1.,</span>
-<span class="go"> 0., 0., 1., 0., 1., 1., 0., 0.],</span>
-<span class="go">[0., 0., 0., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0.,</span>
-<span class="go"> 1., 1., 1., 0., 1., 0., 0., 1.],</span>
-<span class="go">[0., 0., 0., 0., 0., 1., 0., 1., 1., 1., 0., 0., 0., 0., 0., 1.,</span>
-<span class="go"> 1., 1., 1., 1., 0., 1., 1., 1.],</span>
-<span class="go">[1., 1., 1., 0., 0., 1., 0., 1., 1., 1., 0., 1., 1., 1., 1., 1.,</span>
-<span class="go"> 0., 1., 1., 0., 0., 0., 0., 1.],</span>
-<span class="go">[1., 1., 1., 0., 0., 1., 1., 0., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
-<span class="go"> 1., 1., 0., 0., 0., 0., 1., 0.]])</span>
+<span class="go">(array([[0., 0., 1., 0., 0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 0., 0.,</span>
+<span class="go">  1., 1., 1., 0., 0., 0., 1., 1.],</span>
+<span class="go"> [1., 1., 1., 0., 1., 0., 1., 1., 1., 0., 1., 0., 0., 0., 1., 1.,</span>
+<span class="go">  1., 1., 0., 0., 1., 0., 1., 0.],</span>
+<span class="go"> [0., 1., 1., 0., 0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
+<span class="go">  0., 1., 0., 1., 1., 1., 1., 1.],</span>
+<span class="go"> [1., 1., 0., 0., 0., 1., 1., 1., 0., 1., 1., 0., 1., 1., 0., 0.,</span>
+<span class="go">  1., 1., 1., 0., 0., 0., 1., 0.],</span>
+<span class="go"> [1., 1., 1., 0., 0., 1., 0., 0., 1., 1., 0., 1., 1., 0., 1., 0.,</span>
+<span class="go">  0., 0., 1., 0., 1., 0., 0., 0.],</span>
+<span class="go"> [0., 1., 1., 0., 0., 1., 0., 0., 1., 1., 0., 1., 0., 1., 1., 1.,</span>
+<span class="go">  0., 0., 1., 0., 1., 1., 0., 0.],</span>
+<span class="go"> [0., 0., 0., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0.,</span>
+<span class="go">  1., 1., 1., 0., 1., 0., 0., 1.],</span>
+<span class="go"> [0., 0., 0., 0., 0., 1., 0., 1., 1., 1., 0., 0., 0., 0., 0., 1.,</span>
+<span class="go">  1., 1., 1., 1., 0., 1., 1., 1.],</span>
+<span class="go"> [1., 1., 1., 0., 0., 1., 0., 1., 1., 1., 0., 1., 1., 1., 1., 1.,</span>
+<span class="go">  0., 1., 1., 0., 0., 0., 0., 1.],</span>
+<span class="go"> [1., 1., 1., 0., 0., 1., 1., 0., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
+<span class="go">  1., 1., 0., 0., 0., 0., 1., 0.]]),</span>
+<span class="go"> array([1, 0, 7, 9, 7, 1, 3, 1, 4, 1]))</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
@@ -1582,32 +1718,33 @@ be switched</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving one sample</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
-<span class="go">array([[0., 1., 1., 1., 0., 1., 1., 0., 1., 0., 0., 0., 1., 0., 1., 1.,</span>
-<span class="go"> 1., 0., 0., 0., 0., 0., 1., 1.]])</span>
+<span class="go">(array([[0., 1., 1., 1., 0., 1., 1., 0., 1., 0., 0., 0., 1., 0., 1., 1.,</span>
+<span class="go">  1., 0., 0., 0., 0., 0., 1., 1.]]), array([4]))</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving 10 samples</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="go"> array([[0., 0., 1., 0., 1., 0., 0., 1., 0., 0., 1., 1., 0., 0., 0., 0.,</span>
-<span class="go"> 1., 1., 0., 0., 0., 0., 1., 1.],</span>
-<span class="go">[0., 1., 1., 0., 0., 0., 1., 1., 1., 0., 1., 0., 0., 0., 1., 1.,</span>
-<span class="go"> 1., 1., 1., 0., 1., 1., 1., 0.],</span>
-<span class="go">[1., 1., 1., 0., 0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
-<span class="go"> 0., 1., 0., 1., 1., 0., 1., 1.],</span>
-<span class="go">[0., 1., 0., 0., 1., 0., 0., 1., 0., 1., 1., 0., 1., 1., 0., 0.,</span>
-<span class="go"> 1., 1., 0., 1., 1., 1., 1., 0.],</span>
-<span class="go">[0., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 1., 0., 1., 0.,</span>
-<span class="go"> 0., 0., 0., 1., 0., 1., 0., 0.],</span>
-<span class="go">[1., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 0., 1., 1., 1.,</span>
-<span class="go"> 0., 0., 0., 1., 0., 0., 0., 0.],</span>
-<span class="go">[0., 0., 0., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0.,</span>
-<span class="go"> 1., 1., 1., 0., 1., 0., 0., 1.],</span>
-<span class="go">[1., 0., 0., 0., 1., 1., 0., 1., 1., 1., 0., 0., 0., 0., 0., 1.,</span>
-<span class="go"> 1., 1., 0., 1., 0., 0., 1., 1.],</span>
-<span class="go">[0., 1., 1., 0., 1., 0., 0., 1., 1., 1., 0., 1., 1., 1., 1., 1.,</span>
-<span class="go"> 0., 1., 0., 1., 0., 1., 0., 1.],</span>
-<span class="go">[0., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
-<span class="go"> 1., 1., 0., 1., 1., 1., 1., 0.]])</span>
+<span class="go">(array([[0., 0., 1., 0., 1., 0., 0., 1., 0., 0., 1., 1., 0., 0., 0., 0.,</span>
+<span class="go">  1., 1., 0., 0., 0., 0., 1., 1.],</span>
+<span class="go"> [0., 1., 1., 0., 0., 0., 1., 1., 1., 0., 1., 0., 0., 0., 1., 1.,</span>
+<span class="go">  1., 1., 1., 0., 1., 1., 1., 0.],</span>
+<span class="go"> [1., 1., 1., 0., 0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
+<span class="go">  0., 1., 0., 1., 1., 0., 1., 1.],</span>
+<span class="go"> [0., 1., 0., 0., 1., 0., 0., 1., 0., 1., 1., 0., 1., 1., 0., 0.,</span>
+<span class="go">  1., 1., 0., 1., 1., 1., 1., 0.],</span>
+<span class="go"> [0., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 1., 0., 1., 0.,</span>
+<span class="go">  0., 0., 0., 1., 0., 1., 0., 0.],</span>
+<span class="go"> [1., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 0., 1., 1., 1.,</span>
+<span class="go">  0., 0., 0., 1., 0., 0., 0., 0.],</span>
+<span class="go"> [0., 0., 0., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0.,</span>
+<span class="go">  1., 1., 1., 0., 1., 0., 0., 1.],</span>
+<span class="go"> [1., 0., 0., 0., 1., 1., 0., 1., 1., 1., 0., 0., 0., 0., 0., 1.,</span>
+<span class="go">  1., 1., 0., 1., 0., 0., 1., 1.],</span>
+<span class="go"> [0., 1., 1., 0., 1., 0., 0., 1., 1., 1., 0., 1., 1., 1., 1., 1.,</span>
+<span class="go">  0., 1., 0., 1., 0., 1., 0., 1.],</span>
+<span class="go"> [0., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
+<span class="go">  1., 1., 0., 1., 1., 1., 1., 0.]]),</span>
+<span class="go"> array([1, 0, 7, 9, 7, 1, 3, 1, 4, 1]))</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generators will have infinite remaining instances, so it returns -1</span>
@@ -3572,6 +3709,30 @@ the batch_size samples that were requested.</td>
 <dd><p>Should be called before generating the samples.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="skmultiflow.data.make_logical">
+<code class="descclassname">skmultiflow.data.</code><code class="descname">make_logical</code><span class="sig-paren">(</span><em>n_tiles=1</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/data/synth.html#make_logical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.make_logical" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Make a toy dataset with three labels that represent the logical functions: OR, XOR, AND</dt>
+<dd>(functions of the 2D input).</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_tiles</strong> (<em>int</em>) – Number of tiles to generate</li>
+<li><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <cite>np.random</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">

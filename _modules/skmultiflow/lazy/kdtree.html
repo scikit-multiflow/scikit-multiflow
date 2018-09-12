@@ -227,25 +227,8 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="KDTree"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree">[docs]</a><span class="k">class</span> <span class="nc">KDTree</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; KD Tree</span>
-<span class="sd">    </span>
-<span class="sd">    A K dimensional tree implementation, adapted for k dimensional problems.</span>
-
-<span class="sd">    A KD Tree is a space partitioning (in axis-aligned hyperrectangles) tree </span>
-<span class="sd">    structure, where each node is associated with a feature and a splitting </span>
-<span class="sd">    value. Each node can have up to two children nodes, with the property that </span>
-<span class="sd">    all the samples stored by the left child have their feature value smaller </span>
-<span class="sd">    then the node&#39;s splitting value, and all the samples stored by the right </span>
-<span class="sd">    child have their relevant feature greater than or equal to the node&#39;s </span>
-<span class="sd">    splitting value.</span>
-<span class="sd">    </span>
-<span class="sd">    The algorithm used to select the splitting feature and the splitting </span>
-<span class="sd">    value for each node is called the sliding midpoint rule, as defined in </span>
-<span class="sd">    Maneewongvatana and Mount 1999. The idea is that we don&#39;t need a balanced </span>
-<span class="sd">    distribution of samples in all nodes, for the query time to be efficient, </span>
-<span class="sd">    as long as there are &#39;fat&#39; nodes around. This algorithm guarantees that </span>
-<span class="sd">    the nodes won&#39;t become long and thin.</span>
+<div class="viewcode-block" id="KDTree"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree">[docs]</a><span class="k">class</span> <span class="nc">KDTree</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A K-dimensional tree implementation, adapted for k dimensional problems.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -279,10 +262,25 @@
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
+<span class="sd">    A KD Tree is a space partitioning (in axis-aligned hyper-rectangles) tree</span>
+<span class="sd">    structure, where each node is associated with a feature and a splitting</span>
+<span class="sd">    value. Each node can have up to two children nodes, with the property that</span>
+<span class="sd">    all the samples stored by the left child have their feature value smaller</span>
+<span class="sd">    then the node&#39;s splitting value, and all the samples stored by the right</span>
+<span class="sd">    child have their relevant feature greater than or equal to the node&#39;s</span>
+<span class="sd">    splitting value.</span>
+
+<span class="sd">    The algorithm used to select the splitting feature and the splitting</span>
+<span class="sd">    value for each node is called the sliding midpoint rule, as defined in</span>
+<span class="sd">    Maneewongvatana and Mount 1999. The idea is that we don&#39;t need a balanced</span>
+<span class="sd">    distribution of samples in all nodes, for the query time to be efficient,</span>
+<span class="sd">    as long as there are &#39;fat&#39; nodes around. This algorithm guarantees that</span>
+<span class="sd">    the nodes won&#39;t become long and thin.</span>
+
 <span class="sd">    This implementation is not faster than scikit-learn&#39;s implementation, </span>
 <span class="sd">    nor than scipy&#39;s implementation, but it allow users to use a custom </span>
 <span class="sd">    metric for the distance calculation.</span>
-<span class="sd">    term</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mixed&#39;</span><span class="p">,</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">]</span>
@@ -321,7 +319,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span> <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
 
-        <span class="n">distance_array</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">)]</span>
+        <span class="n">distance_array</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">)]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">categorical_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">categorical_list</span><span class="p">:</span>
@@ -365,7 +363,7 @@
                                <span class="n">split_axis</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">split_value</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">distance_function</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span><span class="p">,</span>
                                <span class="n">leaf_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="KDTree.query"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree.query"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Searches the tree for the k nearest neighbors of X</span>
 
 <span class="sd">        Parameters</span>
@@ -379,15 +377,14 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        list or tuple list</span>
-<span class="sd">            Either a list containing all the indexes from the closest neighbors (if </span>
-<span class="sd">            return_distance is False) or two lists, one with the neighbors indexes </span>
-<span class="sd">            and another one with their distance to the samples in X. </span>
+<span class="sd">            idx: List containing all the indexes from the closest neighbors (if return_distance is False)</span>
+<span class="sd">            (dist, idx): Distance to neighbors and corresponding index ()if return_distance is True).</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">dist_all</span><span class="p">,</span> <span class="n">ind_all</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">((</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="p">([])))</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">([</span><span class="mi">0</span><span class="p">]))))):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="p">([])</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">([</span><span class="mi">0</span><span class="p">])))):</span>
             <span class="n">neighbors_distances</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">neighbors_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">query_node</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">neighbors_distances</span><span class="p">)</span>
             <span class="n">indexes</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -415,7 +412,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">ind_all</span></div>
 
-<div class="viewcode-block" id="KDTree.query_radius"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.query_radius">[docs]</a>    <span class="k">def</span> <span class="nf">query_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree.query_radius"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.query_radius">[docs]</a>    <span class="k">def</span> <span class="nf">query_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Radius based query</span>
 <span class="sd">        </span>
 <span class="sd">        Queries the tree based on a limited radius rather than a number of</span>
@@ -442,19 +439,19 @@
     <span class="k">def</span> <span class="nf">_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
 
-<div class="viewcode-block" id="KDTree.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;KDTree: leaf_size: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - metric: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - return_distance&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_distance</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="KDTree.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - leaf_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_size</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - metric: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - return_distance: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">return_distance</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span></div>
 
-<div class="viewcode-block" id="KDTree.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KDTree.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KDTree.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTree.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div></div>
 
 
 <div class="viewcode-block" id="KDTreeNode"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTreeNode">[docs]</a><span class="k">class</span> <span class="nc">KDTreeNode</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; KD Tree Node</span>
-<span class="sd">     </span>
-<span class="sd">    A node from a KD Tree. A node object will store the indexes of its children&#39;s </span>
+    <span class="sd">&quot;&quot;&quot; A node from a KD Tree. A node object will store the indexes of its children&#39;s</span>
 <span class="sd">    samples, and only a reference to the tree&#39;s complete data.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -690,7 +687,8 @@
         <span class="c1"># If the node is a leaf, adopt the brute-force strategy</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_indexes</span><span class="p">)):</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span><span class="p">(</span><span class="n">instance_one</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_indexes</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">instance_two</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span><span class="p">(</span><span class="n">instance_one</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_indexes</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+                                              <span class="n">instance_two</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
                 <span class="n">switch</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbors_distance_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -720,7 +718,6 @@
 
         <span class="c1"># If the node is an inner node the regular query strategy is used</span>
         <span class="k">else</span><span class="p">:</span>
-
             <span class="c1"># Advance in the tree structure until a leaf node is reached</span>
             <span class="k">if</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">split_axis</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_value</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_subtree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -770,9 +767,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_subtree</span>
 
 <div class="viewcode-block" id="KDTreeNode.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTreeNode.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;KDTreeNode: is_leaf: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;True&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_leaf</span> <span class="k">else</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - split_axis: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_axis</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - split_value: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_value</span><span class="p">)</span></div>
+        <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - is_leaf: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - split_axis: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_axis</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - split_value: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span></div>
 
 <div class="viewcode-block" id="KDTreeNode.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.lazy.kdtree.html#skmultiflow.lazy.KDTreeNode.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;data_structure&#39;</span></div></div>

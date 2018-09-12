@@ -225,7 +225,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.data.led_generator</span> <span class="k">import</span> <span class="n">LEDGenerator</span>
 
 
-<div class="viewcode-block" id="LEDGeneratorDrift"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.LEDGeneratorDrift">[docs]</a><span class="k">class</span> <span class="nc">LEDGeneratorDrift</span><span class="p">(</span><span class="n">LEDGenerator</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift"><a class="viewcode-back" href="../../../skmultiflow.data.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift">[docs]</a><span class="k">class</span> <span class="nc">LEDGeneratorDrift</span><span class="p">(</span><span class="n">LEDGenerator</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; LEDGeneratorDrift</span>
 
@@ -261,31 +261,32 @@
 <span class="sd">       &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">       &gt;&gt;&gt; # Retrieving one sample</span>
 <span class="sd">       &gt;&gt;&gt; stream.next_sample()</span>
-<span class="sd">       array([[0., 1., 1., 1., 0., 1., 1., 0., 1., 0., 0., 0., 1., 0., 1., 1.,</span>
-<span class="sd">        1., 0., 0., 0., 0., 0., 1., 1.]])</span>
+<span class="sd">       (array([[0., 1., 1., 1., 0., 1., 1., 0., 1., 0., 0., 0., 1., 0., 1., 1.,</span>
+<span class="sd">         1., 0., 0., 0., 0., 0., 1., 1.]]), array([4]))</span>
 
 <span class="sd">       &gt;&gt;&gt; # Retrieving 10 samples</span>
 <span class="sd">       &gt;&gt;&gt; stream.next_sample(10)</span>
-<span class="sd">        array([[0., 0., 1., 0., 1., 0., 0., 1., 0., 0., 1., 1., 0., 0., 0., 0.,</span>
-<span class="sd">        1., 1., 0., 0., 0., 0., 1., 1.],</span>
-<span class="sd">       [0., 1., 1., 0., 0., 0., 1., 1., 1., 0., 1., 0., 0., 0., 1., 1.,</span>
-<span class="sd">        1., 1., 1., 0., 1., 1., 1., 0.],</span>
-<span class="sd">       [1., 1., 1., 0., 0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
-<span class="sd">        0., 1., 0., 1., 1., 0., 1., 1.],</span>
-<span class="sd">       [0., 1., 0., 0., 1., 0., 0., 1., 0., 1., 1., 0., 1., 1., 0., 0.,</span>
-<span class="sd">        1., 1., 0., 1., 1., 1., 1., 0.],</span>
-<span class="sd">       [0., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 1., 0., 1., 0.,</span>
-<span class="sd">        0., 0., 0., 1., 0., 1., 0., 0.],</span>
-<span class="sd">       [1., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 0., 1., 1., 1.,</span>
-<span class="sd">        0., 0., 0., 1., 0., 0., 0., 0.],</span>
-<span class="sd">       [0., 0., 0., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0.,</span>
-<span class="sd">        1., 1., 1., 0., 1., 0., 0., 1.],</span>
-<span class="sd">       [1., 0., 0., 0., 1., 1., 0., 1., 1., 1., 0., 0., 0., 0., 0., 1.,</span>
-<span class="sd">        1., 1., 0., 1., 0., 0., 1., 1.],</span>
-<span class="sd">       [0., 1., 1., 0., 1., 0., 0., 1., 1., 1., 0., 1., 1., 1., 1., 1.,</span>
-<span class="sd">        0., 1., 0., 1., 0., 1., 0., 1.],</span>
-<span class="sd">       [0., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
-<span class="sd">        1., 1., 0., 1., 1., 1., 1., 0.]])</span>
+<span class="sd">       (array([[0., 0., 1., 0., 1., 0., 0., 1., 0., 0., 1., 1., 0., 0., 0., 0.,</span>
+<span class="sd">         1., 1., 0., 0., 0., 0., 1., 1.],</span>
+<span class="sd">        [0., 1., 1., 0., 0., 0., 1., 1., 1., 0., 1., 0., 0., 0., 1., 1.,</span>
+<span class="sd">         1., 1., 1., 0., 1., 1., 1., 0.],</span>
+<span class="sd">        [1., 1., 1., 0., 0., 1., 1., 1., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
+<span class="sd">         0., 1., 0., 1., 1., 0., 1., 1.],</span>
+<span class="sd">        [0., 1., 0., 0., 1., 0., 0., 1., 0., 1., 1., 0., 1., 1., 0., 0.,</span>
+<span class="sd">         1., 1., 0., 1., 1., 1., 1., 0.],</span>
+<span class="sd">        [0., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 1., 0., 1., 0.,</span>
+<span class="sd">         0., 0., 0., 1., 0., 1., 0., 0.],</span>
+<span class="sd">        [1., 1., 1., 0., 1., 0., 1., 0., 1., 1., 0., 1., 0., 1., 1., 1.,</span>
+<span class="sd">         0., 0., 0., 1., 0., 0., 0., 0.],</span>
+<span class="sd">        [0., 0., 0., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0., 1., 0.,</span>
+<span class="sd">         1., 1., 1., 0., 1., 0., 0., 1.],</span>
+<span class="sd">        [1., 0., 0., 0., 1., 1., 0., 1., 1., 1., 0., 0., 0., 0., 0., 1.,</span>
+<span class="sd">         1., 1., 0., 1., 0., 0., 1., 1.],</span>
+<span class="sd">        [0., 1., 1., 0., 1., 0., 0., 1., 1., 1., 0., 1., 1., 1., 1., 1.,</span>
+<span class="sd">         0., 1., 0., 1., 0., 1., 0., 1.],</span>
+<span class="sd">        [0., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0.,</span>
+<span class="sd">         1., 1., 0., 1., 1., 1., 1., 0.]]),</span>
+<span class="sd">        array([1, 0, 7, 9, 7, 1, 3, 1, 4, 1]))</span>
 
 <span class="sd">       &gt;&gt;&gt; # Generators will have infinite remaining instances, so it returns -1</span>
 <span class="sd">       &gt;&gt;&gt; stream.n_remaining_samples()</span>
@@ -319,7 +320,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_numberAttribute</span><span class="p">[</span><span class="n">value1</span><span class="p">]</span> <span class="o">=</span> <span class="n">value2</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_numberAttribute</span><span class="p">[</span><span class="n">value2</span><span class="p">]</span> <span class="o">=</span> <span class="n">value1</span>
 
-<div class="viewcode-block" id="LEDGeneratorDrift.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.LEDGeneratorDrift.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
@@ -342,10 +343,12 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">selected</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_NUM_BASE_ATTRIBUTES</span><span class="p">):</span>
                 <span class="k">if</span> <span class="p">(</span><span class="mf">0.01</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_percentage</span><span class="p">:</span>
                     <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numberAttribute</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ORIGINAL_INSTANCES</span><span class="p">[</span><span class="n">selected</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
@@ -356,12 +359,13 @@
                     <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numberAttribute</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="LEDGeneratorDrift.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.LEDGeneratorDrift.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift.get_data_info"><a class="viewcode-back" href="../../../skmultiflow.data.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift.get_data_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Led Generator with drift - </span><span class="si">{}</span><span class="s2"> features&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LEDGeneratorDrift.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.LEDGeneratorDrift.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LEDGeneratorDrift.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.led_generator_drift.html#skmultiflow.data.LEDGeneratorDrift.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;  -  n_num_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_num_features</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39;  -  n_cat_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cat_features</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39;  -  has_noise: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">has_noise</span><span class="p">)</span> <span class="o">+</span> \

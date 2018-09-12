@@ -226,11 +226,12 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.hoeffding_nominal_class_attribute_observer</span> <span class="k">import</span> <span class="n">HoeffdingNominalAttributeClassObserver</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">attrgetter</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.variance_reduction_split_criterion</span> <span class="k">import</span> <span class="n">VarianceReductionSplitCriterion</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="n">TARGET_MEAN</span> <span class="o">=</span> <span class="s1">&#39;tm&#39;</span>
-<span class="n">PERCEPTRON</span> <span class="o">=</span> <span class="s1">&#39;perceptron&#39;</span>
+<span class="n">_TARGET_MEAN</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span>
+<span class="n">_PERCEPTRON</span> <span class="o">=</span> <span class="s1">&#39;perceptron&#39;</span>
 
 <span class="c1"># logger</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
@@ -265,18 +266,23 @@
 <span class="sd">        If True, disable pre-pruning.</span>
 <span class="sd">    leaf_prediction: string (default=&#39;nba&#39;)</span>
 <span class="sd">        | Prediction mechanism used at leafs.</span>
-<span class="sd">        | &#39;tm&#39; - Target mean</span>
+<span class="sd">        | &#39;mean&#39; - Target mean</span>
 <span class="sd">        | &#39;perceptron&#39; - Perceptron</span>
 <span class="sd">    nb_threshold: int (default=0)</span>
 <span class="sd">        Number of instances a leaf should observe before allowing Naive Bayes.</span>
 <span class="sd">    nominal_attributes: list, optional</span>
 <span class="sd">        List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</span>
-<span class="sd">    learning_ratio_perceptron: flaot</span>
+<span class="sd">    learning_ratio_perceptron: float</span>
 <span class="sd">        The learning rate of the perceptron.</span>
 <span class="sd">    learning_ratio_decay: float</span>
 <span class="sd">        Decay multiplier for the learning rate of the perceptron</span>
 <span class="sd">    learning_ratio_const: Bool</span>
 <span class="sd">        If False the learning ratio will decay with the number of examples seen</span>
+<span class="sd">    random_state: int, RandomState instance or None, optional (default=None)</span>
+<span class="sd">       If int, random_state is the seed used by the random number generator;</span>
+<span class="sd">       If RandomState instance, random_state is the random number generator;</span>
+<span class="sd">       If None, the random number generator is the RandomState instance used</span>
+<span class="sd">       by `np.random`. Used when leaf_prediction is &#39;perceptron&#39;.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -294,11 +300,11 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span></div></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span></div></div>
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.ActiveLearningNodeForRegression"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.ActiveLearningNodeForRegression">[docs]</a>    <span class="k">class</span> <span class="nc">ActiveLearningNodeForRegression</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
 
@@ -357,7 +363,7 @@
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodePerceptron</span><span class="p">(</span><span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
 
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            LearningNodePerceptron class constructor</span>
 <span class="sd">            Parameters</span>
@@ -367,11 +373,12 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">perceptron_weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="n">perceptron_weight</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">rht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Update the node with the provided instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -382,23 +389,24 @@
 <span class="sd">                Instance class.</span>
 <span class="sd">            weight: float</span>
 <span class="sd">                Instance weight.</span>
-<span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                Hoeffding Tree to update.</span>
+<span class="sd">            rht: RegressionHoeffdingTree</span>
+<span class="sd">                Regression Hoeffding Tree to update.</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">==</span> <span class="p">[]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span>
 
-            <span class="k">if</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_const</span><span class="p">:</span>
-                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span>
+            <span class="k">if</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_const</span><span class="p">:</span>
+                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span> <span class="o">/</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_decay</span><span class="p">)</span>
+                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span> <span class="o">/</span> \
+                                 <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_decay</span><span class="p">)</span>
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
@@ -408,20 +416,20 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">weight</span><span class="p">)):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">update_weights</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_weights</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">rht</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ht</span><span class="o">.</span><span class="n">nominal_attributes</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rht</span><span class="o">.</span><span class="n">nominal_attributes</span><span class="p">:</span>
                         <span class="n">obs</span> <span class="o">=</span> <span class="n">HoeffdingNominalAttributeClassObserver</span><span class="p">()</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">obs</span> <span class="o">=</span> <span class="n">HoeffdingNumericAttributeClassObserver</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
                 <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.update_weights"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.update_weights">[docs]</a>        <span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.LearningNodePerceptron.update_weights"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.LearningNodePerceptron.update_weights">[docs]</a>        <span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">rht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Update the perceptron weights</span>
 <span class="sd">            Parameters</span>
@@ -432,12 +440,12 @@
 <span class="sd">                Instance class.</span>
 <span class="sd">            learning_ratio: float</span>
 <span class="sd">                perceptron learning ratio</span>
-<span class="sd">            ht: HoeffdingTree</span>
-<span class="sd">                Hoeffding Tree to update.</span>
+<span class="sd">            rht: RegressionHoeffdingTree</span>
+<span class="sd">                Regression Hoeffding Tree to update.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="n">normalized_sample</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">normalize_sample</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">normalized_sample</span> <span class="o">=</span> <span class="n">rht</span><span class="o">.</span><span class="n">normalize_sample</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
             <span class="n">normalized_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">normalized_sample</span><span class="p">)</span>
-            <span class="n">normalized_target_value</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">normalized_target_value</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">normalized_target_value</span> <span class="o">=</span> <span class="n">rht</span><span class="o">.</span><span class="n">normalized_target_value</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">+</span> <span class="n">learning_ratio</span> <span class="o">*</span> \
                                            <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">((</span><span class="n">normalized_target_value</span> <span class="o">-</span> <span class="n">normalized_pred</span><span class="p">),</span>
                                                        <span class="n">normalized_sample</span><span class="p">)</span></div>
@@ -468,9 +476,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="n">perceptron_weight</span>
 
-<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
+<div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.learn_from_instance">[docs]</a>        <span class="k">def</span> <span class="nf">learn_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">rht</span><span class="p">):</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
             <span class="k">try</span><span class="p">:</span>
@@ -478,11 +486,11 @@
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span>
 
-            <span class="k">if</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_const</span><span class="p">:</span>
-                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span>
+            <span class="k">if</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_const</span><span class="p">:</span>
+                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span> <span class="o">/</span> <span class="mi">1</span> <span class="o">+</span> \
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ht</span><span class="o">.</span><span class="n">learning_ratio_decay</span>
+                <span class="n">learning_ratio</span> <span class="o">=</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span> <span class="o">/</span> <span class="mi">1</span> <span class="o">+</span> \
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">rht</span><span class="o">.</span><span class="n">learning_ratio_decay</span>
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
@@ -492,7 +500,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">weight</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">weight</span><span class="p">)):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">update_weights</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_weights</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">rht</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.update_weights"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.update_weights">[docs]</a>        <span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">learning_ratio</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="n">normalized_sample</span> <span class="o">=</span> <span class="n">ht</span><span class="o">.</span><span class="n">normalize_sample</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -505,12 +513,9 @@
 <div class="viewcode-block" id="RegressionHoeffdingTree.InactiveLearningNodePerceptron.predict"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.InactiveLearningNodePerceptron.predict">[docs]</a>        <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perceptron_weight</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div></div>
 
-
-
     <span class="c1"># ===========================================</span>
     <span class="c1"># == Hoeffding Regression Tree implementation ===</span>
     <span class="c1"># ===========================================</span>
-
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">max_byte_size</span><span class="o">=</span><span class="mi">33554432</span><span class="p">,</span>
                  <span class="n">memory_estimate_period</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span>
@@ -526,8 +531,8 @@
                  <span class="n">nominal_attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">learning_ratio_perceptron</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
                  <span class="n">learning_ratio_decay</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
-                 <span class="n">learning_ratio_const</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-
+                 <span class="n">learning_ratio_const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">split_criterion</span> <span class="o">=</span> <span class="s1">&#39;variance reduction&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_byte_size</span> <span class="o">=</span> <span class="n">max_byte_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memory_estimate_period</span> <span class="o">=</span> <span class="n">memory_estimate_period</span>
@@ -560,7 +565,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_attribute_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_attribute_squares</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">=</span> <span class="n">leaf_prediction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">leaf_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -568,9 +574,9 @@
 
     <span class="nd">@leaf_prediction</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">leaf_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leaf_prediction</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">leaf_prediction</span> <span class="o">!=</span> <span class="n">TARGET_MEAN</span> <span class="ow">and</span> <span class="n">leaf_prediction</span> <span class="o">!=</span> <span class="n">PERCEPTRON</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalid option </span><span class="si">{}</span><span class="s2">&#39;, will use default &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">leaf_prediction</span><span class="p">,</span> <span class="n">PERCEPTRON</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_prediction</span> <span class="o">=</span> <span class="n">PERCEPTRON</span>
+        <span class="k">if</span> <span class="n">leaf_prediction</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="n">_TARGET_MEAN</span><span class="p">,</span> <span class="n">_PERCEPTRON</span><span class="p">}:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalid option </span><span class="si">{}</span><span class="s2">&#39;, will use default &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">leaf_prediction</span><span class="p">,</span> <span class="n">_PERCEPTRON</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_prediction</span> <span class="o">=</span> <span class="n">_PERCEPTRON</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_prediction</span> <span class="o">=</span> <span class="n">leaf_prediction</span>
 
@@ -593,7 +599,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X: array</span>
+<span class="sd">        X: list or array or numpy.ndarray</span>
 <span class="sd">            features.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -626,7 +632,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        flaot:</span>
+<span class="sd">        float:</span>
 <span class="sd">            normalized target value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -643,10 +649,11 @@
         <span class="sd">&quot;&quot;&quot;Create a new learning node. The type of learning node depends on the tree configuration.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">initial_class_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">initial_class_observations</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">TARGET_MEAN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_TARGET_MEAN</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ActiveLearningNodeForRegression</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">PERCEPTRON</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">LearningNodePerceptron</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_PERCEPTRON</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">LearningNodePerceptron</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">,</span> <span class="n">perceptron_weight</span><span class="p">,</span>
+                                               <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.get_weights_for_instance"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.get_weights_for_instance">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights_for_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get class votes for a single instance.</span>
@@ -669,7 +676,6 @@
             <span class="k">return</span> <span class="n">leaf_node</span><span class="o">.</span><span class="n">perceptron_weight</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span></div>
-
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Incrementally trains the model. Train samples (instances) are compossed of X attributes and their</span>
@@ -695,7 +701,6 @@
 <span class="sd">            Instance attributes.</span>
 <span class="sd">        y: array_like</span>
 <span class="sd">            Classes (targets) for all samples in X.</span>
-<span class="sd">        classes: Not used.</span>
 <span class="sd">        weight: float or array-like</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 
@@ -723,7 +728,6 @@
 <span class="sd">            Instance attributes.</span>
 <span class="sd">        y: array_like</span>
 <span class="sd">            Classes (targets) for all samples in X.</span>
-<span class="sd">        target_values: Not used.</span>
 <span class="sd">        weight: float or array-like</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 
@@ -780,7 +784,7 @@
         <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">TARGET_MEAN</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_TARGET_MEAN</span><span class="p">:</span>
                 <span class="n">votes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_votes_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">votes</span> <span class="o">==</span> <span class="p">{}:</span>
                     <span class="c1"># Tree is empty, all target_values equal, default to zero</span>
@@ -789,12 +793,11 @@
                     <span class="n">number_of_examples_seen</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">sum_of_values</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="n">number_of_examples_seen</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">PERCEPTRON</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_PERCEPTRON</span><span class="p">:</span>
                 <span class="n">normalized_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_sample</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="n">normalized_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_weights_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">normalized_sample</span><span class="p">)</span>
                 <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span>
-                <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">**</span> <span class="mi">2</span>
-                          <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span>
+                <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">**</span> <span class="mi">2</span><span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">normalized_prediction</span> <span class="o">*</span> <span class="n">sd</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">mean</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -872,7 +875,7 @@
                 <span class="n">new_split</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_split_node</span><span class="p">(</span><span class="n">split_decision</span><span class="o">.</span><span class="n">split_test</span><span class="p">,</span>
                                                 <span class="n">node</span><span class="o">.</span><span class="n">get_observed_class_distribution</span><span class="p">())</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">split_decision</span><span class="o">.</span><span class="n">num_splits</span><span class="p">()):</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">PERCEPTRON</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_PERCEPTRON</span><span class="p">:</span>
                         <span class="n">new_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new_learning_node</span><span class="p">(</span><span class="n">split_decision</span><span class="o">.</span><span class="n">resulting_class_distribution_from_split</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
                                                             <span class="n">node</span><span class="o">.</span><span class="n">perceptron_weight</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -889,7 +892,8 @@
             <span class="c1"># Manage memory</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">enforce_tracker_limit</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_deactivate_learning_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_deactivate</span><span class="p">:</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">SplitNode</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_deactivate_learning_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_deactivate</span><span class="p">:</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">ActiveLearningNode</span><span class="p">,</span>
+                                  <span class="n">parent</span><span class="p">:</span> <span class="n">HoeffdingTree</span><span class="o">.</span><span class="n">SplitNode</span><span class="p">,</span> <span class="n">parent_branch</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Deactivate a learning node.</span>
 
 <span class="sd">        Parameters</span>
@@ -902,19 +906,17 @@
 <span class="sd">            Parent node&#39;s branch index.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">TARGET_MEAN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_TARGET_MEAN</span><span class="p">:</span>
             <span class="n">new_leaf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InactiveLearningNodeForRegression</span><span class="p">(</span><span class="n">to_deactivate</span><span class="o">.</span><span class="n">get_observed_class_distribution</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">new_leaf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InactiveLearningNodePerceptron</span><span class="p">(</span><span class="n">to_deactivate</span><span class="o">.</span><span class="n">get_observed_class_distribution</span><span class="p">(),</span> <span class="n">to_deactivate</span><span class="o">.</span><span class="n">perceptron_weight</span><span class="p">)</span>
+            <span class="n">new_leaf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InactiveLearningNodePerceptron</span><span class="p">(</span><span class="n">to_deactivate</span><span class="o">.</span><span class="n">get_observed_class_distribution</span><span class="p">(),</span>
+                                                           <span class="n">to_deactivate</span><span class="o">.</span><span class="n">perceptron_weight</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tree_root</span> <span class="o">=</span> <span class="n">new_leaf</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">parent</span><span class="o">.</span><span class="n">set_child</span><span class="p">(</span><span class="n">parent_branch</span><span class="p">,</span> <span class="n">new_leaf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">-=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span> <span class="o">+=</span> <span class="mi">1</span></div>
-
-
-
 </pre></div>
 
            </div>
