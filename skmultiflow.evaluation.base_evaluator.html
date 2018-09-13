@@ -234,7 +234,6 @@
 <dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator">
 <em class="property">class </em><code class="descclassname">skmultiflow.evaluation.base_evaluator.</code><code class="descname">StreamEvaluator</code><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base_object.html#skmultiflow.core.base_object.BaseObject" title="skmultiflow.core.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base_object.BaseObject</span></code></a></p>
-<p>BaseEvaluator</p>
 <p>The abstract class that works as a base model for all of this framework’s
 evaluators. It creates a basic interface that evaluation modules should
 follow in order to use them with all the tools available in scikit-workflow.</p>
@@ -248,140 +247,35 @@ get_class_type, are implemented.</p>
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.CLASSIFICATION">
-<code class="descname">CLASSIFICATION</code><em class="property"> = 'classification'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.CLASSIFICATION" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.CLASSIFICATION_METRICS">
-<code class="descname">CLASSIFICATION_METRICS</code><em class="property"> = ['performance', 'kappa', 'kappa_t', 'kappa_m', 'true_vs_predicted', 'data_points']</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.CLASSIFICATION_METRICS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.DATA_POINTS">
-<code class="descname">DATA_POINTS</code><em class="property"> = 'data_points'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.DATA_POINTS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.EXACT_MATCH">
-<code class="descname">EXACT_MATCH</code><em class="property"> = 'exact_match'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.EXACT_MATCH" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.HAMMING_LOSS">
-<code class="descname">HAMMING_LOSS</code><em class="property"> = 'hamming_loss'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.HAMMING_LOSS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.HAMMING_SCORE">
-<code class="descname">HAMMING_SCORE</code><em class="property"> = 'hamming_score'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.HAMMING_SCORE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.J_INDEX">
-<code class="descname">J_INDEX</code><em class="property"> = 'j_index'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.J_INDEX" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.KAPPA">
-<code class="descname">KAPPA</code><em class="property"> = 'kappa'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.KAPPA" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.KAPPA_M">
-<code class="descname">KAPPA_M</code><em class="property"> = 'kappa_m'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.KAPPA_M" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.KAPPA_T">
-<code class="descname">KAPPA_T</code><em class="property"> = 'kappa_t'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.KAPPA_T" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.MAE">
-<code class="descname">MAE</code><em class="property"> = 'mean_absolute_error'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.MAE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.MSE">
-<code class="descname">MSE</code><em class="property"> = 'mean_square_error'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.MSE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.MULTI_OUTPUT">
-<code class="descname">MULTI_OUTPUT</code><em class="property"> = 'multi_output'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.MULTI_OUTPUT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.MULTI_OUTPUT_METRICS">
-<code class="descname">MULTI_OUTPUT_METRICS</code><em class="property"> = ['hamming_score', 'hamming_loss', 'exact_match', 'j_index']</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.MULTI_OUTPUT_METRICS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.PERFORMANCE">
-<code class="descname">PERFORMANCE</code><em class="property"> = 'performance'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.PERFORMANCE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.PLOT_TYPES">
-<code class="descname">PLOT_TYPES</code><em class="property"> = ['performance', 'kappa', 'kappa_t', 'kappa_m', 'hamming_score', 'hamming_loss', 'exact_match', 'j_index', 'mean_square_error', 'mean_absolute_error', 'true_vs_predicted', 'data_points']</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.PLOT_TYPES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.REGRESSION">
-<code class="descname">REGRESSION</code><em class="property"> = 'regression'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.REGRESSION" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.REGRESSION_METRICS">
-<code class="descname">REGRESSION_METRICS</code><em class="property"> = ['mean_square_error', 'mean_absolute_error', 'true_vs_predicted']</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.REGRESSION_METRICS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.SINGLE_OUTPUT">
-<code class="descname">SINGLE_OUTPUT</code><em class="property"> = 'single-output'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.SINGLE_OUTPUT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.TASK_TYPES">
-<code class="descname">TASK_TYPES</code><em class="property"> = ['classification', 'regression', 'multi_output', 'single-output', 'undefined']</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.TASK_TYPES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.TRUE_VS_PREDICTED">
-<code class="descname">TRUE_VS_PREDICTED</code><em class="property"> = 'true_vs_predicted'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.TRUE_VS_PREDICTED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.UNDEFINED">
-<code class="descname">UNDEFINED</code><em class="property"> = 'undefined'</em><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.UNDEFINED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.evaluate">
-<code class="descname">evaluate</code><span class="sig-paren">(</span><em>stream</em>, <em>classifier</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function evaluates the classifier, using the class parameters, and
-by feeding it with instances coming from the stream parameter.</p>
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>stream</em>, <em>model</em>, <em>model_names=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates a learner or set of learners on samples from a stream.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>stream</strong> (<em>BaseInstanceStream extension</em>) – The stream to be use in the evaluation process.</li>
-<li><strong>classifier</strong> (<em>BaseClassifier extension</em><em> or </em><em>list of BaseClassifier extensions</em>) – The classifier or classifiers to be evaluated.</li>
+<li><strong>stream</strong> (<em>Stream</em>) – The stream from which to draw the samples.</li>
+<li><strong>model</strong> (<em>StreamModel</em><em> or </em><em>list</em>) – The learner or list of learners to evaluate.</li>
+<li><strong>model_names</strong> (<em>list</em><em>, </em><em>optional</em><em> (</em><em>Default=None</em><em>)</em>) – A list with the names of the learners.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The trained classifier’s at the end of the evaluation process.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The trained learner(s).</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">BaseClassifier extension or list of BaseClassifier extensions</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">StreamModel or list</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.evaluation_summary">
+<code class="descname">evaluation_summary</code><span class="sig-paren">(</span><em>logging</em>, <em>start_time</em>, <em>end_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.evaluation_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.evaluation_summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_class_type">
@@ -401,18 +295,85 @@ generated by that module.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_current_measurements">
+<code class="descname">get_current_measurements</code><span class="sig-paren">(</span><em>model_idx=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.get_current_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_current_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current measurements from the evaluation (measured on last <cite>n_wait</cite> samples).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>model_idx</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>Default=None</em><em>)</em>) – Indicates the index of the model as defined in <cite>evaluate(model)</cite>.
+If None, returns a list with the measurements for each model.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>measurements or list</em></li>
+<li><em>Current measurements. If model_idx is None, returns a list with the measurements</em> – for each model.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">IndexError: If the index is invalid.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects information about the evaluator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Evaluator description.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_mean_measurements">
+<code class="descname">get_mean_measurements</code><span class="sig-paren">(</span><em>model_idx=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.get_mean_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_mean_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get mean measurements from the evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>model_idx</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>Default=None</em><em>)</em>) – Indicates the index of the model as defined in <cite>evaluate(model)</cite>.
+If None, returns a list with the measurements for each model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>measurements or list</em></li>
+<li><em>Mean measurements. If model_idx is None, returns a list with the measurements</em> – for each model.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">IndexError: If the index is invalid.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_measurements">
+<code class="descname">get_measurements</code><span class="sig-paren">(</span><em>model_idx=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.get_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.get_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get measurements from the evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>model_idx</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>Default=None</em><em>)</em>) – Indicates the index of the model as defined in <cite>evaluate(model)</cite>.
+If None, returns a list with the measurements for each model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>tuple (mean, current)</em></li>
+<li><em>Mean and Current measurements. If model_idx is None, each member of the tuple</em> – is a a list with the measurements for each model.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">IndexError: If the index is invalid.</td>
 </tr>
 </tbody>
 </table>
@@ -469,8 +430,7 @@ prediction.</td>
 <dl class="method">
 <dt id="skmultiflow.evaluation.base_evaluator.StreamEvaluator.set_params">
 <code class="descname">set_params</code><span class="sig-paren">(</span><em>parameter_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/evaluation/base_evaluator.html#StreamEvaluator.set_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.evaluation.base_evaluator.StreamEvaluator.set_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass parameter names and values through a dictionary so that their
-values can be updated.</p>
+<dd><p>Update parameter names and values via a dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

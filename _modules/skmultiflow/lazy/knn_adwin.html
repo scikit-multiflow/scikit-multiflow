@@ -228,7 +228,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="KNNAdwin"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn_adwin.html#skmultiflow.lazy.KNNAdwin">[docs]</a><span class="k">class</span> <span class="nc">KNNAdwin</span><span class="p">(</span><span class="n">KNN</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KNNAdwin">[docs]</a><span class="k">class</span> <span class="nc">KNNAdwin</span><span class="p">(</span><span class="n">KNN</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; K-Nearest Neighbors Classifier with ADWIN Change detector </span>
 <span class="sd">    </span>
 <span class="sd">    This Classifier is an improvement from the regular KNN classifier, </span>
@@ -309,7 +309,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="KNNAdwin.reset"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn_adwin.html#skmultiflow.lazy.KNNAdwin.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin.reset"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KNNAdwin.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset</span>
 <span class="sd">        </span>
 <span class="sd">        Resets the adwin algorithm as well as the base model </span>
@@ -324,11 +324,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">adwin</span> <span class="o">=</span> <span class="n">ADWIN</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="KNNAdwin.fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn_adwin.html#skmultiflow.lazy.KNNAdwin.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin.fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KNNAdwin.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="KNNAdwin.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn_adwin.html#skmultiflow.lazy.KNNAdwin.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KNNAdwin.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 <span class="sd">        </span>
 <span class="sd">        Partially fits the model. This is done by updating the window </span>
@@ -376,7 +376,7 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">delete_element</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="KNNAdwin.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.knn_adwin.html#skmultiflow.lazy.KNNAdwin.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNAdwin.get_info"><a class="viewcode-back" href="../../../skmultiflow.lazy.html#skmultiflow.lazy.KNNAdwin.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - n_neighbors: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39; - max_window_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_window_size</span><span class="p">)</span>

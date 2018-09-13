@@ -241,7 +241,7 @@ that classifier.</p>
 to compute a range of performance metrics.</p>
 <p>In order to keep statistics updated, the class won’t require lots of
 information, but two: the predictions and true labels.</p>
-<p>At any given moment, it can compute the following statistics: performance,
+<p>At any given moment, it can compute the following statistics: accuracy,
 kappa, kappa_t, kappa_m, majority_class and error rate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -270,6 +270,22 @@ kappa, kappa_t, kappa_m, majority_class and error rate.</p>
 <li><strong>weight</strong> (<em>float</em>) – Sample’s weight</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.metrics.measure_collection.ClassificationMeasurements.get_accuracy">
+<code class="descname">get_accuracy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#ClassificationMeasurements.get_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.measure_collection.ClassificationMeasurements.get_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the accuracy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the accuracy.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
 </tbody>
 </table>
@@ -307,9 +323,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>string</em></li>
+<li><em>A string with the class’ relevant information.</em></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -381,22 +399,6 @@ temporal correlation between samples.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the true majority class.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.metrics.measure_collection.ClassificationMeasurements.get_performance">
-<code class="descname">get_performance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#ClassificationMeasurements.get_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.measure_collection.ClassificationMeasurements.get_performance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the performance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the performance.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
 </tbody>
 </table>
@@ -536,9 +538,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>string</em></li>
+<li><em>A string with the class’ relevant information.</em></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -649,9 +653,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>string</em></li>
+<li><em>A string with the class’ relevant information.</em></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -699,7 +705,7 @@ windows of the important classifier’s attributes.</p>
 ClassificationMeasurements class. The difference is that the statistics
 kept by this class are local, or partial, while the statistics kept by
 the ClassificationMeasurements class are global.</p>
-<p>At any given moment, it can compute the following statistics: performance,
+<p>At any given moment, it can compute the following statistics: accuracy,
 kappa, kappa_t, kappa_m, majority_class and error rate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -730,6 +736,22 @@ will remove samples from the observation window.</p>
 <li><strong>y_pred</strong> (<em>int</em>) – The classifier’s prediction</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.metrics.measure_collection.WindowClassificationMeasurements.get_accuracy">
+<code class="descname">get_accuracy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.get_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.measure_collection.WindowClassificationMeasurements.get_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the window/local accuracy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the window/local accuracy.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
 </tbody>
 </table>
@@ -767,9 +789,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>string</em></li>
+<li><em>A string with the class’ relevant information.</em></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -841,22 +865,6 @@ the temporal correlation between samples.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the true window/local majority class.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.metrics.measure_collection.WindowClassificationMeasurements.get_performance">
-<code class="descname">get_performance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.get_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.measure_collection.WindowClassificationMeasurements.get_performance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the window/local performance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the window/local performance.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
 </tbody>
 </table>
@@ -1009,9 +1017,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>string</em></li>
+<li><em>A string with the class’ relevant information.</em></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1133,9 +1143,11 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A string with the class’ relevant information.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>string</em></li>
+<li><em>A string with the class’ relevant information.</em></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

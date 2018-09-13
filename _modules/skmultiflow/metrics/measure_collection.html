@@ -240,7 +240,7 @@
 <span class="sd">    In order to keep statistics updated, the class won&#39;t require lots of</span>
 <span class="sd">    information, but two: the predictions and true labels.</span>
 
-<span class="sd">    At any given moment, it can compute the following statistics: performance,</span>
+<span class="sd">    At any given moment, it can compute the following statistics: accuracy,</span>
 <span class="sd">    kappa, kappa_t, kappa_m, majority_class and error rate.</span>
 
 <span class="sd">    Parameters</span>
@@ -342,15 +342,15 @@
 
         <span class="k">return</span> <span class="n">majority_class</span></div>
 
-<div class="viewcode-block" id="ClassificationMeasurements.get_performance"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_performance">[docs]</a>    <span class="k">def</span> <span class="nf">get_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_performance</span>
+<div class="viewcode-block" id="ClassificationMeasurements.get_accuracy"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_accuracy">[docs]</a>    <span class="k">def</span> <span class="nf">get_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get_accuracy</span>
 
-<span class="sd">        Computes the performance.</span>
+<span class="sd">        Computes the accuracy.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the performance.</span>
+<span class="sd">            Returns the accuracy.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -363,7 +363,7 @@
             <span class="k">return</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_incorrectly_classified_ratio"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_incorrectly_classified_ratio">[docs]</a>    <span class="k">def</span> <span class="nf">get_incorrectly_classified_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_get_target_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">add_label</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; _get_target_index</span>
@@ -413,7 +413,7 @@
 <span class="sd">            Returns the Cohen&#39;s kappa coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
         <span class="n">pc</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rows</span><span class="p">):</span>
@@ -440,7 +440,7 @@
 <span class="sd">            Returns the Cohen&#39;s kappa T coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
         <span class="k">else</span><span class="p">:</span>
@@ -460,7 +460,7 @@
 <span class="sd">            Returns the Cohen&#39;s kappa M coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
         <span class="k">else</span><span class="p">:</span>
@@ -476,7 +476,7 @@
 <div class="viewcode-block" id="ClassificationMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - performance: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - accuracy: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">())</span> <span class="o">+</span> \
                <span class="s1">&#39; - kappa: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">())</span> <span class="o">+</span> \
                <span class="s1">&#39; - kappa_t: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">())</span> <span class="o">+</span> \
                <span class="s1">&#39; - kappa_m: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">())</span> <span class="o">+</span> \
@@ -502,7 +502,7 @@
 <span class="sd">    kept by this class are local, or partial, while the statistics kept by</span>
 <span class="sd">    the ClassificationMeasurements class are global.</span>
 
-<span class="sd">    At any given moment, it can compute the following statistics: performance,</span>
+<span class="sd">    At any given moment, it can compute the following statistics: accuracy,</span>
 <span class="sd">    kappa, kappa_t, kappa_m, majority_class and error rate.</span>
 
 <span class="sd">    Parameters</span>
@@ -633,15 +633,15 @@
 
         <span class="k">return</span> <span class="n">majority_class</span></div>
 
-<div class="viewcode-block" id="WindowClassificationMeasurements.get_performance"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_performance">[docs]</a>    <span class="k">def</span> <span class="nf">get_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_performance</span>
+<div class="viewcode-block" id="WindowClassificationMeasurements.get_accuracy"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_accuracy">[docs]</a>    <span class="k">def</span> <span class="nf">get_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get_accuracy</span>
 
-<span class="sd">        Computes the window/local performance.</span>
+<span class="sd">        Computes the window/local accuracy.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local performance.</span>
+<span class="sd">            Returns the window/local accuracy.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -654,7 +654,7 @@
             <span class="k">return</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_incorrectly_classified_ratio"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_incorrectly_classified_ratio">[docs]</a>    <span class="k">def</span> <span class="nf">get_incorrectly_classified_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_get_target_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">add</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; _get_target_index</span>
@@ -704,7 +704,7 @@
 <span class="sd">            Returns the window/local Cohen&#39;s kappa coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
         <span class="n">pc</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rows</span><span class="p">):</span>
@@ -732,7 +732,7 @@
 <span class="sd">            Returns the window/local Cohen&#39;s kappa T coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
         <span class="k">else</span><span class="p">:</span>
@@ -752,7 +752,7 @@
 <span class="sd">            Returns the window/local Cohen&#39;s kappa M coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">()</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">pc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
         <span class="k">else</span><span class="p">:</span>
@@ -776,7 +776,7 @@
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - sample_count: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - window_size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - performance: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_performance</span><span class="p">())</span> <span class="o">+</span> \
+               <span class="s1">&#39; - accuracy: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">())</span> <span class="o">+</span> \
                <span class="s1">&#39; - kappa: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa</span><span class="p">())</span> <span class="o">+</span> \
                <span class="s1">&#39; - kappa_t: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_t</span><span class="p">())</span> <span class="o">+</span> \
                <span class="s1">&#39; - kappa_m: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_kappa_m</span><span class="p">())</span> <span class="o">+</span> \
