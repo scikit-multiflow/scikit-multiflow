@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.trees.hoeffding_numeric_attribute_class_observer &mdash; scikit-multiflow 0.1.0 documentation</title>
+  <title>skmultiflow.trees.numeric_attribute_regression_observer &mdash; scikit-multiflow 0.1.0 documentation</title>
   
 
   
@@ -199,14 +199,14 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>skmultiflow.trees.hoeffding_numeric_attribute_class_observer</li>
+      <li>skmultiflow.trees.numeric_attribute_regression_observer</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/hoeffding_numeric_attribute_class_observer.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/numeric_attribute_regression_observer.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -220,21 +220,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for skmultiflow.trees.hoeffding_numeric_attribute_class_observer</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">skmultiflow.trees.binary_tree_numeric_attribute_class_observer</span> <span class="k">import</span> <span class="n">BinaryTreeNumericAttributeClassObserver</span>
+  <h1>Source code for skmultiflow.trees.numeric_attribute_regression_observer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">skmultiflow.trees.numeric_attribute_class_observer_binary_tree</span> <span class="k">import</span> <span class="n">NumericAttributeClassObserverBinaryTree</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.numeric_attribute_binary_test</span> <span class="k">import</span> <span class="n">NumericAttributeBinaryTest</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_split_suggestion</span> <span class="k">import</span> <span class="n">AttributeSplitSuggestion</span>
 
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver">[docs]</a><span class="k">class</span> <span class="nc">HoeffdingNumericAttributeClassObserver</span><span class="p">(</span><span class="n">BinaryTreeNumericAttributeClassObserver</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; FIMTDDNumericAttributeClassObserver</span>
-
-<span class="sd">    Class for observing the class data distribution for a numeric attribute using gaussian estimators.</span>
-<span class="sd">    This observer monitors the class distribution of a given attribute.</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver">[docs]</a><span class="k">class</span> <span class="nc">NumericAttributeRegressionObserver</span><span class="p">(</span><span class="n">NumericAttributeClassObserverBinaryTree</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class for observing the data distribution for a numeric attribute for regression.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.Node"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.Node"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_left_statistics</span> <span class="o">=</span> <span class="p">{}</span>
@@ -258,7 +255,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.Node.insert_value"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.Node.insert_value">[docs]</a>        <span class="k">def</span> <span class="nf">insert_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.Node.insert_value"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.Node.insert_value">[docs]</a>        <span class="k">def</span> <span class="nf">insert_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cut_point</span><span class="p">:</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_left_statistics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -271,7 +268,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_left_statistics</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">label</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_left_statistics</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">label</span> <span class="o">*</span> <span class="n">label</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_left</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_left</span> <span class="o">=</span> <span class="n">HoeffdingNumericAttributeClassObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_left</span> <span class="o">=</span> <span class="n">NumericAttributeRegressionObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_left</span><span class="o">.</span><span class="n">insert_value</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -285,7 +282,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_right_statistics</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span> <span class="o">*</span> <span class="n">label</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_right</span> <span class="o">=</span> <span class="n">HoeffdingNumericAttributeClassObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_right</span> <span class="o">=</span> <span class="n">NumericAttributeRegressionObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_right</span><span class="o">.</span><span class="n">insert_value</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div></div>
 
@@ -304,21 +301,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_count_right_total</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_count_left_total</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.observe_attribute_class"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.observe_attribute_class"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">att_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">HoeffdingNumericAttributeClassObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">NumericAttributeRegressionObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="o">.</span><span class="n">insert_value</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
         <span class="k">return</span> <span class="mf">0.0</span></div>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_total_left</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_total_right</span> <span class="o">=</span> <span class="n">pre_split_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -328,7 +325,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_count_right_total</span> <span class="o">=</span> <span class="n">pre_split_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_for_best_split_option</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.search_for_best_split_option"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.search_for_best_split_option">[docs]</a>    <span class="k">def</span> <span class="nf">search_for_best_split_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">current_best_option</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.search_for_best_split_option"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.search_for_best_split_option">[docs]</a>    <span class="k">def</span> <span class="nf">search_for_best_split_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">current_best_option</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">current_node</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_right_total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">current_best_option</span>
         <span class="k">if</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_left</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -373,11 +370,11 @@
 
         <span class="k">return</span> <span class="n">current_best_option</span></div>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.remove_bad_splits"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.remove_bad_splits">[docs]</a>    <span class="k">def</span> <span class="nf">remove_bad_splits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">last_check_ratio</span><span class="p">,</span> <span class="n">last_check_sdr</span><span class="p">,</span> <span class="n">last_check_e</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.remove_bad_splits"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.remove_bad_splits">[docs]</a>    <span class="k">def</span> <span class="nf">remove_bad_splits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">last_check_ratio</span><span class="p">,</span> <span class="n">last_check_sdr</span><span class="p">,</span> <span class="n">last_check_e</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">remove_bad_split_nodes</span><span class="p">(</span><span class="n">criterion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="n">last_check_ratio</span><span class="p">,</span> <span class="n">last_check_sdr</span><span class="p">,</span> <span class="n">last_check_e</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingNumericAttributeClassObserver.remove_bad_split_nodes"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_numeric_attribute_class_observer.html#skmultiflow.trees.hoeffding_numeric_attribute_class_observer.HoeffdingNumericAttributeClassObserver.remove_bad_split_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">remove_bad_split_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">last_check_ratio</span><span class="p">,</span> <span class="n">last_check_sdr</span><span class="p">,</span> <span class="n">last_check_e</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeRegressionObserver.remove_bad_split_nodes"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer.html#skmultiflow.trees.numeric_attribute_regression_observer.NumericAttributeRegressionObserver.remove_bad_split_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">remove_bad_split_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">last_check_ratio</span><span class="p">,</span> <span class="n">last_check_sdr</span><span class="p">,</span> <span class="n">last_check_e</span><span class="p">):</span>
 
         <span class="n">is_bad</span> <span class="o">=</span> <span class="kc">False</span>
 

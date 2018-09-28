@@ -228,7 +228,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="ClassifierChain"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain">[docs]</a><span class="k">class</span> <span class="nc">ClassifierChain</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain">[docs]</a><span class="k">class</span> <span class="nc">ClassifierChain</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Classifier Chains for multi-label learning.</span>
 
 <span class="sd">    Parameters</span>
@@ -276,7 +276,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_random_state</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ClassifierChain.fit"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain.fit"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; fit</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
@@ -299,7 +299,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">XY</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">D</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="ClassifierChain.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; partial_fit</span>
 
 <span class="sd">            N.B. Assume that fit has already been called</span>
@@ -325,7 +325,7 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="ClassifierChain.predict"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain.predict"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
 
 <span class="sd">            Returns predictions for X</span>
@@ -340,7 +340,7 @@
         <span class="c1"># Unset the chain order (back to default)</span>
         <span class="k">return</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="ClassifierChain.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict_proba</span>
 
 <span class="sd">            Returns marginals [P(y_1=1|x),...,P(y_L=1|x,y_1,...,y_{L-1})]</span>
@@ -358,13 +358,13 @@
             <span class="n">Y</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">Y</span></div>
 
-<div class="viewcode-block" id="ClassifierChain.score"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain.score"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="ClassifierChain.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__configure</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ClassifierChain.get_info"><a class="viewcode-back" href="../../../skmultiflow.meta.html#skmultiflow.meta.ClassifierChain.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassifierChain.get_info"><a class="viewcode-back" href="../../../skmultiflow.meta.classifier_chains.html#skmultiflow.meta.ClassifierChain.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;ClassifierChain Classifier:&#39;</span> \
                <span class="s1">&#39; - base_estimator: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - order: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span> <span class="o">+</span> \

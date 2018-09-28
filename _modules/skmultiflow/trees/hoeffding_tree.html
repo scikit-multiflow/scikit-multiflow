@@ -228,9 +228,9 @@
 <span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">attrgetter</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.trees.gaussian_numeric_attribute_class_observer</span> <span class="k">import</span> <span class="n">GaussianNumericAttributeClassObserver</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.trees.numeric_attribute_class_observer_gaussian</span> <span class="k">import</span> <span class="n">NumericAttributeClassObserverGaussian</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.nominal_attribute_class_observer</span> <span class="k">import</span> <span class="n">NominalAttributeClassObserver</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.trees.null_attribute_class_observer</span> <span class="k">import</span> <span class="n">NullAttributeClassObserver</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_class_observer_null</span> <span class="k">import</span> <span class="n">AttributeClassObserverNull</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_split_suggestion</span> <span class="k">import</span> <span class="n">AttributeSplitSuggestion</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.gini_split_criterion</span> <span class="k">import</span> <span class="n">GiniSplitCriterion</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.info_gain_split_criterion</span> <span class="k">import</span> <span class="n">InfoGainSplitCriterion</span>
@@ -483,8 +483,12 @@
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="s1">&#39;Leaf = &#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="n">indent</span><span class="p">)</span>
-            <span class="n">class_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
-            <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;Class </span><span class="si">{}</span><span class="s1"> | </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">class_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">)</span></div>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">class_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+                <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;Class </span><span class="si">{}</span><span class="s1"> | </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">class_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># Regression problems</span>
+                <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;Statistics </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">)</span></div>
 
         <span class="c1"># TODO</span>
 <div class="viewcode-block" id="HoeffdingTree.Node.get_description"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.get_description">[docs]</a>        <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -766,7 +770,7 @@
                     <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ht</span><span class="o">.</span><span class="n">nominal_attributes</span><span class="p">:</span>
                         <span class="n">obs</span> <span class="o">=</span> <span class="n">NominalAttributeClassObserver</span><span class="p">()</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">obs</span> <span class="o">=</span> <span class="n">GaussianNumericAttributeClassObserver</span><span class="p">()</span>
+                        <span class="n">obs</span> <span class="o">=</span> <span class="n">NumericAttributeClassObserverGaussian</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
                 <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">weight</span><span class="p">)</span></div>
 
@@ -843,7 +847,7 @@
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="n">att_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">att_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">NullAttributeClassObserver</span><span class="p">()</span></div></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">att_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">AttributeClassObserverNull</span><span class="p">()</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.LearningNodeNB"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNB</span><span class="p">(</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Learning node that uses Naive Bayes models.</span>

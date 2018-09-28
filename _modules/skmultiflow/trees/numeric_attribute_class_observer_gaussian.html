@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.trees.gaussian_numeric_attribute_class_observer &mdash; scikit-multiflow 0.1.0 documentation</title>
+  <title>skmultiflow.trees.numeric_attribute_class_observer_gaussian &mdash; scikit-multiflow 0.1.0 documentation</title>
   
 
   
@@ -199,14 +199,14 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>skmultiflow.trees.gaussian_numeric_attribute_class_observer</li>
+      <li>skmultiflow.trees.numeric_attribute_class_observer_gaussian</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/gaussian_numeric_attribute_class_observer.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/numeric_attribute_class_observer_gaussian.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -220,7 +220,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for skmultiflow.trees.gaussian_numeric_attribute_class_observer</h1><div class="highlight"><pre>
+  <h1>Source code for skmultiflow.trees.numeric_attribute_class_observer_gaussian</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_class_observer</span> <span class="k">import</span> <span class="n">AttributeClassObserver</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.gaussian_estimator</span> <span class="k">import</span> <span class="n">GaussianEstimator</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.numeric_attribute_binary_test</span> <span class="k">import</span> <span class="n">NumericAttributeBinaryTest</span>
@@ -229,11 +229,9 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="GaussianNumericAttributeClassObserver"><a class="viewcode-back" href="../../../skmultiflow.trees.gaussian_numeric_attribute_class_observer.html#skmultiflow.trees.gaussian_numeric_attribute_class_observer.GaussianNumericAttributeClassObserver">[docs]</a><span class="k">class</span> <span class="nc">GaussianNumericAttributeClassObserver</span><span class="p">(</span><span class="n">AttributeClassObserver</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; GaussianNumericAttributeClassObserver</span>
-
-<span class="sd">    Class for observing the class data distribution for a numeric attribute using gaussian estimators.</span>
-<span class="sd">    This observer monitors the class distribution of a given attribute.</span>
+<div class="viewcode-block" id="NumericAttributeClassObserverGaussian"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian">[docs]</a><span class="k">class</span> <span class="nc">NumericAttributeClassObserverGaussian</span><span class="p">(</span><span class="n">AttributeClassObserver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class for observing the class data distribution for a numeric attribute</span>
+<span class="sd">    using gaussian estimators.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -243,7 +241,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_bin_options</span> <span class="o">=</span> <span class="mi">10</span>     <span class="c1"># The number of bins, default 10</span>
 
-<div class="viewcode-block" id="GaussianNumericAttributeClassObserver.observe_attribute_class"><a class="viewcode-back" href="../../../skmultiflow.trees.gaussian_numeric_attribute_class_observer.html#skmultiflow.trees.gaussian_numeric_attribute_class_observer.GaussianNumericAttributeClassObserver.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeClassObserverGaussian.observe_attribute_class"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">att_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
@@ -260,14 +258,14 @@
             <span class="n">val_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span>
             <span class="n">val_dist</span><span class="o">.</span><span class="n">add_observation</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GaussianNumericAttributeClassObserver.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../skmultiflow.trees.gaussian_numeric_attribute_class_observer.html#skmultiflow.trees.gaussian_numeric_attribute_class_observer.GaussianNumericAttributeClassObserver.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeClassObserverGaussian.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">class_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">:</span>
             <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">obs</span><span class="o">.</span><span class="n">probability_density</span><span class="p">(</span><span class="n">att_val</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span></div>
 
-<div class="viewcode-block" id="GaussianNumericAttributeClassObserver.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../skmultiflow.trees.gaussian_numeric_attribute_class_observer.html#skmultiflow.trees.gaussian_numeric_attribute_class_observer.GaussianNumericAttributeClassObserver.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeClassObserverGaussian.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="p">):</span>
         <span class="n">best_suggestion</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">suggested_split_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_split_point_suggestions</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">split_value</span> <span class="ow">in</span> <span class="n">suggested_split_values</span><span class="p">:</span>
@@ -278,7 +276,7 @@
                 <span class="n">best_suggestion</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="n">num_att_binary_test</span><span class="p">,</span> <span class="n">post_split_dist</span><span class="p">,</span> <span class="n">merit</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">best_suggestion</span></div>
 
-<div class="viewcode-block" id="GaussianNumericAttributeClassObserver.get_split_point_suggestions"><a class="viewcode-back" href="../../../skmultiflow.trees.gaussian_numeric_attribute_class_observer.html#skmultiflow.trees.gaussian_numeric_attribute_class_observer.GaussianNumericAttributeClassObserver.get_split_point_suggestions">[docs]</a>    <span class="k">def</span> <span class="nf">get_split_point_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeClassObserverGaussian.get_split_point_suggestions"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian.get_split_point_suggestions">[docs]</a>    <span class="k">def</span> <span class="nf">get_split_point_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">suggested_split_values</span> <span class="o">=</span> <span class="n">SortedList</span><span class="p">()</span>
         <span class="n">min_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="n">max_value</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
@@ -296,7 +294,7 @@
                     <span class="n">suggested_split_values</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">split_value</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">suggested_split_values</span></div>
 
-<div class="viewcode-block" id="GaussianNumericAttributeClassObserver.get_class_dists_from_binary_split"><a class="viewcode-back" href="../../../skmultiflow.trees.gaussian_numeric_attribute_class_observer.html#skmultiflow.trees.gaussian_numeric_attribute_class_observer.GaussianNumericAttributeClassObserver.get_class_dists_from_binary_split">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_dists_from_binary_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_value</span><span class="p">):</span>
+<div class="viewcode-block" id="NumericAttributeClassObserverGaussian.get_class_dists_from_binary_split"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian.get_class_dists_from_binary_split">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_dists_from_binary_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assumes all values equal to split_value go to lhs</span>
 

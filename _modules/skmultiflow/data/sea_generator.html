@@ -226,7 +226,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="SEAGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator">[docs]</a><span class="k">class</span> <span class="nc">SEAGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator">[docs]</a><span class="k">class</span> <span class="nc">SEAGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; SEAGenerator</span>
 <span class="sd">    </span>
 <span class="sd">    This generator is an implementation of the data stream with abrupt </span>
@@ -406,7 +406,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;noise percentage should be in [0.0..1.0], </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">noise_percentage</span><span class="p">))</span>
 
-<div class="viewcode-block" id="SEAGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sould be called before generating the samples.</span>
 
@@ -415,7 +415,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 <span class="sd">        </span>
 <span class="sd">        The sample generation works as follows: The three attributes are </span>
@@ -475,7 +475,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.generate_drift"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.generate_drift"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate drift by switching the classification function randomly.</span>
 
@@ -485,7 +485,7 @@
             <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">new_function</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.classification_function_zero"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_zero"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_zero</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_zero</span>
 <span class="sd">        </span>
@@ -511,7 +511,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.classification_function_one"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_one"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_one</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_one</span>
 
@@ -537,7 +537,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.classification_function_two"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_two"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_two</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_two</span>
 
@@ -563,7 +563,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.classification_function_three"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SEAGenerator.classification_function_three"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.classification_function_three">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_three</span><span class="p">(</span><span class="n">att1</span><span class="p">,</span> <span class="n">att2</span><span class="p">,</span> <span class="n">att3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_three</span>
 
@@ -589,7 +589,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">att1</span> <span class="o">+</span> <span class="n">att2</span> <span class="o">&lt;=</span> <span class="mf">9.5</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SEAGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.SEAGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SEAGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.sea_generator.html#skmultiflow.data.SEAGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;SEAGenerator: classification_function: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - balance_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span><span class="p">)</span> <span class="o">+</span> \

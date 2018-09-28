@@ -231,26 +231,26 @@
 
 <div class="viewcode-block" id="EvaluatePrequential"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential">[docs]</a><span class="k">class</span> <span class="nc">EvaluatePrequential</span><span class="p">(</span><span class="n">StreamEvaluator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; EvaluatePrequential</span>
-<span class="sd">    </span>
-<span class="sd">    The prequential evaluation method, or interleaved test-then-train method, </span>
-<span class="sd">    is an alternative to the traditional holdout evaluation, inherited from </span>
-<span class="sd">    batch setting problems. </span>
-<span class="sd">    </span>
-<span class="sd">    The prequential evaluation is designed specifically for stream settings, </span>
-<span class="sd">    in the sense that each sample serves two purposes, and that samples are </span>
-<span class="sd">    analysed sequentially, in order of arrival, and become immediately </span>
+
+<span class="sd">    The prequential evaluation method, or interleaved test-then-train method,</span>
+<span class="sd">    is an alternative to the traditional holdout evaluation, inherited from</span>
+<span class="sd">    batch setting problems.</span>
+
+<span class="sd">    The prequential evaluation is designed specifically for stream settings,</span>
+<span class="sd">    in the sense that each sample serves two purposes, and that samples are</span>
+<span class="sd">    analysed sequentially, in order of arrival, and become immediately</span>
 <span class="sd">    inaccessible by the means of the stream.</span>
-<span class="sd">    </span>
-<span class="sd">    This method consists of using each sample to test the model, which means </span>
-<span class="sd">    to make a predictions or a regression, and then the same sample is used </span>
-<span class="sd">    to train the learner (partial fit it). This way the learner is always </span>
+
+<span class="sd">    This method consists of using each sample to test the model, which means</span>
+<span class="sd">    to make a predictions or a regression, and then the same sample is used</span>
+<span class="sd">    to train the learner (partial fit it). This way the learner is always</span>
 <span class="sd">    being tested on samples that it hasn&#39;t seen yet.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    n_wait: int (Default: 200)</span>
 <span class="sd">        The number of samples to process between each test. Also defines when to update the plot if `show_plot=True`.</span>
-<span class="sd">        </span>
+
 <span class="sd">    max_samples: int (Default: 100000)</span>
 <span class="sd">        The maximum number of samples to process during the evaluation.</span>
 
@@ -267,8 +267,8 @@
 <span class="sd">        The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots</span>
 <span class="sd">        and/or logged into the output file. Valid options are &#39;accuracy&#39;, &#39;kappa&#39;, &#39;kappa_t&#39;, &#39;kappa_m&#39;,</span>
 <span class="sd">        &#39;hamming_score&#39;, &#39;hamming_loss&#39;, &#39;exact_match&#39;, &#39;j_index&#39;, &#39;mean_square_error&#39;, &#39;mean_absolute_error&#39;,</span>
-<span class="sd">        &#39;true_vs_predicted&#39;.</span>
-<span class="sd">    </span>
+<span class="sd">        &#39;true_vs_predicted&#39;, &#39;average_mean_square_error&#39;, &#39;average_mean_absolute_error&#39;.</span>
+
 <span class="sd">    output_file: string, optional (Default: None)</span>
 <span class="sd">        File name to save the summary of the evaluation.</span>
 
@@ -282,7 +282,7 @@
 <span class="sd">    data_points_for_classification: bool(Default: False)</span>
 <span class="sd">        If True , the plot type is a data points</span>
 <span class="sd">        (only works for classification)</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    1. This evaluator can process a single learner to track its performance; or multiple learners  at a time, to</span>
@@ -290,7 +290,7 @@
 
 <span class="sd">    2. The metric &#39;true_vs_predicted&#39; is intended to be informative only. It corresponds to evaluations at a specific</span>
 <span class="sd">       moment which might not represent the actual learner performance across all instances.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # The first example demonstrates how to use the evaluator to evaluate one learner</span>
@@ -310,7 +310,7 @@
 <span class="sd">    ... output_file=None, show_plot=True, metrics=[&#39;kappa&#39;, &#39;kappa_t&#39;, &#39;performance&#39;])</span>
 <span class="sd">    &gt;&gt;&gt; # Evaluate</span>
 <span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=pipe)</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; # The second example will demonstrate how to compare two classifiers with</span>
 <span class="sd">    &gt;&gt;&gt; # the EvaluatePrequential</span>
 <span class="sd">    &gt;&gt;&gt; from sklearn.linear_model.passive_aggressive import PassiveAggressiveClassifier</span>
@@ -396,25 +396,25 @@
 
 <div class="viewcode-block" id="EvaluatePrequential.evaluate"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate</span>
-<span class="sd">        </span>
+
 <span class="sd">        Evaluates a learner or set of learners on samples from a stream.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        stream: Stream</span>
-<span class="sd">            The stream from which to draw the samples. </span>
-<span class="sd">        </span>
+<span class="sd">            The stream from which to draw the samples.</span>
+
 <span class="sd">        model: StreamModel or list</span>
 <span class="sd">            The learner or list of learners to evaluate.</span>
 
 <span class="sd">        model_names: list, optional (Default=None)</span>
 <span class="sd">            A list with the names of the learners.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        StreamModel or list</span>
 <span class="sd">            The trained learner(s).</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_evaluation</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">model_names</span><span class="o">=</span><span class="n">model_names</span><span class="p">)</span>
 
@@ -438,14 +438,14 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        BaseClassifier extension or list of BaseClassifier extensions</span>
-<span class="sd">            The trained classifiers. </span>
-<span class="sd">        </span>
+<span class="sd">            The trained classifiers.</span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        The classifier parameter should be an extension from the BaseClassifier. In </span>
+<span class="sd">        The classifier parameter should be an extension from the BaseClassifier. In</span>
 <span class="sd">        the future, when BaseRegressor is created, it could be an extension from that</span>
 <span class="sd">        class as well.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
@@ -460,10 +460,14 @@
         <span class="n">first_run</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Pre-training on </span><span class="si">%s</span><span class="s1"> samples.&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span><span class="p">))</span>
+
             <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span><span class="p">)</span>
+
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">REGRESSION</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">REGRESSION</span> <span class="ow">and</span> \
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">MULTI_TARGET_REGRESSION</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span>
+                                              <span class="n">target_values</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span>
@@ -502,7 +506,8 @@
                     <span class="c1"># Train</span>
                     <span class="k">if</span> <span class="n">first_run</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">REGRESSION</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">REGRESSION</span> <span class="ow">and</span> \
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">MULTI_TARGET_REGRESSION</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -567,7 +572,7 @@
 <div class="viewcode-block" id="EvaluatePrequential.predict"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict</span>
 
-<span class="sd">        Predicts the labels of the X samples, by calling the predict </span>
+<span class="sd">        Predicts the labels of the X samples, by calling the predict</span>
 <span class="sd">        function of all the learners.</span>
 
 <span class="sd">        Parameters</span>
@@ -578,7 +583,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        list</span>
-<span class="sd">            A list containing the predicted labels for all instances in X in </span>
+<span class="sd">            A list containing the predicted labels for all instances in X in</span>
 <span class="sd">            all learners.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -600,14 +605,14 @@
 <div class="viewcode-block" id="EvaluatePrequential.set_params"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.set_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set_params</span>
 
-<span class="sd">        This function allows the users to change some of the evaluator&#39;s parameters, </span>
-<span class="sd">        by passing a dictionary where keys are the parameters names, and values are </span>
+<span class="sd">        This function allows the users to change some of the evaluator&#39;s parameters,</span>
+<span class="sd">        by passing a dictionary where keys are the parameters names, and values are</span>
 <span class="sd">        the new parameters&#39; values.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        parameter_dict: Dictionary</span>
-<span class="sd">            A dictionary where the keys are the names of attributes the user </span>
+<span class="sd">            A dictionary where the keys are the names of attributes the user</span>
 <span class="sd">            wants to change, and the values are the new values of those attributes.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>

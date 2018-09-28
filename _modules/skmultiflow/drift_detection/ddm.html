@@ -225,7 +225,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.drift_detection.base_drift_detector</span> <span class="k">import</span> <span class="n">BaseDriftDetector</span>
 
 
-<div class="viewcode-block" id="DDM"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.DDM">[docs]</a><span class="k">class</span> <span class="nc">DDM</span><span class="p">(</span><span class="n">BaseDriftDetector</span><span class="p">):</span>
+<div class="viewcode-block" id="DDM"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.ddm.html#skmultiflow.drift_detection.DDM">[docs]</a><span class="k">class</span> <span class="nc">DDM</span><span class="p">(</span><span class="n">BaseDriftDetector</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Drift Detection Method</span>
 <span class="sd">    </span>
 <span class="sd">    This concept change detection method is based on the PAC learning model </span>
@@ -292,7 +292,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">miss_sd_min</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-<div class="viewcode-block" id="DDM.reset"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.DDM.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DDM.reset"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.ddm.html#skmultiflow.drift_detection.DDM.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset</span>
 
 <span class="sd">        Resets the change detector parameters.</span>
@@ -306,7 +306,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">miss_prob_min</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">miss_sd_min</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DDM.add_element"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.DDM.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+<div class="viewcode-block" id="DDM.add_element"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.ddm.html#skmultiflow.drift_detection.DDM.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add a new element to the statistics</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -354,7 +354,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="DDM.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.DDM.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DDM.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.ddm.html#skmultiflow.drift_detection.DDM.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;DDM: min_num_instances: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_instances</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - sample_count: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - error_rate: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">miss_prob</span><span class="p">)</span> <span class="o">+</span> \

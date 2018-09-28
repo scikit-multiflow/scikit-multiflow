@@ -228,9 +228,7 @@
 
 
 <div class="viewcode-block" id="NominalAttributeClassObserver"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_class_observer.html#skmultiflow.trees.nominal_attribute_class_observer.NominalAttributeClassObserver">[docs]</a><span class="k">class</span> <span class="nc">NominalAttributeClassObserver</span><span class="p">(</span><span class="n">AttributeClassObserver</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; NominalAttributeClassObserver</span>
-
-<span class="sd">    Class for observing the class data distribution for a nominal attribute.</span>
+    <span class="sd">&quot;&quot;&quot; Class for observing the class data distribution for a nominal attribute.</span>
 <span class="sd">    This observer monitors the class distribution of a given attribute.</span>
 <span class="sd">    Used in naive Bayes and decision trees to monitor data statistics on leaves.</span>
 
@@ -247,8 +245,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">val_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">class_val</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">val_dist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">val_dist</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">val_dist</span><span class="p">[</span><span class="n">att_val</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">val_dist</span> <span class="o">=</span> <span class="p">{</span><span class="n">att_val</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_dist</span>
             <span class="k">if</span> <span class="n">att_val</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">val_dist</span><span class="p">:</span>
                 <span class="n">val_dist</span><span class="p">[</span><span class="n">att_val</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -269,11 +266,12 @@
             <span class="n">merit</span> <span class="o">=</span> <span class="n">criterion</span><span class="o">.</span><span class="n">get_merit_of_split</span><span class="p">(</span><span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">post_split_dist</span><span class="p">)</span>
             <span class="n">best_suggestion</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="n">NominalAttributeMultiwayTest</span><span class="p">(</span><span class="n">att_idx</span><span class="p">),</span>
                                                        <span class="n">post_split_dist</span><span class="p">,</span> <span class="n">merit</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">val_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">post_split_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_class_dist_from_binary_split</span><span class="p">(</span><span class="n">val_idx</span><span class="p">)</span>
+        <span class="n">att_values</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">att_val</span> <span class="k">for</span> <span class="n">class_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">att_val</span> <span class="ow">in</span> <span class="n">class_val</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">att_val</span> <span class="ow">in</span> <span class="n">att_values</span><span class="p">:</span>
+            <span class="n">post_split_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_class_dist_from_binary_split</span><span class="p">(</span><span class="n">att_val</span><span class="p">)</span>
             <span class="n">merit</span> <span class="o">=</span> <span class="n">criterion</span><span class="o">.</span><span class="n">get_merit_of_split</span><span class="p">(</span><span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">post_split_dist</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">best_suggestion</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">merit</span> <span class="o">&gt;</span> <span class="n">best_suggestion</span><span class="o">.</span><span class="n">merit</span><span class="p">:</span>
-                <span class="n">best_suggestion</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="n">NominalAttributeBinaryTest</span><span class="p">(</span><span class="n">att_idx</span><span class="p">,</span> <span class="n">val_idx</span><span class="p">),</span>
+                <span class="n">best_suggestion</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="n">NominalAttributeBinaryTest</span><span class="p">(</span><span class="n">att_idx</span><span class="p">,</span> <span class="n">att_val</span><span class="p">),</span>
                                                            <span class="n">post_split_dist</span><span class="p">,</span> <span class="n">merit</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">best_suggestion</span></div>
 

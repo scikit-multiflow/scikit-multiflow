@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.trees.hoeffding_nominal_class_attribute_observer &mdash; scikit-multiflow 0.1.0 documentation</title>
+  <title>skmultiflow.trees.nominal_attribute_regression_observer &mdash; scikit-multiflow 0.1.0 documentation</title>
   
 
   
@@ -199,14 +199,14 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>skmultiflow.trees.hoeffding_nominal_class_attribute_observer</li>
+      <li>skmultiflow.trees.nominal_attribute_regression_observer</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/hoeffding_nominal_class_attribute_observer.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/nominal_attribute_regression_observer.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -220,7 +220,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for skmultiflow.trees.hoeffding_nominal_class_attribute_observer</h1><div class="highlight"><pre>
+  <h1>Source code for skmultiflow.trees.nominal_attribute_regression_observer</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_class_observer</span> <span class="k">import</span> <span class="n">AttributeClassObserver</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.nominal_attribute_multiway_test</span> <span class="k">import</span> <span class="n">NominalAttributeMultiwayTest</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.nominal_attribute_binary_test</span> <span class="k">import</span> <span class="n">NominalAttributeBinaryTest</span>
@@ -228,15 +228,12 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_split_suggestion</span> <span class="k">import</span> <span class="n">AttributeSplitSuggestion</span>
 
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver">[docs]</a><span class="k">class</span> <span class="nc">HoeffdingNominalAttributeClassObserver</span><span class="p">(</span><span class="n">AttributeClassObserver</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; HoeffdingNominalAttributeClassObserver</span>
-
-<span class="sd">    Class for observing the class data distribution for a numeric attribute using gaussian estimators.</span>
-<span class="sd">    This observer monitors the class distribution of a given attribute.</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver">[docs]</a><span class="k">class</span> <span class="nc">NominalAttributeRegressionObserver</span><span class="p">(</span><span class="n">AttributeClassObserver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class for observing the data distribution for a nominal attribute for regression.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver.Node"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver.Node"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
 
         <span class="n">_statistics</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">_child</span> <span class="o">=</span> <span class="kc">None</span>
@@ -255,7 +252,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver.Node.insert_value"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver.Node.insert_value">[docs]</a>        <span class="k">def</span> <span class="nf">insert_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver.Node.insert_value"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver.Node.insert_value">[docs]</a>        <span class="k">def</span> <span class="nf">insert_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cut_point</span><span class="p">:</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_statistics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -265,7 +262,7 @@
             <span class="k">else</span><span class="p">:</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_child</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_child</span> <span class="o">=</span> <span class="n">HoeffdingNominalAttributeClassObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_child</span> <span class="o">=</span> <span class="n">NominalAttributeRegressionObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_child</span><span class="o">.</span><span class="n">insert_value</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div></div>
 
@@ -289,7 +286,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_binary_only</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_possible_values</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver.observe_attribute_class"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver.observe_attribute_class"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">att_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
@@ -297,15 +294,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_number_of_possible_values</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">HoeffdingNominalAttributeClassObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">NominalAttributeRegressionObserver</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="o">.</span><span class="n">insert_value</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
         <span class="k">return</span> <span class="mf">0.0</span></div>
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="p">):</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_one</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_rest</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -322,7 +319,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_for_best_multiway_split_option</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver.search_for_best_binary_split_option"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver.search_for_best_binary_split_option">[docs]</a>    <span class="k">def</span> <span class="nf">search_for_best_binary_split_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">current_best_option</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver.search_for_best_binary_split_option"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver.search_for_best_binary_split_option">[docs]</a>    <span class="k">def</span> <span class="nf">search_for_best_binary_split_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">current_best_option</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">current_node</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_rest</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">current_best_option</span>
 
@@ -333,7 +330,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_rest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_total</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_one</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_sq_one</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_sq_rest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_sq_total</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_sq_one</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_count_one</span><span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count_one</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_count_rest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_one</span>
 
         <span class="n">one_dict</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_count_one</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_one</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_sq_one</span><span class="p">}</span>
@@ -349,23 +346,24 @@
 
         <span class="k">return</span> <span class="n">current_best_option</span></div>
 
-<div class="viewcode-block" id="HoeffdingNominalAttributeClassObserver.search_for_best_multiway_split_option"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_nominal_class_attribute_observer.html#skmultiflow.trees.hoeffding_nominal_class_attribute_observer.HoeffdingNominalAttributeClassObserver.search_for_best_multiway_split_option">[docs]</a>    <span class="k">def</span> <span class="nf">search_for_best_multiway_split_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">current_best_option</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
-            <span class="n">post_split_dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_of_possible_values</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">current_node</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_rest</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">current_best_option</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_of_possible_values</span><span class="p">):</span>
-                <span class="n">post_split_dists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">post_split_dists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">post_split_dists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-                <span class="n">current_node</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_child</span>
+<span class="c1"># TODO Also consider nominal attributes</span>
+<div class="viewcode-block" id="NominalAttributeRegressionObserver.search_for_best_multiway_split_option"><a class="viewcode-back" href="../../../skmultiflow.trees.nominal_attribute_regression_observer.html#skmultiflow.trees.nominal_attribute_regression_observer.NominalAttributeRegressionObserver.search_for_best_multiway_split_option">[docs]</a>    <span class="k">def</span> <span class="nf">search_for_best_multiway_split_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">current_best_option</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">att_idx</span><span class="p">):</span>
+        <span class="n">post_split_dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_of_possible_values</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">current_node</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_rest</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">current_best_option</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_of_possible_values</span><span class="p">):</span>
+            <span class="n">post_split_dists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">post_split_dists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">post_split_dists</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_statistics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">current_node</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">_child</span>
 
-            <span class="n">pre_split_dist</span> <span class="o">=</span> <span class="p">[{</span><span class="bp">self</span><span class="o">.</span><span class="n">_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_total</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_sq_total</span><span class="p">}]</span>
-            <span class="n">merit</span> <span class="o">=</span> <span class="n">criterion</span><span class="o">.</span><span class="n">get_merit_of_split</span><span class="p">(</span><span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">post_split_dists</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">current_best_option</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">merit</span> <span class="o">&gt;</span> <span class="n">current_best_option</span><span class="o">.</span><span class="n">merit</span><span class="p">:</span>
-                <span class="n">nom_att_mutliway_test</span> <span class="o">=</span> <span class="n">NominalAttributeMultiwayTest</span><span class="p">(</span><span class="n">att_idx</span><span class="p">)</span>
-                <span class="n">current_best_option</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="n">nom_att_mutliway_test</span><span class="p">,</span> <span class="n">post_split_dists</span><span class="p">,</span> <span class="n">merit</span><span class="p">)</span>
+        <span class="n">pre_split_dist</span> <span class="o">=</span> <span class="p">[{</span><span class="bp">self</span><span class="o">.</span><span class="n">_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_total</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_sq_total</span><span class="p">}]</span>
+        <span class="n">merit</span> <span class="o">=</span> <span class="n">criterion</span><span class="o">.</span><span class="n">get_merit_of_split</span><span class="p">(</span><span class="n">pre_split_dist</span><span class="p">,</span> <span class="n">post_split_dists</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_best_option</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">merit</span> <span class="o">&gt;</span> <span class="n">current_best_option</span><span class="o">.</span><span class="n">merit</span><span class="p">:</span>
+            <span class="n">nom_att_mutliway_test</span> <span class="o">=</span> <span class="n">NominalAttributeMultiwayTest</span><span class="p">(</span><span class="n">att_idx</span><span class="p">)</span>
+            <span class="n">current_best_option</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="n">nom_att_mutliway_test</span><span class="p">,</span> <span class="n">post_split_dists</span><span class="p">,</span> <span class="n">merit</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="n">current_best_option</span></div></div>
+        <span class="k">return</span> <span class="n">current_best_option</span></div></div>
 </pre></div>
 
            </div>

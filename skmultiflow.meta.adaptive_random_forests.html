@@ -241,10 +241,10 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>index_original</strong> (<em>int</em>) – Tree index within the ensemble.</li>
-<li><strong>classifier</strong> (<a class="reference internal" href="skmultiflow.trees.arf_hoeffding_tree.html#skmultiflow.trees.arf_hoeffding_tree.ARFHoeffdingTree" title="skmultiflow.trees.arf_hoeffding_tree.ARFHoeffdingTree"><em>ARFHoeffdingTree</em></a>) – Tree classifier.</li>
+<li><strong>classifier</strong> (<em>ARFHoeffdingTree</em>) – Tree classifier.</li>
 <li><strong>instances_seen</strong> (<em>int</em>) – Number of instances seen by the tree.</li>
-<li><strong>drift_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a>) – Drift Detection method.</li>
-<li><strong>warning_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a>) – Warning Detection method.</li>
+<li><strong>drift_detection_method</strong> (<em>BaseDriftDetector</em>) – Drift Detection method.</li>
+<li><strong>warning_detection_method</strong> (<em>BaseDriftDetector</em>) – Warning Detection method.</li>
 <li><strong>is_background_learner</strong> (<em>bool</em>) – True if the tree is a background learner.</li>
 </ul>
 </td>
@@ -343,8 +343,8 @@ features are considered at each split.</li>
 <li>’kappa’ - Accuracy</li>
 </ul>
 </li>
-<li><strong>drift_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a><em> or </em><em>None</em><em>,</em><em>, </em><em>optional</em><em> (</em><em>default=ADWIN</em><em>(</em><em>0.001</em><em>)</em><em>)</em>) – Drift Detection method. Set to None to disable Drift detection.</li>
-<li><strong>warning_detection_method</strong> (<a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><em>BaseDriftDetector</em></a><em> or </em><em>None</em><em>, </em><em>default</em><em>(</em><a class="reference internal" href="skmultiflow.drift_detection.html#skmultiflow.drift_detection.ADWIN" title="skmultiflow.drift_detection.ADWIN"><em>ADWIN</em></a><em>(</em><em>0.01</em><em>)</em><em>)</em>) – Warning Detection method. Set to None to disable warning detection.</li>
+<li><strong>drift_detection_method</strong> (<em>BaseDriftDetector</em><em> or </em><em>None</em><em>,</em><em>, </em><em>optional</em><em> (</em><em>default=ADWIN</em><em>(</em><em>0.001</em><em>)</em><em>)</em>) – Drift Detection method. Set to None to disable Drift detection.</li>
+<li><strong>warning_detection_method</strong> (<em>BaseDriftDetector</em><em> or </em><em>None</em><em>, </em><em>default</em><em>(</em><em>ADWIN</em><em>(</em><em>0.01</em><em>)</em><em>)</em>) – Warning Detection method. Set to None to disable warning detection.</li>
 <li><strong>max_byte_size</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=33554432</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)
 Maximum memory consumed by the tree.</li>
 <li><strong>memory_estimate_period</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=2000000</em><em>)</em>) – (<cite>ARFHoeffdingTree</cite> parameter)

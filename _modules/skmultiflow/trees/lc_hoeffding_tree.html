@@ -222,7 +222,7 @@
             
   <h1>Source code for skmultiflow.trees.lc_hoeffding_tree</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">skmultiflow.trees.hoeffding_tree</span> <span class="k">import</span> <span class="n">HoeffdingTree</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.trees.gaussian_numeric_attribute_class_observer</span> <span class="k">import</span> <span class="n">GaussianNumericAttributeClassObserver</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.trees.numeric_attribute_class_observer_gaussian</span> <span class="k">import</span> <span class="n">NumericAttributeClassObserverGaussian</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.nominal_attribute_class_observer</span> <span class="k">import</span> <span class="n">NominalAttributeClassObserver</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.utils</span> <span class="k">import</span> <span class="n">do_naive_bayes_prediction</span>
@@ -350,7 +350,7 @@
                     <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ht</span><span class="o">.</span><span class="n">nominal_attributes</span><span class="p">:</span>
                         <span class="n">obs</span> <span class="o">=</span> <span class="n">NominalAttributeClassObserver</span><span class="p">()</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">obs</span> <span class="o">=</span> <span class="n">GaussianNumericAttributeClassObserver</span><span class="p">()</span>
+                        <span class="n">obs</span> <span class="o">=</span> <span class="n">NumericAttributeClassObserverGaussian</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
                 <span class="n">obs</span><span class="o">.</span><span class="n">observe_attribute_class</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">weight</span><span class="p">)</span></div></div>
 

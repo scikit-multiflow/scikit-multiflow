@@ -225,7 +225,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.drift_detection.base_drift_detector</span> <span class="k">import</span> <span class="n">BaseDriftDetector</span>
 
 
-<div class="viewcode-block" id="EDDM"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.EDDM">[docs]</a><span class="k">class</span> <span class="nc">EDDM</span><span class="p">(</span><span class="n">BaseDriftDetector</span><span class="p">):</span>
+<div class="viewcode-block" id="EDDM"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.eddm.html#skmultiflow.drift_detection.EDDM">[docs]</a><span class="k">class</span> <span class="nc">EDDM</span><span class="p">(</span><span class="n">BaseDriftDetector</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Early Drift Detection Method</span>
 <span class="sd">    </span>
 <span class="sd">    This detection method was created to improve the detection </span>
@@ -293,7 +293,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">m_last_level</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-<div class="viewcode-block" id="EDDM.reset"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.EDDM.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EDDM.reset"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.eddm.html#skmultiflow.drift_detection.EDDM.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset</span>
 
 <span class="sd">        Resets the change detector parameters.</span>
@@ -309,7 +309,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">m_m2s_max</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
-<div class="viewcode-block" id="EDDM.add_element"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.EDDM.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+<div class="viewcode-block" id="EDDM.add_element"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.eddm.html#skmultiflow.drift_detection.EDDM.add_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add a new element to the statistics</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -372,7 +372,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">in_warning_zone</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="EDDM.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.html#skmultiflow.drift_detection.EDDM.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EDDM.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.eddm.html#skmultiflow.drift_detection.EDDM.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;EDDM: min_num_errors: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_min_num_errors</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_samples: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_n</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - mean: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_mean</span><span class="p">)</span> <span class="o">+</span> \

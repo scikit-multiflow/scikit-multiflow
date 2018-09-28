@@ -232,7 +232,7 @@
 <span class="sd">    Notes</span>
 <span class="sd">    _____</span>
 <span class="sd">    This class should not me instantiated, as none of its methods, except the `get_class_type`, are implemented.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    NotImplementedError: This is an abstract class.</span>
@@ -250,21 +250,21 @@
 <span class="sd">        ----------</span>
 <span class="sd">        X : Numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">            The array of samples used to fit the model.</span>
-<span class="sd">            </span>
+
 <span class="sd">        y: Array-like</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
-<span class="sd">            </span>
+
 <span class="sd">        classes: Array-like, optional (default=None)</span>
 <span class="sd">            Contains all possible labels. Applicability varies depending on the algorithm.</span>
 
 <span class="sd">        weight: Array-like, optional (default=None)</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 <span class="sd">            Applicability varies depending on the algorithm.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        self</span>
-<span class="sd">            </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -276,21 +276,21 @@
 <span class="sd">        ----------</span>
 <span class="sd">        X : Numpy.ndarray of shape (n_samples, n_features)</span>
 <span class="sd">            The array of samples used to fit the model.</span>
-<span class="sd">            </span>
+
 <span class="sd">        y: Array-like</span>
 <span class="sd">            An array-like with the labels of all samples in X.</span>
-<span class="sd">            </span>
+
 <span class="sd">        classes: Array-like, optional (default=None)</span>
 <span class="sd">            Contains all possible labels. Applicability varies depending on the algorithm.</span>
 
 <span class="sd">        weight: Array-like, optional (default=None)</span>
 <span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
 <span class="sd">            Applicability varies depending on the algorithm.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        self</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -306,7 +306,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        An array-like with all the predictions for the samples in X.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -324,45 +324,45 @@
 <span class="sd">        An array of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the same</span>
 <span class="sd">        index. And where the list in index [i] contains len(self.target_values) elements, each of which represents the</span>
 <span class="sd">        probability that the i-th sample of X belongs to a certain label.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="StreamModel.reset"><a class="viewcode-back" href="../../../skmultiflow.core.base.html#skmultiflow.core.base.StreamModel.reset">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Resets the model to its initial state.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        StreamModel</span>
 <span class="sd">            self</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="StreamModel.score"><a class="viewcode-back" href="../../../skmultiflow.core.base.html#skmultiflow.core.base.StreamModel.score">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; score</span>
-<span class="sd">        </span>
+
 <span class="sd">        Calculate the performance base metric for the model in its current state.</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        This function isn&#39;t natively implemented on all models.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        X: numpy.ndarray of shape (n_sample, n_features)</span>
 <span class="sd">            The features matrix.</span>
-<span class="sd">        </span>
+
 <span class="sd">        y: Array-like</span>
 <span class="sd">            An array-like containing the targets for all samples in X.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The model&#39;s score.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 

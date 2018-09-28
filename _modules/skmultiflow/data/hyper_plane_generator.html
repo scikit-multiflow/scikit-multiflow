@@ -226,7 +226,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="HyperplaneGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.HyperplaneGenerator">[docs]</a><span class="k">class</span> <span class="nc">HyperplaneGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator">[docs]</a><span class="k">class</span> <span class="nc">HyperplaneGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; HyperplaneGenerator</span>
 <span class="sd">    Generates a problem of prediction class of a rotation hyperplane. It was</span>
 <span class="sd">    used as testbed for CVFDT and VFDT in [1]_.</span>
@@ -399,7 +399,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;sigma percentage should be in [0.0..1.0], </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sigma_percentage</span><span class="p">))</span>
 
-<div class="viewcode-block" id="HyperplaneGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.HyperplaneGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Should be called before generating the samples.</span>
 
@@ -411,7 +411,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_drift_features</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="HyperplaneGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.HyperplaneGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
 <span class="sd">        The sample generation works as follows: The n_features are generated</span>
@@ -468,7 +468,7 @@
             <span class="k">if</span> <span class="p">(</span><span class="mf">0.01</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma_percentage</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
 
-<div class="viewcode-block" id="HyperplaneGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.HyperplaneGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperplaneGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.hyper_plane_generator.html#skmultiflow.data.HyperplaneGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;HyperplaneGenerator: - random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_features: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - n_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span> <span class="o">+</span> \

@@ -226,7 +226,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
-<div class="viewcode-block" id="STAGGERGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator">[docs]</a><span class="k">class</span> <span class="nc">STAGGERGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
+<div class="viewcode-block" id="STAGGERGenerator"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator">[docs]</a><span class="k">class</span> <span class="nc">STAGGERGenerator</span><span class="p">(</span><span class="n">Stream</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; StaggerGenerator</span>
 
@@ -380,7 +380,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;balance_classes should be boolean, and </span><span class="si">{}</span><span class="s2"> was passed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">balance_classes</span><span class="p">))</span>
 
-<div class="viewcode-block" id="STAGGERGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="STAGGERGenerator.prepare_for_use"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator.prepare_for_use">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_for_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Should be called before generating the samples.</span>
 
@@ -389,7 +389,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">next_class_should_be_zero</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="STAGGERGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="STAGGERGenerator.next_sample"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator.next_sample">[docs]</a>    <span class="k">def</span> <span class="nf">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot; next_sample</span>
 
@@ -447,7 +447,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
-<div class="viewcode-block" id="STAGGERGenerator.generate_drift"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="STAGGERGenerator.generate_drift"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator.generate_drift">[docs]</a>    <span class="k">def</span> <span class="nf">generate_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate drift by switching the classification function randomly.</span>
 
@@ -457,7 +457,7 @@
             <span class="n">new_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span> <span class="o">=</span> <span class="n">new_function</span></div>
 
-<div class="viewcode-block" id="STAGGERGenerator.classification_function_zero"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="STAGGERGenerator.classification_function_zero"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator.classification_function_zero">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_zero</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_zero</span>
 
@@ -483,7 +483,7 @@
 <span class="sd">               &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">color</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="STAGGERGenerator.classification_function_one"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="STAGGERGenerator.classification_function_one"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator.classification_function_one">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_one</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_one</span>
 
@@ -509,7 +509,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">color</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">shape</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="STAGGERGenerator.classification_function_two"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="STAGGERGenerator.classification_function_two"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator.classification_function_two">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">classification_function_two</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; classification_function_two</span>
 
@@ -535,7 +535,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="STAGGERGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.html#skmultiflow.data.STAGGERGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="STAGGERGenerator.get_info"><a class="viewcode-back" href="../../../skmultiflow.data.stagger_generator.html#skmultiflow.data.STAGGERGenerator.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;SineGenerator: classification_function: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classification_function_idx</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - random_state: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_random_state</span><span class="p">)</span> <span class="o">+</span> \
                <span class="s1">&#39; - balance_classes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">balance_classes</span><span class="p">)</span></div></div>
