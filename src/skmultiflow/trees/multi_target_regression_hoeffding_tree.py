@@ -493,7 +493,7 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree):
 
         sd = np.sqrt((self.sum_of_attribute_squares -
                       (self.sum_of_attribute_values ** 2) /
-                      self.examples_seen) / self.examples_seen)
+                      self.examples_seen) / (self.examples_seen - 1))
 
         normalized_sample = np.zeros(X.shape[0] + 1, dtype=np.float64)
         np.divide(X - mean, sd, where=sd != 0, out=normalized_sample[:-1])
@@ -524,7 +524,7 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree):
 
         sd = np.sqrt((self.sum_of_squares -
                       (self.sum_of_values ** 2) /
-                      self.examples_seen) / self.examples_seen)
+                      self.examples_seen) / (self.examples_seen - 1))
 
         normalized_targets = np.divide(y - mean, sd, where=sd != 0,
                                        out=np.zeros_like(y, dtype=np.float64))
@@ -742,7 +742,7 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree):
                     sd = np.sqrt((self.sum_of_squares -
                                  (self.sum_of_values ** 2) /
                                  self.examples_seen) /
-                                 self.examples_seen)
+                                 (self.examples_seen - 1))
                     # Samples are normalized using just one sd, as proposed in
                     # the iSoup-Tree method
                     predictions[i] = normalized_prediction * sd + mean
@@ -764,7 +764,7 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree):
                     sd = np.sqrt((self.sum_of_squares -
                                  (self.sum_of_values ** 2) /
                                  self.examples_seen) /
-                                 self.examples_seen)
+                                 (self.examples_seen - 1))
 
                     pred_P = normalized_prediction * sd + mean
 

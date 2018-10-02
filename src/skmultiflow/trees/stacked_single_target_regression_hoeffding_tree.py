@@ -580,7 +580,8 @@ class StackedSingleTargetRegressionHoeffdingTree(
                     mean = self.sum_of_values / self.examples_seen
                     sd = np.sqrt((self.sum_of_squares -
                                  (self.sum_of_values ** 2) /
-                                 self.examples_seen) / self.examples_seen)
+                                 self.examples_seen) /
+                                 (self.examples_seen - 1))
                     # Samples are normalized using just one sd, as proposed in
                     # the iSoup-Tree method
                     predictions[i] = normalized_meta_prediction * sd + mean
@@ -604,7 +605,8 @@ class StackedSingleTargetRegressionHoeffdingTree(
                     mean = self.sum_of_values / self.examples_seen
                     sd = np.sqrt((self.sum_of_squares -
                                  (self.sum_of_values ** 2) /
-                                 self.examples_seen) / self.examples_seen)
+                                 self.examples_seen) /
+                                 (self.examples_seen - 1))
 
                     pred_P = normalized_base_prediction * sd + mean
                     pred_SP = normalized_meta_prediction * sd + mean
