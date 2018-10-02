@@ -122,7 +122,6 @@ def test_multi_target_regression_hoeffding_tree_adaptive(test_path):
         learner.partial_fit(X, y)
         cnt += 1
 
-    np.save('expected_preds_multi_target_regression_adaptive.npy', y_pred)
     test_file = os.path.join(
         test_path,
         'expected_preds_multi_target_regression_adaptive.npy'
