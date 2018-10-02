@@ -83,7 +83,7 @@ def test_multi_target_regression_hoeffding_tree_perceptron(test_path):
 
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 134.5949775942447
+    expected_error = 134.54152831279887
     assert np.isclose(error, expected_error)
 
     expected_info = \
@@ -122,6 +122,7 @@ def test_multi_target_regression_hoeffding_tree_adaptive(test_path):
         learner.partial_fit(X, y)
         cnt += 1
 
+    np.save('expected_preds_multi_target_regression_adaptive.npy', y_pred)
     test_file = os.path.join(
         test_path,
         'expected_preds_multi_target_regression_adaptive.npy'
@@ -130,7 +131,7 @@ def test_multi_target_regression_hoeffding_tree_adaptive(test_path):
 
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 134.43981366919218
+    expected_error = 134.38731296533115
     assert np.isclose(error, expected_error)
 
     expected_info = \
@@ -157,7 +158,3 @@ def test_hoeffding_tree_coverage(test_path):
                 nominal_attributes=[i for i in range(3)]
               )
     learner.partial_fit(X, Y)
-
-
-if __name__ == '__main__':
-    test_multi_target_regression_hoeffding_tree_adaptive('.')
