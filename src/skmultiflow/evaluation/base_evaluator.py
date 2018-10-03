@@ -5,7 +5,7 @@ from skmultiflow.visualization.evaluation_visualizer import EvaluationVisualizer
 from skmultiflow.metrics import WindowClassificationMeasurements, ClassificationMeasurements, \
     MultiTargetClassificationMeasurements, WindowMultiTargetClassificationMeasurements, RegressionMeasurements, \
     WindowRegressionMeasurements, MultiTargetRegressionMeasurements, \
-    WindowMultiTargetRegressionMeasurements
+    WindowMultiTargetRegressionMeasurements, RunningTimeMeasurements
 from skmultiflow.utils import FastBuffer
 import skmultiflow.utils.constants as constants
 
@@ -217,11 +217,11 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
             else:
                 raise ValueError("Inconsistent metrics {} for {} stream.".format(self.metrics, self._output_type))
         else:
-            multi_label_classification_metrics = set(constants.MULTI_TARGET_CLASSIFICATION_METRICS)
+            multi_target_classification_metrics = set(constants.MULTI_TARGET_CLASSIFICATION_METRICS)
             multi_target_regression_metrics = set(constants.MULTI_TARGET_REGRESSION_METRICS)
             evaluation_metrics = set(self.metrics)
 
-            if evaluation_metrics.union(multi_label_classification_metrics) == multi_label_classification_metrics:
+            if evaluation_metrics.union(multi_target_classification_metrics) == multi_target_classification_metrics:
                 self._task_type = constants.MULTI_TARGET_CLASSIFICATION
             elif evaluation_metrics.union(multi_target_regression_metrics) == multi_target_regression_metrics:
                 self._task_type = constants.MULTI_TARGET_REGRESSION
@@ -269,6 +269,12 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
             for i in range(self.n_models):
                 self.mean_eval_measurements.append(MultiTargetRegressionMeasurements())
                 self.current_eval_measurements.append(WindowMultiTargetRegressionMeasurements(window_size=self.n_sliding))
+
+        # Running time
+        self.running_time_measurements = []
+        for i in range(self.n_models):
+            self.running_time_measurements.append(RunningTimeMeasurements())
+
 
     def _update_metrics(self):
         """ Updates the metrics of interest. This function creates a metrics dictionary,
@@ -372,6 +378,15 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
             new_points_dict[constants.DATA_POINTS] = [[[samples.get_queue()[i]], targets, pred[i]]
                                                       for i in range(self.n_models)]
 
+        # Running time
+        new_points_dict[constants.RUNNING_TIME] = [
+            [self.running_time_measurements[i].get_current_training_time(),
+             self.running_time_measurements[i].get_current_testing_time(),
+             self.running_time_measurements[i].get_current_total_running_time()
+             ]
+            for i in range(self.n_models)
+        ]
+
         shift = 0
         if self._method == 'prequential':
             shift = -self.batch_size   # Adjust index due to training after testing
@@ -453,6 +468,11 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                         header += ',true_value_[{}],predicted_value_[{}]'.\
                             format(self.model_names[i], self.model_names[i])
 
+                # Running time
+                for i in range(self.n_models):
+                    header += ',training_time_[{}],testing_time_[{}],total_time_[{}]'.\
+                        format(self.model_names[i], self.model_names[i], self.model_names[i])
+
                 f.write(header)
 
     def _update_file(self, current_sample_id):
@@ -517,6 +537,14 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                 for i in range(self.n_models):
                     t, p = self.mean_eval_measurements[i].get_last()
                     line += ',{:.6f},{:.6f}'.format(t, p)
+
+            # Running time
+            for i in range(self.n_models):
+                line += ',{:.6f},{:.6f},{:.6f}'.format(
+                    self.running_time_measurements[i].get_current_training_time(),
+                    self.running_time_measurements[i].get_current_testing_time(),
+                    self.running_time_measurements[i].get_current_total_running_time()
+                )
 
             with open(self.output_file, 'a') as f:
                 f.write('\n' + line)
@@ -589,17 +617,26 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                 logging.info('{} - MSE          : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_mean_square_error()))
             if constants.MAE in self.metrics:
-                logging.info('{} - MAE          : {:4f}'.format(
+                logging.info('{} - MAE          : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_error()))
             if constants.AMSE in self.metrics:
-                logging.info('{} - AMSE          : {:4f}'.format(
+                logging.info('{} - AMSE          : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_mean_square_error()))
             if constants.AMAE in self.metrics:
-                logging.info('{} - AMAE          : {:4f}'.format(
+                logging.info('{} - AMAE          : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_absolute_error()))
             if constants.ARMSE in self.metrics:
-                logging.info('{} - ARMSE          : {:4f}'.format(
+                logging.info('{} - ARMSE         : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_root_mean_square_error()))
+
+            # Running time
+            logging.info('{} - Training time : {:.2f} s'.format(
+                self.model_names[i], self.running_time_measurements[i].get_current_training_time()))
+            logging.info('{} - Testing time  : {:.2f} s'.format(
+                self.model_names[i], self.running_time_measurements[i].get_current_testing_time()))
+            logging.info('{} - Total time    : {:.2f} s'.format(
+                self.model_names[i], self.running_time_measurements[i].get_current_total_running_time()))
+
 
     def get_measurements(self, model_idx=None):
         """ Get measurements from the evaluation.

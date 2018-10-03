@@ -2,6 +2,7 @@ import numpy as np
 from skmultiflow.core.base_object import BaseObject
 from skmultiflow.utils.data_structures import FastBuffer, FastComplexBuffer, ConfusionMatrix, MOLConfusionMatrix
 from skmultiflow.utils import check_weights
+from timeit import default_timer as timer
 
 
 class ClassificationMeasurements(BaseObject):
@@ -1080,8 +1081,8 @@ class MultiTargetRegressionMeasurements(BaseObject):
 
     It will keep track of global metrics, that can be provided at
     any moment. The relevant metrics kept by an instance of this class
-    are: AMSE (average mean square error) and AMAE (average mean absolute error).
-
+    are: AMSE (average mean square error), AMAE (average mean absolute error),
+    and ARMSE (average root mean square error).
     """
 
     def __init__(self):
@@ -1094,6 +1095,7 @@ class MultiTargetRegressionMeasurements(BaseObject):
         self.last_prediction = None
 
     def reset(self):
+        self.n_targets = 0
         self.total_square_error = 0.0
         self.average_error = 0.0
         self.sample_count = 0
@@ -1110,7 +1112,6 @@ class MultiTargetRegressionMeasurements(BaseObject):
 
         prediction: float or list or np.ndarray
             The predicted value(s).
-
         """
         self.last_true_label = y
         self.last_prediction = prediction
@@ -1133,7 +1134,6 @@ class MultiTargetRegressionMeasurements(BaseObject):
         -------
         float
             The average mean square error.
-
         """
         if self.sample_count == 0:
             return 0.0
@@ -1147,7 +1147,6 @@ class MultiTargetRegressionMeasurements(BaseObject):
         -------
         float
             The average absolute error.
-
         """
         if self.sample_count == 0:
             return 0.0
@@ -1162,7 +1161,6 @@ class MultiTargetRegressionMeasurements(BaseObject):
         -------
         float
             The average mean square error.
-
         """
         if self.sample_count == 0:
             return 0.0
@@ -1196,8 +1194,8 @@ class WindowMultiTargetRegressionMeasurements(BaseObject):
 
     It will keep track of partial metrics, that can be provided at
     any moment. The relevant metrics kept by an instance of this class
-    are: AMSE (average mean square error) and AMAE (average mean absolute error).
-
+    are: AMSE (average mean square error), AMAE (average mean absolute error),
+    and ARMSE (average root mean square error).
     """
 
     def __init__(self, window_size=200):
@@ -1229,7 +1227,6 @@ class WindowMultiTargetRegressionMeasurements(BaseObject):
 
         prediction: float or list or np.ndarray
             The predicted value(s).
-
         """
         self.last_true_label = y
         self.last_prediction = prediction
@@ -1262,7 +1259,6 @@ class WindowMultiTargetRegressionMeasurements(BaseObject):
         -------
         float
             The window/current average mean square error.
-
         """
         if self._sample_count == 0:
             return 0.0
@@ -1277,7 +1273,6 @@ class WindowMultiTargetRegressionMeasurements(BaseObject):
         -------
         float
             The window/current average mean absolute error.
-
         """
         if self._sample_count == 0:
             return 0.0
@@ -1292,7 +1287,6 @@ class WindowMultiTargetRegressionMeasurements(BaseObject):
         -------
         float
             The average mean square error.
-
         """
         if self._sample_count == 0:
             return 0.0
@@ -1317,6 +1311,66 @@ class WindowMultiTargetRegressionMeasurements(BaseObject):
                 str(self.get_average_mean_square_error()) + ' - average_mean_absolute_error: ' + \
                 str(self.get_average_absolute_error()) + ' - average_root_mean_square_error: ' + \
                 str(self.get_average_root_mean_square_error())
+
+
+class RunningTimeMeasurements(BaseObject):
+    """ Class used to compute the running time for each evaluated prediction model.
+
+        The training, prediction, and total time are considered separately. The
+        class accounts for the amount of time each model effectively expent
+        traning and testing. To do so, timers for each of the actions are
+        considered.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.training_time = 0
+        self.testing_time = 0
+        self.sample_count = 0
+        self.total_time = 0
+
+    def reset(self):
+        self.training_time = 0
+        self.testing_time = 0
+        self.sample_count = 0
+        self.total_time = 0
+
+    def compute_training_time_begin(self):
+        self._training_start = timer()
+
+    def compute_training_time_end(self):
+        self.training_time += timer() - self._training_start
+
+    def compute_testing_time_begin(self):
+        self._testing_start = timer()
+
+    def compute_testing_time_end(self):
+        self.testing_time += timer() - self._testing_start
+
+    def update_time_measurements(self, increment=1):
+        self.sample_count += increment
+        self.total_time = self.training_time + self.testing_time
+
+    def get_current_training_time(self):
+        return self.training_time
+
+    def get_current_testing_time(self):
+        return self.testing_time
+
+    def get_current_total_running_time(self):
+        return self.total_time
+
+    def get_class_type(self):
+        return 'measurement'
+
+    def get_info(self):
+        return 'RunningTimeMeasurements: sample_count: ' + \
+                str(self.sample_count) + ' - Total running time: ' + \
+                str(self.get_current_total_running_time()) + \
+                ' - training_time: ' + \
+                str(self.get_current_training_time()) + \
+                ' - testing_time: ' + \
+                str(self.get_current_testing_time())
 
 
 def hamming_score(true_labels, predicts):
