@@ -379,13 +379,14 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                                                       for i in range(self.n_models)]
 
         # Running time
-        new_points_dict[constants.RUNNING_TIME] = [
-            [self.running_time_measurements[i].get_current_training_time(),
-             self.running_time_measurements[i].get_current_testing_time(),
-             self.running_time_measurements[i].get_current_total_running_time()
-             ]
-            for i in range(self.n_models)
-        ]
+        if constants.RUNNING_TIME in self.metrics:
+            new_points_dict[constants.RUNNING_TIME] = [
+                [self.running_time_measurements[i].get_current_training_time(),
+                 self.running_time_measurements[i].get_current_testing_time(),
+                 self.running_time_measurements[i].get_current_total_running_time()
+                 ]
+                for i in range(self.n_models)
+            ]
 
         shift = 0
         if self._method == 'prequential':
@@ -468,10 +469,11 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                         header += ',true_value_[{}],predicted_value_[{}]'.\
                             format(self.model_names[i], self.model_names[i])
 
-                # Running time
-                for i in range(self.n_models):
-                    header += ',training_time_[{}],testing_time_[{}],total_time_[{}]'.\
-                        format(self.model_names[i], self.model_names[i], self.model_names[i])
+                if constants.RUNNING_TIME in self.metrics:
+                    # Running time
+                    for i in range(self.n_models):
+                        header += ',training_time_[{}],testing_time_[{}],total_time_[{}]'.\
+                            format(self.model_names[i], self.model_names[i], self.model_names[i])
 
                 f.write(header)
 
@@ -539,12 +541,13 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                     line += ',{:.6f},{:.6f}'.format(t, p)
 
             # Running time
-            for i in range(self.n_models):
-                line += ',{:.6f},{:.6f},{:.6f}'.format(
-                    self.running_time_measurements[i].get_current_training_time(),
-                    self.running_time_measurements[i].get_current_testing_time(),
-                    self.running_time_measurements[i].get_current_total_running_time()
-                )
+            if constants.RUNNING_TIME in self.metrics:
+                for i in range(self.n_models):
+                    line += ',{:.6f},{:.6f},{:.6f}'.format(
+                        self.running_time_measurements[i].get_current_training_time(),
+                        self.running_time_measurements[i].get_current_testing_time(),
+                        self.running_time_measurements[i].get_current_total_running_time()
+                    )
 
             with open(self.output_file, 'a') as f:
                 f.write('\n' + line)
@@ -629,13 +632,14 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                 logging.info('{} - ARMSE         : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_root_mean_square_error()))
 
-            # Running time
-            logging.info('{} - Training time : {:.2f} s'.format(
-                self.model_names[i], self.running_time_measurements[i].get_current_training_time()))
-            logging.info('{} - Testing time  : {:.2f} s'.format(
-                self.model_names[i], self.running_time_measurements[i].get_current_testing_time()))
-            logging.info('{} - Total time    : {:.2f} s'.format(
-                self.model_names[i], self.running_time_measurements[i].get_current_total_running_time()))
+            if constants.RUNNING_TIME in self.metrics:
+                # Running time
+                logging.info('{} - Training time : {:.2f} s'.format(
+                    self.model_names[i], self.running_time_measurements[i].get_current_training_time()))
+                logging.info('{} - Testing time  : {:.2f} s'.format(
+                    self.model_names[i], self.running_time_measurements[i].get_current_testing_time()))
+                logging.info('{} - Total time    : {:.2f} s'.format(
+                    self.model_names[i], self.running_time_measurements[i].get_current_total_running_time()))
 
 
     def get_measurements(self, model_idx=None):

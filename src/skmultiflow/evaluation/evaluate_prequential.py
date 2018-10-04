@@ -251,7 +251,7 @@ class EvaluatePrequential(StreamEvaluator):
                     self.running_time_measurements[i].compute_training_time_begin()
                     self.model[i].partial_fit(X=X, y=y)
                     self.running_time_measurements[i].compute_training_time_end()
-                self.running_time_measurements[i].update_time_measurements()
+                self.running_time_measurements[i].update_time_measurements(self.pretrain_size)
             self.global_sample_count += self.pretrain_size
             first_run = False
         else:
