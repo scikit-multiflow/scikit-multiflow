@@ -97,7 +97,7 @@ def calculate_object_size(obj, unit='kB'):
     -------
     int
         The size of the object and its related properties and objects,
-        in bytes.
+        in 'unit'.
     """
     seen = set()
     to_visit = deque()
