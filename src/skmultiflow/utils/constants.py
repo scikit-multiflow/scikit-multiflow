@@ -14,6 +14,7 @@ AMAE = 'average_mean_absolute_error'
 ARMSE = 'average_root_mean_square_error'
 TRUE_VS_PREDICTED = 'true_vs_predicted'
 RUNNING_TIME = 'running_time'
+MODEL_SIZE = 'model_size'
 
 PLOT_TYPES = [ACCURACY,
               KAPPA,
@@ -31,7 +32,8 @@ PLOT_TYPES = [ACCURACY,
               TRUE_VS_PREDICTED,
 
               DATA_POINTS,
-              RUNNING_TIME]
+              RUNNING_TIME,
+              MODEL_SIZE]
 CLASSIFICATION_METRICS = [ACCURACY,
                           KAPPA,
                           KAPPA_T,
@@ -39,20 +41,24 @@ CLASSIFICATION_METRICS = [ACCURACY,
                           TRUE_VS_PREDICTED,
 
                           DATA_POINTS,
-                          RUNNING_TIME]
+                          RUNNING_TIME,
+                          MODEL_SIZE]
 REGRESSION_METRICS = [MSE,
                       MAE,
                       TRUE_VS_PREDICTED,
-                      RUNNING_TIME]
+                      RUNNING_TIME,
+                      MODEL_SIZE]
 MULTI_TARGET_CLASSIFICATION_METRICS = [HAMMING_SCORE,
                                        HAMMING_LOSS,
                                        EXACT_MATCH,
                                        J_INDEX,
-                                       RUNNING_TIME]
+                                       RUNNING_TIME,
+                                       MODEL_SIZE]
 MULTI_TARGET_REGRESSION_METRICS = [AMSE,
                                    AMAE,
                                    ARMSE,
-                                   RUNNING_TIME]
+                                   RUNNING_TIME,
+                                   MODEL_SIZE]
 CLASSIFICATION = 'classification'
 REGRESSION = 'regression'
 MULTI_OUTPUT = 'multi_output'
