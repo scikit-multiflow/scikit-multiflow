@@ -8,6 +8,7 @@ from skmultiflow.metrics import WindowClassificationMeasurements, Classification
     WindowMultiTargetRegressionMeasurements, RunningTimeMeasurements
 from skmultiflow.utils import FastBuffer
 import skmultiflow.utils.constants as constants
+from skmultiflow.utils.utils import calculate_object_size
 
 
 class StreamEvaluator(BaseObject, metaclass=ABCMeta):
@@ -475,6 +476,10 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                         header += ',training_time_[{}],testing_time_[{}],total_time_[{}]'.\
                             format(self.model_names[i], self.model_names[i], self.model_names[i])
 
+                if constants.MODEL_SIZE in self.metrics:
+                    for i in range(self.n_models):
+                        header += ',model_size_[{}]'.format(self.model_names[i])
+
                 f.write(header)
 
     def _update_file(self, current_sample_id):
@@ -549,6 +554,10 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                         self.running_time_measurements[i].get_current_total_running_time()
                     )
 
+            if constants.MODEL_SIZE in self.metrics:
+                for i in range(self.n_models):
+                    line += ',{:.6f}'.format(calculate_object_size(self.model[i]))
+
             with open(self.output_file, 'a') as f:
                 f.write('\n' + line)
 
@@ -586,60 +595,64 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
     def evaluation_summary(self, logging, start_time, end_time):
         if end_time - start_time > self.max_time:
             logging.info('Time limit reached. Evaluation stopped.')
-            logging.info('Evaluation time:     {:.2f} s'.format(self.max_time))
+            logging.info('Evaluation time         : {:.2f} s'.format(self.max_time))
         else:
-            logging.info('Evaluation time:     {:.2f} s'.format(end_time - start_time))
-        logging.info('Processed samples: {}'.format(self.global_sample_count))
+            logging.info('Evaluation time         : {:.2f} s'.format(end_time - start_time))
+        logging.info('Processed samples       : {}'.format(self.global_sample_count))
         logging.info('Mean performance:')
         for i in range(self.n_models):
             if constants.ACCURACY in self.metrics:
-                logging.info('{} - Accuracy     : {:.4f}'.format(
+                logging.info('{} - Accuracy           : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_accuracy()))
             if constants.KAPPA in self.metrics:
-                logging.info('{} - Kappa        : {:.4f}'.format(
+                logging.info('{} - Kappa              : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_kappa()))
             if constants.KAPPA_T in self.metrics:
-                logging.info('{} - Kappa T      : {:.4f}'.format(
+                logging.info('{} - Kappa T            : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_kappa_t()))
             if constants.KAPPA_M in self.metrics:
-                logging.info('{} - Kappa M      : {:.4f}'.format(
+                logging.info('{} - Kappa M            : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_kappa_m()))
             if constants.HAMMING_SCORE in self.metrics:
-                logging.info('{} - Hamming score: {:.4f}'.format(
+                logging.info('{} - Hamming score      : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_hamming_score()))
             if constants.HAMMING_LOSS in self.metrics:
-                logging.info('{} - Hamming loss : {:.4f}'.format(
+                logging.info('{} - Hamming loss       : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_hamming_loss()))
             if constants.EXACT_MATCH in self.metrics:
-                logging.info('{} - Exact matches: {:.4f}'.format(
+                logging.info('{} - Exact matches      : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_exact_match()))
             if constants.J_INDEX in self.metrics:
-                logging.info('{} - Jaccard index: {:.4f}'.format(
+                logging.info('{} - Jaccard index      : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_j_index()))
             if constants.MSE in self.metrics:
-                logging.info('{} - MSE          : {:.4f}'.format(
+                logging.info('{} - MSE                : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_mean_square_error()))
             if constants.MAE in self.metrics:
-                logging.info('{} - MAE          : {:.4f}'.format(
+                logging.info('{} - MAE                : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_error()))
             if constants.AMSE in self.metrics:
-                logging.info('{} - AMSE          : {:.4f}'.format(
+                logging.info('{} - AMSE               : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_mean_square_error()))
             if constants.AMAE in self.metrics:
-                logging.info('{} - AMAE          : {:.4f}'.format(
+                logging.info('{} - AMAE               : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_absolute_error()))
             if constants.ARMSE in self.metrics:
-                logging.info('{} - ARMSE         : {:.4f}'.format(
+                logging.info('{} - ARMSE              : {:.4f}'.format(
                     self.model_names[i], self.mean_eval_measurements[i].get_average_root_mean_square_error()))
 
             if constants.RUNNING_TIME in self.metrics:
                 # Running time
-                logging.info('{} - Training time : {:.2f} s'.format(
+                logging.info('{} - Training time (s)  : {:.2f}'.format(
                     self.model_names[i], self.running_time_measurements[i].get_current_training_time()))
-                logging.info('{} - Testing time  : {:.2f} s'.format(
+                logging.info('{} - Testing time  (s)  : {:.2f}'.format(
                     self.model_names[i], self.running_time_measurements[i].get_current_testing_time()))
-                logging.info('{} - Total time    : {:.2f} s'.format(
+                logging.info('{} - Total time    (s)  : {:.2f}'.format(
                     self.model_names[i], self.running_time_measurements[i].get_current_total_running_time()))
+
+            if constants.MODEL_SIZE in self.metrics:
+                logging.info('{} - Size (kB)          : {:.4f}'.format(
+                    self.model_names[i], calculate_object_size(self.model[i])))
 
 
     def get_measurements(self, model_idx=None):

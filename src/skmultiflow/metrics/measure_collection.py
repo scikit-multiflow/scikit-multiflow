@@ -1314,58 +1314,86 @@ class WindowMultiTargetRegressionMeasurements(BaseObject):
 
 
 class RunningTimeMeasurements(BaseObject):
-    """ Class used to compute the running time for each evaluated prediction model.
+    """ Class used to compute the running time for each evaluated prediction
+        model.
 
         The training, prediction, and total time are considered separately. The
         class accounts for the amount of time each model effectively expent
         traning and testing. To do so, timers for each of the actions are
         considered.
+
+        Besides the properties getters, the available compute time methods
+        must be used as follows:
+
+        - `compute_{training, testing}_time_begin`
+        - Perform training/action
+        - `compute_{training, testing}_time_end`
+
+        Additionally, the `update_time_measurements` method updates the total
+        running time accounting, as well as, the total seen samples count.
     """
 
     def __init__(self):
         super().__init__()
-        self.training_time = 0
-        self.testing_time = 0
-        self.sample_count = 0
-        self.total_time = 0
+        self._training_time = 0
+        self._testing_time = 0
+        self._sample_count = 0
+        self._total_time = 0
 
     def reset(self):
-        self.training_time = 0
-        self.testing_time = 0
-        self.sample_count = 0
-        self.total_time = 0
+        self._training_time = 0
+        self._testing_time = 0
+        self._sample_count = 0
+        self._total_time = 0
 
     def compute_training_time_begin(self):
+        """ Initiates the training time accounting.
+        """
         self._training_start = timer()
 
     def compute_training_time_end(self):
-        self.training_time += timer() - self._training_start
+        """ Finishes the training time accounting. Updates current total
+            training time.
+        """
+        self._training_time += timer() - self._training_start
 
     def compute_testing_time_begin(self):
+        """ Initiates the testing time accounting.
+        """
         self._testing_start = timer()
 
     def compute_testing_time_end(self):
-        self.testing_time += timer() - self._testing_start
+        """ Finishes the testing time accounting. Updates current total
+            testing time.
+        """
+        self._testing_time += timer() - self._testing_start
 
     def update_time_measurements(self, increment=1):
-        self.sample_count += increment
-        self.total_time = self.training_time + self.testing_time
+        """ Updates the current total running time. Updates the number of seen
+        samples by `increment`.
+        """
+        if increment > 0:
+            self._sample_count += increment
+        else:
+            self._sample_count += 1
+
+        self._total_time = self._training_time + self._testing_time
 
     def get_current_training_time(self):
-        return self.training_time
+        return self._training_time
 
     def get_current_testing_time(self):
-        return self.testing_time
+        return self._testing_time
 
     def get_current_total_running_time(self):
-        return self.total_time
+        return self._total_time
 
     def get_class_type(self):
         return 'measurement'
 
     def get_info(self):
         return 'RunningTimeMeasurements: sample_count: ' + \
-                str(self.sample_count) + ' - Total running time: ' + \
+                str(self._sample_count) + ' - Total running time: ' + \
                 str(self.get_current_total_running_time()) + \
                 ' - training_time: ' + \
                 str(self.get_current_training_time()) + \
