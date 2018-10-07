@@ -285,17 +285,16 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 
 <dl class="method">
 <dt id="skmultiflow.visualization.base_listener.BaseListener.on_new_train_step">
-<code class="descname">on_new_train_step</code><span class="sig-paren">(</span><em>current_sample_id</em>, <em>metrics_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/base_listener.html#BaseListener.on_new_train_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.base_listener.BaseListener.on_new_train_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>on new_train_step</p>
-<p>At each relevant update (usually at each n_wait samples) this function
+<code class="descname">on_new_train_step</code><span class="sig-paren">(</span><em>sample_id</em>, <em>data_buffer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/base_listener.html#BaseListener.on_new_train_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.base_listener.BaseListener.on_new_train_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>At each relevant update (usually at each n_wait samples) this function
 should be called to enable the plot update.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>current_sample_id</strong> (<em>int</em>) – The current sample id.</li>
-<li><strong>metrics_dict</strong> (<em>dictionary</em>) – A dictionary containing metric values for to current sample.</li>
+<li><strong>sample_id</strong> (<em>int</em>) – The current sample id.</li>
+<li><strong>data_buffer</strong> (<em>EvaluationDataBuffer</em>) – A buffer containing evaluation data for a single training / visualization step.</li>
 </ul>
 </td>
 </tr>

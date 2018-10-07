@@ -728,9 +728,12 @@
                 <span class="n">numSamplesRange</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numSamplesRange</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 
             <span class="n">accuracies</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">keys_to_remove</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">predictionHistories</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">numSamples</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">numSamplesRange</span><span class="p">)):</span>
-                    <span class="n">predictionHistories</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">keys_to_remove</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys_to_remove</span><span class="p">:</span>
+                <span class="n">predictionHistories</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">numSamplesIt</span> <span class="ow">in</span> <span class="n">numSamplesRange</span><span class="p">:</span>
                 <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numSamples</span> <span class="o">-</span> <span class="n">numSamplesIt</span><span class="p">)</span>

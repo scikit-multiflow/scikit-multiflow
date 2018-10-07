@@ -231,33 +231,27 @@
 <span id="skmultiflow-visualization-evaluation-visualizer-module"></span><h1>skmultiflow.visualization.evaluation_visualizer module<a class="headerlink" href="#module-skmultiflow.visualization.evaluation_visualizer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer">
-<em class="property">class </em><code class="descclassname">skmultiflow.visualization.evaluation_visualizer.</code><code class="descname">EvaluationVisualizer</code><span class="sig-paren">(</span><em>task_type=None</em>, <em>n_sliding=0</em>, <em>dataset_name='Unnamed graph'</em>, <em>plots=None</em>, <em>n_learners=1</em>, <em>learner_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.visualization.evaluation_visualizer.</code><code class="descname">EvaluationVisualizer</code><span class="sig-paren">(</span><em>task_type</em>, <em>n_wait</em>, <em>dataset_name</em>, <em>metrics</em>, <em>n_models</em>, <em>model_names</em>, <em>data_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.visualization.base_listener.html#skmultiflow.visualization.base_listener.BaseListener" title="skmultiflow.visualization.base_listener.BaseListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.visualization.base_listener.BaseListener</span></code></a></p>
 <p>This class is responsible for maintaining and updating the plot modules
-for all the evaluators in scikit-multiflow.</p>
-<p>It uses matplotlib’s pyplot modules to create the main plot, which
+for the evaluators in scikit-multiflow.</p>
+<p>It uses <cite>matplotlib.pyplot</cite> modules to create the main plot, which
 depending on the options passed to it as parameter, will create multiple
 subplots to better display all requested metrics.</p>
-<p>The plots are updated on the go, at each n_wait samples. The plot is
-redrawn at each step, which may cause significant slow down, depending on
-the processor used and the plotting options.</p>
-<p>Line objects are used to describe performance measurements and scatter
-instances will represent true labels and predictions, when requested.</p>
-<p>It supports the visualization of multiple learners per subplot as a way
-of comparing the performance of different learning algorithms facing the
-same data stream.</p>
+<p>The plots are dynamically updated depending on frame counts amd time elapsed
+since last update. This strategy account for fast and slow methods.</p>
+<p>Line objects are used to describe performance measurements.</p>
+<p>It supports multiple models per subplot as a way of comparing the performance
+of different learning algorithms.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n_sliding</strong> (<em>int</em>) – The number of samples in the sliding window to track recent performance.</li>
+<li><strong>n_wait</strong> (<em>int</em>) – The number of samples tracked in the sliding window for current performance.</li>
 <li><strong>dataset_name</strong> (<em>string</em><em> (</em><em>Default: 'Unnamed graph'</em><em>)</em>) – The title of the plot. Algorithmically it’s not important.</li>
-<li><strong>plots</strong> (<em>list</em>) – A list containing all the subplots to plot. Can be any of:
-‘accuracy’, ‘kappa’, ‘scatter’, ‘hamming_score’, ‘hamming_loss’,
-‘exact_match’, ‘j_index’, ‘mean_square_error’, ‘mean_absolute_error’,
-‘true_vs_predicted’, ‘kappa_t’, ‘kappa_m’</li>
-<li><strong>n_learners</strong> (<em>int</em>) – The number of learners to compare.</li>
+<li><strong>metrics</strong> (<em>list</em>) – A list containing all the metrics to plot.</li>
+<li><strong>n_models</strong> (<em>int</em>) – The number of models to compare.</li>
 </ul>
 </td>
 </tr>
@@ -271,34 +265,9 @@ same data stream.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Using more than 3 plot types at a time is not recommended, as it will
-significantly slow down processing. Also, for the same reason comparing
+<p>Using more than 3 plot types at a time is not recommended, as it can
+significantly slow down the evaluation time. For the same reason comparing
 more than 3 learners at a time is not recommended.</p>
-<dl class="method">
-<dt id="skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.draw">
-<code class="descname">draw</code><span class="sig-paren">(</span><em>train_step</em>, <em>metrics_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.draw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates and redraws the plot.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>train_step</strong> (<em>int</em>) – The number of samples processed to this moment.</li>
-<li><strong>metrics_dict</strong> (<em>dictionary</em>) – A dictionary containing tuples, where the first element is the
-string that identifies one of the plot’s subplot names, and the
-second element is its numerical value.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.draw_scatter_points">
-<code class="descname">draw_scatter_points</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>predict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer.draw_scatter_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.draw_scatter_points" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.get_info" title="Permalink to this definition">¶</a></dt>
@@ -325,38 +294,37 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.on_new_scatter_data">
-<code class="descname">on_new_scatter_data</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer.on_new_scatter_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.on_new_scatter_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.on_new_train_step">
-<code class="descname">on_new_train_step</code><span class="sig-paren">(</span><em>train_step</em>, <em>metrics_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer.on_new_train_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.on_new_train_step" title="Permalink to this definition">¶</a></dt>
+<code class="descname">on_new_train_step</code><span class="sig-paren">(</span><em>sample_id</em>, <em>data_buffer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#EvaluationVisualizer.on_new_train_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.EvaluationVisualizer.on_new_train_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the listener main function, which gives it the ability to
 ‘listen’ for the caller. Whenever the EvaluationVisualiser should
-be aware of some new data, the caller will call this function,
-passing the new data as parameter.</p>
+be aware of some new data, the caller will invoke this function,
+passing the new data buffer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>train_step</strong> (<em>int</em>) – The number of samples processed to this moment.</li>
-<li><strong>metrics_dict</strong> (<em>dictionary</em>) – A dictionary containing metric measurements, where the key is
-the metric name and the value its corresponding measurement.</li>
+<li><strong>sample_id</strong> (<em>int</em>) – The current sample id.</li>
+<li><strong>data_buffer</strong> (<em>EvaluationDataBuffer</em>) – A buffer containing evaluation data for a single training / visualization step.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li>ValueError: If wrong data formats are passed as parameter this error</li>
-<li>is raised.</li>
-</ul>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ValueError: If an exception is raised during the draw operation.</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="skmultiflow.visualization.evaluation_visualizer.PlotDataTracker">
+<em class="property">class </em><code class="descclassname">skmultiflow.visualization.evaluation_visualizer.</code><code class="descname">PlotDataTracker</code><span class="sig-paren">(</span><em>data_ids: list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/visualization/evaluation_visualizer.html#PlotDataTracker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.visualization.evaluation_visualizer.PlotDataTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to track relevant data for plots corresponding to selected metrics.
+Data buffers and line objects are accessible via the corresponding data_id.</p>
 </dd></dl>
 
 </div>

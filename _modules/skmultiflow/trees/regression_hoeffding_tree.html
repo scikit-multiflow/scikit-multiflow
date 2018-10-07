@@ -561,7 +561,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_ratio_perceptron</span> <span class="o">=</span> <span class="n">learning_ratio_perceptron</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_ratio_decay</span> <span class="o">=</span> <span class="n">learning_ratio_decay</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_ratio_const</span> <span class="o">=</span> <span class="n">learning_ratio_const</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_attribute_values</span> <span class="o">=</span> <span class="p">[]</span>
@@ -595,7 +595,7 @@
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.normalize_sample"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.normalize_sample">[docs]</a>    <span class="k">def</span> <span class="nf">normalize_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Normalize the features in order to ave the same influence during the process of</span>
+<span class="sd">        Normalize the features in order to have the same influence during</span>
 <span class="sd">        training.</span>
 
 <span class="sd">        Parameters</span>
@@ -609,22 +609,22 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">normalized_sample</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
-            <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_attribute_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_attribute_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span>
             <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_of_attribute_squares</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_attribute_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
-                          <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">sd</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                          <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">sd</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">normalized_sample</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">sd</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">normalized_sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">normalized_sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+                <span class="n">normalized_sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">normalized_sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># Value to be multiplied with the constant factor</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">normalized_sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">normalized_sample</span></div>
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.normalized_target_value"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.normalized_target_value">[docs]</a>    <span class="k">def</span> <span class="nf">normalized_target_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Normalize the target in order to ave the same influence during the process of</span>
+<span class="sd">        Normalize the target in order to have the same influence during the process of</span>
 <span class="sd">        training.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -636,10 +636,10 @@
 <span class="sd">        float:</span>
 <span class="sd">            normalized target value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span>
             <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">**</span> <span class="mi">2</span>
-                          <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span>
+                          <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">sd</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">sd</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -734,7 +734,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">+=</span> <span class="n">weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span> <span class="o">+=</span> <span class="n">weight</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">+=</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">+=</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span>
 
@@ -783,26 +783,30 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">r</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_TARGET_MEAN</span><span class="p">:</span>
-                <span class="n">votes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_votes_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">votes</span> <span class="o">==</span> <span class="p">{}:</span>
-                    <span class="c1"># Tree is empty, all target_values equal, default to zero</span>
-                    <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">number_of_examples_seen</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">sum_of_values</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="n">number_of_examples_seen</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_PERCEPTRON</span><span class="p">:</span>
-                <span class="n">normalized_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_sample</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">normalized_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_weights_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">normalized_sample</span><span class="p">)</span>
-                <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span>
-                <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">**</span> <span class="mi">2</span><span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">normalized_prediction</span> <span class="o">*</span> <span class="n">sd</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">mean</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_TARGET_MEAN</span><span class="p">:</span>
+                    <span class="n">votes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_votes_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">votes</span> <span class="o">==</span> <span class="p">{}:</span>
+                        <span class="c1"># Tree is empty, all target_values equal, default to zero</span>
+                        <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">number_of_samples_seen</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">sum_of_values</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="n">number_of_samples_seen</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf_prediction</span> <span class="o">==</span> <span class="n">_PERCEPTRON</span><span class="p">:</span>
+                    <span class="n">normalized_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_sample</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">normalized_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_weights_for_instance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">normalized_sample</span><span class="p">)</span>
+                    <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span>
+                    <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_of_squares</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_of_values</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples_seen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">normalized_prediction</span> <span class="o">*</span> <span class="n">sd</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">mean</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Model is empty</span>
+            <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">predictions</span></div>
 
 <div class="viewcode-block" id="RegressionHoeffdingTree.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_tree.html#skmultiflow.trees.RegressionHoeffdingTree.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>

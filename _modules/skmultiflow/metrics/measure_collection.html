@@ -228,9 +228,7 @@
 
 
 <div class="viewcode-block" id="ClassificationMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements">[docs]</a><span class="k">class</span> <span class="nc">ClassificationMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; ClassificationMeasurements</span>
-
-<span class="sd">    Class used to keep updated statistics about a classifier, in order</span>
+    <span class="sd">&quot;&quot;&quot; Class used to keep updated statistics about a classifier, in order</span>
 <span class="sd">    to be able to provide, at any given moment, any relevant metric about</span>
 <span class="sd">    that classifier.</span>
 
@@ -276,15 +274,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_sample</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">restart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Updates its statistics with the results of a prediction.</span>
+        <span class="sd">&quot;&quot;&quot; Updates its statistics with the results of a prediction.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -317,14 +316,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_majority_class"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_majority_class">[docs]</a>    <span class="k">def</span> <span class="nf">get_majority_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_majority_class</span>
-
-<span class="sd">        Computes the true majority class.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the true majority class.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
-<span class="sd">            Returns the true majority class.</span>
+<span class="sd">            The true majority class.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
@@ -343,14 +340,12 @@
         <span class="k">return</span> <span class="n">majority_class</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_accuracy"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_accuracy">[docs]</a>    <span class="k">def</span> <span class="nf">get_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_accuracy</span>
-
-<span class="sd">        Computes the accuracy.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the accuracy.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the accuracy.</span>
+<span class="sd">            The accuracy.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -366,9 +361,7 @@
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_get_target_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">add_label</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; _get_target_index</span>
-
-<span class="sd">        Computes the index of an element in the self.targets list.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the index of an element in the self.targets list.</span>
 <span class="sd">        Also reshapes the ConfusionMatrix and adds new found targets</span>
 <span class="sd">        if add is True.</span>
 
@@ -403,14 +396,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_kappa"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_kappa">[docs]</a>    <span class="k">def</span> <span class="nf">get_kappa</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_kappa</span>
-
-<span class="sd">        Computes the Cohen&#39;s kappa coefficient.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the Cohen&#39;s kappa coefficient.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the Cohen&#39;s kappa coefficient.</span>
+<span class="sd">            The Cohen&#39;s kappa coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
@@ -429,15 +420,13 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">p0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_kappa_t"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_kappa_t">[docs]</a>    <span class="k">def</span> <span class="nf">get_kappa_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_kappa_t</span>
-
-<span class="sd">        Computes the Cohen&#39;s kappa T coefficient. This measures the</span>
+        <span class="sd">&quot;&quot;&quot; Computes the Cohen&#39;s kappa T coefficient. This measures the</span>
 <span class="sd">        temporal correlation between samples.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the Cohen&#39;s kappa T coefficient.</span>
+<span class="sd">            The Cohen&#39;s kappa T coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
@@ -450,14 +439,12 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">p0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_kappa_m"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_kappa_m">[docs]</a>    <span class="k">def</span> <span class="nf">get_kappa_m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_kappa_t</span>
-
-<span class="sd">        Computes the Cohen&#39;s kappa M coefficient.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the Cohen&#39;s kappa M coefficient.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the Cohen&#39;s kappa M coefficient.</span>
+<span class="sd">            The Cohen&#39;s kappa M coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
@@ -483,13 +470,11 @@
                <span class="s1">&#39; - majority_class: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="ClassificationMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div></div>
 
 
 <div class="viewcode-block" id="WindowClassificationMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements">[docs]</a><span class="k">class</span> <span class="nc">WindowClassificationMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; WindowClassificationMeasurements</span>
-
-<span class="sd">    This class will maintain a fixed sized window of the newest information</span>
+    <span class="sd">&quot;&quot;&quot; This class will maintain a fixed sized window of the newest information</span>
 <span class="sd">    about one classifier. It can provide, as requested, any of the relevant</span>
 <span class="sd">    current metrics about the classifier, measured inside the window.</span>
 
@@ -550,6 +535,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_sample</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">restart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
@@ -557,10 +550,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Updates its statistics with the results of a prediction. If needed it</span>
-<span class="sd">        will remove samples from the observation window.</span>
+        <span class="sd">&quot;&quot;&quot; Updates its statistics with the results of a prediction.</span>
+<span class="sd">        If needed it will remove samples from the observation window.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -608,14 +599,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_majority_class"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_majority_class">[docs]</a>    <span class="k">def</span> <span class="nf">get_majority_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_majority_class</span>
-
-<span class="sd">        Computes the window/local true majority class.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current true majority class.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
-<span class="sd">            Returns the true window/local majority class.</span>
+<span class="sd">            The true window/current majority class.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
@@ -634,14 +623,12 @@
         <span class="k">return</span> <span class="n">majority_class</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_accuracy"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_accuracy">[docs]</a>    <span class="k">def</span> <span class="nf">get_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_accuracy</span>
-
-<span class="sd">        Computes the window/local accuracy.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current accuracy.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local accuracy.</span>
+<span class="sd">            The window/current accuracy.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -657,9 +644,7 @@
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_get_target_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">add</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; _get_target_index</span>
-
-<span class="sd">        Computes the index of an element in the self.targets list.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the index of an element in the self.targets list.</span>
 <span class="sd">        Also reshapes the ConfusionMatrix and adds new found targets</span>
 <span class="sd">        if add is True.</span>
 
@@ -694,14 +679,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_kappa"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_kappa">[docs]</a>    <span class="k">def</span> <span class="nf">get_kappa</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_kappa</span>
-
-<span class="sd">        Computes the window/local Cohen&#39;s kappa coefficient.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current Cohen&#39;s kappa coefficient.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local Cohen&#39;s kappa coefficient.</span>
+<span class="sd">            The window/current Cohen&#39;s kappa coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
@@ -721,15 +704,13 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">p0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_kappa_t"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_kappa_t">[docs]</a>    <span class="k">def</span> <span class="nf">get_kappa_t</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_kappa_t</span>
-
-<span class="sd">        Computes the window/local Cohen&#39;s kappa T coefficient. This measures</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current Cohen&#39;s kappa T coefficient. This measures</span>
 <span class="sd">        the temporal correlation between samples.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local Cohen&#39;s kappa T coefficient.</span>
+<span class="sd">            The window/current Cohen&#39;s kappa T coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
@@ -742,14 +723,12 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">p0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">pc</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_kappa_m"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_kappa_m">[docs]</a>    <span class="k">def</span> <span class="nf">get_kappa_m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_kappa_t</span>
-
-<span class="sd">        Computes the window/local Cohen&#39;s kappa M coefficient.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current Cohen&#39;s kappa M coefficient.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local Cohen&#39;s kappa M coefficient.</span>
+<span class="sd">            The window/current Cohen&#39;s kappa M coefficient.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_accuracy</span><span class="p">()</span>
@@ -770,7 +749,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div>
 
 <div class="viewcode-block" id="WindowClassificationMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
@@ -784,12 +763,9 @@
 
 
 <div class="viewcode-block" id="MultiTargetClassificationMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetClassificationMeasurements">[docs]</a><span class="k">class</span> <span class="nc">MultiTargetClassificationMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; MultiTargetClassificationMeasurements</span>
-
-<span class="sd">    This class will keep updated statistics about a multi output classifier,</span>
+    <span class="sd">&quot;&quot;&quot; This class will keep updated statistics about a multi output classifier,</span>
 <span class="sd">    using a confusion matrix adapted to multi output problems, the</span>
-<span class="sd">    MOLConfusionMatrix, alongside other of the classifier&#39;s relevant</span>
-<span class="sd">    attributes.</span>
+<span class="sd">    MOLConfusionMatrix, alongside other relevant attributes.</span>
 
 <span class="sd">    The performance metrics for multi output tasks are different from those used</span>
 <span class="sd">    for normal classification tasks. Thus, the statistics provided by this class</span>
@@ -831,16 +807,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">restart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exact_match_count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">pass</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="MultiTargetClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Updates its statistics with the results of a prediction.</span>
+        <span class="sd">&quot;&quot;&quot; Updates its statistics with the results of a prediction.</span>
 
 <span class="sd">        Adds the result to the MOLConfusionMatrix and update exact_matches and</span>
 <span class="sd">        j-index sum counts.</span>
@@ -887,10 +862,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
 
 <div class="viewcode-block" id="MultiTargetClassificationMeasurements.get_hamming_loss"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetClassificationMeasurements.get_hamming_loss">[docs]</a>    <span class="k">def</span> <span class="nf">get_hamming_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_hamming_loss</span>
-
-<span class="sd">        Computes the Hamming loss, which is the complement of the hamming</span>
-<span class="sd">        score metric.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the Hamming loss, which is the complement of the</span>
+<span class="sd">        Hamming score metric.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -901,15 +874,13 @@
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="MultiTargetClassificationMeasurements.get_hamming_score"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetClassificationMeasurements.get_hamming_score">[docs]</a>    <span class="k">def</span> <span class="nf">get_hamming_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_hamming_score</span>
-
-<span class="sd">        Computes the hamming score, defined as the number of correctly classified</span>
-<span class="sd">        labels divided by the total number of labels classified.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the Hamming score, defined as the number of correctly</span>
+<span class="sd">        classified labels divided by the total number of labels classified.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            The hamming score.</span>
+<span class="sd">            The Hamming score.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -918,9 +889,7 @@
             <span class="k">return</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="MultiTargetClassificationMeasurements.get_exact_match"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetClassificationMeasurements.get_exact_match">[docs]</a>    <span class="k">def</span> <span class="nf">get_exact_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_exact_match</span>
-
-<span class="sd">        Computes the exact match metric.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the exact match metric.</span>
 
 <span class="sd">        This is the most strict multi output metric, defined as the number of</span>
 <span class="sd">        samples that have all their labels correctly classified, divided by the</span>
@@ -929,15 +898,13 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the exact match metric.</span>
+<span class="sd">            The exact match metric.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exact_match_count</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span></div>
 
 <div class="viewcode-block" id="MultiTargetClassificationMeasurements.get_j_index"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetClassificationMeasurements.get_j_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_j_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_j_index</span>
-
-<span class="sd">        Computes the Jaccard index, also known as the intersection over union</span>
+        <span class="sd">&quot;&quot;&quot; Computes the Jaccard index, also known as the intersection over union</span>
 <span class="sd">        metric. It is calculated by dividing the number of correctly classified</span>
 <span class="sd">        labels by the union of predicted and true labels.</span>
 
@@ -965,13 +932,11 @@
                <span class="s1">&#39; - j_index: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="MultiTargetClassificationMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetClassificationMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div></div>
 
 
 <div class="viewcode-block" id="WindowMultiTargetClassificationMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetClassificationMeasurements">[docs]</a><span class="k">class</span> <span class="nc">WindowMultiTargetClassificationMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; MultiTargetClassificationMeasurements</span>
-
-<span class="sd">    This class will maintain a fixed sized window of the newest information</span>
+    <span class="sd">&quot;&quot;&quot; This class will maintain a fixed sized window of the newest information</span>
 <span class="sd">    about one classifier. It can provide, as requested, any of the relevant</span>
 <span class="sd">    current metrics about the classifier, measured inside the window.</span>
 
@@ -1029,15 +994,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">restart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exact_match_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">j_sum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span> <span class="o">=</span> <span class="n">FastComplexBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span> <span class="o">=</span> <span class="n">FastComplexBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Updates its statistics with the results of a prediction.</span>
+        <span class="sd">&quot;&quot;&quot; Updates its statistics with the results of a prediction.</span>
 
 <span class="sd">        Adds the result to the MOLConfusionMatrix, and updates the</span>
 <span class="sd">        ComplexFastBuffer objects.</span>
@@ -1073,38 +1038,32 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetClassificationMeasurements.get_hamming_loss"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetClassificationMeasurements.get_hamming_loss">[docs]</a>    <span class="k">def</span> <span class="nf">get_hamming_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_hamming_loss</span>
-
-<span class="sd">        Computes the window/local Hamming loss, which is the complement of</span>
-<span class="sd">        the hamming score metric.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current Hamming loss, which is the</span>
+<span class="sd">        complement of the Hamming score metric.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            The window/local hamming loss.</span>
+<span class="sd">            The window/current hamming loss.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_hamming_score</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetClassificationMeasurements.get_hamming_score"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetClassificationMeasurements.get_hamming_score">[docs]</a>    <span class="k">def</span> <span class="nf">get_hamming_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_hamming_score</span>
-
-<span class="sd">        Computes the window/local hamming score, defined as the number of</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current Hamming score, defined as the number of</span>
 <span class="sd">        correctly classified labels divided by the total number of labels</span>
 <span class="sd">        classified.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            The window/local hamming score.</span>
+<span class="sd">            The window/current hamming score.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">hamming_score</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_queue</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetClassificationMeasurements.get_exact_match"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetClassificationMeasurements.get_exact_match">[docs]</a>    <span class="k">def</span> <span class="nf">get_exact_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_exact_match</span>
-
-<span class="sd">        Computes the window/local exact match metric.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current exact match metric.</span>
 
 <span class="sd">        This is the most strict multi output metric, defined as the number of</span>
 <span class="sd">        samples that have all their labels correctly classified, divided by the</span>
@@ -1113,22 +1072,20 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local exact match metric.</span>
+<span class="sd">            The window/current exact match metric.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">exact_match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_queue</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetClassificationMeasurements.get_j_index"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetClassificationMeasurements.get_j_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_j_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_j_index</span>
-
-<span class="sd">        Computes the window/local Jaccard index, also known as the intersection</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current Jaccard index, also known as the intersection</span>
 <span class="sd">        over union metric. It is calculated by dividing the number of correctly</span>
 <span class="sd">        classified labels by the union of predicted and true labels.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            The window/local Jaccard index.</span>
+<span class="sd">            The window/current Jaccard index.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">j_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">get_queue</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">get_queue</span><span class="p">())</span></div>
@@ -1153,13 +1110,11 @@
                <span class="s1">&#39; - j_index: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_j_index</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetClassificationMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetClassificationMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div></div>
 
 
 <div class="viewcode-block" id="RegressionMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements">[docs]</a><span class="k">class</span> <span class="nc">RegressionMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; RegressionMeasurements</span>
-
-<span class="sd">    This class is used to keep updated statistics over a regression</span>
+    <span class="sd">&quot;&quot;&quot; This class is used to keep updated statistics over a regression</span>
 <span class="sd">    learner in a regression problem context.</span>
 
 <span class="sd">    It will keep track of global metrics, that can be provided at</span>
@@ -1184,17 +1139,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="RegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Use the true label and the prediction to update the statistics.</span>
+        <span class="sd">&quot;&quot;&quot; Use the true value and the prediction to update the statistics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        y_true: int</span>
-<span class="sd">            The true label.</span>
+<span class="sd">        y_true: float</span>
+<span class="sd">            The true value.</span>
 
-<span class="sd">        y_pred: int</span>
-<span class="sd">            The classifier&#39;s prediction</span>
+<span class="sd">        y_pred: float</span>
+<span class="sd">            The predicted value.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
@@ -1205,14 +1158,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="RegressionMeasurements.get_mean_square_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_mean_square_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_square_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_mean_square_error</span>
-
-<span class="sd">        Computes the mean square error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the mean square error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the mean square error.</span>
+<span class="sd">            The mean square error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1221,14 +1172,12 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span></div>
 
 <div class="viewcode-block" id="RegressionMeasurements.get_average_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_average_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_error</span>
-
-<span class="sd">        Computes the mean absolute error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the average error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the mean absolute error.</span>
+<span class="sd">            The average error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1240,7 +1189,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span></div>
 
 <div class="viewcode-block" id="RegressionMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div>
 
 <div class="viewcode-block" id="RegressionMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RegressionMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
@@ -1250,9 +1199,7 @@
 
 
 <div class="viewcode-block" id="WindowRegressionMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements">[docs]</a><span class="k">class</span> <span class="nc">WindowRegressionMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; WindowRegressionMeasurements</span>
-
-<span class="sd">    This class is used to keep updated statistics over a regression</span>
+    <span class="sd">&quot;&quot;&quot; This class is used to keep updated statistics over a regression</span>
 <span class="sd">    learner in a regression problem context inside a fixed sized window.</span>
 <span class="sd">    It uses FastBuffer objects to simulate the fixed sized windows.</span>
 
@@ -1281,17 +1228,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">average_error_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Use the true label and the prediction to update the statistics.</span>
+        <span class="sd">&quot;&quot;&quot; Use the true value and the prediction to update the statistics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        y_true: int</span>
-<span class="sd">            The true label.</span>
+<span class="sd">        y_true: float</span>
+<span class="sd">            The true value.</span>
 
-<span class="sd">        y_pred: int</span>
-<span class="sd">            The classifier&#39;s prediction</span>
+<span class="sd">        y_pred: float</span>
+<span class="sd">            The predicted value.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
@@ -1308,14 +1253,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">+=</span> <span class="n">old_average</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_mean_square_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_mean_square_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_square_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_mean_square_error</span>
-
-<span class="sd">        Computes the window/local mean square error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current mean square error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local mean square error.</span>
+<span class="sd">            The window/current mean square error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1324,14 +1267,12 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span></div>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_average_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_average_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_error</span>
-
-<span class="sd">        Computes the window/local mean absolute error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current average error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local mean absolute error.</span>
+<span class="sd">            The window/current average error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1347,7 +1288,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error_correction</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div>
 
 <div class="viewcode-block" id="WindowRegressionMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowRegressionMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> \
@@ -1357,9 +1298,7 @@
 
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements">[docs]</a><span class="k">class</span> <span class="nc">MultiTargetRegressionMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; MultiTargetRegressionMeasurements</span>
-
-<span class="sd">    This class is used to keep updated statistics over a multi-target regression</span>
+    <span class="sd">&quot;&quot;&quot; This class is used to keep updated statistics over a multi-target regression</span>
 <span class="sd">    learner in a multi-target regression problem context.</span>
 
 <span class="sd">    It will keep track of global metrics, that can be provided at</span>
@@ -1370,6 +1309,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1384,17 +1324,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Use the true label and the prediction to update the statistics.</span>
+        <span class="sd">&quot;&quot;&quot; Use the true value and the prediction to update the statistics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        y: int</span>
-<span class="sd">            The true label.</span>
+<span class="sd">        y: float or list or np.ndarray</span>
+<span class="sd">            The true value(s).</span>
 
-<span class="sd">        prediction: int</span>
-<span class="sd">            The classifier&#39;s prediction</span>
+<span class="sd">        prediction: float or list or np.ndarray</span>
+<span class="sd">            The predicted value(s).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y</span>
@@ -1412,31 +1350,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements.get_average_mean_square_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements.get_average_mean_square_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_mean_square_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_mean_square_error</span>
-
-<span class="sd">        Computes the mean square error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the average mean square error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the average mean square error.</span>
+<span class="sd">            The average mean square error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> \
-                <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements.get_average_absolute_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements.get_average_absolute_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_absolute_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_absolute_error</span>
-
-<span class="sd">        Computes the average mean absolute error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the average mean absolute error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the average mean absolute error.</span>
+<span class="sd">            The average absolute error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1446,14 +1379,12 @@
                 <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements.get_average_root_mean_square_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements.get_average_root_mean_square_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_root_mean_square_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_root_mean_square_error</span>
-
-<span class="sd">        Computes the mean square error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the mean square error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the average mean square error.</span>
+<span class="sd">            The average mean square error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1471,7 +1402,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div>
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MultiTargetRegressionMeasurements: sample_count: &#39;</span> <span class="o">+</span> \
@@ -1482,9 +1413,7 @@
 
 
 <div class="viewcode-block" id="WindowMultiTargetRegressionMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetRegressionMeasurements">[docs]</a><span class="k">class</span> <span class="nc">WindowMultiTargetRegressionMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; WindowMultiTargetRegressionMeasurements</span>
-
-<span class="sd">    This class is used to keep updated statistics over a multi-target regression</span>
+    <span class="sd">&quot;&quot;&quot; This class is used to keep updated statistics over a multi-target regression</span>
 <span class="sd">    learner in a multi-target regression problem context inside a fixed sized</span>
 <span class="sd">    window. It uses FastBuffer objects to simulate the fixed sized windows.</span>
 
@@ -1496,6 +1425,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1513,17 +1443,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">average_error_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetRegressionMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetRegressionMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add_result</span>
-
-<span class="sd">        Use the true label and the prediction to update the statistics.</span>
+        <span class="sd">&quot;&quot;&quot; Use the true value and the prediction to update the statistics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        y: int</span>
-<span class="sd">            The true label.</span>
+<span class="sd">        y: float or list or np.ndarray</span>
+<span class="sd">            The true value(s).</span>
 
-<span class="sd">        prediction: int</span>
-<span class="sd">            The classifier&#39;s prediction</span>
+<span class="sd">        prediction: float or list or np.ndarray</span>
+<span class="sd">            The predicted value(s).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y</span>
@@ -1551,14 +1479,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">+=</span> <span class="n">old_average</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetRegressionMeasurements.get_average_mean_square_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetRegressionMeasurements.get_average_mean_square_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_mean_square_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_mean_square_error</span>
-
-<span class="sd">        Computes the window/local average mean square error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current average mean square error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local average mean square error.</span>
+<span class="sd">            The window/current average mean square error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1568,14 +1494,12 @@
                 <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetRegressionMeasurements.get_average_absolute_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetRegressionMeasurements.get_average_absolute_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_absolute_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_absolute_error</span>
-
-<span class="sd">        Computes the window/local average mean absolute error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the window/current average mean absolute error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the window/local average mean absolute error.</span>
+<span class="sd">            The window/current average mean absolute error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1585,14 +1509,12 @@
                 <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetRegressionMeasurements.get_average_root_mean_square_error"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetRegressionMeasurements.get_average_root_mean_square_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_root_mean_square_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get_average_root_mean_square_error</span>
-
-<span class="sd">        Computes the mean square error.</span>
+        <span class="sd">&quot;&quot;&quot; Computes the mean square error.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
-<span class="sd">            Returns the average mean square error.</span>
+<span class="sd">            The average mean square error.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1610,7 +1532,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error_correction</span><span class="o">.</span><span class="n">get_current_size</span><span class="p">()</span>
 
 <div class="viewcode-block" id="WindowMultiTargetRegressionMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetRegressionMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;collection&#39;</span></div>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div>
 
 <div class="viewcode-block" id="WindowMultiTargetRegressionMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowMultiTargetRegressionMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MultiTargetRegressionMeasurements: sample_count: &#39;</span> <span class="o">+</span> \
@@ -1621,9 +1543,7 @@
 
 
 <div class="viewcode-block" id="hamming_score"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.hamming_score">[docs]</a><span class="k">def</span> <span class="nf">hamming_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; hamming_score</span>
-
-<span class="sd">    Computes de hamming score, which is known as the label-based accuracy,</span>
+    <span class="sd">&quot;&quot;&quot; Computes de hamming score, which is known as the label-based accuracy,</span>
 <span class="sd">    designed for multi-label problems. It&#39;s defined as the number of correctly</span>
 <span class="sd">    predicted labels divided by all classified labels.</span>
 
@@ -1660,9 +1580,7 @@
 
 
 <div class="viewcode-block" id="j_index"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.j_index">[docs]</a><span class="k">def</span> <span class="nf">j_index</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; j_index</span>
-
-<span class="sd">    Computes the Jaccard Index of the given set, which is also called the</span>
+    <span class="sd">&quot;&quot;&quot; Computes the Jaccard Index of the given set, which is also called the</span>
 <span class="sd">    &#39;intersection over union&#39; in multi-label settings. It&#39;s defined as the</span>
 <span class="sd">    intersection between the true label&#39;s set and the prediction&#39;s set,</span>
 <span class="sd">    divided by the sum, or union, of those two sets.</span>
@@ -1708,9 +1626,7 @@
 
 
 <div class="viewcode-block" id="exact_match"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.exact_match">[docs]</a><span class="k">def</span> <span class="nf">exact_match</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; exact_match</span>
-
-<span class="sd">    This is the most strict metric for the multi label setting. It&#39;s defined</span>
+    <span class="sd">&quot;&quot;&quot; This is the most strict metric for the multi label setting. It&#39;s defined</span>
 <span class="sd">    as the percentage of samples that have all their labels correctly classified.</span>
 
 <span class="sd">    Parameters</span>

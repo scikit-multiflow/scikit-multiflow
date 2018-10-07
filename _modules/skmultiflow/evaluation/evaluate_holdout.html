@@ -224,37 +224,37 @@
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">unique</span>
 <span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.evaluation.base_evaluator</span> <span class="k">import</span> <span class="n">StreamEvaluator</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">constants</span>
 
 
 <div class="viewcode-block" id="EvaluateHoldout"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_holdout.html#skmultiflow.evaluation.EvaluateHoldout">[docs]</a><span class="k">class</span> <span class="nc">EvaluateHoldout</span><span class="p">(</span><span class="n">StreamEvaluator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; EvaluateHoldout</span>
-
-<span class="sd">    The holdout evaluation method, or periodic holdout evaluation method, analyses</span>
-<span class="sd">    each arriving sample, without computing performance metrics, nor predicting</span>
-<span class="sd">    labels or regressing values, but by updating its statistics.</span>
+    <span class="sd">&quot;&quot;&quot; The holdout evaluation method, or periodic holdout evaluation method,</span>
+<span class="sd">    analyses each arriving sample by updating its statistics, without computing</span>
+<span class="sd">    performance metrics, nor predicting labels or regression values.</span>
 
 <span class="sd">    The performance evaluation happens at every n_wait analysed samples, at which</span>
 <span class="sd">    moment the evaluator will test the learners performance on a test set, formed</span>
 <span class="sd">    by yet unseen samples, which will be used to evaluate performance, but not to</span>
 <span class="sd">    train the model.</span>
 
-<span class="sd">    It&#39;s possible to use the same test set for every test made, but it&#39;s also</span>
-<span class="sd">    possible to dynamically create test sets, so that they differ from each other.</span>
-<span class="sd">    If dynamic test sets are enabled, we use the data stream to create test sets</span>
-<span class="sd">    on the go. This process is more likely to generate test sets that follow the</span>
-<span class="sd">    current concept, in comparison to static test sets.</span>
+<span class="sd">    It&#39;s possible to use the same test set for every test made or to dynamically</span>
+<span class="sd">    create test sets, so that they differ from each other. If dynamic test sets</span>
+<span class="sd">    are enabled, we use the data stream to create test sets on the go. This process</span>
+<span class="sd">    is more likely to generate test sets that follow the current concept, in</span>
+<span class="sd">    comparison to static test sets.</span>
 
-<span class="sd">    Thus, if concept drift is known to be present in the dataset/generator enabling</span>
-<span class="sd">    dynamic test sets is highly recommended. If no concept drift is expected,</span>
-<span class="sd">    disabling this parameter will speed up the evaluation process.</span>
+<span class="sd">    Thus, if concept drift is known to be present in the stream, using dynamic</span>
+<span class="sd">    test sets is recommended. If no concept drift is expected, disabling this</span>
+<span class="sd">    parameter will speed up the evaluation process.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    n_wait: int (Default: 10000)</span>
 <span class="sd">        The number of samples to process between each test. Also defines when to update the plot if `show_plot=True`.</span>
+<span class="sd">        Note that setting `n_wait` too small can significantly slow the evaluation process.</span>
 
 <span class="sd">    max_samples: int (Default: 100000)</span>
 <span class="sd">        The maximum number of samples to process during the evaluation.</span>
@@ -266,73 +266,96 @@
 <span class="sd">        The maximum duration of the simulation (in seconds).</span>
 
 <span class="sd">    metrics: list, optional (Default: [&#39;accuracy&#39;, &#39;kappa&#39;])</span>
-<span class="sd">        The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots</span>
-<span class="sd">        and/or logged into the output file. Valid options are &#39;accuracy&#39;, &#39;kappa&#39;, &#39;kappa_t&#39;, &#39;kappa_m&#39;,</span>
-<span class="sd">        &#39;hamming_score&#39;, &#39;hamming_loss&#39;, &#39;exact_match&#39;, &#39;j_index&#39;, &#39;mean_square_error&#39;, &#39;mean_absolute_error&#39;,</span>
-<span class="sd">        &#39;true_vs_predicts&#39;, &#39;average_mean_squared_error&#39;, &#39;average_mean_absolute_error&#39;.</span>
+<span class="sd">        | The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots</span>
+<span class="sd">          and/or logged into the output file. Valid options are</span>
+<span class="sd">        | *Classification*</span>
+<span class="sd">        | &#39;accuracy&#39;</span>
+<span class="sd">        | &#39;kappa&#39;</span>
+<span class="sd">        | &#39;kappa_t&#39;</span>
+<span class="sd">        | &#39;kappa_m&#39;</span>
+<span class="sd">        | &#39;true_vs_predicted&#39;</span>
+<span class="sd">        | *Multi-target Classification*</span>
+<span class="sd">        | &#39;hamming_score&#39;</span>
+<span class="sd">        | &#39;hamming_loss&#39;</span>
+<span class="sd">        | &#39;exact_match&#39;</span>
+<span class="sd">        | &#39;j_index&#39;</span>
+<span class="sd">        | *Regression*</span>
+<span class="sd">        | &#39;mean_square_error&#39;</span>
+<span class="sd">        | &#39;mean_absolute_error&#39;</span>
+<span class="sd">        | &#39;true_vs_predicted&#39;</span>
+<span class="sd">        | *Multi-target Regression*</span>
+<span class="sd">        | &#39;average_mean_squared_error&#39;</span>
+<span class="sd">        | &#39;average_mean_absolute_error&#39;</span>
+<span class="sd">        | &#39;average_root_mean_square_error&#39;</span>
 
 <span class="sd">    output_file: string, optional (Default: None)</span>
 <span class="sd">        File name to save the summary of the evaluation.</span>
 
 <span class="sd">    show_plot: bool (Default: False)</span>
-<span class="sd">        If True, a plot will show the progress of the evaluation. Warning: Plotting will slow down the evaluation</span>
+<span class="sd">        If True, a plot will show the progress of the evaluation. Warning: Plotting can slow down the evaluation</span>
 <span class="sd">        process.</span>
 
-<span class="sd">    restart_stream: bool, optional (default=True)</span>
+<span class="sd">    restart_stream: bool, optional (Default=True)</span>
 <span class="sd">        If True, the stream is restarted once the evaluation is complete.</span>
 
-<span class="sd">    test_size: int (Default: 20000)</span>
+<span class="sd">    test_size: int (Default: 5000)</span>
 <span class="sd">        The size of the test set.</span>
 
 <span class="sd">    dynamic_test_set: bool (Default: False)</span>
-<span class="sd">        If True, will continuously change the test set, otherwise will use the same test set for all tests.</span>
+<span class="sd">        If `True`, will continuously change the test set, otherwise will use the same test set for all tests.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    It&#39;s important to note that testing the model too often, which means choosing</span>
-<span class="sd">    a `n_wait` parameter too small, will significantly slow the evaluation process,</span>
-<span class="sd">    depending on the test size.</span>
-
-<span class="sd">    This evaluator accepts to types of evaluation processes. It can either evaluate</span>
-<span class="sd">    a single learner while computing its metrics or it can evaluate multiple learners</span>
-<span class="sd">    at a time, as a means of comparing different approaches to the same problem.</span>
+<span class="sd">    1. This evaluator can process a single learner to track its performance; or multiple learners  at a time, to</span>
+<span class="sd">       compare different models on the same stream.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; # The first example demonstrates how to use the evaluator to evaluate one learner</span>
-<span class="sd">    &gt;&gt;&gt; from sklearn.linear_model.passive_aggressive import PassiveAggressiveClassifier</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.core.pipeline import Pipeline</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.evaluation.evaluate_holdout import EvaluateHoldout</span>
-<span class="sd">    &gt;&gt;&gt; # Setup the File Stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(&quot;skmultiflow/data/datasets/covtype.csv&quot;, -1, 1)</span>
-<span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
-<span class="sd">    &gt;&gt;&gt; # Setup the classifier</span>
-<span class="sd">    &gt;&gt;&gt; classifier = PassiveAggressiveClassifier()</span>
-<span class="sd">    &gt;&gt;&gt; # Setup the pipeline</span>
-<span class="sd">    &gt;&gt;&gt; pipe = Pipeline([(&#39;Classifier&#39;, classifier)])</span>
-<span class="sd">    &gt;&gt;&gt; # Setup the evaluator</span>
-<span class="sd">    &gt;&gt;&gt; evaluator = EvaluateHoldout(max_samples=100000, batch_size=1, n_wait=10000, max_time=1000,</span>
-<span class="sd">    &gt;&gt;&gt;                             output_file=None, show_plot=True, metrics=[&#39;kappa&#39;, &#39;performance&#39;],</span>
-<span class="sd">    &gt;&gt;&gt;                             test_size=5000, dynamic_test_set=True)</span>
-<span class="sd">    &gt;&gt;&gt; # Evaluate</span>
-<span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=pipe)</span>
-
-<span class="sd">    &gt;&gt;&gt; # The second example will demonstrate how to compare two classifiers with</span>
-<span class="sd">    &gt;&gt;&gt; # the EvaluateHoldout</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.data import WaveformGenerator</span>
-<span class="sd">    &gt;&gt;&gt; from sklearn.linear_model.stochastic_gradient import SGDClassifier</span>
+<span class="sd">    &gt;&gt;&gt; # The first example demonstrates how to evaluate one model</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.data import SEAGenerator</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.trees import HoeffdingTree</span>
 <span class="sd">    &gt;&gt;&gt; from skmultiflow.evaluation import EvaluateHoldout</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.lazy import KNNAdwin</span>
-<span class="sd">    &gt;&gt;&gt; stream = WaveformGenerator()</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Set the stream</span>
+<span class="sd">    &gt;&gt;&gt; stream = SEAGenerator(random_state=1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
-<span class="sd">    &gt;&gt;&gt; clf_one = SGDClassifier()</span>
-<span class="sd">    &gt;&gt;&gt; clf_two = KNNAdwin(n_neighbors=8,max_window_size=2000)</span>
-<span class="sd">    &gt;&gt;&gt; classifier = [clf_one, clf_two]</span>
-<span class="sd">    &gt;&gt;&gt; evaluator = EvaluateHoldout(test_size=5000, dynamic_test_set=True, max_samples=100000, batch_size=1,</span>
-<span class="sd">    &gt;&gt;&gt;                             n_wait=10000, max_time=1000, output_file=None, show_plot=True,</span>
-<span class="sd">    &gt;&gt;&gt;                             metrics=[&#39;kappa&#39;, &#39;accuracy&#39;])</span>
-<span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=classifier)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Set the model</span>
+<span class="sd">    &gt;&gt;&gt; ht = HoeffdingTree()</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Set the evaluator</span>
+<span class="sd">    &gt;&gt;&gt; evaluator = EvaluateHoldout(max_samples=100000,</span>
+<span class="sd">    &gt;&gt;&gt;                             max_time=1000,</span>
+<span class="sd">    &gt;&gt;&gt;                             show_plot=True,</span>
+<span class="sd">    &gt;&gt;&gt;                             metrics=[&#39;accuracy&#39;, &#39;kappa&#39;],</span>
+<span class="sd">    &gt;&gt;&gt;                             dynamic_test_set=True)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Run evaluation</span>
+<span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=ht, model_names=[&#39;HT&#39;])</span>
+
+<span class="sd">    &gt;&gt;&gt; # The second example demonstrates how to compare two models</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.data import SEAGenerator</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.trees import HoeffdingTree</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.bayes import NaiveBayes</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.evaluation import EvaluateHoldout</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Set the stream</span>
+<span class="sd">    &gt;&gt;&gt; stream = SEAGenerator(random_state=1)</span>
+<span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Set the model</span>
+<span class="sd">    &gt;&gt;&gt; ht = HoeffdingTree()</span>
+<span class="sd">    &gt;&gt;&gt; nb = NaiveBayes()</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Set the evaluator</span>
+<span class="sd">    &gt;&gt;&gt; evaluator = EvaluateHoldout(max_samples=100000,</span>
+<span class="sd">    &gt;&gt;&gt;                             max_time=1000,</span>
+<span class="sd">    &gt;&gt;&gt;                             show_plot=True,</span>
+<span class="sd">    &gt;&gt;&gt;                             metrics=[&#39;accuracy&#39;, &#39;kappa&#39;],</span>
+<span class="sd">    &gt;&gt;&gt;                             dynamic_test_set=True)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Run evaluation</span>
+<span class="sd">    &gt;&gt;&gt; evaluator.evaluate(stream=stream, model=[ht, nb], model_names=[&#39;HT&#39;, &#39;NB&#39;])</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -454,17 +477,18 @@
                     <span class="c1"># Train</span>
                     <span class="k">if</span> <span class="n">first_run</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">REGRESSION</span> <span class="ow">and</span> \
-                               <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">MULTI_TARGET_REGRESSION</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">CLASSIFICATION</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">MULTI_TARGET_CLASSIFICATION</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">))</span>
                             <span class="k">else</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
                         <span class="n">first_run</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_check_progress</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>   <span class="c1"># TODO Confirm place</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_check_progress</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>   <span class="c1"># TODO Confirm place</span>
 
                     <span class="c1"># Test on holdout set</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_test_set</span><span class="p">:</span>
@@ -492,16 +516,11 @@
                             <span class="k">if</span> <span class="n">prediction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
-                                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">CLASSIFICATION</span><span class="p">:</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">mean_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_test</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                                                      <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">current_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_test</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                                                         <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-                                        <span class="k">else</span><span class="p">:</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">mean_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_test</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                                                      <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">current_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_test</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                                                         <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">mean_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_test</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                                                  <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">current_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_test</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                                                     <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+
                                 <span class="bp">self</span><span class="o">.</span><span class="n">_update_metrics</span><span class="p">()</span>
                             <span class="n">performance_sampling_cnt</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -577,13 +596,6 @@
 
         <span class="k">return</span> <span class="n">predictions</span></div>
 
-    <span class="k">def</span> <span class="nf">_check_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">):</span>
-        <span class="n">progress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
-
-        <span class="c1"># Update progress</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">progress</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">//</span> <span class="mi">20</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">progress</span> <span class="o">//</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span><span class="p">))</span>
-
 <div class="viewcode-block" id="EvaluateHoldout.set_params"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_holdout.html#skmultiflow.evaluation.EvaluateHoldout.set_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set_params</span>
 
@@ -603,14 +615,16 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">n_wait</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;max_samples&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;pretrain_size&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;max_time&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">max_time</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;output_file&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;pretrain_size&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;show_plot&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_plot</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;test_size&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">value</span></div>
 
