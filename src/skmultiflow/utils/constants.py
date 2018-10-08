@@ -73,3 +73,7 @@ TASK_TYPES = [CLASSIFICATION,
               MULTI_TARGET_CLASSIFICATION,
               MULTI_TARGET_REGRESSION,
               UNDEFINED]
+MEAN = 'mean'
+CURRENT = 'current'
+Y_TRUE = 'y_true'
+Y_PRED = 'y_pred'
