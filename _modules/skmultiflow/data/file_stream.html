@@ -487,23 +487,24 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sample_y</span></div>
 
 <div class="viewcode-block" id="FileStream.has_more_samples"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.has_more_samples">[docs]</a>    <span class="k">def</span> <span class="nf">has_more_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Checks if stream has more samples.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Boolean</span>
+<span class="sd">            True if stream has more samples.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="FileStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the estimated number of remaining samples.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
 <span class="sd">            Remaining number of samples.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="FileStream.n_remaining_samples"><a class="viewcode-back" href="../../../skmultiflow.data.file_stream.html#skmultiflow.data.FileStream.n_remaining_samples">[docs]</a>    <span class="k">def</span> <span class="nf">n_remaining_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Checks if stream has more samples.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Boolean</span>
-<span class="sd">            True if stream has more samples.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_idx</span></div>
 

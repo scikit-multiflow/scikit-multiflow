@@ -223,9 +223,11 @@
   <h1>Source code for skmultiflow.utils.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
 
 
-<div class="viewcode-block" id="get_dimensions"><a class="viewcode-back" href="../../../skmultiflow.utils.html#skmultiflow.utils.get_dimensions">[docs]</a><span class="k">def</span> <span class="nf">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="get_dimensions"><a class="viewcode-back" href="../../../skmultiflow.utils.utils.html#skmultiflow.utils.get_dimensions">[docs]</a><span class="k">def</span> <span class="nf">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return the dimensions from a numpy.array, numpy.ndarray or list.</span>
 
 <span class="sd">    Parameters</span>
@@ -253,7 +255,7 @@
     <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span></div>
 
 
-<div class="viewcode-block" id="normalize_values_in_dict"><a class="viewcode-back" href="../../../skmultiflow.utils.html#skmultiflow.utils.normalize_values_in_dict">[docs]</a><span class="k">def</span> <span class="nf">normalize_values_in_dict</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="normalize_values_in_dict"><a class="viewcode-back" href="../../../skmultiflow.utils.utils.html#skmultiflow.utils.normalize_values_in_dict">[docs]</a><span class="k">def</span> <span class="nf">normalize_values_in_dict</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Normalize the values in a dictionary using the given factor.</span>
 <span class="sd">    For each element in the dictionary, applies ``value/factor``.</span>
 
@@ -298,6 +300,72 @@
         <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">dictionary</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="calculate_object_size"><a class="viewcode-back" href="../../../skmultiflow.utils.utils.html#skmultiflow.utils.calculate_object_size">[docs]</a><span class="k">def</span> <span class="nf">calculate_object_size</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;kB&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Iteratively calculates the `obj` size in bytes.</span>
+
+<span class="sd">    Visits all the elements related to obj accounting for their respective</span>
+<span class="sd">    sizes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    object: obj</span>
+<span class="sd">        Object to evaluate.</span>
+<span class="sd">    string: unit</span>
+<span class="sd">        The unit in which the accounted value is going to be returned.</span>
+<span class="sd">        Values: &#39;byte&#39;, &#39;kB&#39;, &#39;MB&#39; (Default: &#39;kB&#39;).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        The size of the object and its related properties and objects,</span>
+<span class="sd">        in &#39;unit&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">to_visit</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+    <span class="n">byte_size</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">to_visit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">to_visit</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="c1"># If element was already covered, skip it</span>
+        <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Update size accounting</span>
+        <span class="n">byte_size</span> <span class="o">+=</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="c1"># Mark element as seen</span>
+        <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+
+        <span class="c1"># Add keys and values for size account</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">to_visit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">to_visit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;__dict__&#39;</span><span class="p">):</span>
+            <span class="n">to_visit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="n">to_visit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;kB&#39;</span><span class="p">:</span>
+        <span class="n">final_size</span> <span class="o">=</span> <span class="n">byte_size</span> <span class="o">/</span> <span class="mi">1024</span>
+    <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;MB&#39;</span><span class="p">:</span>
+        <span class="n">final_size</span> <span class="o">=</span> <span class="n">byte_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">final_size</span> <span class="o">=</span> <span class="n">byte_size</span>
+
+    <span class="k">return</span> <span class="n">final_size</span></div>
 </pre></div>
 
            </div>

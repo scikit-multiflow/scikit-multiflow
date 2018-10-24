@@ -225,6 +225,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.core.base_object</span> <span class="k">import</span> <span class="n">BaseObject</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils.data_structures</span> <span class="k">import</span> <span class="n">FastBuffer</span><span class="p">,</span> <span class="n">FastComplexBuffer</span><span class="p">,</span> <span class="n">ConfusionMatrix</span><span class="p">,</span> <span class="n">MOLConfusionMatrix</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_weights</span>
+<span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
 
 
 <div class="viewcode-block" id="ClassificationMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.ClassificationMeasurements">[docs]</a><span class="k">class</span> <span class="nc">ClassificationMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -1303,8 +1304,8 @@
 
 <span class="sd">    It will keep track of global metrics, that can be provided at</span>
 <span class="sd">    any moment. The relevant metrics kept by an instance of this class</span>
-<span class="sd">    are: AMSE (average mean square error) and AMAE (average mean absolute error).</span>
-
+<span class="sd">    are: AMSE (average mean square error), AMAE (average mean absolute error),</span>
+<span class="sd">    and ARMSE (average root mean square error).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1317,6 +1318,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="MultiTargetRegressionMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.MultiTargetRegressionMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">average_error</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1334,6 +1336,8 @@
 <span class="sd">        prediction: float or list or np.ndarray</span>
 <span class="sd">            The predicted value(s).</span>
 
+<span class="sd">        prediction: float or list or np.ndarray</span>
+<span class="sd">            The predicted value(s).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
@@ -1356,7 +1360,6 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The average mean square error.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
@@ -1370,7 +1373,6 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The average absolute error.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
@@ -1385,7 +1387,6 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The average mean square error.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
@@ -1419,8 +1420,8 @@
 
 <span class="sd">    It will keep track of partial metrics, that can be provided at</span>
 <span class="sd">    any moment. The relevant metrics kept by an instance of this class</span>
-<span class="sd">    are: AMSE (average mean square error) and AMAE (average mean absolute error).</span>
-
+<span class="sd">    are: AMSE (average mean square error), AMAE (average mean absolute error),</span>
+<span class="sd">    and ARMSE (average root mean square error).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
@@ -1453,6 +1454,8 @@
 <span class="sd">        prediction: float or list or np.ndarray</span>
 <span class="sd">            The predicted value(s).</span>
 
+<span class="sd">        prediction: float or list or np.ndarray</span>
+<span class="sd">            The predicted value(s).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
@@ -1485,7 +1488,6 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The window/current average mean square error.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
@@ -1500,7 +1502,6 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The window/current average mean absolute error.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
@@ -1515,7 +1516,6 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The average mean square error.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
@@ -1540,6 +1540,94 @@
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_average_mean_square_error</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39; - average_mean_absolute_error: &#39;</span> <span class="o">+</span> \
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_average_absolute_error</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39; - average_root_mean_square_error: &#39;</span> <span class="o">+</span> \
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_average_root_mean_square_error</span><span class="p">())</span></div></div>
+
+
+<div class="viewcode-block" id="RunningTimeMeasurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements">[docs]</a><span class="k">class</span> <span class="nc">RunningTimeMeasurements</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class used to compute the running time for each evaluated prediction</span>
+<span class="sd">        model.</span>
+
+<span class="sd">        The training, prediction, and total time are considered separately. The</span>
+<span class="sd">        class accounts for the amount of time each model effectively expent</span>
+<span class="sd">        traning and testing. To do so, timers for each of the actions are</span>
+<span class="sd">        considered.</span>
+
+<span class="sd">        Besides the properties getters, the available compute time methods</span>
+<span class="sd">        must be used as follows:</span>
+
+<span class="sd">        - `compute_{training, testing}_time_begin`</span>
+<span class="sd">        - Perform training/action</span>
+<span class="sd">        - `compute_{training, testing}_time_end`</span>
+
+<span class="sd">        Additionally, the `update_time_measurements` method updates the total</span>
+<span class="sd">        running time accounting, as well as, the total seen samples count.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_training_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_testing_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.reset"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_training_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_testing_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_time</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.compute_training_time_begin"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.compute_training_time_begin">[docs]</a>    <span class="k">def</span> <span class="nf">compute_training_time_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initiates the training time accounting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_training_start</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.compute_training_time_end"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.compute_training_time_end">[docs]</a>    <span class="k">def</span> <span class="nf">compute_training_time_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Finishes the training time accounting. Updates current total</span>
+<span class="sd">            training time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_training_time</span> <span class="o">+=</span> <span class="n">timer</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_training_start</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.compute_testing_time_begin"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.compute_testing_time_begin">[docs]</a>    <span class="k">def</span> <span class="nf">compute_testing_time_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initiates the testing time accounting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_testing_start</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.compute_testing_time_end"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.compute_testing_time_end">[docs]</a>    <span class="k">def</span> <span class="nf">compute_testing_time_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Finishes the testing time accounting. Updates current total</span>
+<span class="sd">            testing time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_testing_time</span> <span class="o">+=</span> <span class="n">timer</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_testing_start</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.update_time_measurements"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.update_time_measurements">[docs]</a>    <span class="k">def</span> <span class="nf">update_time_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">increment</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Updates the current total running time. Updates the number of seen</span>
+<span class="sd">        samples by `increment`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">increment</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">+=</span> <span class="n">increment</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_training_time</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_testing_time</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.get_current_training_time"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.get_current_training_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_training_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_training_time</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.get_current_testing_time"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.get_current_testing_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_testing_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_testing_time</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.get_current_total_running_time"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.get_current_total_running_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_total_running_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total_time</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.get_class_type"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.get_class_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;measurement&#39;</span></div>
+
+<div class="viewcode-block" id="RunningTimeMeasurements.get_info"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.RunningTimeMeasurements.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;RunningTimeMeasurements: sample_count: &#39;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sample_count</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - Total running time: &#39;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_current_total_running_time</span><span class="p">())</span> <span class="o">+</span> \
+                <span class="s1">&#39; - training_time: &#39;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_current_training_time</span><span class="p">())</span> <span class="o">+</span> \
+                <span class="s1">&#39; - testing_time: &#39;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_current_testing_time</span><span class="p">())</span></div></div>
 
 
 <div class="viewcode-block" id="hamming_score"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.hamming_score">[docs]</a><span class="k">def</span> <span class="nf">hamming_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicts</span><span class="p">):</span>

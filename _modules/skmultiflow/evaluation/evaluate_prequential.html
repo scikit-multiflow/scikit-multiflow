@@ -222,7 +222,6 @@
             
   <h1>Source code for skmultiflow.evaluation.evaluate_prequential</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">unique</span>
 <span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
@@ -230,7 +229,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">constants</span>
 
 
-<div class="viewcode-block" id="EvaluatePrequential"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluatePrequential">[docs]</a><span class="k">class</span> <span class="nc">EvaluatePrequential</span><span class="p">(</span><span class="n">StreamEvaluator</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluatePrequential"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential">[docs]</a><span class="k">class</span> <span class="nc">EvaluatePrequential</span><span class="p">(</span><span class="n">StreamEvaluator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; The prequential evaluation method, or interleaved test-then-train method,</span>
 <span class="sd">    is an alternative to the traditional holdout evaluation, inherited from</span>
 <span class="sd">    batch setting problems.</span>
@@ -419,7 +418,7 @@
         <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;.*invalid value encountered in true_divide.*&quot;</span><span class="p">)</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;.*Passing 1d.*&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EvaluatePrequential.evaluate"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluatePrequential.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluatePrequential.evaluate"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluates a learner or set of learners on samples from a stream.</span>
 
 <span class="sd">        Parameters</span>
@@ -470,37 +469,42 @@
 <span class="sd">        class as well.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-        <span class="n">start_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
-        <span class="n">end_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Prequential Evaluation&#39;</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Evaluating </span><span class="si">%s</span><span class="s1"> target(s).&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">n_targets</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Prequential Evaluation&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Evaluating </span><span class="si">{}</span><span class="s1"> target(s).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">n_targets</span><span class="p">))</span>
 
-        <span class="n">n_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">n_samples</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n_samples</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span><span class="p">:</span>
-            <span class="n">n_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span>
+        <span class="n">actual_max_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">actual_max_samples</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">actual_max_samples</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span><span class="p">:</span>
+            <span class="n">actual_max_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span>
 
         <span class="n">first_run</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Pre-training on </span><span class="si">%s</span><span class="s1"> samples.&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pre-training on </span><span class="si">{}</span><span class="s1"> sample(s).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span><span class="p">))</span>
 
             <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">CLASSIFICATION</span><span class="p">:</span>
+                    <span class="c1"># Training time computation</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_begin</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_end</span><span class="p">()</span>
                 <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">MULTI_TARGET_CLASSIFICATION</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_begin</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_end</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_begin</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_end</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">update_time_measurements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pretrain_size</span>
             <span class="n">first_run</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No pre-training.&#39;</span><span class="p">)</span>
 
         <span class="n">update_count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Evaluating...&#39;</span><span class="p">)</span>
-        <span class="k">while</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_time</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Evaluating...&#39;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_time</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_time</span><span class="p">)</span>
                <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">has_more_samples</span><span class="p">())):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
@@ -510,7 +514,10 @@
                     <span class="n">prediction</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">)]</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                         <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># Testing time</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_testing_time_begin</span><span class="p">()</span>
                             <span class="n">prediction</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_testing_time_end</span><span class="p">()</span>
                         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
                             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unexpected prediction value from </span><span class="si">{}</span><span class="s2">&quot;</span>
                                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
@@ -520,20 +527,32 @@
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">mean_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">current_eval_measurements</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">add_result</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">prediction</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_check_progress</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_check_progress</span><span class="p">(</span><span class="n">actual_max_samples</span><span class="p">)</span>
 
                     <span class="c1"># Train</span>
                     <span class="k">if</span> <span class="n">first_run</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">REGRESSION</span> <span class="ow">and</span> \
                                <span class="bp">self</span><span class="o">.</span><span class="n">_task_type</span> <span class="o">!=</span> <span class="n">constants</span><span class="o">.</span><span class="n">MULTI_TARGET_REGRESSION</span><span class="p">:</span>
+                                <span class="c1"># Accounts for the moment of training beginning</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_begin</span><span class="p">()</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
+                                <span class="c1"># Accounts the ending of training</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_end</span><span class="p">()</span>
                             <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_begin</span><span class="p">()</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_end</span><span class="p">()</span>
+
+                            <span class="c1"># Update total running time</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">update_time_measurements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
                         <span class="n">first_run</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_models</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_begin</span><span class="p">()</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">compute_training_time_end</span><span class="p">()</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">running_time_measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">update_time_measurements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_wait</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span>
                             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_samples</span><span class="p">)</span> <span class="ow">or</span>
@@ -542,21 +561,21 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">_update_metrics</span><span class="p">()</span>
                         <span class="n">update_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-                <span class="n">end_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_end_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">exc</span> <span class="ow">is</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_update_metrics</span><span class="p">()</span>
                 <span class="k">break</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaluation_summary</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluation_summary</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">restart_stream</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
 
-<div class="viewcode-block" id="EvaluatePrequential.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluatePrequential.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluatePrequential.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Partially fit all the learners on the given data.</span>
 
 <span class="sd">        Parameters</span>
@@ -586,7 +605,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="EvaluatePrequential.predict"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluatePrequential.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluatePrequential.predict"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Predicts the labels of the X samples, by calling the predict</span>
 <span class="sd">        function of all the learners.</span>
 
@@ -610,7 +629,7 @@
 
         <span class="k">return</span> <span class="n">predictions</span></div>
 
-<div class="viewcode-block" id="EvaluatePrequential.set_params"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluatePrequential.set_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluatePrequential.set_params"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.set_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; This function allows the users to change some of the evaluator&#39;s parameters,</span>
 <span class="sd">        by passing a dictionary where keys are the parameters names, and values are</span>
 <span class="sd">        the new parameters&#39; values.</span>
@@ -638,7 +657,7 @@
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;show_plot&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">show_plot</span> <span class="o">=</span> <span class="n">value</span></div>
 
-<div class="viewcode-block" id="EvaluatePrequential.get_info"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluatePrequential.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluatePrequential.get_info"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_prequential.html#skmultiflow.evaluation.EvaluatePrequential.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="p">)</span>
