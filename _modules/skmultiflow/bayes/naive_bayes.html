@@ -230,8 +230,8 @@
 <span class="sd">    </span>
 <span class="sd">    A mask for scikit-learn&#39;s Naive Bayes classifier.</span>
 <span class="sd">    </span>
-<span class="sd">    Because scikit-multiflow&#39;s framework require a few interfaces, not present </span>
-<span class="sd">    int scikit-learn, this mask allows the first to use classifiers native to </span>
+<span class="sd">    Because scikit-multiflow&#39;s framework requires a few interfaces, not present</span>
+<span class="sd">    in scikit-learn, this mask allows the first to use classifiers native to</span>
 <span class="sd">    the latter.</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -310,6 +310,8 @@
 <span class="sd">            A list containing the predicted labels for all instances in X.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">,</span> <span class="s2">&quot;classes_&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NaiveBayes.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.bayes.naive_bayes.html#skmultiflow.bayes.NaiveBayes.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
@@ -332,6 +334,8 @@
 <span class="sd">            the probability that the i-th sample of X belongs to a certain label.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">,</span> <span class="s2">&quot;classes_&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NaiveBayes.score"><a class="viewcode-back" href="../../../skmultiflow.bayes.naive_bayes.html#skmultiflow.bayes.NaiveBayes.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>

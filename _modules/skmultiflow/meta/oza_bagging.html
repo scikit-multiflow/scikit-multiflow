@@ -419,8 +419,8 @@
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        list</span>
-<span class="sd">            A list with the label prediction for all the samples in X.</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A numpy.ndarray with the label prediction for all the samples in X.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -430,7 +430,7 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
             <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="n">predictions</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OzaBagging.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.meta.oza_bagging.html#skmultiflow.meta.OzaBagging.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; predict_proba</span>
@@ -490,7 +490,7 @@
                 <span class="n">aux</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span> <span class="o">/</span> <span class="n">sum_proba</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">proba</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">aux</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">aux</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">aux</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OzaBagging.score"><a class="viewcode-back" href="../../../skmultiflow.meta.oza_bagging.html#skmultiflow.meta.OzaBagging.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
