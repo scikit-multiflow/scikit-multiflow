@@ -7,8 +7,8 @@ class NaiveBayes(StreamModel):
     
     A mask for scikit-learn's Naive Bayes classifier.
     
-    Because scikit-multiflow's framework require a few interfaces, not present 
-    int scikit-learn, this mask allows the first to use classifiers native to 
+    Because scikit-multiflow's framework requires a few interfaces, not present
+    in scikit-learn, this mask allows the first to use classifiers native to
     the latter.
     
     """
@@ -87,6 +87,8 @@ class NaiveBayes(StreamModel):
             A list containing the predicted labels for all instances in X.
         
         """
+        if not hasattr(self.classifier, "classes_"):
+            return [0]
         return self.classifier.predict(X)
 
     def predict_proba(self, X):
@@ -109,6 +111,8 @@ class NaiveBayes(StreamModel):
             the probability that the i-th sample of X belongs to a certain label.
         
         """
+        if not hasattr(self.classifier, "classes_"):
+            return [0.0]
         return self.classifier.predict_proba(X)
 
     def score(self, X, y):
