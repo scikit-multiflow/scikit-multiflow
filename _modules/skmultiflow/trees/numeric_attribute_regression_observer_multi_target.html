@@ -226,6 +226,7 @@
     <span class="n">NumericAttributeBinaryTest</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_split_suggestion</span> <span class="k">import</span> \
     <span class="n">AttributeSplitSuggestion</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <div class="viewcode-block" id="NumericAttributeRegressionObserverMultiTarget"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer_multi_target.html#skmultiflow.trees.numeric_attribute_regression_observer_multi_target.NumericAttributeRegressionObserverMultiTarget">[docs]</a><span class="k">class</span> <span class="nc">NumericAttributeRegressionObserverMultiTarget</span><span class="p">(</span><span class="n">AttributeClassObserver</span><span class="p">):</span>
@@ -245,12 +246,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NumericAttributeRegressionObserverMultiTarget.Node"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer_multi_target.html#skmultiflow.trees.numeric_attribute_regression_observer_multi_target.NumericAttributeRegressionObserverMultiTarget.Node">[docs]</a>    <span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
-
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">att_val</span> <span class="o">=</span> <span class="n">att_val</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sum_target</span> <span class="o">=</span> <span class="n">target</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum_target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sum_sq_target</span> <span class="o">=</span> <span class="n">target</span> <span class="o">*</span> <span class="n">target</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_left</span> <span class="o">=</span> <span class="kc">None</span>
@@ -264,7 +264,7 @@
 
             <span class="k">while</span> <span class="n">current</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">antecedent</span> <span class="o">=</span> <span class="n">current</span>
-                <span class="k">if</span> <span class="n">current</span><span class="o">.</span><span class="n">att_val</span> <span class="o">==</span> <span class="n">att_val</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">att_val</span> <span class="o">==</span> <span class="n">current</span><span class="o">.</span><span class="n">att_val</span><span class="p">:</span>
                     <span class="n">current</span><span class="o">.</span><span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">current</span><span class="o">.</span><span class="n">sum_target</span> <span class="o">+=</span> <span class="n">target</span>
                     <span class="n">current</span><span class="o">.</span><span class="n">sum_sq_target</span> <span class="o">+=</span> <span class="n">target</span> <span class="o">*</span> <span class="n">target</span>
@@ -310,13 +310,12 @@
 <div class="viewcode-block" id="NumericAttributeRegressionObserverMultiTarget.get_best_evaluated_split_suggestion"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_regression_observer_multi_target.html#skmultiflow.trees.numeric_attribute_regression_observer_multi_target.NumericAttributeRegressionObserverMultiTarget.get_best_evaluated_split_suggestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_evaluated_split_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">pre_split_dist</span><span class="p">,</span>
                                             <span class="n">att_idx</span><span class="p">,</span> <span class="n">binary_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span> <span class="o">=</span> <span class="n">criterion</span>
-        <span class="c1"># self._pre_split_dist = list(pre_split_dist.values())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pre_split_dist</span> <span class="o">=</span> <span class="n">pre_split_dist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_att_idx</span> <span class="o">=</span> <span class="n">att_idx</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_aux_k</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_aux_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_aux_sq_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_aux_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">pre_split_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_aux_sq_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">pre_split_dist</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
         <span class="n">candidate</span> <span class="o">=</span> <span class="n">AttributeSplitSuggestion</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">[{}],</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>
 

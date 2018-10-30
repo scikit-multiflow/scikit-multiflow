@@ -224,13 +224,14 @@
 <span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">normalize</span>
-
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.core.base_object</span> <span class="k">import</span> <span class="n">BaseObject</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.drift_detection.base_drift_detector</span> <span class="k">import</span> <span class="n">BaseDriftDetector</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.trees.hoeffding_tree</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.drift_detection.adwin</span> <span class="k">import</span> <span class="n">ADWIN</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.arf_hoeffding_tree</span> <span class="k">import</span> <span class="n">ARFHoeffdingTree</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.metrics.measure_collection</span> <span class="k">import</span> <span class="n">ClassificationMeasurements</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils.utils</span> <span class="k">import</span> <span class="n">get_dimensions</span><span class="p">,</span> <span class="n">normalize_values_in_dict</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">check_weights</span>
 
 
@@ -376,7 +377,7 @@
                  <span class="n">nominal_attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;AdaptiveRandomForest class constructor.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>          
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span> <span class="o">=</span> <span class="n">n_estimators</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_features</span> <span class="o">=</span> <span class="n">max_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disable_weighted_vote</span> <span class="o">=</span> <span class="n">disable_weighted_vote</span>
@@ -496,7 +497,7 @@
 
         <span class="k">return</span> <span class="n">normalize</span><span class="p">(</span><span class="n">y_proba_mean</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l1&#39;</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="AdaptiveRandomForest.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.adaptive_random_forests.html#skmultiflow.meta.AdaptiveRandomForest.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>        
+<div class="viewcode-block" id="AdaptiveRandomForest.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.adaptive_random_forests.html#skmultiflow.meta.AdaptiveRandomForest.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reset ARF.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_features</span> <span class="o">=</span> <span class="mi">0</span>
@@ -603,7 +604,7 @@
 
 <div class="viewcode-block" id="AdaptiveRandomForest.is_randomizable"><a class="viewcode-back" href="../../../skmultiflow.meta.adaptive_random_forests.html#skmultiflow.meta.AdaptiveRandomForest.is_randomizable">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">is_randomizable</span><span class="p">():</span>
-        <span class="k">return</span> <span class="kc">True</span>                  </div></div>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
 
 
 <div class="viewcode-block" id="ARFBaseLearner"><a class="viewcode-back" href="../../../skmultiflow.meta.adaptive_random_forests.html#skmultiflow.meta.ARFBaseLearner">[docs]</a><span class="k">class</span> <span class="nc">ARFBaseLearner</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -638,7 +639,7 @@
                  <span class="n">warning_detection_method</span><span class="p">:</span> <span class="n">BaseDriftDetector</span><span class="p">,</span>
                  <span class="n">is_background_learner</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_original</span> <span class="o">=</span> <span class="n">index_original</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">classifier</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">classifier</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">created_on</span> <span class="o">=</span> <span class="n">instances_seen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_background_learner</span> <span class="o">=</span> <span class="n">is_background_learner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_method</span> <span class="o">=</span> <span class="n">ClassificationMeasurements</span>
@@ -650,7 +651,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_drift_on</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_warning_on</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nb_drifts_detected</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nb_warnings_detected</span> <span class="o">=</span> <span class="mi">0</span>            
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_warnings_detected</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">drift_detection</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">warning_detection</span> <span class="o">=</span> <span class="kc">None</span>
@@ -675,7 +676,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">warning_detection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_learner</span><span class="o">.</span><span class="n">warning_detection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">drift_detection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_learner</span><span class="o">.</span><span class="n">drift_detection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_learner</span><span class="o">.</span><span class="n">evaluator_method</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">created_on</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_learner</span><span class="o">.</span><span class="n">created_on</span>                
+            <span class="bp">self</span><span class="o">.</span><span class="n">created_on</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_learner</span><span class="o">.</span><span class="n">created_on</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">background_learner</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>

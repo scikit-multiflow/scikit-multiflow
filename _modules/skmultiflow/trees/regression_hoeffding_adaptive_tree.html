@@ -331,20 +331,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_random_seed</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_classifier_random</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_random_seed</span><span class="p">)</span>
 
-        <span class="c1"># Override SplitNode</span>
-<div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression.calc_byte_size_including_subtree"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression.calc_byte_size_including_subtree">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size_including_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="n">byte_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">byte_size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternate_tree</span><span class="o">.</span><span class="n">calc_byte_size_including_subtree</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">byte_size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">get_length_estimation</span><span class="p">()</span>
-
-            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">byte_size</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">calc_byte_size_including_subtree</span><span class="p">()</span>
-
-            <span class="k">return</span> <span class="n">byte_size</span></div>
-
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="RegressionHAT.AdaSplitNodeForRegression.number_leaves"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaSplitNodeForRegression.number_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">number_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="n">num_of_leaves</span> <span class="o">=</span> <span class="mi">0</span>
@@ -496,12 +482,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_error_change</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_randomSeed</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_classifier_random</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_randomSeed</span><span class="p">)</span>
-
-<div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.calc_byte_size"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.calc_byte_size">[docs]</a>        <span class="k">def</span> <span class="nf">calc_byte_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="n">byte_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">byte_size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimation_error_weight</span><span class="o">.</span><span class="n">get_length_estimation</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">byte_size</span></div>
 
         <span class="c1"># Override NewNode</span>
 <div class="viewcode-block" id="RegressionHAT.AdaLearningNodeForRegression.number_leaves"><a class="viewcode-back" href="../../../skmultiflow.trees.regression_hoeffding_adaptive_tree.html#skmultiflow.trees.RegressionHAT.AdaLearningNodeForRegression.number_leaves">[docs]</a>        <span class="k">def</span> <span class="nf">number_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
