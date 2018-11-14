@@ -226,6 +226,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.visualization.base_listener</span> <span class="k">import</span> <span class="n">BaseListener</span>
 <span class="kn">from</span> <span class="nn">matplotlib.rcsetup</span> <span class="k">import</span> <span class="n">cycler</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">get_backend</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">FastBuffer</span><span class="p">,</span> <span class="n">constants</span>
 
 
@@ -353,8 +354,10 @@
 
             <span class="c1"># To mitigate re-drawing overhead for fast models use frame counter (default = 5 frames).</span>
             <span class="c1"># To avoid slow refresh rate in slow models use a time limit (default = 1 sec).</span>
-            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_cnt</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">current_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_draw_timestamp</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">01</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_cnt</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">current_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_draw_timestamp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.72</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.22</span><span class="p">)</span>  <span class="c1"># Adjust subplots to include metrics annotations</span>
+                <span class="k">if</span> <span class="n">get_backend</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;nbAgg&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>    <span class="c1"># Force draw in&#39;notebook&#39; backend</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_frame_cnt</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_last_draw_timestamp</span> <span class="o">=</span> <span class="n">current_time</span>

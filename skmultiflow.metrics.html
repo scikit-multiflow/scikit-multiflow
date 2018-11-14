@@ -857,7 +857,7 @@ can see.</li>
 <p class="rubric">Examples</p>
 <dl class="method">
 <dt id="skmultiflow.metrics.WindowClassificationMeasurements.add_result">
-<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowClassificationMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_result</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em>, <em>weight=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/metrics/measure_collection.html#WindowClassificationMeasurements.add_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.WindowClassificationMeasurements.add_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates its statistics with the results of a prediction.
 If needed it will remove samples from the observation window.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -867,6 +867,7 @@ If needed it will remove samples from the observation window.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>y_true</strong> (<em>int</em>) – The true label.</li>
 <li><strong>y_pred</strong> (<em>int</em>) – The classifier’s prediction</li>
+<li><strong>weight</strong> (<em>float</em>) – Sample’s weight</li>
 </ul>
 </td>
 </tr>
@@ -1730,7 +1731,7 @@ cells.</p>
 
 <dl class="method">
 <dt id="skmultiflow.metrics.ConfusionMatrix.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>i=None</em>, <em>j=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#ConfusionMatrix.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.ConfusionMatrix.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>i=None</em>, <em>j=None</em>, <em>weight=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#ConfusionMatrix.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.ConfusionMatrix.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Increases by one the count of occurrences in one of the ConfusionMatrix’s
 cells.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1740,6 +1741,7 @@ cells.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>i</strong> (<em>int</em>) – The index of the row to be updated.</li>
 <li><strong>j</strong> (<em>int</em>) – The index of the column to be updated.</li>
+<li><strong>weight</strong> (<em>float</em>) – Sample’s weight</li>
 </ul>
 </td>
 </tr>
@@ -2001,7 +2003,7 @@ indexed by [t, i, j] where i and j are different.</p>
 
 <dl class="method">
 <dt id="skmultiflow.metrics.MOLConfusionMatrix.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>target=None</em>, <em>true=None</em>, <em>pred=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#MOLConfusionMatrix.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.MOLConfusionMatrix.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>target=None</em>, <em>true=None</em>, <em>pred=None</em>, <em>weight=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/utils/data_structures.html#MOLConfusionMatrix.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.metrics.MOLConfusionMatrix.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Increases by one the occurrence count in one of the matrix’s positions.
 As entries arrive, it may reshape the matrix to correctly accommodate all
 possible labels.</p>
@@ -2013,6 +2015,7 @@ possible labels.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>target</strong> (<em>int</em>) – A classification task’s index.</li>
 <li><strong>true</strong> (<em>int</em>) – A true label’s index.</li>
+<li><strong>weight</strong> (<em>float</em>) – Sample’s weight</li>
 <li><strong>pred</strong> (<em>int</em>) – A prediction’s index</li>
 </ul>
 </td>

@@ -615,12 +615,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">pass</span></div>
 
-    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="ConfusionMatrix.update"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.ConfusionMatrix.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfusionMatrix.update"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.ConfusionMatrix.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update</span>
 
 <span class="sd">        Increases by one the count of occurrences in one of the ConfusionMatrix&#39;s</span>
@@ -633,6 +633,9 @@
 
 <span class="sd">        j: int</span>
 <span class="sd">            The index of the column to be updated.</span>
+
+<span class="sd">        weight: float</span>
+<span class="sd">            Sample&#39;s weight</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -651,7 +654,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">max_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
@@ -660,7 +663,7 @@
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">max_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span></div>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConfusionMatrix.remove"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.ConfusionMatrix.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; remove</span>
@@ -867,11 +870,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_targets</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="k">pass</span></div>
 
-    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">true</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">pred</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">true</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">pred</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">weight</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="MOLConfusionMatrix.update"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.MOLConfusionMatrix.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pred</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MOLConfusionMatrix.update"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.MOLConfusionMatrix.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pred</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update</span>
 
 <span class="sd">        Increases by one the occurrence count in one of the matrix&#39;s positions.</span>
@@ -888,8 +891,12 @@
 <span class="sd">        true: int</span>
 <span class="sd">            A true label&#39;s index.</span>
 
+<span class="sd">        weight: float</span>
+<span class="sd">            Sample&#39;s weight</span>
+
 <span class="sd">        pred: int</span>
 <span class="sd">            A prediction&#39;s index</span>
+
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -902,7 +909,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">target</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">target</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">true</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">true</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">true</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">true</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
                     <span class="k">return</span> <span class="kc">False</span>
@@ -910,7 +917,7 @@
                     <span class="k">return</span> <span class="kc">False</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span></div>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MOLConfusionMatrix.remove"><a class="viewcode-back" href="../../../skmultiflow.utils.data_structures.html#skmultiflow.metrics.MOLConfusionMatrix.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pred</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; remove</span>

@@ -303,12 +303,12 @@
         <span class="n">true_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">true_y</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="n">weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">+</span> <span class="n">weight</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">+=</span> <span class="n">weight</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">+</span> <span class="n">weight</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">+=</span> <span class="n">weight</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span></div>
@@ -550,7 +550,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span> <span class="o">=</span> <span class="n">FastBuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WindowClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowClassificationMeasurements.add_result"><a class="viewcode-back" href="../../../skmultiflow.metrics.measure_collection.html#skmultiflow.metrics.WindowClassificationMeasurements.add_result">[docs]</a>    <span class="k">def</span> <span class="nf">add_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Updates its statistics with the results of a prediction.</span>
 <span class="sd">        If needed it will remove samples from the observation window.</span>
 
@@ -562,7 +562,10 @@
 <span class="sd">        y_pred: int</span>
 <span class="sd">            The classifier&#39;s prediction</span>
 
+<span class="sd">        weight: float</span>
+<span class="sd">            Sample&#39;s weight</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_weights</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
         <span class="n">true_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_index</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">old_true</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_labels</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y_true</span><span class="p">]))</span>
@@ -579,19 +582,19 @@
 
         <span class="c1"># Verify if it&#39;s needed to decrease the majority_classifier count</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_majority_class</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier</span> <span class="o">+=</span> <span class="n">weight</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">majority_classifier_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="c1"># Verify if it&#39;s needed to decrease the correct_no_change</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">==</span> <span class="n">y_true</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change</span> <span class="o">+=</span> <span class="n">weight</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">correct_no_change_correction</span><span class="o">.</span><span class="n">add_element</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">true_y</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">true_y</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span></div>
@@ -830,6 +833,7 @@
 <span class="sd">            The classifier&#39;s prediction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span>
         <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1017,6 +1021,7 @@
 <span class="sd">            The classifier&#39;s prediction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span>
         <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1240,6 +1245,7 @@
 <span class="sd">            The predicted value.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y_true</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">y_pred</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_square_error</span> <span class="o">+=</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span>
@@ -1338,7 +1344,9 @@
 
 <span class="sd">        prediction: float or list or np.ndarray</span>
 <span class="sd">            The predicted value(s).</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
 
@@ -1456,7 +1464,9 @@
 
 <span class="sd">        prediction: float or list or np.ndarray</span>
 <span class="sd">            The predicted value(s).</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">last_true_label</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_prediction</span> <span class="o">=</span> <span class="n">prediction</span>
 
