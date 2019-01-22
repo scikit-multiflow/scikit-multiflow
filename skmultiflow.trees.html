@@ -1830,6 +1830,42 @@ predicted labelset.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="skmultiflow.trees.LCHT.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/lc_hoeffding_tree.html#LCHT.partial_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.LCHT.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Incrementally trains the model. Train samples (instances) are composed of X attributes and their
+corresponding targets y.</p>
+<p>Tasks performed before training:</p>
+<ul class="simple">
+<li>Verify instance weight. if not provided, uniform weights (1.0) are assumed.</li>
+<li>If more than one instance is passed, loop through X and pass instances one at a time.</li>
+<li>Update weight seen by model.</li>
+</ul>
+<p>Training tasks:</p>
+<ul class="simple">
+<li>If the tree is empty, create a leaf node as the root.</li>
+<li>If the tree is already initialized, find the corresponding leaf for the instance and update the leaf node
+statistics.</li>
+<li>If growth is allowed and the number of instances that the leaf has observed between split attempts
+exceed the grace period then attempt to split.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Instance attributes.</li>
+<li><strong>y</strong> (<em>array_like</em>) – Classes (targets) for all samples in X.</li>
+<li><strong>classes</strong> (<em>list</em><em> or </em><em>numpy.array</em>) – Contains the class values in the stream. If defined, will be used to define the length of the arrays
+returned by <cite>predict_proba</cite></li>
+<li><strong>weight</strong> (<em>float</em><em> or </em><em>array-like</em>) – Instance weight. If not provided, uniform weights are assumed.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="skmultiflow.trees.LCHT.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/trees/lc_hoeffding_tree.html#LCHT.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.trees.LCHT.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts the label of the X instance(s)</p>

@@ -270,16 +270,7 @@
 <span class="sd">    </span>
 <span class="sd">    ValueError: A ValueError is raised if the &#39;classes&#39; parameter is</span>
 <span class="sd">    not passed in the first partial_fit call.</span>
-<span class="sd">    </span>
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    To choose the correct n_estimators (a value too high or too low may</span>
-<span class="sd">    deteriorate performance) there are different techniques. One of them is </span>
-<span class="sd">    called &#39;The law of diminishing returns in ensemble construction&#39; by Bonab </span>
-<span class="sd">    and Can. This theoretical framework claims, with experimental results, that </span>
-<span class="sd">    the optimal number of classifiers in an online ensemble method is equal to </span>
-<span class="sd">    the number of labels in the classification task. Thus we chose a default </span>
-<span class="sd">    value of 2, adapted to binary classification tasks.</span>
+
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -315,7 +306,7 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_estimator</span><span class="o">=</span><span class="n">KNNAdwin</span><span class="p">(),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_estimator</span><span class="o">=</span><span class="n">KNNAdwin</span><span class="p">(),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># default values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="kc">None</span>

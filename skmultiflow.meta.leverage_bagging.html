@@ -232,7 +232,7 @@
 <span id="skmultiflow-meta-leverage-bagging-module"></span><h1>skmultiflow.meta.leverage_bagging module<a class="headerlink" href="#module-skmultiflow.meta.leverage_bagging" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.meta.leverage_bagging.LeverageBagging">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.leverage_bagging.</code><code class="descname">LeverageBagging</code><span class="sig-paren">(</span><em>base_estimator=&lt;skmultiflow.lazy.knn.KNN object&gt;</em>, <em>n_estimators=2</em>, <em>w=6</em>, <em>delta=0.002</em>, <em>enable_code_matrix=False</em>, <em>leverage_algorithm='leveraging_bag'</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.leverage_bagging.LeverageBagging" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.leverage_bagging.</code><code class="descname">LeverageBagging</code><span class="sig-paren">(</span><em>base_estimator=&lt;skmultiflow.lazy.knn.KNN object&gt;</em>, <em>n_estimators=10</em>, <em>w=6</em>, <em>delta=0.002</em>, <em>enable_code_matrix=False</em>, <em>leverage_algorithm='leveraging_bag'</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/meta/leverage_bagging.html#LeverageBagging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.leverage_bagging.LeverageBagging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.core.base.html#skmultiflow.core.base.StreamModel" title="skmultiflow.core.base.StreamModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.core.base.StreamModel</span></code></a></p>
 <p>Leverage Bagging Classifier</p>
 <p>An ensemble method, which represents an improvement from the online Oza
@@ -284,14 +284,6 @@ If None, the random number generator is the RandomState instance used by <cite>n
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>To choose the correct n_estimators (a value too high or too low may
-deteriorate performance) there are different techniques. One of them is
-called ‘The law of diminishing returns in ensemble construction’ by Bonab
-and Can. This theoretical framework claims, with experimental results, that
-the optimal number of classifiers in an online ensemble method is equal to
-the number of labels in the classification task. Thus we chose a default
-value of 2, adapted to binary classification tasks.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.meta</span> <span class="k">import</span> <span class="n">LeverageBagging</span>
