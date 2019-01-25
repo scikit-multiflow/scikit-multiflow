@@ -97,6 +97,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#option-3-development-version">Option 3. Development version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter Notebooks</a></li>
 </ul>
@@ -222,17 +225,37 @@
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p><strong>Notice:</strong> <cite>scikit-multiflow</cite> works with Python 3.4+ <strong>only</strong>.</p>
-<p>First, you need to make a copy of the <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code> project. On the <a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">project’s github page</a> you will find on the top-right side of the page a green button with the label “Clone or download”. By clicking on it you will get two options: clone with SSH, HTTPS or download a zip. If you opt to get a zip file then you have to unzip the project into the desired local destination before continuing.</p>
-<p>In a terminal, navigate to the local path of the project.</p>
 <p><code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code> requires <a class="reference external" href="www.numpy.org">numpy</a> to be already installed in your system. There are multiple ways to install <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, the easiest is using <a class="reference external" href="https://pip.pypa.io/en/stable/#">pip</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install -U numpy
 </pre></div>
 </div>
-<p>Once <cite>numpy</cite> is installed, you can proceed with the installation of <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code> and its other dependencies. Run the following command (including the dot at the end):</p>
+<div class="section" id="option-1-install-from-source-code">
+<h2>Option 1. Install from source code<a class="headerlink" href="#option-1-install-from-source-code" title="Permalink to this headline">¶</a></h2>
+<p>First, you need to make a copy of the <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code> project. On the <a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">project’s github page</a> you will find on the top-right side of the page a green button with the label “Clone or download”. By clicking on it you will get two options: clone with SSH, HTTPS or download a zip. If you opt to get a zip file then you have to unzip the project into the desired local destination before continuing.</p>
+<p>Once <cite>numpy</cite> is installed, you can proceed with the installation of <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code> and its other dependencies.</p>
+<p>In a terminal, navigate to the local path of the project and run the following command (including the dot at the end):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install -U .
 </pre></div>
 </div>
-<p>When the installation is completed (and no errors were reported), then you will be ready to use <cite>scikit-multiflow</cite>.</p>
+<p>The <cite>-U</cite> option indicates that the package will be installed only for this user.</p>
+<p>Optionally you can indicate to <cite>pip</cite> the remote location of the code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install -U git+https://github.com/scikit-multiflow/scikit-multiflow
+</pre></div>
+</div>
+<p>When the installation is completed (and no errors were reported), then you will be ready to use <cite>scikit-multiflow</cite>. The advantage of this option is that you can install the latest version of the code in github.</p>
+</div>
+<div class="section" id="option-2-install-from-pypi">
+<h2>Option 2. Install from PyPI<a class="headerlink" href="#option-2-install-from-pypi" title="Permalink to this headline">¶</a></h2>
+<p><cite>scikit-multiflow</cite> is also available in the Python Package Index (PyPI). So you can install it using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install -U scikit-multiflow
+</pre></div>
+</div>
+<p>This will install the latest (stable) release of the code.</p>
+</div>
+<div class="section" id="option-3-development-version">
+<h2>Option 3. Development version<a class="headerlink" href="#option-3-development-version" title="Permalink to this headline">¶</a></h2>
+<p>For people interested in contributing to <cite>scikit-multiflow</cite> we recommend to install the project in <em>editable</em> mode, please refer to the <a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">contributor’s page</a> for further information.</p>
+</div>
 <div class="section" id="matplotlib-backend-considerations">
 <h2>matplotlib backend considerations<a class="headerlink" href="#matplotlib-backend-considerations" title="Permalink to this headline">¶</a></h2>
 <ul>
