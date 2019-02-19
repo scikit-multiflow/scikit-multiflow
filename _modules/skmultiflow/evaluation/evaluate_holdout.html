@@ -25,25 +25,17 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -60,7 +52,7 @@
 
           
             
-            <img src="../../../_static/skmultiflow-logo.png" class="logo" />
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -167,7 +159,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">scikit-multiflow</a>
@@ -175,9 +167,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -207,12 +200,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-            
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/evaluation/evaluate_holdout.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
     
   </ul>
@@ -229,7 +216,7 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">unique</span>
 <span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.evaluation.base_evaluator</span> <span class="k">import</span> <span class="n">StreamEvaluator</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.utils</span> <span class="k">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">get_dimensions</span>
 
 
 <div class="viewcode-block" id="EvaluateHoldout"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluate_holdout.html#skmultiflow.evaluation.EvaluateHoldout">[docs]</a><span class="k">class</span> <span class="nc">EvaluateHoldout</span><span class="p">(</span><span class="n">StreamEvaluator</span><span class="p">):</span>
@@ -440,17 +427,6 @@
     <span class="k">def</span> <span class="nf">_periodic_holdout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Method to control the holdout evaluation.</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        BaseClassifier extension or list of BaseClassifier extensions</span>
-<span class="sd">            The trained classifiers.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        The classifier parameter should be an extension from the BaseClassifier. In</span>
-<span class="sd">        the future, when BaseRegressor is created, it could be an axtension from that</span>
-<span class="sd">        class as well.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_end_time</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
@@ -507,7 +483,7 @@
 
                     <span class="c1"># Test on holdout set</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_test_set</span><span class="p">:</span>
-                        <span class="n">perform_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_wait</span> <span class="o">*</span> <span class="p">(</span><span class="n">performance_sampling_cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">perform_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_wait</span> <span class="o">*</span> <span class="p">(</span><span class="n">performance_sampling_cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                                                                     <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">*</span> <span class="n">performance_sampling_cnt</span><span class="p">))</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">perform_test</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_wait</span> <span class="o">==</span> <span class="mi">0</span>
@@ -517,7 +493,7 @@
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_test_set</span><span class="p">:</span>
                             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Separating </span><span class="si">{}</span><span class="s1"> holdout samples.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">))</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">)</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">global_sample_count</span> <span class="o">+=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
                         <span class="c1"># Test</span>
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
@@ -548,6 +524,9 @@
                 <span class="k">if</span> <span class="n">exc</span> <span class="ow">is</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_update_metrics</span><span class="p">()</span>
                 <span class="k">break</span>
+
+        <span class="c1"># Flush file buffer, in case it contains data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flush_file_buffer</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluation_summary</span><span class="p">()</span>
 
@@ -663,9 +642,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -677,7 +654,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -696,6 +673,7 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'0.1.0',
+            LANGUAGE:'en',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -714,14 +692,11 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

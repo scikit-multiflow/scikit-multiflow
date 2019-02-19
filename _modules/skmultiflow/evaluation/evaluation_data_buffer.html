@@ -25,25 +25,17 @@
   
 
   
-  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.0 documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -60,7 +52,7 @@
 
           
             
-            <img src="../../../_static/skmultiflow-logo.png" class="logo" />
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -167,7 +159,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">scikit-multiflow</a>
@@ -175,9 +167,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -207,12 +200,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-            
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/evaluation/evaluation_data_buffer.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
     
   </ul>
@@ -224,7 +211,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for skmultiflow.evaluation.evaluation_data_buffer</h1><div class="highlight"><pre>
-<div class="viewcode-block" id="EvaluationDataBuffer"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluationDataBuffer">[docs]</a><span></span><span class="k">class</span> <span class="nc">EvaluationDataBuffer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluationDataBuffer"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluation_data_buffer.html#skmultiflow.evaluation.EvaluationDataBuffer">[docs]</a><span></span><span class="k">class</span> <span class="nc">EvaluationDataBuffer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Stores evaluation data at a given time. It is used to track and distribute</span>
 <span class="sd">    data across evaluators and visualizers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -258,10 +245,10 @@
             <span class="k">for</span> <span class="n">data_id</span> <span class="ow">in</span> <span class="n">data_ids</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">metric_id</span><span class="p">][</span><span class="n">data_id</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="EvaluationDataBuffer.get_data"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluationDataBuffer.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric_id</span><span class="p">,</span> <span class="n">data_id</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluationDataBuffer.get_data"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluation_data_buffer.html#skmultiflow.evaluation.EvaluationDataBuffer.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric_id</span><span class="p">,</span> <span class="n">data_id</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">metric_id</span><span class="p">][</span><span class="n">data_id</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="EvaluationDataBuffer.update_data"><a class="viewcode-back" href="../../../skmultiflow.evaluation.html#skmultiflow.evaluation.EvaluationDataBuffer.update_data">[docs]</a>    <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="p">,</span> <span class="n">metric_id</span><span class="p">,</span> <span class="n">data_id</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="EvaluationDataBuffer.update_data"><a class="viewcode-back" href="../../../skmultiflow.evaluation.evaluation_data_buffer.html#skmultiflow.evaluation.EvaluationDataBuffer.update_data">[docs]</a>    <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="p">,</span> <span class="n">metric_id</span><span class="p">,</span> <span class="n">data_id</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_id</span> <span class="o">!=</span> <span class="n">sample_id</span><span class="p">:</span>
             <span class="c1"># New sample id, clear values</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_clear_data</span><span class="p">()</span>
@@ -270,9 +257,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -284,7 +269,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -303,6 +288,7 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'0.1.0',
+            LANGUAGE:'en',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -321,14 +307,11 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
