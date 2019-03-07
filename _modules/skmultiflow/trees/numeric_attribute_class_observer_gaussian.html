@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.trees.numeric_attribute_class_observer_gaussian &mdash; scikit-multiflow 0.1.0 documentation</title>
+  <title>skmultiflow.trees.numeric_attribute_class_observer_gaussian &mdash; scikit-multiflow 0.1.3 documentation</title>
   
 
   
@@ -25,17 +25,25 @@
   
 
   
+  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.3 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
    
   <div class="wy-grid-for-nav">
@@ -52,7 +60,7 @@
 
           
             
-            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" />
           
           </a>
 
@@ -60,7 +68,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.3
               </div>
             
           
@@ -90,7 +98,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-3-development-version">Option 3. Development version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-3-install-with-docker">Option 3. Install with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-4-development-version">Option 4. Development version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
 </ul>
@@ -159,7 +168,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">scikit-multiflow</a>
@@ -167,10 +176,9 @@
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
@@ -200,6 +208,12 @@
     
       <li class="wy-breadcrumbs-aside">
         
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/numeric_attribute_class_observer_gaussian.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
     
   </ul>
@@ -224,28 +238,33 @@
 <span class="sd">    using gaussian estimators.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_min_value_observed_per_class</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_value_observed_per_class</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bin_options</span> <span class="o">=</span> <span class="mi">10</span>     <span class="c1"># The number of bins, default 10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_bin_options</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># The number of bins, default 10</span>
 
 <div class="viewcode-block" id="NumericAttributeClassObserverGaussian.observe_attribute_class"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian.observe_attribute_class">[docs]</a>    <span class="k">def</span> <span class="nf">observe_attribute_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">att_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">class_val</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">:</span>
-                <span class="n">val_dist</span> <span class="o">=</span> <span class="n">GaussianEstimator</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_dist</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_min_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">att_val</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_max_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">att_val</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">att_val</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_min_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">att_val</span>
                 <span class="k">if</span> <span class="n">att_val</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_max_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">att_val</span>
-            <span class="n">val_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">val_dist</span> <span class="o">=</span> <span class="n">GaussianEstimator</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_dist</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_min_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">att_val</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_max_value_observed_per_class</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">att_val</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_att_val_dist_per_class</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_max_value_observed_per_class</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_value_observed_per_class</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_min_value_observed_per_class</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_value_observed_per_class</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
             <span class="n">val_dist</span><span class="o">.</span><span class="n">add_observation</span><span class="p">(</span><span class="n">att_val</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NumericAttributeClassObserverGaussian.probability_of_attribute_value_given_class"><a class="viewcode-back" href="../../../skmultiflow.trees.numeric_attribute_class_observer_gaussian.html#skmultiflow.trees.numeric_attribute_class_observer_gaussian.NumericAttributeClassObserverGaussian.probability_of_attribute_value_given_class">[docs]</a>    <span class="k">def</span> <span class="nf">probability_of_attribute_value_given_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">att_val</span><span class="p">,</span> <span class="n">class_val</span><span class="p">):</span>
@@ -304,7 +323,9 @@
 </pre></div>
 
            </div>
-           
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
@@ -316,7 +337,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -334,8 +355,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.0',
-            LANGUAGE:'en',
+            VERSION:'0.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -354,11 +374,14 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

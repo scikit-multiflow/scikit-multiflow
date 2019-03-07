@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.trees.hoeffding_tree &mdash; scikit-multiflow 0.1.0 documentation</title>
+  <title>skmultiflow.trees.hoeffding_tree &mdash; scikit-multiflow 0.1.3 documentation</title>
   
 
   
@@ -25,17 +25,25 @@
   
 
   
+  
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.3 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
 
   
   <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
    
   <div class="wy-grid-for-nav">
@@ -52,7 +60,7 @@
 
           
             
-            <img src="../../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" />
           
           </a>
 
@@ -60,7 +68,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.3
               </div>
             
           
@@ -90,7 +98,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-3-development-version">Option 3. Development version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-3-install-with-docker">Option 3. Install with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-4-development-version">Option 4. Development version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
 </ul>
@@ -159,7 +168,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">scikit-multiflow</a>
@@ -167,10 +176,9 @@
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
@@ -200,6 +208,12 @@
     
       <li class="wy-breadcrumbs-aside">
         
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/trees/hoeffding_tree.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
     
   </ul>
@@ -224,7 +238,7 @@
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.attribute_split_suggestion</span> <span class="k">import</span> <span class="n">AttributeSplitSuggestion</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.gini_split_criterion</span> <span class="k">import</span> <span class="n">GiniSplitCriterion</span>
 <span class="kn">from</span> <span class="nn">skmultiflow.trees.info_gain_split_criterion</span> <span class="k">import</span> <span class="n">InfoGainSplitCriterion</span>
-<span class="kn">from</span> <span class="nn">skmultiflow.trees.utils</span> <span class="k">import</span> <span class="n">do_naive_bayes_prediction</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.bayes</span> <span class="k">import</span> <span class="n">do_naive_bayes_prediction</span>
 
 <span class="n">GINI_SPLIT</span> <span class="o">=</span> <span class="s1">&#39;gini&#39;</span>
 <span class="n">INFO_GAIN_SPLIT</span> <span class="o">=</span> <span class="s1">&#39;info_gain&#39;</span>
@@ -311,6 +325,7 @@
 <span class="sd">            The parent node&#39;s branch.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent_branch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; FoundNode class constructor. &quot;&quot;&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>
@@ -374,6 +389,17 @@
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span></div>
+
+<div class="viewcode-block" id="HoeffdingTree.Node.set_observed_class_distribution"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.set_observed_class_distribution">[docs]</a>        <span class="k">def</span> <span class="nf">set_observed_class_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observed_class_distribution</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Set the observed class distribution at the node.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            -------</span>
+<span class="sd">            dict (class_value, weight)</span>
+<span class="sd">                Class distribution at the node.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span> <span class="o">=</span> <span class="n">observed_class_distribution</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.Node.get_class_votes"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.Node.get_class_votes">[docs]</a>        <span class="k">def</span> <span class="nf">get_class_votes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ht</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; Get the votes per class for a given instance.</span>
@@ -483,6 +509,18 @@
 <div class="viewcode-block" id="HoeffdingTree.SplitNode.num_children"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.num_children">[docs]</a>        <span class="k">def</span> <span class="nf">num_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; Count the number of children for a node.&quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HoeffdingTree.SplitNode.get_split_test"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.get_split_test">[docs]</a>        <span class="k">def</span> <span class="nf">get_split_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Retrieve the split test of this node.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            InstanceConditionalTest</span>
+<span class="sd">                Split test.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_test</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.SplitNode.set_child"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.SplitNode.set_child">[docs]</a>        <span class="k">def</span> <span class="nf">set_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; Set node as child.</span>
@@ -616,6 +654,7 @@
 <span class="sd">            Initial class observations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; LearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -646,6 +685,7 @@
 <span class="sd">            Initial class observations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; InactiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -679,6 +719,7 @@
 <span class="sd">            Initial class observations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; ActiveLearningNode class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -704,6 +745,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weight</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observed_class_distribution</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -739,7 +781,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_seen_at_last_split_evaluation</span></div>
 
 <div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.set_weight_seen_at_last_split_evaluation">[docs]</a>        <span class="k">def</span> <span class="nf">set_weight_seen_at_last_split_evaluation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot; Retrieve the weight seen at last split evaluation.</span>
+            <span class="sd">&quot;&quot;&quot; Set the weight seen at last split evaluation.</span>
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
@@ -789,7 +831,29 @@
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="n">att_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">att_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">AttributeClassObserverNull</span><span class="p">()</span></div></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span><span class="p">[</span><span class="n">att_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">AttributeClassObserverNull</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.get_attribute_observers"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.get_attribute_observers">[docs]</a>        <span class="k">def</span> <span class="nf">get_attribute_observers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Get attribute observers at this node.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            dict (attribute id, attribute observer object)</span>
+<span class="sd">                Attribute observers of this node.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span></div>
+
+<div class="viewcode-block" id="HoeffdingTree.ActiveLearningNode.set_attribute_observers"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.ActiveLearningNode.set_attribute_observers">[docs]</a>        <span class="k">def</span> <span class="nf">set_attribute_observers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute_observers</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; set attribute observers.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            attribute_observers: dict (attribute id, attribute observer object)</span>
+<span class="sd">                new attribute observers.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_observers</span> <span class="o">=</span> <span class="n">attribute_observers</span></div></div>
 
 <div class="viewcode-block" id="HoeffdingTree.LearningNodeNB"><a class="viewcode-back" href="../../../skmultiflow.trees.hoeffding_tree.html#skmultiflow.trees.HoeffdingTree.LearningNodeNB">[docs]</a>    <span class="k">class</span> <span class="nc">LearningNodeNB</span><span class="p">(</span><span class="n">ActiveLearningNode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Learning node that uses Naive Bayes models.</span>
@@ -800,6 +864,7 @@
 <span class="sd">            Initial class observations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; LearningNodeNB class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -847,6 +912,7 @@
 <span class="sd">            Initial class observations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_class_observations</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; LearningNodeNBAdaptive class constructor. &quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initial_class_observations</span><span class="p">)</span>
@@ -1131,12 +1197,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">classes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
         <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])</span>
             <span class="n">row_cnt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-            <span class="n">wrow_cnt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_dimensions</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">row_cnt</span> <span class="o">!=</span> <span class="n">wrow_cnt</span><span class="p">:</span>
-                <span class="n">weight</span> <span class="o">=</span> <span class="p">[</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="n">row_cnt</span>
+            <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">row_cnt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">row_cnt</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">weight</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Inconsistent number of instances (</span><span class="si">{}</span><span class="s1">) and weights (</span><span class="si">{}</span><span class="s1">).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row_cnt</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">weight</span><span class="p">)))</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row_cnt</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_train_weight_seen_by_model</span> <span class="o">+=</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -1266,8 +1331,8 @@
 <span class="sd">            A string buffer containing the measurements of the tree.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">measurements</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Tree size (nodes)&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decision_node_cnt</span>
-                                               <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span>
-                                               <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span><span class="p">,</span>
+                                             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span>
+                                             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span><span class="p">,</span>
                         <span class="s1">&#39;Tree size (leaves)&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_node_cnt</span><span class="p">,</span>
                         <span class="s1">&#39;Active learning nodes&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_node_cnt</span><span class="p">,</span> <span class="s1">&#39;Tree depth&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_tree_depth</span><span class="p">(),</span>
                         <span class="s1">&#39;Active leaf byte size estimate&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_byte_size_estimate</span><span class="p">,</span>
@@ -1402,7 +1467,7 @@
                 <span class="n">best_suggestion</span> <span class="o">=</span> <span class="n">best_split_suggestions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">second_best_suggestion</span> <span class="o">=</span> <span class="n">best_split_suggestions</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">best_suggestion</span><span class="o">.</span><span class="n">merit</span> <span class="o">-</span> <span class="n">second_best_suggestion</span><span class="o">.</span><span class="n">merit</span> <span class="o">&gt;</span> <span class="n">hoeffding_bound</span>
-                        <span class="ow">or</span> <span class="n">hoeffding_bound</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tie_threshold</span><span class="p">):</span>    <span class="c1"># best_suggestion.merit &gt; 1e-10 and \</span>
+                        <span class="ow">or</span> <span class="n">hoeffding_bound</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tie_threshold</span><span class="p">):</span>  <span class="c1"># best_suggestion.merit &gt; 1e-10 and \</span>
                     <span class="n">should_split</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_poor_atts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_poor_atts</span><span class="p">:</span>
                     <span class="n">poor_atts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -1430,6 +1495,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">new_split</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_split_node</span><span class="p">(</span><span class="n">split_decision</span><span class="o">.</span><span class="n">split_test</span><span class="p">,</span>
                                                     <span class="n">node</span><span class="o">.</span><span class="n">get_observed_class_distribution</span><span class="p">())</span>
+
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">split_decision</span><span class="o">.</span><span class="n">num_splits</span><span class="p">()):</span>
                         <span class="n">new_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new_learning_node</span><span class="p">(</span><span class="n">split_decision</span><span class="o">.</span><span class="n">resulting_class_distribution_from_split</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
                         <span class="n">new_split</span><span class="o">.</span><span class="n">set_child</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">new_child</span><span class="p">)</span>
@@ -1458,7 +1524,7 @@
         <span class="k">while</span> <span class="n">max_active</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">learning_nodes</span><span class="p">):</span>
             <span class="n">max_active</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="p">((</span><span class="n">max_active</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_leaf_byte_size_estimate</span> <span class="o">+</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">learning_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_active</span><span class="p">)</span>
-                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_byte_size_estimate</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_byte_size_estimate_overhead_fraction</span><span class="p">)</span> \
+                 <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive_leaf_byte_size_estimate</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_byte_size_estimate_overhead_fraction</span><span class="p">)</span> \
                     <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_byte_size</span><span class="p">:</span>
                 <span class="n">max_active</span> <span class="o">-=</span> <span class="mi">1</span>
                 <span class="k">break</span>
@@ -1613,7 +1679,9 @@
 </pre></div>
 
            </div>
-           
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
@@ -1625,7 +1693,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1643,8 +1711,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.0',
-            LANGUAGE:'en',
+            VERSION:'0.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -1663,11 +1730,14 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>
