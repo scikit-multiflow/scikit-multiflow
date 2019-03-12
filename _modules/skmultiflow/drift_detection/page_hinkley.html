@@ -229,24 +229,31 @@
 
 
 <div class="viewcode-block" id="PageHinkley"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.page_hinkley.html#skmultiflow.drift_detection.PageHinkley">[docs]</a><span class="k">class</span> <span class="nc">PageHinkley</span><span class="p">(</span><span class="n">BaseDriftDetector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Page Hinkley change detector</span>
-<span class="sd">    </span>
+    <span class="sd">&quot;&quot;&quot; Page-Hinkley method for concept drift detection</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    This change detection method works by computing the observed </span>
-<span class="sd">    values and their mean up to the current moment. Page Hinkley </span>
+<span class="sd">    values and their mean up to the current moment. Page-Hinkley</span>
 <span class="sd">    won&#39;t output warning zone warnings, only change detections. </span>
-<span class="sd">    The method works by means of the Page Hinkley test. In general </span>
+<span class="sd">    The method works by means of the Page-Hinkley test [1]_. In general</span>
 <span class="sd">    lines it will detect a concept drift if the observed mean at </span>
 <span class="sd">    some instant is greater then a threshold value lambda.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] E. S. Page. 1954. Continuous Inspection Schemes.</span>
+<span class="sd">       Biometrika 41, 1/2 (1954), 100–115.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    min_num_instances: int</span>
+<span class="sd">    min_num_instances: int (default=30)</span>
 <span class="sd">        The minimum number of instances before detecting change.</span>
-<span class="sd">    delta: float</span>
+<span class="sd">    delta: float (default=0.005)</span>
 <span class="sd">        The delta factor for the Page Hinkley test.</span>
-<span class="sd">    _lambda: int</span>
-<span class="sd">        The change detection threshold.</span>
-<span class="sd">    alpha: float</span>
+<span class="sd">    threshold: int (default=50)</span>
+<span class="sd">        The change detection threshold (lambda).</span>
+<span class="sd">    alpha: float (default=1 - 0.0001)</span>
 <span class="sd">        The forgetting factor, used to weight the observed value </span>
 <span class="sd">        and the mean.</span>
 <span class="sd">    </span>
@@ -268,11 +275,11 @@
 <span class="sd">    ...         print(&#39;Change has been detected in data: &#39; + str(data_stream[i]) + &#39; - of index: &#39; + str(i))</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_num_instances</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">_lambda</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="mf">0.0001</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_num_instances</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.0001</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_instances</span> <span class="o">=</span> <span class="n">min_num_instances</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lambda</span> <span class="o">=</span> <span class="n">_lambda</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="kc">None</span>
@@ -286,7 +293,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
@@ -309,10 +316,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">+=</span> <span class="mf">1.0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">estimation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span> <span class="o">=</span> <span class="kc">False</span>
@@ -323,14 +330,24 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_instances</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lambda</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">in_concept_change</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="PageHinkley.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.page_hinkley.html#skmultiflow.drift_detection.PageHinkley.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;PageHinkley: min_num_instances: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_instances</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - delta: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - lambda: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lambda</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - alpha: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span></div></div>
+        <span class="sd">&quot;&quot;&quot; Collect information about the concept drift detector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string</span>
+<span class="sd">            Configuration for the concept drift detector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;min_num_instances: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_instances</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;delta: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;threshold (lambda): </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;delta: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;alpha: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">description</span></div></div>
 </pre></div>
 
            </div>

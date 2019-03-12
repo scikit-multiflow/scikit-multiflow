@@ -231,14 +231,12 @@
 
 
 <div class="viewcode-block" id="ADWIN"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN">[docs]</a><span class="k">class</span> <span class="nc">ADWIN</span><span class="p">(</span><span class="n">BaseDriftDetector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; ADWIN change detector for concept change detection</span>
+    <span class="sd">&quot;&quot;&quot; ADWIN method for concept drift detection</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    delta : float</span>
+<span class="sd">    delta : float (default=0.002)</span>
 <span class="sd">        The delta parameter for the ADWIN algorithm.</span>
-<span class="sd">    clock : int</span>
-<span class="sd">        The base clock value for the ADWIN algorithm.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -282,7 +280,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">MAX_BUCKETS</span> <span class="o">=</span> <span class="mi">5</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=.</span><span class="mi">002</span><span class="p">,</span> <span class="n">clock</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=.</span><span class="mi">002</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># default values affected by init_bucket()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
@@ -305,7 +303,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">detect</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_detections</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">detect_twice</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mint_clock</span> <span class="o">=</span> <span class="mi">32</span> <span class="k">if</span> <span class="n">clock</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">clock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mint_clock</span> <span class="o">=</span> <span class="mi">32</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">bln_bucket_deleted</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bucket_num_max</span> <span class="o">=</span> <span class="mi">0</span>
@@ -403,8 +401,6 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        value: int or float (a numeric value)</span>
-<span class="sd">            For most of scikit-multiflow learners these values are either </span>
-<span class="sd">            1 or 0.</span>
 <span class="sd">         </span>
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -593,13 +589,16 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">abs_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span>
 
 <div class="viewcode-block" id="ADWIN.get_info"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.ADWIN.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;ADWIN: delta: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - clock: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mint_clock</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - total: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - variance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variance</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - width: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - time: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mint_time</span><span class="p">)</span> <span class="o">+</span> \
-               <span class="s1">&#39; - n_detections: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_detections</span><span class="p">)</span></div></div>
+        <span class="sd">&quot;&quot;&quot; Collect information about the concept drift detector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string</span>
+<span class="sd">            Configuration for the concept drift detector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s1">&#39;delta: </span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">description</span></div></div>
 
 
 <div class="viewcode-block" id="List"><a class="viewcode-back" href="../../../skmultiflow.drift_detection.adwin.html#skmultiflow.drift_detection.List">[docs]</a><span class="k">class</span> <span class="nc">List</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>

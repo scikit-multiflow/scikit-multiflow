@@ -238,29 +238,38 @@
 <dt id="skmultiflow.drift_detection.eddm.EDDM">
 <em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.eddm.</code><code class="descname">EDDM</code><a class="reference internal" href="_modules/skmultiflow/drift_detection/eddm.html#EDDM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.eddm.EDDM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</span></code></a></p>
-<p>Early Drift Detection Method</p>
-<p>This detection method was created to improve the detection
-rate of gradual concept drift in DDM, while keeping a good
-performance against abrupt concept drift. The implementation
-and complete method explanation can be found in Early Drift
-Detection Method by Baena-García, Campo-Ávila, Fidalgo, Bifet,
-Gavaldà and Morales-Bueno.</p>
+<p>EDDM method for concept drift detection</p>
+<p class="rubric">Notes</p>
+<p>EDDM (Early Drift Detection Method) <a class="footnote-reference" href="#id2" id="id1">[1]</a> aims to improve the
+detection rate of gradual concept drift in DDM, while keeping
+a good performance against abrupt concept drift.</p>
 <p>This method works by keeping track of the average distance
 between two errors instead of only the error rate. For this,
-it’s necessary to keep track of the running average distance
+it is necessary to keep track of the running average distance
 and the running standard deviation, as well as the maximum
 distance and the maximum standard deviation.</p>
 <p>The algorithm works similarly to the DDM algorithm, by keeping
 track of statistics only. It works with the running average
-distance (pi’) and the running standard deviation (si’), as
-well as p’max and s’max, which are the values of pi’ and si’
-when (pi’ + 2 * si’) reaches its maximum.</p>
+distance (<cite>pi’</cite>) and the running standard deviation (<cite>si’</cite>), as
+well as <cite>p’max</cite> and <cite>s’max</cite>, which are the values of <cite>pi’</cite> and <cite>si’</cite>
+when <cite>(pi’ + 2 * si’)</cite> reaches its maximum.</p>
 <p>Like DDM, there are two threshold values that define the
 borderline between no change, warning zone, and drift detected.
-These are as follows:
-if (pi’ + 2 * si’)/(p’max + 2 * s’max) &lt; alpha -&gt; Warning zone
-if (pi’ + 2 * si’)/(p’max + 2 * s’max) &lt; beta -&gt; Change detected</p>
-<p>Alpha and beta are set to 0.95 and 0.9, respectively.</p>
+These are as follows:</p>
+<ul class="simple">
+<li>if <cite>(pi’ + 2 * si’)/(p’max + 2 * s’max)</cite> &lt; <cite>alpha</cite> -&gt; Warning zone</li>
+<li>if <cite>(pi’ + 2 * si’)/(p’max + 2 * s’max)</cite> &lt; <cite>beta</cite> -&gt; Change detected</li>
+</ul>
+<p><cite>alpha</cite> and <cite>beta</cite> are set to 0.95 and 0.9, respectively.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Early Drift Detection Method. Manuel Baena-Garcia, Jose Del Campo-Avila,
+Raúl Fidalgo, Albert Bifet, Ricard Gavalda, Rafael Morales-Bueno. In Fourth
+International Workshop on Knowledge Discovery from Data Streams, 2006.</td></tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -323,18 +332,14 @@ False otherwise.</p>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.eddm.EDDM.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/eddm.html#EDDM.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.eddm.EDDM.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum-up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dd><p>Collect information about the concept drift detector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><em>string</em></li>
-<li><em>A string with the class’ relevant information.</em></li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Configuration for the concept drift detector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
 </tr>
 </tbody>
 </table>

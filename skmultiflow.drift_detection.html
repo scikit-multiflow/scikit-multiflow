@@ -249,23 +249,19 @@
 <p>The <a class="reference internal" href="#module-skmultiflow.drift_detection" title="skmultiflow.drift_detection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a> module includes methods for Concept Drift Detection.</p>
 <dl class="class">
 <dt id="skmultiflow.drift_detection.ADWIN">
-<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">ADWIN</code><span class="sig-paren">(</span><em>delta=0.002</em>, <em>clock=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">ADWIN</code><span class="sig-paren">(</span><em>delta=0.002</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</span></code></a></p>
-<p>ADWIN change detector for concept change detection</p>
+<p>ADWIN method for concept drift detection</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>delta</strong> (<em>float</em>) – The delta parameter for the ADWIN algorithm.</li>
-<li><strong>clock</strong> (<em>int</em>) – The base clock value for the ADWIN algorithm.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delta</strong> (<em>float</em><em> (</em><em>default=0.002</em><em>)</em>) – The delta parameter for the ADWIN algorithm.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>ADWIN <a class="footnote-reference" href="#id2" id="id1">[1]</a> (ADaptive WINdowing) is an adaptive sliding window algorithm
+<p>ADWIN <a href="#id9"><span class="problematic" id="id1">[1]_</span></a> (ADaptive WINdowing) is an adaptive sliding window algorithm
 for detecting change, and keeping updated statistics about a data stream.
 ADWIN allows algorithms not adapted for drifting data, to be resistant
 to this phenomenon.</p>
@@ -280,7 +276,7 @@ and all data before that time is discarded.</p>
 <table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Bifet, Albert, and Ricard Gavalda. “Learning from time-changing data with adaptive windowing.”
+<tr><td class="label">[1]</td><td>Bifet, Albert, and Ricard Gavalda. “Learning from time-changing data with adaptive windowing.”
 In Proceedings of the 2007 SIAM international conference on data mining, pp. 443-448.
 Society for Industrial and Applied Mathematics, 2007.</td></tr>
 </tbody>
@@ -319,8 +315,7 @@ variance.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<em>int</em><em> or </em><em>float</em><em> (</em><em>a numeric value</em><em>)</em>) – For most of scikit-multiflow learners these values are either
-1 or 0.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<em>int</em><em> or </em><em>float</em><em> (</em><em>a numeric value</em><em>)</em>) – </td>
 </tr>
 </tbody>
 </table>
@@ -420,18 +415,14 @@ whether it’s inside the warning zone or not.</p>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/adwin.html#ADWIN.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum-up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dd><p>Collect information about the concept drift detector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><em>string</em></li>
-<li><em>A string with the class’ relevant information.</em></li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Configuration for the concept drift detector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
 </tr>
 </tbody>
 </table>
@@ -493,36 +484,56 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 
 <dl class="class">
 <dt id="skmultiflow.drift_detection.DDM">
-<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">DDM</code><span class="sig-paren">(</span><em>min_num_instances=30</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/ddm.html#DDM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">DDM</code><span class="sig-paren">(</span><em>min_num_instances=30</em>, <em>warning_level=2.0</em>, <em>out_control_level=3.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/ddm.html#DDM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</span></code></a></p>
-<p>Drift Detection Method</p>
-<p>This concept change detection method is based on the PAC learning model
-premise, that the learner’s error rate will decrease as the number of
-analysed samples increase, as long as the data distribution is
-stationary.</p>
+<p>DDM method for concept drift detection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>min_num_instances</strong> (<em>int</em><em> (</em><em>default=30</em><em>)</em>) – The minimum required number of analyzed samples so change can be
+detected. This is used to avoid false detections during the early
+moments of the detector, when the weight of one sample is important.</li>
+<li><strong>warning_level</strong> (<em>float</em><em> (</em><em>default=2.0</em><em>)</em>) – Warning Level</li>
+<li><strong>out_control_level</strong> (<em>float</em><em> (</em><em>default=3.0</em><em>)</em>) – Out-control Level</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>DDM (Drift Detection Method) <a href="#id10"><span class="problematic" id="id3">[1]_</span></a> is a concept change detection method
+based on the PAC learning model premise, that the learner’s error rate
+will decrease as the number of analysed samples increase, as long as the
+data distribution is stationary.</p>
 <p>If the algorithm detects an increase in the error rate, that surpasses
 a calculated threshold, either change is detected or the algorithm will
 warn the user that change may occur in the near future, which is called
 the warning zone.</p>
 <p>The detection threshold is calculated in function of two statistics,
-obtained when (pi + si) is minimum:
-pmin: The minimum recorded error rate.
-smin: The minimum recorded standard deviation.</p>
-<p>At instant i, the detection algorithm uses:
-pi: The error rate at instant i.
-si: The standard deviation at instant i.</p>
+obtained when <cite>(pi + si)</cite> is minimum:</p>
+<ul class="simple">
+<li><cite>pmin</cite>: The minimum recorded error rate.</li>
+<li><cite>smin</cite>: The minimum recorded standard deviation.</li>
+</ul>
+<p>At instant <cite>i</cite>, the detection algorithm uses:</p>
+<ul class="simple">
+<li><cite>pi</cite>: The error rate at instant i.</li>
+<li><cite>si</cite>: The standard deviation at instant i.</li>
+</ul>
 <p>The conditions for entering the warning zone and detecting change are
-as follows:
-if pi + si &gt;= pmin + 2 * smin -&gt; Warning zone
-if pi + si &gt;= pmin + 3 * smin -&gt; Change detected</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+as follows:</p>
+<ul class="simple">
+<li>if <cite>pi + si &gt;= pmin + 2 * smin</cite> -&gt; Warning zone</li>
+<li>if <cite>pi + si &gt;= pmin + 3 * smin</cite> -&gt; Change detected</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>min_num_instances</strong> (<em>int</em>) – The minimum required number of analyzed samples so change can be
-detected. This is used to avoid false detections during the early
-moments of the detector, when the weight of one sample is important.</td>
-</tr>
+<tr><td class="label">[1]</td><td>João Gama, Pedro Medas, Gladys Castillo, Pedro Pereira Rodrigues: Learning
+with Drift Detection. SBIA 2004: 286-295</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -568,18 +579,14 @@ False otherwise.</p>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.DDM.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/ddm.html#DDM.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum-up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dd><p>Collect information about the concept drift detector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><em>string</em></li>
-<li><em>A string with the class’ relevant information.</em></li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Configuration for the concept drift detector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
 </tr>
 </tbody>
 </table>
@@ -597,29 +604,38 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 <dt id="skmultiflow.drift_detection.EDDM">
 <em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">EDDM</code><a class="reference internal" href="_modules/skmultiflow/drift_detection/eddm.html#EDDM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.EDDM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</span></code></a></p>
-<p>Early Drift Detection Method</p>
-<p>This detection method was created to improve the detection
-rate of gradual concept drift in DDM, while keeping a good
-performance against abrupt concept drift. The implementation
-and complete method explanation can be found in Early Drift
-Detection Method by Baena-García, Campo-Ávila, Fidalgo, Bifet,
-Gavaldà and Morales-Bueno.</p>
+<p>EDDM method for concept drift detection</p>
+<p class="rubric">Notes</p>
+<p>EDDM (Early Drift Detection Method) <a href="#id11"><span class="problematic" id="id5">[1]_</span></a> aims to improve the
+detection rate of gradual concept drift in DDM, while keeping
+a good performance against abrupt concept drift.</p>
 <p>This method works by keeping track of the average distance
 between two errors instead of only the error rate. For this,
-it’s necessary to keep track of the running average distance
+it is necessary to keep track of the running average distance
 and the running standard deviation, as well as the maximum
 distance and the maximum standard deviation.</p>
 <p>The algorithm works similarly to the DDM algorithm, by keeping
 track of statistics only. It works with the running average
-distance (pi’) and the running standard deviation (si’), as
-well as p’max and s’max, which are the values of pi’ and si’
-when (pi’ + 2 * si’) reaches its maximum.</p>
+distance (<cite>pi’</cite>) and the running standard deviation (<cite>si’</cite>), as
+well as <cite>p’max</cite> and <cite>s’max</cite>, which are the values of <cite>pi’</cite> and <cite>si’</cite>
+when <cite>(pi’ + 2 * si’)</cite> reaches its maximum.</p>
 <p>Like DDM, there are two threshold values that define the
 borderline between no change, warning zone, and drift detected.
-These are as follows:
-if (pi’ + 2 * si’)/(p’max + 2 * s’max) &lt; alpha -&gt; Warning zone
-if (pi’ + 2 * si’)/(p’max + 2 * s’max) &lt; beta -&gt; Change detected</p>
-<p>Alpha and beta are set to 0.95 and 0.9, respectively.</p>
+These are as follows:</p>
+<ul class="simple">
+<li>if <cite>(pi’ + 2 * si’)/(p’max + 2 * s’max)</cite> &lt; <cite>alpha</cite> -&gt; Warning zone</li>
+<li>if <cite>(pi’ + 2 * si’)/(p’max + 2 * s’max)</cite> &lt; <cite>beta</cite> -&gt; Change detected</li>
+</ul>
+<p><cite>alpha</cite> and <cite>beta</cite> are set to 0.95 and 0.9, respectively.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td>Early Drift Detection Method. Manuel Baena-Garcia, Jose Del Campo-Avila,
+Raúl Fidalgo, Albert Bifet, Ricard Gavalda, Rafael Morales-Bueno. In Fourth
+International Workshop on Knowledge Discovery from Data Streams, 2006.</td></tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -682,18 +698,14 @@ False otherwise.</p>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.EDDM.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/eddm.html#EDDM.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.EDDM.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum-up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dd><p>Collect information about the concept drift detector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><em>string</em></li>
-<li><em>A string with the class’ relevant information.</em></li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Configuration for the concept drift detector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
 </tr>
 </tbody>
 </table>
@@ -709,24 +721,33 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 
 <dl class="class">
 <dt id="skmultiflow.drift_detection.PageHinkley">
-<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">PageHinkley</code><span class="sig-paren">(</span><em>min_num_instances=30</em>, <em>delta=0.005</em>, <em>_lambda=50</em>, <em>alpha=0.9999</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/page_hinkley.html#PageHinkley"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">PageHinkley</code><span class="sig-paren">(</span><em>min_num_instances=30</em>, <em>delta=0.005</em>, <em>threshold=50</em>, <em>alpha=0.9999</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/page_hinkley.html#PageHinkley"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="skmultiflow.drift_detection.base_drift_detector.html#skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector" title="skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">skmultiflow.drift_detection.base_drift_detector.BaseDriftDetector</span></code></a></p>
-<p>Page Hinkley change detector</p>
+<p>Page-Hinkley method for concept drift detection</p>
+<p class="rubric">Notes</p>
 <p>This change detection method works by computing the observed
-values and their mean up to the current moment. Page Hinkley
+values and their mean up to the current moment. Page-Hinkley
 won’t output warning zone warnings, only change detections.
-The method works by means of the Page Hinkley test. In general
+The method works by means of the Page-Hinkley test <a href="#id12"><span class="problematic" id="id7">[1]_</span></a>. In general
 lines it will detect a concept drift if the observed mean at
 some instant is greater then a threshold value lambda.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td>E. S. Page. 1954. Continuous Inspection Schemes.
+Biometrika 41, 1/2 (1954), 100–115.</td></tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>min_num_instances</strong> (<em>int</em>) – The minimum number of instances before detecting change.</li>
-<li><strong>delta</strong> (<em>float</em>) – The delta factor for the Page Hinkley test.</li>
-<li><strong>_lambda</strong> (<em>int</em>) – The change detection threshold.</li>
-<li><strong>alpha</strong> (<em>float</em>) – The forgetting factor, used to weight the observed value
+<li><strong>min_num_instances</strong> (<em>int</em><em> (</em><em>default=30</em><em>)</em>) – The minimum number of instances before detecting change.</li>
+<li><strong>delta</strong> (<em>float</em><em> (</em><em>default=0.005</em><em>)</em>) – The delta factor for the Page Hinkley test.</li>
+<li><strong>threshold</strong> (<em>int</em><em> (</em><em>default=50</em><em>)</em>) – The change detection threshold (lambda).</li>
+<li><strong>alpha</strong> (<em>float</em><em> (</em><em>default=1 - 0.0001</em><em>)</em>) – The forgetting factor, used to weight the observed value
 and the mean.</li>
 </ul>
 </td>
@@ -772,18 +793,14 @@ if concept drift was detected and False otherwise.</p>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skmultiflow/drift_detection/page_hinkley.html#PageHinkley.get_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum-up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dd><p>Collect information about the concept drift detector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><em>string</em></li>
-<li><em>A string with the class’ relevant information.</em></li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Configuration for the concept drift detector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
 </tr>
 </tbody>
 </table>
