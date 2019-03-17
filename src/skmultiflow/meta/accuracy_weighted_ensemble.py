@@ -95,7 +95,6 @@ class AccuracyWeightedEnsemble(StreamModel):
         self.base_estimator = base_estimator
 
         # the ensemble in which the classifiers are sorted by their weight
-        # self.models = sc.SortedList()
         self.models_pool = sc.SortedList()
 
         # cross validation fold
@@ -167,25 +166,15 @@ class AccuracyWeightedEnsemble(StreamModel):
                                                      n_splits=self.n_splits)
 
                 # (4) update the weights of each classifier in the ensemble, not using cross-validation
-                # for model in self.models:
-                #     model.weight = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
                 for model in self.models_pool:
                     model.weight = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
-
-                # (5) C <- top K weighted classifiers in C U { C' }
-                # if len(self.models) < self.n_estimators:
-                #     self.models.add(value=clf_new)
-                # else:
-                #     if clf_new.weight > 0 and clf_new.weight > self.models[0].weight:
-                #         self.models.pop(0)
-                #         self.models.add(value=clf_new)
 
                 # add the new model to the pool if there are slots available
                 if len(self.models_pool) < self.n_kept_estimators:
                     self.models_pool.add(clf_new)
                 else:
                     # remove the worst one
-                    if clf_new.weight > 0 and clf_new.weight > self.models[0].weight:
+                    if clf_new.weight > 0 and clf_new.weight > self.models_pool[0].weight:
                         self.models_pool.pop(0)
                         self.models_pool.add(clf_new)
 
@@ -214,26 +203,12 @@ class AccuracyWeightedEnsemble(StreamModel):
         """
 
         N, D = X.shape
-        # K = self.n_estimators if len(self.models_pool) >= self.n_estimators else len(self.models_pool)
-        ensemble = list(self.models_pool.islice(len(self.models_pool) - self.n_estimators - 1, len(self.models_pool)))
-        sum_weights = np.sum([clf.weight for clf in ensemble])  # for normalization
-
-        # if using array
-        # predictions = np.zeros(N)
-        # predictions_by_all_models = np.column_stack([model.estimator.predict(X) for model in self.models])
-        # for i, pred in enumerate(predictions_by_all_models):
-        #     avg_weighted_prediction = {}
-        #     for j, label in enumerate(pred):
-        #         if label in avg_weighted_prediction:
-        #             avg_weighted_prediction[label] += self.models[j].weight / sum_weights
-        #         else:
-        #             avg_weighted_prediction[label] = self.models[j].weight / sum_weights
-        #     max_value = max(avg_weighted_prediction.items(), key=operator.itemgetter(1))[0]
-        #     predictions[i] = max_value
-        # return predictions
+        start = max(0, len(self.models_pool) - self.n_estimators - 1)
+        end = len(self.models_pool)
+        sum_weights = np.sum([clf.weight for clf in self.models_pool.islice(start, end)])
 
         weigthed_votes = [dict()] * N
-        for model in ensemble:
+        for model in self.models_pool.islice(start, end):
             classifier = model.estimator
             prediction = classifier.predict(X)
             weight = model.weight
@@ -256,6 +231,7 @@ class AccuracyWeightedEnsemble(StreamModel):
     def reset(self):
         """ Resets all parameters to its default value"""
         self.n_estimators = 10
+        self.n_kept_estimators = 30
         self.base_estimator = DecisionTreeClassifier()
         self.models_pool = sc.SortedList()
         self.n_splits = 5
@@ -295,14 +271,12 @@ class AccuracyWeightedEnsemble(StreamModel):
         probabs = model.estimator.predict_proba(X)
         sum_error = 0
         for i, c in enumerate(y):
-            # if the label in y is unseen when training,
-            # skip it, don't include it in the error
             if c in labels:
                 index_label_c = np.where(labels == c)[0][0]  # find the index of this label c in probabs[i]
                 probab_ic = probabs[i][index_label_c]
                 sum_error += (1 - probab_ic) ** 2
             else:
-                sum_error += 1
+                sum_error += 0  # TODO penalize a label that is unseen during training?
 
         return sum_error / N
 
@@ -327,7 +301,7 @@ class AccuracyWeightedEnsemble(StreamModel):
         if n_splits is not None and type(n_splits) is int:
             # we create a copy because we don't want to "modify" an already trained model
             copy_model = cp.deepcopy(model)
-            copy_model.estimator = cp.deepcopy(self.base_estimator) # make a new estimator
+            copy_model.estimator = cp.deepcopy(self.base_estimator)  # make a new estimator
             score = 0
             kf = KFold(n_splits=self.n_splits, shuffle=True, random_state=0)
             for train_idx, test_idx in kf.split(X=self.X_chunk, y=self.y_chunk):
