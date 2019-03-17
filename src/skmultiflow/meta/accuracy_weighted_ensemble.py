@@ -1,6 +1,6 @@
 from skmultiflow.core.base import StreamModel
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, KFold
 import sortedcontainers as sc
 import numpy as np
 import copy as cp
@@ -55,7 +55,6 @@ class AccuracyWeightedEnsemble(StreamModel):
         chunk_labels: array
             The array containing the unique class labels of the data chunk this estimator
             is trained on.
-
         """
 
         def __init__(self, estimator, weight, chunk_labels):
@@ -77,11 +76,11 @@ class AccuracyWeightedEnsemble(StreamModel):
             -------
             boolean
                 true if this object's weight is less than that of the other object
-
             """
             return self.weight < other.weight
 
-    def __init__(self, n_estimators=10, base_estimator=DecisionTreeClassifier(), window_size=200, n_splits=5):
+    def __init__(self, n_estimators=10, n_kept_estimators=30,
+                 base_estimator=DecisionTreeClassifier(), window_size=200, n_splits=5):
         """ Create a new ensemble"""
 
         super().__init__()
@@ -89,11 +88,15 @@ class AccuracyWeightedEnsemble(StreamModel):
         # top K classifiers
         self.n_estimators = n_estimators
 
+        # total number of classifiers to keep
+        self.n_kept_estimators = n_kept_estimators
+
         # base learner
         self.base_estimator = base_estimator
 
         # the ensemble in which the classifiers are sorted by their weight
-        self.models = sc.SortedList()
+        # self.models = sc.SortedList()
+        self.models_pool = sc.SortedList()
 
         # cross validation fold
         self.n_splits = n_splits
@@ -164,16 +167,27 @@ class AccuracyWeightedEnsemble(StreamModel):
                                                      n_splits=self.n_splits)
 
                 # (4) update the weights of each classifier in the ensemble, not using cross-validation
-                for model in self.models:
-                    model.weights = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
+                # for model in self.models:
+                #     model.weight = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
+                for model in self.models_pool:
+                    model.weight = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
 
                 # (5) C <- top K weighted classifiers in C U { C' }
-                if len(self.models) < self.n_estimators:
-                    self.models.add(value=clf_new)
+                # if len(self.models) < self.n_estimators:
+                #     self.models.add(value=clf_new)
+                # else:
+                #     if clf_new.weight > 0 and clf_new.weight > self.models[0].weight:
+                #         self.models.pop(0)
+                #         self.models.add(value=clf_new)
+
+                # add the new model to the pool if there are slots available
+                if len(self.models_pool) < self.n_kept_estimators:
+                    self.models_pool.add(clf_new)
                 else:
+                    # remove the worst one
                     if clf_new.weight > 0 and clf_new.weight > self.models[0].weight:
-                        self.models.pop(0)
-                        self.models.add(value=clf_new)
+                        self.models_pool.pop(0)
+                        self.models_pool.add(clf_new)
 
                 # instance-based pruning only happens with Cost Sensitive extension
                 self.do_instance_pruning()
@@ -198,32 +212,39 @@ class AccuracyWeightedEnsemble(StreamModel):
         numpy.array
             Predicted labels for all instances in X.
         """
+
         N, D = X.shape
+        # K = self.n_estimators if len(self.models_pool) >= self.n_estimators else len(self.models_pool)
+        ensemble = list(self.models_pool.islice(len(self.models_pool) - self.n_estimators - 1, len(self.models_pool)))
+        sum_weights = np.sum([clf.weight for clf in ensemble])  # for normalization
 
-        # List with size X.shape[0] and each value is a dict too,
-        # Ex: [{0:0.2, 1:0.7}, {1:0.3, 2:0.5}]
-        list_label_instance = []
+        # if using array
+        # predictions = np.zeros(N)
+        # predictions_by_all_models = np.column_stack([model.estimator.predict(X) for model in self.models])
+        # for i, pred in enumerate(predictions_by_all_models):
+        #     avg_weighted_prediction = {}
+        #     for j, label in enumerate(pred):
+        #         if label in avg_weighted_prediction:
+        #             avg_weighted_prediction[label] += self.models[j].weight / sum_weights
+        #         else:
+        #             avg_weighted_prediction[label] = self.models[j].weight / sum_weights
+        #     max_value = max(avg_weighted_prediction.items(), key=operator.itemgetter(1))[0]
+        #     predictions[i] = max_value
+        # return predictions
 
-        # use sum_weights for normalization
-        sum_weights = np.sum([clf.weight for clf in self.models])
-
-        # For each classifier in self.models, predict the labels for X
-        for model in self.models:
-            clf = model.clf
-            pred = clf.predict(X)
+        weigthed_votes = [dict()] * N
+        for model in ensemble:
+            classifier = model.estimator
+            prediction = classifier.predict(X)
             weight = model.weight
-            for i, label in enumerate(pred.tolist()):
-                if i == len(list_label_instance):  # maintain the dictionary
-                    list_label_instance.append({label: weight / sum_weights})
-                else:
-                    try:
-                        list_label_instance[i][label] += weight / sum_weights
-                    except KeyError:
-                        list_label_instance[i][label] = weight / sum_weights
+            for i, label in enumerate(prediction):
+                try:
+                    weigthed_votes[i][label] += weight / sum_weights
+                except KeyError:
+                    weigthed_votes[i][label] = weight / sum_weights
 
         predict_weighted_voting = np.zeros(N)
-        for i, dic in enumerate(list_label_instance):
-            # return the key of max value in a dict
+        for i, dic in enumerate(weigthed_votes):
             max_value = max(dic.items(), key=operator.itemgetter(1))[0]
             predict_weighted_voting[i] = max_value
 
@@ -236,7 +257,7 @@ class AccuracyWeightedEnsemble(StreamModel):
         """ Resets all parameters to its default value"""
         self.n_estimators = 10
         self.base_estimator = DecisionTreeClassifier()
-        self.models = sc.SortedList()
+        self.models_pool = sc.SortedList()
         self.n_splits = 5
 
         # chunk-related information
@@ -271,7 +292,7 @@ class AccuracyWeightedEnsemble(StreamModel):
         """
         N = len(y)
         labels = model.chunk_labels
-        probabs = model.clf.predict_proba(X)
+        probabs = model.estimator.predict_proba(X)
         sum_error = 0
         for i, c in enumerate(y):
             # if the label in y is unseen when training,
@@ -306,15 +327,16 @@ class AccuracyWeightedEnsemble(StreamModel):
         if n_splits is not None and type(n_splits) is int:
             # we create a copy because we don't want to "modify" an already trained model
             copy_model = cp.deepcopy(model)
+            copy_model.estimator = cp.deepcopy(self.base_estimator) # make a new estimator
             score = 0
-            sf = StratifiedKFold(n_splits=self.n_splits, shuffle=True, random_state=0)
-            for train_idx, test_idx in sf.split(X=self.X_chunk, y=self.y_chunk):
+            kf = KFold(n_splits=self.n_splits, shuffle=True, random_state=0)
+            for train_idx, test_idx in kf.split(X=self.X_chunk, y=self.y_chunk):
                 X_train, y_train = self.X_chunk[train_idx], self.y_chunk[train_idx]
                 X_test, y_test = self.X_chunk[test_idx], self.y_chunk[test_idx]
                 try:
-                    copy_model.clf.fit(X_train, y_train)
+                    copy_model.estimator.fit(X_train, y_train)
                 except NotImplementedError:
-                    copy_model.clf.partial_fit(X_train, y_train, copy_model.chunk_labels, None)
+                    copy_model.estimator.partial_fit(X_train, y_train, copy_model.chunk_labels, None)
                 score += self.compute_score(model=copy_model, X=X_test, y=y_test) / self.n_splits
         else:
             # compute the score on the entire data chunk
