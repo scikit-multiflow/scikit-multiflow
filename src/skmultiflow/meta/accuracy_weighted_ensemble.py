@@ -57,11 +57,12 @@ class AccuracyWeightedEnsemble(StreamModel):
             is trained on.
         """
 
-        def __init__(self, estimator, weight, chunk_labels):
+        def __init__(self, estimator, weight, chunk_labels, chunk_labels_count):
             """ Creates a new weighted classifier."""
             self.estimator = estimator
             self.weight = weight
             self.chunk_labels = chunk_labels
+            self.chunk_labels_count = chunk_labels_count
 
         def __lt__(self, other):
             """ Compares an object of this class to the other by means of the weight.
@@ -145,23 +146,29 @@ class AccuracyWeightedEnsemble(StreamModel):
                 self.p = 0
 
                 # retrieve the classes and class count
-                if classes is None:
-                    classes, class_count = np.unique(self.y_chunk, return_counts=True)
-                else:
-                    _, class_count = np.unique(self.y_chunk, return_counts=True)
+                classes, class_count = np.unique(self.y_chunk, return_counts=True)
+
+                # if classes is None:
+                #     classes, class_count = np.unique(self.y_chunk, return_counts=True)
+                # else:
+                #     _, class_count = np.unique(self.y_chunk, return_counts=True)
 
                 # (1) train classifier C' from X by creating a deep copy from the base learner
-                C_new = cp.deepcopy(self.base_estimator)
-                try:
-                    C_new.fit(self.X_chunk, self.y_chunk)
-                except NotImplementedError:
-                    C_new.partial_fit(self.X_chunk, self.y_chunk, classes, weight)
+                C_new = self.train_model(model=cp.deepcopy(self.base_estimator),
+                                         X=self.X_chunk, y=self.y_chunk,
+                                         classes=classes, weight=weight)
+
+                # try:
+                #     C_new.fit(self.X_chunk, self.y_chunk)
+                # except NotImplementedError:
+                #     C_new.partial_fit(self.X_chunk, self.y_chunk, classes, weight)
 
                 # compute the baseline error rate given by a random classifier
-                baseline_score = self.compute_baseline(classes)
+                baseline_score = self.compute_baseline(self.y_chunk)
 
                 # compute the weight of C', may do cross-validation if cv is not None
-                clf_new = self.WeightedClassifier(estimator=C_new, weight=0, chunk_labels=classes)
+                clf_new = self.WeightedClassifier(estimator=C_new, weight=0,
+                                                  chunk_labels=classes, chunk_labels_count=class_count)
                 clf_new.weight = self.compute_weight(model=clf_new, baseline_score=baseline_score,
                                                      n_splits=self.n_splits)
 
@@ -171,12 +178,18 @@ class AccuracyWeightedEnsemble(StreamModel):
 
                 # add the new model to the pool if there are slots available
                 if len(self.models_pool) < self.n_kept_estimators:
-                    self.models_pool.add(clf_new)
+                    if clf_new.weight > 0.0:
+                        self.models_pool.add(clf_new)
                 else:
                     # remove the worst one
-                    if clf_new.weight > 0 and clf_new.weight > self.models_pool[0].weight:
+                    if clf_new.weight > 0.0 and clf_new.weight > self.models_pool[0].weight:
                         self.models_pool.pop(0)
                         self.models_pool.add(clf_new)
+
+                # print out the weights for testing
+                # print("\nPrinting weights...")
+                # for model in self.models_pool:
+                #     print(model.weight)
 
                 # instance-based pruning only happens with Cost Sensitive extension
                 self.do_instance_pruning()
@@ -186,6 +199,33 @@ class AccuracyWeightedEnsemble(StreamModel):
     def do_instance_pruning(self):
         # only has effect if the ensemble is applied in cost-sensitive applications
         pass
+
+    def train_model(self, model, X, y, classes=None, weight=None):
+        """ Trains a model, taking care of the fact that either fit or partial_fit is implemented
+
+        Parameters
+        ----------
+        model: StreamModel or sklearn.BaseEstimator
+            The model to train
+        X: numpy.ndarray of shape (n_samples, n_features)
+            The data chunk
+        y: numpy.array of shape (n_samples)
+            The labels in the chunk
+        classes: list or numpy.array
+            The unique classes in the data chunk
+        weight: float or array-like
+            Instance weight. If not provided, uniform weights are assumed.
+
+        Returns
+        -------
+        StreamModel or sklearn.BaseEstimator
+            The trained model
+        """
+        try:
+            model.fit(X, y)
+        except NotImplementedError:
+            model.partial_fit(X, y, classes, weight)
+        return model
 
     def predict(self, X):
         """ Predicts the labels of X in a general classification setting.
@@ -205,21 +245,23 @@ class AccuracyWeightedEnsemble(StreamModel):
         N, D = X.shape
         start = max(0, len(self.models_pool) - self.n_estimators - 1)
         end = len(self.models_pool)
-        sum_weights = np.sum([clf.weight for clf in self.models_pool.islice(start, end)])
+        if start == 0 and end == 0:  # if the ensemble has nothing yet
+            return np.zeros(N)
 
-        weigthed_votes = [dict()] * N
+        sum_weights = np.sum([clf.weight for clf in self.models_pool.islice(start, end)])
+        weighted_votes = [dict()] * N
         for model in self.models_pool.islice(start, end):
             classifier = model.estimator
             prediction = classifier.predict(X)
             weight = model.weight
             for i, label in enumerate(prediction):
                 try:
-                    weigthed_votes[i][label] += weight / sum_weights
+                    weighted_votes[i][label] += weight / sum_weights if sum_weights != 0 else weight
                 except KeyError:
-                    weigthed_votes[i][label] = weight / sum_weights
+                    weighted_votes[i][label] = weight / sum_weights if sum_weights != 0 else weight
 
         predict_weighted_voting = np.zeros(N)
-        for i, dic in enumerate(weigthed_votes):
+        for i, dic in enumerate(weighted_votes):
             max_value = max(dic.items(), key=operator.itemgetter(1))[0]
             predict_weighted_voting[i] = max_value
 
@@ -268,15 +310,23 @@ class AccuracyWeightedEnsemble(StreamModel):
         """
         N = len(y)
         labels = model.chunk_labels
-        probabs = model.estimator.predict_proba(X)
+        # probabs = model.estimator.predict_proba(X)  # !!! doesn't work correctly!!!
+
+        # get the probability of each class
+        total = np.sum(model.chunk_labels_count)
+        probabs = np.zeros((N, len(model.chunk_labels)))
+        for i in range(N):
+            for j, label in enumerate(model.chunk_labels):
+                probabs[i][j] = model.chunk_labels_count[j] / total
+
         sum_error = 0
         for i, c in enumerate(y):
             if c in labels:
                 index_label_c = np.where(labels == c)[0][0]  # find the index of this label c in probabs[i]
                 probab_ic = probabs[i][index_label_c]
-                sum_error += (1 - probab_ic) ** 2
+                sum_error += (1.0 - probab_ic) ** 2
             else:
-                sum_error += 0  # TODO penalize a label that is unseen during training?
+                sum_error += 1.0  # TODO penalize a label that is unseen during training?
 
         return sum_error / N
 
@@ -307,11 +357,16 @@ class AccuracyWeightedEnsemble(StreamModel):
             for train_idx, test_idx in kf.split(X=self.X_chunk, y=self.y_chunk):
                 X_train, y_train = self.X_chunk[train_idx], self.y_chunk[train_idx]
                 X_test, y_test = self.X_chunk[test_idx], self.y_chunk[test_idx]
-                try:
-                    copy_model.estimator.fit(X_train, y_train)
-                except NotImplementedError:
-                    copy_model.estimator.partial_fit(X_train, y_train, copy_model.chunk_labels, None)
+                copy_model.estimator = self.train_model(model=copy_model.estimator,
+                                                        X=X_train, y=y_train,
+                                                        classes=copy_model.chunk_labels,
+                                                        weight=None)
                 score += self.compute_score(model=copy_model, X=X_test, y=y_test) / self.n_splits
+
+                # try:
+                #     copy_model.estimator.fit(X_train, y_train)
+                # except NotImplementedError:
+                #     copy_model.estimator.partial_fit(X_train, y_train, copy_model.chunk_labels, None)
         else:
             # compute the score on the entire data chunk
             score = self.compute_score(X=self.X_chunk, y=self.y_chunk, model=model)
@@ -341,11 +396,14 @@ class AccuracyWeightedEnsemble(StreamModel):
 
         # compute MSE, with cross-validation or not
         score = self.compute_score_crossvalidation(model=model, n_splits=n_splits)
+        # print("score:", score)
+        # print("baseline score:", baseline_score)
+        # print("weight:", baseline_score - score)
 
         # w = MSE_r = MSE_i
-        return baseline_score - score
+        return max(0.0, baseline_score - score)
 
-    def compute_baseline(self, classes):
+    def compute_baseline(self, y):
         """ This method computes the score produced by a random classifier, served as a baseline.
         The baseline score is MSE_r in case of a normal classifier, b_r in case of a cost-sensitive one
 
@@ -361,13 +419,14 @@ class AccuracyWeightedEnsemble(StreamModel):
         """
 
         # if we assume uniform distribution
-        # L = len(np.unique(classes))
-        # MSE_r = L * (1 / L) * (1 - 1 / L) ** 2
+        L = len(np.unique(y))
+        mse_r = L * (1 / L) * (1 - 1 / L) ** 2
 
         # if we base on the class distribution of the data --> count the number of labels
-        _, class_count = np.unique(classes, return_counts=True)
-        class_dist = [class_count[i] / self.window_size for i, c in enumerate(classes)]
-        mse_r = np.sum([class_dist[i] * ((1 - class_dist[i]) ** 2) for i, c in enumerate(classes)])
+        # classes, class_count = np.unique(y, return_counts=True)
+        # class_dist = [class_count[i] / self.window_size for i, c in enumerate(classes)]
+        # mse_r = np.sum([class_dist[i] * ((1 - class_dist[i]) ** 2) for i, c in enumerate(classes)])
+
         return mse_r
 
     def get_info(self):

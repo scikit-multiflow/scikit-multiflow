@@ -3,8 +3,10 @@ from skmultiflow.data.file_stream import FileStream
 from skmultiflow.meta import AccuracyWeightedEnsemble
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
+from skmultiflow.bayes import NaiveBayes
 from skmultiflow.evaluation import EvaluatePrequential
 import numpy as np
+
 
 def test_awe():
     # prepare the stream
@@ -13,8 +15,8 @@ def test_awe():
 
     # prepare the ensemble
     classifier = AccuracyWeightedEnsemble(n_estimators=10,
-                                   base_estimator=GaussianNB(),
-                                   window_size=200, n_splits=5)
+                                          base_estimator=GaussianNB(),
+                                          window_size=200, n_splits=5)
 
     # test reset
     classifier.reset()
@@ -56,16 +58,18 @@ def test_performance_awe():
     stream.prepare_for_use()
 
     # prepare the classifier
-    classifier = AccuracyWeightedEnsemble(n_estimators=10, n_kept_estimators=30, base_estimator=GaussianNB(),
+    classifier = AccuracyWeightedEnsemble(n_estimators=10, n_kept_estimators=30,
+                                          base_estimator=NaiveBayes(),
                                           window_size=200, n_splits=5)
 
     # prepare the evaluator
-    evaluator = EvaluatePrequential(max_samples=100000, batch_size=1, pretrain_size=1000,
-                                    metrics=["accuracy", "kappa"], show_plot=False, restart_stream=True,
-                                    output_file="D:/Study/M2_DK/Data_Stream/result/result_awe_hyper.csv", n_wait=1000)
+    evaluator = EvaluatePrequential(max_samples=100000, batch_size=1, pretrain_size=0,
+                                    metrics=["accuracy", "kappa", "kappa_t"], show_plot=False, restart_stream=True,
+                                    output_file="D:/Study/M2_DK/Data_Stream/result/result.csv", n_wait=200)
 
     # run stuffs
     evaluator.evaluate(stream, classifier)
+
 
 # test_awe()
 test_performance_awe()
