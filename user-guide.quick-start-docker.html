@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Stream class &mdash; scikit-multiflow 0.1.3 documentation</title>
+  <title>Quick-Start Guide with Docker &mdash; scikit-multiflow 0.1.3 documentation</title>
   
 
   
@@ -36,9 +36,9 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="scikit-multiflow 0.1.3 documentation" href="index.html"/>
-        <link rel="up" title="Core Concepts" href="user-guide.core-concepts.html"/>
-        <link rel="next" title="Quick-Start Guide" href="user-guide.quick-start.html"/>
-        <link rel="prev" title="Architecture" href="user-guide.core-concepts.architecture.html"/> 
+        <link rel="up" title="User Guide" href="user-guide.html"/>
+        <link rel="next" title="Using Streams in scikit-multiflow" href="user-guide.streams-intro.html"/>
+        <link rel="prev" title="Quick-Start Guide" href="user-guide.quick-start.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -107,9 +107,9 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="user-guide.html">User Guide</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="user-guide.core-concepts.html">Core Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="user-guide.core-concepts.html">Core Concepts</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.architecture.html">Architecture</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Stream class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user-guide.core-concepts.stream-class.html">Stream class</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start.html">Quick-Start Guide</a><ul>
@@ -117,9 +117,9 @@
 <li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="user-guide.quick-start-docker.html">Quick-Start Guide with Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start-docker.html#run-hello-world-example">Run Hello World example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user-guide.quick-start-docker.html#write-your-code-and-run-it-in-scikit-multiflow-container">Write your code and run it in scikit-multiflow container</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quick-Start Guide with Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run-hello-world-example">Run Hello World example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#write-your-code-and-run-it-in-scikit-multiflow-container">Write your code and run it in scikit-multiflow container</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="user-guide.streams-intro.html">Using Streams in scikit-multiflow</a><ul>
@@ -210,16 +210,14 @@
         
           <li><a href="user-guide.html">User Guide</a> &raquo;</li>
         
-          <li><a href="user-guide.core-concepts.html">Core Concepts</a> &raquo;</li>
-        
-      <li>Stream class</li>
+      <li>Quick-Start Guide with Docker</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/user-guide.core-concepts.stream-class.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/user-guide.quick-start-docker.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -233,43 +231,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="stream-class">
-<h1>Stream class<a class="headerlink" href="#stream-class" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="skmultiflow.data.base_stream.html#skmultiflow.data.base_stream.Stream" title="skmultiflow.data.base_stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stream</span></code></a> class is in charge of “providing” data inside <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code>. The most important method of the <code class="docutils literal notranslate"><span class="pre">Stream</span></code> class is <code class="docutils literal notranslate"><span class="pre">next_sample(batch_size)</span></code>.</p>
-<p>The shape <span class="math notranslate nohighlight">\((n, m)\)</span> of the <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> arrays depends on the <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> and the type of learning problem.</p>
-<div class="section" id="supervised-learning">
-<h2>Supervised learning<a class="headerlink" href="#supervised-learning" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">next_sample(batch_size)</span></code> will return a features vector <span class="math notranslate nohighlight">\(X\)</span> and its corresponding target vector <span class="math notranslate nohighlight">\(Y\)</span></p>
-<p>The <strong>number of samples</strong> <span class="math notranslate nohighlight">\(n\)</span> is defined by <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> which by default is 1.</p>
-<p>The total number of features <span class="math notranslate nohighlight">\(m\)</span> in <span class="math notranslate nohighlight">\(X\)</span> is equal to the number of numerical features plus the number of categorical features: <span class="math notranslate nohighlight">\(X_m = n_{num} + n_{cat}\)</span></p>
-<p>The number of columns <span class="math notranslate nohighlight">\(m\)</span> in <span class="math notranslate nohighlight">\(Y\)</span> determines the number of targets to learn. Consider the following examples:</p>
-<ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">S_bc</span></code>: A binary classification stream<ul>
-<li>Number of targets: <code class="docutils literal notranslate"><span class="pre">Y_m</span> <span class="pre">=</span> <span class="pre">1</span></code></li>
-<li>Unique target values: <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code></li>
-</ul>
-</li>
-<li><code class="docutils literal notranslate"><span class="pre">S_mc</span></code>: A multi-class classification stream with 3 classes (0, 1, 2)<ul>
-<li>Number of targets: <code class="docutils literal notranslate"><span class="pre">Y_m</span> <span class="pre">=</span> <span class="pre">1</span></code></li>
-<li>Unique target values: <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></code></li>
-</ul>
-</li>
-<li><code class="docutils literal notranslate"><span class="pre">S_mc</span></code>: A multi-target classification stream, with 2 targets, where classes (0,1,2) correspond to the first target and classes (1, 2) to the second target.<ul>
-<li>Number of targets: <code class="docutils literal notranslate"><span class="pre">Y_m</span> <span class="pre">=</span> <span class="pre">2</span></code></li>
-<li>Unique target values: <code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">1,</span> <span class="pre">2],[1,</span> <span class="pre">2]]</span></code></li>
-</ul>
-</li>
-<li><code class="docutils literal notranslate"><span class="pre">S_r</span></code>: A regression stream<ul>
-<li>Number of targets: <code class="docutils literal notranslate"><span class="pre">Y_m</span> <span class="pre">=</span> <span class="pre">1</span></code></li>
-<li>Target values indicates the data type: <code class="docutils literal notranslate"><span class="pre">[float]</span></code></li>
-</ul>
-</li>
-<li><code class="docutils literal notranslate"><span class="pre">S_mtr</span></code>: A multi-target regression stream with 3 targets<ul>
-<li>Number of targets: <code class="docutils literal notranslate"><span class="pre">Y_m</span> <span class="pre">=</span> <span class="pre">3</span></code></li>
-<li>Target values indicates the data type: <code class="docutils literal notranslate"><span class="pre">[float,</span> <span class="pre">float,</span> <span class="pre">float]</span></code></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="quick-start-guide-with-docker">
+<h1>Quick-Start Guide with Docker<a class="headerlink" href="#quick-start-guide-with-docker" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="run-hello-world-example">
+<h2>Run Hello World example<a class="headerlink" href="#run-hello-world-example" title="Permalink to this headline">¶</a></h2>
+<p>When you start scikit-multiflow container with jupyter, you will find a <code class="docutils literal notranslate"><span class="pre">Quick</span> <span class="pre">Start</span></code> jupyter notebook.</p>
+<p>For the scikit-multiflow container with python. There are two Hello World examples.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">hoeffding_tree.py</span></code>, data is generated from <code class="docutils literal notranslate"><span class="pre">WaveformGenerator</span></code>.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">ht_from_file.py</span></code>, data is generated from a csv file <code class="docutils literal notranslate"><span class="pre">elec.csv</span></code>.</p>
+<p>Start scikit-multiflow Docker container</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -it skmultiflow/scikit-multiflow:latest
+</pre></div>
+</div>
+<p>Run the Hoeffding Tree example :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python hoeffding_tree.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="write-your-code-and-run-it-in-scikit-multiflow-container">
+<h2>Write your code and run it in scikit-multiflow container<a class="headerlink" href="#write-your-code-and-run-it-in-scikit-multiflow-container" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to write and edit your code on your local machine and run it in the container.</p>
+<p>First, create a work directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir workdir
+</pre></div>
+</div>
+<p>Second, you get the path of that directory. This will be the value of <code class="docutils literal notranslate"><span class="pre">hostDir</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> workdir <span class="o">&amp;&amp;</span> <span class="nb">pwd</span>
+</pre></div>
+</div>
+<p>In this example, let’s assume that this command returns the following path : <code class="docutils literal notranslate"><span class="pre">/tmp/workdir</span></code></p>
+<p>Next, you mount the directory with the following command and start scikit-multiflow container</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -it -v /tmp/workdir:/app --shm-size 2G skmultiflow/scikit-multiflow:latest
+</pre></div>
+</div>
+<p>Let’s download some example to <code class="docutils literal notranslate"><span class="pre">workdir</span></code> directory. You can also write your own code.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wget https://raw.githubusercontent.com/scikit-multiflow/scikit-multiflow/master/docker/examples/src/hoeffding_tree.py
+</pre></div>
+</div>
+<p>Now, your files are synchronized with the container. just run it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python hoeffding_tree.py
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -283,10 +285,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="user-guide.quick-start.html" class="btn btn-neutral float-right" title="Quick-Start Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="user-guide.streams-intro.html" class="btn btn-neutral float-right" title="Using Streams in scikit-multiflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="user-guide.core-concepts.architecture.html" class="btn btn-neutral" title="Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="user-guide.quick-start.html" class="btn btn-neutral" title="Quick-Start Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
