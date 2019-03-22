@@ -13,7 +13,9 @@ from .multi_output_learner import MultiOutputLearner
 from .learn_pp import LearnPP
 from .learn_nse import LearnNSE
 from .accuracy_weighted_ensemble import AccuracyWeightedEnsemble
+from .accuracy_weighted_ensemble_moa import AccuracyWeightedEnsembleMOA
+
 
 __all__ = ["AdaptiveRandomForest", "BatchIncremental", "LeverageBagging", "OzaBagging", "OzaBaggingAdwin",
            "ClassifierChain", "RegressorChain", "MultiOutputLearner", "LearnPP", "LearnNSE",
-           "AccuracyWeightedEnsemble"]
+           "AccuracyWeightedEnsemble", "AccuracyWeightedEnsembleMOA"]

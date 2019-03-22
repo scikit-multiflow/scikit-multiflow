@@ -4,7 +4,8 @@ from sklearn.model_selection import StratifiedKFold, KFold
 import sortedcontainers as sc
 import numpy as np
 import copy as cp
-import operator
+import operator as op
+import time
 
 
 class AccuracyWeightedEnsemble(StreamModel):
@@ -55,6 +56,8 @@ class AccuracyWeightedEnsemble(StreamModel):
         chunk_labels: array
             The array containing the unique class labels of the data chunk this estimator
             is trained on.
+        chunk_labels_count: array
+            The array containing the count of each unique class in the data chunk
         """
 
         def __init__(self, estimator, weight, chunk_labels, chunk_labels_count):
@@ -96,7 +99,8 @@ class AccuracyWeightedEnsemble(StreamModel):
         self.base_estimator = base_estimator
 
         # the ensemble in which the classifiers are sorted by their weight
-        self.models_pool = sc.SortedList()
+        # self.models_pool = sc.SortedList()
+        self.models_pool = []
 
         # cross validation fold
         self.n_splits = n_splits
@@ -148,25 +152,15 @@ class AccuracyWeightedEnsemble(StreamModel):
                 # retrieve the classes and class count
                 classes, class_count = np.unique(self.y_chunk, return_counts=True)
 
-                # if classes is None:
-                #     classes, class_count = np.unique(self.y_chunk, return_counts=True)
-                # else:
-                #     _, class_count = np.unique(self.y_chunk, return_counts=True)
-
-                # (1) train classifier C' from X by creating a deep copy from the base learner
+                # (1) train classifier C' from X
                 C_new = self.train_model(model=cp.deepcopy(self.base_estimator),
                                          X=self.X_chunk, y=self.y_chunk,
                                          classes=classes, weight=weight)
 
-                # try:
-                #     C_new.fit(self.X_chunk, self.y_chunk)
-                # except NotImplementedError:
-                #     C_new.partial_fit(self.X_chunk, self.y_chunk, classes, weight)
-
                 # compute the baseline error rate given by a random classifier
                 baseline_score = self.compute_baseline(self.y_chunk)
 
-                # compute the weight of C', may do cross-validation if cv is not None
+                # compute the weight of C' with cross-validation
                 clf_new = self.WeightedClassifier(estimator=C_new, weight=0,
                                                   chunk_labels=classes, chunk_labels_count=class_count)
                 clf_new.weight = self.compute_weight(model=clf_new, baseline_score=baseline_score,
@@ -176,20 +170,15 @@ class AccuracyWeightedEnsemble(StreamModel):
                 for model in self.models_pool:
                     model.weight = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
 
-                # add the new model to the pool if there are slots available
-                if len(self.models_pool) < self.n_kept_estimators:
-                    if clf_new.weight > 0.0:
-                        self.models_pool.add(clf_new)
-                else:
-                    # remove the worst one
-                    if clf_new.weight > 0.0 and clf_new.weight > self.models_pool[0].weight:
-                        self.models_pool.pop(0)
-                        self.models_pool.add(clf_new)
-
-                # print out the weights for testing
-                # print("\nPrinting weights...")
-                # for model in self.models_pool:
-                #     print(model.weight)
+                # add the new model to the pool if there are slots available, else remove the worst one
+                if clf_new.weight > 0:
+                    if len(self.models_pool) < self.n_kept_estimators:
+                        self.models_pool.append(clf_new)
+                    else:
+                        worst_model = min(self.models_pool, key=op.attrgetter("weight"))
+                        if clf_new.weight > worst_model.weight:
+                            self.models_pool.remove(worst_model)
+                            self.models_pool.append(clf_new)
 
                 # instance-based pruning only happens with Cost Sensitive extension
                 self.do_instance_pruning()
@@ -243,26 +232,41 @@ class AccuracyWeightedEnsemble(StreamModel):
         """
 
         N, D = X.shape
-        start = max(0, len(self.models_pool) - self.n_estimators - 1)
-        end = len(self.models_pool)
-        if start == 0 and end == 0:  # if the ensemble has nothing yet
+
+        if len(self.models_pool) == 0:
             return np.zeros(N)
 
-        sum_weights = np.sum([clf.weight for clf in self.models_pool.islice(start, end)])
+        # get top K classifiers
+        end = self.n_estimators if len(self.models_pool) > self.n_estimators else len(self.models_pool)
+        ensemble = sorted(self.models_pool, key=lambda clf: clf.weight, reverse=True)[0:end]
+
+        # print("model size:", len(self.models_pool))
+        # print("ensemble size:", len(ensemble))
+        # # print out to test
+        # print("Model pools=====")
+        # for model in self.models_pool:
+        #     print(model.weight, sep=" ")
+        # print("\nEnsemble=====")
+        # for model in ensemble:
+        #     print(model.weight, sep=" ")
+
+        sum_weights = np.sum([abs(clf.weight) for clf in ensemble])
+        if sum_weights == 0:
+            sum_weights = 1  # safety check: if sum_weights = 0, do as if sum_weights = 1
+
         weighted_votes = [dict()] * N
-        for model in self.models_pool.islice(start, end):
+        for model in ensemble:
             classifier = model.estimator
             prediction = classifier.predict(X)
-            weight = model.weight
             for i, label in enumerate(prediction):
-                try:
-                    weighted_votes[i][label] += weight / sum_weights if sum_weights != 0 else weight
-                except KeyError:
-                    weighted_votes[i][label] = weight / sum_weights if sum_weights != 0 else weight
+                if label in weighted_votes[i]:
+                    weighted_votes[i][label] += model.weight / sum_weights
+                else:
+                    weighted_votes[i][label] = model.weight / sum_weights
 
         predict_weighted_voting = np.zeros(N)
         for i, dic in enumerate(weighted_votes):
-            max_value = max(dic.items(), key=operator.itemgetter(1))[0]
+            max_value = max(dic.items(), key=op.itemgetter(1))[0]
             predict_weighted_voting[i] = max_value
 
         return predict_weighted_voting
@@ -310,14 +314,20 @@ class AccuracyWeightedEnsemble(StreamModel):
         """
         N = len(y)
         labels = model.chunk_labels
-        # probabs = model.estimator.predict_proba(X)  # !!! doesn't work correctly!!!
 
-        # get the probability of each class
-        total = np.sum(model.chunk_labels_count)
-        probabs = np.zeros((N, len(model.chunk_labels)))
-        for i in range(N):
-            for j, label in enumerate(model.chunk_labels):
-                probabs[i][j] = model.chunk_labels_count[j] / total
+        # TODO The probabilities don't sum to 1 ???
+        probabs = model.estimator.predict_proba(X)
+        print(N)
+        print("\n", probabs)
+        time.sleep(2)
+
+        # manually get the probability of each class
+        # but then every instance gets the same class probability...
+        # total = np.sum(model.chunk_labels_count)
+        # probabs = np.zeros((N, len(model.chunk_labels)))
+        # for i in range(N):
+        #     for j, label in enumerate(model.chunk_labels):
+        #         probabs[i][j] = model.chunk_labels_count[j] / total
 
         sum_error = 0
         for i, c in enumerate(y):
@@ -326,7 +336,7 @@ class AccuracyWeightedEnsemble(StreamModel):
                 probab_ic = probabs[i][index_label_c]
                 sum_error += (1.0 - probab_ic) ** 2
             else:
-                sum_error += 1.0  # TODO penalize a label that is unseen during training?
+                sum_error += 1.0
 
         return sum_error / N
 
@@ -351,7 +361,7 @@ class AccuracyWeightedEnsemble(StreamModel):
         if n_splits is not None and type(n_splits) is int:
             # we create a copy because we don't want to "modify" an already trained model
             copy_model = cp.deepcopy(model)
-            copy_model.estimator = cp.deepcopy(self.base_estimator)  # make a new estimator
+            copy_model.estimator.reset()
             score = 0
             kf = KFold(n_splits=self.n_splits, shuffle=True, random_state=0)
             for train_idx, test_idx in kf.split(X=self.X_chunk, y=self.y_chunk):
@@ -362,11 +372,6 @@ class AccuracyWeightedEnsemble(StreamModel):
                                                         classes=copy_model.chunk_labels,
                                                         weight=None)
                 score += self.compute_score(model=copy_model, X=X_test, y=y_test) / self.n_splits
-
-                # try:
-                #     copy_model.estimator.fit(X_train, y_train)
-                # except NotImplementedError:
-                #     copy_model.estimator.partial_fit(X_train, y_train, copy_model.chunk_labels, None)
         else:
             # compute the score on the entire data chunk
             score = self.compute_score(X=self.X_chunk, y=self.y_chunk, model=model)
@@ -401,7 +406,8 @@ class AccuracyWeightedEnsemble(StreamModel):
         # print("weight:", baseline_score - score)
 
         # w = MSE_r = MSE_i
-        return max(0.0, baseline_score - score)
+        # return max(0.0, baseline_score - score)
+        return baseline_score - score
 
     def compute_baseline(self, y):
         """ This method computes the score produced by a random classifier, served as a baseline.
@@ -409,8 +415,8 @@ class AccuracyWeightedEnsemble(StreamModel):
 
         Parameters
         ----------
-        classes: numpy.array
-            The unique class labels
+        y: numpy.array
+            The labels of the chunk
 
         Returns
         -------
@@ -419,13 +425,13 @@ class AccuracyWeightedEnsemble(StreamModel):
         """
 
         # if we assume uniform distribution
-        L = len(np.unique(y))
-        mse_r = L * (1 / L) * (1 - 1 / L) ** 2
+        # L = len(np.unique(y))
+        # mse_r = L * (1 / L) * (1 - 1 / L) ** 2
 
         # if we base on the class distribution of the data --> count the number of labels
-        # classes, class_count = np.unique(y, return_counts=True)
-        # class_dist = [class_count[i] / self.window_size for i, c in enumerate(classes)]
-        # mse_r = np.sum([class_dist[i] * ((1 - class_dist[i]) ** 2) for i, c in enumerate(classes)])
+        classes, class_count = np.unique(y, return_counts=True)
+        class_dist = [class_count[i] / len(y) for i, c in enumerate(classes)]
+        mse_r = np.sum([class_dist[i] * ((1 - class_dist[i]) ** 2) for i, c in enumerate(classes)])
 
         return mse_r
 
