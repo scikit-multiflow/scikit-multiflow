@@ -53,19 +53,16 @@ class AccuracyWeightedEnsemble(StreamModel):
             This estimator must already been trained on a data chunk.
         weight: float
             The weight associated to this estimator
-        chunk_labels: array
+        seen_labels: array
             The array containing the unique class labels of the data chunk this estimator
             is trained on.
-        chunk_labels_count: array
-            The array containing the count of each unique class in the data chunk
         """
 
-        def __init__(self, estimator, weight, chunk_labels, chunk_labels_count):
+        def __init__(self, estimator, weight, seen_labels):
             """ Creates a new weighted classifier."""
             self.estimator = estimator
             self.weight = weight
-            self.chunk_labels = chunk_labels
-            self.chunk_labels_count = chunk_labels_count
+            self.seen_labels = seen_labels
 
         def __lt__(self, other):
             """ Compares an object of this class to the other by means of the weight.
@@ -161,8 +158,7 @@ class AccuracyWeightedEnsemble(StreamModel):
                 baseline_score = self.compute_baseline(self.y_chunk)
 
                 # compute the weight of C' with cross-validation
-                clf_new = self.WeightedClassifier(estimator=C_new, weight=0,
-                                                  chunk_labels=classes, chunk_labels_count=class_count)
+                clf_new = self.WeightedClassifier(estimator=C_new, weight=-1.0, seen_labels=classes)
                 clf_new.weight = self.compute_weight(model=clf_new, baseline_score=baseline_score,
                                                      n_splits=self.n_splits)
 
@@ -171,14 +167,13 @@ class AccuracyWeightedEnsemble(StreamModel):
                     model.weight = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
 
                 # add the new model to the pool if there are slots available, else remove the worst one
-                if clf_new.weight > 0:
-                    if len(self.models_pool) < self.n_kept_estimators:
+                if len(self.models_pool) < self.n_kept_estimators:
+                    self.models_pool.append(clf_new)
+                else:
+                    worst_model = min(self.models_pool, key=op.attrgetter("weight"))
+                    if clf_new.weight > worst_model.weight:
+                        self.models_pool.remove(worst_model)
                         self.models_pool.append(clf_new)
-                    else:
-                        worst_model = min(self.models_pool, key=op.attrgetter("weight"))
-                        if clf_new.weight > worst_model.weight:
-                            self.models_pool.remove(worst_model)
-                            self.models_pool.append(clf_new)
 
                 # instance-based pruning only happens with Cost Sensitive extension
                 self.do_instance_pruning()
@@ -313,13 +308,8 @@ class AccuracyWeightedEnsemble(StreamModel):
             The mean square error of the model (MSE_i)
         """
         N = len(y)
-        labels = model.chunk_labels
-
-        # TODO The probabilities don't sum to 1 ???
+        labels = model.seen_labels
         probabs = model.estimator.predict_proba(X)
-        print(N)
-        print("\n", probabs)
-        time.sleep(2)
 
         # manually get the probability of each class
         # but then every instance gets the same class probability...
@@ -369,7 +359,7 @@ class AccuracyWeightedEnsemble(StreamModel):
                 X_test, y_test = self.X_chunk[test_idx], self.y_chunk[test_idx]
                 copy_model.estimator = self.train_model(model=copy_model.estimator,
                                                         X=X_train, y=y_train,
-                                                        classes=copy_model.chunk_labels,
+                                                        classes=copy_model.seen_labels,
                                                         weight=None)
                 score += self.compute_score(model=copy_model, X=X_test, y=y_test) / self.n_splits
         else:
@@ -406,8 +396,8 @@ class AccuracyWeightedEnsemble(StreamModel):
         # print("weight:", baseline_score - score)
 
         # w = MSE_r = MSE_i
-        # return max(0.0, baseline_score - score)
-        return baseline_score - score
+        return max(0.0, baseline_score - score)
+        # return baseline_score - score
 
     def compute_baseline(self, y):
         """ This method computes the score produced by a random classifier, served as a baseline.

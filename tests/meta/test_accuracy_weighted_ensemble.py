@@ -48,64 +48,34 @@ def test_awe():
     acc = corrects / sample_count
     print(corrects, sample_count, acc)
 
-def test_performance_awe():
+
+def test_performance_awe(dataset, base_estimator=NaiveBayes(), n_wait=1000):
     # prepare the stream
-    # stream = HyperplaneGenerator(random_state=0,
-    #                              n_features=10,
-    #                              n_drift_features=2,
-    #                              mag_change=0.1,
-    #                              noise_percentage=0.05,
-    #                              sigma_percentage=0.1)
-
-    # stream = FileStream(filepath="agr_a_10k.arff.csv")
-    # stream = FileStream(filepath="hyperplaneData.csv")
-    stream = FileStream(filepath="elec.arff.csv")
-    # stream = ConceptDriftStream()
-
+    stream = FileStream(filepath=dataset)
     stream.prepare_for_use()
 
     # prepare the classifier
     classifier = AccuracyWeightedEnsemble(n_estimators=10, n_kept_estimators=30,
-                                          base_estimator=NaiveBayes(),
+                                          base_estimator=base_estimator,
                                           window_size=200, n_splits=5)
 
     # prepare the evaluator
-    evaluator = EvaluatePrequential(max_samples=10000, batch_size=1, pretrain_size=0,
-                                    metrics=["accuracy", "kappa", "kappa_t"], show_plot=False, restart_stream=True,
-                                    output_file="D:/Study/M2_DK/Data_Stream/result/result.csv", n_wait=200)
-
-    # run stuffs
-    evaluator.evaluate(stream, classifier)
-
-def test_performance_moa():
-    # prepare the stream
-    # stream = HyperplaneGenerator(random_state=0,
-    #                              n_features=10,
-    #                              n_drift_features=2,
-    #                              mag_change=0.1,
-    #                              noise_percentage=0.05,
-    #                              sigma_percentage=0.1)
-
-    # stream = FileStream(filepath="agr_a_10k.arff.csv")
-    # stream = FileStream(filepath="hyperplaneData.csv")
-    stream = FileStream(filepath="elec.arff.csv")
-    # stream = ConceptDriftStream()
-
-    stream.prepare_for_use()
-
-    # prepare the classifier
-    classifier = AccuracyWeightedEnsembleMOA(n_estimators=10, n_stored_estimators=30,
-                                             window_size=200, n_splits=5, base_estimator=NaiveBayes(),
-                                             random_state=1)
-
-    # prepare the evaluator
     evaluator = EvaluatePrequential(max_samples=100000, batch_size=1, pretrain_size=0,
-                                    metrics=["accuracy", "kappa", "kappa_t"], show_plot=False, restart_stream=True,
-                                    output_file="D:/Study/M2_DK/Data_Stream/result/result.csv", n_wait=200)
+                                    metrics=["accuracy", "kappa"], show_plot=False, restart_stream=True,
+                                    output_file="D:/Study/M2_DK/Data_Stream/result/result.csv", n_wait=n_wait)
 
     # run stuffs
     evaluator.evaluate(stream, classifier)
+    print("\nDATASET:", dataset)
+    print("BASE LEARNER:", base_estimator.get_info())
+    print("N_WAIT:", n_wait)
 
-# test_awe()
-test_performance_awe()
-# test_performance_moa()
+
+# test_performance_awe(dataset="agr_a_10k.arff.csv", n_wait=500)
+# test_performance_awe(dataset="elec.arff.csv", n_wait=500)
+# test_performance_awe(dataset="hyperplaneData.csv", n_wait=1000)
+# test_performance_awe(dataset="conceptDriftData100K.csv", n_wait=1000)
+# test_performance_awe(dataset="covtype.csv", n_wait=1000)
+# test_performance_awe(dataset="randomTree100K.arff.csv", n_wait=1000)
+# test_performance_awe(dataset="elec.arff.csv", base_estimator=NaiveBayes(), n_wait=1000)
+test_performance_awe(dataset="elec.arff.csv", base_estimator=HoeffdingTree(), n_wait=1000)
