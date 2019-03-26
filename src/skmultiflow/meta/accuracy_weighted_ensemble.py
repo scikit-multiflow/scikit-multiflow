@@ -1,11 +1,9 @@
 from skmultiflow.core.base import StreamModel
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import StratifiedKFold, KFold
-import sortedcontainers as sc
+from skmultiflow.bayes.naive_bayes import NaiveBayes
+from sklearn.model_selection import KFold
 import numpy as np
 import copy as cp
 import operator as op
-import time
 
 
 class AccuracyWeightedEnsemble(StreamModel):
@@ -81,7 +79,7 @@ class AccuracyWeightedEnsemble(StreamModel):
             return self.weight < other.weight
 
     def __init__(self, n_estimators=10, n_kept_estimators=30,
-                 base_estimator=DecisionTreeClassifier(), window_size=200, n_splits=5):
+                 base_estimator=NaiveBayes(), window_size=200, n_splits=5):
         """ Create a new ensemble"""
 
         super().__init__()
@@ -96,7 +94,6 @@ class AccuracyWeightedEnsemble(StreamModel):
         self.base_estimator = base_estimator
 
         # the ensemble in which the classifiers are sorted by their weight
-        # self.models_pool = sc.SortedList()
         self.models_pool = []
 
         # cross validation fold
@@ -235,16 +232,6 @@ class AccuracyWeightedEnsemble(StreamModel):
         end = self.n_estimators if len(self.models_pool) > self.n_estimators else len(self.models_pool)
         ensemble = sorted(self.models_pool, key=lambda clf: clf.weight, reverse=True)[0:end]
 
-        # print("model size:", len(self.models_pool))
-        # print("ensemble size:", len(ensemble))
-        # # print out to test
-        # print("Model pools=====")
-        # for model in self.models_pool:
-        #     print(model.weight, sep=" ")
-        # print("\nEnsemble=====")
-        # for model in ensemble:
-        #     print(model.weight, sep=" ")
-
         sum_weights = np.sum([abs(clf.weight) for clf in ensemble])
         if sum_weights == 0:
             sum_weights = 1  # safety check: if sum_weights = 0, do as if sum_weights = 1
@@ -271,14 +258,7 @@ class AccuracyWeightedEnsemble(StreamModel):
 
     def reset(self):
         """ Resets all parameters to its default value"""
-        self.n_estimators = 10
-        self.n_kept_estimators = 30
-        self.base_estimator = DecisionTreeClassifier()
-        self.models_pool = sc.SortedList()
-        self.n_splits = 5
-
-        # chunk-related information
-        self.window_size = 200
+        self.models_pool = []
         self.p = -1
         self.X_chunk = None
         self.y_chunk = None
@@ -310,14 +290,6 @@ class AccuracyWeightedEnsemble(StreamModel):
         N = len(y)
         labels = model.seen_labels
         probabs = model.estimator.predict_proba(X)
-
-        # manually get the probability of each class
-        # but then every instance gets the same class probability...
-        # total = np.sum(model.chunk_labels_count)
-        # probabs = np.zeros((N, len(model.chunk_labels)))
-        # for i in range(N):
-        #     for j, label in enumerate(model.chunk_labels):
-        #         probabs[i][j] = model.chunk_labels_count[j] / total
 
         sum_error = 0
         for i, c in enumerate(y):
@@ -351,7 +323,8 @@ class AccuracyWeightedEnsemble(StreamModel):
         if n_splits is not None and type(n_splits) is int:
             # we create a copy because we don't want to "modify" an already trained model
             copy_model = cp.deepcopy(model)
-            copy_model.estimator.reset()
+            copy_model.estimator = cp.deepcopy(self.base_estimator)
+            # copy_model.estimator.reset()
             score = 0
             kf = KFold(n_splits=self.n_splits, shuffle=True, random_state=0)
             for train_idx, test_idx in kf.split(X=self.X_chunk, y=self.y_chunk):
@@ -391,13 +364,9 @@ class AccuracyWeightedEnsemble(StreamModel):
 
         # compute MSE, with cross-validation or not
         score = self.compute_score_crossvalidation(model=model, n_splits=n_splits)
-        # print("score:", score)
-        # print("baseline score:", baseline_score)
-        # print("weight:", baseline_score - score)
 
         # w = MSE_r = MSE_i
         return max(0.0, baseline_score - score)
-        # return baseline_score - score
 
     def compute_baseline(self, y):
         """ This method computes the score produced by a random classifier, served as a baseline.
@@ -436,7 +405,8 @@ class AccuracyWeightedEnsemble(StreamModel):
 
         description = type(self).__name__ + ': '
         description += "n_estimators: {} - ".format(self.n_estimators)
-        description += "base_estimator: {} - ".format(type(self.base_estimator))
+        description += "n_kept_estimators: {} - ".format(self.n_kept_estimators)
+        description += "base_estimator: {} - ".format(self.base_estimator.get_info())
         description += "window_size: {} - ".format(self.window_size)
-        description += "n_splits: {} - ".format(self.n_splits)
+        description += "n_splits: {}".format(self.n_splits)
         return description
