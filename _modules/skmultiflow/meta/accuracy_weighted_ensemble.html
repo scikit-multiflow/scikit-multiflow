@@ -1,0 +1,713 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.meta.accuracy_weighted_ensemble &mdash; scikit-multiflow 0.1.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.4 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="../../../_static/skmultiflow-logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-3-install-with-docker">Option 3. Install with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#option-4-development-version">Option 4. Development version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user-guide.quick-start-docker.html">Quick-Start Guide with Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.quick-start-docker.html#run-hello-world-example">Run Hello World example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.quick-start-docker.html#write-your-code-and-run-it-in-scikit-multiflow-container">Write your code and run it in scikit-multiflow container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user-guide.streams-intro.html">Using Streams in scikit-multiflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user-guide.streams-intro.html#stream-generators">Stream generators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.data">Data: <code class="docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_autosummary/skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../documentation.html#package-indices-and-search">Package, Indices and Search</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules.html">skmultiflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>skmultiflow.meta.accuracy_weighted_ensemble</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_modules/skmultiflow/meta/accuracy_weighted_ensemble.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for skmultiflow.meta.accuracy_weighted_ensemble</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">skmultiflow.core.base</span> <span class="k">import</span> <span class="n">StreamModel</span>
+<span class="kn">from</span> <span class="nn">skmultiflow.bayes.naive_bayes</span> <span class="k">import</span> <span class="n">NaiveBayes</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">KFold</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="kn">import</span> <span class="nn">operator</span> <span class="k">as</span> <span class="nn">op</span>
+
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble">[docs]</a><span class="k">class</span> <span class="nc">AccuracyWeightedEnsemble</span><span class="p">(</span><span class="n">StreamModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Accuracy Weighted Ensemble or AWE</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_estimators: int (default=10)</span>
+<span class="sd">        Maximum number of estimators to be kept in the ensemble</span>
+<span class="sd">    base_estimator: StreamModel or sklearn.BaseEstimator (default=NaiveBayes)</span>
+<span class="sd">        Each member of the ensemble is an instance of the base estimator</span>
+<span class="sd">    window_size: int (default=200)</span>
+<span class="sd">        The size of one chunk to be processed</span>
+<span class="sd">        (warning: the chunk size is not always the same as the batch size)</span>
+<span class="sd">    n_splits: int (default=5)</span>
+<span class="sd">        Number of folds to run cross-validation for computing the weight</span>
+<span class="sd">        of a classifier in the ensemble</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    An Accuracy Weighted Ensemble (AWE) [1]_ is an ensemble of classification models in which</span>
+<span class="sd">    each model is judiciously weighted based on their expected classification accuracy</span>
+<span class="sd">    on the test data under the time-evolving environment. The ensemble guarantees to be</span>
+<span class="sd">    efficient and robust against concept-drifting streams.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Haixun Wang, Wei Fan, Philip S. Yu, and Jiawei Han. 2003.</span>
+<span class="sd">       Mining concept-drifting data streams using ensemble classifiers.</span>
+<span class="sd">       In Proceedings of the ninth ACM SIGKDD international conference</span>
+<span class="sd">       on Knowledge discovery and data mining (KDD &#39;03).</span>
+<span class="sd">       ACM, New York, NY, USA, 226-235.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.WeightedClassifier"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.WeightedClassifier">[docs]</a>    <span class="k">class</span> <span class="nc">WeightedClassifier</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; A wrapper that includes a base estimator and its associated weight</span>
+<span class="sd">        (and additional information)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        estimator: StreamModel or sklearn.BaseEstimator</span>
+<span class="sd">            The base estimator to be wrapped up with additional information.</span>
+<span class="sd">            This estimator must already been trained on a data chunk.</span>
+<span class="sd">        weight: float</span>
+<span class="sd">            The weight associated to this estimator</span>
+<span class="sd">        seen_labels: array</span>
+<span class="sd">            The array containing the unique class labels of the data chunk this estimator</span>
+<span class="sd">            is trained on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">seen_labels</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Creates a new weighted classifier.&quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">estimator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">seen_labels</span> <span class="o">=</span> <span class="n">seen_labels</span>
+
+        <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Compares an object of this class to the other by means of the weight.</span>
+<span class="sd">            This method helps to sort the classifier correctly in the sorted list.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            other: WeightedClassifier</span>
+<span class="sd">                The other object to be compared to</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            boolean</span>
+<span class="sd">                true if this object&#39;s weight is less than that of the other object</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">weight</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_kept_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                 <span class="n">base_estimator</span><span class="o">=</span><span class="n">NaiveBayes</span><span class="p">(),</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a new ensemble&quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># top K classifiers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span> <span class="o">=</span> <span class="n">n_estimators</span>
+
+        <span class="c1"># total number of classifiers to keep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_kept_estimators</span> <span class="o">=</span> <span class="n">n_kept_estimators</span>
+
+        <span class="c1"># base learner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span> <span class="o">=</span> <span class="n">base_estimator</span>
+
+        <span class="c1"># the ensemble in which the classifiers are sorted by their weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># cross validation fold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_splits</span> <span class="o">=</span> <span class="n">n_splits</span>
+
+        <span class="c1"># chunk-related information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">window_size</span>  <span class="c1"># chunk size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># chunk pointer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.fit"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.partial_fit"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.partial_fit">[docs]</a>    <span class="k">def</span> <span class="nf">partial_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Updates the ensemble when a new data chunk arrives (Algorithm 1 in the paper).</span>
+<span class="sd">        The update is only launched when the chunk is filled up.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            Instance attributes.</span>
+<span class="sd">        y: array_like</span>
+<span class="sd">            Classes (targets) for all samples in X.</span>
+<span class="sd">        classes: list or numpy.array</span>
+<span class="sd">            Contains the class values in the stream. If defined, will be used to define the length of the arrays</span>
+<span class="sd">            returned by `predict_proba`</span>
+<span class="sd">        weight: float or array-like</span>
+<span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># initializes everything when the ensemble is first called</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># fill up the data chunk</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">:</span>
+                <span class="c1"># reset the pointer</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="c1"># retrieve the classes and class count</span>
+                <span class="n">classes</span><span class="p">,</span> <span class="n">class_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># (1) train classifier C&#39; from X</span>
+                <span class="n">C_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">),</span>
+                                         <span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">,</span>
+                                         <span class="n">classes</span><span class="o">=</span><span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+
+                <span class="c1"># compute the baseline error rate given by a random classifier</span>
+                <span class="n">baseline_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_baseline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">)</span>
+
+                <span class="c1"># compute the weight of C&#39; with cross-validation</span>
+                <span class="n">clf_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">WeightedClassifier</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">C_new</span><span class="p">,</span> <span class="n">weight</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">seen_labels</span><span class="o">=</span><span class="n">classes</span><span class="p">)</span>
+                <span class="n">clf_new</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_weight</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">clf_new</span><span class="p">,</span> <span class="n">baseline_score</span><span class="o">=</span><span class="n">baseline_score</span><span class="p">,</span>
+                                                     <span class="n">n_splits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_splits</span><span class="p">)</span>
+
+                <span class="c1"># (4) update the weights of each classifier in the ensemble, not using cross-validation</span>
+                <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="p">:</span>
+                    <span class="n">model</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_weight</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">baseline_score</span><span class="o">=</span><span class="n">baseline_score</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+                <span class="c1"># add the new model to the pool if there are slots available, else remove the worst one</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_kept_estimators</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clf_new</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">worst_model</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">op</span><span class="o">.</span><span class="n">attrgetter</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">clf_new</span><span class="o">.</span><span class="n">weight</span> <span class="o">&gt;</span> <span class="n">worst_model</span><span class="o">.</span><span class="n">weight</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">worst_model</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clf_new</span><span class="p">)</span>
+
+                <span class="c1"># instance-based pruning only happens with Cost Sensitive extension</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_instance_pruning</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.do_instance_pruning"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.do_instance_pruning">[docs]</a>    <span class="k">def</span> <span class="nf">do_instance_pruning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Only has effect if the ensemble is applied in cost-sensitive applications.</span>
+        <span class="c1"># Not used in the current implementation.</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.train_model"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.train_model">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Trains a model, taking care of the fact that either fit or partial_fit is implemented</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model: StreamModel or sklearn.BaseEstimator</span>
+<span class="sd">            The model to train</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            The data chunk</span>
+<span class="sd">        y: numpy.array of shape (n_samples)</span>
+<span class="sd">            The labels in the chunk</span>
+<span class="sd">        classes: list or numpy.array</span>
+<span class="sd">            The unique classes in the data chunk</span>
+<span class="sd">        weight: float or array-like</span>
+<span class="sd">            Instance weight. If not provided, uniform weights are assumed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StreamModel or sklearn.BaseEstimator</span>
+<span class="sd">            The trained model</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.predict"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Predicts the labels of X in a general classification setting.</span>
+<span class="sd">        The prediction is done via normalized weighted voting (choosing the maximum).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray of shape (n_samples, n_features)</span>
+<span class="sd">            Samples for which we want to predict the labels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.array</span>
+<span class="sd">            Predicted labels for all instances in X.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="c1"># get top K classifiers</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="p">)</span>
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">clf</span><span class="p">:</span> <span class="n">clf</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+
+        <span class="n">sum_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">sum_weights</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sum_weights</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># safety check: if sum_weights = 0, do as if sum_weights = 1</span>
+
+        <span class="n">weighted_votes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">()]</span> <span class="o">*</span> <span class="n">N</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">:</span>
+            <span class="n">classifier</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">estimator</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prediction</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">weighted_votes</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">weighted_votes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">label</span><span class="p">]</span> <span class="o">+=</span> <span class="n">model</span><span class="o">.</span><span class="n">weight</span> <span class="o">/</span> <span class="n">sum_weights</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">weighted_votes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">weight</span> <span class="o">/</span> <span class="n">sum_weights</span>
+
+        <span class="n">predict_weighted_voting</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">weighted_votes</span><span class="p">):</span>
+            <span class="n">max_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dic</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">op</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">predict_weighted_voting</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_value</span>
+
+        <span class="k">return</span> <span class="n">predict_weighted_voting</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.predict_proba"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.reset"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Resets all parameters to its default value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models_pool</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.score"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.compute_score"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.compute_score">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Computes the mean square error of a classifier, via the predicted probabilities.</span>
+
+<span class="sd">        This code needs to take into account the fact that a classifier C trained on a</span>
+<span class="sd">        previous data chunk may not have seen all the labels that appear in a new chunk</span>
+<span class="sd">        (e.g. C is trained with only labels [1, 2] but the new chunk contains labels [1, 2, 3, 4, 5]</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model: StreamModel or sklearn.BaseEstimator</span>
+<span class="sd">            The estimator in the ensemble to compute the score on</span>
+<span class="sd">        X: numpy.ndarray of shape (window_size, n_features)</span>
+<span class="sd">            The data from the new chunk</span>
+<span class="sd">        y: numpy.array</span>
+<span class="sd">            The labels from the new chunk</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The mean square error of the model (MSE_i)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">seen_labels</span>
+        <span class="n">probabs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="n">sum_error</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+                <span class="n">index_label_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">labels</span> <span class="o">==</span> <span class="n">c</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># find the index of this label c in probabs[i]</span>
+                <span class="n">probab_ic</span> <span class="o">=</span> <span class="n">probabs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">index_label_c</span><span class="p">]</span>
+                <span class="n">sum_error</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">probab_ic</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sum_error</span> <span class="o">+=</span> <span class="mf">1.0</span>
+
+        <span class="k">return</span> <span class="n">sum_error</span> <span class="o">/</span> <span class="n">N</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.compute_score_crossvalidation"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.compute_score_crossvalidation">[docs]</a>    <span class="k">def</span> <span class="nf">compute_score_crossvalidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">n_splits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Computes the score of interests, using cross-validation or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model: StreamModel or sklearn.BaseEstimator</span>
+<span class="sd">            The estimator in the ensemble to compute the score on</span>
+<span class="sd">        n_splits: int</span>
+<span class="sd">            The number of CV folds.</span>
+<span class="sd">            If None, the score is computed directly on the entire data chunk.</span>
+<span class="sd">            Else, we proceed as in traditional cross-validation setting.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The score of an estimator computed via CV</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">n_splits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">n_splits</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="c1"># we create a copy because we don&#39;t want to &quot;modify&quot; an already trained model</span>
+            <span class="n">copy_model</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">copy_model</span><span class="o">.</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span>
+            <span class="c1"># copy_model.estimator.reset()</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_splits</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">):</span>
+                <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">[</span><span class="n">train_idx</span><span class="p">]</span>
+                <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span><span class="p">[</span><span class="n">test_idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+                <span class="n">copy_model</span><span class="o">.</span><span class="n">estimator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">copy_model</span><span class="o">.</span><span class="n">estimator</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+                                                        <span class="n">classes</span><span class="o">=</span><span class="n">copy_model</span><span class="o">.</span><span class="n">seen_labels</span><span class="p">,</span>
+                                                        <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                <span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_score</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">copy_model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_test</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_splits</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># compute the score on the entire data chunk</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_score</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">X_chunk</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y_chunk</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">score</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.compute_weight"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.compute_weight">[docs]</a>    <span class="k">def</span> <span class="nf">compute_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">baseline_score</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Computes the weight of a classifier given the baseline score calculated on a random learner.</span>
+<span class="sd">        The weight relies on either (1) MSE if it is a normal classifier,</span>
+<span class="sd">        or (2) benefit if it is a cost-sensitive classifier.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model: StreamModel or sklearn.BaseEstimator</span>
+<span class="sd">            The learner to compute the weight on</span>
+<span class="sd">        baseline_score: float</span>
+<span class="sd">            The baseline score calculated on a random learner</span>
+<span class="sd">        n_splits: int (default=None)</span>
+<span class="sd">            The number of CV folds.</span>
+<span class="sd">            If not None (and is a number), we compute the weight using CV</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The weight computed from the MSE score of the classifier</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># compute MSE, with cross-validation or not</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_score_crossvalidation</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">)</span>
+
+        <span class="c1"># w = MSE_r = MSE_i</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">baseline_score</span> <span class="o">-</span> <span class="n">score</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.compute_baseline"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.compute_baseline">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_baseline</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This method computes the score produced by a random classifier, served as a baseline.</span>
+<span class="sd">        The baseline score is MSE\ :sub:`r`\  in case of a normal classifier, b\ :sub:`r`\  in case of a cost-sensitive</span>
+<span class="sd">        classifier.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: numpy.array</span>
+<span class="sd">            The labels of the chunk</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The baseline score of a random learner</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># if we assume uniform distribution</span>
+        <span class="c1"># L = len(np.unique(y))</span>
+        <span class="c1"># mse_r = L * (1 / L) * (1 - 1 / L) ** 2</span>
+
+        <span class="c1"># if we base on the class distribution of the data --&gt; count the number of labels</span>
+        <span class="n">classes</span><span class="p">,</span> <span class="n">class_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">class_dist</span> <span class="o">=</span> <span class="p">[</span><span class="n">class_count</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">classes</span><span class="p">)]</span>
+        <span class="n">mse_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">class_dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">class_dist</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">classes</span><span class="p">)])</span>
+
+        <span class="k">return</span> <span class="n">mse_r</span></div>
+
+<div class="viewcode-block" id="AccuracyWeightedEnsemble.get_info"><a class="viewcode-back" href="../../../skmultiflow.meta.accuracy_weighted_ensemble.html#skmultiflow.meta.AccuracyWeightedEnsemble.get_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Collects the information of the AWE</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string</span>
+<span class="sd">            Configuration for AWE.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">description</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot;n_estimators: </span><span class="si">{}</span><span class="s2"> - &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot;n_kept_estimators: </span><span class="si">{}</span><span class="s2"> - &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_kept_estimators</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot;base_estimator: </span><span class="si">{}</span><span class="s2"> - &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="o">.</span><span class="n">get_info</span><span class="p">())</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot;window_size: </span><span class="si">{}</span><span class="s2"> - &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot;n_splits: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_splits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">description</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

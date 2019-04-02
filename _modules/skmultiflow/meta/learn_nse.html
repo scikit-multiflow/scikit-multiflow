@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.meta.learn_nse &mdash; scikit-multiflow 0.1.3 documentation</title>
+  <title>skmultiflow.meta.learn_nse &mdash; scikit-multiflow 0.1.4 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="scikit-multiflow 0.1.3 documentation" href="../../../index.html"/>
+    <link rel="top" title="scikit-multiflow 0.1.4 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.3
+                0.1.4
               </div>
             
           
@@ -280,6 +280,7 @@
                  <span class="n">crossing_point</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                  <span class="n">ensemble_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
                  <span class="n">pruning</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_weights</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bkts</span> <span class="o">=</span> <span class="p">[]</span>
@@ -299,7 +300,8 @@
 <div class="viewcode-block" id="LearnNSE.fit"><a class="viewcode-back" href="../../../skmultiflow.meta.learn_nse.html#skmultiflow.meta.LearnNSE.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-    <span class="k">def</span> <span class="nf">__fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_train_model</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
@@ -318,6 +320,8 @@
 <span class="sd">        classes: list</span>
 <span class="sd">            List of all existing classes. This is an optional parameter, except</span>
 <span class="sd">            for the first partial_fit call, when it becomes obligatory.</span>
+<span class="sd">        weight: None</span>
+<span class="sd">            Instance weights. NOT used for this classifier.</span>
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        RuntimeError:</span>
@@ -365,13 +369,13 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">instance_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_weights</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_weights</span><span class="p">)</span>
 
                     <span class="c1"># Train base classifier with Dt</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__fit</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_train_model</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># First run! train the classifier on the instances with the same weight</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">instance_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span> <span class="o">/</span> <span class="n">mt</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__fit</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_train_model</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">classifier</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">bkts</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
@@ -390,7 +394,7 @@
                     <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">t</span> <span class="ow">and</span> <span class="n">ekt</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
                         <span class="c1"># Generate a new classifier</span>
                         <span class="n">classifier</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_estimator</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__fit</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_train_model</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_batch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">classifier</span>
                     <span class="k">elif</span> <span class="n">ekt</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
                         <span class="n">ekt</span> <span class="o">=</span> <span class="mf">0.5</span>
@@ -554,7 +558,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.3',
+            VERSION:'0.1.4',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
