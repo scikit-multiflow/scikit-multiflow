@@ -297,10 +297,10 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # Imports</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.lazy.knn import KNN</span>
-<span class="sd">    &gt;&gt;&gt; from skmultiflow.data.file_stream import FileStream</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.lazy import KNN</span>
+<span class="sd">    &gt;&gt;&gt; from skmultiflow.data import SEAGenerator</span>
 <span class="sd">    &gt;&gt;&gt; # Setting up the stream</span>
-<span class="sd">    &gt;&gt;&gt; stream = FileStream(&#39;skmultiflow/data/datasets/sea_big.csv&#39;, -1, 1)</span>
+<span class="sd">    &gt;&gt;&gt; stream = SEAGenerator(random_state=1, noise_percentage=.1)</span>
 <span class="sd">    &gt;&gt;&gt; stream.prepare_for_use()</span>
 <span class="sd">    &gt;&gt;&gt; # Pre training the classifier with 200 samples</span>
 <span class="sd">    &gt;&gt;&gt; X, y = stream.next_sample(200)</span>
@@ -319,10 +319,10 @@
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Displaying results</span>
 <span class="sd">    &gt;&gt;&gt; print(&#39;KNN usage example&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; print(str(n_samples) + &#39; samples analyzed.&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{} samples analyzed.&#39;.format(n_samples))</span>
 <span class="sd">    5000 samples analyzed.</span>
-<span class="sd">    &gt;&gt;&gt; print(&quot;KNN&#39;s performance: &quot; + str(corrects/n_samples))</span>
-<span class="sd">    KNN&#39;s performance: 0.868</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;KNN&#39;s performance: {}&quot;.format(corrects/n_samples))</span>
+<span class="sd">    KNN&#39;s performance: 0.8788</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
