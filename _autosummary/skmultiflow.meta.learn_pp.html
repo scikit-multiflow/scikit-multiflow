@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.meta.learn_pp &mdash; scikit-multiflow 0.1.4 documentation</title>
+  <title>skmultiflow.meta.learn_pp &mdash; scikit-multiflow 0.2.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="skmultiflow.meta.learn_nse" href="skmultiflow.meta.learn_nse.html" />
-    <link rel="prev" title="skmultiflow.meta.accuracy_weighted_ensemble" href="skmultiflow.meta.accuracy_weighted_ensemble.html" /> 
+    <link rel="prev" title="skmultiflow.meta.dynamic_weighted_majority" href="skmultiflow.meta.dynamic_weighted_majority.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.1.4
+                0.2.0
               </div>
             
           
@@ -247,7 +247,7 @@
 </table>
 <dl class="class">
 <dt id="skmultiflow.meta.learn_pp.LearnPP">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.learn_pp.</code><code class="descname">LearnPP</code><span class="sig-paren">(</span><em>base_estimator=DecisionTreeClassifier(class_weight=None</em>, <em>criterion='gini'</em>, <em>max_depth=None</em>, <em>max_features=None</em>, <em>max_leaf_nodes=None</em>, <em>min_impurity_decrease=0.0</em>, <em>min_impurity_split=None</em>, <em>min_samples_leaf=1</em>, <em>min_samples_split=2</em>, <em>min_weight_fraction_leaf=0.0</em>, <em>presort=False</em>, <em>random_state=None</em>, <em>splitter='best')</em>, <em>error_threshold=0.5</em>, <em>n_estimators=30</em>, <em>n_ensembles=10</em>, <em>window_size=100</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.learn_pp.</code><code class="descname">LearnPP</code><span class="sig-paren">(</span><em>base_estimator=DecisionTreeClassifier(class_weight=None</em>, <em>criterion='gini'</em>, <em>max_depth=None</em>, <em>max_features=None</em>, <em>max_leaf_nodes=None</em>, <em>min_impurity_decrease=0.0</em>, <em>min_impurity_split=None</em>, <em>min_samples_leaf=1</em>, <em>min_samples_split=2</em>, <em>min_weight_fraction_leaf=0.0</em>, <em>presort=False</em>, <em>random_state=None</em>, <em>splitter='best')</em>, <em>error_threshold=0.5</em>, <em>n_estimators=30</em>, <em>n_ensembles=10</em>, <em>window_size=100</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Learn++ <a class="reference internal" href="#rd9521080a0c1-1" id="id2">[1]</a> is an ensemble learning. Learn++ does not require
 access to previously used data during subsequent incremental learning
 steps. At the same time, it does not forget previously acquired knowledge.
@@ -315,7 +315,7 @@ are passed in further calls but differ from the initial classes.</p>
 </div>
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.fit"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.fit"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model under the batch setting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -338,7 +338,7 @@ Applicability varies depending on the algorithm.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.get_class_type">
-<code class="descname">get_class_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/core/base.py#L146"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.get_class_type" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_class_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/core/base.py#L146"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.get_class_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>The class type is a string that identifies the type of object
 generated by that module.</p>
 <dl class="field-list simple">
@@ -353,7 +353,7 @@ generated by that module.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.get_info"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L314"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.get_info"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L314"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects information about the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -367,7 +367,7 @@ generated by that module.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.partial_fit">
-<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.partial_fit"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.partial_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.partial_fit"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.partial_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partially fits the model, based on the X and y matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -399,7 +399,7 @@ it has too low accuracy on the dataset.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.predict"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L293"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.predict"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L293"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>The predict function will use majority votes from all its learners
 with their weights to find the most likely prediction for the sample matrix X.
 :param X: A matrix of the samples we want to predict.
@@ -416,7 +416,7 @@ with their weights to find the most likely prediction for the sample matrix X.
 
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.predict_proba">
-<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.predict_proba"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L263"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.predict_proba"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L263"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts the probability of each sample belonging to each one of the
 known classes.</p>
 <dl class="field-list simple">
@@ -443,7 +443,7 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.reset"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L102"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.reset"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L102"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the model to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -457,7 +457,7 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.learn_pp.LearnPP.score">
-<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.score"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/bbddf0c/src/skmultiflow/meta/learn_pp.py#L311"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.score" title="Permalink to this definition">¶</a></dt>
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/meta/learn_pp.html#LearnPP.score"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/meta/learn_pp.py#L311"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.learn_pp.LearnPP.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the performance base metric for the model in its current state.</p>
 <p class="rubric">Notes</p>
 <p>This function isn’t natively implemented on all models.</p>
@@ -492,7 +492,7 @@ the probability that the i-th sample of X belongs to a certain label.</p>
         <a href="skmultiflow.meta.learn_nse.html" class="btn btn-neutral float-right" title="skmultiflow.meta.learn_nse" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.meta.accuracy_weighted_ensemble.html" class="btn btn-neutral float-left" title="skmultiflow.meta.accuracy_weighted_ensemble" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.meta.dynamic_weighted_majority.html" class="btn btn-neutral float-left" title="skmultiflow.meta.dynamic_weighted_majority" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -501,7 +501,6 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, various
 
     </p>
   </div>
