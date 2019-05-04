@@ -1,9 +1,9 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from skmultiflow.utils import check_random_state
 
 
-class HyperplaneGenerator(Stream):
+class HyperplaneGenerator(BaseGenerator):
     """ HyperplaneGenerator
     Generates a problem of prediction class of a rotation hyperplane. It was
     used as testbed for CVFDT and VFDT in [1]_.

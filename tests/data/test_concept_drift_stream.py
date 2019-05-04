@@ -56,5 +56,3 @@ def test_concept_drift_stream(test_path):
     assert stream.n_targets == np.array(y).ndim
 
     assert stream.n_features == X.shape[1]
-
-    assert 'stream' == stream.get_class_type()

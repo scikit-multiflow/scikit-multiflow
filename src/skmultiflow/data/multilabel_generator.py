@@ -1,15 +1,15 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from sklearn.datasets import make_multilabel_classification
 from skmultiflow.utils import check_random_state
 
 
-class MultilabelGenerator(Stream):
+class MultilabelGenerator(BaseGenerator):
     """ MultilabelGenerator
 
     This generator creates a stream of samples for a multilabel problem.
-    It uses the make_multilabel_classification function from scikit-learn, 
-    which creates a batch setting multilabel classification problem. These 
+    It uses the make_multilabel_classification function from scikit-learn,
+    which creates a batch setting multilabel classification problem. These
     samples are then sequentially fed by the next_sample function.
 
     Parameters
@@ -22,7 +22,7 @@ class MultilabelGenerator(Stream):
 
     n_targets: int (Default: 1)
         Number of targets to generate.
-        
+
     n_labels: int (Default: 2)
         Average number of labels per instance.
 
@@ -35,7 +35,7 @@ class MultilabelGenerator(Stream):
     Notes
     -----
     This is a wrapper for scikit-lean's `make_multilabel_classification`
-        
+
     Examples
     --------
     >>> # Imports
@@ -103,8 +103,8 @@ class MultilabelGenerator(Stream):
     def __configure(self):
         """ __configure
 
-        Uses the make_multilabel_classification function from scikit-learn 
-        to generate a multilabel classification problem. This problem will 
+        Uses the make_multilabel_classification function from scikit-learn
+        to generate a multilabel classification problem. This problem will
         be kept in memory and provided as demanded.
 
 
@@ -121,21 +121,21 @@ class MultilabelGenerator(Stream):
 
     def next_sample(self, batch_size=1):
         """ next_sample
-        
+
         Return batch_size samples from the X and y matrices stored in
         memory.
-        
+
         Parameters
         ----------
         batch_size: int
             The number of samples to return.
-        
+
         Returns
         -------
         tuple or tuple list
-            Return a tuple with the features matrix and the labels matrix for 
+            Return a tuple with the features matrix and the labels matrix for
             the batch_size samples that were requested.
-        
+
         """
         self.sample_idx += batch_size
         try:

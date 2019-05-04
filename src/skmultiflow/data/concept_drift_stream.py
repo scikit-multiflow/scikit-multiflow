@@ -1,10 +1,10 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from skmultiflow.utils import check_random_state
 from skmultiflow.data import AGRAWALGenerator
 
 
-class ConceptDriftStream(Stream):
+class ConceptDriftStream(BaseGenerator):
     """ ConceptDriftStream
 
     A stream generator that adds concept drift or change by joining several streams.
