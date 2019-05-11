@@ -1,23 +1,24 @@
 import numpy as np
-from skmultiflow.transform.base_transform import StreamTransform
 from skmultiflow.utils.utils import get_dimensions
 
+from sklearn.base import BaseEstimator, TransformerMixin
 
-class OneHotToCategorical(StreamTransform):
+
+class OneHotToCategorical(BaseEstimator, TransformerMixin):
     """ OneHotToCategorical
-    
-    Transform that receives a features matrix, with some features coded as 
-    one hot, and transform these features in basic int coded categorical 
+
+    Transform that receives a features matrix, with some features coded as
+    one hot, and transform these features in basic int coded categorical
     features.
-    
+
     Parameters
     ----------
     categorical_list: list of lists
         Each inner list contains all the attribute indexes that are associated with
         the same categorical feature.
-    
+
     """
-    def __init__(self, categorical_list):
+    def __init__(self, categorical_list, *args, **kwargs):
         super().__init__()
         self.categorical_list = categorical_list
 
@@ -26,20 +27,20 @@ class OneHotToCategorical(StreamTransform):
 
     def transform(self, X):
         """ transform
-        
-        Transform one hot features in the X matrix into int coded 
+
+        Transform one hot features in the X matrix into int coded
         categorical features.
-        
+
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
             The sample or set of samples that should be transformed.
-         
+
         Returns
         -------
         numpy.ndarray
             The transformed data.
-        
+
         """
         r, c = get_dimensions(X)
 

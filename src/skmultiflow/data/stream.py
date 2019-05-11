@@ -15,6 +15,8 @@ class from_generator(Source):
         self.poll_interval = poll_interval
         if start:
             self.start()
+        self.mf_gen.prepare_for_use()
+
     def start(self):
         self.stopped = False
         self.started = True

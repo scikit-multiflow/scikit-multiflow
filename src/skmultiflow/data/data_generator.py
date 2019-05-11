@@ -6,7 +6,7 @@ from skmultiflow.data.base_generator import BaseGenerator
 
 class DataGenerator(BaseGenerator):
     # TODO : inherit from pandas.DataFrame should make things easier
-    """ BatchGenerator
+    """ DataGenerator
 
     A generator constructed from the entries of a static dataset (numpy array or pandas
     DataFrame).
