@@ -2,7 +2,7 @@ from sklearn.exceptions import ConvergenceWarning
 from sklearn.datasets import make_regression
 from skmultiflow.meta.regressor_chains import RegressorChain
 from sklearn.linear_model import SGDRegressor
-from skmultiflow.data import DataStream
+from skmultiflow.data import DataGenerator
 import numpy as np
 
 import warnings
@@ -11,12 +11,14 @@ warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
 def test_regressor_chains():
     X_reg, y_reg = make_regression(random_state=112, n_targets=3, n_samples=5150)
-    stream = DataStream(X_reg, y_reg)
-    stream.prepare_for_use()
+
+    X_gen = DataGenerator(X_reg, return_np=True)
+    y_gen = DataGenerator(y_reg, return_np=True)
+
     estimator = SGDRegressor(random_state=112, max_iter=10, tol=1e-3)
     learner = RegressorChain(base_estimator=estimator, random_state=112)
 
-    X, y = stream.next_sample(150)
+    X, y = X_gen.next_sample(150), y_gen.next_sample(150)
     learner.partial_fit(X, y)
 
     cnt = 0
@@ -26,7 +28,7 @@ def test_regressor_chains():
     wait_samples = 100
 
     while cnt < max_samples:
-        X, y = stream.next_sample()
+        X, y = X_gen.next_sample(), y_gen.next_sample()
         # Test every n samples
         if (cnt % wait_samples == 0) and (cnt != 0):
             predictions.append(list(learner.predict(X)[0]))

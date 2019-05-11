@@ -1,16 +1,17 @@
 import numpy as np
+import pandas as pd
 from array import array
 import os
 from skmultiflow.lazy.sam_knn import SAMKNN
-from skmultiflow.data.file_stream import FileStream
+from skmultiflow.data.data_generator import DataGenerator
 
 
 def test_sam_knn(package_path):
 
     test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_big.csv')
+    target_idx = -1
 
-    stream = FileStream(test_file)
-    stream.prepare_for_use()
+    gen = DataGenerator(pd.read_csv(test_file), return_np=True)
 
     hyperParams = {'maxSize': 1000, 'nNeighbours': 5, 'knnWeights': 'distance', 'STMSizeAdaption': 'maxACCApprox',
                    'useLTM': False}
@@ -26,7 +27,8 @@ def test_sam_knn(package_path):
     wait_samples = 100
 
     while cnt < max_samples:
-        X, y = stream.next_sample()
+        sample = gen.next_sample()
+        X, y = sample[:,0:target_idx], sample[:, target_idx:]
         # Test every n samples
         if (cnt % wait_samples == 0) and (cnt != 0):
             predictions.append(learner.predict(X)[0])
@@ -49,8 +51,10 @@ def test_sam_knn_coverage(package_path):
 
     test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_big.csv')
 
-    stream = FileStream(test_file)
-    stream.prepare_for_use()
+    raw_data = pd.read_csv(test_file)
+    X_gen = DataGenerator(raw_data.iloc[:, :-1], return_np=True)
+    y_gen = DataGenerator(raw_data.iloc[:, -1:], return_np=True)
+    X_gen.prepare_for_use(), y_gen.prepare_for_use()
 
     hyperParams = {'maxSize': 50,
                    'n_neighbors': 3,
@@ -73,7 +77,7 @@ def test_sam_knn_coverage(package_path):
     wait_samples = 20
 
     while cnt < max_samples:
-        X, y = stream.next_sample()
+        X, y = X_gen.next_sample(), y_gen.next_sample()
         # Test every n samples
         if (cnt % wait_samples == 0) and (cnt != 0):
             predictions.append(learner.predict(X)[0])

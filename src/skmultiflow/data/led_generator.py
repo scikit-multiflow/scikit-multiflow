@@ -1,9 +1,9 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from skmultiflow.utils import check_random_state
 
 
-class LEDGenerator(Stream):
+class LEDGenerator(BaseGenerator):
     """ LEDGenerator
 
     This data source originates from the CART book [1]_. An implementation

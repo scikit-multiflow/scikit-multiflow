@@ -1,10 +1,10 @@
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from sklearn.datasets import make_regression
 from skmultiflow.utils import check_random_state
 import numpy as np
 
 
-class RegressionGenerator(Stream):
+class RegressionGenerator(BaseGenerator):
     """ RegressionGenerator
     
     This generator creates a stream of samples for a regression problem. It 

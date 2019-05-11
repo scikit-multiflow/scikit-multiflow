@@ -3,7 +3,7 @@ import io
 from abc import ABCMeta, abstractmethod
 from timeit import default_timer as timer
 from skmultiflow.core.base_object import BaseObject
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from .evaluation_data_buffer import EvaluationDataBuffer
 from skmultiflow.visualization.evaluation_visualizer import EvaluationVisualizer
 from skmultiflow.metrics import WindowClassificationMeasurements, ClassificationMeasurements, \
@@ -75,7 +75,7 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
 
         Parameters
         ----------
-        stream: Stream
+        stream: BaseGenerator
             The stream from which to draw the samples.
 
         model: StreamModel or list
@@ -173,7 +173,7 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
                 raise NotImplementedError('{} does not have a predict() method.'.format(model))
 
         self.model = model if isinstance(model, list) else [model]
-        if isinstance(stream, Stream):
+        if isinstance(stream, BaseGenerator):
             self.stream = stream
         else:
             raise ValueError('{} is not a valid stream type.'.format(stream))
@@ -191,7 +191,7 @@ class StreamEvaluator(BaseObject, metaclass=ABCMeta):
 
     def _check_configuration(self):
         # Check stream to infer task type
-        if isinstance(self.stream, Stream):
+        if isinstance(self.stream, BaseGenerator):
             if self.stream.n_targets == 1:
                 self._output_type = constants.SINGLE_OUTPUT
             elif self.stream.n_targets > 1:

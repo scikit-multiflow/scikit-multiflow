@@ -3,8 +3,8 @@ The :mod:`skmultiflow.data` module contains data stream methods including method
 conversion and generators.
 """
 
-from .data_stream import DataStream
-from .file_stream import FileStream
+from .stream import from_generator
+from .data_generator import DataGenerator
 from .agrawal_generator import AGRAWALGenerator
 from .concept_drift_stream import ConceptDriftStream
 from .hyper_plane_generator import HyperplaneGenerator
@@ -22,7 +22,23 @@ from .stagger_generator import STAGGERGenerator
 from .synth import make_logical
 from .waveform_generator import WaveformGenerator
 
-__all__ = ["DataStream", "FileStream", "AGRAWALGenerator", "ConceptDriftStream", "HyperplaneGenerator", "LEDGenerator",
-           "LEDGeneratorDrift", "MIXEDGenerator", "MultilabelGenerator", "RandomRBFGenerator",
-           "RandomRBFGeneratorDrift", "RandomTreeGenerator", "RegressionGenerator", "SEAGenerator", "SineGenerator",
-           "STAGGERGenerator", "make_logical", "WaveformGenerator"]
+__all__ = [
+    "DataGenerator",
+    "AGRAWALGenerator",
+    "ConceptDriftStream",
+    "HyperplaneGenerator",
+    "LEDGenerator",
+    "LEDGeneratorDrift",
+    "MIXEDGenerator",
+    "MultilabelGenerator",
+    "RandomRBFGenerator",
+    "RandomRBFGeneratorDrift",
+    "RandomTreeGenerator",
+    "RegressionGenerator",
+    "SEAGenerator",
+    "SineGenerator",
+    "STAGGERGenerator",
+    "make_logical",
+    "WaveformGenerator",
+    "from_generator",
+]

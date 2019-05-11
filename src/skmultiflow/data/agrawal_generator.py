@@ -1,11 +1,11 @@
 import numpy as np
 
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from skmultiflow.utils import check_random_state
 
 
-class AGRAWALGenerator(Stream):
-    """ AGRAWAL stream generator
+class AGRAWALGenerator(BaseGenerator):
+    """ AGRAWAL generator
 
     The generator was introduced by Agrawal et al in [1]_, and was common source
     of data for early work on scaling up decision tree learners.

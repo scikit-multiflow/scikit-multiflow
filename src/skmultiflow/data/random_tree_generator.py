@@ -1,10 +1,10 @@
 import numpy as np
 from array import array
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.base_generator import BaseGenerator
 from skmultiflow.utils import check_random_state
 
 
-class RandomTreeGenerator(Stream):
+class RandomTreeGenerator(BaseGenerator):
     """ RandomTreeGenerator
        
     This generator is built based on its description in Domingo and Hulten's 

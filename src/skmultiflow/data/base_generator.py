@@ -2,16 +2,17 @@ from abc import ABCMeta, abstractmethod
 from skmultiflow.core.base_object import BaseObject
 
 
-class Stream(BaseObject, metaclass=ABCMeta):
-    """ The abstract class setting up the minimum requirements of a stream,
+class BaseGenerator(BaseObject, metaclass=ABCMeta):
+    """ The abstract class setting up the minimum requirements of a generator,
     so that it can work along the other modules in the scikit-multiflow
     framework.
-    
+
     Raises
     ------
     NotImplementedError: This is an abstract class.
-    
+
     """
+    # TODO : remove everything related to features vs targets, this sould not be handled at this level
     def __init__(self):
         self.n_samples = 0
         self.n_targets = 0
@@ -19,9 +20,8 @@ class Stream(BaseObject, metaclass=ABCMeta):
         self.n_num_features = 0
         self.n_cat_features = 0
         self.n_classes = 0
-        self.cat_features_idx = []
-        self.current_sample_x = None
-        self.current_sample_y = None
+        self.cat_features_idx = []  # TODO : remove
+
         self.sample_idx = 0
         self.feature_names = None
         self.target_names = None
@@ -219,16 +219,16 @@ class Stream(BaseObject, metaclass=ABCMeta):
     @abstractmethod
     def next_sample(self, batch_size=1):
         """ Generates or returns next `batch_size` samples in the stream.
-        
+
         Parameters
         ----------
         batch_size: int
             How many samples at a time to return.
-        
+
         Returns
         -------
         tuple or tuple list
-            A numpy.ndarray of shape (batch_size, n_features) and an array-like of size 
+            A numpy.ndarray of shape (batch_size, n_features) and an array-like of size
             n_targets, representing the next batch_size samples.
 
         """
@@ -283,20 +283,20 @@ class Stream(BaseObject, metaclass=ABCMeta):
 
     def get_data_info(self):
         """ get_name
-        
-        Gets the name of the plot, which is a string that will appear 
+
+        Gets the name of the plot, which is a string that will appear
         in evaluation methods, to represent the stream.
-        
+
         The default format is: 'Stream name - x labels'.
-        
+
         Returns
         -------
         string
             A string representing the plot name.
-        
+
         """
         return self.name + " - {} target(s), {} classes, {} features".format(self.n_targets,
                                                                              self.n_classes, self.n_features)
 
     def get_class_type(self):
-        return 'stream'
+        return type(self)
