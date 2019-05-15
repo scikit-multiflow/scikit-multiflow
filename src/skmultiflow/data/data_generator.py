@@ -41,9 +41,6 @@ class DataGenerator(BaseGenerator):
         else:
             return (None, None)
 
-    def last_sample(self):
-        return self.next_sample()
-
     def prepare_for_use(self):
         self.sample_idx = 0
 

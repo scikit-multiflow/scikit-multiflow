@@ -3,7 +3,6 @@ from sklearn.utils import tosequence
 
 
 class Pipeline(BaseObject):
-    # TODO : deprecate this, or replace it with with a Stream.from_sklearn_pipeline helper function
     """ Pipeline
 
     A pipeline structure that holds a set of sequential Transforms, followed
