@@ -9,7 +9,6 @@ from skmultiflow.data.data_generator import DataGenerator
 def test_sam_knn(package_path):
 
     test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_big.csv')
-    target_idx = -1
 
     gen = DataGenerator(pd.read_csv(test_file), return_np=True)
 
@@ -28,7 +27,7 @@ def test_sam_knn(package_path):
 
     while cnt < max_samples:
         sample = gen.next_sample()
-        X, y = sample[:,0:target_idx], sample[:, target_idx:]
+        X, y = sample[:, :-1], sample[:, -1:]
         # Test every n samples
         if (cnt % wait_samples == 0) and (cnt != 0):
             predictions.append(learner.predict(X)[0])
@@ -51,10 +50,8 @@ def test_sam_knn_coverage(package_path):
 
     test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_big.csv')
 
-    raw_data = pd.read_csv(test_file)
-    X_gen = DataGenerator(raw_data.iloc[:, :-1], return_np=True)
-    y_gen = DataGenerator(raw_data.iloc[:, -1:], return_np=True)
-    X_gen.prepare_for_use(), y_gen.prepare_for_use()
+    gen = DataGenerator(pd.read_csv(test_file), return_np=True)
+    gen.prepare_for_use()
 
     hyperParams = {'maxSize': 50,
                    'n_neighbors': 3,
@@ -77,7 +74,8 @@ def test_sam_knn_coverage(package_path):
     wait_samples = 20
 
     while cnt < max_samples:
-        X, y = X_gen.next_sample(), y_gen.next_sample()
+        sample = gen.next_sample()
+        X, y = sample[:, :-1], sample[:, -1:]
         # Test every n samples
         if (cnt % wait_samples == 0) and (cnt != 0):
             predictions.append(learner.predict(X)[0])
