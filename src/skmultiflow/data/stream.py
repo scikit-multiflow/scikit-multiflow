@@ -4,10 +4,10 @@ from streamz import Stream, Source
 from skmultiflow.data.base_generator import BaseGenerator
 
 @Stream.register_api(staticmethod)
-class from_generator(Source):
+class from_multiflow_generator(Source):
     def __init__(self, mf_gen, batch_size, poll_interval=1.0, start=False):
         assert isinstance(mf_gen, BaseGenerator)
-        super(from_generator, self).__init__(ensure_io_loop=True)
+        super(from_multiflow_generator, self).__init__(ensure_io_loop=True)
         self.batch_size = batch_size
         self.stopped = True
         self.started = False
@@ -24,7 +24,7 @@ class from_generator(Source):
 
     @gen.coroutine
     def do_poll(self):
-        while self.mf_gen.has_more_samples():
+        while self.mf_gen.has_more_samples() and not self.stopped:
             sample = self.mf_gen.next_sample(self.batch_size)
             yield self._emit(sample)
             yield gen.sleep(self.poll_interval)

@@ -3,7 +3,7 @@ The :mod:`skmultiflow.data` module contains data stream methods including method
 conversion and generators.
 """
 
-from .stream import from_generator
+from .stream import from_multiflow_generator
 from .data_generator import DataGenerator
 from .agrawal_generator import AGRAWALGenerator
 from .concept_drift_stream import ConceptDriftStream
@@ -40,5 +40,5 @@ __all__ = [
     "STAGGERGenerator",
     "make_logical",
     "WaveformGenerator",
-    "from_generator",
+    "from_multiflow_generator",
 ]
