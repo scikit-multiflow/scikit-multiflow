@@ -12,7 +12,6 @@ class BaseGenerator(BaseObject, metaclass=ABCMeta):
     NotImplementedError: This is an abstract class.
 
     """
-    # TODO : remove everything related to features vs targets, this sould not be handled at this level
     def __init__(self):
         self.n_samples = 0
         self.n_targets = 0
@@ -20,13 +19,15 @@ class BaseGenerator(BaseObject, metaclass=ABCMeta):
         self.n_num_features = 0
         self.n_cat_features = 0
         self.n_classes = 0
-        self.cat_features_idx = []  # TODO : remove
-
+        self.cat_features_idx = []
+        self.current_sample_x = None
+        self.current_sample_y = None
         self.sample_idx = 0
         self.feature_names = None
         self.target_names = None
         self.target_values = None
         self.name = None
+
 
     @property
     def n_features(self):
