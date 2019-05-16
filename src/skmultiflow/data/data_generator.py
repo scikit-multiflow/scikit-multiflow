@@ -5,11 +5,9 @@ from skmultiflow.data.base_generator import BaseGenerator
 # TODO : doc for all methods
 
 class DataGenerator(BaseGenerator):
-    # TODO : inherit from pandas.DataFrame should make things easier
     """ DataGenerator
 
-    A generator constructed from the entries of a static dataset (numpy array or pandas
-    DataFrame).
+    A generator constructed from the entries of a static dataset
 
     The batch generator is able to provide, as requested, a number of samples, in
     a way that old samples cannot be accessed in a later time. This is done
@@ -17,9 +15,11 @@ class DataGenerator(BaseGenerator):
 
     Parameters
     ----------
-    data: np.ndarray or pd.DataFrame
-        The features' columns and targets' columns or the feature columns
-        only if they are passed separately.
+    data:  ndarray (structured or homogeneous), Iterable, dict, or DataFrame
+        the data to be passed as input. If not already a pd.DataFrame,
+        a dataframe will be constucted from it
+    return_np: bool
+        Either `next_sample` and `last_sample` will return pandas.DataFrame or np.array
     """
 
     def __init__(self, data, return_np=False):
@@ -34,6 +34,20 @@ class DataGenerator(BaseGenerator):
         self._last_sample = pd.DataFrame(columns=self.data.columns)
 
     def next_sample(self, batch_size=1):
+        """
+        Pull a new batch of data out from the generator, of size batch_size
+
+        Parameters
+        ----------
+        batch_size:  int
+            number of elements (i.e number of rows) to pull from the generator
+
+        Returns
+        -------
+        pandas.DataFrame or None
+            if a sample if available, return it as a pandas DataFrame
+            otherwise return None
+        """
         sample = self.data.iloc[self.sample_idx:self.sample_idx + batch_size]
         self.sample_idx += batch_size
         self._last_sample = sample
@@ -43,6 +57,14 @@ class DataGenerator(BaseGenerator):
             return None
 
     def last_sample(self):
+        """
+        Get the last batch of data returned by `next_sample`
+        Returns
+        -------
+        pandas.DataFrame or None
+            if a sample if available, return it as a pandas DataFrame
+            otherwise return None
+        """
         return self._last_sample
 
     def prepare_for_use(self):
@@ -52,12 +74,12 @@ class DataGenerator(BaseGenerator):
         return self.data.info()
 
     def has_more_samples(self):
-        """ Checks if stream has more samples.
+        """ Checks if the generator has more samples.
 
         Returns
         -------
         Boolean
-            True if stream has more samples.
+            True if the generator has more samples.
 
         """
         return self.n_remaining_samples() > 0
