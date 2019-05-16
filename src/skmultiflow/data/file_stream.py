@@ -2,10 +2,10 @@ import os
 import pandas as pd
 import numpy as np
 import warnings
-from skmultiflow.data.base_generator import BaseGenerator
+from skmultiflow.data.data_generator import DataGenerator
 
 
-class FileStream(BaseGenerator):
+class FileStream(DataGenerator):
     """ FileStream
 
     A stream generated from the entries of a file. For the moment only
@@ -62,265 +62,48 @@ class FileStream(BaseGenerator):
     _CLASSIFICATION = 'classification'
     _REGRESSION = 'regression'
 
-    warnings.warn("FileStream will be deprecated in the future, use streamz.Source.from_textfile instead")
+    warnings.warn("FileStream will be deprecated in the future, use skmultiflow.data.DataGenerator instead")
 
-    def __init__(self, filepath, target_idx=-1, n_targets=1, cat_features_idx=None):
-        super().__init__()
+    def __init__(self, filepath, target_idx=-1, n_targets=1, cat_features_idx=None, return_np=True, **kwargs):
+        data = pd.read_csv(filepath)
+        super().__init__(data, return_np=False, **kwargs)
 
         self.filepath = filepath
         self.n_targets = n_targets
         self.target_idx = target_idx
         self.cat_features_idx = [] if cat_features_idx is None else cat_features_idx
 
-        self.X = None
-        self.y = None
-        self.task_type = None
-        self.n_classes = 0
-        self.filename = ''
-        self.basename = ''
+        self.feature_names = list(self.data.columns)[:target_idx]
+        self.target_names = list(self.data.columns)[target_idx:]
+        self.n_features = len(self.feature_names)
+        self.n_cat_features = len(self.cat_features_idx)
+        self.n_num_features = self.n_features - self.n_cat_features
+        self._return_np = return_np
 
         # Automatically infer target_idx if not passed in multi-output problems
         if self.n_targets > 1 and self.target_idx == -1:
             self.target_idx = -self.n_targets
 
-        self.__configure()
-
-    def __configure(self):
-        self.basename = os.path.basename(self.filepath)
-        filename, extension = os.path.splitext(self.basename)
-        if extension.lower() == '.csv':
-            self.read_function = pd.read_csv
-        else:
-            raise ValueError('Unsupported format: ', extension)
-        self.filename = filename
-
-    @property
-    def target_idx(self):
-        """
-        Get the number of the column where Y begins.
-
-        Returns
-        -------
-        int:
-            The number of the column where Y begins.
-        """
-        return self._target_idx
-
-    @target_idx.setter
-    def target_idx(self, target_idx):
-        """
-        Sets the number of the column where Y begins.
-
-        Parameters
-        ----------
-        target_idx: int
-        """
-
-        self._target_idx = target_idx
-
-    @property
-    def n_targets(self):
-        """
-         Get the number of targets.
-
-        Returns
-        -------
-        int:
-            The number of targets.
-        """
-        return self._n_targets
-
-    @n_targets.setter
-    def n_targets(self, n_targets):
-        """
-        Sets the number of targets.
-
-        Parameters
-        ----------
-        n_targets: int
-        """
-
-        self._n_targets = n_targets
-
-    @property
-    def cat_features_idx(self):
-        """
-        Get the list of the categorical features index.
-
-        Returns
-        -------
-        list:
-            List of categorical features index.
-
-        """
-        return self._cat_features_idx
-
-    @cat_features_idx.setter
-    def cat_features_idx(self, cat_features_idx):
-        """
-        Sets the list of the categorical features index.
-
-        Parameters
-        ----------
-        cat_features_idx:
-            List of categorical features index.
-        """
-
-        self._cat_features_idx = cat_features_idx
-
-    def prepare_for_use(self):
-        """ prepare_for_use
-
-        Prepares the stream for use.
-
-        Note
-        ----
-        This functions should always be called after the stream initialization.
-
-        """
-        self._load_data()
-        self.sample_idx = 0
-        self.current_sample_x = None
-        self.current_sample_y = None
-
-    def _load_data(self):
-        """ Reads the data provided by the user and separates the features and targets.
-        """
-        try:
-            raw_data = self.read_function(self.filepath)
-
-            if any(raw_data.dtypes == 'object'):
-                raise ValueError('File contains text data.')
-            rows, cols = raw_data.shape
-            self.n_samples = rows
-            labels = raw_data.columns.values.tolist()
-
-            if (self.target_idx + self.n_targets) == cols or (self.target_idx + self.n_targets) == 0:
-                # Take everything to the right of target_idx
-                self.y = raw_data.iloc[:, self.target_idx:].values
-                self.target_names = raw_data.iloc[:, self.target_idx:].columns.values.tolist()
-            else:
-                # Take only n_targets columns to the right of target_idx, use the rest as features
-                self.y = raw_data.iloc[:, self.target_idx:self.target_idx + self.n_targets].values
-                self.target_names = labels[self.target_idx:self.target_idx + self.n_targets]
-
-            self.X = raw_data.drop(self.target_names, axis=1).values
-            self.feature_names = raw_data.drop(self.target_names, axis=1).columns.values.tolist()
-
-            _, self.n_features = self.X.shape
-            if self.cat_features_idx:
-                if max(self.cat_features_idx) < self.n_features:
-                    self.n_cat_features = len(self.cat_features_idx)
-                else:
-                    raise IndexError('Categorical feature index in {} '
-                                     'exceeds n_features {}'.format(self.cat_features_idx, self.n_features))
-            self.n_num_features = self.n_features - self.n_cat_features
-
-            if np.issubdtype(self.y.dtype, np.integer):
-                self.task_type = self._CLASSIFICATION
-                self.n_classes = len(np.unique(self.y))
-            else:
-                self.task_type = self._REGRESSION
-            self.target_values = self.get_target_values()
-        except FileNotFoundError:
-            raise FileNotFoundError("File {} does not exist.".format(self.filepath))
-        pass
-
-    def restart(self):
-        """ restart
-
-        Restarts the stream's sample feeding, while keeping all of its
-        parameters.
-
-        It basically server the purpose of reinitializing the stream to
-        its initial state.
-
-        """
-        self.sample_idx = 0
-        self.current_sample_x = None
-        self.current_sample_y = None
+        self.X = self.data[self.feature_names]
+        self.y = self.data[self.target_names]
+        if len(self.y.shape) == 2:
+            self.y = self.y.iloc[:, 0]
+        self.target_values = list(self.y.unique())
+        self.task_type = None
+        self.n_classes = len(self.target_values)
+        self.name = os.path.split(self.filepath)[-1]
 
     def next_sample(self, batch_size=1):
-        """ next_sample
+        return self._unzip_data(super().next_sample(batch_size=batch_size))
 
-        If there is enough instances to supply at least batch_size samples, those
-        are returned. If there aren't a tuple of (None, None) is returned.
+    def last_sample(self):
+        return self._unzip_data(super().last_sample())
 
-        Parameters
-        ----------
-        batch_size: int
-            The number of instances to return.
-
-        Returns
-        -------
-        tuple or tuple list
-            Returns the next batch_size instances.
-            For general purposes the return can be treated as a numpy.ndarray.
-
-        """
-        self.sample_idx += batch_size
-        try:
-
-            self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
-            self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx, :]
-            if self.n_targets < 2:
-                self.current_sample_y = self.current_sample_y.flatten()
-
-        except IndexError:
-            self.current_sample_x = None
-            self.current_sample_y = None
-        return self.current_sample_x, self.current_sample_y
-
-    def has_more_samples(self):
-        """ Checks if stream has more samples.
-
-        Returns
-        -------
-        Boolean
-            True if stream has more samples.
-
-        """
-        return (self.n_samples - self.sample_idx) > 0
-
-    def n_remaining_samples(self):
-        """ Returns the estimated number of remaining samples.
-
-        Returns
-        -------
-        int
-            Remaining number of samples.
-
-        """
-        return self.n_samples - self.sample_idx
-
-    def get_all_samples(self):
-        """
-        returns all the samples in the stream.
-
-        Returns
-        -------
-        X: pd.DataFrame
-            The features' columns.
-        y: pd.DataFrame
-            The targets' columns.
-        """
-        return self.X, self.y
-
-    def get_data_info(self):
-        if self.task_type == self._CLASSIFICATION:
-            return "{} - {} target(s), {} classes".format(self.basename, self.n_targets, self.n_classes)
-        elif self.task_type == self._REGRESSION:
-            return "{} - {} target(s)".format(self.basename, self.n_targets)
-
-    def get_target_values(self):
-        if self.task_type == 'classification':
-            if self.n_targets == 1:
-                return np.unique(self.y).tolist()
-            else:
-                return [np.unique(self.y[:, i]).tolist() for i in range(self.n_targets)]
-        elif self.task_type == self._REGRESSION:
-            return [float] * self.n_targets
-
-    def get_info(self):
-        return 'File Stream: filename: ' + str(self.basename) + \
-               '  -  n_targets: ' + str(self.n_targets)
+    def _unzip_data(self, sample):
+        if sample is not None:
+            X, y = sample[self.feature_names], sample[self.target_names]
+            if isinstance(y, pd.DataFrame):
+                y = y.iloc[:, 0]
+            return (X.values, y.values) if self._return_np else (X, y)
+        else:
+            return None

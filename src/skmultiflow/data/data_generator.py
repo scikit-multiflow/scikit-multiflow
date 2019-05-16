@@ -22,7 +22,7 @@ class DataGenerator(BaseGenerator):
         only if they are passed separately.
     """
 
-    def __init__(self, data, y=None, return_np=False):
+    def __init__(self, data, return_np=False):
         BaseGenerator.__init__(self)
 
         if not isinstance(data, pd.DataFrame):
@@ -30,16 +30,20 @@ class DataGenerator(BaseGenerator):
 
         self.data = data
         self.sample_idx = 0
-
         self.return_np = return_np
+        self._last_sample = pd.DataFrame(columns=self.data.columns)
 
     def next_sample(self, batch_size=1):
         sample = self.data.iloc[self.sample_idx:self.sample_idx + batch_size]
         self.sample_idx += batch_size
+        self._last_sample = sample
         if not sample.empty:
             return sample.values if self.return_np else sample
         else:
-            return (None, None)
+            return None
+
+    def last_sample(self):
+        return self._last_sample
 
     def prepare_for_use(self):
         self.sample_idx = 0
