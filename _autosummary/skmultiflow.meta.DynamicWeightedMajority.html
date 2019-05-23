@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.meta.DynamicWeightedMajority &mdash; scikit-multiflow 0.3.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/skmultiflow.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="skmultiflow.meta.LearnNSE" href="skmultiflow.meta.LearnNSE.html" />
+    <link rel="prev" title="skmultiflow.meta.MonteCarloClassifierChain" href="skmultiflow.meta.MonteCarloClassifierChain.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide.quick-start-docker.html">Quick-Start Guide with Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.quick-start-docker.html#run-hello-world-example">Run Hello World example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.quick-start-docker.html#write-your-code-and-run-it-in-scikit-multiflow-container">Write your code and run it in scikit-multiflow container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide.streams-intro.html">Using Streams in scikit-multiflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.streams-intro.html#stream-generators">Stream generators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../documentation.html">scikit-multiflow API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.core">Core: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.core</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.base.BaseEstimator.html">skmultiflow.core.base.BaseEstimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.BaseSKMObject.html">skmultiflow.core.BaseSKMObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.ClassifierMixin.html">skmultiflow.core.ClassifierMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.RegressorMixin.html">skmultiflow.core.RegressorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.MetaEstimatorMixin.html">skmultiflow.core.MetaEstimatorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.MultiOutputMixin.html">skmultiflow.core.MultiOutputMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.Pipeline.html">skmultiflow.core.Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.data">Data: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.base_stream.Stream.html">skmultiflow.data.base_stream.Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.DataStream.html">skmultiflow.data.DataStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.FileStream.html">skmultiflow.data.FileStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.ADWIN.html">skmultiflow.drift_detection.ADWIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.DDM.html">skmultiflow.drift_detection.DDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.EDDM.html">skmultiflow.drift_detection.EDDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.PageHinkley.html">skmultiflow.drift_detection.PageHinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.EvaluateHoldout.html">skmultiflow.evaluation.EvaluateHoldout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.EvaluatePrequential.html">skmultiflow.evaluation.EvaluatePrequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.transform">Transform: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.transform</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.transform.MissingValuesCleaner.html">skmultiflow.transform.MissingValuesCleaner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.transform.OneHotToCategorical.html">skmultiflow.transform.OneHotToCategorical</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#misc">Misc:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#data-structure">Data structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#utilities">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's new (Changelog)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Other versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Previous versions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../documentation.html">API Documentation</a> &raquo;</li>
+        
+      <li>skmultiflow.meta.DynamicWeightedMajority</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_autosummary/skmultiflow.meta.DynamicWeightedMajority.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="skmultiflow-meta-dynamicweightedmajority">
+<h1>skmultiflow.meta.DynamicWeightedMajority<a class="headerlink" href="#skmultiflow-meta-dynamicweightedmajority" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.meta.DynamicWeightedMajority">
+<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">DynamicWeightedMajority</code><span class="sig-paren">(</span><em>n_estimators=5</em>, <em>base_estimator=NaiveBayes(nominal_attributes=None)</em>, <em>period=50</em>, <em>beta=0.5</em>, <em>theta=0.01</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dynamic Weighted Majority ensemble classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_estimators</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=5</em><em>)</em>) – Maximum number of estimators to hold.</p></li>
+<li><p><strong>base_estimator</strong> (<em>StreamModel</em><em> or </em><em>sklearn.BaseEstimator</em><em> (</em><em>default=NaiveBayes</em><em>)</em>) – Each member of the ensemble is an instance of the base estimator.</p></li>
+<li><p><strong>period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=50</em><em>)</em>) – Period between expert removal, creation, and weight update.</p></li>
+<li><p><strong>beta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>default=0.5</em><em>)</em>) – Factor for which to decrease weights by.</p></li>
+<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>default=0.01</em><em>)</em>) – Minimum fraction of weight per model.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The dynamic weighted majority (DWM) <a class="footnote-reference brackets" href="#id2" id="id1">1</a>, uses four mechanisms to
+cope with concept drift: It trains online learners of the ensemble,
+it weights those learners based on their performance, it removes them,
+also based on their performance, and it adds new experts based on the
+global performance of the ensemble.</p>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Kolter and Maloof. Dynamic weighted majority: An ensemble method
+for drifting concepts. The Journal of Machine Learning Research,
+8:2755-2790, December 2007. ISSN 1532-4435.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>n_estimators=5</em>, <em>base_estimator=NaiveBayes(nominal_attributes=None)</em>, <em>period=50</em>, <em>beta=0.5</em>, <em>theta=0.01</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L54"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new instance of DynamicWeightedMajority.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-center">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.__init__" title="skmultiflow.meta.DynamicWeightedMajority.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([n_estimators, base_estimator, …])</p></td>
+<td><p>Creates a new instance of DynamicWeightedMajority.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.fit" title="skmultiflow.meta.DynamicWeightedMajority.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(X, y[, classes, sample_weight])</p></td>
+<td><p>Fit the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.fit_single_sample" title="skmultiflow.meta.DynamicWeightedMajority.fit_single_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_single_sample</span></code></a>(X, y[, classes, sample_weight])</p></td>
+<td><p>Fits a single sample of shape <cite>X.shape=(1, n_attributes)</cite> and <cite>y.shape=(1)</cite></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.get_expert_predictions" title="skmultiflow.meta.DynamicWeightedMajority.get_expert_predictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expert_predictions</span></code></a>(X)</p></td>
+<td><p>Returns predictions of each class for each expert.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.get_info" title="skmultiflow.meta.DynamicWeightedMajority.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<td><p>Collects and returns the information about the configuration of the estimator</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.get_params" title="skmultiflow.meta.DynamicWeightedMajority.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.partial_fit" title="skmultiflow.meta.DynamicWeightedMajority.partial_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">partial_fit</span></code></a>(X, y[, classes, sample_weight])</p></td>
+<td><p>Partially fits the model on the supplied X and y matrices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.predict" title="skmultiflow.meta.DynamicWeightedMajority.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(X)</p></td>
+<td><p>The predict function will take an average of the predictions of its learners, weighted by their respective weights, and return the most likely class.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.predict_proba" title="skmultiflow.meta.DynamicWeightedMajority.predict_proba"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_proba</span></code></a>(X)</p></td>
+<td><p>Estimates the probability of each sample in X belonging to each of the class-labels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.reset" title="skmultiflow.meta.DynamicWeightedMajority.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<td><p>Reset this ensemble learner.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.score" title="skmultiflow.meta.DynamicWeightedMajority.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(X, y[, sample_weight])</p></td>
+<td><p>Returns the mean accuracy on the given test data and labels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.DynamicWeightedMajority.set_params" title="skmultiflow.meta.DynamicWeightedMajority.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.WeightedExpert">
+<em class="property">class </em><code class="descname">WeightedExpert</code><span class="sig-paren">(</span><em>estimator</em>, <em>weight</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L39"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.WeightedExpert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper that includes an estimator and its weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> (<em>StreamModel</em><em> or </em><em>sklearn.BaseEstimator</em>) – The estimator to wrap.</p></li>
+<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The estimator’s weight.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The features to train the model.</p></li>
+<li><p><strong>y</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_targets</em><em>)</em>) – An array-like with the class labels of all samples in X.</p></li>
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible/known class labels. Usage varies depending on the learning method.</p></li>
+<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the learning method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.fit_single_sample">
+<code class="descname">fit_single_sample</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L134"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.fit_single_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a single sample of shape <cite>X.shape=(1, n_attributes)</cite> and <cite>y.shape=(1)</cite></p>
+<p>Aggregates all experts’ predictions, diminishes weight of experts whose
+predictions were wrong, and may create or remove experts every _period_
+samples.</p>
+<p>Finally, trains each individual expert on the provided data.</p>
+<p>Train loop as described by Kolter and Maloof in the original paper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Features matrix used for partially updating the model.</p></li>
+<li><p><strong>y</strong> (<em>Array-like</em>) – An array-like of all the class labels for the samples in X.</p></li>
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – List of all existing classes. This is an optional parameter.</p></li>
+<li><p><strong>sample_weight</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Samples weight. If not provided, uniform weights are assumed. Applicability
+depends on the base estimator.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.get_expert_predictions">
+<code class="descname">get_expert_predictions</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L197"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.get_expert_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns predictions of each class for each expert.
+In shape: (n_experts, n_samples)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects and returns the information about the configuration of the estimator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Configuration of the estimator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.get_params">
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapping of string to any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L75"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partially fits the model on the supplied X and y matrices.</p>
+<p>Since it’s an ensemble learner, if X and y matrix of more than one
+sample are passed, the algorithm will partial fit the model one sample
+at a time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The features to train the model.</p></li>
+<li><p><strong>y</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em>) – An array-like with the class labels of all samples in X.</p></li>
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Array with all possible/known class labels. This is an optional parameter, except
+for the first partial_fit call where it is compulsory.</p></li>
+<li><p><strong>sample_weight</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the base estimator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>self</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DynamicWeightedMajority</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predict function will take an average of the predictions of its
+learners, weighted by their respective weights, and return the most
+likely class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – A matrix of the samples we want to predict.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A numpy.ndarray with the label prediction for all the samples in X.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.predict_proba">
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L131"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the probability of each sample in X belonging to each of the class-labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The matrix of samples one wants to predict the class probabilities for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the</em></p></li>
+<li><p><em>same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents</em></p></li>
+<li><p><em>the probability that the i-th sample of X belongs to a certain class-label.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/meta/dynamic_weighted_majority.py#L204"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset this ensemble learner.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.score">
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the mean accuracy on the given test data and labels.</p>
+<p>In multi-label classification, this is the subset accuracy
+which is a harsh metric since you require for each sample that
+each label set be correctly predicted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array-like</em><em>, </em><em>shape =</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Test samples.</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em>, </em><em>shape =</em><em> (</em><em>n_samples</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_outputs</em><em>)</em>) – True labels for X.</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em>, </em><em>shape =</em><em> [</em><em>n_samples</em><em>]</em><em>, </em><em>optional</em>) – Sample weights.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>score</strong> – Mean accuracy of self.predict(X) wrt. y.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.meta.DynamicWeightedMajority.set_params">
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.DynamicWeightedMajority.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as pipelines). The latter have parameters of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s possible to update each
+component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skmultiflow.meta.LearnNSE.html" class="btn btn-neutral float-right" title="skmultiflow.meta.LearnNSE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skmultiflow.meta.MonteCarloClassifierChain.html" class="btn btn-neutral float-left" title="skmultiflow.meta.MonteCarloClassifierChain" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
