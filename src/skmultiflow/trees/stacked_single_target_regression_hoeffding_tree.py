@@ -1,33 +1,28 @@
+from operator import attrgetter
+
 import numpy as np
-from skmultiflow.trees.regression_hoeffding_tree import \
-    RegressionHoeffdingTree
-from skmultiflow.trees.multi_target_regression_hoeffding_tree import \
-    MultiTargetRegressionHoeffdingTree
+
+from skmultiflow.core import MultiOutputMixin
+from skmultiflow.trees import RegressionHoeffdingTree
+from skmultiflow.trees import MultiTargetRegressionHoeffdingTree
 from skmultiflow.trees.numeric_attribute_regression_observer_multi_target \
     import NumericAttributeRegressionObserverMultiTarget
 from skmultiflow.trees.nominal_attribute_regression_observer \
      import NominalAttributeRegressionObserver
-from operator import attrgetter
 from skmultiflow.utils.utils import get_dimensions
 from skmultiflow.trees.intra_cluster_variance_reduction_split_criterion \
      import IntraClusterVarianceReductionSplitCriterion
 from skmultiflow.utils import check_random_state
-import logging
 
 
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 _ADAPTIVE = 'adaptive'
 
-# logger
-logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 
 class StackedSingleTargetRegressionHoeffdingTree(
-        MultiTargetRegressionHoeffdingTree):
-    """Stacked Single Target Multi-target Regression Hoeffding tree.
+        MultiTargetRegressionHoeffdingTree, MultiOutputMixin):
+    """Stacked Single Target Multi-target Regression Hoeffding Tree.
 
     Proposed (and yet not published) by Saulo Martiello Mastelini.
 
@@ -52,10 +47,11 @@ class StackedSingleTargetRegressionHoeffdingTree(
         If True, disable poor attributes.
     no_preprune: boolean (default=False)
         If True, disable pre-pruning.
-    leaf_prediction: string (default='nba')
+    leaf_prediction: string (default='perceptron')
         | Prediction mechanism used at leafs.
-        | 'tm' - Target mean
+        | 'mean' - Target mean
         | 'perceptron' - Perceptron
+        | 'adaptive' - Adaptively chooses between the best predictor
     nb_threshold: int (default=0)
         Number of instances a leaf should observe before allowing Naive Bayes.
     nominal_attributes: list, optional
@@ -144,7 +140,7 @@ class StackedSingleTargetRegressionHoeffdingTree(
                     obs = self._attribute_observers[i]
                 except KeyError:
                     # Creates targets observers, if not already defined
-                    if i in rht.nominal_attributes:
+                    if rht.nominal_attributes is not None and i in rht.nominal_attributes:
                         obs = NominalAttributeRegressionObserver()
                     else:
                         obs = NumericAttributeRegressionObserverMultiTarget()
@@ -480,20 +476,23 @@ class StackedSingleTargetRegressionHoeffdingTree(
                  learning_ratio_decay=0.001,
                  learning_ratio_const=True,
                  random_state=None):
-
-        self.split_criterion = 'intra cluster variance reduction'
-        self.max_byte_size = max_byte_size
-        self.memory_estimate_period = memory_estimate_period
-        self.grace_period = grace_period
-        self.split_confidence = split_confidence
-        self.tie_threshold = tie_threshold
-        self.binary_split = binary_split
-        self.stop_mem_management = stop_mem_management
-        self.remove_poor_atts = remove_poor_atts
-        self.no_preprune = no_preprune
-        self.leaf_prediction = leaf_prediction
-        self.nb_threshold = nb_threshold
-        self.nominal_attributes = nominal_attributes
+        super().__init__(max_byte_size=max_byte_size,
+                         memory_estimate_period=memory_estimate_period,
+                         grace_period=grace_period,
+                         split_confidence=split_confidence,
+                         tie_threshold=tie_threshold,
+                         binary_split=binary_split,
+                         stop_mem_management=stop_mem_management,
+                         remove_poor_atts=remove_poor_atts,
+                         no_preprune=no_preprune,
+                         leaf_prediction=leaf_prediction,
+                         nb_threshold=nb_threshold,
+                         nominal_attributes=nominal_attributes)
+        self.split_criterion = 'icvr'   # intra cluster variance reduction
+        self.learning_ratio_perceptron = learning_ratio_perceptron
+        self.learning_ratio_decay = learning_ratio_decay
+        self.learning_ratio_const = learning_ratio_const
+        self.random_state = random_state
 
         self._tree_root = None
         self._decision_node_cnt = 0
@@ -505,16 +504,11 @@ class StackedSingleTargetRegressionHoeffdingTree(
         self._growth_allowed = True
         self._train_weight_seen_by_model = 0.0
 
-        self.learning_ratio_perceptron = learning_ratio_perceptron
-        self.learning_ratio_decay = learning_ratio_decay
-        self.learning_ratio_const = learning_ratio_const
         self.examples_seen = 0
         self.sum_of_values = 0.0
         self.sum_of_squares = 0.0
         self.sum_of_attribute_values = 0.0
         self.sum_of_attribute_squares = 0.0
-        self._init_random_state = random_state
-        self.random_state = check_random_state(self._init_random_state)
 
         # To add the n_targets property once
         self._n_targets_set = False
@@ -650,7 +644,7 @@ class StackedSingleTargetRegressionHoeffdingTree(
     def _attempt_to_split(self, node, parent, parent_idx: int):
         """Attempt to split a node.
 
-        If there exists significative variance among the target space of the
+        If there exists significant variance among the target space of the
         seem examples:
 
         1. Find split candidates and select the top 2.
