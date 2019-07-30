@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import math
+import copy
 
 from skmultiflow.utils.utils import get_max_value_key, normalize_values_in_dict
 from skmultiflow.drift_detection import ADWIN
@@ -309,13 +310,11 @@ class HAT(HoeffdingTree):
         def learn_from_instance(self, X, y, weight, hat, parent, parent_branch):
             true_class = y
 
-            # k = self._classifier_random.poisson(1.0)
-            # if k > 0:
-            #     weight = weight * k
+            k = self._classifier_random.poisson(1.0)
+            if k > 0:
+                weight = weight * k
 
-            tmp = self.get_class_votes(X, hat)
-
-            class_prediction = get_max_value_key(tmp)
+            class_prediction = get_max_value_key(self.get_class_votes(X, hat))
 
             bl_correct = (true_class == class_prediction)
 
@@ -365,7 +364,7 @@ class HAT(HoeffdingTree):
             normalization_factor = dist_sum * self.get_error_estimation() * self.get_error_estimation()
 
             if normalization_factor > 0.0:
-                normalize_values_in_dict(dist, normalization_factor)
+                dist = normalize_values_in_dict(dist, normalization_factor, inplace=False)
 
             return dist
 
