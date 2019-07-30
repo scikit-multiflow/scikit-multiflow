@@ -12,7 +12,6 @@ from skmultiflow.trees.nominal_attribute_regression_observer \
 from skmultiflow.utils.utils import get_dimensions
 from skmultiflow.trees.intra_cluster_variance_reduction_split_criterion \
      import IntraClusterVarianceReductionSplitCriterion
-from skmultiflow.utils import check_random_state
 
 
 _TARGET_MEAN = 'mean'
@@ -22,9 +21,10 @@ _ADAPTIVE = 'adaptive'
 
 class StackedSingleTargetRegressionHoeffdingTree(
         MultiTargetRegressionHoeffdingTree, MultiOutputMixin):
-    """Stacked Single Target Multi-target Regression Hoeffding Tree.
+    """Stacked Single-target Regression Hoeffding Tree.
 
-    Proposed (and yet not published) by Saulo Martiello Mastelini.
+    Implementation of the Stacked Single-target Regression Hoeffding Tree (SST-HT)
+    proposed by S. M. Mastelini, S. Barbon Jr., and A. C. P. L. F. de Carvalho [1]_.
 
     Parameters
     ----------
@@ -68,6 +68,11 @@ class StackedSingleTargetRegressionHoeffdingTree(
        If RandomState instance, random_state is the random number generator;
        If None, the random number generator is the RandomState instance used
        by `np.random`. Used when leaf_prediction is 'perceptron'.
+
+    References
+    ----------
+    .. [1] Mastelini, S. M., Barbon Jr, S., de Carvalho, A. C. P. L. F. (2019).
+       "Online Multi-target regression trees with stacked leaf models". arXiv preprint arXiv:1903.12483.
     """
 
     class LearningNodePerceptron(MultiTargetRegressionHoeffdingTree.
