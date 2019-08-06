@@ -298,24 +298,7 @@ class StackedSingleTargetRegressionHoeffdingTree(
                              random_state)
 
         def learn_from_instance(self, X, y, weight, rht):
-
-            if self.perceptron_weight is None:
-                self.perceptron_weight = {}
-                # Creates matrix of perceptron random weights
-                _, rows = get_dimensions(y)
-                _, cols = get_dimensions(X)
-
-                self.perceptron_weight[0] = \
-                    self.random_state.uniform(-1.0, 1.0, (rows, cols + 1))
-                # Cascade Stacking
-                self.perceptron_weight[1] = \
-                    self.random_state.uniform(-1.0, 1.0, (rows, rows + 1))
-                self.normalize_perceptron_weights()
-
-            try:
-                self._observed_class_distribution[0] += weight
-            except KeyError:
-                self._observed_class_distribution[0] = weight
+            self._observed_class_distribution[0] += weight
 
             if rht.learning_ratio_const:
                 learning_ratio = rht.learning_ratio_perceptron
@@ -324,12 +307,8 @@ class StackedSingleTargetRegressionHoeffdingTree(
                                 (1 + self._observed_class_distribution[0] *
                                  rht.learning_ratio_decay)
 
-            try:
-                self._observed_class_distribution[1] += weight * y
-                self._observed_class_distribution[2] += weight * y * y
-            except KeyError:
-                self._observed_class_distribution[1] = weight * y
-                self._observed_class_distribution[2] = weight * y * y
+            self._observed_class_distribution[1] += weight * y
+            self._observed_class_distribution[2] += weight * y * y
 
             for i in range(int(weight)):
                 self.update_weights(X, y, learning_ratio, rht)
