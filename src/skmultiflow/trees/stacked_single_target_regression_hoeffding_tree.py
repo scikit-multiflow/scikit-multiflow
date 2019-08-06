@@ -14,7 +14,6 @@ from skmultiflow.trees.intra_cluster_variance_reduction_split_criterion \
      import IntraClusterVarianceReductionSplitCriterion
 
 
-_TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 _ADAPTIVE = 'adaptive'
 
@@ -23,8 +22,9 @@ class StackedSingleTargetRegressionHoeffdingTree(
         MultiTargetRegressionHoeffdingTree, MultiOutputMixin):
     """Stacked Single-target Regression Hoeffding Tree.
 
-    Implementation of the Stacked Single-target Regression Hoeffding Tree (SST-HT)
-    proposed by S. M. Mastelini, S. Barbon Jr., and A. C. P. L. F. de Carvalho [1]_.
+    Implementation of the Stacked Single-target Regression Hoeffding Tree
+    (SST-HT) proposed by S. M. Mastelini, S. Barbon Jr., and A. C. P. L. F. de
+    Carvalho [1]_.
 
     Parameters
     ----------
@@ -49,9 +49,9 @@ class StackedSingleTargetRegressionHoeffdingTree(
         If True, disable pre-pruning.
     leaf_prediction: string (default='perceptron')
         | Prediction mechanism used at leafs.
-        | 'mean' - Target mean
-        | 'perceptron' - Perceptron
-        | 'adaptive' - Adaptively chooses between the best predictor
+        | 'perceptron' - Stacked perceptron
+        | 'adaptive' - Adaptively chooses between the best predictor (mean,
+        perceptron or stacked perceptron)
     nb_threshold: int (default=0)
         Number of instances a leaf should observe before allowing Naive Bayes.
     nominal_attributes: list, optional
@@ -72,7 +72,8 @@ class StackedSingleTargetRegressionHoeffdingTree(
     References
     ----------
     .. [1] Mastelini, S. M., Barbon Jr, S., de Carvalho, A. C. P. L. F. (2019).
-       "Online Multi-target regression trees with stacked leaf models". arXiv preprint arXiv:1903.12483.
+       "Online Multi-target regression trees with stacked leaf models". arXiv
+       preprint arXiv:1903.12483.
     """
 
     class LearningNodePerceptron(MultiTargetRegressionHoeffdingTree.
@@ -518,6 +519,18 @@ class StackedSingleTargetRegressionHoeffdingTree(
         # To add the n_targets property once
         self._n_targets_set = False
 
+    @property
+    def leaf_prediction(self):
+        return self._leaf_prediction
+
+    @leaf_prediction.setter
+    def leaf_prediction(self, leaf_prediction):
+        if leaf_prediction not in {_PERCEPTRON, _ADAPTIVE}:
+            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
+            self._leaf_prediction = _PERCEPTRON
+        else:
+            self._leaf_prediction = leaf_prediction
+
     def _get_predictors_faded_error(self, X):
         """Get the faded error of the leaf corresponding to the pased instance.
 
@@ -559,15 +572,7 @@ class StackedSingleTargetRegressionHoeffdingTree(
 
         predictions = np.zeros((r, self._n_targets), dtype=np.float64)
         for i in range(r):
-            if self.leaf_prediction == _TARGET_MEAN:
-                votes = self.get_votes_for_instance(X[i]).copy()
-                # Tree is not empty, otherwise, all target_values are set
-                # equally, default to zero
-                if votes != {}:
-                    number_of_examples_seen = votes[0]
-                    sum_of_values = votes[1]
-                    predictions[i] = sum_of_values / number_of_examples_seen
-            elif self.leaf_prediction == _PERCEPTRON:
+            if self.leaf_prediction == _PERCEPTRON:
                 if self.examples_seen > 1:
                     normalized_sample = self.normalize_sample(X[i])
                     perceptron_weights = self.get_weights_for_instance(X[i])
@@ -728,11 +733,6 @@ class StackedSingleTargetRegressionHoeffdingTree(
                             resulting_class_distribution_from_split(i),
                             node.perceptron_weight
                         )
-                    elif self.leaf_prediction == _TARGET_MEAN:
-                        new_child = self._new_learning_node(
-                            split_decision.
-                            resulting_class_distribution_from_split(i),
-                            None)
                     elif self.leaf_prediction == _ADAPTIVE:
                         new_child = self._new_learning_node(
                             split_decision.
@@ -773,11 +773,7 @@ class StackedSingleTargetRegressionHoeffdingTree(
         parent_branch: int
             Parent node's branch index.
         """
-        if self.leaf_prediction == _TARGET_MEAN:
-            new_leaf = self.InactiveLearningNodeForRegression(
-                to_deactivate.get_observed_class_distribution()
-            )
-        elif self.leaf_prediction == _PERCEPTRON:
+        if self.leaf_prediction == _PERCEPTRON:
             new_leaf = self.InactiveLearningNodePerceptron(
                 to_deactivate.get_observed_class_distribution(),
                 to_deactivate.perceptron_weight

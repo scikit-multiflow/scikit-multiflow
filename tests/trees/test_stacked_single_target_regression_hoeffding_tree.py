@@ -123,6 +123,7 @@ def test_hoeffding_tree_coverage(test_path):
     X = data['X']
     Y = data['Y']
 
+    # Will generate a warning concerning the invalid leaf prediction option
     learner = StackedSingleTargetRegressionHoeffdingTree(
         leaf_prediction='mean',
         nominal_attributes=[i for i in range(3)]
