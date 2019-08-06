@@ -6,7 +6,7 @@ from skmultiflow.trees import StackedSingleTargetRegressionHoeffdingTree
 
 
 def test_stacked_single_target_regression_hoeffding_tree_perceptron(test_path):
-    stream = RegressionGenerator(n_samples=500, n_features=20,
+    stream = RegressionGenerator(n_samples=2000, n_features=20,
                                  n_informative=15, random_state=1,
                                  n_targets=3)
     stream.prepare_for_use()
@@ -17,8 +17,8 @@ def test_stacked_single_target_regression_hoeffding_tree_perceptron(test_path):
     )
 
     cnt = 0
-    max_samples = 500
-    wait_samples = 10
+    max_samples = 2000
+    wait_samples = 200
     y_pred = np.zeros((int(max_samples / wait_samples), 3))
     y_true = np.zeros((int(max_samples / wait_samples), 3))
 
@@ -35,11 +35,10 @@ def test_stacked_single_target_regression_hoeffding_tree_perceptron(test_path):
         test_path,
         'expected_preds_stacked_single_target_hoeffding_tree_perceptron.npy'
     )
-
     expected_predictions = np.load(test_file)
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 145.96135900202685
+    expected_error = 151.52171404209466
     assert np.isclose(error, expected_error)
 
     expected_info = "StackedSingleTargetRegressionHoeffdingTree(binary_split=False, grace_period=200,\n" \
@@ -61,7 +60,7 @@ def test_stacked_single_target_regression_hoeffding_tree_perceptron(test_path):
 
 
 def test_stacked_single_target_regression_hoeffding_tree_adaptive(test_path):
-    stream = RegressionGenerator(n_samples=500, n_features=20,
+    stream = RegressionGenerator(n_samples=2000, n_features=20,
                                  n_informative=15, random_state=1,
                                  n_targets=3)
     stream.prepare_for_use()
@@ -72,8 +71,8 @@ def test_stacked_single_target_regression_hoeffding_tree_adaptive(test_path):
     )
 
     cnt = 0
-    max_samples = 500
-    wait_samples = 10
+    max_samples = 2000
+    wait_samples = 200
     y_pred = np.zeros((int(max_samples / wait_samples), 3))
     y_true = np.zeros((int(max_samples / wait_samples), 3))
 
@@ -94,7 +93,7 @@ def test_stacked_single_target_regression_hoeffding_tree_adaptive(test_path):
 
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 134.40951845901694
+    expected_error = 150.7836894811965
     assert np.isclose(error, expected_error)
 
     expected_info = "StackedSingleTargetRegressionHoeffdingTree(binary_split=False, grace_period=200,\n" \
