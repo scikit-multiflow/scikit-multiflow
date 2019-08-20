@@ -18,7 +18,7 @@ _PERCEPTRON = 'perceptron'
 _ADAPTIVE = 'adaptive'
 
 
-class StackedSingleTargetRegressionHoeffdingTree(
+class StackedSingleTargetHoeffingTreeRegressor(
         MultiTargetRegressionHoeffdingTree, MultiOutputMixin):
     """Stacked Single-target Regression Hoeffding Tree.
 
