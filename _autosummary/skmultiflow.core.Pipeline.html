@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.core.Pipeline &mdash; scikit-multiflow 0.3.0 documentation</title>
+  <title>skmultiflow.core.Pipeline &mdash; scikit-multiflow 0.4.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.4.0
               </div>
             
           
@@ -148,12 +148,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.prototype">Prototype based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Trees based methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -262,7 +264,7 @@
 <h1>skmultiflow.core.Pipeline<a class="headerlink" href="#skmultiflow-core-pipeline" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.core.Pipeline">
-<em class="property">class </em><code class="descclassname">skmultiflow.core.</code><code class="descname">Pipeline</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.core.</code><code class="descname">Pipeline</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline" title="Permalink to this definition">¶</a></dt>
 <dd><p>[Experimental] Holds a set of sequential operation (transforms), followed by a single estimator.</p>
 <p>It allows for easy manipulation of datasets that may
 require several transformation processes before being used by a learner.
@@ -316,7 +318,7 @@ is required. Each tuple should be of the format (‘name’, estimator).</p>
 </div>
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L68"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L68"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -364,7 +366,7 @@ is required. Each tuple should be of the format (‘name’, estimator).</p>
 </table>
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L106"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L106"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sequentially fit and transform data in all but last step, then fit
 the model in last step.</p>
 <dl class="field-list simple">
@@ -386,7 +388,7 @@ model.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L283"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L283"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -400,7 +402,7 @@ model.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -418,7 +420,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.named_steps">
-<code class="descname">named_steps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L270"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.named_steps" title="Permalink to this definition">¶</a></dt>
+<code class="descname">named_steps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L270"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.named_steps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a dictionary to access all the steps’ properties.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -432,7 +434,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.partial_fit">
-<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L141"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.partial_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L141"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.partial_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sequentially partial fit and transform data in all but last step,
 then partial fit data in last step.</p>
 <dl class="field-list simple">
@@ -440,7 +442,7 @@ then partial fit data in last step.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The features to train the model.</p></li>
 <li><p><strong>y</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em>) – An array-like with the class labels of all samples in X.</p></li>
-<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a>) – Array with all possible/known class labels. This is an optional parameter, except
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a>) – Array with all possible/known class labels. This is an optional parameter, except
 for the first partial_fit call where it is compulsory.</p></li>
 </ul>
 </dd>
@@ -455,7 +457,7 @@ for the first partial_fit call where it is compulsory.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.partial_fit_predict">
-<code class="descname">partial_fit_predict</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L181"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.partial_fit_predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">partial_fit_predict</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L181"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.partial_fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partial fits and transforms data in all but last step, then partial
 fits and predicts in the last step</p>
 <dl class="field-list simple">
@@ -476,7 +478,7 @@ fits and predicts in the last step</p>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.partial_fit_transform">
-<code class="descname">partial_fit_transform</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L215"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.partial_fit_transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">partial_fit_transform</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L215"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.partial_fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partial fits and transforms data in all but last step, then
 partial_fit in last step</p>
 <dl class="field-list simple">
@@ -498,7 +500,7 @@ model.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/pipeline.py#L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/pipeline.py#L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sequentially applies all transforms and then predict with last step.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -515,7 +517,7 @@ model.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the estimator to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -529,7 +531,7 @@ model.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.core.Pipeline.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.core.Pipeline.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form

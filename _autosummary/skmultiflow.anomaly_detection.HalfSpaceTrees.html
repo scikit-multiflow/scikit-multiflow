@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.meta.OzaBagging &mdash; scikit-multiflow 0.4.0 documentation</title>
+  <title>skmultiflow.anomaly_detection.HalfSpaceTrees &mdash; scikit-multiflow 0.4.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="skmultiflow.meta.OzaBaggingAdwin" href="skmultiflow.meta.OzaBaggingAdwin.html" />
-    <link rel="prev" title="skmultiflow.meta.OnlineUnderOverBagging" href="skmultiflow.meta.OnlineUnderOverBagging.html" /> 
+    <link rel="next" title="skmultiflow.bayes.NaiveBayes" href="skmultiflow.bayes.NaiveBayes.html" />
+    <link rel="prev" title="skmultiflow.data.ConceptDriftStream" href="skmultiflow.data.ConceptDriftStream.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -148,10 +148,10 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.prototype">Prototype based methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules based methods</a></li>
@@ -239,14 +239,14 @@
         
           <li><a href="../documentation.html">API Documentation</a> &raquo;</li>
         
-      <li>skmultiflow.meta.OzaBagging</li>
+      <li>skmultiflow.anomaly_detection.HalfSpaceTrees</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_autosummary/skmultiflow.meta.OzaBagging.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_autosummary/skmultiflow.anomaly_detection.HalfSpaceTrees.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -260,87 +260,50 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="skmultiflow-meta-ozabagging">
-<h1>skmultiflow.meta.OzaBagging<a class="headerlink" href="#skmultiflow-meta-ozabagging" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="skmultiflow-anomaly-detection-halfspacetrees">
+<h1>skmultiflow.anomaly_detection.HalfSpaceTrees<a class="headerlink" href="#skmultiflow-anomaly-detection-halfspacetrees" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="skmultiflow.meta.OzaBagging">
-<em class="property">class </em><code class="descclassname">skmultiflow.meta.</code><code class="descname">OzaBagging</code><span class="sig-paren">(</span><em>base_estimator=KNNAdwin(leaf_size=30</em>, <em>max_window_size=1000</em>, <em>n_neighbors=5</em>, <em>nominal_attributes=None)</em>, <em>n_estimators=10</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/meta/oza_bagging.py#L9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging" title="Permalink to this definition">¶</a></dt>
-<dd><p>Oza Bagging ensemble classifier.</p>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees">
+<em class="property">class </em><code class="descclassname">skmultiflow.anomaly_detection.</code><code class="descname">HalfSpaceTrees</code><span class="sig-paren">(</span><em>n_features</em>, <em>window_size=250</em>, <em>depth=15</em>, <em>n_estimators=25</em>, <em>size_limit=50</em>, <em>anomaly_threshold=0.5</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Half–Space Trees.</p>
+<p>Implementation of the Streaming Half–Space–Trees (HS–Trees) <a class="footnote-reference brackets" href="#id2" id="id1">1</a>, a fast one-class anomaly detector
+for evolving data streams. It requires only normal data for training and works well when anomalous
+data are rare. The model features an ensemble of random HS–Trees, and the tree structure is
+constructed without any data. This makes the method highly efficient because it requires no model
+restructuring when adapting to evolving data streams.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.BaseSKMObject.html#skmultiflow.core.BaseSKMObject" title="skmultiflow.core.BaseSKMObject"><em>skmultiflow.core.BaseSKMObject</em></a><em> or </em><em>sklearn.BaseEstimator</em><em> (</em><em>default=KNNAdwin</em><em>)</em>) – Each member of the ensemble is an instance of the base estimator.</p></li>
-<li><p><strong>n_estimators</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=10</em><em>)</em>) – The size of the ensemble, in other words, how many classifiers to train.</p></li>
+<li><p><strong>n_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>required</em>) – The dimensionality of the stream.</p></li>
+<li><p><strong>n_estimators</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=25</em><em>)</em>) – Number of trees in the ensemble.
+‘t’ in the original paper.</p></li>
+<li><p><strong>window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=250</em><em>)</em>) – The window size of the stream.
+‘Psi’ in the original paper.</p></li>
+<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=15</em><em>)</em>) – The maximum depth of the trees in the ensemble.
+‘maxDepth’ in the original paper.</p></li>
+<li><p><strong>size_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=50</em><em>)</em>) – The minimum mass required in a node (as a fraction of the window size) to calculate the anomaly score.
+‘sizeLimit’ in the original paper.
+A good setting is 0.1 * window_size</p></li>
+<li><p><strong>anomaly_threshold</strong> (<em>double</em><em>, </em><em>optional</em><em> (</em><em>default=0.5</em><em>)</em>) – The threshold for declaring anomalies.
+Any instance prediction probability above this threshold will be declared as an anomaly.</p></li>
 <li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
 If RandomState instance, random_state is the random number generator;
-If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – A ValueError is raised if the ‘classes’ parameter is:</p></li>
-<li><p><strong>not passed in the first partial_fit call.</strong> – </p></li>
+If None, the random number generator is the RandomState instance used
+by <cite>np.random</cite>.</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Oza Bagging <a class="footnote-reference brackets" href="#id2" id="id1">1</a> is an ensemble learning method first introduced by Oza and
-Russel’s ‘Online Bagging and Boosting’. They are an improvement of the
-well known Bagging ensemble method for the batch setting, which in this
-version can effectively handle data streams.</p>
-<p>For a traditional Bagging algorithm, adapted for the batch setting, we
-would have M classifiers training on M different datasets, created by
-drawing N samples from the N-sized training set with replacement.</p>
-<p>In the online context, since there is no training dataset, but a stream
-of samples, the drawing of samples with replacement can’t be trivially
-executed. The strategy adopted by the Online Bagging algorithm is to
-simulate this task by training each arriving sample K times, which is
-drawn by the binomial distribution. Since we can consider the data stream
-to be infinite, and knowing that with infinite samples the binomial
-distribution tends to a Poisson(1) distribution, Oza and Russel found
-that to be a good ‘drawing with replacement’.</p>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
 <dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>N. C. Oza, “Online Bagging and Boosting,” in 2005 IEEE International Conference on Systems,
-Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.</p>
+<dd><p>S.C.Tan, K.M.Ting, and T.F.Liu, “Fast anomaly detection for streaming data,”
+in IJCAI Proceedings - International Joint Conference on Artificial Intelligence,
+2011, vol. 22, no. 1, pp. 1511–1516.</p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.meta</span> <span class="k">import</span> <span class="n">OzaBagging</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn</span> <span class="k">import</span> <span class="n">KNN</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data</span> <span class="k">import</span> <span class="n">SEAGenerator</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">0.07</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the OzaBagging classifier to work with KNN classifiers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OzaBagging</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">KNN</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">max_window_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Keeping track of sample count and correct prediction count</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sample_count</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corrects</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pre training the classifier with 200 samples</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">stream</span><span class="o">.</span><span class="n">target_values</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
-<span class="gp">... </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">pred</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-<span class="gp">... </span>            <span class="n">corrects</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="gp">... </span>    <span class="n">sample_count</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Displaying the results</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sample_count</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; samples analyzed.&#39;</span><span class="p">)</span>
-<span class="go">2000 samples analyzed.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;OzaBagging classifier performance: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">corrects</span> <span class="o">/</span> <span class="n">sample_count</span><span class="p">))</span>
-<span class="go">OzaBagging classifier performance: 0.9095</span>
-</pre></div>
-</div>
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>base_estimator=KNNAdwin(leaf_size=30</em>, <em>max_window_size=1000</em>, <em>n_neighbors=5</em>, <em>nominal_attributes=None)</em>, <em>n_estimators=10</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/meta/oza_bagging.py#L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>n_features</em>, <em>window_size=250</em>, <em>depth=15</em>, <em>n_estimators=25</em>, <em>size_limit=50</em>, <em>anomaly_threshold=0.5</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L59"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -351,41 +314,62 @@ Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.__init__" title="skmultiflow.meta.OzaBagging.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([base_estimator, max_window_size, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.__init__" title="skmultiflow.anomaly_detection.HalfSpaceTrees.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(n_features[, window_size, depth, …])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.fit" title="skmultiflow.meta.OzaBagging.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(X, y[, classes, sample_weight])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.build_trees" title="skmultiflow.anomaly_detection.HalfSpaceTrees.build_trees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_trees</span></code></a>()</p></td>
+<td><p>Initialises ensemble.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.fit" title="skmultiflow.anomaly_detection.HalfSpaceTrees.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(X, y[, classes, sample_weight])</p></td>
 <td><p>Fit the model.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.get_info" title="skmultiflow.meta.OzaBagging.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.get_info" title="skmultiflow.anomaly_detection.HalfSpaceTrees.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
 <td><p>Collects and returns the information about the configuration of the estimator</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.get_params" title="skmultiflow.meta.OzaBagging.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.get_params" title="skmultiflow.anomaly_detection.HalfSpaceTrees.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
 <td><p>Get parameters for this estimator.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.partial_fit" title="skmultiflow.meta.OzaBagging.partial_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">partial_fit</span></code></a>(X, y[, classes, sample_weight])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.initialise_work_space" title="skmultiflow.anomaly_detection.HalfSpaceTrees.initialise_work_space"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialise_work_space</span></code></a>()</p></td>
+<td><p>Initialises work spaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.partial_fit" title="skmultiflow.anomaly_detection.HalfSpaceTrees.partial_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">partial_fit</span></code></a>(X, y[, classes, sample_weight])</p></td>
 <td><p>Partially (incrementally) fit the model.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.predict" title="skmultiflow.meta.OzaBagging.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(X)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.predict" title="skmultiflow.anomaly_detection.HalfSpaceTrees.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(X)</p></td>
 <td><p>Predict classes for the passed data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.predict_proba" title="skmultiflow.meta.OzaBagging.predict_proba"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_proba</span></code></a>(X)</p></td>
-<td><p>Estimates the probability of each sample in X belonging to each of the class-labels.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.predict_proba" title="skmultiflow.anomaly_detection.HalfSpaceTrees.predict_proba"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_proba</span></code></a>(X)</p></td>
+<td><p>Estimates the probability of each sample in X belonging to each of the class-labels (normal and outlier).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.reset" title="skmultiflow.meta.OzaBagging.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.reset" title="skmultiflow.anomaly_detection.HalfSpaceTrees.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
 <td><p>Resets the estimator to its initial state.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.score" title="skmultiflow.meta.OzaBagging.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(X, y[, sample_weight])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.score" title="skmultiflow.anomaly_detection.HalfSpaceTrees.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(X, y[, sample_weight])</p></td>
 <td><p>Returns the mean accuracy on the given test data and labels.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.meta.OzaBagging.set_params" title="skmultiflow.meta.OzaBagging.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.set_is_learning_phase_on" title="skmultiflow.anomaly_detection.HalfSpaceTrees.set_is_learning_phase_on"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_is_learning_phase_on</span></code></a>(boolean)</p></td>
+<td><p>Sets learning phase in each tree defined in the ensemble.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.set_params" title="skmultiflow.anomaly_detection.HalfSpaceTrees.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
 <td><p>Set the parameters of this estimator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.update_mass" title="skmultiflow.anomaly_detection.HalfSpaceTrees.update_mass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_mass</span></code></a>(X, boolean)</p></td>
+<td><p>Populates mass profiles for every tree defined in the ensemble.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.update_models" title="skmultiflow.anomaly_detection.HalfSpaceTrees.update_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_models</span></code></a>()</p></td>
+<td><p>Updates the mass profile of every tree in the ensemble.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.fit" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.build_trees">
+<code class="descname">build_trees</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L222"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.build_trees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises ensemble.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -406,8 +390,8 @@ Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.get_info" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -420,8 +404,8 @@ Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.get_params" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.get_params">
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -438,44 +422,37 @@ contained subobjects that are estimators.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.partial_fit">
-<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/meta/oza_bagging.py#L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.partial_fit" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.initialise_work_space">
+<code class="descname">initialise_work_space</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L204"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.initialise_work_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises work spaces.
+For every dimension in the feature space, creates a minimum and a maximum work range.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.partial_fit">
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L83"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.partial_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partially (incrementally) fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The features to train the model.</p></li>
 <li><p><strong>y</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em>) – An array-like with the class labels of all samples in X.</p></li>
-<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Array with all possible/known class labels. This is an optional parameter, except
-for the first partial_fit call where it is compulsory.</p></li>
-<li><p><strong>sample_weight</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the base estimator.</p></li>
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – Not used by this method.</p></li>
+<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – Not used by this method.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – A ValueError is raised if the ‘classes’ parameter is not:</p></li>
-<li><p><strong>passed in the first partial_fit call</strong><strong>, or </strong><strong>if they are passed in further</strong> – </p></li>
-<li><p><strong>calls but differ from the initial classes list passed.</strong> – </p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>self</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>OzaBagging</p>
-</dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Since it’s an ensemble learner, if X and y matrix of more than one
-sample are passed, the algorithm will partial fit the model one sample
-at a time.</p>
-<p>Each sample is trained by each classifier a total of K times, where K
-is drawn by a Poisson(1) distribution.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/meta/oza_bagging.py#L180"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.predict" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L147"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict classes for the passed data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -488,39 +465,31 @@ is drawn by a Poisson(1) distribution.</p>
 <dd class="field-odd"><p>A numpy.ndarray with all the predictions for the samples in X.</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The predict function will average the predictions from all its learners
-to find the most likely prediction for the sample matrix X.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.predict_proba">
-<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/meta/oza_bagging.py#L207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimates the probability of each sample in X belonging to each of the class-labels.</p>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.predict_proba">
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L176"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the probability of each sample in X belonging to each of the class-labels (normal and outlier).</p>
+<p>Class probabilities are calculated as the mean predicted class probabilities per base estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The matrix of samples one wants to predict the class probabilities for.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Samples for which we want to predict the class probabilities.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the</em></p></li>
-<li><p><em>same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents</em></p></li>
-<li><p><em>the probability that the i-th sample of X belongs to a certain class-label.</em></p></li>
-</ul>
-</p>
+<dd class="field-even"><p>Predicted class probabilities for all instances in X.
+Class probabilities for a sample shall sum to 1 as long as at least one estimators has non-zero predictions.
+If no estimator can predict probabilities, probabilities of 0 are returned.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – A ValueError is raised if the number of classes in the base_estimator:</p></li>
-<li><p><strong>learner differs from that of the ensemble learner.</strong> – </p></li>
-</ul>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray of shape (n_samples, n_classes)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/meta/oza_bagging.py#L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.reset" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the estimator to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -533,8 +502,8 @@ to find the most likely prediction for the sample matrix X.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.score">
-<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.score" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.score">
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mean accuracy on the given test data and labels.</p>
 <p>In multi-label classification, this is the subset accuracy
 which is a harsh metric since you require for each sample that
@@ -557,8 +526,19 @@ each label set be correctly predicted.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.meta.OzaBagging.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.OzaBagging.set_params" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.set_is_learning_phase_on">
+<code class="descname">set_is_learning_phase_on</code><span class="sig-paren">(</span><em>boolean</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.set_is_learning_phase_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets learning phase in each tree defined in the ensemble.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>boolean</strong> (<em>Boolean</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.set_params">
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -574,6 +554,26 @@ component of a nested object.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.update_mass">
+<code class="descname">update_mass</code><span class="sig-paren">(</span><em>X</em>, <em>boolean</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L232"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.update_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates mass profiles for every tree defined in the ensemble.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>1</em><em>, </em><em>n_features</em><em>)</em>) – Instance attributes.</p></li>
+<li><p><strong>boolean</strong> (<em>boolean</em><em>, </em><em>True</em><em> or </em><em>False</em>) – True to update reference mass, False to update latest mass</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.anomaly_detection.HalfSpaceTrees.update_models">
+<code class="descname">update_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/anomaly_detection/half_space_trees.py#L247"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.anomaly_detection.HalfSpaceTrees.update_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the mass profile of every tree in the ensemble.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -586,10 +586,10 @@ component of a nested object.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="skmultiflow.meta.OzaBaggingAdwin.html" class="btn btn-neutral float-right" title="skmultiflow.meta.OzaBaggingAdwin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="skmultiflow.bayes.NaiveBayes.html" class="btn btn-neutral float-right" title="skmultiflow.bayes.NaiveBayes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.meta.OnlineUnderOverBagging.html" class="btn btn-neutral float-left" title="skmultiflow.meta.OnlineUnderOverBagging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.data.ConceptDriftStream.html" class="btn btn-neutral float-left" title="skmultiflow.data.ConceptDriftStream" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

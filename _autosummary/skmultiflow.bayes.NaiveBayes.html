@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.bayes.NaiveBayes &mdash; scikit-multiflow 0.3.0 documentation</title>
+  <title>skmultiflow.bayes.NaiveBayes &mdash; scikit-multiflow 0.4.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="skmultiflow.lazy.KNN" href="skmultiflow.lazy.KNN.html" />
-    <link rel="prev" title="skmultiflow.data.ConceptDriftStream" href="skmultiflow.data.ConceptDriftStream.html" /> 
+    <link rel="prev" title="skmultiflow.anomaly_detection.HalfSpaceTrees" href="skmultiflow.anomaly_detection.HalfSpaceTrees.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.4.0
               </div>
             
           
@@ -148,12 +148,14 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.prototype">Prototype based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Trees based methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
@@ -262,7 +264,7 @@
 <h1>skmultiflow.bayes.NaiveBayes<a class="headerlink" href="#skmultiflow-bayes-naivebayes" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.bayes.NaiveBayes">
-<em class="property">class </em><code class="descclassname">skmultiflow.bayes.</code><code class="descname">NaiveBayes</code><span class="sig-paren">(</span><em>nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/bayes/naive_bayes.py#L12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.bayes.</code><code class="descname">NaiveBayes</code><span class="sig-paren">(</span><em>nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/bayes/naive_bayes.py#L12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Naive Bayes classifier.</p>
 <p>Performs classic bayesian prediction while making naive assumption that all inputs are independent.
 Naive Bayes is a classifier algorithm known for its simplicity and low computational cost. Given <cite>n</cite> different
@@ -270,7 +272,7 @@ classes, the trained Naive Bayes classifier predicts for every unlabelled instan
 belongs with high accuracy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nominal_attributes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em> (</em><em>optional</em><em>, </em><em>default=None</em><em>)</em>) – List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</p>
+<dd class="field-odd"><p><strong>nominal_attributes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em> (</em><em>optional</em><em>, </em><em>default=None</em><em>)</em>) – List of Nominal attributes. If emtpy, then assume that all attributes are numerical.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -279,7 +281,7 @@ they must be partially fitted before use. In the <cite>scikit-multiflow</cite> e
 <cite>pretrain_size&gt;0</cite>.</p>
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/bayes/naive_bayes.py#L33"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/bayes/naive_bayes.py#L33"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -324,15 +326,15 @@ they must be partially fitted before use. In the <cite>scikit-multiflow</cite> e
 </table>
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The features to train the model.</p></li>
 <li><p><strong>y</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_targets</em><em>)</em>) – An array-like with the class labels of all samples in X.</p></li>
-<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible/known class labels. Usage varies depending on the learning method.</p></li>
-<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the learning method.</p></li>
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains all possible/known class labels. Usage varies depending on the learning method.</p></li>
+<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the learning method.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -346,7 +348,7 @@ they must be partially fitted before use. In the <cite>scikit-multiflow</cite> e
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -360,7 +362,7 @@ they must be partially fitted before use. In the <cite>scikit-multiflow</cite> e
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -378,14 +380,14 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.partial_fit">
-<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/bayes/naive_bayes.py#L44"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.partial_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">partial_fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>classes=None</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/bayes/naive_bayes.py#L44"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.partial_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partially (incrementally) fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The features to train the model.</p></li>
 <li><p><strong>y</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em>) – An array-like with the labels of all samples in X.</p></li>
-<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Array with all possible/known classes. Usage varies depending on the learning method.</p></li>
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Array with all possible/known classes. Usage varies depending on the learning method.</p></li>
 <li><p><strong>sample_weight</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the learning method.</p></li>
 </ul>
 </dd>
@@ -400,7 +402,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/bayes/naive_bayes.py#L98"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/bayes/naive_bayes.py#L98"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict classes for the passed data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -417,7 +419,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.predict_proba">
-<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/bayes/naive_bayes.py#L119"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/bayes/naive_bayes.py#L119"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimates the probability of each sample in X belonging to each of the class-labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -436,7 +438,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the estimator to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -450,7 +452,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.score">
-<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.score" title="Permalink to this definition">¶</a></dt>
+<code class="descname">score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mean accuracy on the given test data and labels.</p>
 <p>In multi-label classification, this is the subset accuracy
 which is a harsh metric since you require for each sample that
@@ -474,7 +476,7 @@ each label set be correctly predicted.</p>
 
 <dl class="method">
 <dt id="skmultiflow.bayes.NaiveBayes.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.bayes.NaiveBayes.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -505,7 +507,7 @@ component of a nested object.</p>
         <a href="skmultiflow.lazy.KNN.html" class="btn btn-neutral float-right" title="skmultiflow.lazy.KNN" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.data.ConceptDriftStream.html" class="btn btn-neutral float-left" title="skmultiflow.data.ConceptDriftStream" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.anomaly_detection.HalfSpaceTrees.html" class="btn btn-neutral float-left" title="skmultiflow.anomaly_detection.HalfSpaceTrees" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

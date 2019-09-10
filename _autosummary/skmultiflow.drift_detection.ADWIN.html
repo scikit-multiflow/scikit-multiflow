@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.drift_detection.ADWIN &mdash; scikit-multiflow 0.3.0 documentation</title>
+  <title>skmultiflow.drift_detection.ADWIN &mdash; scikit-multiflow 0.4.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="skmultiflow.drift_detection.DDM" href="skmultiflow.drift_detection.DDM.html" />
-    <link rel="prev" title="skmultiflow.rules.VFDR" href="skmultiflow.rules.VFDR.html" /> 
+    <link rel="prev" title="skmultiflow.trees.StackedSingleTargetHoeffdingTreeRegressor" href="skmultiflow.trees.StackedSingleTargetHoeffdingTreeRegressor.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.4.0
               </div>
             
           
@@ -148,12 +148,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.prototype">Prototype based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Trees based methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul class="current">
@@ -262,7 +264,7 @@
 <h1>skmultiflow.drift_detection.ADWIN<a class="headerlink" href="#skmultiflow-drift-detection-adwin" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.drift_detection.ADWIN">
-<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">ADWIN</code><span class="sig-paren">(</span><em>delta=0.002</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.</code><code class="descname">ADWIN</code><span class="sig-paren">(</span><em>delta=0.002</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adaptive Windowing method for concept drift detection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -308,7 +310,7 @@ Society for Industrial and Applied Mathematics, 2007.</p>
 </div>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>delta=0.002</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>delta=0.002</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -398,7 +400,7 @@ Society for Industrial and Applied Mathematics, 2007.</p>
 </table>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.add_element">
-<code class="descname">add_element</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L166"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.add_element" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_element</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L166"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.add_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new element to the sample window.</p>
 <p>Apart from adding the element value to the window, by inserting it in
 the correct bucket, it will also update the relevant statistics, in
@@ -420,7 +422,7 @@ either 0’s or 1’s, that are interpreted as follows:
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.delete_element">
-<code class="descname">delete_element</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L212"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.delete_element" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete_element</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L212"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.delete_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete an Item from the bucket list.</p>
 <p>Deletes the last Item and updates relevant statistics kept by ADWIN.</p>
 <dl class="field-list simple">
@@ -435,7 +437,7 @@ either 0’s or 1’s, that are interpreted as follows:
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.detected_change">
-<code class="descname">detected_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L269"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.detected_change" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detected_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L269"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.detected_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detects concept change in a drifting data stream.</p>
 <p>The ADWIN algorithm is described in Bifet and Gavaldà’s ‘Learning from
 Time-Changing Data with Adaptive Windowing’. The general idea is to keep
@@ -457,7 +459,7 @@ the width property.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.detected_warning_zone">
-<code class="descname">detected_warning_zone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L116"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.detected_warning_zone" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detected_warning_zone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L116"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.detected_warning_zone" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the change detector supports the warning zone, this function will return
 whether it’s inside the warning zone or not.</p>
 <dl class="field-list simple">
@@ -472,7 +474,7 @@ whether it’s inside the warning zone or not.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.get_change">
-<code class="descname">get_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L99"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_change" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L99"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get drift</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -486,7 +488,7 @@ whether it’s inside the warning zone or not.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -500,7 +502,7 @@ whether it’s inside the warning zone or not.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.get_length_estimation">
-<code class="descname">get_length_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/base_drift_detector.py#L66"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_length_estimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_length_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/base_drift_detector.py#L66"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_length_estimation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the length estimation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -514,7 +516,7 @@ whether it’s inside the warning zone or not.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -532,7 +534,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/drift_detection/adwin.py#L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/drift_detection/adwin.py#L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset detectors</p>
 <p>Resets statistics and adwin’s window.</p>
 <dl class="field-list simple">
@@ -547,7 +549,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.ADWIN.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/7ec6888/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/a038426/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ADWIN.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -578,7 +580,7 @@ component of a nested object.</p>
         <a href="skmultiflow.drift_detection.DDM.html" class="btn btn-neutral float-right" title="skmultiflow.drift_detection.DDM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.rules.VFDR.html" class="btn btn-neutral float-left" title="skmultiflow.rules.VFDR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.trees.StackedSingleTargetHoeffdingTreeRegressor.html" class="btn btn-neutral float-left" title="skmultiflow.trees.StackedSingleTargetHoeffdingTreeRegressor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
