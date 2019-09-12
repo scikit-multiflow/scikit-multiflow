@@ -7,18 +7,21 @@ from timeit import default_timer as timer
 
 
 class ClassificationMeasurements(object):
-    """ Class used to keep updated statistics about a classifier, in order
+    """ Classification measurements.
+
+    Class used to keep updated statistics about a classifier, in order
     to be able to provide, at any given moment, any relevant metric about
     that classifier.
 
     It combines a ConfusionMatrix object, with some additional statistics,
-    to compute a range of performance metrics.
+    to compute a range of performance metrics. Important: indices in the
+    confusion matrix depend on the arrival order of observed classes.
 
     In order to keep statistics updated, the class won't require lots of
     information, but two: the predictions and true labels.
 
-    At any given moment, it can compute the following statistics: accuracy,
-    kappa, kappa_t, kappa_m, majority_class and error rate.
+    At any given moment, it can compute the multiple statistics including
+    accuracy, kappa, kappa_t, kappa_m, majority_class, error rate, etc.
 
     Parameters
     ----------
