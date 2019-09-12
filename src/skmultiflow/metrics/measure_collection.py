@@ -239,7 +239,7 @@ class ClassificationMeasurements(object):
         return (p0 - pc) / (1.0 - pc)
 
     def get_g_mean(self):
-        """ Compute the G-mean of the classifier.
+        """ Compute the G-mean of the classifier. Binary-classification only.
 
         Returns
         -------
@@ -257,7 +257,7 @@ class ClassificationMeasurements(object):
         return np.sqrt((sensitivity * specificity))
 
     def get_f1_score(self):
-        """ Compute the F1-score of the classifier.
+        """ Compute the F1-score of the classifier. Binary-classification only.
 
         Returns
         -------
@@ -272,7 +272,7 @@ class ClassificationMeasurements(object):
             return 2 * ((precision * recall) / (precision + recall))
 
     def get_precision(self):
-        """ compute the precision of the classifier.
+        """ compute the precision of the classifier. Binary-classification only.
 
 
         Returns
@@ -289,7 +289,7 @@ class ClassificationMeasurements(object):
             return tp / (tp + fp)
 
     def get_recall(self):
-        """ Compute the recall.
+        """ Compute the recall of the classifier. Binary-classification only.
 
         Returns
         -------
