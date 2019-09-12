@@ -336,8 +336,8 @@ class WindowClassificationMeasurements(object):
     kept by this class are local, or partial, while the statistics kept by
     the ClassificationMeasurements class are global.
 
-    At any given moment, it can compute the following statistics: accuracy,
-    kappa, kappa_t, kappa_m, majority_class and error rate.
+    At any given moment, it can compute multiple statistics including accuracy,
+    kappa, kappa_t, kappa_m, majority_class, error rate, etc.
 
     Parameters
     ----------
@@ -593,7 +593,7 @@ class WindowClassificationMeasurements(object):
         return (p0 - pc) / (1.0 - pc)
 
     def get_g_mean(self):
-        """ Compute the G-mean of the classifier.
+        """ Compute the G-mean of the classifier. Binary-classification only.
 
         Returns
         -------
@@ -611,7 +611,7 @@ class WindowClassificationMeasurements(object):
         return np.sqrt((sensitivity * specificity))
 
     def get_f1_score(self):
-        """ Compute the F1-score of the classifier.
+        """ Compute the F1-score of the classifier. Binary-classification only.
 
         Returns
         -------
@@ -626,7 +626,7 @@ class WindowClassificationMeasurements(object):
             return 2 * ((precision * recall) / (precision + recall))
 
     def get_precision(self):
-        """ compute the precision of the classifier.
+        """ compute the precision of the classifier. Binary-classification only.
 
 
         Returns
@@ -643,7 +643,7 @@ class WindowClassificationMeasurements(object):
             return tp / (tp + fp)
 
     def get_recall(self):
-        """ Compute the recall.
+        """ Compute the recall of the classifier. Binary-classification only.
 
         Returns
         -------
