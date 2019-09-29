@@ -107,7 +107,7 @@ class MIXEDGenerator(Stream):
         Returns
         -------
         int
-            index of the classification function [0,1,2]
+            index of the classification function [0,1]
         """
         return self._classification_function_idx
 
@@ -289,7 +289,7 @@ class MIXEDGenerator(Stream):
         Generate drift by switching the classification function randomly.
 
         """
-        new_function = self._random_state.randint(3)
+        new_function = self._random_state.randint(2)
         while new_function == self.classification_function:
-            new_function = self._random_state.randint(3)
+            new_function = self._random_state.randint(2)
         self.classification_function = new_function
