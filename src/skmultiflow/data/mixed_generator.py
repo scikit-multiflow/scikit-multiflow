@@ -286,10 +286,7 @@ class MIXEDGenerator(Stream):
 
     def generate_drift(self):
         """
-        Generate drift by switching the classification function randomly.
+        Generate drift by switching the classification function.
 
         """
-        new_function = self._random_state.randint(2)
-        while new_function == self.classification_function:
-            new_function = self._random_state.randint(2)
-        self.classification_function = new_function
+        self.classification_function = 1 - self.classification_function
