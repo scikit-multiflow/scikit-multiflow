@@ -25,8 +25,8 @@ class MIXEDGenerator(Stream):
     Parameters
     ----------
     classification_function: int (default: 0)
-        Which of the four classification functions to use for the generation.
-        The value can vary from 0 to 1.
+        Which of the two classification functions to use for the generation.
+        Valid options are 0 or 1.
 
     random_state: int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;
