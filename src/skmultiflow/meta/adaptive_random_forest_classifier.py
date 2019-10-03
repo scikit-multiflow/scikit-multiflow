@@ -13,7 +13,7 @@ from skmultiflow.metrics.measure_collection import ClassificationMeasurements
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, check_random_state, check_weights
 
 
-class AdaptiveRandomForest(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
+class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     """Adaptive Random Forest classifier.
 
         Parameters
@@ -155,7 +155,7 @@ class AdaptiveRandomForest(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                  nb_threshold=0,
                  nominal_attributes=None,
                  random_state=None):
-        """AdaptiveRandomForest class constructor."""
+        """AdaptiveRandomForestClassifier class constructor."""
         super().__init__()
         self.n_estimators = n_estimators
         self.max_features = max_features
