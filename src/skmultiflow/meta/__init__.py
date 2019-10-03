@@ -2,7 +2,8 @@
 The :mod:`skmultiflow.meta` module includes meta learning methods.
 """
 
-from .adaptive_random_forests import AdaptiveRandomForest
+from .adaptive_random_forest_classifier import AdaptiveRandomForestClassifier
+from .adaptive_random_forest_regressor import AdaptiveRandomForestRegressor
 from .batch_incremental import BatchIncremental
 from .leverage_bagging import LeverageBagging
 from .oza_bagging import OzaBagging
@@ -25,8 +26,25 @@ from .online_rus_boost import OnlineRUSBoost
 from .online_smote_bagging import OnlineSMOTEBagging
 
 
-__all__ = ["AdaptiveRandomForest", "BatchIncremental", "LeverageBagging", "OzaBagging", "OzaBaggingAdwin",
-           "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
-           "RegressorChain", "MultiOutputLearner", "LearnPP", "LearnNSE", "AccuracyWeightedEnsemble",
-           "DynamicWeightedMajority", "AdditiveExpertEnsemble", "OnlineSMOTEBagging",
-           "OnlineRUSBoost", "OnlineCSB2", "OnlineAdaC2", "OnlineUnderOverBagging", "OnlineBoosting"]
+__all__ = ["AdaptiveRandomForestClassifier",
+           "AdaptiveRandomForestRegressor",
+           "BatchIncremental",
+           "LeverageBagging",
+           "OzaBagging",
+           "OzaBaggingAdwin",
+           "ClassifierChain",
+           "ProbabilisticClassifierChain",
+           "MonteCarloClassifierChain",
+           "RegressorChain",
+           "MultiOutputLearner",
+           "LearnPP",
+           "LearnNSE",
+           "AccuracyWeightedEnsemble",
+           "DynamicWeightedMajority",
+           "AdditiveExpertEnsemble",
+           "OnlineSMOTEBagging",
+           "OnlineRUSBoost",
+           "OnlineCSB2",
+           "OnlineAdaC2",
+           "OnlineUnderOverBagging",
+           "OnlineBoosting"]
