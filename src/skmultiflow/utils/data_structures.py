@@ -347,7 +347,8 @@ class ConfusionMatrix(object):
     the other is associated with the predictions. If we consider the columns
     to represent predictions and the rows to represent true labels. An entry
     in position [1, 2] means that the true label was 1, while the prediction
-    was label 2, thus this was a bad prediction.
+    was label 2, thus this was a bad prediction. Important: indices in the
+    confusion matrix depend on the arrival order of observed classes.
 
     This structure is used to keep updated statistics from a classifier's
     performance, which allows to compute different evaluation metrics.
@@ -420,19 +421,16 @@ class ConfusionMatrix(object):
         """
         if i is None or j is None:
             return False
-
         else:
             m, n = self.confusion_matrix.shape
-            if (i <= m) and (i >= 0) and (j <= n) and (j >= 0):
+            if (0 <= i < m) and (0 <= j < n):
                 return self._update(i, j, weight)
-
             else:
-                max_value = np.max(i, j)
-                if max_value > m + 1:
+                new_size = np.max(i, j) + 1
+                if new_size <= m:
                     return False
-
                 else:
-                    self.reshape(max_value, max_value)
+                    self.reshape(new_size, new_size)
                     return self._update(i, j, weight)
 
     def remove(self, i=None, j=None):
