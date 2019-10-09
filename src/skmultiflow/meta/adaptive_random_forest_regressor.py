@@ -209,7 +209,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
             The features to train the model.
 
         y: numpy.ndarray of shape (n_samples)
-            An array-like with the class labels of all samples in X.
+            An array-like with the target values of all samples in X.
 
         sample_weight: numpy.ndarray of shape (n_samples), optional
             (default=None)
