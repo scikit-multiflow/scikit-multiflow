@@ -83,13 +83,12 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         (`RegressionHoeffdingTree` parameter)
         If True, disable pre-pruning.
 
-    leaf_prediction: string, optional (default='nba')
+    leaf_prediction: string, optional (default='perceptron')
         (`RegressionHoeffdingTree` parameter)
         Prediction mechanism used at leafs.
 
-        - 'mc' - Majority Class
-        - 'nb' - Naive Bayes
-        - 'nba' - Naive Bayes Adaptive
+        - 'mean' - Target mean
+        - 'perceptron' - Perceptron
 
     nb_threshold: int, optional (default=0)
         (`RegressionHoeffdingTree` parameter)
