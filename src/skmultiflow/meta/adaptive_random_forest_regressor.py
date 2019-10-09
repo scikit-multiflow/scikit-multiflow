@@ -94,20 +94,20 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         (`RegressionHoeffdingTree` parameter)
         Number of instances a leaf should observe before allowing Naive Bayes.
 
-    nominal_attributes: list, optional
+    nominal_attributes: list, optional (default=None)
         (`RegressionHoeffdingTree` parameter)
         List of Nominal attributes. If emtpy, then assume that all attributes
         are numerical.
 
-    learning_ratio_perceptron: float
+    learning_ratio_perceptron: float (default=0.02)
         (`RegressionHoeffdingTree` parameter)
         The learning rate of the perceptron.
 
-    learning_ratio_decay: float
+    learning_ratio_decay: float (default=0.001)
         (`RegressionHoeffdingTree` parameter)
         Decay multiplier for the learning rate of the perceptron
 
-    learning_ratio_const: Bool
+    learning_ratio_const: Bool (default=True)
         (`RegressionHoeffdingTree` parameter)
         If False the learning ratio will decay with the number of examples seen
 
