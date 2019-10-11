@@ -267,11 +267,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         predictions = []
         for i in range(r):
             votes = self.get_votes_for_instance(X[i])
-            if votes == {}:
-                # Ensemble is empty, all classes equal, default to zero
-                predictions.append(0)
-            else:
-                predictions.append(max(votes, key=votes.get))
+            predictions.append(np.mean(list(votes.values())))
         return np.asarray(predictions)
 
     def predict_proba(self, X):
