@@ -10,7 +10,7 @@ from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.trees.regression_hoeffding_tree import RegressionHoeffdingTree
 from skmultiflow.metrics.measure_collection import RegressionMeasurements
-from skmultiflow.utils import get_dimensions, normalize_values_in_dict, check_random_state, check_weights
+from skmultiflow.utils import get_dimensions, check_random_state, check_weights
 
 
 class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimatorMixin):
@@ -290,7 +290,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         for i in range(self.n_estimators):
             vote = deepcopy(self.ensemble[i].get_votes_for_instance(X))
             if vote != {} and sum(vote.values()) > 0:
-                vote = normalize_values_in_dict(vote, inplace=False)
                 if not self.disable_weighted_vote:
                     performance = self.ensemble[i].evaluator.get_mean_square_error()
                     if performance != 0.0:  # CHECK How to handle negative (kappa) values?
