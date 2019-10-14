@@ -28,8 +28,8 @@ def test_adaptive_random_forest_regressor():
         cnt += 1
 
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 155.5787786499754
-    assert (np.abs(expected_error - error) < 1)
+    expected_error = 166.02923950812894
+    assert (np.isclose(expected_error, error, atol=1))
 
     assert type(learner.predict(X)) == np.ndarray
 
