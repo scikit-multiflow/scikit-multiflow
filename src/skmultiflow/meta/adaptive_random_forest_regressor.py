@@ -240,7 +240,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
 
     def _partial_fit(self, X, y, sample_weight=1.0):
         self.instances_seen += 1
-        
+
         if self.ensemble is None:
             self.init_ensemble(X)
 
@@ -252,7 +252,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
                 self.ensemble[i].partial_fit(np.asarray([X]), np.asarray([y]),
                                              sample_weight=np.asarray([k]),
                                              instances_seen=self.instances_seen)
-    
+
     def predict(self, X):
         """ Predict target values for the passed data.
 
@@ -418,7 +418,7 @@ class ARFBaseLearner(BaseSKMObject):
         self.background_learner = None
         self._use_drift_detector = False
         self._use_background_learner = False
-        
+
         self.evaluator = self.evaluator_method()
 
         # Initialize drift and warning detectors
