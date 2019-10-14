@@ -1,9 +1,3 @@
-TODO: predict uses get_votes that return ensemble[i].predict: if weighted_vote,
-we need to use the barycenter, so to store the performances. Maybe put get_votes
-in predict to ease that integration.
-
-
-
 from copy import deepcopy
 import math
 
@@ -272,9 +266,27 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         r, _ = get_dimensions(X)
         predictions = []
         for i in range(r):
-            votes = self.get_votes_for_instance(X[i])
-            predictions.append(np.mean(votes))
+            predictions.append(_predict(X[i]))
         return np.asarray(predictions)
+
+    def _predict(self, X):
+        if self.ensemble is None:
+            self.init_ensemble(X)
+        sum_weighted_votes = 0
+        sum_weights = 0
+
+        for i in range(self.n_estimators):
+            vote = deepcopy(self.ensemble[i].predict(X))
+            if not self.disable_weighted_vote:
+                performance = self.ensemble[i].evaluator.get_mean_square_error()
+                if performance != 0.0:
+                    vote *= performance
+                    sum_weights += performance
+            else:
+                sum_weights += 1
+            sum_weighted_votes += vote
+            pred = sum_weighted_votes / sum_weights
+        return pred
 
     def predict_proba(self, X):
         """Not implemented for this method."""
@@ -288,25 +300,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         self._train_weight_seen_by_model = 0.0
         self._random_state = check_random_state(self.random_state)
 
-    def get_votes_for_instance(self, X):
-        if self.ensemble is None:
-            self.init_ensemble(X)
-        combined_votes = []
-
-        for i in range(self.n_estimators):
-            vote = deepcopy(self.ensemble[i].predict(X))
-            if not self.disable_weighted_vote:
-                performance = self.ensemble[i].evaluator.get_mean_square_error()
-                if performance != 0.0:  # CHECK How to handle negative (kappa) values?
-                    vote *= performance
-            # Add values
-            for k in vote:
-                try:
-                    combined_votes[k] += vote[k]
-                except KeyError:
-                    combined_votes[k] = vote[k]
-        return combined_votes
-        
     def init_ensemble(self, X):
         self._set_max_features(get_dimensions(X)[1])
 
