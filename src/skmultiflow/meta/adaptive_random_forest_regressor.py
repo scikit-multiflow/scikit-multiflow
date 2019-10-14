@@ -340,6 +340,8 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
             pass
         elif isinstance(self.max_features, float):
             # Consider 'max_features' as a percentage
+            if self.max_feature <= 0 or self.max_feature > 1:
+                raise ValueError('Invalid max_feature: {}'.format(max_feature))
             self.max_features = int(self.max_features * n)
         elif self.max_features is None:
             self.max_features = n
