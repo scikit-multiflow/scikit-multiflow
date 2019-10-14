@@ -1,3 +1,9 @@
+TODO: predict uses get_votes that return ensemble[i].predict: if weighted_vote,
+we need to use the barycenter, so to store the performances. Maybe put get_votes
+in predict to ease that integration.
+
+
+
 from copy import deepcopy
 import math
 
@@ -251,7 +257,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
                                              instances_seen=self.instances_seen)
     
     def predict(self, X):
-        """ Predict target value for the passed data.
+        """ Predict target values for the passed data.
 
         Parameters
         ----------
@@ -267,7 +273,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         predictions = []
         for i in range(r):
             votes = self.get_votes_for_instance(X[i])
-            predictions.append(np.mean(list(votes.values())))
+            predictions.append(np.mean(votes))
         return np.asarray(predictions)
 
     def predict_proba(self, X):
@@ -285,22 +291,20 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
     def get_votes_for_instance(self, X):
         if self.ensemble is None:
             self.init_ensemble(X)
-        combined_votes = {}
+        combined_votes = []
 
         for i in range(self.n_estimators):
-            vote = deepcopy(self.ensemble[i].get_votes_for_instance(X))
-            if vote != {} and sum(vote.values()) > 0:
-                if not self.disable_weighted_vote:
-                    performance = self.ensemble[i].evaluator.get_mean_square_error()
-                    if performance != 0.0:  # CHECK How to handle negative (kappa) values?
-                        for k in vote:
-                            vote[k] = vote[k] * performance
-                # Add values
-                for k in vote:
-                    try:
-                        combined_votes[k] += vote[k]
-                    except KeyError:
-                        combined_votes[k] = vote[k]
+            vote = deepcopy(self.ensemble[i].predict(X))
+            if not self.disable_weighted_vote:
+                performance = self.ensemble[i].evaluator.get_mean_square_error()
+                if performance != 0.0:  # CHECK How to handle negative (kappa) values?
+                    vote *= performance
+            # Add values
+            for k in vote:
+                try:
+                    combined_votes[k] += vote[k]
+                except KeyError:
+                    combined_votes[k] = vote[k]
         return combined_votes
         
     def init_ensemble(self, X):
@@ -486,6 +490,3 @@ class ARFBaseLearner(BaseSKMObject):
 
     def predict_proba(self, X):
         return self.estimator.predict_proba(X)
-
-    def get_votes_for_instance(self, X):
-        return self.estimator.get_votes_for_instance(X)
