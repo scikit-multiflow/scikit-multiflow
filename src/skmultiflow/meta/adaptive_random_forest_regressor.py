@@ -448,10 +448,10 @@ class ARFBaseLearner(BaseSKMObject):
             self.background_learner.estimator.partial_fit(X, y, sample_weight=sample_weight)
 
         if self._use_drift_detector and not self.is_background_learner:
-            correctly_classifies = self.estimator.predict(X) == y
+            correctly_predicts = self.estimator.predict(X) == y
             # Check for warning only if use_background_learner is active
             if self._use_background_learner:
-                self.warning_detection.add_element(int(not correctly_classifies))
+                self.warning_detection.add_element(int(not correctly_predicts))
                 # Check if there was a change
                 if self.warning_detection.detected_change():
                     self.last_warning_on = instances_seen
@@ -470,7 +470,7 @@ class ARFBaseLearner(BaseSKMObject):
                     self.warning_detection.reset()
 
             # Update the drift detection
-            self.drift_detection.add_element(int(not correctly_classifies))
+            self.drift_detection.add_element(int(not correctly_predicts))
 
             # Check if there was a change
             if self.drift_detection.detected_change():
