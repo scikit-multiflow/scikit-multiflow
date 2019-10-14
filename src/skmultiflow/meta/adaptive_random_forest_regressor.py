@@ -266,7 +266,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         r, _ = get_dimensions(X)
         predictions = []
         for i in range(r):
-            predictions.append(_predict(X[i]))
+            predictions.append(self._predict(X[i]))
         return np.asarray(predictions)
 
     def _predict(self, X):
