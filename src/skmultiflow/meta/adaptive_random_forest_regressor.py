@@ -133,7 +133,10 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
     .. [1] Gomes, H.M., Bifet, A., Read, J., Barddal, J.P., Enembreck, F.,
        Pfharinger, B., Holmes, G. and Abdessalem, T., 2017.
        Adaptive random forests for evolving data stream classification.
-       Machine Learning, 106(9-10), pp.1469-1495. 
+       Machine Learning, 106(9-10), pp.1469-1495.
+       [2] Gomes, H.M., Barddal, J.P., Boiko, L.E., Bifet, A., 2018
+       Adaptive random forests for data stream regression.
+       ESANN 2018.
     """
 
     def __init__(self,
