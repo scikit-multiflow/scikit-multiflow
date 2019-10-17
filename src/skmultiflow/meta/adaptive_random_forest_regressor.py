@@ -90,10 +90,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         - 'mean' - Target mean
         - 'perceptron' - Perceptron
 
-    nb_threshold: int, optional (default=0)
-        (`RegressionHoeffdingTree` parameter)
-        Number of instances a leaf should observe before allowing Naive Bayes.
-
     nominal_attributes: list, optional (default=None)
         (`RegressionHoeffdingTree` parameter)
         List of Nominal attributes. If emtpy, then assume that all attributes
@@ -158,7 +154,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
                  remove_poor_atts=False,
                  no_preprune=False,
                  leaf_prediction='perceptron',
-                 nb_threshold=0,
                  nominal_attributes=None,
                  learning_ratio_perceptron=0.02,
                  learning_ratio_decay=0.001,
@@ -196,7 +191,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         self.remove_poor_atts = remove_poor_atts
         self.no_preprune = no_preprune
         self.leaf_prediction = leaf_prediction
-        self.nb_threshold = nb_threshold
         self.nominal_attributes = nominal_attributes
         self.learning_ratio_perceptron = learning_ratio_perceptron
         self.learning_ratio_decay = learning_ratio_decay
