@@ -39,8 +39,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
     lambda_value: int, optional (default=6)
         The lambda value for bagging (lambda=6 corresponds to Leverage Bagging).
 
-    drift_detection_method: BaseDriftDetector or None, optional
-        (default=ADWIN(0.001))
+    drift_detection_method: BaseDriftDetector or None, optional (default=ADWIN(0.001))
         Drift Detection method. Set to None to disable Drift detection.
 
     warning_detection_method: BaseDriftDetector or None, default(ADWIN(0.01))
