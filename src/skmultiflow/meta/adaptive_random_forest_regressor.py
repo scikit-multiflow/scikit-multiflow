@@ -345,7 +345,9 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         # max_features is negative, use max_features + n
         if self.max_features < 0:
             self.max_features += n
-        # max_features <= 0 (m can be negative if max_features is negative and abs(max_features) > n),
+        # max_features <= 0
+        # (m can be negative if max_features is negative
+        # and abs(max_features) > n)
         # use max_features = 1
         if self.max_features <= 0:
             self.max_features = 1
