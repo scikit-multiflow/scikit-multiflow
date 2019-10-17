@@ -272,7 +272,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         sum_weights = 0
 
         for i in range(self.n_estimators):
-            predicted_value = deepcopy(self.ensemble[i].predict(np.asarray([X])))
+            prediction = deepcopy(self.ensemble[i].predict(np.asarray([X])))
             if not self.disable_weighted_vote:
                 performance = self.ensemble[i].evaluator.get_mean_square_error()
                 if performance != 0.0:
@@ -443,32 +443,35 @@ class ARFBaseLearner(BaseSKMObject):
         self.estimator.partial_fit(X, y, sample_weight=sample_weight)
 
         if self.background_learner:
-            self.background_learner.estimator.partial_fit(X, y, sample_weight=sample_weight)
+            self.background_learner.estimator.partial_fit(X, y,
+                sample_weight=sample_weight)
 
         if self._use_drift_detector and not self.is_background_learner:
-            correctly_predicts = self.estimator.predict(X) == y
+            predicted_value = self.estimator.predict(X)
             # Check for warning only if use_background_learner is active
             if self._use_background_learner:
-                self.warning_detection.add_element(int(not correctly_predicts))
+                self.warning_detection.add_element(predicted_value)
                 # Check if there was a change
                 if self.warning_detection.detected_change():
                     self.last_warning_on = instances_seen
                     self.nb_warnings_detected += 1
                     # Create a new background tree estimator
                     background_learner = self.estimator.new_instance()
-                    # Create a new background learner object
-                    self.background_learner = ARFBaseLearner(self.index_original,
-                                                             background_learner,
-                                                             instances_seen,
-                                                             self.drift_detection_method,
-                                                             self.warning_detection_method,
-                                                             True)
+                    # Create a new background learner
+                    self.background_learner = ARFBaseLearner(
+                        self.index_original,
+                        background_learner,
+                        instances_seen,
+                        self.drift_detection_method,
+                        self.warning_detection_method,
+                        True)
                     # Update the warning detection object for the current object
-                    # (this effectively resets changes made to the object while it was still a bkg learner).
+                    # (this effectively resets changes made to the object
+                    # while it was still a bkg learner).
                     self.warning_detection.reset()
 
             # Update the drift detection
-            self.drift_detection.add_element(int(not correctly_predicts))
+            self.drift_detection.add_element(predicted_value)
 
             # Check if there was a change
             if self.drift_detection.detected_change():
