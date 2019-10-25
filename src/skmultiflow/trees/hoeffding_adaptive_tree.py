@@ -2,6 +2,8 @@ import copy
 
 from skmultiflow.trees import HoeffdingTree
 from skmultiflow.trees.nodes import InactiveLearningNode
+from skmultiflow.trees.nodes import AdaLearningNode
+from skmultiflow.trees.nodes import AdaSplitNode
 
 import numpy as np
 
@@ -170,8 +172,8 @@ class HAT(HoeffdingTree):
 
     # Override HoeffdingTree
     def _new_learning_node(self, initial_class_observations=None):
-        return self.AdaLearningNode(initial_class_observations)
+        return AdaLearningNode(initial_class_observations)
 
     # Override HoeffdingTree
     def new_split_node(self, split_test, class_observations):
-        return self.AdaSplitNode(split_test, class_observations)
+        return AdaSplitNode(split_test, class_observations)

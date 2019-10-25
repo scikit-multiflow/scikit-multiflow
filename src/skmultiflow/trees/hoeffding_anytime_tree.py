@@ -3,9 +3,12 @@ import numpy as np
 from skmultiflow.trees.split_criterion import GiniSplitCriterion
 from skmultiflow.trees.hoeffding_tree import HoeffdingTree
 from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
+from skmultiflow.trees.nodes import LearningNode
 from skmultiflow.trees.nodes import AnyTimeSplitNode
 from skmultiflow.trees.nodes import AnyTimeActiveLearningNode
 from skmultiflow.trees.nodes import AnyTimeInactiveLearningNode
+from skmultiflow.trees.nodes import AnyTimeLearningNodeNB
+from skmultiflow.trees.nodes import AnyTimeLearningNodeNBAdaptive
 from skmultiflow.utils import get_dimensions, calculate_object_size
 
 
@@ -287,7 +290,7 @@ class HATT(HoeffdingTree):
             found_node.parent.set_child(found_node.parent_branch, leaf_node)
             self._active_leaf_node_cnt += 1
 
-        if isinstance(leaf_node, self.LearningNode):
+        if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
             learning_node.learn_from_instance(X, y, weight, self)
 

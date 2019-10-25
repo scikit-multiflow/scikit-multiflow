@@ -22,6 +22,10 @@ from .anytime_active_learning_node import AnyTimeActiveLearningNode
 from .anytime_inactive_learning_node import AnyTimeInactiveLearningNode
 from .anytime_learning_node_nb import AnyTimeLearningNodeNB
 from .anytime_learning_node_nb_adaptive import AnyTimeLearningNodeNBAdaptive
+from .lc_active_learning_node import LCActiveLearningNode
+from .lc_inactive_learning_node import LCInactiveLearningNode
+from .lc_learning_node_nb import LCLearningNodeNB
+from .lc_learning_node_nba import LCLearningNodeNBA
 
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode",
@@ -29,4 +33,6 @@ __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode
            "ARFLearningNode", "ARFLearningNodeNB", "ARFLearningNodeNBAdaptive",
            "AdaNode", "AdaSplitNode", "AdaLearningNode", "AnyTimeSplitNode",
            "AnyTimeActiveLearningNode", "AnyTimeInactiveLearningNode",
-           "AnyTimeLearningNodeNB", "AnyTimeLearningNodeNBAdaptive"]
+           "AnyTimeLearningNodeNB", "AnyTimeLearningNodeNBAdaptive",
+           "LCActiveLearningNode", "LCInactiveLearningNode", "LCLearningNodeNB",
+           "LCLearningNodeNBA"]
