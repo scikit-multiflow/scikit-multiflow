@@ -1,15 +1,14 @@
 import numpy as np
-
-from skmultiflow.rules.attribute_expand_suggestion import AttributeExpandSuggestion
 from skmultiflow.trees.attribute_observer import AttributeClassObserver
 from skmultiflow.trees.gaussian_estimator import GaussianEstimator
+from skmultiflow.trees.attribute_test import NumericAttributeBinaryTest
+from skmultiflow.trees.attribute_test import AttributeSplitSuggestion
+from sortedcontainers.sortedlist import SortedList
 
 
-class GaussianNumericAttributeClassObserver(AttributeClassObserver):
-    """ GaussianNumericAttributeClassObserver
-
-    Class for observing the class data distribution for a numeric attribute using gaussian estimators.
-    This observer monitors the class distribution of a given attribute.
+class NumericAttributeClassObserverGaussian(AttributeClassObserver):
+    """ Class for observing the class data distribution for a numeric attribute
+    using gaussian estimators.
 
     """
 
@@ -38,6 +37,7 @@ class GaussianNumericAttributeClassObserver(AttributeClassObserver):
                 self._att_val_dist_per_class = dict(sorted(self._att_val_dist_per_class.items()))
                 self._max_value_observed_per_class = dict(sorted(self._max_value_observed_per_class.items()))
                 self._min_value_observed_per_class = dict(sorted(self._min_value_observed_per_class.items()))
+
             val_dist.add_observation(att_val, weight)
 
     def probability_of_attribute_value_given_class(self, att_val, class_val):
@@ -47,24 +47,19 @@ class GaussianNumericAttributeClassObserver(AttributeClassObserver):
         else:
             return 0.0
 
-    def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, class_idx=None):
+    def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, binary_only):
         best_suggestion = None
         suggested_split_values = self.get_split_point_suggestions()
-        for expand_value in suggested_split_values:
-            post_split_dist = self.get_class_dists_from_binary_split(expand_value)
-            if class_idx is not None:
-                criterion.class_idx = class_idx
+        for split_value in suggested_split_values:
+            post_split_dist = self.get_class_dists_from_binary_split(split_value)
             merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
             if best_suggestion is None or merit > best_suggestion.merit:
-                if criterion.best_idx == 0:
-                    symbol = "<="
-                else:
-                    symbol = ">"
-                best_suggestion = AttributeExpandSuggestion(att_idx, expand_value, symbol, post_split_dist, merit)
+                num_att_binary_test = NumericAttributeBinaryTest(att_idx, split_value, True)
+                best_suggestion = AttributeSplitSuggestion(num_att_binary_test, post_split_dist, merit)
         return best_suggestion
 
     def get_split_point_suggestions(self):
-        suggested_split_values = []
+        suggested_split_values = SortedList()
         min_value = np.inf
         max_value = -np.inf
         for k, estimator in self._att_val_dist_per_class.items():
@@ -78,8 +73,7 @@ class GaussianNumericAttributeClassObserver(AttributeClassObserver):
             for i in range(self.num_bin_options):
                 split_value = min_value + (bin_size * (i + 1))
                 if split_value > min_value and split_value < max_value:
-                    suggested_split_values.append(split_value)
-        suggested_split_values.sort()
+                    suggested_split_values.add(split_value)
         return suggested_split_values
 
     def get_class_dists_from_binary_split(self, split_value):
@@ -87,7 +81,6 @@ class GaussianNumericAttributeClassObserver(AttributeClassObserver):
         Assumes all values equal to split_value go to lhs
 
         """
-
         lhs_dist = {}
         rhs_dist = {}
         for k, estimator in self._att_val_dist_per_class.items():

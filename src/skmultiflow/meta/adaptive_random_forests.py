@@ -8,7 +8,7 @@ from sklearn.preprocessing import normalize
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.drift_detection import ADWIN
-from skmultiflow.trees.arf_hoeffding_tree import ARFHoeffdingTree
+from skmultiflow.trees import ARFHoeffdingTree
 from skmultiflow.metrics.measure_collection import ClassificationMeasurements
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, check_random_state, check_weights
 
@@ -238,7 +238,7 @@ class AdaptiveRandomForest(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     def _partial_fit(self, X, y, classes=None, sample_weight=1.0):
         self.instances_seen += 1
-        
+
         if self.ensemble is None:
             self.init_ensemble(X)
 
@@ -251,7 +251,7 @@ class AdaptiveRandomForest(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                                              classes=classes,
                                              sample_weight=np.asarray([k]),
                                              instances_seen=self.instances_seen)
-    
+
     def predict(self, X):
         """ Predict classes for the passed data.
 
@@ -335,7 +335,7 @@ class AdaptiveRandomForest(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                     except KeyError:
                         combined_votes[k] = vote[k]
         return combined_votes
-        
+
     def init_ensemble(self, X):
         self._set_max_features(get_dimensions(X)[1])
 
@@ -444,7 +444,7 @@ class ARFBaseLearner(BaseSKMObject):
         self.background_learner = None
         self._use_drift_detector = False
         self._use_background_learner = False
-        
+
         self.evaluator = self.evaluator_method()
 
         # Initialize drift and warning detectors
