@@ -11,6 +11,10 @@ from .active_learning_node import ActiveLearningNode
 from .inactive_learning_node import InactiveLearningNode
 from .learning_node_nb import LearningNodeNB
 from .learning_node_nb_adaptive import LearningNodeNBAdaptive
+from .arf_learning_node import ARFLearningNode
+from .arf_learning_node_nb import ARFLearningNodeNB
+from .arf_learning_node_nb_adaptive import ARFLearningNodeNBAdaptive
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode",
-           "InactiveLearningNode", "LearningNodeNB", "LearningNodeNBAdaptive"]
+           "InactiveLearningNode", "LearningNodeNB", "LearningNodeNBAdaptive",
+           "ARFLearningNode", "ARFLearningNodeNB", "ARFLearningNodeNBAdaptive"]
