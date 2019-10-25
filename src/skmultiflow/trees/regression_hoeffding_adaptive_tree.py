@@ -1,15 +1,19 @@
 from abc import ABCMeta, abstractmethod
 
-from skmultiflow.trees.regression_hoeffding_tree import RegressionHoeffdingTree, HoeffdingTree
-from skmultiflow.utils.utils import *
+from skmultiflow.trees import HoeffdingTree, RegressionHoeffdingTree
+from skmultiflow.utils import *
 from skmultiflow.drift_detection.adwin import ADWIN
 from skmultiflow.utils import check_random_state
+
+from skmultiflow.trees.nodes import FoundNode
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import InactiveLearningNode
 
 
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 error_width_threshold = 300
-SplitNode = RegressionHoeffdingTree.SplitNode
 LearningNodePerceptron = RegressionHoeffdingTree.LearningNodePerceptron
 
 
@@ -181,9 +185,9 @@ class RegressionHAT(RegressionHoeffdingTree):
                             rhat._tree_root = rhat._tree_root._alternate_tree
                         rhat.switch_alternate_trees_cnt += 1
                     elif bound < alt_error_rate - old_error_rate:
-                        if isinstance(self._alternate_tree, HoeffdingTree.ActiveLearningNode):
+                        if isinstance(self._alternate_tree, ActiveLearningNode):
                             self._alternate_tree = None
-                        elif isinstance(self._alternate_tree, HoeffdingTree.ActiveLearningNode):
+                        elif isinstance(self._alternate_tree, ActiveLearningNode):
                             self._alternate_tree = None
                         else:
                             self._alternate_tree.kill_tree_children(rhat)
@@ -208,10 +212,10 @@ class RegressionHAT(RegressionHoeffdingTree):
                     if isinstance(child, rhat.AdaSplitNodeForRegression):
                         child.kill_tree_children(rhat)
 
-                    if isinstance(child, HoeffdingTree.ActiveLearningNode):
+                    if isinstance(child, ActiveLearningNode):
                         child = None
                         rhat._active_leaf_node_cnt -= 1
-                    elif isinstance(child, HoeffdingTree.InactiveLearningNode):
+                    elif isinstance(child, InactiveLearningNode):
                         child = None
                         rhat._inactive_leaf_node_cnt -= 1
 
@@ -241,7 +245,7 @@ class RegressionHAT(RegressionHoeffdingTree):
                     child.filter_instance_to_leaves(X, y, weight, parent, parent_branch,
                                                     update_splitter_counts, found_nodes)
                 else:
-                    found_nodes.append(HoeffdingTree.FoundNode(None, self, child_index))
+                    found_nodes.append(FoundNode(None, self, child_index))
             if self._alternate_tree is not None:
                 self._alternate_tree.filter_instance_to_leaves(X, y, weight, self, -999,
                                                                update_splitter_counts, found_nodes)
@@ -310,7 +314,7 @@ class RegressionHAT(RegressionHoeffdingTree):
                                       update_splitter_counts, found_nodes=None):
             if found_nodes is None:
                 found_nodes = []
-            found_nodes.append(HoeffdingTree.FoundNode(self, parent, parent_branch))
+            found_nodes.append(FoundNode(self, parent, parent_branch))
 
     # ===========================================
     # == Hoeffding Regression Tree implementation ===

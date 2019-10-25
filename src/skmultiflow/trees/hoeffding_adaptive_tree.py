@@ -7,11 +7,14 @@ from skmultiflow.drift_detection import ADWIN
 from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.trees import HoeffdingTree
 from skmultiflow.utils import check_random_state
+from skmultiflow.trees.nodes import FoundNode
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import LearningNodeNBAdaptive
+from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import InactiveLearningNode
 
 import numpy as np
 
-SplitNode = HoeffdingTree.SplitNode
-LearningNodeNBAdaptive = HoeffdingTree.LearningNodeNBAdaptive
 
 MAJORITY_CLASS = 'mc'
 NAIVE_BAYES = 'nb'
@@ -222,9 +225,9 @@ class HAT(HoeffdingTree):
                             hat._tree_root = hat._tree_root.alternateTree
                         hat.switch_alternate_trees_cnt += 1
                     elif bound < alt_error_rate - old_error_rate:
-                        if isinstance(self._alternate_tree, HAT.ActiveLearningNode):
+                        if isinstance(self._alternate_tree, ActiveLearningNode):
                             self._alternate_tree = None
-                        elif isinstance(self._alternate_tree, HAT.InactiveLearningNode):
+                        elif isinstance(self._alternate_tree, InactiveLearningNode):
                             self._alternate_tree = None
                         else:
                             self._alternate_tree.kill_tree_children(hat)
@@ -250,10 +253,10 @@ class HAT(HoeffdingTree):
                     if isinstance(child, HAT.AdaSplitNode):
                         child.kill_tree_children(hat)
 
-                    if isinstance(child, HAT.ActiveLearningNode):
+                    if isinstance(child, ActiveLearningNode):
                         child = None
                         hat._active_leaf_node_cnt -= 1
-                    elif isinstance(child, HAT.InactiveLearningNode):
+                    elif isinstance(child, InactiveLearningNode):
                         child = None
                         hat._inactive_leaf_node_cnt -= 1
 
@@ -274,7 +277,7 @@ class HAT(HoeffdingTree):
                     child.filter_instance_to_leaves(X, y, weight, parent, parent_branch,
                                                     update_splitter_counts, found_nodes)
                 else:
-                    found_nodes.append(HoeffdingTree.FoundNode(None, self, child_index))
+                    found_nodes.append(FoundNode(None, self, child_index))
             if self._alternate_tree is not None:
                 self._alternate_tree.filter_instance_to_leaves(X, y, weight, self, -999,
                                                                update_splitter_counts, found_nodes)
@@ -373,7 +376,7 @@ class HAT(HoeffdingTree):
                                       update_splitter_counts, found_nodes=None):
             if found_nodes is None:
                 found_nodes = []
-            found_nodes.append(HoeffdingTree.FoundNode(self, parent, parent_branch))
+            found_nodes.append(FoundNode(self, parent, parent_branch))
 
     # =============================================
     # == Hoeffding Adaptive Tree implementation ===
@@ -423,7 +426,7 @@ class HAT(HoeffdingTree):
         if self._tree_root is None:
             self._tree_root = self._new_learning_node()
             self._active_leaf_node_cnt = 1
-        if isinstance(self._tree_root, self.InactiveLearningNode):
+        if isinstance(self._tree_root, InactiveLearningNode):
             self._tree_root.learn_from_instance(X, y, sample_weight, self)
         else:
             self._tree_root.learn_from_instance(X, y, sample_weight, self, None, -1)
@@ -438,7 +441,7 @@ class HAT(HoeffdingTree):
     def get_votes_for_instance(self, X):
         result = {}
         if self._tree_root is not None:
-            if isinstance(self._tree_root, self.InactiveLearningNode):
+            if isinstance(self._tree_root, InactiveLearningNode):
                 found_node = [self._tree_root.filter_instance_to_leaf(X, None, -1)]
             else:
                 found_node = self.filter_instance_to_leaves(X, -np.inf, -np.inf, None, -1, False)

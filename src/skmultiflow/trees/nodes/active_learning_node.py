@@ -1,4 +1,4 @@
-from skmultiflow.trees.attribute_test import AttributeSplitSuggestion
+from skmultiflow.trees import AttributeSplitSuggestion
 from skmultiflow.trees.attribute_observer import AttributeClassObserverNull
 from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
 from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian

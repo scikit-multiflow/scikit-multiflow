@@ -4,13 +4,15 @@ import numpy as np
 
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees import RegressionHoeffdingTree
-from skmultiflow.trees.numeric_attribute_regression_observer_multi_target \
-     import NumericAttributeRegressionObserverMultiTarget
-from skmultiflow.trees.nominal_attribute_regression_observer import NominalAttributeRegressionObserver
+from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserverMultiTarget
+from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
 from skmultiflow.utils.utils import get_dimensions
-from skmultiflow.trees.intra_cluster_variance_reduction_split_criterion \
-    import IntraClusterVarianceReductionSplitCriterion
+from skmultiflow.trees.split_criterion import IntraClusterVarianceReductionSplitCriterion
 from skmultiflow.utils import check_random_state
+
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import LearningNode
+from skmultiflow.trees.nodes import ActiveLearningNode
 
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
@@ -724,13 +726,12 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
             found_node.parent.set_child(found_node.parent_branch, leaf_node)
             self._active_leaf_node_cnt += 1
 
-        if isinstance(leaf_node, self.LearningNode):
+        if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
             learning_node.learn_from_instance(X, y, sample_weight, self)
 
             if self._growth_allowed and \
-                    isinstance(learning_node,
-                               RegressionHoeffdingTree.ActiveLearningNode):
+                    isinstance(learning_node, ActiveLearningNode):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.get_weight_seen()
 
@@ -935,8 +936,8 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
             self.enforce_tracker_limit()
 
     def _deactivate_learning_node(self, to_deactivate:
-                                  RegressionHoeffdingTree.ActiveLearningNode,
-                                  parent: RegressionHoeffdingTree.SplitNode,
+                                  ActiveLearningNode,
+                                  parent: SplitNode,
                                   parent_branch: int):
         """Deactivate a learning node.
 

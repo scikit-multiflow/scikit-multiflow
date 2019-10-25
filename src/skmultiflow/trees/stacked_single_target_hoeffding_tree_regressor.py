@@ -5,13 +5,13 @@ import numpy as np
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees import RegressionHoeffdingTree
 from skmultiflow.trees import MultiTargetRegressionHoeffdingTree
-from skmultiflow.trees.numeric_attribute_regression_observer_multi_target \
-    import NumericAttributeRegressionObserverMultiTarget
-from skmultiflow.trees.nominal_attribute_regression_observer \
-     import NominalAttributeRegressionObserver
+from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserverMultiTarget
+from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
 from skmultiflow.utils.utils import get_dimensions
-from skmultiflow.trees.intra_cluster_variance_reduction_split_criterion \
-     import IntraClusterVarianceReductionSplitCriterion
+from skmultiflow.trees.split_criterion import IntraClusterVarianceReductionSplitCriterion
+
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import ActiveLearningNode
 
 
 _PERCEPTRON = 'perceptron'
@@ -805,9 +805,9 @@ class StackedSingleTargetHoeffdingTreeRegressor(MultiTargetRegressionHoeffdingTr
             # Manage memory
             self.enforce_tracker_limit()
 
-    def _deactivate_learning_node(self, to_deactivate:
-                                  RegressionHoeffdingTree.ActiveLearningNode,
-                                  parent: RegressionHoeffdingTree.SplitNode,
+    def _deactivate_learning_node(self,
+                                  to_deactivate: ActiveLearningNode,
+                                  parent: SplitNode,
                                   parent_branch: int):
         """Deactivate a learning node.
 

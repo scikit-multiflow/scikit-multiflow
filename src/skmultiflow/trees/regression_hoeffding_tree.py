@@ -2,11 +2,15 @@ from operator import attrgetter
 
 from skmultiflow.core import RegressorMixin
 from skmultiflow.trees.hoeffding_tree import HoeffdingTree
-from skmultiflow.trees.numeric_attribute_regression_observer import NumericAttributeRegressionObserver
-from skmultiflow.trees.nominal_attribute_regression_observer import NominalAttributeRegressionObserver
-from skmultiflow.utils.utils import *
+from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserver
+from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
+from skmultiflow.utils import *
 from skmultiflow.utils import check_random_state
-from skmultiflow.trees.variance_reduction_split_criterion import VarianceReductionSplitCriterion
+from skmultiflow.trees.split_criterion import VarianceReductionSplitCriterion
+
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import InactiveLearningNode
 
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
@@ -63,7 +67,7 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
     .. [1] Elena Ikonomovska, João Gama, and Sašo Džeroski. 2011. Learning model trees from
            evolving data streams. Data Min. Knowl. Discov. 23, 1 (July 2011), 128-168.
     """
-    class InactiveLearningNodeForRegression(HoeffdingTree.InactiveLearningNode):
+    class InactiveLearningNodeForRegression(InactiveLearningNode):
 
         def __init__(self, initial_class_observations=None):
             """ InactiveLearningNode class constructor. """
@@ -80,7 +84,7 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
                 self._observed_class_distribution[1] = y * weight
                 self._observed_class_distribution[2] = y * y * weight
 
-    class ActiveLearningNodeForRegression(HoeffdingTree.ActiveLearningNode):
+    class ActiveLearningNodeForRegression(ActiveLearningNode):
 
         def __init__(self, initial_class_observations):
             """ ActiveLearningNode class constructor. """
@@ -135,7 +139,7 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
             else:
                 return self._observed_class_distribution[0]
 
-    class LearningNodePerceptron(HoeffdingTree.ActiveLearningNode):
+    class LearningNodePerceptron(ActiveLearningNode):
 
         def __init__(self, initial_class_observations, perceptron_weight=None, random_state=None):
             """
@@ -241,7 +245,7 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
             else:
                 return self._observed_class_distribution[0]
 
-    class InactiveLearningNodePerceptron(HoeffdingTree.InactiveLearningNode):
+    class InactiveLearningNodePerceptron(InactiveLearningNode):
 
         def __init__(self, initial_class_observations, perceptron_weight=None):
             super().__init__(initial_class_observations)
@@ -533,7 +537,7 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
         if isinstance(leaf_node, self.LearningNode):
             learning_node = leaf_node
             learning_node.learn_from_instance(X, y, sample_weight, self)
-            if self._growth_allowed and isinstance(learning_node, HoeffdingTree.ActiveLearningNode):
+            if self._growth_allowed and isinstance(learning_node, ActiveLearningNode):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.get_weight_seen()
                 weight_diff = weight_seen - active_learning_node.get_weight_seen_at_last_split_evaluation()
@@ -676,8 +680,8 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
             # Manage memory
             self.enforce_tracker_limit()
 
-    def _deactivate_learning_node(self, to_deactivate: HoeffdingTree.ActiveLearningNode,
-                                  parent: HoeffdingTree.SplitNode, parent_branch: int):
+    def _deactivate_learning_node(self, to_deactivate: ActiveLearningNode,
+                                  parent: SplitNode, parent_branch: int):
         """Deactivate a learning node.
 
         Parameters

@@ -1,18 +1,19 @@
 from operator import attrgetter
 import numpy as np
-from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
-from skmultiflow.trees.gini_split_criterion import GiniSplitCriterion
+from skmultiflow.trees import AttributeSplitSuggestion
+from skmultiflow.trees.split_criterion import GiniSplitCriterion
 from skmultiflow.trees.hoeffding_tree import HoeffdingTree
-from skmultiflow.trees.info_gain_split_criterion import InfoGainSplitCriterion
-from skmultiflow.trees.nominal_attribute_class_observer import NominalAttributeClassObserver
-from skmultiflow.trees.numeric_attribute_class_observer_gaussian import NumericAttributeClassObserverGaussian
+from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
+from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
+from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
 from skmultiflow.bayes import do_naive_bayes_prediction
-from skmultiflow.utils.utils import get_dimensions, calculate_object_size
+from skmultiflow.utils import get_dimensions, calculate_object_size
 
-Node = HoeffdingTree.Node
-SplitNode = HoeffdingTree.SplitNode
-ActiveLearningNode = HoeffdingTree.ActiveLearningNode
-InactiveLearningNode = HoeffdingTree.InactiveLearningNode
+from skmultiflow.trees.nodes import Node
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import InactiveLearningNode
+
 
 GINI_SPLIT = 'gini'
 INFO_GAIN_SPLIT = 'info_gain'

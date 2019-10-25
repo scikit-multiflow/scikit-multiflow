@@ -1,9 +1,13 @@
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees.hoeffding_tree import HoeffdingTree
-from skmultiflow.trees.numeric_attribute_class_observer_gaussian import NumericAttributeClassObserverGaussian
-from skmultiflow.trees.nominal_attribute_class_observer import NominalAttributeClassObserver
-from skmultiflow.utils.utils import *
+from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
+from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
+from skmultiflow.utils import *
 from skmultiflow.bayes import do_naive_bayes_prediction
+
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import InactiveLearningNode
 
 GINI_SPLIT = 'gini'
 INFO_GAIN_SPLIT = 'info_gain'
@@ -123,7 +127,7 @@ class LCHT(HoeffdingTree, MultiOutputMixin):
             """
         super().partial_fit(X, y, sample_weight=sample_weight)    # Override HT, infer the classes
 
-    class LCActiveLearningNode(HoeffdingTree.ActiveLearningNode):
+    class LCActiveLearningNode(ActiveLearningNode):
 
         def __init__(self, initial_class_observations):
             super().__init__(initial_class_observations)
@@ -150,7 +154,7 @@ class LCHT(HoeffdingTree, MultiOutputMixin):
                     self._attribute_observers[i] = obs
                 obs.observe_attribute_class(X[i], int(y), weight)
 
-    class LCInactiveLearningNode(HoeffdingTree.InactiveLearningNode):
+    class LCInactiveLearningNode(InactiveLearningNode):
 
         def __init__(self, initial_class_observations=None):
             """ LCInactiveLearningNode class constructor. """
@@ -299,7 +303,7 @@ class LCHT(HoeffdingTree, MultiOutputMixin):
         else:
             return self.LCLearningNodeNBA(initial_class_observations)
 
-    def _deactivate_learning_node(self, to_deactivate: LCActiveLearningNode, parent: HoeffdingTree.SplitNode, parent_branch: int):
+    def _deactivate_learning_node(self, to_deactivate: LCActiveLearningNode, parent: SplitNode, parent_branch: int):
         """Deactivate a learning node.
 
         Parameters
