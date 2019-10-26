@@ -4,7 +4,7 @@ from skmultiflow.trees.nodes import InactiveLearningNode
 class InactiveLearningNodeForRegression(InactiveLearningNode):
 
     def __init__(self, initial_class_observations=None):
-        """ InactiveLearningNode class constructor. """
+        """ InactiveLearningNodeForRegression class constructor. """
         super().__init__(initial_class_observations)
 
     def learn_from_instance(self, X, y, weight, ht):

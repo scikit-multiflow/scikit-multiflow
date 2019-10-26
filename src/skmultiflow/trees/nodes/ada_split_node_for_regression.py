@@ -1,3 +1,4 @@
+import math
 from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import ActiveLearningNode

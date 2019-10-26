@@ -6,7 +6,7 @@ from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObser
 class ActiveLearningNodeForRegression(ActiveLearningNode):
 
     def __init__(self, initial_class_observations):
-        """ ActiveLearningNode class constructor. """
+        """ ActiveLearningNodeForRegression class constructor. """
         super().__init__(initial_class_observations)
 
     def learn_from_instance(self, X, y, weight, ht):
