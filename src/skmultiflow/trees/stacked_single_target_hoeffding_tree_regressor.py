@@ -12,6 +12,8 @@ from skmultiflow.trees.split_criterion import IntraClusterVarianceReductionSplit
 
 from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import ActiveLearningNodePerceptronMultiTarget
+from skmultiflow.trees.nodes import InactiveLearningNodePerceptronMultiTarget
 
 
 _PERCEPTRON = 'perceptron'
@@ -75,8 +77,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(MultiTargetRegressionHoeffdingTr
        preprint arXiv:1903.12483.
     """
 
-    class LearningNodePerceptron(MultiTargetRegressionHoeffdingTree.
-                                 LearningNodePerceptron):
+    class LearningNodePerceptron(ActiveLearningNodePerceptronMultiTarget):
 
         def __init__(self, initial_class_observations, perceptron_weight=None,
                      random_state=None):
@@ -318,8 +319,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(MultiTargetRegressionHoeffdingTr
                 normalized_target_value - normalized_meta_pred
             )
 
-    class InactiveLearningNodePerceptron(MultiTargetRegressionHoeffdingTree.
-                                         InactiveLearningNodePerceptron):
+    class InactiveLearningNodePerceptron(InactiveLearningNodePerceptronMultiTarget):
 
         def __init__(self, initial_class_observations, perceptron_weight=None,
                      random_state=None):
