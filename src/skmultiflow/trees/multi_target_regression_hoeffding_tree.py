@@ -14,6 +14,10 @@ from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import LearningNode
 from skmultiflow.trees.nodes import ActiveLearningNode
 
+from skmultiflow.trees.nodes import ActiveLearningNodeForRegression
+from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
+from skmultiflow.trees.nodes import InactiveLearningNodePerceptron
+
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 _ADAPTIVE = 'adaptive'
@@ -73,8 +77,7 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
        Journal of Intelligent Information Systems 50.2 (2018): 315-339.
     """
 
-    class ActiveLearningNodeForRegression(RegressionHoeffdingTree.
-                                          ActiveLearningNodeForRegression):
+    class ActiveLearningNodeForRegression(ActiveLearningNodeForRegression):
 
         def __init__(self, initial_class_observations):
             """ ActiveLearningNode class constructor. """
@@ -115,8 +118,7 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
                     self._attribute_observers[i] = obs
                 obs.observe_attribute_class(x, y, weight)
 
-    class LearningNodePerceptron(RegressionHoeffdingTree.
-                                 LearningNodePerceptron):
+    class LearningNodePerceptron(ActiveLearningNodePerceptron):
 
         def __init__(self, initial_class_observations, perceptron_weight=None,
                      random_state=None):
@@ -295,8 +297,7 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
                                         self._observed_class_distribution[0])
             )
 
-    class InactiveLearningNodePerceptron(RegressionHoeffdingTree.
-                                         InactiveLearningNodePerceptron):
+    class InactiveLearningNodePerceptron(InactiveLearningNodePerceptron):
 
         def __init__(self, initial_class_observations, perceptron_weight=None,
                      random_state=None):

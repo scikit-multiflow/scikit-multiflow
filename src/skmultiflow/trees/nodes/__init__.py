@@ -26,6 +26,10 @@ from .lc_active_learning_node import LCActiveLearningNode
 from .lc_inactive_learning_node import LCInactiveLearningNode
 from .lc_learning_node_nb import LCLearningNodeNB
 from .lc_learning_node_nba import LCLearningNodeNBA
+from .active_learning_node_for_regression import ActiveLearningNodeForRegression
+from .active_learning_node_perceptron import ActiveLearningNodePerceptron
+from .inactive_learning_node_for_regression import InactiveLearningNodeForRegression
+from .inactive_learning_node_perceptron import InactiveLearningNodePerceptron
 
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode",
@@ -35,4 +39,5 @@ __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode
            "AnyTimeActiveLearningNode", "AnyTimeInactiveLearningNode",
            "AnyTimeLearningNodeNB", "AnyTimeLearningNodeNBAdaptive",
            "LCActiveLearningNode", "LCInactiveLearningNode", "LCLearningNodeNB",
-           "LCLearningNodeNBA"]
+           "LCLearningNodeNBA", "ActiveLearningNodeForRegression", "ActiveLearningNodePerceptron",
+           "InactiveLearningNodeForRegression", "InactiveLearningNodePerceptron"]

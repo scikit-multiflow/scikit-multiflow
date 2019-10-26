@@ -10,11 +10,12 @@ from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import ActiveLearningNode
 from skmultiflow.trees.nodes import InactiveLearningNode
 
+from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
+
 
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 error_width_threshold = 300
-LearningNodePerceptron = RegressionHoeffdingTree.LearningNodePerceptron
 
 
 class RegressionHAT(RegressionHoeffdingTree):
@@ -250,7 +251,7 @@ class RegressionHAT(RegressionHoeffdingTree):
                 self._alternate_tree.filter_instance_to_leaves(X, y, weight, self, -999,
                                                                update_splitter_counts, found_nodes)
 
-    class AdaLearningNodeForRegression(LearningNodePerceptron, NewNode):
+    class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, NewNode):
 
         def __init__(self, initial_class_observations, perceptron_weight, random_state=None):
             super().__init__(initial_class_observations, perceptron_weight, random_state)
