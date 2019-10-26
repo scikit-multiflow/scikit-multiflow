@@ -1,8 +1,6 @@
 import numpy as np
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees.hoeffding_tree import HoeffdingTree
-from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
-from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
 from skmultiflow.utils import *
 from skmultiflow.bayes import do_naive_bayes_prediction
 
