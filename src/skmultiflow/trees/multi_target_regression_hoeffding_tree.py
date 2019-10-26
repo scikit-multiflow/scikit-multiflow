@@ -4,7 +4,7 @@ import numpy as np
 
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees import RegressionHoeffdingTree
-from skmultiflow.utils.utils import get_dimensions
+from skmultiflow.utils import get_dimensions
 from skmultiflow.trees.split_criterion import IntraClusterVarianceReductionSplitCriterion
 
 from skmultiflow.trees.nodes import SplitNode
