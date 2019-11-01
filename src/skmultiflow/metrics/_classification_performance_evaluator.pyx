@@ -416,6 +416,8 @@ cdef class ClassificationPerformanceEvaluator:
                 return <double>sp.stats.gmean(sensitivity_per_class)
         return 0.0
 
+    # specificity was used for the calculation of geometric mean for binary classification.
+    # It is not required in the new implementation. However, it might be handy in the future.
     # cdef double _specificity_per_class(self, int class_value):
     #     cdef double tn
     #     cdef double fp
