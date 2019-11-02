@@ -10,7 +10,7 @@ from skmultiflow.utils.utils import get_max_value_key, normalize_values_in_dict
 MAJORITY_CLASS = 'mc'
 NAIVE_BAYES = 'nb'
 NAIVE_BAYES_ADAPTIVE = 'nba'
-error_width_threshold = 300
+ERROR_WIDTH_THRESHOLD = 300
 
 
 class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):

@@ -8,7 +8,7 @@ from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.utils import check_random_state, get_max_value_key
 
-error_width_threshold = 300
+ERROR_WIDTH_THRESHOLD = 300
 
 
 class AdaSplitNode(SplitNode, AdaNode):
@@ -78,8 +78,8 @@ class AdaSplitNode(SplitNode, AdaNode):
 
         # Condition to replace alternate tree
         elif self._alternate_tree is not None and self._alternate_tree.is_null_error() is False:
-            if self.get_error_width() > error_width_threshold \
-                    and self._alternate_tree.get_error_width() > error_width_threshold:
+            if self.get_error_width() > ERROR_WIDTH_THRESHOLD \
+                    and self._alternate_tree.get_error_width() > ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
                 alt_error_rate = self._alternate_tree.get_error_estimation()
                 fDelta = .05

@@ -8,7 +8,7 @@ from skmultiflow.trees.nodes import AdaLearningNodeForRegression
 
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
-error_width_threshold = 300
+ERROR_WIDTH_THRESHOLD = 300
 
 
 class RegressionHAT(RegressionHoeffdingTree):
