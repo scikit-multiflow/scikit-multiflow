@@ -2,7 +2,7 @@ import numpy as np
 from skmultiflow.trees.attribute_observer import AttributeClassObserver
 from skmultiflow.trees.attribute_test import NominalAttributeBinaryTest
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
-from skmultiflow.trees import AttributeSplitSuggestion
+from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 
 
 class NominalAttributeRegressionObserver(AttributeClassObserver):

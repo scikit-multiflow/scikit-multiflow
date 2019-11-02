@@ -1,5 +1,5 @@
 import numpy as np
-from skmultiflow.trees import AttributeSplitSuggestion
+from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 from skmultiflow.trees.nodes import InactiveLearningNode
 
 
