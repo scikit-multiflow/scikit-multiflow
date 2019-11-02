@@ -6,7 +6,7 @@ from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
 from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
 
 
-class ARFLearningNode(ActiveLearningNode):
+class RandomLearningNodeClassification(ActiveLearningNode):
     """ARF learning node class.
 
     Parameters
@@ -24,7 +24,7 @@ class ARFLearningNode(ActiveLearningNode):
         by `np.random`.
     """
     def __init__(self, initial_class_observations, max_features, random_state=None):
-        """ ARFLearningNode class constructor. """
+        """ RandomLearningNodeClassification class constructor. """
         super().__init__(initial_class_observations)
 
         self.max_features = max_features

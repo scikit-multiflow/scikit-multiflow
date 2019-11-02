@@ -11,9 +11,9 @@ from .active_learning_node import ActiveLearningNode
 from .inactive_learning_node import InactiveLearningNode
 from .learning_node_nb import LearningNodeNB
 from .learning_node_nb_adaptive import LearningNodeNBAdaptive
-from .arf_learning_node import ARFLearningNode
-from .arf_learning_node_nb import ARFLearningNodeNB
-from .arf_learning_node_nb_adaptive import ARFLearningNodeNBAdaptive
+from .random_learning_node_classification import RandomLearningNodeClassification
+from .random_learning_node_nb import RandomLearningNodeNB
+from .random_learning_node_nb_adaptive import RandomLearningNodeNBAdaptive
 from .ada_node import AdaNode
 from .ada_split_node import AdaSplitNode
 from .ada_learning_node import AdaLearningNode
@@ -46,7 +46,7 @@ from .sst_inactive_learning_node_adaptive import SSTInactiveLearningNodeAdaptive
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode",
            "InactiveLearningNode", "LearningNodeNB", "LearningNodeNBAdaptive",
-           "ARFLearningNode", "ARFLearningNodeNB", "ARFLearningNodeNBAdaptive",
+           "RandomLearningNodeClassification", "RandomLearningNodeNB", "RandomLearningNodeNBAdaptive",
            "AdaNode", "AdaSplitNode", "AdaLearningNode", "AnyTimeSplitNode",
            "AnyTimeActiveLearningNode", "AnyTimeInactiveLearningNode",
            "AnyTimeLearningNodeNB", "AnyTimeLearningNodeNBAdaptive",

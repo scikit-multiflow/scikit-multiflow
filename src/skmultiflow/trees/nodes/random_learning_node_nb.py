@@ -1,8 +1,8 @@
 from skmultiflow.bayes import do_naive_bayes_prediction
-from skmultiflow.trees.nodes import ARFLearningNode
+from skmultiflow.trees.nodes import RandomLearningNodeClassification
 
 
-class ARFLearningNodeNB(ARFLearningNode):
+class RandomLearningNodeNB(RandomLearningNodeClassification):
     """ARF Naive Bayes learning node class.
 
     Parameters
