@@ -1,6 +1,6 @@
 """
-The :mod:`skmultiflow.trees.leaf_predictor` module includes learning methods
-based on trees.
+The :mod:`skmultiflow.trees.nodes` module includes learning and split node
+implementations for the hoeffding trees.
 """
 
 from .found_node import FoundNode

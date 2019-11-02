@@ -58,9 +58,9 @@ class RegressionHAT(RegressionHoeffdingTree):
 
     """
 
-    # ===========================================
-    # == Hoeffding Regression Tree implementation ===
-    # ===========================================
+    # ========================================================
+    # == Regression Hoeffding Adaptive Tree implementation ===
+    # ========================================================
 
     def __init__(self,
                  max_byte_size=33554432,

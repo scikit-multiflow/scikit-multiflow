@@ -78,9 +78,9 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
        Journal of Intelligent Information Systems 50.2 (2018): 315-339.
     """
 
-    # ===========================================
-    # == Hoeffding Regression Tree implementation ===
-    # ===========================================
+    # ============================================================
+    # == Multi-target Regression Hoeffding Tree implementation ===
+    # ============================================================
 
     def __init__(self,
                  max_byte_size=33554432,

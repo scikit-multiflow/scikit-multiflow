@@ -12,6 +12,7 @@ from skmultiflow.trees.nodes import LCLearningNodeNBA
 
 MAJORITY_CLASS = 'mc'
 NAIVE_BAYES = 'nb'
+NAIVE_BAYES_ADAPTIVE = 'nba'
 
 
 class LCHT(HoeffdingTree, MultiOutputMixin):

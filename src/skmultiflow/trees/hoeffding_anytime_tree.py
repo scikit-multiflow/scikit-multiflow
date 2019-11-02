@@ -16,6 +16,7 @@ GINI_SPLIT = 'gini'
 INFO_GAIN_SPLIT = 'info_gain'
 MAJORITY_CLASS = 'mc'
 NAIVE_BAYES = 'nb'
+NAIVE_BAYES_ADAPTIVE = 'nba'
 
 
 class HATT(HoeffdingTree):
