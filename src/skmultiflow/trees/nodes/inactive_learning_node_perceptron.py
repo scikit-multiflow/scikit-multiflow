@@ -3,8 +3,23 @@ from skmultiflow.trees.nodes import InactiveLearningNode
 
 
 class InactiveLearningNodePerceptron(InactiveLearningNode):
+    """ Inactive Learning Node for regression tasks that always use a linear
+    perceptron model to provide responses.
 
+    Parameters
+    ----------
+    initial_class_observations: dict
+        In regression tasks this dictionary carries the sufficient to perform
+        online variance calculation. They refer to the number of observations
+        (key '0'), the sum of the target values (key '1'), and the sum of the
+        squared target values (key '2').
+    perceptron_weight: np.ndarray(n_features) or None, optional (default=None)
+        (default=None)
+        The weights for the linear models. If
+        not passed, uniform values in the range [-1, 1] are used.
+    """
     def __init__(self, initial_class_observations, perceptron_weight=None):
+        """ InactiveLearningNodePerceptron class constructor."""
         super().__init__(initial_class_observations)
         if perceptron_weight is None:
             self.perceptron_weight = []
@@ -12,7 +27,20 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
             self.perceptron_weight = perceptron_weight
 
     def learn_from_instance(self, X, y, weight, rht):
+        """Update the node with the provided instance.
 
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: double
+            Instance target value.
+        weight: float
+            Instance weight.
+        rht: RegressionHoeffdingTree
+            Regression Hoeffding Tree to update.
+
+        """
         if self.perceptron_weight is None:
             self.perceptron_weight = np.random.uniform(-1, 1, len(X)+1)
 
@@ -38,6 +66,19 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
             self.update_weights(X, y, learning_ratio, rht)
 
     def update_weights(self, X, y, learning_ratio, ht):
+        """
+        Update the perceptron weights
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: float
+            Instance target value.
+        learning_ratio: float
+            perceptron learning ratio
+        rht: RegressionHoeffdingTree
+            Regression Hoeffding Tree to update.
+        """
         normalized_sample = ht.normalize_sample(X)
         normalized_pred = self.predict(normalized_sample)
         normalized_target_value = ht.normalized_target_value(y)

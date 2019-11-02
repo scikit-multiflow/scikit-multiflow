@@ -6,15 +6,28 @@ from skmultiflow.utils import check_random_state
 
 
 class ActiveLearningNodePerceptron(ActiveLearningNode):
+    """ Learning Node for regression tasks that always use a linear perceptron
+    model to provide responses.
 
+    Parameters
+    ----------
+    initial_class_observations: dict
+        In regression tasks this dictionary carries the sufficient to perform
+        online variance calculation. They refer to the number of observations
+        (key '0'), the sum of the target values (key '1'), and the sum of the
+        squared target values (key '2').
+    perceptron_weight: np.ndarray(n_features) or None, optional (default=None)
+        (default=None)
+        The weights for the linear models. If
+        not passed, uniform values in the range [-1, 1] are used.
+    random_state: int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+    """
     def __init__(self, initial_class_observations, perceptron_weight=None, random_state=None):
-        """
-        ActiveLearningNodePerceptron class constructor
-        Parameters
-        ----------
-        initial_class_observations
-        perceptron_weight
-        """
+        """ ActiveLearningNodePerceptron class constructor."""
         super().__init__(initial_class_observations)
         if perceptron_weight is None:
             self.perceptron_weight = None
@@ -29,8 +42,8 @@ class ActiveLearningNodePerceptron(ActiveLearningNode):
         ----------
         X: numpy.ndarray of length equal to the number of features.
             Instance attributes for updating the node.
-        y: int
-            Instance class.
+        y: float
+            Instance target value.
         weight: float
             Instance weight.
         rht: RegressionHoeffdingTree
@@ -80,8 +93,8 @@ class ActiveLearningNodePerceptron(ActiveLearningNode):
         ----------
         X: numpy.ndarray of length equal to the number of features.
             Instance attributes for updating the node.
-        y: int
-            Instance class.
+        y: float
+            Instance target value.
         learning_ratio: float
             perceptron learning ratio
         rht: RegressionHoeffdingTree

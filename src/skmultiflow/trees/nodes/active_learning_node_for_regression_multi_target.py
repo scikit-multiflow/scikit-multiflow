@@ -4,7 +4,17 @@ from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObser
 
 
 class ActiveLearningNodeForRegressionMultiTarget(ActiveLearningNodeForRegression):
+    """ Learning Node for Multi-target Regression tasks that always use the
+    average predictor for each target.
 
+    Parameters
+    ----------
+    initial_class_observations: dict
+        In regression tasks this dictionary carries the sufficient to perform
+        online variance calculation. They refer to the number of observations
+        (key '0'), the sum of the targets values (key '1'), and the sum of the
+        squared targets values (key '2').
+    """
     def __init__(self, initial_class_observations):
         """ ActiveLearningNodeForRegressionMultiTarget class constructor. """
         super().__init__(initial_class_observations)
@@ -16,8 +26,8 @@ class ActiveLearningNodeForRegressionMultiTarget(ActiveLearningNodeForRegression
         ----------
         X: numpy.ndarray of length equal to the number of features.
             Instance attributes for updating the node.
-        y: int
-            Instance class.
+        y: numpy.ndarray of length equal to the number of targets.
+            Targets values.
         weight: float
             Instance weight.
         ht: HoeffdingTree

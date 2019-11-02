@@ -3,15 +3,29 @@ from skmultiflow.trees.nodes import ActiveLearningNodePerceptronMultiTarget
 
 
 class ActiveLearningNodeAdaptiveMultiTarget(ActiveLearningNodePerceptronMultiTarget):
+    """ Learning Node for Multi-target Regression tasks that keeps track of both
+    a linear perceptron and an average predictor for each target.
+
+    Parameters
+    ----------
+    initial_class_observations: dict
+        In regression tasks this dictionary carries the sufficient to perform
+        online variance calculation. They refer to the number of observations
+        (key '0'), the sum of the targets values (key '1'), and the sum of the
+        squared targets values (key '2').
+    perceptron_weight: np.ndarray(n_targets, n_features) or None, optinal
+        (default=None)
+        The weights for the linear models that predict the targets values. If
+        not passed, uniform values in the range [-1, 1] are used.
+    random_state: int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+    """
     def __init__(self, initial_class_observations, perceptron_weight=None,
                  random_state=None):
-        """ActiveLearningNodeAdaptiveMultiTarget class constructor
-
-        Parameters
-        ----------
-        initial_class_observations
-        perceptron_weight
-        """
+        """ActiveLearningNodeAdaptiveMultiTarget class constructor."""
         super().__init__(initial_class_observations, perceptron_weight,
                          random_state)
 

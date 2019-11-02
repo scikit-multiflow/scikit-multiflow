@@ -6,30 +6,30 @@ from skmultiflow.utils.utils import get_dimensions
 
 
 class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
+    """ Learning Node for SST-HT that always use stacked perceptrons to provide
+    targets responses.
 
+    Parameters
+    ----------
+    initial_class_observations: dict
+        A dictionary containing the set of sufficient statistics to be
+        stored by the leaf node. It contains the following elements:
+        - 0: the sum of elements seen so far;
+        - 1: the sum of the targets values seen so far;
+        - 2: the sum of the squared values of the targets seen so far.
+    perceptron_weight: `numpy.ndarray` with number of features rows and
+    number of targets columns.
+        The weight matrix for the perceptron predictors. Set to `None`
+        by default (in that case it will be randomly initiated).
+    random_state : `int`, `RandomState` instance or None (default=None)
+        If int, `random_state` is used as seed to the random number
+        generator; If a `RandomState` instance, `random_state` is the
+        random number generator; If `None`, the random number generator
+        is the current `RandomState` instance used by `np.random`.
+    """
     def __init__(self, initial_class_observations, perceptron_weight=None,
                  random_state=None):
-        """
-        SSTActiveLearningNode class constructor
-
-        Parameters
-        ----------
-        initial_class_observations: dict
-            A dictionary containing the set of sufficient statistics to be
-            stored by the leaf node. It contains the following elements:
-            - 0: the sum of elements seen so far;
-            - 1: the sum of the targets values seen so far;
-            - 2: the sum of the squared values of the targets seen so far.
-        perceptron_weight: `numpy.ndarray` with number of features rows and
-        number of targets columns.
-            The weight matrix for the perceptron predictors. Set to `None`
-            by default (in that case it will be randomly initiated).
-        random_state : `int`, `RandomState` instance or None (default=None)
-            If int, `random_state` is used as seed to the random number
-            generator; If a `RandomState` instance, `random_state` is the
-            random number generator; If `None`, the random number generator
-            is the current `RandomState` instance used by `np.random`.
-        """
+        """ SSTActiveLearningNode class constructor."""
         super().__init__(initial_class_observations, perceptron_weight,
                          random_state)
 
@@ -129,6 +129,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
 
     # Normalize both levels
     def normalize_perceptron_weights(self):
+        """ Normalizes both levels of perceptron weights."""
         n_targets = self.perceptron_weight[0].shape[0]
         # Normalize perceptron weights
         for i in range(n_targets):

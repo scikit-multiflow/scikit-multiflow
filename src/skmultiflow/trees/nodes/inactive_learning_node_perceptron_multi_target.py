@@ -5,16 +5,48 @@ from skmultiflow.utils.utils import get_dimensions
 
 
 class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):
+    """ Inactive Learning Node for Multi-target Regression tasks that always use
+    linear perceptron predictors for each target.
 
+    Parameters
+    ----------
+    initial_class_observations: dict
+        In regression tasks this dictionary carries the sufficient to perform
+        online variance calculation. They refer to the number of observations
+        (key '0'), the sum of the targets values (key '1'), and the sum of the
+        squared targets values (key '2').
+    perceptron_weight: np.ndarray(n_targets, n_features) or None, optional
+        (default=None)
+        The weights for the linear models that predict the targets values. If
+        not passed, uniform values in the range [-1, 1] are used.
+    random_state: int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+    """
     def __init__(self, initial_class_observations, perceptron_weight=None,
                  random_state=None):
+        """ InactiveLearningNodeForRegression class constructor."""
         super().__init__(initial_class_observations)
 
         self.perceptron_weight = perceptron_weight
         self.random_state = check_random_state(random_state)
 
     def learn_from_instance(self, X, y, weight, rht):
+        """Update the node with the provided instance.
 
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: numpy.ndarray of length equal to the number of targets.
+            Instance targets.
+        weight: float
+            Instance weight.
+        rht: RegressionHoeffdingTree
+            Regression Hoeffding Tree to update.
+        """
         if self.perceptron_weight is None:
             # Creates matrix of perceptron random weights
             _, rows = get_dimensions(y)
