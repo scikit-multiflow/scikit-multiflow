@@ -3,14 +3,14 @@ from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import ActiveLearningNode
 from skmultiflow.trees.nodes import InactiveLearningNode
-from skmultiflow.trees.nodes import AdaNodeRegression
+from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection.adwin import ADWIN
 from skmultiflow.utils import check_random_state
 
 ERROR_WIDTH_THRESHOLD = 300
 
 
-class AdaSplitNodeForRegression(SplitNode, AdaNodeRegression):
+class AdaSplitNodeForRegression(SplitNode, AdaNode):
     def __init__(self, split_test, class_observations):
         super().__init__(split_test, class_observations)
         self._estimation_error_weight = ADWIN()
@@ -19,7 +19,7 @@ class AdaSplitNodeForRegression(SplitNode, AdaNodeRegression):
         self._random_seed = 1
         self._classifier_random = check_random_state(self._random_seed)
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def number_leaves(self):
         num_of_leaves = 0
         for child in self._children:
@@ -28,11 +28,11 @@ class AdaSplitNodeForRegression(SplitNode, AdaNodeRegression):
 
         return num_of_leaves
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def get_error_estimation(self):
         return self._estimation_error_weight.estimation
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def get_error_width(self):
         w = 0.0
         if self.is_null_error() is False:
@@ -40,11 +40,11 @@ class AdaSplitNodeForRegression(SplitNode, AdaNodeRegression):
 
         return w
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def is_null_error(self):
         return self._estimation_error_weight is None
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def learn_from_instance(self, X, y, weight, rhat, parent, parent_branch):
 
         true_target = y
@@ -113,7 +113,7 @@ class AdaSplitNodeForRegression(SplitNode, AdaNodeRegression):
         if child is not None:
             child.learn_from_instance(X, y, weight, rhat, parent, parent_branch)
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def kill_tree_children(self, rhat):
         for child in self._children:
             if child is not None:
@@ -131,7 +131,7 @@ class AdaSplitNodeForRegression(SplitNode, AdaNodeRegression):
                     child = None
                     rhat._inactive_leaf_node_cnt -= 1
 
-    # override AdaNodeRegression
+    # override AdaNode
     def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,
                                   update_splitter_counts=False, found_nodes=None):
         if found_nodes is None:

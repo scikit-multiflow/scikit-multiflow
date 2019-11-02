@@ -30,7 +30,6 @@ from .active_learning_node_for_regression import ActiveLearningNodeForRegression
 from .active_learning_node_perceptron import ActiveLearningNodePerceptron
 from .inactive_learning_node_for_regression import InactiveLearningNodeForRegression
 from .inactive_learning_node_perceptron import InactiveLearningNodePerceptron
-from .ada_node_regression import AdaNodeRegression
 from .ada_split_node_for_regression import AdaSplitNodeForRegression
 from .ada_learning_node_for_regression import AdaLearningNodeForRegression
 from .active_learning_node_for_regression_multi_target import ActiveLearningNodeForRegressionMultiTarget
@@ -53,7 +52,7 @@ __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode
            "LCActiveLearningNode", "LCInactiveLearningNode", "LCLearningNodeNB",
            "LCLearningNodeNBA", "ActiveLearningNodeForRegression", "ActiveLearningNodePerceptron",
            "InactiveLearningNodeForRegression", "InactiveLearningNodePerceptron",
-           "AdaNodeRegression", "AdaSplitNodeForRegression", "AdaLearningNodeForRegression",
+           "AdaSplitNodeForRegression", "AdaLearningNodeForRegression",
            "ActiveLearningNodeForRegressionMultiTarget", "ActiveLearningNodePerceptronMultiTarget",
            "ActiveLearningNodeAdaptiveMultiTarget", "InactiveLearningNodePerceptronMultiTarget",
            "InactiveLearningNodeAdaptiveMultiTarget", "SSTActiveLearningNode",

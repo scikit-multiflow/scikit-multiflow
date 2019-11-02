@@ -1,11 +1,11 @@
 from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
-from skmultiflow.trees.nodes import AdaNodeRegression
+from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection.adwin import ADWIN
 from skmultiflow.utils import check_random_state
 
 
-class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNodeRegression):
+class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
 
     def __init__(self, initial_class_observations, perceptron_weight, random_state=None):
         super().__init__(initial_class_observations, perceptron_weight, random_state)
@@ -14,26 +14,26 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNodeRegressi
         self._randomSeed = 1
         self._classifier_random = check_random_state(self._randomSeed)
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def number_leaves(self):
         return 1
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def get_error_estimation(self):
         return self._estimation_error_weight.estimation
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def get_error_width(self):
         return self._estimation_error_weight.width
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def is_null_error(self):
         return self._estimation_error_weight is None
 
     def kill_tree_children(self, hat):
         pass
 
-    # Override AdaNodeRegression
+    # Override AdaNode
     def learn_from_instance(self, X, y, weight, rhat, parent, parent_branch):
 
         super().learn_from_instance(X, y, weight, rhat)
@@ -64,7 +64,7 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNodeRegressi
             rhat._attempt_to_split(self, parent, parent_branch)
             self.set_weight_seen_at_last_split_evaluation(weight_seen)
 
-    # Override AdaNodeRegression, New for option votes
+    # Override AdaNode, New for option votes
     def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,
                                   update_splitter_counts, found_nodes=None):
         if found_nodes is None:
