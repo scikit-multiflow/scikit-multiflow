@@ -159,7 +159,7 @@ class LCHT(HoeffdingTree, MultiOutputMixin):
             return LCActiveLearningNode(initial_class_observations)
         elif self._leaf_prediction == NAIVE_BAYES:
             return LCLearningNodeNB(initial_class_observations)
-        else:
+        else:  # NAIVE BAYES ADAPTIVE (default)
             return LCLearningNodeNBA(initial_class_observations)
 
     def _deactivate_learning_node(self, to_deactivate: LCActiveLearningNode, parent: SplitNode, parent_branch: int):

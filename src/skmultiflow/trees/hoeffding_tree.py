@@ -498,7 +498,7 @@ class HoeffdingTree(BaseSKMObject, ClassifierMixin):
             return ActiveLearningNode(initial_class_observations)
         elif self._leaf_prediction == NAIVE_BAYES:
             return LearningNodeNB(initial_class_observations)
-        else:
+        else:  # NAIVE BAYES ADAPTIVE (default)
             return LearningNodeNBAdaptive(initial_class_observations)
 
     def get_model_description(self):

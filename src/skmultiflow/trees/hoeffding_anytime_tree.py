@@ -77,7 +77,7 @@ class HATT(HoeffdingTree):
             return AnyTimeActiveLearningNode(initial_class_observations)
         elif self._leaf_prediction == NAIVE_BAYES:
             return AnyTimeLearningNodeNB(initial_class_observations)
-        else:
+        else:  # NAIVE BAYES ADAPTIVE (default)
             return AnyTimeLearningNodeNBAdaptive(initial_class_observations)
 
     # Override new_split_node
