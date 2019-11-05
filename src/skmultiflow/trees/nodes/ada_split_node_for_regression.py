@@ -11,6 +11,18 @@ ERROR_WIDTH_THRESHOLD = 300
 
 
 class AdaSplitNodeForRegression(SplitNode, AdaNode):
+    """ Node that splits the data in a Regression Hoeffding Adaptive Tree.
+
+    Parameters
+    ----------
+    split_test: skmultiflow.split_test.InstanceConditionalTest
+        Split test.
+    class_observations: dict
+        In regression tasks this dictionary carries the sufficient to perform
+        online variance calculation. They refer to the number of observations
+        (key '0'), the sum of the target values (key '1'), and the sum of the
+        squared target values (key '2').
+    """
     def __init__(self, split_test, class_observations):
         super().__init__(split_test, class_observations)
         self._estimation_error_weight = ADWIN()

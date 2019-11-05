@@ -3,7 +3,15 @@ from skmultiflow.trees.nodes import AnyTimeLearningNodeNB
 
 
 class AnyTimeLearningNodeNBAdaptive(AnyTimeLearningNodeNB):
+    """ Learning node for the Hoeffding Anytime Tree that uses Adaptive Naive
+    Bayes models.
 
+    Parameters
+    ----------
+    initial_class_observations: dict (class_value, weight) or None
+        Initial class observations
+
+    """
     def __init__(self, initial_class_observations):
         """ AnyTimeLearningNodeNBAdaptive class constructor. """
         super().__init__(initial_class_observations)

@@ -6,7 +6,26 @@ from skmultiflow.utils import check_random_state
 
 
 class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
+    """ Learning Node of the Regression Hoeffding Adaptive Tree that always use
+    a linear perceptron model to provide responses.
 
+    Parameters
+    ----------
+    initial_class_observations: dict
+        In regression tasks this dictionary carries the sufficient to perform
+        online variance calculation. They refer to the number of observations
+        (key '0'), the sum of the target values (key '1'), and the sum of the
+        squared target values (key '2').
+    perceptron_weight: np.ndarray(n_features) or None, optional (default=None)
+        (default=None)
+        The weights for the linear models. If
+        not passed, uniform values in the range [-1, 1] are used.
+    random_state: int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+    """
     def __init__(self, initial_class_observations, perceptron_weight, random_state=None):
         super().__init__(initial_class_observations, perceptron_weight, random_state)
         self._estimation_error_weight = ADWIN()

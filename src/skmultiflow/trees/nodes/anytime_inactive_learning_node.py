@@ -4,7 +4,7 @@ from skmultiflow.trees.nodes import InactiveLearningNode
 
 
 class AnyTimeInactiveLearningNode(InactiveLearningNode):
-    """ Inactive learning node that does not grow.
+    """ Inactive Learning node for the Hoeffding Anytime Tree.
 
     Parameters
     ----------

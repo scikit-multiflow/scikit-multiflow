@@ -3,7 +3,15 @@ from skmultiflow.trees.nodes import LCActiveLearningNode
 
 
 class LCLearningNodeNB(LCActiveLearningNode):
+    """ Learning node for the Label Combination Hoeffding Tree that uses Naive
+    Bayes models.
 
+    Parameters
+    ----------
+    initial_class_observations: dict (class_value, weight) or None
+        Initial class observations
+
+    """
     def __init__(self, initial_class_observations):
         """ LCLearningNodeNB class constructor. """
         super().__init__(initial_class_observations)

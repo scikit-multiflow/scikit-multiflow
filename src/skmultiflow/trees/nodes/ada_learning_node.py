@@ -14,6 +14,15 @@ ERROR_WIDTH_THRESHOLD = 300
 
 
 class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
+    """ Learning node for Hoeffding Adaptive Tree that uses Adaptive Naive
+    Bayes models.
+
+    Parameters
+    ----------
+    initial_class_observations: dict (class_value, weight) or None
+        Initial class observations
+
+    """
     def __init__(self, initial_class_observations):
         super().__init__(initial_class_observations)
         self._estimation_error_weight = ADWIN()
@@ -87,7 +96,7 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
         # NB
         elif prediction_option == NAIVE_BAYES:
             dist = do_naive_bayes_prediction(X, self._observed_class_distribution, self._attribute_observers)
-        # NBAdaptive
+        # NBAdaptive (default)
         else:
             if self._mc_correct_weight > self._nb_correct_weight:
                 dist = self.get_observed_class_distribution()

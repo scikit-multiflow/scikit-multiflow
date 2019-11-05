@@ -4,7 +4,7 @@ from skmultiflow.trees.nodes import ActiveLearningNode
 
 
 class AnyTimeActiveLearningNode(ActiveLearningNode):
-    """ Learning node that supports growth.
+    """ Active Learning node for the Hoeffding Anytime Tree.
 
     Parameters
     ----------

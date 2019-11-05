@@ -6,7 +6,14 @@ NAIVE_BAYES_ADAPTIVE = 'nba'
 
 
 class LCActiveLearningNode(ActiveLearningNode):
+    """ Active Learning node for the Label Combination Hoeffding Tree.
 
+    Parameters
+    ----------
+    initial_class_observations: dict (class_value, weight) or None
+        Initial class observations
+
+    """
     def __init__(self, initial_class_observations):
         super().__init__(initial_class_observations)
 

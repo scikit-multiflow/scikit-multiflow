@@ -3,7 +3,15 @@ from skmultiflow.trees.nodes import AnyTimeActiveLearningNode
 
 
 class AnyTimeLearningNodeNB(AnyTimeActiveLearningNode):
+    """ Learning node  for the Hoeffding Anytime Tree that uses Naive Bayes
+    models.
 
+    Parameters
+    ----------
+    initial_class_observations: dict (class_value, weight) or None
+        Initial class observations
+
+    """
     def __init__(self, initial_class_observations):
         """ AnyTimeLearningNodeNB class constructor. """
         super().__init__(initial_class_observations)

@@ -2,7 +2,14 @@ from skmultiflow.trees.nodes import InactiveLearningNode
 
 
 class LCInactiveLearningNode(InactiveLearningNode):
+    """ Inactive Learning node for the Label Combination Hoeffding Tree.
 
+    Parameters
+    ----------
+    initial_class_observations: dict (class_value, weight) or None
+        Initial class observations
+
+    """
     def __init__(self, initial_class_observations=None):
         """ LCInactiveLearningNode class constructor. """
         super().__init__(initial_class_observations)

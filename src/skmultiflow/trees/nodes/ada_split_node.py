@@ -12,6 +12,15 @@ ERROR_WIDTH_THRESHOLD = 300
 
 
 class AdaSplitNode(SplitNode, AdaNode):
+    """ Node that splits the data in a Hoeffding Adaptive Tree.
+
+    Parameters
+    ----------
+    split_test: skmultiflow.split_test.InstanceConditionalTest
+        Split test.
+    class_observations: dict (class_value, weight) or None
+        Class observations
+    """
     def __init__(self, split_test, class_observations):
         super().__init__(split_test, class_observations)
         self._estimation_error_weight = ADWIN()
