@@ -1,6 +1,6 @@
 import numpy as np
 from skmultiflow.trees.nodes import SSTInactiveLearningNode
-from skmultiflow.utils.utils import get_dimensions
+from skmultiflow.utils import get_dimensions
 
 
 class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):

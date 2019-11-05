@@ -1,7 +1,7 @@
 import numpy as np
 from skmultiflow.trees.nodes import InactiveLearningNodePerceptron
 from skmultiflow.utils import check_random_state
-from skmultiflow.utils.utils import get_dimensions
+from skmultiflow.utils import get_dimensions
 
 
 class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):

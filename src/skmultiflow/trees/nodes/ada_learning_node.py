@@ -5,7 +5,7 @@ from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import LearningNodeNBAdaptive
 from skmultiflow.trees.nodes import AdaNode
 
-from skmultiflow.utils.utils import get_max_value_key, normalize_values_in_dict
+from skmultiflow.utils import get_max_value_key, normalize_values_in_dict
 
 MAJORITY_CLASS = 'mc'
 NAIVE_BAYES = 'nb'

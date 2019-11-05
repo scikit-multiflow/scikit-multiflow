@@ -5,7 +5,7 @@ from sklearn.preprocessing import normalize
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin
 from skmultiflow.utils import check_random_state
-from skmultiflow.utils.utils import get_dimensions
+from skmultiflow.utils import get_dimensions
 
 
 class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):

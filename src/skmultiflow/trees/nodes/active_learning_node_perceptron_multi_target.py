@@ -3,7 +3,7 @@ from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserverMultiTarget
 from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
 from skmultiflow.utils import check_random_state
-from skmultiflow.utils.utils import get_dimensions
+from skmultiflow.utils import get_dimensions
 
 
 class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
