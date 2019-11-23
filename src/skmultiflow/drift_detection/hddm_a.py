@@ -58,7 +58,6 @@ class HDDM_A(BaseDriftDetector):
     def __init__(self, drift_confidence=0.001, warning_confidence=0.005, two_side_option=True):
         super().__init__()
         super().reset()
-        # n前缀代表计数, c前缀代表值
         self.n_min = 0
         self.c_min = 0
         self.total_n = 0
