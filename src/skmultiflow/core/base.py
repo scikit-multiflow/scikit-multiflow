@@ -636,6 +636,121 @@ class RegressorMixin(metaclass=ABCMeta):
                         multioutput='variance_weighted')
 
 
+class ForecasterMixin(metaclass=ABCMeta):
+    """Mixin class for all forecasting estimators in scikit-multiflow."""
+    _estimator_type = "forecaster"
+    last_samples = []
+    k = None
+    l = None
+
+    def __init__(self, k=1, l=1):
+        self.k = k
+        self.l = l
+
+    def partial_fit(self, X, y, sample_weight=None):
+        """ Partially (incrementally) fit the model with the following formula (x=x[t-k:t-1], y=x[t::t+l]).
+
+        Parameters
+        ----------
+        X : numpy.ndarray of shape (n_samples, n_features)
+            The features to train the model.
+
+        y: numpy.ndarray of shape (n_samples)
+            An array-like with the target values of all samples in X.
+
+        sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
+            Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the learning method.
+
+        Returns
+        -------
+        self
+
+        """
+        if self.last_samples is None or len(self.last_samples) < self.k:
+            self._partial_fit(X, y, sample_weight=sample_weight)
+        else:
+            self._partial_fit(self.last_samples[0], y, sample_weight=sample_weight)
+            self.last_samples.remove(self.last_samples[0])
+
+        self.last_samples.append(X)
+
+        return self
+
+    @abstractmethod
+    def _partial_fit(self, X, y, sample_weight=None):
+        """ Partially (incrementally) fit the model.
+
+        Parameters
+        ----------
+        X : numpy.ndarray of shape (n_samples, n_features)
+            The features to train the model.
+
+        y: numpy.ndarray of shape (n_samples)
+            An array-like with the target values of all samples in X.
+
+        sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
+            Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the learning method.
+
+        Returns
+        -------
+        self
+
+        """
+        raise NotImplementedError
+
+    def predict(self, X):
+        """ Predict target values for the passed data.
+
+        Parameters
+        ----------
+        X : numpy.ndarray of shape (n_samples, n_features)
+            The set of data samples to predict the target values for.
+
+        Returns
+        -------
+        A numpy.ndarray with all the predictions for the samples in X.
+
+        """
+        return self.forecast(X, 0)
+
+    @abstractmethod
+    def forecast(self, X, l=l):
+        """ Forecast the next l target values for the passed data.
+
+        Parameters
+        ----------
+        X : numpy.ndarray of shape (n_samples, n_features)
+            The set of data samples to predict the target values for.
+
+        l: int
+            number of steps to forecast
+
+        Returns
+        -------
+        A numpy.ndarray with all the predictions for the samples in X.
+
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def predict_proba(self, X):
+        """ Estimates the probability of each sample in X belonging to each of the class-labels.
+
+        Parameters
+        ----------
+        X : numpy.ndarray of shape (n_samples, n_features)
+            The matrix of samples one wants to predict the class probabilities for.
+
+        Returns
+        -------
+        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the
+        same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents
+        the probability that the i-th sample of X belongs to a certain class-label.
+
+        """
+        raise NotImplementedError
+
+
 class MetaEstimatorMixin(object):
     """Mixin class for all meta estimators in scikit-multiflow."""
     _required_parameters = ["estimator"]
@@ -677,3 +792,19 @@ def is_regressor(estimator):
         True if estimator is a regressor and False otherwise.
     """
     return getattr(estimator, "_estimator_type", None) == "regressor"
+
+
+def is_forecaster(estimator):
+    """Returns True if the given estimator is (probably) a forecaster.
+
+    Parameters
+    ----------
+    estimator : object
+        Estimator object to test.
+
+    Returns
+    -------
+    out : bool
+        True if estimator is a forecaster and False otherwise.
+    """
+    return getattr(estimator, "_estimator_type", None) == "forecaster"
