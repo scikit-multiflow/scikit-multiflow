@@ -123,6 +123,18 @@ class AdaSplitNode(SplitNode, AdaNode):
         child = self.get_child(child_branch)
         if child is not None:
             child.learn_from_instance(X, y, weight, hat, parent, parent_branch)
+        # Instance contains a categorical value previously unseen by the split
+        # node
+        elif self.get_split_test().branch_for_instance(X) < 0:
+            # Creates a new learning node to encompass the new observed feature
+            # value
+            leaf_node = hat._new_learning_node()
+            branch_id = self.get_split_test().add_new_branch(
+                X[self.get_split_test().get_atts_test_depends_on()[0]]
+            )
+            self.set_child(branch_id, leaf_node)
+            hat._active_leaf_node_cnt += 1
+            leaf_node.learn_from_instance(X, y, weight, hat, parent, parent_branch)
 
     # Override AdaNode
     def kill_tree_children(self, hat):

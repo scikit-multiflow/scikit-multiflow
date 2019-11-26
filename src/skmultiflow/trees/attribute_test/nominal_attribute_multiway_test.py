@@ -35,3 +35,22 @@ class NominalAttributeMultiwayTest(InstanceConditionalTest):
 
     def get_atts_test_depends_on(self):
         return [self._att_idx]
+
+    def add_new_branch(self, att_val):
+        """ Adds a previously unseen categorical attribute value to the test
+        options.
+
+        Used to create new branches for unseen categories.
+
+        Parameters
+        ----------
+            att_val: the value of the new category.
+
+        Returns
+        -------
+            new_branch_id: the branch id corresponding for the new value.
+        """
+        new_branch_id = max(self._branch_mapping.values()) + 1
+        self._branch_mapping[att_val] = new_branch_id
+        self._reverse_branch_mapping[new_branch_id] = att_val
+        return new_branch_id
