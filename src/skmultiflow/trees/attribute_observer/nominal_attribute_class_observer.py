@@ -21,16 +21,18 @@ class NominalAttributeClassObserver(AttributeClassObserver):
         if att_val is None:
             self._missing_weight_observed += weight
         else:
-            try:
-                val_dist = self._att_val_dist_per_class[class_val]
-            except KeyError:
+            if class_val not in self._att_val_dist_per_class:
                 self._att_val_dist_per_class[class_val] = {att_val: 0.0}
-                self._att_val_dist_per_class = dict(sorted(self._att_val_dist_per_class.items()))
+                self._att_val_dist_per_class = dict(
+                    sorted(self._att_val_dist_per_class.items())
+                )
             try:
                 self._att_val_dist_per_class[class_val][att_val] += weight
             except KeyError:
                 self._att_val_dist_per_class[class_val][att_val] = weight
-                self._att_val_dist_per_class[class_val] = dict(sorted(self._att_val_dist_per_class[class_val].items()))
+                self._att_val_dist_per_class[class_val] = dict(
+                    sorted(self._att_val_dist_per_class[class_val].items())
+                )
 
         self._total_weight_observed += weight
 
@@ -43,18 +45,29 @@ class NominalAttributeClassObserver(AttributeClassObserver):
 
     def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, binary_only):
         best_suggestion = None
+        att_values = set(
+            [att_val for class_val in self._att_val_dist_per_class.values()
+             for att_val in class_val]
+        )
         if not binary_only:
             post_split_dist = self.get_class_dist_from_multiway_split()
             merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
-            best_suggestion = AttributeSplitSuggestion(NominalAttributeMultiwayTest(att_idx),
-                                                       post_split_dist, merit)
-        att_values = set([att_val for class_val in self._att_val_dist_per_class.values() for att_val in class_val])
+            branch_mapping = {k: v for v, k in enumerate(att_values)}
+            best_suggestion = AttributeSplitSuggestion(
+                NominalAttributeMultiwayTest(att_idx, branch_mapping),
+                post_split_dist, merit
+            )
         for att_val in att_values:
             post_split_dist = self.get_class_dist_from_binary_split(att_val)
             merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
             if best_suggestion is None or merit > best_suggestion.merit:
-                best_suggestion = AttributeSplitSuggestion(NominalAttributeBinaryTest(att_idx, att_val),
-                                                           post_split_dist, merit)
+                branch_mapping = {
+                    k: 0 if k == att_val else 1 for k in att_values
+                }
+                best_suggestion = AttributeSplitSuggestion(
+                    NominalAttributeBinaryTest(att_idx, att_val, branch_mapping),
+                    post_split_dist, merit
+                )
         return best_suggestion
 
     def get_class_dist_from_multiway_split(self):
