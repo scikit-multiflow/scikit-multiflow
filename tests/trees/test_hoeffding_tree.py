@@ -148,12 +148,20 @@ def test_hoeffding_tree_model_information():
 
     learner.partial_fit(X, y, classes=stream.target_values)
 
-    expected_info = "{'Tree size (nodes)': 5, 'Tree size (leaves)': 3, " \
-                    "'Active learning nodes': 3, 'Tree depth': 2, 'Active " \
-                    "leaf byte size estimate': 0.0, 'Inactive leaf byte " \
-                    "size estimate': 0.0, 'Byte size estimate overhead': 1.0}"
+    expected_info = {
+        'Tree size (nodes)': 5,
+        'Tree size (leaves)': 3,
+        'Active learning nodes': 3,
+        'Tree depth': 2,
+        'Active leaf byte size estimate': 0.0,
+        'Inactive leaf byte size estimate': 0.0,
+        'Byte size estimate overhead': 1.0
+    }
 
-    assert expected_info == str(learner.get_model_measurements)
+    observed_info = learner.get_model_measurements
+    for k in expected_info:
+        assert k in observed_info
+        assert expected_info[k] == observed_info[k]
 
     expected_description = "if Attribute 0 <= 4.549969620513424:\n" \
                             "  if Attribute 1 <= 5.440182925299016:\n" \
