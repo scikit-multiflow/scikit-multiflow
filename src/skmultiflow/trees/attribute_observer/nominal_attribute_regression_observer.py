@@ -3,8 +3,6 @@ from skmultiflow.trees.attribute_test import NominalAttributeBinaryTest
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 
-from collections import Counter
-
 
 class NominalAttributeRegressionObserver(AttributeClassObserver):
     """ Class for observing the data distribution for a nominal attribute for
@@ -20,18 +18,15 @@ class NominalAttributeRegressionObserver(AttributeClassObserver):
             return
         else:
             if att_val in self._statistics:
-                new = Counter({
-                    0: weight,
-                    1: weight * target,
-                    2: weight * target * target
-                })
-                self._statistics[att_val] += new
+                self._statistics[att_val][0] += weight
+                self._statistics[att_val][1] += weight * target
+                self._statistics[att_val][2] += weight * target * target
             else:
-                self._statistics[att_val] = Counter({
+                self._statistics[att_val] = {
                     0: weight,
                     1: weight * target,
                     2: weight * target * target
-                })
+                }
 
     def probability_of_attribute_value_given_class(self, att_val, target):
         return 0.0
@@ -39,9 +34,8 @@ class NominalAttributeRegressionObserver(AttributeClassObserver):
     def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, binary_only):
         current_best = None
         if not binary_only:
-            post_split_dist = [
-                dict(stat) for stat in self._statistics.values()
-            ]
+            post_split_dist = list(self._statistics.values())
+
             merit = criterion.get_merit_of_split(
                 pre_split_dist, post_split_dist
             )
@@ -52,11 +46,14 @@ class NominalAttributeRegressionObserver(AttributeClassObserver):
                 post_split_dist, merit
             )
 
-        pre_split_counter = Counter(pre_split_dist)
         for att_val in self._statistics:
             actual_dist = self._statistics[att_val]
-            remaining_dist = dict(pre_split_counter - actual_dist)
-            post_split_dist = [dict(actual_dist), remaining_dist]
+            remaining_dist = {
+                0: pre_split_dist[0] - actual_dist[0],
+                1: pre_split_dist[1] - actual_dist[1],
+                2: pre_split_dist[2] - actual_dist[2]
+            }
+            post_split_dist = [actual_dist, remaining_dist]
 
             merit = criterion.get_merit_of_split(pre_split_dist,
                                                  post_split_dist)
