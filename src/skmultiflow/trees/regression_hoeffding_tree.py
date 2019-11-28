@@ -236,7 +236,7 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
             if isinstance(leaf_node, LearningNode):
                 return leaf_node.perceptron_weight
             else:
-                return np.zeros(len(X) + 1)
+                return None
         else:
             return []
 
@@ -372,12 +372,20 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
                         sum_of_values = votes[1]
                         predictions.append(sum_of_values / number_of_samples_seen)
                 elif self.leaf_prediction == _PERCEPTRON:
-                    normalized_sample = self.normalize_sample(X[i])
-                    normalized_prediction = np.dot(self.get_weights_for_instance(X[i]), normalized_sample)
-                    mean = self.sum_of_values / self.samples_seen
-                    sd = np.sqrt((self.sum_of_squares - self.sum_of_values ** 2 / self.samples_seen)
-                                 / self.samples_seen)
                     if self.samples_seen > 1:
+                        perceptron_weights = self.get_weights_for_instance(X[i])
+                        if perceptron_weights is None:
+                            predictions.append(0.0)
+                            continue
+                        normalized_sample = self.normalize_sample(X[i])
+                        normalized_prediction = np.dot(
+                            perceptron_weights, normalized_sample
+                        )
+                        mean = self.sum_of_values / self.samples_seen
+                        sd = np.sqrt(
+                            (self.sum_of_squares - self.sum_of_values ** 2 /
+                             self.samples_seen) / self.samples_seen
+                        )
                         predictions.append(normalized_prediction * sd * 3 + mean)
                     else:
                         predictions.append(0.0)
