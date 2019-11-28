@@ -11,6 +11,8 @@ from skmultiflow.trees.split_criterion import GiniSplitCriterion
 from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
 from skmultiflow.trees.split_criterion import HellingerDistanceCriterion
 
+from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
+
 from skmultiflow.trees.nodes import Node
 from skmultiflow.trees.nodes import ActiveLearningNode
 from skmultiflow.trees.nodes import InactiveLearningNode
@@ -374,7 +376,8 @@ class HoeffdingTree(BaseSKMObject, ClassifierMixin):
                     active_learning_node.set_weight_seen_at_last_split_evaluation(weight_seen)
         # Split node encountered a previously unseen categorical value
         # (in a multiway test)
-        elif isinstance(leaf_node, SplitNode):
+        elif isinstance(leaf_node, SplitNode) and \
+                isinstance(leaf_node.get_split_test(), NominalAttributeMultiwayTest):
             # Creates a new branch to the new categorical value
             current = found_node.node
             leaf_node = self._new_learning_node()
