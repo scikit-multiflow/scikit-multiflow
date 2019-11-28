@@ -124,7 +124,7 @@ class AdaSplitNode(SplitNode, AdaNode):
         child_branch = self.instance_child_index(X)
         child = self.get_child(child_branch)
         if child is not None:
-            child.learn_from_instance(X, y, weight, hat, parent, parent_branch)
+            child.learn_from_instance(X, y, weight, hat, self, child_branch)
         # Instance contains a categorical value previously unseen by the split
         # node
         elif isinstance(self.get_split_test(), NominalAttributeMultiwayTest) and \
