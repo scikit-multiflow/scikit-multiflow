@@ -52,7 +52,8 @@ class NominalAttributeClassObserver(AttributeClassObserver):
         if not binary_only:
             post_split_dist = self.get_class_dist_from_multiway_split()
             merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
-            branch_mapping = {k: v for v, k in enumerate(att_values)}
+            branch_mapping = {attr_val: branch_id for branch_id, attr_val in
+                              enumerate(att_values)}
             best_suggestion = AttributeSplitSuggestion(
                 NominalAttributeMultiwayTest(att_idx, branch_mapping),
                 post_split_dist, merit
@@ -61,11 +62,8 @@ class NominalAttributeClassObserver(AttributeClassObserver):
             post_split_dist = self.get_class_dist_from_binary_split(att_val)
             merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
             if best_suggestion is None or merit > best_suggestion.merit:
-                branch_mapping = {
-                    k: 0 if k == att_val else 1 for k in att_values
-                }
                 best_suggestion = AttributeSplitSuggestion(
-                    NominalAttributeBinaryTest(att_idx, att_val, branch_mapping),
+                    NominalAttributeBinaryTest(att_idx, att_val),
                     post_split_dist, merit
                 )
         return best_suggestion

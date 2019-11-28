@@ -3,6 +3,19 @@ from skmultiflow.rules.base_predicate import Predicate
 
 
 class NominalAttributeMultiwayTest(InstanceConditionalTest):
+    """ Implements multi-way split tests for categorical features.
+
+        The resulting test considers one branch for each possible feature
+        value.
+
+        Parameters
+        ----------
+            att_idx: int
+                The column id for the attribute.
+            branch_mapping: dict(float: int)
+                A dictionary that maps the feature values to their respective.
+                branch ids
+    """
     def __init__(self, att_idx, branch_mapping):
         super().__init__()
         self._att_idx = att_idx
