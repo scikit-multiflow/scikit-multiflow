@@ -404,6 +404,19 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
                                            found_node.parent_branch)
                     active_learning_node.\
                         set_weight_seen_at_last_split_evaluation(weight_seen)
+        # Split node encountered a previously unseen categorical value
+        # (in a multiway test)
+        elif isinstance(leaf_node, SplitNode) and \
+                isinstance(leaf_node.get_split_test(), NominalAttributeMultiwayTest):
+            current = found_node.node
+            leaf_node = self._new_learning_node()
+            branch_id = current.get_split_test().add_new_branch(
+                X[current.get_split_test().get_atts_test_depends_on()[0]]
+            )
+            current.set_child(branch_id, leaf_node)
+            self._active_leaf_node_cnt += 1
+            leaf_node.learn_from_instance(X, y, sample_weight, self)
+
         if self._train_weight_seen_by_model % self.memory_estimate_period == 0:
             self.estimate_model_byte_size()
 
@@ -420,8 +433,13 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
         list
             Predicted target values.
         """
-        r, _ = get_dimensions(X)
 
+        if not self._n_targets_set:
+            raise RuntimeError(
+                'MultiTargetRegressionHoeffdingTree must be initialized ' +
+                'prior its use. Use a `pretrain_size > 0`.'
+            )
+        r, _ = get_dimensions(X)
         predictions = np.zeros((r, self._n_targets), dtype=np.float64)
         for i in range(r):
             if self.leaf_prediction == _TARGET_MEAN:

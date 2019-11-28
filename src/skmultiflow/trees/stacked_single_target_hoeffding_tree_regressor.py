@@ -203,8 +203,13 @@ class StackedSingleTargetHoeffdingTreeRegressor(MultiTargetRegressionHoeffdingTr
         list
             Predicted target values.
         """
-        r, _ = get_dimensions(X)
+        if not self._n_targets_set:
+            raise RuntimeError(
+                'StackingSingleTargetHoeffdingTreeRegressor must be ' +
+                'initialized prior its use. Use a `pretrain_size > 0`.'
+            )
 
+        r, _ = get_dimensions(X)
         predictions = np.zeros((r, self._n_targets), dtype=np.float64)
         for i in range(r):
             if self.leaf_prediction == _PERCEPTRON:
