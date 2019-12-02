@@ -186,17 +186,17 @@ def test_hoeffding_tree_categorical_features(test_path):
 
     learner.partial_fit(X, y, classes=np.unique(y))
 
-    expected_description = "if Attribute 2 = 0.0:\n" \
-                           "  Leaf = Class 1 | {0: 218.0, 1: 334.0}\n" \
-                           "if Attribute 2 = 1.0:\n" \
-                           "  Leaf = Class 1 | {0: 161.0, 1: 336.0}\n" \
-                           "if Attribute 2 = -1.0:\n" \
-                           "  Leaf = Class 1 | {0: 244.0, 1: 275.0}\n" \
-                           "if Attribute 2 = -4.0:\n" \
-                           "  Leaf = Class 0 | {0: 339.0, 1: 125.0}\n" \
+    expected_description = "if Attribute 2 = -4.0:\n" \
+                           "  Leaf = Class 0 | {0: 410.0, 1: 72.0}\n" \
                            "if Attribute 2 = -3.0:\n" \
-                           "  Leaf = Class 0 | {0: 299.0, 1: 195.0}\n" \
+                           "  Leaf = Class 0 | {0: 367.0, 1: 115.0}\n" \
                            "if Attribute 2 = -2.0:\n" \
-                           "  Leaf = Class 0 | {0: 239.0, 1: 235.0}\n"
+                           "  Leaf = Class 0 | {0: 299.0, 1: 199.0}\n" \
+                           "if Attribute 2 = -1.0:\n" \
+                           "  Leaf = Class 1 | {0: 210.0, 1: 295.0}\n" \
+                           "if Attribute 2 = 0.0:\n" \
+                           "  Leaf = Class 1 | {0: 133.0, 1: 418.0}\n" \
+                           "if Attribute 2 = 1.0:\n" \
+                           "  Leaf = Class 1 | {0: 81.0, 1: 401.0}\n"
 
     assert learner.get_model_description() == expected_description
