@@ -17,11 +17,11 @@ class NominalAttributeRegressionObserver(AttributeClassObserver):
         if att_val is None or weight is None:
             return
         else:
-            if att_val in self._statistics:
+            try:
                 self._statistics[att_val][0] += weight
                 self._statistics[att_val][1] += weight * target
                 self._statistics[att_val][2] += weight * target * target
-            else:
+            except KeyError:
                 self._statistics[att_val] = {
                     0: weight,
                     1: weight * target,
