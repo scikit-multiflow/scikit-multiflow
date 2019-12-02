@@ -172,3 +172,31 @@ def test_hoeffding_tree_model_information():
                             "  Leaf = Class 1 | {0: 390.5845685762964, 1: 2372.3747376855454}\n" \
 
     assert expected_description == learner.get_model_description()
+
+
+def test_hoeffding_tree_categorical_features(test_path):
+    data_path = os.path.join(test_path, 'ht_categorical_features_testcase.npy')
+    stream = np.load(data_path)
+    # Removes the last two columns (regression targets)
+    stream = stream[:, :-2]
+    X, y = stream[:, :-1], stream[:, -1]
+
+    nominal_attr_idx = [2, 3, 5, 6]
+    learner = HoeffdingTree(nominal_attributes=nominal_attr_idx)
+
+    learner.partial_fit(X, y, classes=np.unique(y))
+
+    expected_description = "if Attribute 2 = 0.0:\n" \
+                           "  Leaf = Class 1 | {0: 218.0, 1: 334.0}\n" \
+                           "if Attribute 2 = 1.0:\n" \
+                           "  Leaf = Class 1 | {0: 161.0, 1: 336.0}\n" \
+                           "if Attribute 2 = -1.0:\n" \
+                           "  Leaf = Class 1 | {0: 244.0, 1: 275.0}\n" \
+                           "if Attribute 2 = -4.0:\n" \
+                           "  Leaf = Class 0 | {0: 339.0, 1: 125.0}\n" \
+                           "if Attribute 2 = -3.0:\n" \
+                           "  Leaf = Class 0 | {0: 299.0, 1: 195.0}\n" \
+                           "if Attribute 2 = -2.0:\n" \
+                           "  Leaf = Class 0 | {0: 239.0, 1: 235.0}\n"
+
+    assert learner.get_model_description() == expected_description
