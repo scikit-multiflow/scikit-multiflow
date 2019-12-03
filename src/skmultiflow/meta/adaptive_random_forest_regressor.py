@@ -272,7 +272,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         sum_weights = 0
 
         for i in range(self.n_estimators):
-            prediction = deepcopy(self.ensemble[i].predict(np.asarray([X])))
+            predicted_value = deepcopy(self.ensemble[i].predict(np.asarray([X])))
             if not self.disable_weighted_vote:
                 performance = self.ensemble[i].evaluator.get_mean_square_error()
                 if performance != 0.0:
