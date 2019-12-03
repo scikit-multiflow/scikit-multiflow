@@ -494,3 +494,21 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
             parent.set_child(parent_branch, new_leaf)
         self._active_leaf_node_cnt -= 1
         self._inactive_leaf_node_cnt += 1
+
+    def new_instance(self):
+        return RegressionHoeffdingTree(max_byte_size=self.max_byte_size,
+                                       memory_estimate_period=self.memory_estimate_period,
+                                       grace_period=self.grace_period,
+                                       split_confidence=self.split_confidence,
+                                       tie_threshold=self.tie_threshold,
+                                       binary_split=self.binary_split,
+                                       stop_mem_management=self.stop_mem_management,
+                                       remove_poor_atts=self.remove_poor_atts,
+                                       leaf_prediction=self.leaf_prediction,
+                                       no_preprune=self.no_preprune,
+                                       nb_threshold=self.nb_threshold,
+                                       nominal_attributes=self.nominal_attributes,
+                                       learning_ratio_perceptron=self.learning_ratio_perceptron,
+                                       learning_ratio_decay=self.learning_ratio_decay,
+                                       learning_ratio_const=self.learning_ratio_const,
+                                       random_state=self.random_state)
