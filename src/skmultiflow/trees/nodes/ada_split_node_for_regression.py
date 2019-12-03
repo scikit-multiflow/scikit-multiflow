@@ -91,7 +91,6 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
 
         # Condition to replace alternate tree
         elif self._alternate_tree is not None and self._alternate_tree.is_null_error() is False:
-            print("we'll be replacing the actual tree")
             if self.get_error_width() > ERROR_WIDTH_THRESHOLD \
                     and self._alternate_tree.get_error_width() > ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
