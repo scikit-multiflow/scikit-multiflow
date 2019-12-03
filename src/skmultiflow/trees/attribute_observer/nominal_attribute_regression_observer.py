@@ -27,6 +27,9 @@ class NominalAttributeRegressionObserver(AttributeClassObserver):
                     1: weight * target,
                     2: weight * target * target
                 }
+                self._statistics = dict(
+                    sorted(self._statistics.items())
+                )
 
     def probability_of_attribute_value_given_class(self, att_val, target):
         return 0.0
