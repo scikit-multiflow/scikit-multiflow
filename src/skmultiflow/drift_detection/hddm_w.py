@@ -13,6 +13,9 @@ class HDDM_W(BaseDriftDetector):
     warning_confidence : float (default=0.005)
         Confidence to the warning
 
+    lambda_option : float (default=0.050)
+        The weight given to recent data. Smaller values mean less weight given to recent data.
+
     two_side_option : bool (default=True)
         Option to monitor error increments and decrements (two-sided) or only increments (one-sided)
 
@@ -86,11 +89,6 @@ class HDDM_W(BaseDriftDetector):
             This parameter indicates whether the last sample analyzed was
             correctly classified or not. 1 indicates an error (miss-classification).
 
-        Returns
-        -------
-        HDDM_W
-            self
-
         Notes
         -----
         After calling self method, to verify if change was detected or if
@@ -110,25 +108,25 @@ class HDDM_W(BaseDriftDetector):
                 self.lambda_option * self.lambda_option \
                 + aux_decay_rate * aux_decay_rate * self.total.independent_bounded_condition_sum
 
-        self.update_incr_statistics(prediction, self.drift_confidence)
-        if self.monitor_mean_incr(self.drift_confidence):
+        self._update_incr_statistics(prediction, self.drift_confidence)
+        if self._monitor_mean_incr(self.drift_confidence):
             self.reset()
             self.in_concept_change = True
             self.in_warning_zone = False
             return
-        elif self.monitor_mean_incr(self.warning_confidence):
+        elif self._monitor_mean_incr(self.warning_confidence):
             self.in_concept_change = False
             self.in_warning_zone = True
         else:
             self.in_concept_change = False
             self.in_warning_zone = False
 
-        self.update_decr_statistics(prediction, self.drift_confidence)
-        if self.two_side_option and self.monitor_mean_decr(self.drift_confidence):
+        self._update_decr_statistics(prediction, self.drift_confidence)
+        if self.two_side_option and self._monitor_mean_decr(self.drift_confidence):
             self.reset()
         self.estimation = self.total.EWMA_estimator
 
-    def detect_mean_increment(self, sample1, sample2, confidence):
+    def _detect_mean_increment(self, sample1, sample2, confidence):
         if sample1.EWMA_estimator < 0 or sample2.EWMA_estimator < 0:
             return False
 
@@ -136,13 +134,13 @@ class HDDM_W(BaseDriftDetector):
                       + sample2.independent_bounded_condition_sum) * log(1 / confidence) / 2)
         return sample2.EWMA_estimator - sample1.EWMA_estimator > bound
 
-    def monitor_mean_incr(self, confidence):
-        return self.detect_mean_increment(self.sample1_incr_monitor, self.sample2_incr_monitor, confidence)
+    def _monitor_mean_incr(self, confidence):
+        return self._detect_mean_increment(self.sample1_incr_monitor, self.sample2_incr_monitor, confidence)
 
-    def monitor_mean_decr(self, confidence):
-        return self.detect_mean_increment(self.sample2_decr_monitor, self.sample1_decr_monitor, confidence)
+    def _monitor_mean_decr(self, confidence):
+        return self._detect_mean_increment(self.sample2_decr_monitor, self.sample1_decr_monitor, confidence)
 
-    def update_incr_statistics(self, value, confidence):
+    def _update_incr_statistics(self, value, confidence):
         aux_decay = 1.0 - self.lambda_option
         bound = sqrt(self.total.independent_bounded_condition_sum * log(1.0 / confidence) / 2)
 
@@ -164,7 +162,7 @@ class HDDM_W(BaseDriftDetector):
                     self.lambda_option * self.lambda_option + \
                     aux_decay * aux_decay * self.sample2_incr_monitor.independent_bounded_condition_sum
 
-    def update_decr_statistics(self, value, confidence):
+    def _update_decr_statistics(self, value, confidence):
         aux_decay = 1.0 - self.lambda_option
         epsilon = sqrt(self.total.independent_bounded_condition_sum * log(1.0 / confidence) / 2)
 
@@ -188,11 +186,6 @@ class HDDM_W(BaseDriftDetector):
         """ reset
 
         Resets the change detector parameters.
-
-        Returns
-        -------
-        HDDM_W
-            self
 
         """
         super().reset()
