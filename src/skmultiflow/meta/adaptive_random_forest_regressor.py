@@ -312,7 +312,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
                                  remove_poor_atts=self.remove_poor_atts,
                                  no_preprune=self.no_preprune,
                                  leaf_prediction=self.leaf_prediction,
-                                 nb_threshold=self.nb_threshold,
                                  nominal_attributes=self.nominal_attributes,
                                  learning_ratio_perceptron=self.learning_ratio_perceptron,
                                  learning_ratio_decay=self.learning_ratio_decay,
