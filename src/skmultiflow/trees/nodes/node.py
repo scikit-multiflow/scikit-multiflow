@@ -150,7 +150,7 @@ class Node(metaclass=ABCMeta):
         """
         buffer[0] += textwrap.indent('Leaf = ', ' ' * indent)
 
-        try:
+        if ht._estimator_type == 'classifier':
             class_val = max(
                 self._observed_class_distribution,
                 key=self._observed_class_distribution.get
@@ -158,7 +158,7 @@ class Node(metaclass=ABCMeta):
             buffer[0] += 'Class {} | {}\n'.format(
                 class_val, self._observed_class_distribution
             )
-        except ValueError:  # Regression problems
+        else:  # Regression problems
             buffer[0] += 'Statistics {}\n'.format(
                 self._observed_class_distribution
             )

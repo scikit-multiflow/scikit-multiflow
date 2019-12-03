@@ -127,3 +127,33 @@ def test_hoeffding_tree_coverage(test_path):
     learner.partial_fit(X, y)
 
     assert learner._estimator_type == 'regressor'
+
+
+def test_regression_hoeffding_tree_model_description():
+    stream = RegressionGenerator(
+        n_samples=500, n_features=20, n_informative=15, random_state=1
+    )
+    stream.prepare_for_use()
+
+    learner = RegressionHoeffdingTree(leaf_prediction='mean')
+
+    cnt = 0
+    max_samples = 500
+    y_pred = array('d')
+    y_true = array('d')
+    wait_samples = 10
+
+    while cnt < max_samples:
+        X, y = stream.next_sample()
+        # Test every n samples
+        if (cnt % wait_samples == 0) and (cnt != 0):
+            y_pred.append(learner.predict(X)[0])
+            y_true.append(y[0])
+        learner.partial_fit(X, y)
+        cnt += 1
+
+    expected_description = "if Attribute 6 <= 0.1394515530995348:\n" \
+                           "  Leaf = Statistics {0: 276.0, 1: -21537.415676972567, 2: 11399392.218650982}\n" \
+                           "if Attribute 6 > 0.1394515530995348:\n" \
+                           "  Leaf = Statistics {0: 224.0, 1: 22964.88675585524, 2: 10433581.253436781}\n"
+    assert learner.get_model_description() == expected_description
