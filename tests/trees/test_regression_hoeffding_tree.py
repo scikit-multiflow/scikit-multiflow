@@ -5,6 +5,7 @@ from sklearn.metrics import mean_absolute_error
 from skmultiflow.data import RegressionGenerator
 from skmultiflow.trees import RegressionHoeffdingTree
 
+from difflib import SequenceMatcher
 
 def test_hoeffding_tree():
     stream = RegressionGenerator(n_samples=500, n_features=20, n_informative=15, random_state=1)
@@ -156,4 +157,11 @@ def test_regression_hoeffding_tree_model_description():
                            "  Leaf = Statistics {0: 276.0, 1: -21537.415676972567, 2: 11399392.218650982}\n" \
                            "if Attribute 6 > 0.1394515530995348:\n" \
                            "  Leaf = Statistics {0: 224.0, 1: 22964.88675585524, 2: 10433581.253436781}\n"
+<<<<<<< HEAD
     assert learner.get_model_description() == expected_description
+=======
+
+    assert SequenceMatcher(
+        None, expected_description, learner.get_model_description()
+    ).ratio() > 0.9
+>>>>>>> b704b5aad7c7215113d7d28c192d6837f4dffd4a
