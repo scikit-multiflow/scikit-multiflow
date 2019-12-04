@@ -36,20 +36,21 @@ class NominalAttributeRegressionObserver(AttributeClassObserver):
 
     def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, binary_only):
         current_best = None
+        ordered_feature_values = sorted(list(self._statistics.keys()))
         if not binary_only:
-            post_split_dist = list(self._statistics.values())
+            post_split_dist = [self._statistics[k] for k in ordered_feature_values]
 
             merit = criterion.get_merit_of_split(
                 pre_split_dist, post_split_dist
             )
             branch_mapping = {attr_val: branch_id for branch_id, attr_val in
-                              enumerate(self._statistics)}
+                              enumerate(ordered_feature_values)}
             current_best = AttributeSplitSuggestion(
                 NominalAttributeMultiwayTest(att_idx, branch_mapping),
                 post_split_dist, merit
             )
 
-        for att_val in self._statistics:
+        for att_val in ordered_feature_values:
             actual_dist = self._statistics[att_val]
             remaining_dist = {
                 0: pre_split_dist[0] - actual_dist[0],
