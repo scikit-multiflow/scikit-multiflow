@@ -2,7 +2,7 @@
 The :mod:`skmultiflow.meta` module includes meta learning methods.
 """
 
-from .adaptive_random_forests import AdaptiveRandomForest
+from .adaptive_random_forests import AdaptiveRandomForestClassifier
 from .batch_incremental import BatchIncrementalClassifier
 from .leverage_bagging import LeverageBagging
 from .oza_bagging import OzaBagging
@@ -25,11 +25,12 @@ from .online_rus_boost import OnlineRUSBoost
 from .online_smote_bagging import OnlineSMOTEBagging
 from .batch_incremental import BatchIncremental   # remove in v0.7.0
 from .accuracy_weighted_ensemble import AccuracyWeightedEnsemble   # remove in v0.7.0
+from .adaptive_random_forests import AdaptiveRandomForest   # remove in v0.7.0
 
 
-__all__ = ["AdaptiveRandomForest", "BatchIncrementalClassifier", "LeverageBagging", "OzaBagging", "OzaBaggingAdwin",
-           "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
+__all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBagging", "OzaBagging",
+           "OzaBaggingAdwin", "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
            "RegressorChain", "MultiOutputLearner", "LearnPP", "LearnNSE", "AccuracyWeightedEnsembleClassifier",
            "DynamicWeightedMajority", "AdditiveExpertEnsemble", "OnlineSMOTEBagging",
            "OnlineRUSBoost", "OnlineCSB2", "OnlineAdaC2", "OnlineUnderOverBagging", "OnlineBoosting",
-           "BatchIncremental", "AccuracyWeightedEnsemble"]
+           "BatchIncremental", "AccuracyWeightedEnsemble", "AdaptiveRandomForest"]

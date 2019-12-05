@@ -133,7 +133,7 @@ Ensemble methods
    :toctree: _autosummary
 
    meta.AccuracyWeightedEnsembleClassifier
-   meta.AdaptiveRandomForest
+   meta.AdaptiveRandomForestClassifier
    meta.AdditiveExpertEnsemble
    meta.BatchIncrementalClassifier
    meta.ClassifierChain
