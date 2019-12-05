@@ -135,7 +135,7 @@ Ensemble methods
    meta.AccuracyWeightedEnsemble
    meta.AdaptiveRandomForest
    meta.AdditiveExpertEnsemble
-   meta.BatchIncremental
+   meta.BatchIncrementalClassifier
    meta.ClassifierChain
    meta.ProbabilisticClassifierChain
    meta.MonteCarloClassifierChain

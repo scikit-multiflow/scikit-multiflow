@@ -3,7 +3,7 @@ The :mod:`skmultiflow.meta` module includes meta learning methods.
 """
 
 from .adaptive_random_forests import AdaptiveRandomForest
-from .batch_incremental import BatchIncremental
+from .batch_incremental import BatchIncrementalClassifier
 from .leverage_bagging import LeverageBagging
 from .oza_bagging import OzaBagging
 from .oza_bagging_adwin import OzaBaggingAdwin
@@ -23,10 +23,12 @@ from .online_csb2 import OnlineCSB2
 from .online_under_over_bagging import OnlineUnderOverBagging
 from .online_rus_boost import OnlineRUSBoost
 from .online_smote_bagging import OnlineSMOTEBagging
+from .batch_incremental import BatchIncremental   # remove in v0.7.0
 
 
-__all__ = ["AdaptiveRandomForest", "BatchIncremental", "LeverageBagging", "OzaBagging", "OzaBaggingAdwin",
+__all__ = ["AdaptiveRandomForest", "BatchIncrementalClassifier", "LeverageBagging", "OzaBagging", "OzaBaggingAdwin",
            "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
            "RegressorChain", "MultiOutputLearner", "LearnPP", "LearnNSE", "AccuracyWeightedEnsemble",
            "DynamicWeightedMajority", "AdditiveExpertEnsemble", "OnlineSMOTEBagging",
-           "OnlineRUSBoost", "OnlineCSB2", "OnlineAdaC2", "OnlineUnderOverBagging", "OnlineBoosting"]
+           "OnlineRUSBoost", "OnlineCSB2", "OnlineAdaC2", "OnlineUnderOverBagging", "OnlineBoosting",
+           "BatchIncremental"]
