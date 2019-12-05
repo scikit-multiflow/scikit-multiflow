@@ -132,7 +132,7 @@ Ensemble methods
    :nosignatures:
    :toctree: _autosummary
 
-   meta.AccuracyWeightedEnsemble
+   meta.AccuracyWeightedEnsembleClassifier
    meta.AdaptiveRandomForest
    meta.AdditiveExpertEnsemble
    meta.BatchIncrementalClassifier
