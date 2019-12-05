@@ -139,7 +139,7 @@ Ensemble methods
    meta.ClassifierChain
    meta.ProbabilisticClassifierChain
    meta.MonteCarloClassifierChain
-   meta.DynamicWeightedMajority
+   meta.DynamicWeightedMajorityClassifier
    meta.LearnNSE
    meta.LearnPP
    meta.LeverageBagging
