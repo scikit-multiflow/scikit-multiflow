@@ -181,22 +181,22 @@ def test_hoeffding_tree_categorical_features(test_path):
     stream = stream[:, :-2]
     X, y = stream[:, :-1], stream[:, -1]
 
-    nominal_attr_idx = [2, 3, 5, 6]
+    nominal_attr_idx = np.arange(7).tolist()
     learner = HoeffdingTree(nominal_attributes=nominal_attr_idx)
 
     learner.partial_fit(X, y, classes=np.unique(y))
 
-    expected_description = "if Attribute 2 = -4.0:\n" \
-                           "  Leaf = Class 0 | {0: 410.0, 1: 72.0}\n" \
-                           "if Attribute 2 = -3.0:\n" \
-                           "  Leaf = Class 0 | {0: 367.0, 1: 115.0}\n" \
-                           "if Attribute 2 = -2.0:\n" \
-                           "  Leaf = Class 0 | {0: 299.0, 1: 199.0}\n" \
-                           "if Attribute 2 = -1.0:\n" \
-                           "  Leaf = Class 1 | {0: 210.0, 1: 295.0}\n" \
-                           "if Attribute 2 = 0.0:\n" \
-                           "  Leaf = Class 1 | {0: 133.0, 1: 418.0}\n" \
-                           "if Attribute 2 = 1.0:\n" \
-                           "  Leaf = Class 1 | {0: 81.0, 1: 401.0}\n"
+    expected_description = "if Attribute 0 = -15.0:\n" \
+                           "  Leaf = Class 2 | {2: 350.0}\n" \
+                           "if Attribute 0 = 0.0:\n" \
+                           "  Leaf = Class 0 | {0: 420.0, 1: 252.0}\n" \
+                           "if Attribute 0 = 1.0:\n" \
+                           "  Leaf = Class 1 | {0: 312.0, 1: 332.0}\n" \
+                           "if Attribute 0 = 2.0:\n" \
+                           "  Leaf = Class 1 | {0: 236.0, 1: 383.0}\n" \
+                           "if Attribute 0 = 3.0:\n" \
+                           "  Leaf = Class 1 | {0: 168.0, 1: 459.0}\n" \
+                           "if Attribute 0 = -30.0:\n" \
+                           "  Leaf = Class 3.0 | {3.0: 46.0, 4.0: 42.0}\n"
 
     assert learner.get_model_description() == expected_description

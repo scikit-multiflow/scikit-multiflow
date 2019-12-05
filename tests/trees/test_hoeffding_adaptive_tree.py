@@ -159,29 +159,22 @@ def test_hoeffding_adaptive_tree_categorical_features(test_path):
     stream = stream[:, :-2]
     X, y = stream[:, :-1], stream[:, -1]
 
-    nominal_attr_idx = [2, 3, 5, 6]
+    nominal_attr_idx = np.arange(7).tolist()
     learner = HAT(nominal_attributes=nominal_attr_idx)
 
     learner.partial_fit(X, y, classes=np.unique(y))
 
-    expected_description = "if Attribute 2 = -4.0:\n" \
-                           "  Leaf = Class 0 | {0: 556.0, 1: 103.0}\n" \
-                           "if Attribute 2 = -3.0:\n" \
-                           "  Leaf = Class 0 | {0: 488.0, 1: 156.0}\n" \
-                           "if Attribute 2 = -2.0:\n" \
-                           "  if Attribute 3 = -3.0:\n" \
-                           "    Leaf = Class 0 | {0: 119.0, 1: 15.0}\n" \
-                           "  if Attribute 3 = -2.0:\n" \
-                           "    Leaf = Class 0 | {0: 97.0, 1: 23.0}\n" \
-                           "  if Attribute 3 = -1.0:\n" \
-                           "    Leaf = Class 1 | {0: 63.0, 1: 68.0}\n" \
-                           "  if Attribute 3 = 0.0:\n" \
-                           "    Leaf = Class 1 | {0: 31.0, 1: 71.0}\n" \
-                           "if Attribute 2 = -1.0:\n" \
-                           "  Leaf = Class 1 | {0: 288.0, 1: 399.0}\n" \
-                           "if Attribute 2 = 0.0:\n" \
-                           "  Leaf = Class 1 | {0: 178.0, 1: 572.0}\n" \
-                           "if Attribute 2 = 1.0:\n" \
-                           "  Leaf = Class 1 | {0: 113.0, 1: 552.0}\n"
+    expected_description = "if Attribute 0 = -15.0:\n" \
+                           "  Leaf = Class 2 | {2: 475.0}\n" \
+                           "if Attribute 0 = 0.0:\n" \
+                           "  Leaf = Class 0 | {0: 560.0, 1: 345.0}\n" \
+                           "if Attribute 0 = 1.0:\n" \
+                           "  Leaf = Class 1 | {0: 416.0, 1: 464.0}\n" \
+                           "if Attribute 0 = 2.0:\n" \
+                           "  Leaf = Class 1 | {0: 335.0, 1: 504.0}\n" \
+                           "if Attribute 0 = 3.0:\n" \
+                           "  Leaf = Class 1 | {0: 244.0, 1: 644.0}\n" \
+                           "if Attribute 0 = -30.0:\n" \
+                           "  Leaf = Class 3.0 | {3.0: 65.0, 4.0: 55.0}\n"
 
     assert learner.get_model_description() == expected_description
