@@ -199,3 +199,38 @@ def test_multi_target_regression_hoeffding_tree_model_description():
     assert SequenceMatcher(
         None, expected_description, learner.get_model_description()
     ).ratio() > 0.9
+
+
+def test_multi_target_regression_hoeffding_tree_categorical_features(test_path):
+    data_path = os.path.join(test_path, 'ht_categorical_features_testcase.npy')
+    stream = np.load(data_path)
+    X, y = stream[:, :-2], stream[:, -2:]
+
+    nominal_attr_idx = np.arange(8)
+    learner = MultiTargetRegressionHoeffdingTree(nominal_attributes=nominal_attr_idx)
+
+    learner.partial_fit(X, y)
+
+    expected_description = "if Attribute 0 = -15.0:\n" \
+                           "  if Attribute 3 = 0.0:\n" \
+                           "    Leaf = Statistics {0: 80.0000, 1: [-192.4417, 80.0908], 2: [464.1268, 80.1882]}\n" \
+                           "  if Attribute 3 = 1.0:\n" \
+                           "    Leaf = Statistics {0: 77.0000, 1: [-184.8333, -7.2503], 2: [444.9068, 42.7423]}\n" \
+                           "  if Attribute 3 = 2.0:\n" \
+                           "    Leaf = Statistics {0: 56.0000, 1: [-134.1829, -1.0863], 2: [322.1336, 28.1218]}\n" \
+                           "  if Attribute 3 = 3.0:\n" \
+                           "    Leaf = Statistics {0: 62.0000, 1: [-148.2397, -17.2837], 2: [355.5327, 38.6913]}\n" \
+                           "if Attribute 0 = 0.0:\n" \
+                           "  Leaf = Statistics {0: 672.0000, 1: [390.6773, 672.0472], 2: [761.0744, 672.1686]}\n" \
+                           "if Attribute 0 = 1.0:\n" \
+                           "  Leaf = Statistics {0: 644.0000, 1: [671.3479, 174.3011], 2: [927.5194, 466.7064]}\n" \
+                           "if Attribute 0 = 2.0:\n" \
+                           "  Leaf = Statistics {0: 619.0000, 1: [867.2865, 320.6506], 2: [1262.0992, 435.2835]}\n" \
+                           "if Attribute 0 = 3.0:\n" \
+                           "  Leaf = Statistics {0: 627.0000, 1: [987.0864, 331.0822], 2: [1583.8108, 484.0456]}\n" \
+                           "if Attribute 0 = -30.0:\n" \
+                           "  Leaf = Statistics {0: 88.0000, 1: [-269.7967, 25.9328], 2: [828.2289, 57.6501]}\n"
+
+    assert SequenceMatcher(
+        None, expected_description, learner.get_model_description()
+    ).ratio() > 0.9
