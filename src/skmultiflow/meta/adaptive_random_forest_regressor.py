@@ -3,14 +3,12 @@ import math
 
 import numpy as np
 
-from sklearn.preprocessing import normalize
-
 from skmultiflow.core import BaseSKMObject, RegressorMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.trees.regression_hoeffding_tree import RegressionHoeffdingTree
 from skmultiflow.metrics.measure_collection import RegressionMeasurements
-from skmultiflow.utils import get_dimensions, check_random_state, check_weights
+from skmultiflow.utils import get_dimensions, check_random_state
 
 
 class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimatorMixin):
@@ -32,9 +30,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         - If "sqrt", then ``max_features=sqrt(n_features)`` (same as "auto").
         - If "log2", then ``max_features=log2(n_features)``.
         - If None, then ``max_features=n_features``.
-
-    disable_weighted_vote: bool, optional (default=False)
-        Weighted vote option.
 
     lambda_value: int, optional (default=6)
         The lambda value for bagging (lambda=6 corresponds to Leverage Bagging).
@@ -138,7 +133,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
                  # Forest parameters
                  n_estimators=10,
                  max_features='auto',
-                 disable_weighted_vote=False,
                  lambda_value=6,
                  drift_detection_method: BaseDriftDetector=ADWIN(0.001),
                  warning_detection_method: BaseDriftDetector=ADWIN(0.01),
@@ -162,7 +156,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         super().__init__()
         self.n_estimators = n_estimators
         self.max_features = max_features
-        self.disable_weighted_vote = disable_weighted_vote
         self.lambda_value = lambda_value
         if isinstance(drift_detection_method, BaseDriftDetector):
             self.drift_detection_method = drift_detection_method
@@ -173,7 +166,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         else:
             self.warning_detection_method = None
         self.instances_seen = 0
-        self._train_weight_seen_by_model = 0.0
         self.ensemble = None
         self.random_state = random_state
         # This is the actual random_state object used
@@ -196,7 +188,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         self.learning_ratio_const = learning_ratio_const
         self.random_state = random_state
 
-    def partial_fit(self, X, y, sample_weight=None):
+    def partial_fit(self, X, y):
         """ Partially (incrementally) fit the model.
 
         Parameters
@@ -207,31 +199,20 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         y: numpy.ndarray of shape (n_samples)
             An array-like with the target values of all samples in X.
 
-        sample_weight: numpy.ndarray of shape (n_samples), optional
-            (default=None)
-            Samples weight. If not provided, uniform weights are assumed.
-
         Returns
         -------
         self
 
         """
-        if sample_weight is None:
-            weight = 1.0
-        else:
-            weight = sample_weight
 
         if y is not None:
             row_cnt, _ = get_dimensions(X)
-            weight = check_weights(weight, expand_length=row_cnt)
             for i in range(row_cnt):
-                if weight[i] != 0.0:
-                    self._train_weight_seen_by_model += weight[i]
-                    self._partial_fit(X[i], y[i], weight[i])
+                self._partial_fit(X[i], y[i])
 
         return self
 
-    def _partial_fit(self, X, y, sample_weight=1.0):
+    def _partial_fit(self, X, y):
         self.instances_seen += 1
 
         if self.ensemble is None:
@@ -268,21 +249,11 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
     def _predict(self, X):
         if self.ensemble is None:
             self.init_ensemble(X)
-        sum_weighted_predicted_values = 0
-        sum_weights = 0
+        sum_predicted_values = 0
 
         for i in range(self.n_estimators):
-            predicted_value = deepcopy(self.ensemble[i].predict(np.asarray([X])))
-            if not self.disable_weighted_vote:
-                performance = self.ensemble[i].evaluator.get_mean_square_error()
-                if performance != 0.0:
-                    predicted_value *= performance
-                    sum_weights += performance
-            else:
-                sum_weights += 1
-            sum_weighted_predicted_values += predicted_value
-            pred = sum_weighted_predicted_values / sum_weights
-        return pred
+            sum_predicted_values += self.ensemble[i].predict(np.asarray([X]))
+        return sum_predicted_values / self.n_estimators
 
     def predict_proba(self, X):
         """Not implemented for this method."""
@@ -293,7 +264,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         self.ensemble = None
         self.max_features = 0
         self.instances_seen = 0
-        self._train_weight_seen_by_model = 0.0
         self._random_state = check_random_state(self.random_state)
 
     def init_ensemble(self, X):
