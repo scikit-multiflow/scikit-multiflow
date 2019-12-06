@@ -28,3 +28,26 @@ def test_hddm_w():
             detected_indices.append(i)
 
     assert detected_indices == expected_indices
+
+    # Second test, more abrupt drifts
+    hddm_w.reset()
+    # Data
+    mu, sigma = 0.0, 0.1  # mean and standard deviation
+    d_1 = np.random.normal(mu, sigma, 500) > 0
+    mu, sigma = 0.25, 0.1  # mean and standard deviation
+    d_2 = np.random.normal(mu, sigma, 500) > 0
+    mu, sigma = 0.0, 0.1  # mean and standard deviation
+    d_3 = np.random.normal(mu, sigma, 500) > 0
+    mu, sigma = 0.25, 0.1  # mean and standard deviation
+    d_4 = np.random.normal(mu, sigma, 500) > 0
+    data_stream = np.concatenate((d_1.astype(int), d_2.astype(int), d_3.astype(int), d_4.astype(int)))
+
+    expected_indices = [518, 1513]
+    detected_indices = []
+
+    for i in range(data_stream.size):
+        hddm_w.add_element(data_stream[i])
+        if hddm_w.detected_change():
+            detected_indices.append(i)
+
+    assert detected_indices == expected_indices
