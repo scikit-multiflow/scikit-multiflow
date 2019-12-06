@@ -46,8 +46,8 @@ class NominalAttributeClassObserver(AttributeClassObserver):
     def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, binary_only):
         best_suggestion = None
         att_values = sorted(set(
-            [att_val for class_val in self._att_val_dist_per_class.values()
-             for att_val in class_val]
+            [att_val for att_val_per_class in self._att_val_dist_per_class.values()
+             for att_val in att_val_per_class]
         ))
         if not binary_only:
             post_split_dist = self.get_class_dist_from_multiway_split()
