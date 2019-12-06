@@ -124,7 +124,11 @@ def test_regression_hoeffding_adaptive_tree_categorical_features(test_path):
     X, y = stream[:, :-1], stream[:, -1]
 
     nominal_attr_idx = np.arange(8)
-    learner = RegressionHAT(nominal_attributes=nominal_attr_idx)
+    # Typo in leaf prediction
+    learner = RegressionHAT(
+        nominal_attributes=nominal_attr_idx,
+        leaf_prediction='percptron'
+    )
 
     learner.partial_fit(X, y)
 

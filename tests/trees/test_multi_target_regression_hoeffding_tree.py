@@ -169,10 +169,14 @@ def test_hoeffding_tree_coverage(test_path):
     X = data['X']
     Y = data['Y']
 
+    # Invalid leaf prediction option
     learner = MultiTargetRegressionHoeffdingTree(
-                leaf_prediction='mean',
+                leaf_prediction='MEAN',
                 nominal_attributes=[i for i in range(3)]
               )
+    print(learner.split_criterion)
+    # Invalid split_criterion
+    learner.split_criterion = 'ICVR'
     learner.partial_fit(X, Y)
 
 
@@ -207,7 +211,10 @@ def test_multi_target_regression_hoeffding_tree_categorical_features(test_path):
     X, y = stream[:, :-2], stream[:, -2:]
 
     nominal_attr_idx = np.arange(8)
-    learner = MultiTargetRegressionHoeffdingTree(nominal_attributes=nominal_attr_idx)
+    learner = MultiTargetRegressionHoeffdingTree(
+        nominal_attributes=nominal_attr_idx,
+        leaf_prediction='perceptron'
+    )
 
     learner.partial_fit(X, y)
 
@@ -234,3 +241,17 @@ def test_multi_target_regression_hoeffding_tree_categorical_features(test_path):
     assert SequenceMatcher(
         None, expected_description, learner.get_model_description()
     ).ratio() > 0.9
+
+    new_sample = X[0].copy()
+    # Adding a new category on the split feature
+    new_sample[0] = 7
+    learner.predict([new_sample])
+
+    # Let's do the same considering other prediction strategy
+    learner = MultiTargetRegressionHoeffdingTree(
+        nominal_attributes=nominal_attr_idx,
+        leaf_prediction='adaptive'
+    )
+
+    learner.partial_fit(X, y)
+    learner.predict([new_sample])

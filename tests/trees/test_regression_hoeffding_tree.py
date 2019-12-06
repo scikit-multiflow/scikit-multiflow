@@ -124,7 +124,13 @@ def test_hoeffding_tree_coverage(test_path):
     X = data['X']
     y = data['y']
 
-    learner = RegressionHoeffdingTree(leaf_prediction='mean', nominal_attributes=[i for i in range(3)])
+    # Typo in leaf prediction
+    learner = RegressionHoeffdingTree(
+        leaf_prediction='percptron', nominal_attributes=[i for i in range(3)]
+    )
+    print(learner.split_criterion)
+    # Invalid split_criterion
+    learner.split_criterion = 'VR'
     learner.partial_fit(X, y)
 
     assert learner._estimator_type == 'regressor'
