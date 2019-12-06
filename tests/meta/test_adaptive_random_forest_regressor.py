@@ -4,6 +4,7 @@ from array import array
 from sklearn.metrics import mean_absolute_error
 from skmultiflow.data import RegressionGenerator
 from skmultiflow.meta import AdaptiveRandomForestRegressor
+from skmultiflow.trees import RegressionHoeffdingTree
 
 
 def test_adaptive_random_forest_regressor():
@@ -11,28 +12,31 @@ def test_adaptive_random_forest_regressor():
     stream.prepare_for_use()
 
     learner = AdaptiveRandomForestRegressor(random_state=1)
+    baseline = RegressionHoeffdingTree(random_state=1)
 
     cnt = 0
     max_samples = 500
     y_pred = array('d')
     y_true = array('d')
+    y_baseline = array('d')
     wait_samples = 10
 
-    while cnt < max_samples:
+    for cnt in range(max_samples):
         X, y = stream.next_sample()
-        # Test every n samples
+        # Test every 'wait_samples' samples
         if (cnt % wait_samples == 0) and (cnt != 0):
             y_pred.append(learner.predict(X)[0])
+            y_baseline.append(baseline.predict(X)[0])
             y_true.append(y[0])
         learner.partial_fit(X, y)
-        cnt += 1
+        baseline.partial_fit(X, y)
 
     error = mean_absolute_error(y_true, y_pred)
-    print(error)
+    assert error == mean_absolute_error(y_true, y_baseline)
 
     assert type(learner.predict(X)) == np.ndarray
 
-    expected_info = "AdaptiveRandomForestRegressor(binary_split=False, disable_weighted_vote=False,\n" \
+    expected_info = "AdaptiveRandomForestRegressor(binary_split=False,\n" \
                     "                              drift_detection_method=ADWIN(delta=0.001),\n" \
                     "                              grace_period=200, lambda_value=6,\n" \
                     "                              leaf_prediction='perceptron',\n" \
@@ -46,6 +50,5 @@ def test_adaptive_random_forest_regressor():
                     "                              split_confidence=1e-07, stop_mem_management=False,\n" \
                     "                              tie_threshold=0.05,\n" \
                     "                              warning_detection_method=ADWIN(delta=0.01))"
-    print(learner.get_info())
 
     assert learner.get_info() == expected_info
