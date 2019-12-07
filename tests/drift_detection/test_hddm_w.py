@@ -51,3 +51,7 @@ def test_hddm_w():
             detected_indices.append(i)
 
     assert detected_indices == expected_indices
+
+    expected_info = "HDDM_W(drift_confidence=0.001, lambda_option=0.05, two_side_option=True,\n" \
+                    "       warning_confidence=0.005)"
+    assert hddm_w.get_info() == expected_info
