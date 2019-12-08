@@ -14,7 +14,7 @@ _REGRESSOR_TYPE = "regressor"
 
 
 class MultiOutputLearner(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiOutputMixin):
-    """ Multi-Output Learner for multi-label classification.
+    """ Multi-Output Learner for multi-target classification or regression.
 
     Parameters
     ----------
