@@ -8,8 +8,21 @@ from skmultiflow.lazy import KNNAdwin
 from skmultiflow.utils import check_random_state
 from skmultiflow.utils.utils import *
 
+import warnings
 
-class OnlineSMOTEBagging(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
+
+def OnlineSMOTEBagging(base_estimator=KNNAdwin(), n_estimators=10, sampling_rate=1, drift_detection=True,
+                       random_state=None):
+    warnings.warn("'OnlineSMOTEBagging' has been renamed to 'OnlineSMOTEBaggingClassifier' in v0.5.0.\n"
+                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    return OnlineSMOTEBaggingClassifier(base_estimator=base_estimator,
+                                        n_estimators=n_estimators,
+                                        sampling_rate=sampling_rate,
+                                        drift_detection=drift_detection,
+                                        random_state=random_state)
+
+
+class OnlineSMOTEBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     r""" Online SMOTEBagging ensemble classifier.
 
     Online SMOTEBagging [1]_ is the online version of the ensemble method SMOTEBagging.

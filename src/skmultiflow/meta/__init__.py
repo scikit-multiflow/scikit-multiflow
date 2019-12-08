@@ -22,7 +22,7 @@ from .online_adac2 import OnlineAdaC2Classifier
 from .online_csb2 import OnlineCSB2Classifier
 from .online_under_over_bagging import OnlineUnderOverBagging
 from .online_rus_boost import OnlineRUSBoostClassifier
-from .online_smote_bagging import OnlineSMOTEBagging
+from .online_smote_bagging import OnlineSMOTEBaggingClassifier
 from .batch_incremental import BatchIncremental   # remove in v0.7.0
 from .accuracy_weighted_ensemble import AccuracyWeightedEnsemble   # remove in v0.7.0
 from .adaptive_random_forests import AdaptiveRandomForest   # remove in v0.7.0
@@ -35,14 +35,15 @@ from .online_adac2 import OnlineAdaC2   # remove in v0.7.0
 from .online_boosting import OnlineBoosting   # remove in v0.7.0
 from .online_csb2 import OnlineCSB2   # remove in v0.7.0
 from .online_rus_boost import OnlineRUSBoost   # remove in v0.7.0
+from .online_smote_bagging import OnlineSMOTEBagging   # remove in v0.7.0
 
 
 __all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBaggingClassifier", "OzaBagging",
            "OzaBaggingAdwin", "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
            "RegressorChain", "MultiOutputLearner", "LearnPPClassifier", "LearnPPNSEClassifier",
            "AccuracyWeightedEnsembleClassifier", "DynamicWeightedMajorityClassifier",
-           "AdditiveExpertEnsembleClassifier", "OnlineSMOTEBagging", "OnlineRUSBoostClassifier", "OnlineCSB2Classifier",
-           "OnlineAdaC2Classifier", "OnlineUnderOverBagging", "OnlineBoostingClassifier",
+           "AdditiveExpertEnsembleClassifier", "OnlineSMOTEBaggingClassifier", "OnlineRUSBoostClassifier",
+           "OnlineCSB2Classifier", "OnlineAdaC2Classifier", "OnlineUnderOverBagging", "OnlineBoostingClassifier",
            "BatchIncremental", "AccuracyWeightedEnsemble", "AdaptiveRandomForest", "AdditiveExpertEnsemble",
            "DynamicWeightedMajority", "LearnNSE", "LearnPP", "LeverageBagging", "OnlineAdaC2", "OnlineBoosting",
-           "OnlineCSB2", "OnlineRUSBoost"]
+           "OnlineCSB2", "OnlineRUSBoost", "OnlineSMOTEBagging"]
