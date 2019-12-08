@@ -5,8 +5,18 @@ from skmultiflow.lazy import KNNAdwin
 from skmultiflow.utils.utils import *
 from skmultiflow.utils import check_random_state
 
+import warnings
 
-class OzaBagging(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
+
+def OzaBagging(base_estimator=KNNAdwin(), n_estimators=10, random_state=None):
+    warnings.warn("'OzaBagging' has been renamed to 'OzaBaggingClassifier' in v0.5.0.\n"
+                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    return OzaBaggingClassifier(base_estimator=base_estimator,
+                                n_estimators=n_estimators,
+                                random_state=random_state)
+
+
+class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     """ Oza Bagging ensemble classifier.
 
     Parameters
@@ -55,14 +65,14 @@ class OzaBagging(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     Examples
     --------
     >>> # Imports
-    >>> from skmultiflow.meta import OzaBagging
+    >>> from skmultiflow.meta import OzaBaggingClassifier
     >>> from skmultiflow.lazy.knn import KNN
     >>> from skmultiflow.data import SEAGenerator
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1, noise_percentage=0.07)
     >>> stream.prepare_for_use()
-    >>> # Setting up the OzaBagging classifier to work with KNN classifiers
-    >>> clf = OzaBagging(base_estimator=KNN(n_neighbors=8, max_window_size=2000, leaf_size=30), n_estimators=2)
+    >>> # Setting up the OzaBagging classifier to work with KNN as base estimator
+    >>> clf = OzaBaggingClassifier(base_estimator=KNN(n_neighbors=8, max_window_size=2000, leaf_size=30), n_estimators=2)
     >>> # Keeping track of sample count and correct prediction count
     >>> sample_count = 0
     >>> corrects = 0
@@ -81,7 +91,7 @@ class OzaBagging(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     >>> # Displaying the results
     >>> print(str(sample_count) + ' samples analyzed.')
     2000 samples analyzed.
-    >>> print('OzaBagging classifier performance: ' + str(corrects / sample_count))
+    >>> print('OzaBaggingClassifier performance: ' + str(corrects / sample_count))
     OzaBagging classifier performance: 0.9095
 
     """
@@ -135,7 +145,7 @@ class OzaBagging(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         
         Returns
         _______
-        OzaBagging
+        OzaBaggingClassifier
             self
 
         Notes

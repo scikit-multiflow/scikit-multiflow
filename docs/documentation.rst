@@ -150,8 +150,8 @@ Ensemble methods
    meta.OnlineRUSBoostClassifier
    meta.OnlineSMOTEBaggingClassifier
    meta.OnlineUnderOverBaggingClassifier
-   meta.OzaBagging
-   meta.OzaBaggingAdwin
+   meta.OzaBaggingClassifier
+   meta.OzaBaggingADWINClassifier
    meta.RegressorChain
 
 Neural Networks

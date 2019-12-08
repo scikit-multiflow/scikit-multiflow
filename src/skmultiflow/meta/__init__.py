@@ -5,8 +5,8 @@ The :mod:`skmultiflow.meta` module includes meta learning methods.
 from .adaptive_random_forests import AdaptiveRandomForestClassifier
 from .batch_incremental import BatchIncrementalClassifier
 from .leverage_bagging import LeverageBaggingClassifier
-from .oza_bagging import OzaBagging
-from .oza_bagging_adwin import OzaBaggingAdwin
+from .oza_bagging import OzaBaggingClassifier
+from .oza_bagging_adwin import OzaBaggingADWINClassifier
 from .classifier_chains import ClassifierChain
 from .classifier_chains import ProbabilisticClassifierChain
 from .classifier_chains import MonteCarloClassifierChain
@@ -37,15 +37,18 @@ from .online_csb2 import OnlineCSB2   # remove in v0.7.0
 from .online_rus_boost import OnlineRUSBoost   # remove in v0.7.0
 from .online_smote_bagging import OnlineSMOTEBagging   # remove in v0.7.0
 from .online_under_over_bagging import OnlineUnderOverBagging   # remove in v0.7.0
+from .oza_bagging import OzaBagging   # remove in v0.7.0
+from .oza_bagging_adwin import OzaBaggingAdwin   # remove in v0.7.0
 
 
-__all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBaggingClassifier", "OzaBagging",
-           "OzaBaggingAdwin", "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
-           "RegressorChain", "MultiOutputLearner", "LearnPPClassifier", "LearnPPNSEClassifier",
-           "AccuracyWeightedEnsembleClassifier", "DynamicWeightedMajorityClassifier",
+__all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBaggingClassifier",
+           "OzaBaggingClassifier", "OzaBaggingADWINClassifier", "ClassifierChain", "ProbabilisticClassifierChain",
+           "MonteCarloClassifierChain", "RegressorChain", "MultiOutputLearner", "LearnPPClassifier",
+           "LearnPPNSEClassifier", "AccuracyWeightedEnsembleClassifier", "DynamicWeightedMajorityClassifier",
            "AdditiveExpertEnsembleClassifier", "OnlineSMOTEBaggingClassifier", "OnlineRUSBoostClassifier",
            "OnlineCSB2Classifier", "OnlineAdaC2Classifier", "OnlineUnderOverBaggingClassifier",
            "OnlineBoostingClassifier",
            "BatchIncremental", "AccuracyWeightedEnsemble", "AdaptiveRandomForest", "AdditiveExpertEnsemble",
            "DynamicWeightedMajority", "LearnNSE", "LearnPP", "LeverageBagging", "OnlineAdaC2", "OnlineBoosting",
-           "OnlineCSB2", "OnlineRUSBoost", "OnlineSMOTEBagging", "OnlineUnderOverBagging"]
+           "OnlineCSB2", "OnlineRUSBoost", "OnlineSMOTEBagging", "OnlineUnderOverBagging", "OzaBagging",
+           "OzaBaggingAdwin"]
