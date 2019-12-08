@@ -6,7 +6,7 @@ from skmultiflow.data import FileStream
 
 def demo(): 
 
-    # The classifier we will use (other options: SAMKNN, LeverageBagging, SGD)
+    # The classifier we will use (other options: SAMKNN, LeverageBaggingClassifier, SGD)
     h = HoeffdingTree()
 
     # Setup Stream

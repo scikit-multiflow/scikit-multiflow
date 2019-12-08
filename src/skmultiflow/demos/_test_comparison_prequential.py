@@ -28,7 +28,7 @@ def demo(instances=2000):
     # classifier = OzaBaggingAdwin(base_estimator=KNN(n_neighbors=8, max_window_size=2000, leaf_size=30, categorical_list=None))
     clf_one = KNNAdwin(n_neighbors=8, max_window_size=1000, leaf_size=30)
     # clf_two = KNN(n_neighbors=8, max_window_size=1000, leaf_size=30)
-    # clf_two = LeverageBagging(base_estimator=KNN(), n_estimators=2)
+    # clf_two = LeverageBaggingClassifier(base_estimator=KNN(), n_estimators=2)
 
     t_one = OneHotToCategorical([[10, 11, 12, 13],
                             [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
