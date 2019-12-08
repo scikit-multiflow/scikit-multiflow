@@ -197,7 +197,7 @@ Rules based methods
    :nosignatures:
    :toctree: _autosummary
 
-   rules.VFDR
+   rules.VeryFastDecisionRulesClassifier
 
 Trees based methods
 -------------------
