@@ -4,7 +4,7 @@ The :mod:`skmultiflow.meta` module includes meta learning methods.
 
 from .adaptive_random_forests import AdaptiveRandomForestClassifier
 from .batch_incremental import BatchIncrementalClassifier
-from .leverage_bagging import LeverageBagging
+from .leverage_bagging import LeverageBaggingClassifier
 from .oza_bagging import OzaBagging
 from .oza_bagging_adwin import OzaBaggingAdwin
 from .classifier_chains import ClassifierChain
@@ -30,12 +30,14 @@ from .additive_expert_ensemble import AdditiveExpertEnsemble   # remove in v0.7.
 from .dynamic_weighted_majority import DynamicWeightedMajority   # remove in v0.7.0
 from .learn_nse import LearnNSE   # remove in v0.7.0
 from .learn_pp import LearnPP   # remove in v0.7.0
+from .leverage_bagging import LeverageBagging   # remove in v0.7.0
 
 
-__all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBagging", "OzaBagging",
+__all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBaggingClassifier", "OzaBagging",
            "OzaBaggingAdwin", "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
            "RegressorChain", "MultiOutputLearner", "LearnPPClassifier", "LearnPPNSEClassifier",
            "AccuracyWeightedEnsembleClassifier", "DynamicWeightedMajorityClassifier",
            "AdditiveExpertEnsembleClassifier", "OnlineSMOTEBagging", "OnlineRUSBoost", "OnlineCSB2", "OnlineAdaC2",
            "OnlineUnderOverBagging", "OnlineBoosting", "BatchIncremental", "AccuracyWeightedEnsemble",
-           "AdaptiveRandomForest", "AdditiveExpertEnsemble", "DynamicWeightedMajority", "LearnNSE", "LearnPP"]
+           "AdaptiveRandomForest", "AdditiveExpertEnsemble", "DynamicWeightedMajority", "LearnNSE", "LearnPP",
+           "LeverageBagging"]
