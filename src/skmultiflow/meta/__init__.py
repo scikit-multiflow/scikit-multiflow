@@ -18,7 +18,7 @@ from .accuracy_weighted_ensemble import AccuracyWeightedEnsembleClassifier
 from .dynamic_weighted_majority import DynamicWeightedMajorityClassifier
 from .additive_expert_ensemble import AdditiveExpertEnsembleClassifier
 from .online_boosting import OnlineBoosting
-from .online_adac2 import OnlineAdaC2
+from .online_adac2 import OnlineAdaC2Classifier
 from .online_csb2 import OnlineCSB2
 from .online_under_over_bagging import OnlineUnderOverBagging
 from .online_rus_boost import OnlineRUSBoost
@@ -31,13 +31,14 @@ from .dynamic_weighted_majority import DynamicWeightedMajority   # remove in v0.
 from .learn_nse import LearnNSE   # remove in v0.7.0
 from .learn_pp import LearnPP   # remove in v0.7.0
 from .leverage_bagging import LeverageBagging   # remove in v0.7.0
+from .online_adac2 import OnlineAdaC2   # remove in v0.7.0
 
 
 __all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBaggingClassifier", "OzaBagging",
            "OzaBaggingAdwin", "ClassifierChain", "ProbabilisticClassifierChain", "MonteCarloClassifierChain",
            "RegressorChain", "MultiOutputLearner", "LearnPPClassifier", "LearnPPNSEClassifier",
            "AccuracyWeightedEnsembleClassifier", "DynamicWeightedMajorityClassifier",
-           "AdditiveExpertEnsembleClassifier", "OnlineSMOTEBagging", "OnlineRUSBoost", "OnlineCSB2", "OnlineAdaC2",
-           "OnlineUnderOverBagging", "OnlineBoosting", "BatchIncremental", "AccuracyWeightedEnsemble",
-           "AdaptiveRandomForest", "AdditiveExpertEnsemble", "DynamicWeightedMajority", "LearnNSE", "LearnPP",
-           "LeverageBagging"]
+           "AdditiveExpertEnsembleClassifier", "OnlineSMOTEBagging", "OnlineRUSBoost", "OnlineCSB2",
+           "OnlineAdaC2Classifier", "OnlineUnderOverBagging", "OnlineBoosting",
+           "BatchIncremental", "AccuracyWeightedEnsemble", "AdaptiveRandomForest", "AdditiveExpertEnsemble",
+           "DynamicWeightedMajority", "LearnNSE", "LearnPP", "LeverageBagging", "OnlineAdaC2"]

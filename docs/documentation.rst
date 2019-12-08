@@ -144,7 +144,7 @@ Ensemble methods
    meta.LearnPPClassifier
    meta.LeverageBaggingClassifier
    meta.MultiOutputLearner
-   meta.OnlineAdaC2
+   meta.OnlineAdaC2Classifier
    meta.OnlineBoosting
    meta.OnlineCSB2
    meta.OnlineRUSBoost
