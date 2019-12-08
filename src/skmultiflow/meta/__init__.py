@@ -20,7 +20,7 @@ from .additive_expert_ensemble import AdditiveExpertEnsembleClassifier
 from .online_boosting import OnlineBoostingClassifier
 from .online_adac2 import OnlineAdaC2Classifier
 from .online_csb2 import OnlineCSB2Classifier
-from .online_under_over_bagging import OnlineUnderOverBagging
+from .online_under_over_bagging import OnlineUnderOverBaggingClassifier
 from .online_rus_boost import OnlineRUSBoostClassifier
 from .online_smote_bagging import OnlineSMOTEBaggingClassifier
 from .batch_incremental import BatchIncremental   # remove in v0.7.0
@@ -36,6 +36,7 @@ from .online_boosting import OnlineBoosting   # remove in v0.7.0
 from .online_csb2 import OnlineCSB2   # remove in v0.7.0
 from .online_rus_boost import OnlineRUSBoost   # remove in v0.7.0
 from .online_smote_bagging import OnlineSMOTEBagging   # remove in v0.7.0
+from .online_under_over_bagging import OnlineUnderOverBagging   # remove in v0.7.0
 
 
 __all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "LeverageBaggingClassifier", "OzaBagging",
@@ -43,7 +44,8 @@ __all__ = ["AdaptiveRandomForestClassifier", "BatchIncrementalClassifier", "Leve
            "RegressorChain", "MultiOutputLearner", "LearnPPClassifier", "LearnPPNSEClassifier",
            "AccuracyWeightedEnsembleClassifier", "DynamicWeightedMajorityClassifier",
            "AdditiveExpertEnsembleClassifier", "OnlineSMOTEBaggingClassifier", "OnlineRUSBoostClassifier",
-           "OnlineCSB2Classifier", "OnlineAdaC2Classifier", "OnlineUnderOverBagging", "OnlineBoostingClassifier",
+           "OnlineCSB2Classifier", "OnlineAdaC2Classifier", "OnlineUnderOverBaggingClassifier",
+           "OnlineBoostingClassifier",
            "BatchIncremental", "AccuracyWeightedEnsemble", "AdaptiveRandomForest", "AdditiveExpertEnsemble",
            "DynamicWeightedMajority", "LearnNSE", "LearnPP", "LeverageBagging", "OnlineAdaC2", "OnlineBoosting",
-           "OnlineCSB2", "OnlineRUSBoost", "OnlineSMOTEBagging"]
+           "OnlineCSB2", "OnlineRUSBoost", "OnlineSMOTEBagging", "OnlineUnderOverBagging"]
