@@ -147,7 +147,7 @@ Ensemble methods
    meta.OnlineAdaC2Classifier
    meta.OnlineBoostingClassifier
    meta.OnlineCSB2Classifier
-   meta.OnlineRUSBoost
+   meta.OnlineRUSBoostClassifier
    meta.OnlineSMOTEBagging
    meta.OnlineUnderOverBagging
    meta.OzaBagging
