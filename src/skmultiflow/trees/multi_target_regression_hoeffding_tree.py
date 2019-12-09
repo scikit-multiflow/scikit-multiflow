@@ -444,13 +444,11 @@ class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMix
             Predicted target values.
         """
 
-        if not self._n_targets_set:
-            raise RuntimeError(
-                'MultiTargetRegressionHoeffdingTree must be initialized ' +
-                'prior its use. Use a `pretrain_size > 0`.'
-            )
         r, _ = get_dimensions(X)
-        predictions = np.zeros((r, self._n_targets), dtype=np.float64)
+        try:
+            predictions = np.zeros((r, self._n_targets), dtype=np.float64)
+        except AttributeError:
+            return [0.0]
         for i in range(r):
             if self.leaf_prediction == _TARGET_MEAN:
                 votes = self.get_votes_for_instance(X[i]).copy()

@@ -129,6 +129,10 @@ def test_hoeffding_tree_coverage(test_path):
         nominal_attributes=[i for i in range(3)],
         learning_ratio_const=False
     )
+
+    # Trying to predict without fitting
+    learner.predict(X[0])
+
     learner.partial_fit(X, Y)
 
 

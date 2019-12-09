@@ -191,6 +191,9 @@ def test_multi_target_regression_hoeffding_tree_model_description():
 
     max_samples = 700
     X, y = stream.next_sample(max_samples)
+    # Trying to predict without fitting
+    learner.predict(X[0])
+
     learner.partial_fit(X, y)
 
     expected_description = "if Attribute 11 <= 0.36737233297880056:\n" \
