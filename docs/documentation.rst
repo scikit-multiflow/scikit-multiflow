@@ -213,7 +213,7 @@ Trees based methods
    :toctree: _autosummary
 
    trees.HoeffdingTreeClassifier
-   trees.HAT
+   trees.HoeffdingAdaptiveTreeClassifier
    trees.HATT
    trees.LCHT
    trees.RegressionHoeffdingTree
