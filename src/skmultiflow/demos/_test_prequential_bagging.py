@@ -1,4 +1,4 @@
-from skmultiflow.trees import HoeffdingTree
+from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.meta import LeverageBaggingClassifier
 from skmultiflow.data import WaveformGenerator
 from skmultiflow.evaluation import EvaluatePrequential
@@ -30,7 +30,7 @@ def demo(output_file=None, instances=40000):
     #classifier = OzaBaggingADWINClassifier(base_estimator=KNN(n_neighbors=8, max_window_size=2000, leaf_size=30))
     #classifier = LeverageBaggingClassifier(base_estimator=KNN(n_neighbors=8, max_window_size=2000, leaf_size=30),
     #                                       n_estimators=1)
-    pipe = LeverageBaggingClassifier(base_estimator=HoeffdingTree(), n_estimators=2)
+    pipe = LeverageBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), n_estimators=2)
 
     # Setup the pipeline
     #pipe = Pipeline([('Classifier', classifier)])

@@ -212,7 +212,7 @@ Trees based methods
    :nosignatures:
    :toctree: _autosummary
 
-   trees.HoeffdingTree
+   trees.HoeffdingTreeClassifier
    trees.HAT
    trees.HATT
    trees.LCHT

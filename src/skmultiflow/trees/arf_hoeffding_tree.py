@@ -1,12 +1,12 @@
 from skmultiflow.utils import check_random_state
-from skmultiflow.trees.hoeffding_tree import HoeffdingTree, MAJORITY_CLASS, \
+from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier, MAJORITY_CLASS, \
     NAIVE_BAYES
 from skmultiflow.trees.nodes import RandomLearningNodeClassification
 from skmultiflow.trees.nodes import RandomLearningNodeNB
 from skmultiflow.trees.nodes import RandomLearningNodeNBAdaptive
 
 
-class ARFHoeffdingTree(HoeffdingTree):
+class ARFHoeffdingTree(HoeffdingTreeClassifier):
     """ Adaptive Random Forest Hoeffding Tree.
 
     Parameters

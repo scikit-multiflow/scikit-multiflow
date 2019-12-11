@@ -4,7 +4,7 @@ from sklearn.naive_bayes import GaussianNB
 
 from skmultiflow.data import SEAGenerator
 from skmultiflow.meta import LearnPPNSEClassifier
-from skmultiflow.trees import HoeffdingTree
+from skmultiflow.trees import HoeffdingTreeClassifier
 
 
 def run_classifier(estimator, stream, pruning=None, ensemble_size=15, m=200):
@@ -86,7 +86,7 @@ def test_learn_nse():
     stream = SEAGenerator(random_state=2212)
     stream.prepare_for_use()
 
-    estimator = HoeffdingTree()
+    estimator = HoeffdingTreeClassifier()
 
     classifier = LearnPPNSEClassifier(base_estimator=estimator)
 

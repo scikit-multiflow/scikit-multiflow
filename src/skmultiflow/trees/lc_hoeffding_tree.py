@@ -1,6 +1,6 @@
 import numpy as np
 from skmultiflow.core import MultiOutputMixin
-from skmultiflow.trees.hoeffding_tree import HoeffdingTree
+from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.utils import *
 from skmultiflow.bayes import do_naive_bayes_prediction
 
@@ -15,7 +15,7 @@ NAIVE_BAYES = 'nb'
 NAIVE_BAYES_ADAPTIVE = 'nba'
 
 
-class LCHT(HoeffdingTree, MultiOutputMixin):
+class LCHT(HoeffdingTreeClassifier, MultiOutputMixin):
     """ Label Combination Hoeffding Tree for multi-label learning.
 
     Label combination transforms the problem from multi-label to multi-class.

@@ -1,6 +1,6 @@
 import copy
 
-from skmultiflow.trees import HoeffdingTree
+from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.trees.nodes import InactiveLearningNode
 from skmultiflow.trees.nodes import AdaLearningNode
 from skmultiflow.trees.nodes import AdaSplitNode
@@ -14,7 +14,7 @@ NAIVE_BAYES_ADAPTIVE = 'nba'
 ERROR_WIDTH_THRESHOLD = 300
 
 
-class HAT(HoeffdingTree):
+class HAT(HoeffdingTreeClassifier):
     """ Hoeffding Adaptive Tree.
 
     Parameters
@@ -145,7 +145,7 @@ class HAT(HoeffdingTree):
         self.switch_alternate_trees_cnt = 0
         self._tree_root = None
 
-    # Override HoeffdingTree
+    # Override HoeffdingTreeClassifier
     def _partial_fit(self, X, y, sample_weight):
         if self._tree_root is None:
             self._tree_root = self._new_learning_node()
@@ -161,7 +161,7 @@ class HAT(HoeffdingTree):
                                                   update_splitter_counts, nodes)
         return nodes
 
-    # Override HoeffdingTree
+    # Override HoeffdingTreeClassifier
     def get_votes_for_instance(self, X):
         result = {}
         if self._tree_root is not None:
@@ -178,10 +178,10 @@ class HAT(HoeffdingTree):
                     result.update(dist)  # add elements to dictionary
         return result
 
-    # Override HoeffdingTree
+    # Override HoeffdingTreeClassifier
     def _new_learning_node(self, initial_class_observations=None):
         return AdaLearningNode(initial_class_observations)
 
-    # Override HoeffdingTree
+    # Override HoeffdingTreeClassifier
     def new_split_node(self, split_test, class_observations):
         return AdaSplitNode(split_test, class_observations)

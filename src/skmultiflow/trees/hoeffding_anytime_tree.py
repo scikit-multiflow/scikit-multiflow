@@ -1,7 +1,7 @@
 from operator import attrgetter
 import numpy as np
 from skmultiflow.trees.split_criterion import GiniSplitCriterion
-from skmultiflow.trees.hoeffding_tree import HoeffdingTree
+from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
 from skmultiflow.trees.nodes import LearningNode
 from skmultiflow.trees.nodes import AnyTimeSplitNode
@@ -19,7 +19,7 @@ NAIVE_BAYES = 'nb'
 NAIVE_BAYES_ADAPTIVE = 'nba'
 
 
-class HATT(HoeffdingTree):
+class HATT(HoeffdingTreeClassifier):
     """ Hoeffding Anytime Tree or Extremely Fast Decision Tree.
 
     Parameters

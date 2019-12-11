@@ -2,7 +2,7 @@ import numpy as np
 from operator import attrgetter
 
 from skmultiflow.core import RegressorMixin
-from skmultiflow.trees.hoeffding_tree import HoeffdingTree
+from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.utils import *
 from skmultiflow.utils import check_random_state
 from skmultiflow.trees.split_criterion import VarianceReductionSplitCriterion
@@ -20,7 +20,7 @@ _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 
 
-class RegressionHoeffdingTree(RegressorMixin, HoeffdingTree):
+class RegressionHoeffdingTree(RegressorMixin, HoeffdingTreeClassifier):
     """ Regression Hoeffding Tree or Fast Incremental Model Tree with Drift Detection.
 
     This is an implementation of the Fast Incremental Model Tree with Drift Detection (FIMT-DD)
