@@ -2,7 +2,6 @@ import numpy as np
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.utils import *
-from skmultiflow.bayes import do_naive_bayes_prediction
 
 from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import LCActiveLearningNode
@@ -10,13 +9,21 @@ from skmultiflow.trees.nodes import LCInactiveLearningNode
 from skmultiflow.trees.nodes import LCLearningNodeNB
 from skmultiflow.trees.nodes import LCLearningNodeNBA
 
+import warnings
+
+
+def LCHT(ATTRIBUTES):
+    warnings.warn("'LCHT' has been renamed to 'LabelCombinationHoeffdingTree' in v0.5.0.\n"
+                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    return LabelCombinationHoeffdingTree(ATTRIBUTES)
+
 MAJORITY_CLASS = 'mc'
 NAIVE_BAYES = 'nb'
 NAIVE_BAYES_ADAPTIVE = 'nba'
 
 
-class LCHT(HoeffdingTreeClassifier, MultiOutputMixin):
-    """ Label Combination Hoeffding Tree for multi-label learning.
+class LabelCombinationHoeffdingTree(HoeffdingTreeClassifier, MultiOutputMixin):
+    """ Label Combination Hoeffding Tree for multi-label classification.
 
     Label combination transforms the problem from multi-label to multi-class.
     For each unique combination of labels it assigns a class and proceeds

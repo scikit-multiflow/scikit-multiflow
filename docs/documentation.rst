@@ -215,7 +215,7 @@ Trees based methods
    trees.HoeffdingTreeClassifier
    trees.HoeffdingAdaptiveTreeClassifier
    trees.ExtremelyFastDecisionTreeClassifier
-   trees.LCHT
+   trees.LabelCombinationHoeffdingTree
    trees.RegressionHoeffdingTree
    trees.RegressionHAT
    trees.MultiTargetRegressionHoeffdingTree
