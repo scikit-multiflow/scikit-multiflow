@@ -252,7 +252,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         sum_predicted_values = 0
 
         for i in range(self.n_estimators):
-            sum_predicted_values += self.ensemble[i].predict(np.asarray([X]))
+            sum_predicted_values += self.ensemble[i].predict(np.asarray([X]))[0]
         return sum_predicted_values / self.n_estimators
 
     def predict_proba(self, X):
