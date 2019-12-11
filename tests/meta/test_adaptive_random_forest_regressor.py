@@ -4,7 +4,6 @@ from array import array
 from sklearn.metrics import mean_absolute_error
 from skmultiflow.data import RegressionGenerator
 from skmultiflow.meta import AdaptiveRandomForestRegressor
-from skmultiflow.trees import RegressionHoeffdingTree
 
 
 def test_adaptive_random_forest_regressor():
@@ -12,7 +11,6 @@ def test_adaptive_random_forest_regressor():
     stream.prepare_for_use()
 
     learner = AdaptiveRandomForestRegressor(random_state=1)
-    baseline = RegressionHoeffdingTree(random_state=1)
 
     cnt = 0
     max_samples = 500
@@ -26,13 +24,11 @@ def test_adaptive_random_forest_regressor():
         # Test every 'wait_samples' samples
         if (cnt % wait_samples == 0) and (cnt != 0):
             y_pred.append(learner.predict(X)[0])
-            y_baseline.append(baseline.predict(X)[0])
             y_true.append(y[0])
         learner.partial_fit(X, y)
-        baseline.partial_fit(X, y)
 
     error = mean_absolute_error(y_true, y_pred)
-    assert error == mean_absolute_error(y_true, y_baseline)
+    assert np.isclose(error, 304, atol=2)
 
     assert type(learner.predict(X)) == np.ndarray
 
