@@ -3,7 +3,7 @@ from operator import attrgetter
 import numpy as np
 
 from skmultiflow.core import MultiOutputMixin
-from skmultiflow.trees import RegressionHoeffdingTree
+from skmultiflow.trees import HoeffdingTreeRegressor
 from skmultiflow.utils import get_dimensions
 from skmultiflow.trees.split_criterion import IntraClusterVarianceReductionSplitCriterion
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
@@ -25,7 +25,7 @@ _PERCEPTRON = 'perceptron'
 _ADAPTIVE = 'adaptive'
 
 
-class MultiTargetRegressionHoeffdingTree(RegressionHoeffdingTree, MultiOutputMixin):
+class MultiTargetRegressionHoeffdingTree(HoeffdingTreeRegressor, MultiOutputMixin):
     """Multi-target Regression Hoeffding Tree.
 
     This is an implementation of the iSoup-Tree proposed by A. Osojnik, P. Panov, and S. Džeroski [1]_.

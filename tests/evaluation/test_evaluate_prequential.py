@@ -95,7 +95,7 @@ def test_evaluate_classification_coverage(tmpdir):
 def test_evaluate_regression_coverage(tmpdir):
     # A simple coverage test. Tests for metrics are placed in the corresponding test module.
     from skmultiflow.data import RegressionGenerator
-    from skmultiflow.trees import RegressionHoeffdingTree
+    from skmultiflow.trees import HoeffdingTreeRegressor
 
     max_samples = 1000
 
@@ -104,7 +104,7 @@ def test_evaluate_regression_coverage(tmpdir):
     stream.prepare_for_use()
 
     # Learner
-    htr = RegressionHoeffdingTree()
+    htr = HoeffdingTreeRegressor()
 
     output_file = os.path.join(str(tmpdir), "prequential_summary.csv")
     metrics = ['mean_square_error', 'mean_absolute_error']

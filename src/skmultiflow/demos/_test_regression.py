@@ -2,7 +2,7 @@
 from skmultiflow.core.pipeline import Pipeline
 from skmultiflow.evaluation.evaluate_prequential import EvaluatePrequential
 from skmultiflow.data.regression_generator import RegressionGenerator
-from skmultiflow.trees.regression_hoeffding_tree import RegressionHoeffdingTree
+from skmultiflow.trees.hoeffding_tree_regressor import HoeffdingTreeRegressor
 
 
 def demo(output_file=None, instances=40000):
@@ -29,7 +29,7 @@ def demo(output_file=None, instances=40000):
     # Setup the classifier
     # classifier = SGDClassifier()
     # classifier = PassiveAggressiveClassifier()
-    classifier = RegressionHoeffdingTree()
+    classifier = HoeffdingTreeRegressor()
     # classifier = PerceptronMask()
 
     # Setup the pipeline

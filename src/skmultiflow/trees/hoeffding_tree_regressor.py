@@ -4,7 +4,6 @@ from operator import attrgetter
 from skmultiflow.core import RegressorMixin
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.utils import *
-from skmultiflow.utils import check_random_state
 from skmultiflow.trees.split_criterion import VarianceReductionSplitCriterion
 
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
@@ -20,11 +19,10 @@ _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 
 
-class RegressionHoeffdingTree(RegressorMixin, HoeffdingTreeClassifier):
-    """ Regression Hoeffding Tree or Fast Incremental Model Tree with Drift Detection.
+class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
+    """ Hoeffding Tree Regressor.
 
-    This is an implementation of the Fast Incremental Model Tree with Drift Detection (FIMT-DD)
-    introduced by E. Ikonomovska, J. Gama, and S. Džeroski [1]_.
+    This is an adaptation of the Hoeffding Tree for regression.
 
     Parameters
     ----------
@@ -66,15 +64,12 @@ class RegressionHoeffdingTree(RegressorMixin, HoeffdingTreeClassifier):
        If None, the random number generator is the RandomState instance used
        by `np.random`. Used when leaf_prediction is 'perceptron'.
 
-    References
-    ----------
-    .. [1] Elena Ikonomovska, João Gama, and Sašo Džeroski. 2011. Learning model trees from
-           evolving data streams. Data Min. Knowl. Discov. 23, 1 (July 2011), 128-168.
+
     """
 
-    # ===========================================
-    # == Hoeffding Regression Tree implementation ===
-    # ===========================================
+    # =============================================
+    # == Hoeffding Tree Regressor implementation ==
+    # =============================================
     def __init__(self,
                  max_byte_size=33554432,
                  memory_estimate_period=1000000,

@@ -9,7 +9,7 @@ from .hoeffding_tree import HoeffdingTreeClassifier
 from .hoeffding_adaptive_tree import HoeffdingAdaptiveTreeClassifier
 from .extremely_fast_decision_tree import ExtremelyFastDecisionTreeClassifier
 from .label_combination_hoeffding_tree import LabelCombinationHoeffdingTree
-from .regression_hoeffding_tree import RegressionHoeffdingTree
+from .hoeffding_tree_regressor import HoeffdingTreeRegressor
 from .regression_hoeffding_adaptive_tree import RegressionHAT
 from .multi_target_regression_hoeffding_tree import MultiTargetRegressionHoeffdingTree
 from .stacked_single_target_hoeffding_tree_regressor import StackedSingleTargetHoeffdingTreeRegressor
@@ -21,7 +21,7 @@ from .label_combination_hoeffding_tree import LCHT   # remove in v0.7.0"
 __all__ = ["attribute_observer", "attribute_test", "nodes", "split_criterion",
            "HoeffdingTreeClassifier", "HoeffdingAdaptiveTreeClassifier", "ExtremelyFastDecisionTreeClassifier",
            "LabelCombinationHoeffdingTree",
-           "HoeffdingTree", "HAT", "HATT", "LCHT", "RegressionHoeffdingTree",
+           "HoeffdingTree", "HAT", "HATT", "LCHT", "HoeffdingTreeRegressor",
            "RegressionHAT", "MultiTargetRegressionHoeffdingTree",
            "StackedSingleTargetHoeffdingTreeRegressor"]
 

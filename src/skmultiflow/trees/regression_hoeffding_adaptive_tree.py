@@ -1,6 +1,6 @@
 import numpy as np
 
-from skmultiflow.trees import RegressionHoeffdingTree
+from skmultiflow.trees import HoeffdingTreeRegressor
 
 from skmultiflow.trees.nodes import AdaSplitNodeForRegression
 from skmultiflow.trees.nodes import AdaLearningNodeForRegression
@@ -11,7 +11,7 @@ _PERCEPTRON = 'perceptron'
 ERROR_WIDTH_THRESHOLD = 300
 
 
-class RegressionHAT(RegressionHoeffdingTree):
+class RegressionHAT(HoeffdingTreeRegressor):
     """ An adaptation of the Hoeffding Adaptive Tree for regression.
 
     The tree uses ADWIN to detect drift and PERCEPTRON to make predictions.
