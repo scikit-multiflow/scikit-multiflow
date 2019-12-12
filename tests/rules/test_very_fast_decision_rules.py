@@ -58,8 +58,8 @@ def test_vfdr_info_gain():
     assert (learner.get_model_description() == expected_model_description_1) or \
            (learner.get_model_description() == expected_model_description_2)
 
-    expected_model_measurements_1 = {'Number of rules: ': 3, 'model_size in bytes': 62295}
-    expected_model_measurements_2 = {'Number of rules: ': 3, 'model_size in bytes': 73167}
+    expected_model_measurements_1 = {'Number of rules: ': 3, 'model_size in bytes': 61735}
+    expected_model_measurements_2 = {'Number of rules: ': 3, 'model_size in bytes': 72607}
 
     if sys.platform == 'linux':
         assert (learner.get_model_measurements() == expected_model_measurements_1) or \
