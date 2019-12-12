@@ -140,7 +140,7 @@ def test_evaluate_multi_target_classification_coverage(tmpdir):
 
 def test_evaluate_multi_target_regression_coverage(tmpdir):
     from skmultiflow.data import RegressionGenerator
-    from skmultiflow.trees import MultiTargetRegressionHoeffdingTree
+    from skmultiflow.trees import iSOUPTreeRegressor
 
     max_samples = 1000
 
@@ -151,7 +151,7 @@ def test_evaluate_multi_target_regression_coverage(tmpdir):
     stream.prepare_for_use()
 
     # Learner
-    mtrht = MultiTargetRegressionHoeffdingTree(leaf_prediction='adaptive')
+    mtrht = iSOUPTreeRegressor(leaf_prediction='adaptive')
 
     output_file = os.path.join(str(tmpdir), "prequential_summary.csv")
     metrics = ['average_mean_square_error', 'average_mean_absolute_error', 'average_root_mean_square_error']

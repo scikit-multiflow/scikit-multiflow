@@ -6,7 +6,7 @@ from skmultiflow.data import SEAGenerator
 from skmultiflow.bayes import NaiveBayes
 from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.trees import HoeffdingTreeRegressor
-from skmultiflow.trees import MultiTargetRegressionHoeffdingTree
+from skmultiflow.trees import iSOUPTreeRegressor
 from skmultiflow.core import is_classifier
 from skmultiflow.core import is_regressor
 
@@ -76,7 +76,7 @@ def test_set_params():
 def test_get_tags():
     classifier = HoeffdingTreeClassifier()
     regressor = HoeffdingTreeRegressor()
-    multi_output_regressor = MultiTargetRegressionHoeffdingTree()
+    multi_output_regressor = iSOUPTreeRegressor()
 
     classifier_tags = classifier._get_tags()
 

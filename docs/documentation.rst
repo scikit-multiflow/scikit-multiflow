@@ -218,7 +218,7 @@ Trees based methods
    trees.LabelCombinationHoeffdingTree
    trees.HoeffdingTreeRegressor
    trees.HoeffdingAdaptiveTreeRegressor
-   trees.MultiTargetRegressionHoeffdingTree
+   trees.iSOUPTreeRegressor
    trees.StackedSingleTargetHoeffdingTreeRegressor
 
 
