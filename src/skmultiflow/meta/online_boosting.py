@@ -1,7 +1,7 @@
 import copy as cp
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
-from skmultiflow.lazy import KNNAdwin
+from skmultiflow.lazy import KNNADWINClassifier
 from skmultiflow.utils import check_random_state
 from skmultiflow.utils.utils import *
 from skmultiflow.drift_detection import ADWIN
@@ -9,7 +9,7 @@ from skmultiflow.drift_detection import ADWIN
 import warnings
 
 
-def OnlineBoosting(base_estimator=KNNAdwin(), n_estimators=10, drift_detection=True, random_state=None):
+def OnlineBoosting(base_estimator=KNNADWINClassifier(), n_estimators=10, drift_detection=True, random_state=None):
     warnings.warn("'OnlineBoosting' has been renamed to 'OnlineBoostingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OnlineBoostingClassifier(base_estimator=base_estimator,
@@ -46,7 +46,7 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNAdwin)
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
         Each member of the ensemble is an instance of the base estimator.
 
     n_estimators: int, optional (default=10)
@@ -77,7 +77,7 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
     """
 
-    def __init__(self, base_estimator=KNNAdwin(), n_estimators=10, drift_detection=True, random_state=None):
+    def __init__(self, base_estimator=KNNADWINClassifier(), n_estimators=10, drift_detection=True, random_state=None):
 
         super().__init__()
         self.base_estimator = base_estimator

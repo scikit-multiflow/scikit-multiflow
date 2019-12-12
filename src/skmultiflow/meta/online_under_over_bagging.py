@@ -2,14 +2,14 @@ import copy as cp
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection import ADWIN
-from skmultiflow.lazy import KNNAdwin
+from skmultiflow.lazy import KNNADWINClassifier
 from skmultiflow.utils import check_random_state
 from skmultiflow.utils.utils import *
 
 import warnings
 
 
-def OnlineUnderOverBagging(base_estimator=KNNAdwin(), n_estimators=10, sampling_rate=2, drift_detection=True,
+def OnlineUnderOverBagging(base_estimator=KNNADWINClassifier(), n_estimators=10, sampling_rate=2, drift_detection=True,
                            random_state=None):
     warnings.warn("'OnlineUnderOverBagging' has been renamed to 'OnlineUnderOverBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
@@ -44,7 +44,7 @@ class OnlineUnderOverBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNAdwin)
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
         Each member of the ensemble is an instance of the base estimator.
 
     n_estimators: int, optional (default=10)
@@ -82,7 +82,7 @@ class OnlineUnderOverBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
 
     """
 
-    def __init__(self, base_estimator=KNNAdwin(), n_estimators=10, sampling_rate=2, drift_detection=True,
+    def __init__(self, base_estimator=KNNADWINClassifier(), n_estimators=10, sampling_rate=2, drift_detection=True,
                  random_state=None):
         super().__init__()
         # default values

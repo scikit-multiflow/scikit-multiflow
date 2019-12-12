@@ -1,14 +1,14 @@
 import copy as cp
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
-from skmultiflow.lazy import KNNAdwin
+from skmultiflow.lazy import KNNADWINClassifier
 from skmultiflow.utils.utils import *
 from skmultiflow.utils import check_random_state
 
 import warnings
 
 
-def OzaBagging(base_estimator=KNNAdwin(), n_estimators=10, random_state=None):
+def OzaBagging(base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):
     warnings.warn("'OzaBagging' has been renamed to 'OzaBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OzaBaggingClassifier(base_estimator=base_estimator,
@@ -21,7 +21,7 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNAdwin)
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
         Each member of the ensemble is an instance of the base estimator.
 
     n_estimators: int (default=10)
@@ -96,7 +96,7 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     """
 
-    def __init__(self, base_estimator=KNNAdwin(), n_estimators=10, random_state=None):
+    def __init__(self, base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):
         super().__init__()
         # default values
         self.ensemble = None

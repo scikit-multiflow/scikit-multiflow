@@ -116,7 +116,7 @@ Lazy learning methods
    :toctree: _autosummary
 
    lazy.KNNClassifier
-   lazy.KNNAdwin
+   lazy.KNNADWINClassifier
    lazy.SAMKNN
 
 Ensemble methods

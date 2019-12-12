@@ -1,14 +1,14 @@
 import copy as cp
 
 from skmultiflow.meta import OzaBaggingClassifier
-from skmultiflow.lazy import KNNAdwin
+from skmultiflow.lazy import KNNADWINClassifier
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.utils.utils import *
 
 import warnings
 
 
-def OzaBaggingAdwin(base_estimator=KNNAdwin(), n_estimators=10, random_state=None):
+def OzaBaggingAdwin(base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):
     warnings.warn("'OzaBaggingAdwin' has been renamed to 'OzaBaggingADWINClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OzaBaggingADWINClassifier(base_estimator=base_estimator,
@@ -21,7 +21,7 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNAdwin)
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
         Each member of the ensemble is an instance of the base estimator.
 
     n_estimators: int (default=10)
@@ -88,7 +88,7 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
     
     """
 
-    def __init__(self, base_estimator=KNNAdwin(), n_estimators=10, random_state=None):
+    def __init__(self, base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):
         super().__init__(base_estimator, n_estimators, random_state)
         # default values
         self.adwin_ensemble = None

@@ -4,10 +4,11 @@ data is delayed until a query is received, this is, on-demand.
 """
 
 from .knn_classifier import KNNClassifier
-from .knn_adwin import KNNAdwin
+from .knn_adwin import KNNADWINClassifier
 from .sam_knn import SAMKNN
 from .kdtree import KDTree
 from .knn_classifier import KNN   # remove in v0.7.0
+from .knn_adwin import KNNAdwin   # remove in v0.7.0
 
 
-__all__ = ["KNNClassifier", "KNNAdwin", "SAMKNN", "KDTree", "KNN"]
+__all__ = ["KNNClassifier", "KNNADWINClassifier", "SAMKNN", "KDTree", "KNN", "KNNAdwin"]

@@ -4,7 +4,19 @@ from skmultiflow.utils.data_structures import InstanceWindow
 from skmultiflow.utils.utils import *
 
 
-class KNNAdwin(KNNClassifier):
+import warnings
+
+
+def KNNAdwin(n_neighbors=5, max_window_size=1000, leaf_size=30, nominal_attributes=None):
+    warnings.warn("'KNNAdwin' has been renamed to 'KNNADWINClassifier' in v0.5.0.\n"
+                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    return KNNADWINClassifier(n_neighbors=n_neighbors,
+                              max_window_size=max_window_size,
+                              leaf_size=leaf_size,
+                              nominal_attributes=nominal_attributes)
+
+
+class KNNADWINClassifier(KNNClassifier):
     """ K-Nearest Neighbors classifier with ADWIN change detector.
     
     This Classifier is an improvement from the regular KNNClassifier,
@@ -48,13 +60,13 @@ class KNNAdwin(KNNClassifier):
     Examples
     --------
     >>> # Imports
-    >>> from skmultiflow.lazy.knn_adwin import KNNAdwin
-    >>> from skmultiflow.data.file_stream import FileStream
+    >>> from skmultiflow.lazy import KNNADWINClassifier
+    >>> from skmultiflow.data import FileStream
     >>> # Setting up the stream
     >>> stream = FileStream('skmultiflow/data/datasets/covtype.csv')
     >>> stream.prepare_for_use()
     >>> # Setting up the KNNAdwin classifier
-    >>> knn_adwin = KNNAdwin(n_neighbors=8, leaf_size=40, max_window_size=2000)
+    >>> knn_adwin = KNNADWINClassifier(n_neighbors=8, leaf_size=40, max_window_size=2000)
     >>> # Pre training the classifier with 200 samples
     >>> X, y = stream.next_sample(200)
     >>> knn_adwin = knn_adwin.partial_fit(X, y)
@@ -73,7 +85,7 @@ class KNNAdwin(KNNClassifier):
     >>> print('KNNClassifier usage example')
     >>> print(str(n_samples) + ' samples analyzed.')
     5000 samples analyzed.
-    >>> print("KNNAdwin's performance: " + str(corrects/n_samples))
+    >>> print("KNNADWINClassifier's performance: " + str(corrects/n_samples))
     KNNAdwin's performance: 0.7798
 
     """
@@ -93,7 +105,7 @@ class KNNAdwin(KNNClassifier):
         
         Returns
         -------
-        KNNAdwin
+        KNNADWINClassifier
             self
         
         """
@@ -124,7 +136,7 @@ class KNNAdwin(KNNClassifier):
         
         Returns
         -------
-        KNNAdwin
+        KNNADWINClassifier
             self
         
         """
