@@ -30,7 +30,7 @@ class ActiveLearningNodeForRegressionMultiTarget(ActiveLearningNodeForRegression
             Targets values.
         weight: float
             Instance weight.
-        ht: HoeffdingTreeClassifier
+        ht: HoeffdingTreeRegressor
             Hoeffding Tree to update.
 
         """
