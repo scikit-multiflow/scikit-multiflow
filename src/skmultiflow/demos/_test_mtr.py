@@ -1,20 +1,18 @@
-from skmultiflow.core.pipeline import Pipeline
 from skmultiflow.data import RegressionGenerator
 from skmultiflow.evaluation.evaluate_prequential import EvaluatePrequential
-from skmultiflow.trees.multi_target_regression_hoeffding_tree import \
-    MultiTargetRegressionHoeffdingTree
+from skmultiflow.trees.isoup_tree import iSOUPTreeRegressor
 
 
 def demo(output_file=None):
-    """ _test_mtr_regression
+    """ Test iSOUP-Tree
 
-    This demo demonstrates how to evaluate a Multi-Target Regressor. The
-    employed dataset is 'scm1d', which is contained in the data folder.
+    This demo demonstrates how to evaluate a iSOUP-Tree multi-target regressor.
+    The employed dataset is 'scm1d', which is contained in the data folder.
 
     Parameters
     ----------
     input_file: string
-        A string describind the path for the input dataset
+        A string describing the path for the input dataset
 
     output_file: string
         The name of the csv output file
@@ -25,10 +23,7 @@ def demo(output_file=None):
                                  n_targets=7)
     stream.prepare_for_use()
 
-    classifier = MultiTargetRegressionHoeffdingTree(leaf_prediction='adaptive')
-
-    # Setup the pipeline
-    pipe = Pipeline([('Classifier', classifier)])
+    classifier = iSOUPTreeRegressor(leaf_prediction='adaptive')
 
     # Setup the evaluator
     evaluator = EvaluatePrequential(pretrain_size=1, batch_size=1, n_wait=200,
@@ -39,7 +34,7 @@ def demo(output_file=None):
                                              'average_root_mean_square_error'])
 
     # Evaluate
-    evaluator.evaluate(stream=stream, model=pipe)
+    evaluator.evaluate(stream=stream, model=classifier)
 
 
 if __name__ == '__main__':
