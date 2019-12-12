@@ -117,7 +117,7 @@ Lazy learning methods
 
    lazy.KNNClassifier
    lazy.KNNADWINClassifier
-   lazy.SAMKNN
+   lazy.SAMKNNClassifier
 
 Ensemble methods
 ----------------
