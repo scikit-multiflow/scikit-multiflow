@@ -49,5 +49,5 @@ def test_pipeline(test_path):
                     "                                      [15, 16, 17, 18, 19],\n" \
                     "                                      [20, 21, 22, 23, 24]])\n" \
                     "KNNADWINClassifier(leaf_size=40, max_window_size=50, n_neighbors=2,\n" \
-                    "         nominal_attributes=None)]"
+                    "                   nominal_attributes=None)]"
     assert pipe.get_info() == expected_info
