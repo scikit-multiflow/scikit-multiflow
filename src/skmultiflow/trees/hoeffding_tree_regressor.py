@@ -49,8 +49,6 @@ def RegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=10000
 class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
     """ Hoeffding Tree regressor.
 
-    This is an adaptation of the Hoeffding Tree for regression.
-
     Parameters
     ----------
     max_byte_size: int (default=33554432)
@@ -91,6 +89,14 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
        If None, the random number generator is the RandomState instance used
        by `np.random`. Used when leaf_prediction is 'perceptron'.
 
+    Notes
+    -----
+    The Hoeffding Tree Regressor (HTR) is an adaptation of the incremental tree algorithm of the same name for
+    classification. Similarly to its classification counterpart, HTR uses the Hoeffding bound to control
+    its split decisions. Differently from the classification algorithm, HTR relies on calculating
+    the reduction of variance in the target space to decide among the split candidates. The smallest the variance
+    at its leaf nodes, the more homogeneous the partitions are. At its leaf nodes, HTR fits either linear
+    perceptron models or uses the sample average as the predictor.
 
     """
 
