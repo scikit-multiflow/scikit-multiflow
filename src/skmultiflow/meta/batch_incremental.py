@@ -9,7 +9,7 @@ from sklearn.tree import DecisionTreeClassifier
 import warnings
 
 
-def BatchIncremental(nominal_attributes=None):
+def BatchIncremental(nominal_attributes=None):     # pragma: no cover
     warnings.warn("'BatchIncremental' has been renamed to 'BatchIncrementalClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return BatchIncrementalClassifier(nominal_attributes=nominal_attributes)

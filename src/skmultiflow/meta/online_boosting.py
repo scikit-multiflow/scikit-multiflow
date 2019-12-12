@@ -9,7 +9,8 @@ from skmultiflow.drift_detection import ADWIN
 import warnings
 
 
-def OnlineBoosting(base_estimator=KNNADWINClassifier(), n_estimators=10, drift_detection=True, random_state=None):
+def OnlineBoosting(base_estimator=KNNADWINClassifier(), n_estimators=10, drift_detection=True,
+                   random_state=None):     # pragma: no cover
     warnings.warn("'OnlineBoosting' has been renamed to 'OnlineBoostingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OnlineBoostingClassifier(base_estimator=base_estimator,

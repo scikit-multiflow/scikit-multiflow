@@ -10,7 +10,7 @@ import warnings
 
 
 def LeverageBagging(base_estimator=KNNClassifier(), n_estimators=10, w=6, delta=0.002, enable_code_matrix=False,
-                    leverage_algorithm='leveraging_bag', random_state=None):
+                    leverage_algorithm='leveraging_bag', random_state=None):     # pragma: no cover
     warnings.warn("'LeverageBagging' has been renamed to 'LeverageBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return LeverageBaggingClassifier(base_estimator=base_estimator,

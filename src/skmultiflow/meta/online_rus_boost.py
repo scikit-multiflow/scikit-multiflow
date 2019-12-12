@@ -10,7 +10,7 @@ import warnings
 
 
 def OnlineRUSBoost(base_estimator=KNNADWINClassifier(), n_estimators=10, sampling_rate=3, algorithm=1,
-                   drift_detection=True, random_state=None):
+                   drift_detection=True, random_state=None):     # pragma: no cover
     warnings.warn("'OnlineRUSBoost' has been renamed to 'OnlineRUSBoostClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OnlineRUSBoostClassifier(base_estimator=base_estimator,

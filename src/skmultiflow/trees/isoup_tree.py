@@ -32,7 +32,7 @@ def MultiTargetRegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_p
                                        stop_mem_management=False, remove_poor_atts=False, leaf_prediction='perceptron',
                                        no_preprune=False, nb_threshold=0, nominal_attributes=None,
                                        learning_ratio_perceptron=0.02, learning_ratio_decay=0.001,
-                                       learning_ratio_const=True, random_state=None):
+                                       learning_ratio_const=True, random_state=None):     # pragma: no cover
     warnings.warn("'MultiTargetRegressionHoeffdingTree' has been renamed to 'iSOUPTreeRegressor' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return iSOUPTreeRegressor(max_byte_size=max_byte_size,

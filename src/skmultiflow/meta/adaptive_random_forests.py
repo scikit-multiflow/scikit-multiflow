@@ -35,7 +35,7 @@ def AdaptiveRandomForest(n_estimators=10,
                          leaf_prediction='nba',
                          nb_threshold=0,
                          nominal_attributes=None,
-                         random_state=None):
+                         random_state=None):     # pragma: no cover
     warnings.warn("’AdaptiveRandomForest’ has been renamed to ‘AdaptiveRandomForestClassifier’ in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return AdaptiveRandomForestClassifier(n_estimators=n_estimators,

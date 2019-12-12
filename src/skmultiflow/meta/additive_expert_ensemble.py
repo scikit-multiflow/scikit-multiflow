@@ -6,7 +6,8 @@ from skmultiflow.bayes import NaiveBayes
 import warnings
 
 
-def AdditiveExpertEnsemble(n_estimators=5, base_estimator=NaiveBayes(), beta=0.8, gamma=0.1, pruning='weakest'):
+def AdditiveExpertEnsemble(n_estimators=5, base_estimator=NaiveBayes(), beta=0.8, gamma=0.1,
+                           pruning='weakest'):     # pragma: no cover
     warnings.warn("’AdditiveExpertEnsemble’ has been renamed to ‘AdditiveExpertEnsembleClassifier’ in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return AdditiveExpertEnsembleClassifier(n_estimators=n_estimators,

@@ -7,7 +7,8 @@ from skmultiflow.bayes import NaiveBayes
 import warnings
 
 
-def DynamicWeightedMajority(n_estimators=5, base_estimator=NaiveBayes(), period=50, beta=0.5, theta=0.01):
+def DynamicWeightedMajority(n_estimators=5, base_estimator=NaiveBayes(), period=50, beta=0.5,
+                            theta=0.01):     # pragma: no cover
     warnings.warn("'DynamicWeightedMajority' has been renamed to 'DynamicWeightedMajorityClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return DynamicWeightedMajorityClassifier(n_estimators=n_estimators,

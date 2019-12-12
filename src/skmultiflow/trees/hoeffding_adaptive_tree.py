@@ -11,7 +11,7 @@ import warnings
 def HAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, split_criterion='info_gain',
         split_confidence=0.0000001, tie_threshold=0.05, binary_split=False, stop_mem_management=False,
         remove_poor_atts=False, no_preprune=False, leaf_prediction='nba', nb_threshold=0, nominal_attributes=None,
-        bootstrap_sampling=True):
+        bootstrap_sampling=True):     # pragma: no cover
     warnings.warn("'HAT' has been renamed to 'HoeffdingAdaptiveTreeClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return HoeffdingAdaptiveTreeClassifier(max_byte_size=max_byte_size,

@@ -10,7 +10,7 @@ import warnings
 
 
 def LearnPP(base_estimator=DecisionTreeClassifier(), error_threshold=0.5, n_estimators=30, n_ensembles=10,
-            window_size=100, random_state=None):
+            window_size=100, random_state=None):     # pragma: no cover
     warnings.warn("'LearnPP' has been renamed to 'LearnPPClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return LearnPPClassifier(base_estimator=base_estimator,

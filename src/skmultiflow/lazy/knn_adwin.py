@@ -7,7 +7,7 @@ from skmultiflow.utils.utils import *
 import warnings
 
 
-def KNNAdwin(n_neighbors=5, max_window_size=1000, leaf_size=30, nominal_attributes=None):
+def KNNAdwin(n_neighbors=5, max_window_size=1000, leaf_size=30, nominal_attributes=None):     # pragma: no cover
     warnings.warn("'KNNAdwin' has been renamed to 'KNNADWINClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return KNNADWINClassifier(n_neighbors=n_neighbors,

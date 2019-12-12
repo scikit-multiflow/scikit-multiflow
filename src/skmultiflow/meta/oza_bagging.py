@@ -8,7 +8,7 @@ from skmultiflow.utils import check_random_state
 import warnings
 
 
-def OzaBagging(base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):
+def OzaBagging(base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):     # pragma: no cover
     warnings.warn("'OzaBagging' has been renamed to 'OzaBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OzaBaggingClassifier(base_estimator=base_estimator,

@@ -25,7 +25,8 @@ def RegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=10000
                             split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
                             stop_mem_management=False, remove_poor_atts=False, leaf_prediction="perceptron",
                             no_preprune=False, nb_threshold=0, nominal_attributes=None, learning_ratio_perceptron=0.02,
-                            learning_ratio_decay=0.001, learning_ratio_const=True, random_state=None):
+                            learning_ratio_decay=0.001, learning_ratio_const=True,
+                            random_state=None):     # pragma: no cover
     warnings.warn("'.RegressionHoeffdingTree' has been renamed to 'HoeffdingTreeRegressor' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return HoeffdingTreeRegressor(max_byte_size=max_byte_size,

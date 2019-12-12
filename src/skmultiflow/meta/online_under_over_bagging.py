@@ -10,7 +10,7 @@ import warnings
 
 
 def OnlineUnderOverBagging(base_estimator=KNNADWINClassifier(), n_estimators=10, sampling_rate=2, drift_detection=True,
-                           random_state=None):
+                           random_state=None):     # pragma: no cover
     warnings.warn("'OnlineUnderOverBagging' has been renamed to 'OnlineUnderOverBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OnlineUnderOverBaggingClassifier(base_estimator=base_estimator,

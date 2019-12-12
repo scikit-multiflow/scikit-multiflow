@@ -10,7 +10,7 @@ import warnings
 
 
 def AccuracyWeightedEnsemble(n_estimators=10, n_kept_estimators=30, base_estimator=NaiveBayes(), window_size=200,
-                             n_splits=5):
+                             n_splits=5):     # pragma: no cover
     warnings.warn("’AccuracyWeightedEnsemble’ has been renamed to ‘AccuracyWeightedEnsembleClassifier’ in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return AccuracyWeightedEnsembleClassifier(n_estimators=n_estimators,

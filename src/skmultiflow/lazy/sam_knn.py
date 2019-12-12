@@ -14,7 +14,7 @@ import warnings
 
 
 def SAMKNN(n_neighbors=5, weighting='distance', max_window_size=5000, ltm_size=0.4, min_stm_size=50,
-           stm_size_option='maxACCApprox', use_ltm=True):
+           stm_size_option='maxACCApprox', use_ltm=True):     # pragma: no cover
     warnings.warn("'SAMKNN' has been renamed to 'SAMKNNClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return SAMKNNClassifier(n_neighbors=n_neighbors,

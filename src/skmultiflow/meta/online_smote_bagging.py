@@ -12,7 +12,7 @@ import warnings
 
 
 def OnlineSMOTEBagging(base_estimator=KNNADWINClassifier(), n_estimators=10, sampling_rate=1, drift_detection=True,
-                       random_state=None):
+                       random_state=None):     # pragma: no cover
     warnings.warn("'OnlineSMOTEBagging' has been renamed to 'OnlineSMOTEBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OnlineSMOTEBaggingClassifier(base_estimator=base_estimator,
