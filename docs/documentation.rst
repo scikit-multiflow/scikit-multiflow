@@ -215,7 +215,7 @@ Trees based methods
    trees.HoeffdingTreeClassifier
    trees.HoeffdingAdaptiveTreeClassifier
    trees.ExtremelyFastDecisionTreeClassifier
-   trees.LabelCombinationHoeffdingTree
+   trees.LabelCombinationHoeffdingTreeClassifier
    trees.HoeffdingTreeRegressor
    trees.HoeffdingAdaptiveTreeRegressor
    trees.iSOUPTreeRegressor

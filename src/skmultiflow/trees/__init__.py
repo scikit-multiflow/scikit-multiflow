@@ -8,7 +8,7 @@ from . import split_criterion
 from .hoeffding_tree import HoeffdingTreeClassifier
 from .hoeffding_adaptive_tree import HoeffdingAdaptiveTreeClassifier
 from .extremely_fast_decision_tree import ExtremelyFastDecisionTreeClassifier
-from .label_combination_hoeffding_tree import LabelCombinationHoeffdingTree
+from .label_combination_hoeffding_tree import LabelCombinationHoeffdingTreeClassifier
 from .hoeffding_tree_regressor import HoeffdingTreeRegressor
 from .hoeffding_adaptive_tree_regressor import HoeffdingAdaptiveTreeRegressor
 from .isoup_tree import iSOUPTreeRegressor
@@ -23,7 +23,7 @@ from .isoup_tree import MultiTargetRegressionHoeffdingTree   # remove in v0.7.0"
 
 __all__ = ["attribute_observer", "attribute_test", "nodes", "split_criterion",
            "HoeffdingTreeClassifier", "HoeffdingAdaptiveTreeClassifier", "ExtremelyFastDecisionTreeClassifier",
-           "LabelCombinationHoeffdingTree", "HoeffdingTreeRegressor", "HoeffdingAdaptiveTreeRegressor",
+           "LabelCombinationHoeffdingTreeClassifier", "HoeffdingTreeRegressor", "HoeffdingAdaptiveTreeRegressor",
            "iSOUPTreeRegressor",
            "HoeffdingTree", "HAT", "HATT", "LCHT", "RegressionHoeffdingTree",
            "RegressionHAT", "MultiTargetRegressionHoeffdingTree",
