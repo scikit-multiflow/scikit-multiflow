@@ -1,13 +1,13 @@
-from skmultiflow.lazy import KNN
+from skmultiflow.lazy import KNNClassifier
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.utils.data_structures import InstanceWindow
 from skmultiflow.utils.utils import *
 
 
-class KNNAdwin(KNN):
+class KNNAdwin(KNNClassifier):
     """ K-Nearest Neighbors classifier with ADWIN change detector.
     
-    This Classifier is an improvement from the regular KNN classifier, 
+    This Classifier is an improvement from the regular KNNClassifier,
     as it is resistant to concept drift. It utilises the ADWIN change 
     detector to decide which samples to keep and which ones to forget, 
     and by doing so it regulates the sample window size.
@@ -15,7 +15,7 @@ class KNNAdwin(KNN):
     To know more about the ADWIN change detector, please visit 
     skmultiflow.classification.core.drift_detection.adwin
 
-    It uses the regular KNN Classifier as a base class, with the 
+    It uses the regular KNNClassifier as a base class, with the
     major difference that this class keeps a variable size window, 
     instead of a fixed size one and also it updates the adwin algorithm 
     at each partial_fit call.
@@ -70,7 +70,7 @@ class KNNAdwin(KNN):
     ...     n_samples += 1
     >>>
     >>> # Displaying the results
-    >>> print('KNN usage example')
+    >>> print('KNNClassifier usage example')
     >>> print(str(n_samples) + ' samples analyzed.')
     5000 samples analyzed.
     >>> print("KNNAdwin's performance: " + str(corrects/n_samples))
@@ -89,7 +89,7 @@ class KNNAdwin(KNN):
         """ reset
         
         Resets the adwin algorithm as well as the base model 
-        kept by the KNN base class.
+        kept by the KNNClassifier base class.
         
         Returns
         -------

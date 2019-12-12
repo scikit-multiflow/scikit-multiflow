@@ -115,7 +115,7 @@ Lazy learning methods
    :nosignatures:
    :toctree: _autosummary
 
-   lazy.KNN
+   lazy.KNNClassifier
    lazy.KNNAdwin
    lazy.SAMKNN
 

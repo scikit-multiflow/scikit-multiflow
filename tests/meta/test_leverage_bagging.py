@@ -1,5 +1,5 @@
 from skmultiflow.meta import LeverageBaggingClassifier
-from skmultiflow.lazy import KNN
+from skmultiflow.lazy import KNNClassifier
 from skmultiflow.data import SEAGenerator
 
 import numpy as np
@@ -8,7 +8,7 @@ import numpy as np
 def test_leverage_bagging():
     stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
     stream.prepare_for_use()
-    knn = KNN(n_neighbors=8, leaf_size=40, max_window_size=2000)
+    knn = KNNClassifier(n_neighbors=8, leaf_size=40, max_window_size=2000)
     learner = LeverageBaggingClassifier(base_estimator=knn, n_estimators=3, random_state=112)
     first = True
 
@@ -47,7 +47,7 @@ def test_leverage_bagging():
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    expected_info = "LeverageBaggingClassifier(base_estimator=KNN(leaf_size=40, max_window_size=2000, " \
+    expected_info = "LeverageBaggingClassifier(base_estimator=KNNClassifier(leaf_size=40, max_window_size=2000, " \
                     "n_neighbors=8, nominal_attributes=None), delta=0.002, enable_code_matrix=False, " \
                     "leverage_algorithm='leveraging_bag', n_estimators=3, random_state=112, w=6)"
     info = " ".join([line.strip() for line in learner.get_info().split()])

@@ -57,13 +57,13 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
     --------
     >>> # Imports
     >>> from skmultiflow.meta import OzaBaggingADWINClassifier
-    >>> from skmultiflow.lazy.knn import KNN
+    >>> from skmultiflow.lazy.knn import KNNClassifier
     >>> from skmultiflow.data.sea_generator import SEAGenerator
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1, noise_percentage=6.7)
     >>> stream.prepare_for_use()
     >>> # Setting up the OzaBaggingADWINClassifier to work with KNN as base estimator
-    >>> clf = OzaBaggingADWINClassifier(base_estimator=KNN(n_neighbors=8, max_window_size=2000, leaf_size=30),
+    >>> clf = OzaBaggingADWINClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30),
     ...                                 n_estimators=2)
     >>> # Keeping track of sample count and correct prediction count
     >>> sample_count = 0

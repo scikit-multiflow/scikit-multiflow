@@ -1,7 +1,7 @@
 import copy as cp
 
 from skmultiflow.core.base import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
-from skmultiflow.lazy import KNN
+from skmultiflow.lazy import KNNClassifier
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.utils.utils import *
 from skmultiflow.utils import check_random_state
@@ -9,7 +9,7 @@ from skmultiflow.utils import check_random_state
 import warnings
 
 
-def LeverageBagging(base_estimator=KNN(), n_estimators=10, w=6, delta=0.002, enable_code_matrix=False,
+def LeverageBagging(base_estimator=KNNClassifier(), n_estimators=10, w=6, delta=0.002, enable_code_matrix=False,
                     leverage_algorithm='leveraging_bag', random_state=None):
     warnings.warn("'LeverageBagging' has been renamed to 'LeverageBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
@@ -90,13 +90,13 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
     --------
     >>> # Imports
     >>> from skmultiflow.meta import LeverageBaggingClassifier
-    >>> from skmultiflow.lazy import KNN
+    >>> from skmultiflow.lazy import KNNClassifier
     >>> from skmultiflow.data import SEAGenerator
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1, noise_percentage=6.7)
     >>> stream.prepare_for_use()
     >>> # Setting up the LeverageBagging classifier to work with KNN classifiers
-    >>> clf = LeverageBaggingClassifier(base_estimator=KNN(n_neighbors=8, max_window_size=2000, leaf_size=30),
+    >>> clf = LeverageBaggingClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30),
     >>>                                 n_estimators=2)
     >>> # Keeping track of sample count and correct prediction count
     >>> sample_count = 0
@@ -125,7 +125,7 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
                            'leveraging_subag']
 
     def __init__(self,
-                 base_estimator=KNN(),
+                 base_estimator=KNNClassifier(),
                  n_estimators=10,
                  w=6,
                  delta=0.002,
