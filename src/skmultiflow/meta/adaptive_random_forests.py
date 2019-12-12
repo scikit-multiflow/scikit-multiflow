@@ -8,7 +8,7 @@ from sklearn.preprocessing import normalize
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.drift_detection import ADWIN
-from skmultiflow.trees.arf_hoeffding_tree import ARFHoeffdingTree
+from skmultiflow.trees.arf_hoeffding_tree import ARFHoeffdingTreeClassifier
 from skmultiflow.metrics import ClassificationPerformanceEvaluator
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, check_random_state, check_weights
 
@@ -98,50 +98,50 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
             Warning Detection method. Set to None to disable warning detection.
 
         max_byte_size: int, optional (default=33554432)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Maximum memory consumed by the tree.
 
         memory_estimate_period: int, optional (default=2000000)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Number of instances between memory consumption checks.
 
         grace_period: int, optional (default=50)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Number of instances a leaf should observe between split attempts.
 
         split_criterion: string, optional (default='info_gain')
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Split criterion to use.
 
             - 'gini' - Gini
             - 'info_gain' - Information Gain
 
         split_confidence: float, optional (default=0.01)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Allowed error in split decision, a value closer to 0 takes longer to decide.
 
         tie_threshold: float, optional (default=0.05)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Threshold below which a split will be forced to break ties.
 
         binary_split: bool, optional (default=False)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             If True, only allow binary splits.
 
         stop_mem_management: bool, optional (default=False)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             If True, stop growing as soon as memory limit is hit.
 
         remove_poor_atts: bool, optional (default=False)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             If True, disable poor attributes.
 
         no_preprune: bool, optional (default=False)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             If True, disable pre-pruning.
 
         leaf_prediction: string, optional (default='nba')
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Prediction mechanism used at leafs.
 
             - 'mc' - Majority Class
@@ -149,11 +149,11 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
             - 'nba' - Naive Bayes Adaptive
 
         nb_threshold: int, optional (default=0)
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             Number of instances a leaf should observe before allowing Naive Bayes.
 
         nominal_attributes: list, optional
-            (`ARFHoeffdingTree` parameter)
+            (`ARFHoeffdingTreeClassifier` parameter)
             List of Nominal attributes. If emtpy, then assume that all attributes are numerical.
 
         random_state: int, RandomState instance or None, optional (default=None)
@@ -388,21 +388,22 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
         self._set_max_features(get_dimensions(X)[1])
 
         self.ensemble = [ARFBaseLearner(index_original=i,
-                                        classifier=ARFHoeffdingTree(max_byte_size=self.max_byte_size,
-                                                                    memory_estimate_period=self.memory_estimate_period,
-                                                                    grace_period=self.grace_period,
-                                                                    split_criterion=self.split_criterion,
-                                                                    split_confidence=self.split_confidence,
-                                                                    tie_threshold=self.tie_threshold,
-                                                                    binary_split=self.binary_split,
-                                                                    stop_mem_management=self.stop_mem_management,
-                                                                    remove_poor_atts=self.remove_poor_atts,
-                                                                    no_preprune=self.no_preprune,
-                                                                    leaf_prediction=self.leaf_prediction,
-                                                                    nb_threshold=self.nb_threshold,
-                                                                    nominal_attributes=self.nominal_attributes,
-                                                                    max_features=self.max_features,
-                                                                    random_state=self.random_state),
+                                        classifier=ARFHoeffdingTreeClassifier(
+                                            max_byte_size=self.max_byte_size,
+                                            memory_estimate_period=self.memory_estimate_period,
+                                            grace_period=self.grace_period,
+                                            split_criterion=self.split_criterion,
+                                            split_confidence=self.split_confidence,
+                                            tie_threshold=self.tie_threshold,
+                                            binary_split=self.binary_split,
+                                            stop_mem_management=self.stop_mem_management,
+                                            remove_poor_atts=self.remove_poor_atts,
+                                            no_preprune=self.no_preprune,
+                                            leaf_prediction=self.leaf_prediction,
+                                            nb_threshold=self.nb_threshold,
+                                            nominal_attributes=self.nominal_attributes,
+                                            max_features=self.max_features,
+                                            random_state=self.random_state),
                                         instances_seen=self.instances_seen,
                                         drift_detection_method=self.drift_detection_method,
                                         warning_detection_method=self.warning_detection_method,
@@ -448,7 +449,7 @@ class ARFBaseLearner(BaseSKMObject):
     ----------
     index_original: int
         Tree index within the ensemble.
-    classifier: ARFHoeffdingTree
+    classifier: ARFHoeffdingTreeClassifier
         Tree classifier.
     instances_seen: int
         Number of instances seen by the tree.
@@ -467,7 +468,7 @@ class ARFBaseLearner(BaseSKMObject):
     """
     def __init__(self,
                  index_original,
-                 classifier: ARFHoeffdingTree,
+                 classifier: ARFHoeffdingTreeClassifier,
                  instances_seen,
                  drift_detection_method: BaseDriftDetector,
                  warning_detection_method: BaseDriftDetector,
