@@ -1,6 +1,6 @@
 from skmultiflow.evaluation import EvaluatePrequential
 from skmultiflow.data import FileStream
-from skmultiflow.lazy import KNNAdwin
+from skmultiflow.lazy import KNNADWINClassifier
 from sklearn.linear_model import SGDClassifier
 from skmultiflow.core import Pipeline
 from skmultiflow.transform import OneHotToCategorical
@@ -24,10 +24,10 @@ def demo(instances=2000):
     stream.prepare_for_use()
     # Setup the classifier
     clf = SGDClassifier()
-    # classifier = KNNAdwin(n_neighbors=8, max_window_size=2000,leaf_size=40, nominal_attributes=None)
+    # classifier = KNNADWINClassifier(n_neighbors=8, max_window_size=2000,leaf_size=40, nominal_attributes=None)
     # classifier = OzaBaggingADWINClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000,
     #                                                                     leaf_size=30))
-    clf_one = KNNAdwin(n_neighbors=8, max_window_size=1000, leaf_size=30)
+    clf_one = KNNADWINClassifier(n_neighbors=8, max_window_size=1000, leaf_size=30)
     # clf_two = KNNClassifier(n_neighbors=8, max_window_size=1000, leaf_size=30)
     # clf_two = LeverageBaggingClassifier(base_estimator=KNNClassifier(), n_estimators=2)
 
