@@ -6,7 +6,7 @@ import numpy as np
 from skmultiflow.core import BaseSKMObject, RegressorMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.drift_detection import ADWIN
-from skmultiflow.trees.regression_hoeffding_tree import RegressionHoeffdingTree
+from skmultiflow.trees.hoeffding_tree_regressor import HoeffdingTreeRegressor
 from skmultiflow.metrics.measure_collection import RegressionMeasurements
 from skmultiflow.utils import get_dimensions, check_random_state
 
@@ -41,64 +41,64 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         Warning Detection method. Set to None to disable warning detection.
 
     max_byte_size: int, optional (default=33554432)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         Maximum memory consumed by the tree.
 
     memory_estimate_period: int, optional (default=2000000)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         Number of instances between memory consumption checks.
 
     grace_period: int, optional (default=50)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         Number of instances a leaf should observe between split attempts.
 
     split_confidence: float, optional (default=0.01)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         Allowed error in split decision, a value closer to 0 takes longer
         to decide.
 
     tie_threshold: float, optional (default=0.05)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         Threshold below which a split will be forced to break ties.
 
     binary_split: bool, optional (default=False)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         If True, only allow binary splits.
 
     stop_mem_management: bool, optional (default=False)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         If True, stop growing as soon as memory limit is hit.
 
     remove_poor_atts: bool, optional (default=False)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         If True, disable poor attributes.
 
     no_preprune: bool, optional (default=False)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         If True, disable pre-pruning.
 
     leaf_prediction: string, optional (default='perceptron')
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         Prediction mechanism used at leafs.
 
         - 'mean' - Target mean
         - 'perceptron' - Perceptron
 
     nominal_attributes: list, optional (default=None)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         List of Nominal attributes. If emtpy, then assume that all attributes
         are numerical.
 
     learning_ratio_perceptron: float (default=0.02)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         The learning rate of the perceptron.
 
     learning_ratio_decay: float (default=0.001)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         Decay multiplier for the learning rate of the perceptron
 
     learning_ratio_const: Bool (default=True)
-        (`RegressionHoeffdingTree` parameter)
+        (`HoeffdingTreeRegressor` parameter)
         If False the learning ratio will decay with the number of examples seen
 
     random_state: int, RandomState instance or None, optional (default=None)
@@ -271,7 +271,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
 
         self.ensemble = [ARFBaseLearner(
                              index_original=i,
-                             estimator=RegressionHoeffdingTree(
+                             estimator=HoeffdingTreeRegressor(
                                  max_byte_size=self.max_byte_size,
                                  memory_estimate_period=self.memory_estimate_period,
                                  grace_period=self.grace_period,
@@ -337,7 +337,7 @@ class ARFBaseLearner(BaseSKMObject):
     index_original: int
         Tree index within the ensemble.
 
-    estimator: RegressionHoeffdingTree
+    estimator: HoeffdingTreeRegressor
         Tree estimator.
 
     instances_seen: int
@@ -359,7 +359,7 @@ class ARFBaseLearner(BaseSKMObject):
     """
     def __init__(self,
                  index_original,
-                 estimator: RegressionHoeffdingTree,
+                 estimator: HoeffdingTreeRegressor,
                  instances_seen,
                  drift_detection_method: BaseDriftDetector,
                  warning_detection_method: BaseDriftDetector,
