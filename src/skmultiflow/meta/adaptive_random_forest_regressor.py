@@ -186,7 +186,6 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         self.learning_ratio_perceptron = learning_ratio_perceptron
         self.learning_ratio_decay = learning_ratio_decay
         self.learning_ratio_const = learning_ratio_const
-        self.random_state = random_state
 
     def partial_fit(self, X, y):
         """ Partially (incrementally) fit the model.
