@@ -2,7 +2,6 @@
 The :mod:`skmultiflow.meta` module includes meta learning methods.
 """
 
-
 from .adaptive_random_forest_classifier import AdaptiveRandomForestClassifier
 from .adaptive_random_forest_regressor import AdaptiveRandomForestRegressor
 from .batch_incremental import BatchIncrementalClassifier
@@ -10,11 +9,9 @@ from .leverage_bagging import LeverageBaggingClassifier
 from .oza_bagging import OzaBaggingClassifier
 from .oza_bagging_adwin import OzaBaggingADWINClassifier
 from .classifier_chains import ClassifierChain
-from .dynamic_weighted_majority import DynamicWeightedMajority
-from .learn_nse import LearnNSE
-from .learn_pp import LearnPP
-from .leverage_bagging import LeverageBagging
+from .classifier_chains import ProbabilisticClassifierChain
 from .classifier_chains import MonteCarloClassifierChain
+from .regressor_chains import RegressorChain
 from .multi_output_learner import MultiOutputLearner
 from .learn_pp import LearnPPClassifier
 from .learn_nse import LearnPPNSEClassifier
