@@ -29,7 +29,7 @@ from .online_rus_boost import OnlineRUSBoostClassifier
 from .online_smote_bagging import OnlineSMOTEBaggingClassifier
 from .batch_incremental import BatchIncremental   # remove in v0.7.0
 from .accuracy_weighted_ensemble import AccuracyWeightedEnsemble   # remove in v0.7.0
-from .adaptive_random_forests import AdaptiveRandomForest   # remove in v0.7.0
+from .adaptive_random_forest_classifier import AdaptiveRandomForest   # remove in v0.7.0
 from .additive_expert_ensemble import AdditiveExpertEnsemble   # remove in v0.7.0
 from .dynamic_weighted_majority import DynamicWeightedMajority   # remove in v0.7.0
 from .learn_nse import LearnNSE   # remove in v0.7.0
