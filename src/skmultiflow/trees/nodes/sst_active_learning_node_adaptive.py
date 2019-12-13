@@ -57,10 +57,10 @@ class SSTActiveLearningNodeAdaptive(SSTActiveLearningNode):
         _, n_features = get_dimensions(X)
         _, n_targets = get_dimensions(y)
 
-        normalized_target_value = rht.normalized_target_value(y)
+        normalize_target_value = rht.normalize_target_value(y)
 
         self.perceptron_weight[0] += learning_ratio * \
-            (normalized_target_value - normalized_base_pred)[:, None] @ \
+            (normalize_target_value - normalized_base_pred)[:, None] @ \
             normalized_sample[None, :]
 
         # Add bias term
@@ -68,7 +68,7 @@ class SSTActiveLearningNodeAdaptive(SSTActiveLearningNode):
         normalized_meta_pred = self._predict_meta(normalized_base_pred)
 
         self.perceptron_weight[1] += learning_ratio * \
-            (normalized_target_value - normalized_meta_pred)[:, None] @ \
+            (normalize_target_value - normalized_meta_pred)[:, None] @ \
             normalized_base_pred[None, :]
 
         self.normalize_perceptron_weights()
@@ -77,16 +77,16 @@ class SSTActiveLearningNodeAdaptive(SSTActiveLearningNode):
         # The considered errors are normalized, since they are based on
         # mean centered and sd scaled values
         self.fMAE_M = 0.95 * self.fMAE_M + np.absolute(
-            normalized_target_value - rht.
-            normalized_target_value(self._observed_class_distribution[1] /
+            normalize_target_value - rht.
+            normalize_target_value(self._observed_class_distribution[1] /
                                     self._observed_class_distribution[0])
         )
 
         # Ignore added bias term in the comparison
         self.fMAE_P = 0.95 * self.fMAE_P + np.absolute(
-            normalized_target_value - normalized_base_pred[:-1]
+            normalize_target_value - normalized_base_pred[:-1]
         )
 
         self.fMAE_SP = 0.95 * self.fMAE_SP + np.absolute(
-            normalized_target_value - normalized_meta_pred
+            normalize_target_value - normalized_meta_pred
         )
