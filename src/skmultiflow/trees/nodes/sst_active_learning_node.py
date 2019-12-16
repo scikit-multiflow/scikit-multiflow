@@ -111,10 +111,10 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
         normalized_sample = rht.normalize_sample(X)
         normalized_base_pred = self._predict_base(normalized_sample)
 
-        normalize_target_value = rht.normalize_target_value(y)
+        normalized_target_value = rht.normalize_target_value(y)
 
         self.perceptron_weight[0] += learning_ratio * \
-            (normalize_target_value - normalized_base_pred)[:, None] @ \
+            (normalized_target_value - normalized_base_pred)[:, None] @ \
             normalized_sample[None, :]
 
         # Add bias term
@@ -122,7 +122,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
         normalized_meta_pred = self._predict_meta(normalized_base_pred)
 
         self.perceptron_weight[1] += learning_ratio * \
-            (normalize_target_value - normalized_meta_pred)[:, None] @ \
+            (normalized_target_value - normalized_meta_pred)[:, None] @ \
             normalized_base_pred[None, :]
 
         self.normalize_perceptron_weights()
