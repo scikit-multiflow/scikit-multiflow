@@ -171,7 +171,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         # This is the actual random_state object used
         self._random_state = check_random_state(self.random_state)
 
-        # Regression Hoeffding Tree configuration
+        # Hoeffding Tree Regressor configuration
         self.max_byte_size = max_byte_size
         self.memory_estimate_period = memory_estimate_period
         self.grace_period = grace_period
@@ -203,11 +203,11 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         self
 
         """
+        if y is None:
+            return self
 
-        if y is not None:
-            row_cnt, _ = get_dimensions(X)
-            for i in range(row_cnt):
-                self._partial_fit(X[i], y[i])
+        for x, y_ in zip(X, y):
+            self._partial_fit(x, y_)
 
         return self
 
@@ -217,14 +217,14 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         if self.ensemble is None:
             self.init_ensemble(X)
 
-        for i in range(self.n_estimators):
-            y_predicted = self.ensemble[i].predict(np.asarray([X]))
-            self.ensemble[i].evaluator.add_result(y_predicted, y)
+        for estimator in self.ensemble:
+            y_predicted = estimator.predict(np.asarray([X]))
+            estimator.evaluator.add_result(y_predicted, y)
             k = self._random_state.poisson(self.lambda_value)
             if k > 0:
-                self.ensemble[i].partial_fit(np.asarray([X]), np.asarray([y]),
-                                             sample_weight=np.asarray([k]),
-                                             instances_seen=self.instances_seen)
+                estimator.partial_fit(np.asarray([X]), np.asarray([y]),
+                                      sample_weight=np.asarray([k]),
+                                      instances_seen=self.instances_seen)
 
     def predict(self, X):
         """ Predict target values for the passed data.
@@ -239,10 +239,9 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         A numpy.ndarray with all the predictions for the samples in X.
 
         """
-        r, _ = get_dimensions(X)
         predictions = []
-        for i in range(r):
-            predictions.append(self._predict(X[i]))
+        for x in X:
+            predictions.append(self._predict(x))
         return np.asarray(predictions)
 
     def _predict(self, X):
@@ -250,8 +249,8 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
             self.init_ensemble(X)
         sum_predicted_values = 0
 
-        for i in range(self.n_estimators):
-            sum_predicted_values += self.ensemble[i].predict(np.asarray([X]))[0]
+        for estimator in self.ensemble:
+            sum_predicted_values += estimator.predict(np.asarray([X]))[0]
         return sum_predicted_values / self.n_estimators
 
     def predict_proba(self, X):
@@ -268,28 +267,30 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
     def init_ensemble(self, X):
         self._set_max_features(get_dimensions(X)[1])
 
-        self.ensemble = [ARFBaseLearner(
-                             index_original=i,
-                             estimator=HoeffdingTreeRegressor(
-                                 max_byte_size=self.max_byte_size,
-                                 memory_estimate_period=self.memory_estimate_period,
-                                 grace_period=self.grace_period,
-                                 split_confidence=self.split_confidence,
-                                 tie_threshold=self.tie_threshold,
-                                 binary_split=self.binary_split,
-                                 stop_mem_management=self.stop_mem_management,
-                                 remove_poor_atts=self.remove_poor_atts,
-                                 no_preprune=self.no_preprune,
-                                 leaf_prediction=self.leaf_prediction,
-                                 nominal_attributes=self.nominal_attributes,
-                                 learning_ratio_perceptron=self.learning_ratio_perceptron,
-                                 learning_ratio_decay=self.learning_ratio_decay,
-                                 learning_ratio_const=self.learning_ratio_const,
-                                 random_state=self.random_state),
-                             instances_seen=self.instances_seen,
-                             drift_detection_method=self.drift_detection_method,
-                             warning_detection_method=self.warning_detection_method,
-                             is_background_learner=False) for i in range(self.n_estimators)]
+        self.ensemble = \
+            [ARFBaseLearner(
+                index_original=i,
+                estimator=HoeffdingTreeRegressor(
+                    max_byte_size=self.max_byte_size,
+                    memory_estimate_period=self.memory_estimate_period,
+                    grace_period=self.grace_period,
+                    split_confidence=self.split_confidence,
+                    tie_threshold=self.tie_threshold,
+                    binary_split=self.binary_split,
+                    stop_mem_management=self.stop_mem_management,
+                    remove_poor_atts=self.remove_poor_atts,
+                    no_preprune=self.no_preprune,
+                    leaf_prediction=self.leaf_prediction,
+                    nominal_attributes=self.nominal_attributes,
+                    learning_ratio_perceptron=self.learning_ratio_perceptron,
+                    learning_ratio_decay=self.learning_ratio_decay,
+                    learning_ratio_const=self.learning_ratio_const,
+                    random_state=self.random_state),
+                instances_seen=self.instances_seen,
+                drift_detection_method=self.drift_detection_method,
+                warning_detection_method=self.warning_detection_method,
+                is_background_learner=False)
+            for i in range(self.n_estimators)]
 
     def _set_max_features(self, n):
         if self.max_features == 'auto' or self.max_features == 'sqrt':
@@ -428,13 +429,13 @@ class ARFBaseLearner(BaseSKMObject):
                     # Create a new background tree estimator
                     background_learner = self.estimator.new_instance()
                     # Create a new background learner
-                    self.background_learner = ARFBaseLearner(
-                        self.index_original,
-                        background_learner,
-                        instances_seen,
-                        self.drift_detection_method,
-                        self.warning_detection_method,
-                        True)
+                    self.background_learner = \
+                        ARFBaseLearner(self.index_original,
+                                       background_learner,
+                                       instances_seen,
+                                       self.drift_detection_method,
+                                       self.warning_detection_method,
+                                       True)
                     # Update the warning detection object for the current object
                     # (this effectively resets changes made to the object
                     # while it was still a bkg learner).
