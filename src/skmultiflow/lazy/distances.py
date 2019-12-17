@@ -117,8 +117,7 @@ def euclidean_distance(instance_one, instance_two, **kwargs):
 
     if index is not None:
         # entropy
-        return np.sqrt(np.power(one[index] - instance_two, 2))
+        return np.sqrt((one[index] - instance_two) ** 2)
 
     two = np.array(instance_two)
-    return np.sqrt(np.sum(np.power(np.subtract(one, two), [2 for _ in range(one.size)])))
-
+    return np.sqrt(np.sum((one - two) ** [2 for _ in range(one.size)]))

@@ -83,8 +83,8 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
         normalized_pred = self.predict(normalized_sample)
         normalized_target_value = ht.normalize_target_value(y)
         self.perceptron_weight += learning_ratio * \
-            np.multiply((normalized_pred - normalized_target_value),
-                        normalized_sample)
+            ((normalized_pred - normalized_target_value) *
+             normalized_sample)
 
     def predict(self, X):
         return np.dot(self.perceptron_weight, X[0])

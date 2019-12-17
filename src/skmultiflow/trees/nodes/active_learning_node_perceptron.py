@@ -103,9 +103,9 @@ class ActiveLearningNodePerceptron(ActiveLearningNode):
         normalized_sample = rht.normalize_sample(X)
         normalized_pred = self.predict(normalized_sample)
         normalized_target_value = rht.normalize_target_value(y)
-        self.perceptron_weight = self.perceptron_weight + learning_ratio * \
-            np.multiply((normalized_target_value - normalized_pred),
-                        normalized_sample)
+        self.perceptron_weight += learning_ratio * \
+            ((normalized_target_value - normalized_pred) *
+             np.asarray(normalized_sample))
 
     def predict(self, X):
         return np.dot(self.perceptron_weight, X)
