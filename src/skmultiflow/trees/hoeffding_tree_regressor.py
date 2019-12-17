@@ -152,8 +152,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         self.samples_seen = 0
         self.sum_of_values = 0.0
         self.sum_of_squares = 0.0
-        self.sum_of_attribute_values = []
-        self.sum_of_attribute_squares = []
+        self.sum_of_attribute_values = np.array([])
+        self.sum_of_attribute_squares = np.array([])
         self.random_state = random_state
 
     @property
@@ -331,14 +331,12 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         self.sum_of_values += sample_weight * y
         self.sum_of_squares += sample_weight * y * y
 
-        try:
-            self.sum_of_attribute_values = np.add(self.sum_of_attribute_values, np.multiply(sample_weight, X))
-            self.sum_of_attribute_squares = np.add(
-                self.sum_of_attribute_squares, np.multiply(sample_weight, np.power(X, 2))
-            )
-        except ValueError:
-            self.sum_of_attribute_values = np.multiply(sample_weight, X)
-            self.sum_of_attribute_squares = np.multiply(sample_weight, np.power(X, 2))
+        if self.sum_of_attribute_values.size != 0:
+            self.sum_of_attribute_values += sample_weight * X
+            self.sum_of_attribute_squares += sample_weight * X**2
+        else:
+            self.sum_of_attribute_values = sample_weight * X
+            self.sum_of_attribute_squares = sample_weight * X**2
 
         if self._tree_root is None:
             self._tree_root = self._new_learning_node()
@@ -409,9 +407,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                             predictions.append(0.0)
                             continue
                         normalized_sample = self.normalize_sample(X[i])
-                        normalized_prediction = np.dot(
-                            perceptron_weights, normalized_sample
-                        )
+                        normalized_prediction = perceptron_weights.dot(normalized_sample)
                         mean = self.sum_of_values / self.samples_seen
                         sd = np.sqrt(
                             (self.sum_of_squares - self.sum_of_values ** 2 /
