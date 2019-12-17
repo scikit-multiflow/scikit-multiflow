@@ -11,7 +11,9 @@ from skmultiflow.metrics.measure_collection import RegressionMeasurements
 from skmultiflow.utils import get_dimensions, check_random_state
 
 
-class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimatorMixin):
+class AdaptiveRandomForestRegressor(BaseSKMObject,
+                                    RegressorMixin,
+                                    MetaEstimatorMixin):
     """Adaptive Random Forest estimator.
 
     Parameters
@@ -27,18 +29,23 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
           ``int(max_features * n_features)`` features are considered at
           each split.
         - If "auto", then ``max_features=sqrt(n_features)``.
-        - If "sqrt", then ``max_features=sqrt(n_features)`` (same as "auto").
+        - If "sqrt", then ``max_features=sqrt(n_features)``
+          (same as "auto").
         - If "log2", then ``max_features=log2(n_features)``.
         - If None, then ``max_features=n_features``.
 
     lambda_value: int, optional (default=6)
-        The lambda value for bagging (lambda=6 corresponds to Leverage Bagging).
+        The lambda value for bagging (lambda=6 corresponds to Leverage
+        Bagging).
 
-    drift_detection_method: BaseDriftDetector or None, optional (default=ADWIN(0.001))
+    drift_detection_method: BaseDriftDetector or None,
+                            optional (default=ADWIN(0.001))
         Drift Detection method. Set to None to disable Drift detection.
 
-    warning_detection_method: BaseDriftDetector or None, default(ADWIN(0.01))
-        Warning Detection method. Set to None to disable warning detection.
+    warning_detection_method: BaseDriftDetector or None,
+                              default(ADWIN(0.01))
+        Warning Detection method. Set to None to disable warning
+        detection.
 
     max_byte_size: int, optional (default=33554432)
         (`HoeffdingTreeRegressor` parameter)
@@ -50,12 +57,13 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
 
     grace_period: int, optional (default=50)
         (`HoeffdingTreeRegressor` parameter)
-        Number of instances a leaf should observe between split attempts.
+        Number of instances a leaf should observe between split
+        attempts.
 
     split_confidence: float, optional (default=0.01)
         (`HoeffdingTreeRegressor` parameter)
-        Allowed error in split decision, a value closer to 0 takes longer
-        to decide.
+        Allowed error in split decision, a value closer to 0 takes
+        longer to decide.
 
     tie_threshold: float, optional (default=0.05)
         (`HoeffdingTreeRegressor` parameter)
@@ -86,8 +94,8 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
 
     nominal_attributes: list, optional (default=None)
         (`HoeffdingTreeRegressor` parameter)
-        List of Nominal attributes. If emtpy, then assume that all attributes
-        are numerical.
+        List of Nominal attributes. If emtpy, then assume that all
+        attributes are numerical.
 
     learning_ratio_perceptron: float (default=0.02)
         (`HoeffdingTreeRegressor` parameter)
@@ -99,29 +107,37 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
 
     learning_ratio_const: Bool (default=True)
         (`HoeffdingTreeRegressor` parameter)
-        If False the learning ratio will decay with the number of examples seen
+        If False the learning ratio will decay with the number of
+        examples seen.
 
-    random_state: int, RandomState instance or None, optional (default=None)
-        If int, random_state is the seed used by the random number generator;
-        If RandomState instance, random_state is the random number generator;
-        If None, the random number generator is the RandomState instance used
-        by `np.random`. Used when leaf_prediction is 'perceptron'.
+    random_state: int, RandomState instance or None,
+                       optional (default=None)
+        If int, random_state is the seed used by the random number
+        generator;
+        If RandomState instance, random_state is the random number
+        generator;
+        If None, the random number generator is the RandomState
+        instance used by `np.random`. Used when leaf_prediction is
+        'perceptron'.
 
     Notes
     -----
     The 3 most important aspects of Adaptive Random Forest [1]_ are:
     (1) inducing diversity through re-sampling;
-    (2) inducing diversity through randomly selecting subsets of features for
-        node splits (see skmultiflow.classification.trees.arf_hoeffding_tree);
+    (2) inducing diversity through randomly selecting subsets of
+        features for node splits
+        (see skmultiflow.classification.trees.arf_hoeffding_tree);
     (3) drift detectors per base tree, which cause selective resets
         in response to drifts.
-    It also allows training background trees, which start training if a warning
-    is detected and replace the active tree if the warning escalates to a drift.
+    It also allows training background trees, which start training if
+    a warning is detected and replace the active tree if the warning
+    escalates to a drift.
 
     References
     ----------
-    .. [1] Gomes, H.M., Bifet, A., Read, J., Barddal, J.P., Enembreck, F.,
-       Pfharinger, B., Holmes, G. and Abdessalem, T., 2017.
+    .. [1] Gomes, H.M., Bifet, A., Read, J., Barddal, J.P.,
+       Enembreck, F., Pfharinger, B., Holmes, G. and Abdessalem,
+       T., 2017.
        Adaptive random forests for evolving data stream classification.
        Machine Learning, 106(9-10), pp.1469-1495.
        [2] Gomes, H.M., Barddal, J.P., Boiko, L.E., Bifet, A., 2018
@@ -232,7 +248,8 @@ class AdaptiveRandomForestRegressor(BaseSKMObject, RegressorMixin, MetaEstimator
         Parameters
         ----------
         X : numpy.ndarray of shape (n_samples, n_features)
-            The set of data samples for which to predict the target value.
+            The set of data samples for which to predict the target
+            value.
 
         Returns
         -------
