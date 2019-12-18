@@ -179,3 +179,38 @@ def is_scalar_nan(x):
     # convert from numpy.bool_ to python bool to ensure that testing
     # is_scalar_nan(x) is True does not fail.
     return bool(isinstance(x, numbers.Real) and np.isnan(x))
+
+
+def add_values_in_dict(dict_a: dict, dict_b: dict, inplace=False) -> dict:
+    """ Adds two dictionaries, summing the values of elements with the same key.
+
+    This function iterates over the keys of dict_b and adds their corresponding
+    values to the elements in dict_a. If dict_b has a (key, value) pair that
+    does not belong to dict_a, this pair is added to the latter dictionary.
+
+    Parameters
+    ----------
+    dict_a: dictionary to update.
+    dict_b: dictionary containing the new observations.
+    inplace: boolean (default: False)
+        Determines whether the changes will be implemented in-place (directly
+        on dict_a, when set to True) or in a copy of dict_a (default behavior).
+
+    Returns
+    -------
+        dict
+            A dictionary containing the result of the merging operation.
+            Can be either be a pointer to dict_a or a newly created structure.
+            The behavior for the return value depends on `inplace`.
+    """
+    if inplace:
+        result = dict_a
+    else:
+        result = copy.deepcopy(dict_a)
+
+    for k, v in dict_b.items():
+        try:
+            result[k] += v
+        except KeyError:
+            result[k] = v
+    return result
