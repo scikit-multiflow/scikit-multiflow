@@ -44,13 +44,13 @@ class InactiveLearningNodeAdaptiveMultiTarget(InactiveLearningNodePerceptronMult
             Targets values.
         learning_ratio: float
             perceptron learning ratio
-        rht: RegressionHoeffdingTree
+        rht: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
         """
         normalized_sample = rht.normalize_sample(X)
         normalized_pred = self.predict(normalized_sample)
 
-        normalized_target_value = rht.normalized_target_value(y)
+        normalized_target_value = rht.normalize_target_value(y)
         self.perceptron_weight += learning_ratio * \
             np.matmul((normalized_target_value - normalized_pred)[:, None],
                       normalized_sample[None, :])
@@ -66,6 +66,6 @@ class InactiveLearningNodeAdaptiveMultiTarget(InactiveLearningNodePerceptronMult
 
         self.fMAE_M = 0.95 * self.fMAE_M + np.abs(
             normalized_target_value - rht.
-            normalized_target_value(self._observed_class_distribution[1] /
+            normalize_target_value(self._observed_class_distribution[1] /
                                     self._observed_class_distribution[0])
         )

@@ -46,7 +46,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNode):
             Instance target value.
         weight: float
             Instance weight.
-        rht: RegressionHoeffdingTree
+        rht: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
 
         """
@@ -97,12 +97,12 @@ class ActiveLearningNodePerceptron(ActiveLearningNode):
             Instance target value.
         learning_ratio: float
             perceptron learning ratio
-        rht: RegressionHoeffdingTree
+        rht: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
         """
         normalized_sample = rht.normalize_sample(X)
         normalized_pred = self.predict(normalized_sample)
-        normalized_target_value = rht.normalized_target_value(y)
+        normalized_target_value = rht.normalize_target_value(y)
         self.perceptron_weight = self.perceptron_weight + learning_ratio * \
             np.multiply((normalized_target_value - normalized_pred),
                         normalized_sample)

@@ -44,7 +44,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
             Instance targets.
         weight: float
             Instance weight.
-        rht: RegressionHoeffdingTree
+        rht: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
         """
         if self.perceptron_weight is None:
@@ -105,13 +105,13 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
             Targets values.
         learning_ratio: float
             perceptron learning ratio
-        rht: RegressionHoeffdingTree
+        rht: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
         """
         normalized_sample = rht.normalize_sample(X)
         normalized_base_pred = self._predict_base(normalized_sample)
 
-        normalized_target_value = rht.normalized_target_value(y)
+        normalized_target_value = rht.normalize_target_value(y)
 
         self.perceptron_weight[0] += learning_ratio * \
             (normalized_target_value - normalized_base_pred)[:, None] @ \
