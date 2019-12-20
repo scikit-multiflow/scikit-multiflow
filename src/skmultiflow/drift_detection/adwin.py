@@ -265,7 +265,7 @@ class ADWIN(BaseDriftDetector):
                 n2 = self.bucket_size(i)
                 u1 = cursor.bucket_total[0]/n1
                 u2 = cursor.bucket_total[1]/n2
-                incremental_variance = n1 * n2 * (u1 - u2) / (n1 + n2)
+                incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
                 next_node.insert_bucket(cursor.bucket_total[0] + cursor.bucket_total[1], cursor.bucket_variance[1]
                                         + incremental_variance)
                 self.bucket_number += 1
