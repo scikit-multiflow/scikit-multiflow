@@ -60,6 +60,12 @@ class ADWIN(BaseDriftDetector):
     MAX_BUCKETS = 5
 
     def __init__(self, delta=.002):
+        """ADWIN Init.
+
+        The sliding window is stored in `list_row_bucket` as a list of
+        `Item`s, each one keeping a list of buckets of the same size.
+
+        """
         super().__init__()
         # default values affected by init_bucket()
         self.delta = delta
