@@ -382,55 +382,43 @@ class List(object):
 
     def __init__(self):
         super().__init__()
-        self._count = None
-        self._first = None
-        self._last = None
+        self.size = None
+        self.first = None
+        self.last = None
         self.reset()
         self.add_to_head()
 
     def reset(self):
-        self._count = 0
-        self._first = None
-        self._last = None
+        self.size = 0
+        self.first = None
+        self.last = None
 
     def add_to_head(self):
-        self._first = Item(self._first, None)
-        if self._last is None:
-            self._last = self._first
+        self.first = Item(self.first, None)
+        if self.last is None:
+            self.last = self.first
 
     def remove_from_head(self):
-        self._first = self._first.get_next_item()
-        if self._first is not None:
-            self._first.set_previous(None)
+        self.first = self.first.get_next_item()
+        if self.first is not None:
+            self.first.set_previous(None)
         else:
-            self._last = None
-        self._count -= 1
+            self.last = None
+        self.size -= 1
 
     def add_to_tail(self):
-        self._last = Item(None, self._last)
-        if self._first is None:
-            self._first = self._last
-        self._count += 1
+        self.last = Item(None, self.last)
+        if self.first is None:
+            self.first = self.last
+        self.size += 1
 
     def remove_from_tail(self):
-        self._last = self._last.get_previous()
-        if self._last is not None:
-            self._last.set_next_item(None)
+        self.last = self.last.get_previous()
+        if self.last is not None:
+            self.last.set_next_item(None)
         else:
-            self._first = None
-        self._count -= 1
-
-    @property
-    def first(self):
-        return self._first
-
-    @property
-    def last(self):
-        return self._last
-
-    @property
-    def size(self):
-        return self._count
+            self.first = None
+        self.size -= 1
 
 
 class Item(object):
