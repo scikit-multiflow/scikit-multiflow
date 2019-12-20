@@ -230,9 +230,9 @@ class ADWIN(BaseDriftDetector):
         node = self.list_row_bucket.last
         n1 = self.bucket_size(self.last_bucket_row)
         self._width -= n1
-        self._total -= node.get_total(0)
-        u1 = node.get_total(0) / n1
-        incremental_variance = node.get_variance(0) + n1 * self._width * (u1 - self._total / self._width) * \
+        self._total -= node.bucket_total[0]
+        u1 = node.bucket_total[0] / n1
+        incremental_variance = node.bucket_variance[0] + n1 * self._width * (u1 - self._total / self._width) * \
                                (u1 - self._total / self._width) / (n1 + self._width)
         self._variance -= incremental_variance
         node.remove_bucket()
@@ -250,17 +250,17 @@ class ADWIN(BaseDriftDetector):
         while cursor is not None:
             k = cursor.bucket_size_row
             if k == self.MAX_BUCKETS + 1:
-                next_node = cursor.get_next_item()
+                next_node = cursor.next
                 if next_node is None:
                     self.list_row_bucket.add_to_tail()
-                    next_node = cursor.get_next_item()
+                    next_node = cursor.next
                     self.last_bucket_row += 1
                 n1 = self.bucket_size(i)
                 n2 = self.bucket_size(i)
-                u1 = cursor.get_total(0)/n1
-                u2 = cursor.get_total(1)/n2
+                u1 = cursor.bucket_total[0]/n1
+                u2 = cursor.bucket_total[1]/n2
                 incremental_variance = n1 * n2 * (u1 - u2) / (n1 + n2)
-                next_node.insert_bucket(cursor.get_total(0) + cursor.get_total(1), cursor.get_variance(1)
+                next_node.insert_bucket(cursor.bucket_total[0] + cursor.bucket_total[1], cursor.bucket_variance[1]
                                         + incremental_variance)
                 self.bucket_number += 1
                 cursor.compress_bucket_row(2)
@@ -270,7 +270,7 @@ class ADWIN(BaseDriftDetector):
             else:
                 break
 
-            cursor = cursor.get_next_item()
+            cursor = cursor.next
             i += 1
 
     def detected_change(self):
@@ -320,18 +320,18 @@ class ADWIN(BaseDriftDetector):
                 while (not bln_exit) and (cursor is not None):
                     for k in range(cursor.bucket_size_row - 1):
                         n2 = self.bucket_size(i)
-                        u2 = cursor.get_total(k)
+                        u2 = cursor.bucket_total[k]
 
                         if n0 > 0:
-                            v0 += cursor.get_variance(k) + 1. * n0 * n2 * (u0/n0 - u2/n2) * (u0/n0 - u2/n2) / (n0 + n2)
+                            v0 += cursor.bucket_variance[k] + 1. * n0 * n2 * (u0/n0 - u2/n2) * (u0/n0 - u2/n2) / (n0 + n2)
 
                         if n1 > 0:
-                            v1 -= cursor.get_variance(k) + 1. * n1 * n2 * (u1/n1 - u2/n2) * (u1/n1 - u2/n2) / (n1 + n2)
+                            v1 -= cursor.bucket_variance[k] + 1. * n1 * n2 * (u1/n1 - u2/n2) * (u1/n1 - u2/n2) / (n1 + n2)
 
                         n0 += self.bucket_size(i)
                         n1 -= self.bucket_size(i)
-                        u0 += cursor.get_total(k)
-                        u1 -= cursor.get_total(k)
+                        u0 += cursor.bucket_total[k]
+                        u1 -= cursor.bucket_total[k]
 
                         if (i == 0) and (k == cursor.bucket_size_row - 1):
                             bln_exit = True
@@ -354,7 +354,7 @@ class ADWIN(BaseDriftDetector):
                                 bln_exit = True
                                 break
 
-                    cursor = cursor.get_previous()
+                    cursor = cursor.previous
                     i -= 1
         self._width_t += self.width
         if bln_change:
@@ -399,9 +399,9 @@ class List(object):
             self.last = self.first
 
     def remove_from_head(self):
-        self.first = self.first.get_next_item()
+        self.first = self.first.next
         if self.first is not None:
-            self.first.set_previous(None)
+            self.first.previous = None
         else:
             self.last = None
         self.size -= 1
@@ -413,9 +413,9 @@ class List(object):
         self.size += 1
 
     def remove_from_tail(self):
-        self.last = self.last.get_previous()
+        self.last = self.last.previous
         if self.last is not None:
-            self.last.set_next_item(None)
+            self.last.next = None
         else:
             self.first = None
         self.size -= 1
@@ -443,7 +443,7 @@ class Item(object):
         if next_item is not None:
             next_item.previous = self
         if previous_item is not None:
-            previous_item.set_next_item(self)
+            previous_item.next = self
         self.bucket_size_row = None
         self.max_buckets = ADWIN.MAX_BUCKETS
         self.bucket_total = np.zeros(self.max_buckets+1, dtype=float)
@@ -466,14 +466,14 @@ class Item(object):
         return self
 
     def __clear_buckets(self, index):
-        self.set_total(0, index)
-        self.set_variance(0, index)
+        self.bucket_total[index] = 0
+        self.bucket_variance[index] = 0
 
     def insert_bucket(self, value, variance):
         new_item = self.bucket_size_row
         self.bucket_size_row += 1
-        self.set_total(value, new_item)
-        self.set_variance(variance, new_item)
+        self.bucket_total[new_item] = value
+        self.bucket_variance[new_item] = variance
 
     def remove_bucket(self):
         self.compress_bucket_row(1)
@@ -487,27 +487,3 @@ class Item(object):
             self.__clear_buckets(ADWIN.MAX_BUCKETS - i + 1)
 
         self.bucket_size_row -= num_deleted
-
-    def get_next_item(self):
-        return self.next
-
-    def set_next_item(self, next_item):
-        self.next = next_item
-
-    def get_previous(self):
-        return self.previous
-
-    def set_previous(self, previous):
-        self.previous = previous
-
-    def get_total(self, index):
-        return self.bucket_total[index]
-
-    def get_variance(self, index):
-        return self.bucket_variance[index]
-
-    def set_total(self, value, index):
-        self.bucket_total[index] = value
-
-    def set_variance(self, value, index):
-        self.bucket_variance[index] = value
