@@ -372,10 +372,10 @@ class ADWIN(BaseDriftDetector):
 
 
 class List(object):
-    """A linked list object for ADWIN algorithm.
+    """A doubly-linked list object for ADWIN algorithm.
 
     Used for storing ADWIN's bucket list. Is composed of Item objects.
-    Acts as a linked list, where each element points to its predecessor
+    Acts as a doubly-linked list, where each element points to its predecessor
     and successor.
 
     """
