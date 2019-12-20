@@ -73,20 +73,19 @@ class ADWIN(BaseDriftDetector):
         self.__init_buckets()
 
         # other default values
-        self.mint_min_window_longitude = 10
+        self.min_window_longitude = 10
 
-        self.mdbl_delta = .002
-        self.mint_time = 0
-        self.mdbl_width = 0
+        self.time = 0
+        self.width_t = 0
 
         self.detect = 0
         self._n_detections = 0
         self.detect_twice = 0
-        self.mint_clock = 32
+        self.clock = 32
 
-        self.bln_bucket_deleted = False
+        self.was_bucket_deleted = False
         self.bucket_num_max = 0
-        self.mint_min_window_length = 5
+        self.min_window_length = 5
         super().reset()
 
     def reset(self):
@@ -111,13 +110,13 @@ class ADWIN(BaseDriftDetector):
             Whether or not a drift occurred.
 
         """
-        return self.bln_bucket_deleted
+        return self.was_bucket_deleted
 
     def reset_change(self):
-        self.bln_bucket_deleted = False
+        self.was_bucket_deleted = False
 
     def set_clock(self, clock):
-        self.mint_clock = clock
+        self.clock = clock
 
     def detected_warning_zone(self):
         return False
@@ -154,7 +153,7 @@ class ADWIN(BaseDriftDetector):
 
     @property
     def width_t(self):
-        return self.mdbl_width
+        return self.width_t
 
     def __init_buckets(self):
         """Initialize the bucket's List and statistics.
@@ -299,10 +298,10 @@ class ADWIN(BaseDriftDetector):
         """
         bln_change = False
         bln_exit = False
-        bln_bucket_deleted = False
-        self.mint_time += 1
+        was_bucket_deleted = False
+        self.time += 1
         n0 = 0
-        if (self.mint_time % self.mint_clock == 0) and (self.width > self.mint_min_window_longitude):
+        if (self.time % self.clock == 0) and (self.width > self.min_window_longitude):
             bln_reduce_width = True
             while bln_reduce_width:
                 bln_reduce_width = not bln_reduce_width
@@ -339,14 +338,14 @@ class ADWIN(BaseDriftDetector):
                             break
 
                         abs_value = 1. * ((u0/n0) - (u1/n1))
-                        if (n1 >= self.mint_min_window_length) and (n0 >= self.mint_min_window_length)\
+                        if (n1 >= self.min_window_length) and (n0 >= self.min_window_length)\
                                 and (self.__bln_cut_expression(n0, n1, u0, u1, v0, v1, abs_value, self.delta)):
-                            bln_bucket_deleted = True
-                            self.detect = self.mint_time
+                            was_bucket_deleted = True
+                            self.detect = self.time
                             if self.detect == 0:
-                                self.detect = self.mint_time
+                                self.detect = self.time
                             elif self.detect_twice == 0:
-                                self.detect_twice = self.mint_time
+                                self.detect_twice = self.time
 
                             bln_reduce_width = True
                             bln_change = True
@@ -357,7 +356,7 @@ class ADWIN(BaseDriftDetector):
 
                     cursor = cursor.get_previous()
                     i -= 1
-        self.mdbl_width += self.width
+        self.width_t += self.width
         if bln_change:
             self._n_detections += 1
         self.in_concept_change = bln_change
@@ -367,7 +366,7 @@ class ADWIN(BaseDriftDetector):
         n = self.width
         dd = np.log(2*np.log(n)/delta)
         v = self.variance
-        m = (1. / (n0 - self.mint_min_window_length + 1)) + (1. / (n1 - self.mint_min_window_length + 1))
+        m = (1. / (n0 - self.min_window_length + 1)) + (1. / (n1 - self.min_window_length + 1))
         epsilon = np.sqrt(2 * m * v * dd) + 1. * 2 / 3 * dd * m
         return np.absolute(abs_value) > epsilon
 
