@@ -76,7 +76,7 @@ class ADWIN(BaseDriftDetector):
         self.min_window_longitude = 10
 
         self.time = 0
-        self.width_t = 0
+        self._width_t = 0
 
         self.detect = 0
         self._n_detections = 0
@@ -153,7 +153,7 @@ class ADWIN(BaseDriftDetector):
 
     @property
     def width_t(self):
-        return self.width_t
+        return self._width_t
 
     def __init_buckets(self):
         """Initialize the bucket's List and statistics.
@@ -356,7 +356,7 @@ class ADWIN(BaseDriftDetector):
 
                     cursor = cursor.get_previous()
                     i -= 1
-        self.width_t += self.width
+        self._width_t += self.width
         if bln_change:
             self._n_detections += 1
         self.in_concept_change = bln_change
