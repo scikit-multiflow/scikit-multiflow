@@ -4,7 +4,7 @@ from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 
 
 class ADWIN(BaseDriftDetector):
-    """ Adaptive Windowing method for concept drift detection.
+    """Adaptive Windowing method for concept drift detection.
     
     Parameters
     ----------
@@ -13,29 +13,31 @@ class ADWIN(BaseDriftDetector):
 
     Notes
     -----
-    ADWIN [1]_ (ADaptive WINdowing) is an adaptive sliding window algorithm
-    for detecting change, and keeping updated statistics about a data stream.
-    ADWIN allows algorithms not adapted for drifting data, to be resistant
-    to this phenomenon.
+    ADWIN [1]_ (ADaptive WINdowing) is an adaptive sliding window
+    algorithm for detecting change, and keeping updated statistics
+    about a data stream. ADWIN allows algorithms not adapted for
+    drifting data, to be resistant to this phenomenon.
 
-    The general idea is to keep statistics from a window of variable size while
-    detecting concept drift.
+    The general idea is to keep statistics from a window of variable
+    size while detecting concept drift.
 
-    The algorithm will decide the size of the window by cutting the statistics'
-    window at different points and analysing the average of some statistic over
-    these two windows. If the absolute value of the difference between the two
-    averages surpasses a pre-defined threshold, change is detected at that point
-    and all data before that time is discarded.
+    The algorithm will decide the size of the window by cutting the
+    statistics' window at different points and analysing the average of
+    some statistic over these two windows. If the absolute value of the
+    difference between the two averages surpasses a pre-defined
+    threshold, change is detected at that point and all data before
+    that time is discarded.
 
     References
     ----------
-    .. [1] Bifet, Albert, and Ricard Gavalda. "Learning from time-changing data with adaptive windowing."
-       In Proceedings of the 2007 SIAM international conference on data mining, pp. 443-448.
+    .. [1] Bifet, Albert, and Ricard Gavalda.
+       "Learning from time-changing data with adaptive windowing."
+       In Proceedings of the 2007 SIAM international conference on data
+       mining, pp. 443-448.
        Society for Industrial and Applied Mathematics, 2007.
 
     Examples
     --------
-    >>> # Imports
     >>> import numpy as np
     >>> from skmultiflow.drift_detection.adwin import ADWIN
     >>> adwin = ADWIN()
@@ -48,9 +50,13 @@ class ADWIN(BaseDriftDetector):
     >>> for i in range(2000):
     ...     adwin.add_element(data_stream[i])
     ...     if adwin.detected_change():
-    ...         print('Change detected in data: ' + str(data_stream[i]) + ' - at index: ' + str(i))
+    ...         print('Change detected in data: '
+    ...               + str(data_stream[i])
+    ...               + ' - at index: '
+    ...               + str(i))
     
     """
+
     MAX_BUCKETS = 5
 
     def __init__(self, delta=.002):
@@ -84,7 +90,7 @@ class ADWIN(BaseDriftDetector):
         super().reset()
 
     def reset(self):
-        """ Reset detectors
+        """Reset detectors.
         
         Resets statistics and adwin's window.
         
@@ -97,12 +103,12 @@ class ADWIN(BaseDriftDetector):
         self.__init__(delta=self.delta)
 
     def get_change(self):
-        """ Get drift
+        """Get drift.
         
         Returns
         -------
         bool
-            Whether or not a drift occurred 
+            Whether or not a drift occurred.
         
         """
         return self.bln_bucket_deleted
@@ -151,7 +157,7 @@ class ADWIN(BaseDriftDetector):
         return self.mdbl_width
 
     def __init_buckets(self):
-        """ Initialize the bucket's List and statistics
+        """Initialize the bucket's List and statistics.
         
         Set all statistics to 0 and create a new bucket List.
         
@@ -164,12 +170,12 @@ class ADWIN(BaseDriftDetector):
         self.bucket_number = 0
 
     def add_element(self, value):
-        """ Add a new element to the sample window.
+        """Add a new element to the sample window.
         
-        Apart from adding the element value to the window, by inserting it in 
-        the correct bucket, it will also update the relevant statistics, in 
-        this case the total sum of all values, the window width and the total 
-        variance.
+        Apart from adding the element value to the window, by inserting
+        it in the correct bucket, it will also update the relevant
+        statistics, in this case the total sum of all values, the
+        window width and the total variance.
         
         Parameters
         ----------
@@ -177,11 +183,12 @@ class ADWIN(BaseDriftDetector):
          
         Notes
         -----
-        The value parameter can be any numeric value relevant to the analysis 
-        of concept change. For the learners in this framework we are using 
-        either 0's or 1's, that are interpreted as follows:
-        0: Means the learners prediction was wrong
-        1: Means the learners prediction was correct
+        The value parameter can be any numeric value relevant to the
+        analysis of concept change. For the learners in this framework
+        we are using either 0's or 1's, that are interpreted as
+        follows:
+        0: the learners prediction was wrong
+        1: the learners prediction was correct
         
         This function should be used at every new sample analysed.
          
@@ -210,14 +217,15 @@ class ADWIN(BaseDriftDetector):
         return np.power(2, row)
 
     def delete_element(self):
-        """ Delete an Item from the bucket list.
+        """Delete an Item from the bucket list.
          
-        Deletes the last Item and updates relevant statistics kept by ADWIN.
+        Deletes the last Item and updates relevant statistics kept by
+        ADWIN.
         
         Returns
         -------
         int
-            The bucket size from the updated bucket
+            The bucket size from the updated bucket.
         
         """
         node = self.list_row_bucket.last
@@ -267,24 +275,26 @@ class ADWIN(BaseDriftDetector):
             i += 1
 
     def detected_change(self):
-        """ Detects concept change in a drifting data stream.
+        """Detects concept change in a drifting data stream.
         
-        The ADWIN algorithm is described in Bifet and Gavaldà's 'Learning from 
-        Time-Changing Data with Adaptive Windowing'. The general idea is to keep 
-        statistics from a window of variable size while detecting concept drift.
+        The ADWIN algorithm is described in Bifet and Gavaldà's
+        'Learning from Time-Changing Data with Adaptive Windowing'.
+        The general idea is to keep statistics from a window of
+        variable size while detecting concept drift.
          
-        This function is responsible for analysing different cutting points in 
-        the sliding window, to verify if there is a significant change in concept.
+        This function is responsible for analysing different cutting
+        points in the sliding window, to verify if there is a
+        significant change in concept.
         
         Returns
         -------
         bln_change : bool
-            Whether change was detected or not
+            Whether change was detected or not.
             
         Notes
         -----
-        If change was detected, one should verify the new window size, by reading 
-        the width property.
+        If change was detected, one should verify the new window size,
+        by reading the width property.
         
         """
         bln_change = False
@@ -363,13 +373,14 @@ class ADWIN(BaseDriftDetector):
 
 
 class List(object):
-    """ A linked list object for ADWIN algorithm.
+    """A linked list object for ADWIN algorithm.
     
-    Used for storing ADWIN's bucket list. Is composed of Item objects. 
-    Acts as a linked list, where each element points to its predecessor 
+    Used for storing ADWIN's bucket list. Is composed of Item objects.
+    Acts as a linked list, where each element points to its predecessor
     and successor.
         
     """
+
     def __init__(self):
         super().__init__()
         self._count = None
@@ -424,9 +435,9 @@ class List(object):
 
 
 class Item(object):
-    """ Item to be used by the List object.
+    """Item to be used by the List object.
     
-    The Item object, alongside the List object, are the two main data 
+    The Item object, alongside the List object, are the two main data
     structures used for storing the relevant statistics for the ADWIN
     algorithm for change detection.
     
@@ -453,12 +464,12 @@ class Item(object):
         self.reset()
 
     def reset(self):
-        """ Reset the algorithm's statistics and window
+        """Reset the algorithm's statistics and window.
         
         Returns
         -------
         ADWIN
-            self
+            self.
         
         """
         self.bucket_size_row = 0
