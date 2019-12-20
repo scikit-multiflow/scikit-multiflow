@@ -5,13 +5,15 @@ from skmultiflow.utils import FastBuffer, get_dimensions
 
 
 class MinmaxScaler(StreamTransform):
-    """ Standardize features by removing the mean and scaling to unit variance.
-    Mean and stdev are computed in given window frame.
+    """ Transform features by scaling each feature to a given range.
+    This estimator scales and translates each feature individually such
+    that it is in the given range on the training set, e.g. between zero and one.
+    For the training set we consider a window of a given length.
 
     Parameters
     ----------
     window_size: int (Default: 200)
-        Defines the window size to compute mean and standard deviation.
+        Defines the window size to compute min and max values.
 
     Examples
     --------
@@ -104,7 +106,7 @@ class MinmaxScaler(StreamTransform):
 
         Returns
         -------
-        StandardScaler
+        MinmaxScaler
             self
 
         """
