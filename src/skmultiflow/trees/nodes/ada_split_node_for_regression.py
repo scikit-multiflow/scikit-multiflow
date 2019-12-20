@@ -37,7 +37,7 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
     # Override AdaNode
     def number_leaves(self):
         num_of_leaves = 0
-        for child in self._children:
+        for child in self._children.values():
             if child is not None:
                 num_of_leaves += child.number_leaves()
 
@@ -80,12 +80,11 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         # Detect change
         self.error_change = self._estimation_error_weight.detected_change()
 
-        if self.error_change is True and old_error > self.get_error_estimation():
-
+        if self.error_change and old_error > self.get_error_estimation():
             self.error_change = False
 
         # Check condition to build a new alternate tree
-        if self.error_change is True:
+        if self.error_change:
             self._alternate_tree = rhat._new_learning_node()
             rhat.alternate_trees_cnt += 1
 
