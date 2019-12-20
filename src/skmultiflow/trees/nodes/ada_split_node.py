@@ -47,7 +47,7 @@ class AdaSplitNode(SplitNode, AdaNode):
     # Override AdaNode
     def get_error_width(self):
         w = 0.0
-        if self.is_null_error() is False:
+        if not self.is_null_error():
             w = self._estimation_error_weight.width
 
         return w
@@ -88,7 +88,7 @@ class AdaSplitNode(SplitNode, AdaNode):
             hat.alternate_trees_cnt += 1
 
         # Condition to replace alternate tree
-        elif self._alternate_tree is not None and self._alternate_tree.is_null_error() is False:
+        elif self._alternate_tree is not None and not self._alternate_tree.is_null_error():
             if self.get_error_width() > ERROR_WIDTH_THRESHOLD \
                     and self._alternate_tree.get_error_width() > ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
