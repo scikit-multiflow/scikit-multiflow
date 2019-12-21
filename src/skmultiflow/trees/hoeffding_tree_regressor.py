@@ -197,12 +197,12 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         """
         normalized_sample = []
         for i in range(len(X)):
-            sd_squared = (self.sum_of_attribute_squares[i] - self.sum_of_attribute_values[i] ** 2
+            var = (self.sum_of_attribute_squares[i] - self.sum_of_attribute_values[i] ** 2
                           / self.samples_seen) / self.samples_seen
-            if self.samples_seen > 1 and sd_squared >= 0:
+            if self.samples_seen > 1 and var >= 0:
                 mean = self.sum_of_attribute_values[i] / self.samples_seen
-                sd = np.sqrt(sd_squared)
-                normalized_sample.append((X[i] - mean) / (3 * sd))
+                std = np.sqrt(var)
+                normalized_sample.append((X[i] - mean) / (3 * std))
             else:
                 normalized_sample.append(0.0)
         if self.samples_seen > 1:
@@ -226,12 +226,12 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             normalized target value
         """
         if self.samples_seen > 1:
-            sd_squared = (self.sum_of_squares - self.sum_of_values ** 2
+            var = (self.sum_of_squares - self.sum_of_values ** 2
                           / self.samples_seen) / self.samples_seen
-            if sd_squared >= 0:
+            if var >= 0:
                 mean = self.sum_of_values / self.samples_seen
-                sd = np.sqrt(sd_squared)
-                return (y - mean) / (3 * sd)
+                std = np.sqrt(var)
+                return (y - mean) / (3 * std)
             else:
                 return 0.0
         return 0.0
@@ -413,11 +413,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                             perceptron_weights, normalized_sample
                         )
                         mean = self.sum_of_values / self.samples_seen
-                        sd = np.sqrt(
+                        std = np.sqrt(
                             (self.sum_of_squares - self.sum_of_values ** 2 /
                              self.samples_seen) / self.samples_seen
                         )
-                        predictions.append(normalized_prediction * sd * 3 + mean)
+                        predictions.append(normalized_prediction * std * 3 + mean)
                     else:
                         predictions.append(0.0)
         else:
