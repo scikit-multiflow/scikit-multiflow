@@ -197,9 +197,9 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         """
         normalized_sample = []
         for i in range(len(X)):
-            var = (self.sum_of_attribute_squares[i] - self.sum_of_attribute_values[i] ** 2
-                          / self.samples_seen) / self.samples_seen
-            if self.samples_seen > 1 and var >= 0:
+            var = ((self.sum_of_attribute_squares[i] - self.sum_of_attribute_values[i] ** 2
+                          / self.samples_seen) / self.samples_seen)
+            if not np.isclose(var, 0, atol=1e-08):
                 mean = self.sum_of_attribute_values[i] / self.samples_seen
                 std = np.sqrt(var)
                 normalized_sample.append((X[i] - mean) / (3 * std))
@@ -225,16 +225,14 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         float:
             normalized target value
         """
-        if self.samples_seen > 1:
-            var = (self.sum_of_squares - self.sum_of_values ** 2
-                          / self.samples_seen) / self.samples_seen
-            if var >= 0:
-                mean = self.sum_of_values / self.samples_seen
-                std = np.sqrt(var)
-                return (y - mean) / (3 * std)
-            else:
-                return 0.0
-        return 0.0
+        var = (self.sum_of_squares - self.sum_of_values ** 2
+                      / self.samples_seen) / self.samples_seen
+        if not np.isclose(var, 0, atol=1e-08):
+            mean = self.sum_of_values / self.samples_seen
+            std = np.sqrt(var)
+            return (y - mean) / (3 * std)
+        else:
+            return 0.0
 
     def _new_learning_node(self, initial_class_observations=None, perceptron_weight=None):
         """Create a new learning node. The type of learning node depends on the tree configuration."""
@@ -403,7 +401,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                         sum_of_values = votes[1]
                         predictions.append(sum_of_values / number_of_samples_seen)
                 elif self.leaf_prediction == _PERCEPTRON:
-                    if self.samples_seen > 1:
+                    var = (
+                        (self.sum_of_squares - self.sum_of_values ** 2 /
+                         self.samples_seen) / self.samples_seen
+                    )
+                    if not np.isclose(var, 0, atol=1e-08):
                         perceptron_weights = self.get_weights_for_instance(X[i])
                         if perceptron_weights is None:
                             predictions.append(0.0)
@@ -413,10 +415,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                             perceptron_weights, normalized_sample
                         )
                         mean = self.sum_of_values / self.samples_seen
-                        std = np.sqrt(
-                            (self.sum_of_squares - self.sum_of_values ** 2 /
-                             self.samples_seen) / self.samples_seen
-                        )
+                        std = np.sqrt(var)
                         predictions.append(normalized_prediction * std * 3 + mean)
                     else:
                         predictions.append(0.0)
