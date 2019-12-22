@@ -128,7 +128,7 @@ class ADWIN(BaseDriftDetector):
         return False
 
     @property
-    def _n_buckets(self):
+    def _n_buckets_used(self):
         return self.bucket_num_max
 
     @property
