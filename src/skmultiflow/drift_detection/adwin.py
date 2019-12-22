@@ -383,11 +383,11 @@ class ADWIN(BaseDriftDetector):
 
     def _should_cut(self, n0, n1, u0, u1, v0, v1, abs_value, delta):
         n = self.width
-        dd = np.log(2*np.log(n)/delta)
+        dd = np.log(2 * np.log(n) / delta)
         v = self.variance
         m = ((1. / (n0 - self.min_window_length + 1))
              + (1. / (n1 - self.min_window_length + 1)))
-        epsilon = np.sqrt(2 * m * v * dd) + 1. * 2 / 3 * dd * m
+        epsilon = np.sqrt(2 * m * v * dd) + 2. * dd * m / 3
         return np.absolute(abs_value) > epsilon
 
 
