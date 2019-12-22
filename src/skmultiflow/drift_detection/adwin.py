@@ -62,7 +62,7 @@ class ADWIN(BaseDriftDetector):
     def __init__(self, delta=.002):
         """ADWIN Init.
 
-        The sliding window is stored in `list_row_bucket` as a list of
+        The sliding window is stored in `rows_buckets` as a list of
         `Item`s, each one keeping a list of buckets of the same size.
 
         """
@@ -70,7 +70,7 @@ class ADWIN(BaseDriftDetector):
         # default values affected by init_bucket()
         self.delta = delta
         self.last_bucket_row = 0
-        self.list_row_bucket = None
+        self.rows_buckets = None
         self._total = 0
         self._variance = 0
         self._width = 0
@@ -128,7 +128,7 @@ class ADWIN(BaseDriftDetector):
         return False
 
     @property
-    def _bucket_used_bucket(self):
+    def _n_buckets(self):
         return self.bucket_num_max
 
     @property
@@ -167,7 +167,7 @@ class ADWIN(BaseDriftDetector):
         Set all statistics to 0 and create a new bucket List.
 
         """
-        self.list_row_bucket = List()
+        self.rows_buckets = List()
         self.last_bucket_row = 0
         self._total = 0
         self._variance = 0
@@ -199,7 +199,7 @@ class ADWIN(BaseDriftDetector):
 
         """
         self._width += 1
-        self.__insert_element_bucket(0, value, self.list_row_bucket.first)
+        self.__insert_element_bucket(0, value, self.rows_buckets.first)
         incremental_variance = 0
 
         if self._width > 1:
@@ -233,7 +233,7 @@ class ADWIN(BaseDriftDetector):
             The bucket size from the updated bucket.
 
         """
-        node = self.list_row_bucket.last
+        node = self.rows_buckets.last
         n1 = self.bucket_size(self.last_bucket_row)
         self._width -= n1
         self._total -= node.bucket_total[0]
@@ -245,20 +245,20 @@ class ADWIN(BaseDriftDetector):
         self.bucket_number -= 1
 
         if node.bucket_size_row == 0:
-            self.list_row_bucket.remove_from_tail()
+            self.rows_buckets.remove_from_tail()
             self.last_bucket_row -= 1
 
         return n1
 
     def __compress_buckets(self):
-        cursor = self.list_row_bucket.first
+        cursor = self.rows_buckets.first
         i = 0
         while cursor is not None:
             k = cursor.bucket_size_row
             if k == self.MAX_BUCKETS + 1:
                 next_node = cursor.next
                 if next_node is None:
-                    self.list_row_bucket.add_to_tail()
+                    self.rows_buckets.add_to_tail()
                     next_node = cursor.next
                     self.last_bucket_row += 1
                 n1 = self.bucket_size(i)
@@ -293,7 +293,7 @@ class ADWIN(BaseDriftDetector):
 
         Returns
         -------
-        bln_change : bool
+        has_changed : bool
             Whether change was detected or not.
 
         Notes
@@ -302,16 +302,16 @@ class ADWIN(BaseDriftDetector):
         by reading the width property.
 
         """
-        bln_change = False
-        bln_exit = False
+        has_changed = False
+        should_exit = False
         was_bucket_deleted = False
         self.time += 1
         n0 = 0
         if (self.time % self.clock == 0) and (self.width > self.min_window_longitude):
             bln_reduce_width = True
             while bln_reduce_width:
-                bln_reduce_width = not bln_reduce_width
-                bln_exit = False
+                bln_reduce_width = False
+                should_exit = False
                 n0 = 0
                 n1 = self._width
                 u0 = 0
@@ -320,10 +320,10 @@ class ADWIN(BaseDriftDetector):
                 v1 = self._variance
                 n2 = 0
                 u2 = 0
-                cursor = self.list_row_bucket.last
+                cursor = self.rows_buckets.last
                 i = self.last_bucket_row
 
-                while (not bln_exit) and (cursor is not None):
+                while (not should_exit) and (cursor is not None):
                     for k in range(cursor.bucket_size_row - 1):
                         n2 = self.bucket_size(i)
                         u2 = cursor.bucket_total[k]
@@ -340,7 +340,7 @@ class ADWIN(BaseDriftDetector):
                         u1 -= cursor.bucket_total[k]
 
                         if (i == 0) and (k == cursor.bucket_size_row - 1):
-                            bln_exit = True
+                            should_exit = True
                             break
 
                         abs_value = 1. * ((u0/n0) - (u1/n1))
@@ -354,19 +354,19 @@ class ADWIN(BaseDriftDetector):
                                 self.detect_twice = self.time
 
                             bln_reduce_width = True
-                            bln_change = True
+                            has_changed = True
                             if self.width > 0:
                                 n0 -= self.delete_element()
-                                bln_exit = True
+                                should_exit = True
                                 break
 
                     cursor = cursor.previous
                     i -= 1
         self._width_t += self.width
-        if bln_change:
+        if has_changed:
             self._n_detections += 1
-        self.in_concept_change = bln_change
-        return bln_change
+        self.in_concept_change = has_changed
+        return has_changed
 
     def __bln_cut_expression(self, n0, n1, u0, u1, v0, v1, abs_value, delta):
         n = self.width
