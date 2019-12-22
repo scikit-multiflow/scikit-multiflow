@@ -59,14 +59,14 @@ class ADWIN(BaseDriftDetector):
 
     MAX_BUCKETS = 5
 
-    def __init__(self, delta=.002):
+    def _init_(self, delta=.002):
         """ADWIN Init.
 
         The sliding window is stored in `bucket_rows` as a list of
-        `Item`s, each one keeping a list of buckets of the same size.
+        `Row`s, each one keeping a list of buckets of the same size.
 
         """
-        super().__init__()
+        super()._init_()
         # default values affected by init_bucket()
         self.delta = delta
         self.last_bucket_row = 0
@@ -74,9 +74,9 @@ class ADWIN(BaseDriftDetector):
         self._total = 0
         self._variance = 0
         self._width = 0
-        self.bucket_number = 0
+        self.n_buckets = 0
 
-        self.__init_buckets()
+        self._init_buckets()
 
         # other default values
         self.min_window_longitude = 10
@@ -90,7 +90,7 @@ class ADWIN(BaseDriftDetector):
         self.clock = 32
 
         self.was_bucket_deleted = False
-        self.bucket_num_max = 0
+        self.max_n_buckets = 0
         self.min_window_length = 5
         super().reset()
 
@@ -105,7 +105,7 @@ class ADWIN(BaseDriftDetector):
             self
 
         """
-        self.__init__(delta=self.delta)
+        self._init_(delta=self.delta)
 
     def get_change(self):
         """Get drift.
@@ -129,7 +129,7 @@ class ADWIN(BaseDriftDetector):
 
     @property
     def _n_buckets_used(self):
-        return self.bucket_num_max
+        return self.max_n_buckets
 
     @property
     def width(self):
@@ -161,7 +161,7 @@ class ADWIN(BaseDriftDetector):
     def width_t(self):
         return self._width_t
 
-    def __init_buckets(self):
+    def _init_buckets(self):
         """Initialize the bucket's List and statistics.
 
         Set all statistics to 0 and create a new bucket List.
@@ -172,7 +172,7 @@ class ADWIN(BaseDriftDetector):
         self._total = 0
         self._variance = 0
         self._width = 0
-        self.bucket_number = 0
+        self.n_buckets = 0
 
     def add_element(self, value):
         """Add a new element to the sample window.
@@ -199,7 +199,7 @@ class ADWIN(BaseDriftDetector):
 
         """
         self._width += 1
-        self.__insert_element_bucket(0, value, self.bucket_rows.first)
+        self._insert_element_bucket(0, value, self.bucket_rows.first)
         incremental_variance = 0
 
         if self._width > 1:
@@ -208,23 +208,23 @@ class ADWIN(BaseDriftDetector):
 
         self._variance += incremental_variance
         self._total += value
-        self.__compress_buckets()
+        self._compress_buckets()
 
-    def __insert_element_bucket(self, variance, value, node):
+    def _insert_element_bucket(self, variance, value, node):
         node.insert_bucket(value, variance)
-        self.bucket_number += 1
+        self.n_buckets += 1
 
-        if self.bucket_number > self.bucket_num_max:
-            self.bucket_num_max = self.bucket_number
+        if self.n_buckets > self.max_n_buckets:
+            self.max_n_buckets = self.n_buckets
 
     @staticmethod
     def bucket_size(row):
         return np.power(2, row)
 
     def delete_element(self):
-        """Delete an Item from the bucket list.
+        """Delete a Row from the bucket list.
 
-        Deletes the last Item and updates relevant statistics kept by
+        Deletes the last Row and updates relevant statistics kept by
         ADWIN.
 
         Returns
@@ -242,19 +242,19 @@ class ADWIN(BaseDriftDetector):
                                (u1 - self._total / self._width) / (n1 + self._width)
         self._variance -= incremental_variance
         node.remove_bucket()
-        self.bucket_number -= 1
+        self.n_buckets -= 1
 
-        if node.bucket_size_row == 0:
+        if node.size == 0:
             self.bucket_rows.remove_from_tail()
             self.last_bucket_row -= 1
 
         return n1
 
-    def __compress_buckets(self):
+    def _compress_buckets(self):
         cursor = self.bucket_rows.first
         i = 0
         while cursor is not None:
-            k = cursor.bucket_size_row
+            k = cursor.size
             if k == self.MAX_BUCKETS + 1:
                 next_node = cursor.next
                 if next_node is None:
@@ -268,10 +268,10 @@ class ADWIN(BaseDriftDetector):
                 incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
                 next_node.insert_bucket(cursor.bucket_total[0] + cursor.bucket_total[1], cursor.bucket_variance[1]
                                         + incremental_variance)
-                self.bucket_number += 1
+                self.n_buckets += 1
                 cursor.compress_bucket_row(2)
 
-                if next_node.bucket_size_row <= self.MAX_BUCKETS:
+                if next_node.size <= self.MAX_BUCKETS:
                     break
             else:
                 break
@@ -324,7 +324,7 @@ class ADWIN(BaseDriftDetector):
                 i = self.last_bucket_row
 
                 while (not should_exit) and (cursor is not None):
-                    for k in range(cursor.bucket_size_row - 1):
+                    for k in range(cursor.size - 1):
                         n2 = self.bucket_size(i)
                         u2 = cursor.bucket_total[k]
 
@@ -339,7 +339,7 @@ class ADWIN(BaseDriftDetector):
                         u0 += cursor.bucket_total[k]
                         u1 -= cursor.bucket_total[k]
 
-                        if (i == 0) and (k == cursor.bucket_size_row - 1):
+                        if (i == 0) and (k == cursor.size - 1):
                             should_exit = True
                             break
 
@@ -380,14 +380,14 @@ class ADWIN(BaseDriftDetector):
 class List(object):
     """A doubly-linked list object for ADWIN algorithm.
 
-    Used for storing ADWIN's bucket list. Is composed of Item objects.
+    Used for storing ADWIN's bucket list. Is composed of Row objects.
     Acts as a doubly-linked list, where each element points to its predecessor
     and successor.
 
     """
 
-    def __init__(self):
-        super().__init__()
+    def _init_(self):
+        super()._init_()
         self.size = None
         self.first = None
         self.last = None
@@ -400,7 +400,7 @@ class List(object):
         self.last = None
 
     def add_to_head(self):
-        self.first = Item(self.first, None)
+        self.first = Row(self.first, None)
         if self.last is None:
             self.last = self.first
 
@@ -413,7 +413,7 @@ class List(object):
         self.size -= 1
 
     def add_to_tail(self):
-        self.last = Item(None, self.last)
+        self.last = Row(None, self.last)
         if self.first is None:
             self.first = self.last
         self.size += 1
@@ -427,30 +427,30 @@ class List(object):
         self.size -= 1
 
 
-class Item(object):
-    """Item to be used by the List object.
+class Row(object):
+    """Row of buckets of the same width.
 
-    The Item object, alongside the List object, are the two main data
+    The Row object, alongside the List object, are the two main data
     structures used for storing the relevant statistics for the ADWIN
     algorithm for change detection.
 
     Parameters
     ----------
-    next_item: Item object
-        Reference to the next Item in the List
-    previous_item: Item object
-        Reference to the previous Item in the List
+    next_item: Row object
+        Reference to the next Row in the List
+    previous_item: Row object
+        Reference to the previous Row in the List
 
     """
-    def __init__(self, next_item=None, previous_item=None):
-        super().__init__()
-        self.next = next_item
-        self.previous = previous_item
-        if next_item is not None:
-            next_item.previous = self
-        if previous_item is not None:
-            previous_item.next = self
-        self.bucket_size_row = None
+    def _init_(self, next=None, previous=None):
+        super()._init_()
+        self.next = next
+        self.previous = previous
+        if next is not None:
+            next.previous = self
+        if previous is not None:
+            previous.next = self
+        self.width = None
         self.max_buckets = ADWIN.MAX_BUCKETS
         self.bucket_total = np.zeros(self.max_buckets+1, dtype=float)
         self.bucket_variance = np.zeros(self.max_buckets+1, dtype=float)
@@ -465,19 +465,19 @@ class Item(object):
             self.
 
         """
-        self.bucket_size_row = 0
+        self.width = 0
         for i in range(ADWIN.MAX_BUCKETS + 1):
-            self.__clear_buckets(i)
+            self._clear_bucket(i)
 
         return self
 
-    def __clear_buckets(self, index):
+    def _clear_bucket(self, index):
         self.bucket_total[index] = 0
         self.bucket_variance[index] = 0
 
     def insert_bucket(self, value, variance):
-        new_item = self.bucket_size_row
-        self.bucket_size_row += 1
+        new_item = self.width
+        self.width += 1
         self.bucket_total[new_item] = value
         self.bucket_variance[new_item] = variance
 
@@ -490,6 +490,6 @@ class Item(object):
             self.bucket_variance[i-num_deleted] = self.bucket_variance[i]
 
         for i in range(1, num_deleted+1):
-            self.__clear_buckets(ADWIN.MAX_BUCKETS - i + 1)
+            self._clear_bucket(ADWIN.MAX_BUCKETS - i + 1)
 
-        self.bucket_size_row -= num_deleted
+        self.width -= num_deleted
