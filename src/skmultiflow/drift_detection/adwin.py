@@ -448,7 +448,7 @@ class List(object):
 
 
 class Row(object):
-    """Row of buckets of the same width.
+    """Row of buckets of the same size.
 
     The Row object, alongside the List object, are the two main data
     structures used for storing the relevant statistics for the ADWIN
@@ -470,7 +470,7 @@ class Row(object):
             next.previous = self
         if previous is not None:
             previous.next = self
-        self.width = None
+        self.size = None
         self.max_buckets = ADWIN.MAX_BUCKETS
         self.bucket_total = np.zeros(self.max_buckets+1, dtype=float)
         self.bucket_variance = np.zeros(self.max_buckets+1, dtype=float)
@@ -485,7 +485,7 @@ class Row(object):
             self.
 
         """
-        self.width = 0
+        self.size = 0
         for i in range(ADWIN.MAX_BUCKETS + 1):
             self._clear_bucket(i)
 
@@ -496,8 +496,8 @@ class Row(object):
         self.bucket_variance[index] = 0
 
     def insert_bucket(self, value, variance):
-        new_item = self.width
-        self.width += 1
+        new_item = self.size
+        self.size += 1
         self.bucket_total[new_item] = value
         self.bucket_variance[new_item] = variance
 
@@ -512,4 +512,4 @@ class Row(object):
         for i in range(1, num_deleted+1):
             self._clear_bucket(ADWIN.MAX_BUCKETS - i + 1)
 
-        self.width -= num_deleted
+        self.size -= num_deleted
