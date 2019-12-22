@@ -212,8 +212,8 @@ class ADWIN(BaseDriftDetector):
         self._total += value
         self._compress_buckets()
 
-    def _insert_element_bucket(self, variance, value, node):
-        node.insert_bucket(value, variance)
+    def _insert_element_bucket(self, variance, value, row):
+        row.insert_bucket(value, variance)
         self.n_buckets += 1
 
         if self.n_buckets > self.max_n_buckets:
@@ -235,21 +235,21 @@ class ADWIN(BaseDriftDetector):
             The bucket size from the updated bucket.
 
         """
-        node = self.bucket_rows.last
+        row = self.bucket_rows.last
         n1 = self.bucket_size(self.last_bucket_row)
         self._width -= n1
-        self._total -= node.bucket_total[0]
-        u1 = node.bucket_total[0] / n1
-        incremental_variance = (node.bucket_variance[0]
+        self._total -= row.bucket_total[0]
+        u1 = row.bucket_total[0] / n1
+        incremental_variance = (row.bucket_variance[0]
                                 + n1
                                   * self._width
                                   * (u1 - self._total / self._width)**2
                                   / (n1 + self._width))
         self._variance -= incremental_variance
-        node.remove_bucket()
+        row.remove_bucket()
         self.n_buckets -= 1
 
-        if node.size == 0:
+        if row.size == 0:
             self.bucket_rows.remove_from_tail()
             self.last_bucket_row -= 1
 
@@ -261,24 +261,24 @@ class ADWIN(BaseDriftDetector):
         while cursor is not None:
             k = cursor.size
             if k == self.MAX_BUCKETS + 1:
-                next_node = cursor.next
-                if next_node is None:
+                next_row = cursor.next
+                if next_row is None:
                     self.bucket_rows.add_to_tail()
-                    next_node = cursor.next
+                    next_row = cursor.next
                     self.last_bucket_row += 1
                 n1 = self.bucket_size(i)
                 n2 = self.bucket_size(i)
                 u1 = cursor.bucket_total[0]/n1
                 u2 = cursor.bucket_total[1]/n2
                 incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
-                next_node.insert_bucket(cursor.bucket_total[0]
+                next_row.insert_bucket(cursor.bucket_total[0]
                                         + cursor.bucket_total[1],
                                         cursor.bucket_variance[1]
                                         + incremental_variance)
                 self.n_buckets += 1
                 cursor.compress_bucket_row(2)
 
-                if next_node.size <= self.MAX_BUCKETS:
+                if next_row.size <= self.MAX_BUCKETS:
                     break
             else:
                 break
