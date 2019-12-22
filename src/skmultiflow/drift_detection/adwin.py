@@ -281,7 +281,7 @@ class ADWIN(BaseDriftDetector):
             i += 1
 
     def detected_change(self):
-        """Detects concept change in a drifting data stream.
+        """Detect concept change in a drifting data stream.
 
         The ADWIN algorithm is described in Bifet and Gavaldà's
         'Learning from Time-Changing Data with Adaptive Windowing'.
