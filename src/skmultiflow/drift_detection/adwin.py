@@ -200,13 +200,14 @@ class ADWIN(BaseDriftDetector):
         """
         self._width += 1
         self._insert_element_bucket(0, value, self.bucket_rows.first)
-        incremental_variance = 0
 
         if self._width > 1:
             incremental_variance = ((self._width - 1)
                                     * (value - self._total
                                        / (self._width - 1))**2
                                     / self._width)
+        else:
+            incremental_variance = 0
 
         self._variance += incremental_variance
         self._total += value
