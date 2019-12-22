@@ -260,29 +260,22 @@ class ADWIN(BaseDriftDetector):
         row = self.bucket_rows.first
         i = 0
         while row is not None:
-            k = row.size
-            if k == self.MAX_BUCKETS + 1:
-                next_row = row.next
-                if next_row is None:
-                    self.bucket_rows.add_to_tail()
-                    next_row = row.next
-                    self.last_bucket_row += 1
-                n1 = self.bucket_size(i)
-                n2 = self.bucket_size(i)
-                u1 = row.bucket_total[0]/n1
-                u2 = row.bucket_total[1]/n2
-                incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
-                next_row.insert_bucket(row.bucket_total[0]
-                                       + row.bucket_total[1],
-                                       row.bucket_variance[1]
-                                       + incremental_variance)
-                self.n_buckets += 1
-                row.compress_bucket_row(2)
-
-                if next_row.size <= self.MAX_BUCKETS:
-                    break
-            else:
+            if row.size != self.MAX_BUCKETS + 1:
                 break
+            next_row = row.next
+            if next_row is None:
+                self.bucket_rows.add_to_tail()
+                next_row = row.next
+                self.last_bucket_row += 1
+            n1 = n2 = self.bucket_size(i)
+            u1 = row.bucket_total[0]/n1
+            u2 = row.bucket_total[1]/n2
+            incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
+            next_row.insert_bucket(row.bucket_total[0] + row.bucket_total[1],
+                                   row.bucket_variance[1]
+                                   + incremental_variance)
+            self.n_buckets += 1
+            row.compress_bucket_row(2)
 
             row = row.next
             i += 1
