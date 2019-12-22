@@ -162,7 +162,7 @@ class ADWIN(BaseDriftDetector):
         return self._width_t
 
     def _init_buckets(self):
-        """Initialize the bucket's List and statistics.
+        """Initialize the buckets List and statistics.
 
         Set all statistics to 0 and create a new bucket List.
 
@@ -203,8 +203,10 @@ class ADWIN(BaseDriftDetector):
         incremental_variance = 0
 
         if self._width > 1:
-            incremental_variance = (self._width - 1) * (value - self._total / (self._width - 1)) * \
-                                   (value - self._total / (self._width - 1)) / self._width
+            incremental_variance = ((self._width - 1)
+                                    * (value - self._total
+                                       / (self._width - 1))**2
+                                    / self._width)
 
         self._variance += incremental_variance
         self._total += value
@@ -219,7 +221,7 @@ class ADWIN(BaseDriftDetector):
 
     @staticmethod
     def bucket_size(row):
-        return np.power(2, row)
+        return 2 ** row
 
     def delete_element(self):
         """Delete a Row from the bucket list.
@@ -238,8 +240,11 @@ class ADWIN(BaseDriftDetector):
         self._width -= n1
         self._total -= node.bucket_total[0]
         u1 = node.bucket_total[0] / n1
-        incremental_variance = node.bucket_variance[0] + n1 * self._width * (u1 - self._total / self._width) * \
-                               (u1 - self._total / self._width) / (n1 + self._width)
+        incremental_variance = (node.bucket_variance[0]
+                                + n1
+                                  * self._width
+                                  * (u1 - self._total / self._width)**2
+                                  / (n1 + self._width))
         self._variance -= incremental_variance
         node.remove_bucket()
         self.n_buckets -= 1
@@ -266,7 +271,9 @@ class ADWIN(BaseDriftDetector):
                 u1 = cursor.bucket_total[0]/n1
                 u2 = cursor.bucket_total[1]/n2
                 incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
-                next_node.insert_bucket(cursor.bucket_total[0] + cursor.bucket_total[1], cursor.bucket_variance[1]
+                next_node.insert_bucket(cursor.bucket_total[0]
+                                        + cursor.bucket_total[1],
+                                        cursor.bucket_variance[1]
                                         + incremental_variance)
                 self.n_buckets += 1
                 cursor.compress_bucket_row(2)
@@ -307,7 +314,8 @@ class ADWIN(BaseDriftDetector):
         was_bucket_deleted = False
         self.time += 1
         n0 = 0
-        if (self.time % self.clock == 0) and (self.width > self.min_window_longitude):
+        if ((self.time % self.clock == 0)
+            and (self.width > self.min_window_longitude)):
             should_reduce_width = True
             while should_reduce_width:
                 should_reduce_width = False
@@ -329,10 +337,19 @@ class ADWIN(BaseDriftDetector):
                         u2 = cursor.bucket_total[k]
 
                         if n0 > 0:
-                            v0 += cursor.bucket_variance[k] + 1. * n0 * n2 * (u0/n0 - u2/n2) * (u0/n0 - u2/n2) / (n0 + n2)
-
+                            v0 += (cursor.bucket_variance[k]
+                                   + 1.
+                                     * n0
+                                     * n2
+                                     * (u0/n0 - u2/n2)**2
+                                     / (n0 + n2))
                         if n1 > 0:
-                            v1 -= cursor.bucket_variance[k] + 1. * n1 * n2 * (u1/n1 - u2/n2) * (u1/n1 - u2/n2) / (n1 + n2)
+                            v1 -= (cursor.bucket_variance[k]
+                                   + 1.
+                                   * n1
+                                   * n2
+                                   * (u1/n1 - u2/n2)**2
+                                   / (n1 + n2))
 
                         n0 += self.bucket_size(i)
                         n1 -= self.bucket_size(i)
@@ -344,8 +361,10 @@ class ADWIN(BaseDriftDetector):
                             break
 
                         abs_value = 1. * ((u0/n0) - (u1/n1))
-                        if (n1 >= self.min_window_length) and (n0 >= self.min_window_length)\
-                                and (self._should_cut(n0, n1, u0, u1, v0, v1, abs_value, self.delta)):
+                        if ((n1 >= self.min_window_length)
+                            and (n0 >= self.min_window_length)
+                            and self._should_cut(n0, n1, u0, u1, v0, v1,
+                                                 abs_value, self.delta)):
                             was_bucket_deleted = True
                             self.detect = self.time
                             if self.detect == 0:
@@ -372,7 +391,8 @@ class ADWIN(BaseDriftDetector):
         n = self.width
         dd = np.log(2*np.log(n)/delta)
         v = self.variance
-        m = (1. / (n0 - self.min_window_length + 1)) + (1. / (n1 - self.min_window_length + 1))
+        m = ((1. / (n0 - self.min_window_length + 1))
+             + (1. / (n1 - self.min_window_length + 1)))
         epsilon = np.sqrt(2 * m * v * dd) + 1. * 2 / 3 * dd * m
         return np.absolute(abs_value) > epsilon
 
