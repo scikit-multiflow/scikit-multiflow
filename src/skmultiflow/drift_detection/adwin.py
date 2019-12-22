@@ -180,7 +180,7 @@ class ADWIN(BaseDriftDetector):
         Apart from adding the element value to the window, by inserting
         it in the correct bucket, it will also update the relevant
         statistics, in this case the total sum of all values, the
-        window width and the total variance.
+        window width, and the total variance.
 
         Parameters
         ----------
