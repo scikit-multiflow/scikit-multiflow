@@ -257,34 +257,34 @@ class ADWIN(BaseDriftDetector):
         return n1
 
     def _compress_buckets(self):
-        cursor = self.bucket_rows.first
+        row = self.bucket_rows.first
         i = 0
-        while cursor is not None:
-            k = cursor.size
+        while row is not None:
+            k = row.size
             if k == self.MAX_BUCKETS + 1:
-                next_row = cursor.next
+                next_row = row.next
                 if next_row is None:
                     self.bucket_rows.add_to_tail()
-                    next_row = cursor.next
+                    next_row = row.next
                     self.last_bucket_row += 1
                 n1 = self.bucket_size(i)
                 n2 = self.bucket_size(i)
-                u1 = cursor.bucket_total[0]/n1
-                u2 = cursor.bucket_total[1]/n2
+                u1 = row.bucket_total[0]/n1
+                u2 = row.bucket_total[1]/n2
                 incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
-                next_row.insert_bucket(cursor.bucket_total[0]
-                                        + cursor.bucket_total[1],
-                                        cursor.bucket_variance[1]
-                                        + incremental_variance)
+                next_row.insert_bucket(row.bucket_total[0]
+                                       + row.bucket_total[1],
+                                       row.bucket_variance[1]
+                                       + incremental_variance)
                 self.n_buckets += 1
-                cursor.compress_bucket_row(2)
+                row.compress_bucket_row(2)
 
                 if next_row.size <= self.MAX_BUCKETS:
                     break
             else:
                 break
 
-            cursor = cursor.next
+            row = row.next
             i += 1
 
     def detected_change(self):
@@ -329,23 +329,23 @@ class ADWIN(BaseDriftDetector):
                 v1 = self._variance
                 n2 = 0
                 u2 = 0
-                cursor = self.bucket_rows.last
+                row = self.bucket_rows.last
                 i = self.last_bucket_row
 
-                while (not should_exit) and (cursor is not None):
-                    for k in range(cursor.size - 1):
+                while (not should_exit) and (row is not None):
+                    for k in range(row.size - 1):
                         n2 = self.bucket_size(i)
-                        u2 = cursor.bucket_total[k]
+                        u2 = row.bucket_total[k]
 
                         if n0 > 0:
-                            v0 += (cursor.bucket_variance[k]
+                            v0 += (row.bucket_variance[k]
                                    + 1.
                                      * n0
                                      * n2
                                      * (u0/n0 - u2/n2)**2
                                      / (n0 + n2))
                         if n1 > 0:
-                            v1 -= (cursor.bucket_variance[k]
+                            v1 -= (row.bucket_variance[k]
                                    + 1.
                                    * n1
                                    * n2
@@ -354,10 +354,10 @@ class ADWIN(BaseDriftDetector):
 
                         n0 += self.bucket_size(i)
                         n1 -= self.bucket_size(i)
-                        u0 += cursor.bucket_total[k]
-                        u1 -= cursor.bucket_total[k]
+                        u0 += row.bucket_total[k]
+                        u1 -= row.bucket_total[k]
 
-                        if (i == 0) and (k == cursor.size - 1):
+                        if (i == 0) and (k == row.size - 1):
                             should_exit = True
                             break
 
@@ -380,7 +380,7 @@ class ADWIN(BaseDriftDetector):
                                 should_exit = True
                                 break
 
-                    cursor = cursor.previous
+                    row = row.previous
                     i -= 1
         self._width_t += self.width
         if has_changed:
