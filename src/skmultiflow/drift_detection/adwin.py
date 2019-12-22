@@ -41,12 +41,14 @@ class ADWIN(BaseDriftDetector):
     >>> import numpy as np
     >>> from skmultiflow.drift_detection.adwin import ADWIN
     >>> adwin = ADWIN()
-    >>> # Simulating a data stream as a normal distribution of 1's and 0's
+    >>> # Simulating a data stream as a normal distribution of 1's
+    ... # and 0's.
     >>> data_stream = np.random.randint(2, size=2000)
-    >>> # Changing the data concept from index 999 to 2000
+    >>> # Changing the data concept from index 999 to 2000.
     >>> for i in range(999, 2000):
     ...     data_stream[i] = np.random.randint(4, high=8)
-    >>> # Adding stream elements to ADWIN and verifying if drift occurred
+    >>> # Adding stream elements to ADWIN and verifying if drift
+    ... # occurred.
     >>> for i in range(2000):
     ...     adwin.add_element(data_stream[i])
     ...     if adwin.detected_change():
@@ -395,8 +397,8 @@ class List(object):
     """A doubly-linked list object for ADWIN algorithm.
 
     Used for storing ADWIN's bucket list. Is composed of Row objects.
-    Acts as a doubly-linked list, where each element points to its predecessor
-    and successor.
+    Acts as a doubly-linked list, where each element points to its
+    predecessor and successor.
 
     """
 
