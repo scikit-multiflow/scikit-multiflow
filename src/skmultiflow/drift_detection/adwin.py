@@ -59,14 +59,14 @@ class ADWIN(BaseDriftDetector):
 
     MAX_BUCKETS = 5
 
-    def _init_(self, delta=.002):
+    def __init__(self, delta=.002):
         """ADWIN Init.
 
         The sliding window is stored in `bucket_rows` as a list of
         `Row`s, each one keeping a list of buckets of the same size.
 
         """
-        super()._init_()
+        super().__init__()
         # default values affected by init_bucket()
         self.delta = delta
         self.last_bucket_row = 0
@@ -76,7 +76,7 @@ class ADWIN(BaseDriftDetector):
         self._width = 0
         self.n_buckets = 0
 
-        self._init_buckets()
+        self.__init__buckets()
 
         # other default values
         self.min_window_longitude = 10
@@ -105,7 +105,7 @@ class ADWIN(BaseDriftDetector):
             self
 
         """
-        self._init_(delta=self.delta)
+        self.__init__(delta=self.delta)
 
     def get_change(self):
         """Get drift.
@@ -161,7 +161,7 @@ class ADWIN(BaseDriftDetector):
     def width_t(self):
         return self._width_t
 
-    def _init_buckets(self):
+    def __init__buckets(self):
         """Initialize the buckets List and statistics.
 
         Set all statistics to 0 and create a new bucket List.
@@ -406,8 +406,8 @@ class List(object):
 
     """
 
-    def _init_(self):
-        super()._init_()
+    def __init__(self):
+        super().__init__()
         self.size = None
         self.first = None
         self.last = None
@@ -462,8 +462,8 @@ class Row(object):
         Reference to the previous Row in the List
 
     """
-    def _init_(self, next=None, previous=None):
-        super()._init_()
+    def __init__(self, next=None, previous=None):
+        super().__init__()
         self.next = next
         self.previous = previous
         if next is not None:
