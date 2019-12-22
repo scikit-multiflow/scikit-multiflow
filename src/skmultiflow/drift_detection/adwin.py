@@ -224,7 +224,7 @@ class ADWIN(BaseDriftDetector):
     def bucket_size(row):
         return 2 ** row
 
-    def delete_element(self):
+    def delete_row(self):
         """Delete a Row from the bucket list.
 
         Deletes the last Row and updates relevant statistics kept by
@@ -376,7 +376,7 @@ class ADWIN(BaseDriftDetector):
                             should_reduce_width = True
                             has_changed = True
                             if self.width > 0:
-                                n0 -= self.delete_element()
+                                n0 -= self.delete_row()
                                 should_exit = True
                                 break
 
