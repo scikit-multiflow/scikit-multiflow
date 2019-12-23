@@ -206,7 +206,9 @@ class ADWIN(BaseDriftDetector):
         if self._width > 1:
             incremental_variance = ((self._width - 1)
                                     * (value - self._total
-                                       / (self._width - 1))**2
+                                       / (self._width - 1))
+                                    * (value - self._total
+                                       / (self._width - 1))
                                     / self._width)
         else:
             incremental_variance = 0
@@ -246,7 +248,8 @@ class ADWIN(BaseDriftDetector):
         incremental_variance = (row.bucket_variance[0]
                                 + n1
                                   * self._width
-                                  * (u1 - self._total / self._width)**2
+                                  * (u1 - self._total / self._width)
+                                  * (u1 - self._total / self._width)
                                   / (n1 + self._width))
         self._variance -= incremental_variance
         row.remove_bucket()
@@ -272,7 +275,7 @@ class ADWIN(BaseDriftDetector):
             n1 = n2 = self.bucket_size(i)
             u1 = row.bucket_total[0]/n1
             u2 = row.bucket_total[1]/n2
-            incremental_variance = n1 * n2 * (u1 - u2)**2 / (n1 + n2)
+            incremental_variance = n1 * n2 * (u1 - u2) * (u1 - u2) / (n1 + n2)
             next_row.insert_bucket(row.bucket_total[0] + row.bucket_total[1],
                                    row.bucket_variance[1]
                                    + incremental_variance)
@@ -337,14 +340,16 @@ class ADWIN(BaseDriftDetector):
                                    + 1.
                                      * n0
                                      * n2
-                                     * (u0/n0 - u2/n2)**2
+                                     * (u0/n0 - u2/n2)
+                                     * (u0/n0 - u2/n2)
                                      / (n0 + n2))
                         if n1 > 0:
                             v1 -= (row.bucket_variance[k]
                                    + 1.
                                    * n1
                                    * n2
-                                   * (u1/n1 - u2/n2)**2
+                                   * (u1/n1 - u2/n2)
+                                   * (u1/n1 - u2/n2)
                                    / (n1 + n2))
 
                         n0 += self.bucket_size(i)
