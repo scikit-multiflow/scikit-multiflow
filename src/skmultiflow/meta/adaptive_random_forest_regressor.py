@@ -202,8 +202,8 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
         if y is None:
             return self
 
-        for x, y_ in zip(X, y):
-            self._partial_fit(x, y_)
+        for X_, y_ in zip(X, y):
+            self._partial_fit(X_, y_)
 
         return self
 
@@ -218,7 +218,8 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
             estimator.evaluator.add_result(y_predicted, y)
             k = self._random_state.poisson(self.lambda_value)
             if k > 0:
-                estimator.partial_fit(np.asarray([X]), np.asarray([y]),
+                estimator.partial_fit(np.asarray([X]),
+                                      np.asarray([y]),
                                       sample_weight=np.asarray([k]),
                                       instances_seen=self.instances_seen)
 
@@ -237,8 +238,8 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
 
         """
         predictions = []
-        for x in X:
-            predictions.append(self._predict(x))
+        for X_ in X:
+            predictions.append(self._predict(X_))
         return np.asarray(predictions)
 
     def _predict(self, X):
@@ -368,8 +369,8 @@ class ARFBaseLearner(BaseSKMObject):
 
         self.last_drift_on = 0
         self.last_warning_on = 0
-        self.nb_drifts_detected = 0
-        self.nb_warnings_detected = 0
+        self.n_drifts_detected = 0
+        self.n_warnings_detected = 0
 
         self.drift_detection = None
         self.warning_detection = None
@@ -417,7 +418,7 @@ class ARFBaseLearner(BaseSKMObject):
                 # Check if there was a change
                 if self.warning_detection.detected_change():
                     self.last_warning_on = instances_seen
-                    self.nb_warnings_detected += 1
+                    self.n_warnings_detected += 1
                     # Create a new background tree estimator
                     background_learner = self.estimator.new_instance()
                     # Create a new background learner
@@ -439,7 +440,7 @@ class ARFBaseLearner(BaseSKMObject):
             # Check if there was a change
             if self.drift_detection.detected_change():
                 self.last_drift_on = instances_seen
-                self.nb_drifts_detected += 1
+                self.n_drifts_detected += 1
                 self.reset(instances_seen)
 
     def predict(self, X):
