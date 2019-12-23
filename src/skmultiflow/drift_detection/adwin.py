@@ -312,7 +312,6 @@ class ADWIN(BaseDriftDetector):
         should_exit = False
         was_bucket_deleted = False
         self.time += 1
-        n0 = 0
         if ((self.time % self.clock == 0)
             and (self.width > self.min_window_longitude)):
             should_reduce_width = True
