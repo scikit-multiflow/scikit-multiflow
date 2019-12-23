@@ -73,9 +73,9 @@ class ADWIN(BaseDriftDetector):
         self.delta = delta
         self.last_bucket_row = 0
         self.bucket_rows = None
-        self._total = 0
+        self.total = 0
         self._variance = 0
-        self._width = 0
+        self.width = 0
         self.n_buckets = 0
 
         self.__init__buckets()
@@ -84,10 +84,10 @@ class ADWIN(BaseDriftDetector):
         self.min_window_longitude = 10
 
         self.time = 0
-        self._width_t = 0
+        self.width_t = 0
 
         self.detect = 0
-        self._n_detections = 0
+        self.n_detections = 0
         self.detect_twice = 0
         self.clock = 32
 
@@ -123,45 +123,22 @@ class ADWIN(BaseDriftDetector):
     def reset_change(self):
         self.was_bucket_deleted = False
 
-    def set_clock(self, clock):
-        self.clock = clock
-
     def detected_warning_zone(self):
         return False
 
     @property
-    def _n_buckets_used(self):
-        return self.max_n_buckets
-
-    @property
-    def width(self):
-        return self._width
-
-    @property
-    def n_detections(self):
-        return self._n_detections
-
-    @property
-    def total(self):
-        return self._total
-
-    @property
     def variance(self):
-        return self._variance / self._width
+        return self._variance / self.width
 
     @property
     def estimation(self):
-        if self._width == 0:
+        if self.width == 0:
             return 0
-        return self._total / self._width
+        return self.total / self.width
 
     @estimation.setter
     def estimation(self, value):
         pass
-
-    @property
-    def width_t(self):
-        return self._width_t
 
     def __init__buckets(self):
         """Initialize the buckets List and statistics.
@@ -171,9 +148,9 @@ class ADWIN(BaseDriftDetector):
         """
         self.bucket_rows = List()
         self.last_bucket_row = 0
-        self._total = 0
+        self.total = 0
         self._variance = 0
-        self._width = 0
+        self.width = 0
         self.n_buckets = 0
 
     def add_element(self, value):
@@ -200,21 +177,21 @@ class ADWIN(BaseDriftDetector):
         This function should be used at every new sample analysed.
 
         """
-        self._width += 1
+        self.width += 1
         self._insert_element_bucket(0, value, self.bucket_rows.first)
 
-        if self._width > 1:
-            incremental_variance = ((self._width - 1)
-                                    * (value - self._total
-                                       / (self._width - 1))
-                                    * (value - self._total
-                                       / (self._width - 1))
-                                    / self._width)
+        if self.width > 1:
+            incremental_variance = ((self.width - 1)
+                                    * (value - self.total
+                                       / (self.width - 1))
+                                    * (value - self.total
+                                       / (self.width - 1))
+                                    / self.width)
         else:
             incremental_variance = 0
 
         self._variance += incremental_variance
-        self._total += value
+        self.total += value
         self._compress_buckets()
 
     def _insert_element_bucket(self, variance, value, row):
@@ -242,15 +219,15 @@ class ADWIN(BaseDriftDetector):
         """
         row = self.bucket_rows.last
         n1 = self.bucket_size(self.last_bucket_row)
-        self._width -= n1
-        self._total -= row.bucket_total[0]
-        u1 = row.bucket_total[0] / n1
+        self.width -= n1
+        self.total -= row.buckettotal[0]
+        u1 = row.buckettotal[0] / n1
         incremental_variance = (row.bucket_variance[0]
                                 + n1
-                                  * self._width
-                                  * (u1 - self._total / self._width)
-                                  * (u1 - self._total / self._width)
-                                  / (n1 + self._width))
+                                  * self.width
+                                  * (u1 - self.total / self.width)
+                                  * (u1 - self.total / self.width)
+                                  / (n1 + self.width))
         self._variance -= incremental_variance
         row.remove_bucket()
         self.n_buckets -= 1
@@ -273,10 +250,10 @@ class ADWIN(BaseDriftDetector):
                 next_row = row.next
                 self.last_bucket_row += 1
             n1 = n2 = self.bucket_size(i)
-            u1 = row.bucket_total[0]/n1
-            u2 = row.bucket_total[1]/n2
+            u1 = row.buckettotal[0]/n1
+            u2 = row.buckettotal[1]/n2
             incremental_variance = n1 * n2 * (u1 - u2) * (u1 - u2) / (n1 + n2)
-            next_row.insert_bucket(row.bucket_total[0] + row.bucket_total[1],
+            next_row.insert_bucket(row.buckettotal[0] + row.buckettotal[1],
                                    row.bucket_variance[1]
                                    + incremental_variance)
             self.n_buckets += 1
@@ -314,12 +291,12 @@ class ADWIN(BaseDriftDetector):
         self.time += 1
         if ((self.time % self.clock == 0)
             and (self.width > self.min_window_longitude)):
-            should_reduce_width = True
-            while should_reduce_width:
-                should_reduce_width = False
+            should_reducewidth = True
+            while should_reducewidth:
+                should_reducewidth = False
                 should_exit = False
                 n0 = u0 = v0 = 0
-                n1 = self._width
+                n1 = self.width
                 u1 = self.total
                 v1 = self._variance
                 n2 = u2 = 0
@@ -329,7 +306,7 @@ class ADWIN(BaseDriftDetector):
                 while (not should_exit) and (row is not None):
                     for k in range(row.size - 1):
                         n2 = self.bucket_size(i)
-                        u2 = row.bucket_total[k]
+                        u2 = row.buckettotal[k]
 
                         if n0 > 0:
                             v0 += (row.bucket_variance[k]
@@ -348,8 +325,8 @@ class ADWIN(BaseDriftDetector):
 
                         n0 += self.bucket_size(i)
                         n1 -= self.bucket_size(i)
-                        u0 += row.bucket_total[k]
-                        u1 -= row.bucket_total[k]
+                        u0 += row.buckettotal[k]
+                        u1 -= row.buckettotal[k]
 
                         if (i == 0) and (k == row.size - 1):
                             should_exit = True
@@ -367,7 +344,7 @@ class ADWIN(BaseDriftDetector):
                             elif self.detect_twice == 0:
                                 self.detect_twice = self.time
 
-                            should_reduce_width = True
+                            should_reducewidth = True
                             has_changed = True
                             if self.width > 0:
                                 n0 -= self.delete_row()
@@ -376,9 +353,9 @@ class ADWIN(BaseDriftDetector):
 
                     row = row.previous
                     i -= 1
-        self._width_t += self.width
+        self.width_t += self.width
         if has_changed:
-            self._n_detections += 1
+            self.n_detections += 1
         self.in_concept_change = has_changed
         return has_changed
 
@@ -467,7 +444,7 @@ class Row(object):
             previous.next = self
         self.size = None
         self.max_buckets = ADWIN.MAX_BUCKETS
-        self.bucket_total = np.zeros(self.max_buckets+1, dtype=float)
+        self.buckettotal = np.zeros(self.max_buckets+1, dtype=float)
         self.bucket_variance = np.zeros(self.max_buckets+1, dtype=float)
         self.reset()
 
@@ -487,13 +464,13 @@ class Row(object):
         return self
 
     def _clear_bucket(self, index):
-        self.bucket_total[index] = 0
+        self.buckettotal[index] = 0
         self.bucket_variance[index] = 0
 
     def insert_bucket(self, value, variance):
         new_item = self.size
         self.size += 1
-        self.bucket_total[new_item] = value
+        self.buckettotal[new_item] = value
         self.bucket_variance[new_item] = variance
 
     def remove_bucket(self):
@@ -501,7 +478,7 @@ class Row(object):
 
     def compress_bucket_row(self, num_deleted=1):
         for i in range(num_deleted, ADWIN.MAX_BUCKETS + 1):
-            self.bucket_total[i-num_deleted] = self.bucket_total[i]
+            self.buckettotal[i-num_deleted] = self.buckettotal[i]
             self.bucket_variance[i-num_deleted] = self.bucket_variance[i]
 
         for i in range(1, num_deleted+1):
