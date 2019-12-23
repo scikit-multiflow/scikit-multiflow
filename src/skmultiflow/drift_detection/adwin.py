@@ -334,20 +334,18 @@ class ADWIN(BaseDriftDetector):
 
                         if n0 > 0:
                             v0 += (row.bucket_variance[k]
-                                   + 1.
-                                     * n0
+                                   + n0
                                      * n2
                                      * (u0/n0 - u2/n2)
                                      * (u0/n0 - u2/n2)
                                      / (n0 + n2))
                         if n1 > 0:
                             v1 -= (row.bucket_variance[k]
-                                   + 1.
-                                   * n1
-                                   * n2
-                                   * (u1/n1 - u2/n2)
-                                   * (u1/n1 - u2/n2)
-                                   / (n1 + n2))
+                                   + n1
+                                    * n2
+                                    * (u1/n1 - u2/n2)
+                                    * (u1/n1 - u2/n2)
+                                    / (n1 + n2))
 
                         n0 += self.bucket_size(i)
                         n1 -= self.bucket_size(i)
@@ -358,7 +356,7 @@ class ADWIN(BaseDriftDetector):
                             should_exit = True
                             break
 
-                        abs_value = 1. * ((u0/n0) - (u1/n1))
+                        abs_value = u0 / n0 - u1 / n1
                         if ((n1 >= self.min_window_length)
                             and (n0 >= self.min_window_length)
                             and self._should_cut(n0, n1, u0, u1, v0, v1,
