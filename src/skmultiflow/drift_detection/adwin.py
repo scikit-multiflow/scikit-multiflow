@@ -319,14 +319,11 @@ class ADWIN(BaseDriftDetector):
             while should_reduce_width:
                 should_reduce_width = False
                 should_exit = False
-                n0 = 0
+                n0 = u0 = v0 = 0
                 n1 = self._width
-                u0 = 0
                 u1 = self.total
-                v0 = 0
                 v1 = self._variance
-                n2 = 0
-                u2 = 0
+                n2 = u2 = 0
                 row = self.bucket_rows.last
                 i = self.last_bucket_row
 
