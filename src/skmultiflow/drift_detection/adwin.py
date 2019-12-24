@@ -136,10 +136,6 @@ class ADWIN(BaseDriftDetector):
             return 0
         return self.total / self.width
 
-    @estimation.setter
-    def estimation(self, value):
-        pass
-
     def __init__buckets(self):
         """Initialize the buckets List and statistics.
 
