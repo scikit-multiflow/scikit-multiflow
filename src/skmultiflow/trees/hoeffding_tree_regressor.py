@@ -142,8 +142,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                          leaf_prediction=leaf_prediction,
                          nb_threshold=nb_threshold,
                          nominal_attributes=nominal_attributes,
-                         split_criterion='vr')
-        self.split_criterion = 'vr'   # variance reduction
+                         split_criterion='variance_reduction')
+        self.split_criterion = 'variance_reduction'
 
         self._tree_root = None
         self._decision_node_cnt = 0
@@ -172,7 +172,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
         if leaf_prediction not in {_TARGET_MEAN, _PERCEPTRON}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
+            print("Invalid leaf_prediction option '{}'".format(leaf_prediction),
+                  ", will use default '{}'.".format(_PERCEPTRON))
             self._leaf_prediction = _PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
@@ -183,10 +184,10 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
     @split_criterion.setter
     def split_criterion(self, split_criterion):
-        if split_criterion != 'vr':   # variance reduction
-            print("Invalid split_criterion option {}', will use default '{}'".format(split_criterion,
-                                                                                     'vr'))
-            self._split_criterion = 'vr'
+        if split_criterion != 'variance_reduction':
+            print("Invalid split_criterion option '{}'".format(split_criterion),
+                  ", will use default '{}'.".format('variance_reduction'))
+            self._split_criterion = 'variance_reduction'
         else:
             self._split_criterion = split_criterion
 
@@ -195,6 +196,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         Normalize the features in order to have the same influence
         during training.
+        Only used when leaf_prediction is set to 'perceptron'.
 
         Parameters
         ----------
@@ -220,8 +222,9 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 normalized_sample.append(float(X[i] - mean) / (3 * std))
             except (ValueError, ZeroDivisionError):
                 normalized_sample.append(0.0)
+        # Value to be multiplied with the intercept of the perceptron.
         if self.samples_seen > 1:
-            normalized_sample.append(1.0)  # Value to be multiplied with the constant factor
+            normalized_sample.append(1.0)
         else:
             normalized_sample.append(0.0)
         return normalized_sample
@@ -231,6 +234,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         Normalize the target value in order to have the same influence
         during the training.
+        Only used when leaf_prediction is set to 'perceptron'.
 
         Parameters
         ----------
