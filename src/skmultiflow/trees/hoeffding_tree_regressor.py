@@ -426,42 +426,42 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             Predicted target values.
 
         """
-        predictions = []
-        if self.samples_seen > 0:
-            r, _ = get_dimensions(X)
-            for i in range(r):
-                if self.leaf_prediction == _TARGET_MEAN:
-                    votes = self.get_votes_for_instance(X[i]).copy()
-                    if votes == {}:
-                        # Tree is empty, all target_values equal, default to zero
-                        predictions.append(0)
-                    else:
-                        number_of_samples_seen = votes[0]
-                        sum_of_values = votes[1]
-                        predictions.append(sum_of_values / number_of_samples_seen)
-                elif self.leaf_prediction == _PERCEPTRON:
-                    var = ((self.sum_of_squares
-                           - self.sum_of_values
-                             * self.sum_of_values
-                             / self.samples_seen)
-                           / self.samples_seen)
-                    perceptron_weights = self.get_weights_for_instance(X[i])
-                    if perceptron_weights is None:
-                        predictions.append(0.0)
-                        continue
-                    normalized_sample = self.normalize_sample(X[i])
-                    normalized_prediction = np.dot(
-                        perceptron_weights, normalized_sample
-                    )
-                    mean = self.sum_of_values / self.samples_seen
-                    try:
-                        std = sqrt(var)
-                        predictions.append(normalized_prediction * std * 3 + mean)
-                    except ValueError:
-                        predictions.append(mean)
-        else:
+        if self.samples_seen == 0:
             # Model is empty
-            predictions.append(0.0)
+            return np.asarray(0.0)
+
+        predictions = []
+        r, _ = get_dimensions(X)
+        for i in range(r):
+            if self.leaf_prediction == _TARGET_MEAN:
+                votes = self.get_votes_for_instance(X[i]).copy()
+                if votes == {}:
+                    # Tree is empty, all target_values equal, default to zero
+                    predictions.append(0)
+                else:
+                    number_of_samples_seen = votes[0]
+                    sum_of_values = votes[1]
+                    predictions.append(sum_of_values / number_of_samples_seen)
+            elif self.leaf_prediction == _PERCEPTRON:
+                var = ((self.sum_of_squares
+                       - self.sum_of_values
+                         * self.sum_of_values
+                         / self.samples_seen)
+                       / self.samples_seen)
+                perceptron_weights = self.get_weights_for_instance(X[i])
+                if perceptron_weights is None:
+                    predictions.append(0.0)
+                    continue
+                normalized_sample = self.normalize_sample(X[i])
+                normalized_prediction = np.dot(perceptron_weights,
+                                               normalized_sample)
+                mean = self.sum_of_values / self.samples_seen
+                try:
+                    std = sqrt(var)
+                    predictions.append(normalized_prediction * std * 3 + mean)
+                except ValueError:
+                    predictions.append(mean)
+
         return np.asarray(predictions)
 
     def predict_proba(self, X):
