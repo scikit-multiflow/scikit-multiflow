@@ -258,7 +258,9 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         except (ValueError, ZeroDivisionError):
             return 0.0
 
-    def _new_learning_node(self, initial_class_observations=None, perceptron_weight=None):
+    def _new_learning_node(self,
+                           initial_class_observations=None,
+                           perceptron_weight=None):
         """Create a new learning node.
 
         The type of learning node depends on the tree configuration.
@@ -268,7 +270,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         if self.leaf_prediction == _TARGET_MEAN:
             return ActiveLearningNodeForRegression(initial_class_observations)
         elif self.leaf_prediction == _PERCEPTRON:
-            return ActiveLearningNodePerceptron(initial_class_observations, perceptron_weight,
+            return ActiveLearningNodePerceptron(initial_class_observations,
+                                                perceptron_weight,
                                                 random_state=self.random_state)
 
     def get_weights_for_instance(self, X):
@@ -336,8 +339,9 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             if sample_weight is None:
                 sample_weight = np.ones(row_cnt)
             if row_cnt != len(sample_weight):
-                raise ValueError('Inconsistent number of instances ({}) and weights ({}).'.format(row_cnt,
-                                                                                                  len(sample_weight)))
+                raise ValueError("Inconsistent number of instance ",
+                                 "({}) and ".format(row_cnt),
+                                 "weights ({}).".format(len(sample_weight)))
             for i in range(row_cnt):
                 if sample_weight[i] != 0.0:
                     self._train_weight_seen_by_model += sample_weight[i]
@@ -363,13 +367,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         self.sum_of_squares += sample_weight * y * y
 
         try:
-            self.sum_of_attribute_values = np.add(self.sum_of_attribute_values, np.multiply(sample_weight, X))
-            self.sum_of_attribute_squares = np.add(
-                self.sum_of_attribute_squares, np.multiply(sample_weight, np.power(X, 2))
-            )
+            self.sum_of_attribute_values += sample_weight * X
+            self.sum_of_attribute_squares += sample_weight * X**2
         except ValueError:
-            self.sum_of_attribute_values = np.multiply(sample_weight, X)
-            self.sum_of_attribute_squares = np.multiply(sample_weight, np.power(X, 2))
+            self.sum_of_attribute_values = sample_weight * X
+            self.sum_of_attribute_squares = sample_weight * X**2
 
         if self._tree_root is None:
             self._tree_root = self._new_learning_node()
@@ -384,17 +386,21 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
             learning_node.learn_from_instance(X, y, sample_weight, self)
-            if self._growth_allowed and isinstance(learning_node, ActiveLearningNode):
+            if (self._growth_allowed
+                and isinstance(learning_node, ActiveLearningNode)):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.get_weight_seen()
                 weight_diff = weight_seen - active_learning_node.get_weight_seen_at_last_split_evaluation()
                 if weight_diff >= self.grace_period:
-                    self._attempt_to_split(active_learning_node, found_node.parent, found_node.parent_branch)
+                    self._attempt_to_split(active_learning_node,
+                                           found_node.parent,
+                                           found_node.parent_branch)
                     active_learning_node.set_weight_seen_at_last_split_evaluation(weight_seen)
         # Split node encountered a previously unseen categorical value
         # (in a multiway test)
-        elif isinstance(leaf_node, SplitNode) and \
-                isinstance(leaf_node.get_split_test(), NominalAttributeMultiwayTest):
+        elif (isinstance(leaf_node, SplitNode)
+              and isinstance(leaf_node.get_split_test(),
+                             NominalAttributeMultiwayTest)):
             current = found_node.node
             leaf_node = self._new_learning_node()
             branch_id = current.get_split_test().add_new_branch(
