@@ -368,10 +368,10 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         try:
             self.sum_of_attribute_values += sample_weight * X
-            self.sum_of_attribute_squares += sample_weight * X**2
+            self.sum_of_attribute_squares += sample_weight * X * X
         except ValueError:
             self.sum_of_attribute_values = sample_weight * X
-            self.sum_of_attribute_squares = sample_weight * X**2
+            self.sum_of_attribute_squares = sample_weight * X * X
 
         if self._tree_root is None:
             self._tree_root = self._new_learning_node()
