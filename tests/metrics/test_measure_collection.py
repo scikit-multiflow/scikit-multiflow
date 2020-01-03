@@ -1,9 +1,9 @@
 import numpy as np
 import time
-from skmultiflow.metrics import ClassificationMeasurements
-from skmultiflow.metrics import WindowClassificationMeasurements
-from skmultiflow.metrics import MultiTargetClassificationMeasurements
-from skmultiflow.metrics import WindowMultiTargetClassificationMeasurements
+from skmultiflow.metrics import ClassificationPerformanceEvaluator
+from skmultiflow.metrics import WindowClassificationPerformanceEvaluator
+from skmultiflow.metrics import MultiLabelClassificationPerformanceEvaluator
+from skmultiflow.metrics import WindowMultiLabelClassificationPerformanceEvaluator
 from skmultiflow.metrics import RegressionMeasurements
 from skmultiflow.metrics import WindowRegressionMeasurements
 from skmultiflow.metrics import MultiTargetRegressionMeasurements
@@ -11,135 +11,132 @@ from skmultiflow.metrics import WindowMultiTargetRegressionMeasurements
 from skmultiflow.metrics import RunningTimeMeasurements
 
 
-def test_classification_measurements():
+def test_classification_performance_evaluator():
     y_true = np.concatenate((np.ones(85), np.zeros(10), np.ones(5)))
     y_pred = np.concatenate((np.ones(90), np.zeros(10)))
 
-    measurements = ClassificationMeasurements()
+    measurements = ClassificationPerformanceEvaluator()
     for i in range(len(y_true)):
         measurements.add_result(y_true[i], y_pred[i])
 
     expected_acc = 90/100
-    assert expected_acc == measurements.get_accuracy()
-
-    expected_incorrectly_classified_ratio = 1 - expected_acc
-    assert expected_incorrectly_classified_ratio == measurements.get_incorrectly_classified_ratio()
+    assert expected_acc == measurements.accuracy_score()
 
     expected_kappa = (expected_acc - 0.82) / (1 - 0.82)
-    assert np.isclose(expected_kappa, measurements.get_kappa())
+    assert np.isclose(expected_kappa, measurements.kappa_score())
 
     expected_kappa_m = (expected_acc - .9) / (1 - 0.9)
-    assert np.isclose(expected_kappa_m, measurements.get_kappa_m())
+    assert np.isclose(expected_kappa_m, measurements.kappa_m_score())
 
     expected_kappa_t = (expected_acc - .97) / (1 - 0.97)
-    assert expected_kappa_t == measurements.get_kappa_t()
+    assert expected_kappa_t == measurements.kappa_t_score()
 
     expected_precision = 85 / (85+5)
-    assert np.isclose(expected_precision, measurements.get_precision())
+    assert np.isclose(expected_precision, measurements.precision_score())
 
     expected_recall = 85 / (85+5)
-    assert np.isclose(expected_recall, measurements.get_recall())
+    assert np.isclose(expected_recall, measurements.recall_score())
 
     expected_f1_score = 2 * ((expected_precision * expected_recall) / (expected_precision + expected_recall))
-    assert np.isclose(expected_f1_score, measurements.get_f1_score())
+    assert np.isclose(expected_f1_score, measurements.f1_score())
 
     expected_g_mean = np.sqrt((5 / (5 + 5)) * expected_recall)
-    assert np.isclose(expected_g_mean, measurements.get_g_mean())
+    assert np.isclose(expected_g_mean, measurements.geometric_mean_score())
 
-    expected_info = 'ClassificationMeasurements: - sample_count: 100 - accuracy: 0.900000 - kappa: 0.444444 ' \
-                    '- kappa_t: -2.333333 - kappa_m: 0.000000 - f1-score: 0.944444 - precision: 0.944444 ' \
-                    '- recall: 0.944444 - g-mean: 0.687184 - majority_class: 1'
+    expected_info = ("ClassificationPerformanceEvaluator(n_classes=2, "
+                     "n_samples=100, accuracy_score=0.900000, "
+                     "kappa_m_score=0.000000, kappa_t_score=-2.333333, "
+                     "kappa_m_score=0.000000, precision_score=0.944444, "
+                     "recall_score=0.944444, f1_score=0.944444, "
+                     "geometric_mean_score=0.687184, majority_class=1)")
     assert expected_info == measurements.get_info()
 
     expected_last = (1.0, 0.0)
     assert expected_last == measurements.get_last()
 
     expected_majority_class = 1
-    assert expected_majority_class == measurements.get_majority_class()
+    assert expected_majority_class == measurements.majority_class()
 
     measurements.reset()
-    assert measurements.sample_count == 0
+    assert measurements.n_samples == 0
 
 
-def test_window_classification_measurements():
+def test_window_classification_performance_evaluator():
     y_true = np.concatenate((np.ones(85), np.zeros(10), np.ones(5)))
     y_pred = np.concatenate((np.ones(90), np.zeros(10)))
 
-    measurements = WindowClassificationMeasurements(window_size=20)
+    measurements = WindowClassificationPerformanceEvaluator(window_size=20)
     for i in range(len(y_true)):
         measurements.add_result(y_true[i], y_pred[i])
 
     expected_acc = 10/20
-    assert expected_acc == measurements.get_accuracy()
-
-    expected_incorrectly_classified_ratio = 1 - expected_acc
-    assert expected_incorrectly_classified_ratio == measurements.get_incorrectly_classified_ratio()
+    assert expected_acc == measurements.accuracy_score()
 
     expected_kappa = 0.0
-    assert np.isclose(expected_kappa, measurements.get_kappa())
+    assert np.isclose(expected_kappa, measurements.kappa_score())
 
-    expected_kappa_m = 0.3333333333333333
-    assert np.isclose(expected_kappa_m, measurements.get_kappa_m())
+    expected_kappa_m = 0.28571428571428575
+    assert np.isclose(expected_kappa_m, measurements.kappa_m_score())
 
     expected_kappa_t = -4.0
-    assert np.isclose(expected_kappa_t, measurements.get_kappa_t())
+    assert np.isclose(expected_kappa_t, measurements.kappa_t_score())
 
     expected_precision = 5 / (5 + 5)
-    assert np.isclose(expected_precision, measurements.get_precision())
+    assert np.isclose(expected_precision, measurements.precision_score())
 
     expected_recall = 5 / (5 + 5)
-    assert np.isclose(expected_recall, measurements.get_recall())
+    assert np.isclose(expected_recall, measurements.recall_score())
 
     expected_f1_score = 2 * ((expected_precision * expected_recall) / (expected_precision + expected_recall))
-    assert np.isclose(expected_f1_score, measurements.get_f1_score())
+    assert np.isclose(expected_f1_score, measurements.f1_score())
 
     expected_g_mean = np.sqrt((5 / (5 + 5)) * expected_recall)
-    assert np.isclose(expected_g_mean, measurements.get_g_mean())
+    assert np.isclose(expected_g_mean, measurements.geometric_mean_score())
 
-    expected_info = 'WindowClassificationMeasurements: - sample_count: 20 - window_size: 20 ' \
-                    '- accuracy: 0.500000 - kappa: 0.000000 - kappa_t: -4.000000 ' \
-                    '- kappa_m: 0.333333 - f1-score: 0.500000 - precision: 0.500000 ' \
-                    '- recall: 0.500000 - g-mean: 0.500000 - majority_class: 0'
-    assert expected_info == measurements.get_info()
+    expected_info = ("WindowClassificationPerformanceEvaluator(n_classes=2, "
+                     "window_size=20, n_samples=20, accuracy_score=0.500000, "
+                     "kappa_m_score=0.285714, kappa_t_score=-4.000000, "
+                     "kappa_m_score=0.285714, precision_score=0.500000, "
+                     "recall_score=0.500000, f1_score=0.500000, "
+                     "geometric_mean_score=0.500000, majority_class=0)")
 
     expected_last = (1.0, 0.0)
     assert expected_last == measurements.get_last()
 
     expected_majority_class = 0
-    assert expected_majority_class == measurements.get_majority_class()
+    assert expected_majority_class == measurements.majority_class()
 
     measurements.reset()
-    assert measurements.sample_count == 0
+    assert measurements.n_samples == 0
 
 
-def test_multi_target_classification_measurements():
+def test_multi_label_classification_performance_evaluator():
     y_0 = np.ones(100)
     y_1 = np.concatenate((np.ones(90), np.zeros(10)))
     y_2 = np.concatenate((np.ones(85), np.zeros(10), np.ones(5)))
     y_true = np.ones((100, 3))
     y_pred = np.vstack((y_0, y_1, y_2)).T
 
-    measurements = MultiTargetClassificationMeasurements()
+    measurements = MultiLabelClassificationPerformanceEvaluator()
     for i in range(len(y_true)):
         measurements.add_result(y_true[i], y_pred[i])
 
     expected_acc = 0.85
-    assert np.isclose(expected_acc, measurements.get_exact_match())
+    assert np.isclose(expected_acc, measurements.exact_match_score())
 
     expected_hamming_score = 1 - 0.06666666666666667
-    assert np.isclose(expected_hamming_score, measurements.get_hamming_score())
+    assert np.isclose(expected_hamming_score, measurements.hamming_score())
 
     expected_hamming_loss = 0.06666666666666667
-    assert np.isclose(expected_hamming_loss, measurements.get_hamming_loss())
+    assert np.isclose(expected_hamming_loss, measurements.hamming_loss_score())
 
     expected_jaccard_index = 0.9333333333333332
-    assert np.isclose(expected_jaccard_index, measurements.get_j_index())
+    assert np.isclose(expected_jaccard_index, measurements.jaccard_score())
 
-    expected_total_sum = 300
-    assert expected_total_sum == measurements.get_total_sum()
-
-    expected_info = 'MultiTargetClassificationMeasurements: - sample_count: 100 - hamming_loss: 0.066667 - ' \
-                    'hamming_score: 0.933333 - exact_match: 0.850000 - j_index: 0.933333'
+    expected_info = ("MultiLabelClassificationPerformanceEvaluator(n_labels=3,"
+                     " n_samples=100, hamming_score=0.933333, "
+                     "hamming_loss_score=0.066667, exact_match_score=0.850000,"
+                     " jaccard_score=0.933333)")
     assert expected_info == measurements.get_info()
 
     expected_last_true = (1.0, 1.0, 1.0)
@@ -148,37 +145,36 @@ def test_multi_target_classification_measurements():
     assert np.alltrue(expected_last_pred == measurements.get_last()[1])
 
     measurements.reset()
-    assert measurements.sample_count == 0
+    assert measurements.n_samples == 0
 
 
-def test_window_multi_target_classification_measurements():
+def test_window_multi_label_classification_performance_evaluator():
     y_0 = np.ones(100)
     y_1 = np.concatenate((np.ones(90), np.zeros(10)))
     y_2 = np.concatenate((np.ones(85), np.zeros(10), np.ones(5)))
     y_true = np.ones((100, 3))
     y_pred = np.vstack((y_0, y_1, y_2)).T
 
-    measurements = WindowMultiTargetClassificationMeasurements(window_size=20)
+    measurements = WindowMultiLabelClassificationPerformanceEvaluator(window_size=20)
     for i in range(len(y_true)):
         measurements.add_result(y_true[i], y_pred[i])
 
     expected_acc = 0.25
-    assert np.isclose(expected_acc, measurements.get_exact_match())
+    assert np.isclose(expected_acc, measurements.exact_match_score())
 
     expected_hamming_score = 1 - 0.33333333333333337
-    assert np.isclose(expected_hamming_score, measurements.get_hamming_score())
+    assert np.isclose(expected_hamming_score, measurements.hamming_score())
 
     expected_hamming_loss = 0.33333333333333337
-    assert np.isclose(expected_hamming_loss, measurements.get_hamming_loss())
+    assert np.isclose(expected_hamming_loss, measurements.hamming_loss_score())
 
     expected_jaccard_index = 0.6666666666666667
-    assert np.isclose(expected_jaccard_index, measurements.get_j_index())
+    assert np.isclose(expected_jaccard_index, measurements.jaccard_score())
 
-    expected_total_sum = 300
-    assert expected_total_sum == measurements.get_total_sum()
-
-    expected_info = 'WindowMultiTargetClassificationMeasurements: - sample_count: 20 - hamming_loss: 0.333333 ' \
-                    '- hamming_score: 0.666667 - exact_match: 0.250000 - j_index: 0.666667'
+    expected_info = ("WindowMultiLabelClassificationPerformanceEvaluator("
+                     "n_labels=3, window_size=20, n_samples=20, "
+                     "hamming_score=0.666667, hamming_loss_score=0.333333, "
+                     "exact_match_score=0.250000, jaccard_score=0.666667)")
     assert expected_info == measurements.get_info()
 
     expected_last_true = (1.0, 1.0, 1.0)
@@ -187,7 +183,7 @@ def test_window_multi_target_classification_measurements():
     assert np.alltrue(expected_last_pred == measurements.get_last()[1])
 
     measurements.reset()
-    assert measurements.sample_count == 0
+    assert measurements.n_samples == 0
 
 
 def test_regression_measurements():
