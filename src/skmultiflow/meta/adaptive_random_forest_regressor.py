@@ -362,7 +362,9 @@ class ARFBaseLearner(BaseSKMObject):
     -----
     Inner class that represents a single tree member of the forest.
     Contains analysis information, such as the numberOfDriftsDetected.
+
     """
+
     def __init__(self,
                  index_original,
                  estimator: HoeffdingTreeRegressor,
