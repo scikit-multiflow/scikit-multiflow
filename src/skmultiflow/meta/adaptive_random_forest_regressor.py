@@ -237,19 +237,13 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
         A numpy.ndarray with all the predictions for the samples in X.
 
         """
-        predictions = []
-        for X_ in X:
-            predictions.append(self._predict(X_))
-        return np.asarray(predictions)
-
-    def _predict(self, X):
+        predictions = np.zeros(get_dimensions(X)[0])
         if self.ensemble is None:
             self.init_ensemble(X)
-        sum_predicted_values = 0
-
-        for estimator in self.ensemble:
-            sum_predicted_values += estimator.predict(np.asarray([X]))[0]
-        return sum_predicted_values / self.n_estimators
+        for learner in self.ensemble:
+            predictions += learner.predict(X)
+        predictions /= self.n_estimators
+        return predictions
 
     def predict_proba(self, X):
         """Not implemented for this method."""
