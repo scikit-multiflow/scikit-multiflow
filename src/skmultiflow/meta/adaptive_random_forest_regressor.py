@@ -20,6 +20,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
     ----------
     n_estimators: int, optional (default=10)
         Number of trees in the ensemble.
+
     max_features : int, float, string or None,\
                    optional (default="auto")
         Max number of attributes for each node split.
@@ -32,64 +33,82 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
           (same as "auto").
         - If "log2", then ``max_features=log2(n_features)``.
         - If None, then ``max_features=n_features``.
+
     lambda_value: int, optional (default=6)
         The lambda value for bagging (lambda=6 corresponds to Leverage
         Bagging).
+
     drift_detection_method: BaseDriftDetector or None,
                             optional (default=ADWIN(0.001))
         Drift Detection method. Set to None to disable Drift detection.
+
     warning_detection_method: BaseDriftDetector or None,
                               default(ADWIN(0.01))
         Warning Detection method. Set to None to disable warning
         detection.
+
     max_byte_size: int, optional (default=33554432)
         (`HoeffdingTreeRegressor` parameter)
         Maximum memory consumed by the tree.
+
     memory_estimate_period: int, optional (default=2000000)
         (`HoeffdingTreeRegressor` parameter)
         Number of instances between memory consumption checks.
+
     grace_period: int, optional (default=50)
         (`HoeffdingTreeRegressor` parameter)
         Number of instances a leaf should observe between split
         attempts.
+
     split_confidence: float, optional (default=0.01)
         (`HoeffdingTreeRegressor` parameter)
         Allowed error in split decision, a value closer to 0 takes
         longer to decide.
+
     tie_threshold: float, optional (default=0.05)
         (`HoeffdingTreeRegressor` parameter)
         Threshold below which a split will be forced to break ties.
+
     binary_split: bool, optional (default=False)
         (`HoeffdingTreeRegressor` parameter)
         If True, only allow binary splits.
+
     stop_mem_management: bool, optional (default=False)
         (`HoeffdingTreeRegressor` parameter)
         If True, stop growing as soon as memory limit is hit.
+
     remove_poor_atts: bool, optional (default=False)
         (`HoeffdingTreeRegressor` parameter)
         If True, disable poor attributes.
+
     no_preprune: bool, optional (default=False)
         (`HoeffdingTreeRegressor` parameter)
         If True, disable pre-pruning.
+
     leaf_prediction: string, optional (default='perceptron')
         (`HoeffdingTreeRegressor` parameter)
         Prediction mechanism used at leafs.
         - 'mean' - Target mean
         - 'perceptron' - Perceptron
+
     nominal_attributes: list, optional (default=None)
         (`HoeffdingTreeRegressor` parameter)
         List of Nominal attributes. If emtpy, then assume that all
         attributes are numerical.
+
     learning_ratio_perceptron: float (default=0.02)
         (`HoeffdingTreeRegressor` parameter)
         The learning rate of the perceptron.
+
     learning_ratio_decay: float (default=0.001)
         (`HoeffdingTreeRegressor` parameter)
         Decay multiplier for the learning rate of the perceptron
+
     learning_ratio_const: Bool (default=True)
         (`HoeffdingTreeRegressor` parameter)
         If False the learning ratio will decay with the number of
         examples seen.
+
     random_state: int, RandomState instance or None,
                        optional (default=None)
         If int, random_state is the seed used by the random number
@@ -148,7 +167,7 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
                  learning_ratio_decay=0.001,
                  learning_ratio_const=True,
                  random_state=None):
-        """AdaptiveRandomForestRegressor class constructor."""
+        """ AdaptiveRandomForestRegressor class constructor. """
         super().__init__()
         self.n_estimators = n_estimators
         self.max_features = max_features
@@ -323,14 +342,19 @@ class ARFBaseLearner(BaseSKMObject):
     ----------
     index_original: int
         Tree index within the ensemble.
+
     estimator: HoeffdingTreeRegressor
         Tree estimator.
+
     instances_seen: int
         Number of instances seen by the tree.
+
     drift_detection_method: BaseDriftDetector
         Drift Detection method.
+
     warning_detection_method: BaseDriftDetector
         Warning Detection method.
+
     is_background_learner: bool
         True if the tree is a background learner.
 
