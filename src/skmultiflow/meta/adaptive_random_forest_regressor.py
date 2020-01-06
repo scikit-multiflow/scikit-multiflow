@@ -201,27 +201,22 @@ class AdaptiveRandomForestRegressor(BaseSKMObject,
         """
         if y is None:
             return self
-
-        for X_, y_ in zip(X, y):
-            self._partial_fit(X_, y_)
-
-        return self
-
-    def _partial_fit(self, X, y):
-        self.instances_seen += 1
-
         if self.ensemble is None:
             self.init_ensemble(X)
 
-        for estimator in self.ensemble:
-            y_predicted = estimator.predict(np.asarray([X]))
-            estimator.evaluator.add_result(y_predicted, y)
-            k = self._random_state.poisson(self.lambda_value)
-            if k > 0:
-                estimator.partial_fit(np.asarray([X]),
-                                      np.asarray([y]),
-                                      sample_weight=np.asarray([k]),
-                                      instances_seen=self.instances_seen)
+        for i in range(get_dimensions(X)[0]):
+            self.instances_seen += 1
+
+            for learner in self.ensemble:
+                y_predicted = learner.predict(X[i:i+1])
+                learner.evaluator.add_result(y_predicted, y)
+                k = self._random_state.poisson(self.lambda_value)
+                if k > 0:
+                    learner.partial_fit(X[i:i+1], y[i:i+1],
+                                        sample_weight=np.asarray([k]),
+                                        instances_seen=self.instances_seen)
+
+        return self
 
     def predict(self, X):
         """ Predict target values for the passed data.
