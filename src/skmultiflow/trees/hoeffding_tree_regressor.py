@@ -288,17 +288,17 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             Array with the perceptron weights for a specific instance
 
         """
-        if self._tree_root is not None:
-            found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
-            leaf_node = found_node.node
-            if leaf_node is None:
-                leaf_node = found_node.parent
-            if isinstance(leaf_node, LearningNode):
-                return leaf_node.perceptron_weight
-            else:
-                return None
-        else:
+        if self._tree_root is None:
             return []
+
+        found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
+        leaf_node = found_node.node
+        if leaf_node is None:
+            leaf_node = found_node.parent
+        if isinstance(leaf_node, LearningNode):
+            return leaf_node.perceptron_weight
+        else:
+            return None
 
     def partial_fit(self, X, y, sample_weight=None):
         """Incrementally train the model.
