@@ -431,10 +431,9 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             return np.asarray(0.0)
 
         predictions = []
-        r, _ = get_dimensions(X)
-        for i in range(r):
+        for x in X:
             if self.leaf_prediction == _TARGET_MEAN:
-                votes = self.get_votes_for_instance(X[i]).copy()
+                votes = self.get_votes_for_instance(x).copy()
                 if votes == {}:
                     # Tree is empty, all target_values equal, default to zero
                     predictions.append(0)
@@ -448,11 +447,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                          * self.sum_of_values
                          / self.samples_seen)
                        / self.samples_seen)
-                perceptron_weights = self.get_weights_for_instance(X[i])
+                perceptron_weights = self.get_weights_for_instance(x)
                 if perceptron_weights is None:
                     predictions.append(0.0)
                     continue
-                normalized_sample = self.normalize_sample(X[i])
+                normalized_sample = self.normalize_sample(x)
                 normalized_prediction = np.dot(perceptron_weights,
                                                normalized_sample)
                 mean = self.sum_of_values / self.samples_seen
