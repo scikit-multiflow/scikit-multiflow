@@ -367,8 +367,10 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         self.sum_of_squares += sample_weight * y * y
 
         try:
-            self.sum_of_attribute_values += sample_weight * X
-            self.sum_of_attribute_squares += sample_weight * X * X
+            self.sum_of_attribute_values = (self.sum_of_attribute_values
+                                            + sample_weight * X)
+            self.sum_of_attribute_squares = (self.sum_of_attribute_squares
+                                             + sample_weight * X * X)
         except ValueError:
             self.sum_of_attribute_values = sample_weight * X
             self.sum_of_attribute_squares = sample_weight * X * X
