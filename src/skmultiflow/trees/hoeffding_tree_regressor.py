@@ -1,5 +1,4 @@
 import numpy as np
-from math import sqrt
 from operator import attrgetter
 
 from skmultiflow.core import RegressorMixin
@@ -15,6 +14,7 @@ from skmultiflow.trees.nodes import ActiveLearningNodeForRegression
 from skmultiflow.trees.nodes import InactiveLearningNodeForRegression
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.nodes import InactiveLearningNodePerceptron
+from skmultiflow.trees.nodes.active_learning_node_perceptron import compute_sd
 
 import warnings
 
@@ -198,24 +198,22 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         """
         normalized_sample = []
         for i in range(len(X)):
-            var = ((self.sum_of_attribute_squares[i]
-                    - self.sum_of_attribute_values[i]
-                      * self.sum_of_attribute_values[i]
-                      / self.samples_seen)
-                   / self.samples_seen)
-            mean = self.sum_of_attribute_values[i] / self.samples_seen
-            try:
-                std = sqrt(var)
-                normalized_sample.append(float(X[i] - mean) / (3 * std))
-            except (ValueError, ZeroDivisionError):
+            if (self._nominal_attributes is not None and i not in self._nominal_attributes) and self.samples_seen > 1:
+                mean = self.sum_of_attribute_values[i] / self.samples_seen
+                sd = compute_sd(self.sum_of_attribute_squares[i], self.sum_of_attribute_values[i], self.samples_seen)
+                if sd > 0:
+                    normalized_sample.append(float(X[i] - mean) / (3 * sd))
+                else:
+                    normalized_sample.append(0.0)
+            else:
                 normalized_sample.append(0.0)
         if self.samples_seen > 1:
             normalized_sample.append(1.0)  # Value to be multiplied with the constant factor
         else:
             normalized_sample.append(0.0)
-        return normalized_sample
+        return np.asarray(normalized_sample)
 
-    def normalize_target_value(self, y):
+    def normalized_target_value(self, y):
         """
         Normalize the target in order to have the same influence during the process of
         training.
@@ -229,25 +227,21 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         float:
             normalized target value
         """
-        var = ((self.sum_of_squares - self.sum_of_values
-                                      * self.sum_of_values
-                                      / self.samples_seen)
-               / self.samples_seen)
-        mean = self.sum_of_values / self.samples_seen
-        try:
-            std = sqrt(var)
-            return float(y - mean) / (3 * std)
-        except (ValueError, ZeroDivisionError):
-            return 0.0
+        if self.samples_seen > 1:
+            mean = self.sum_of_values / self.samples_seen
+            sd = compute_sd(self.sum_of_squares, self.sum_of_values, self.samples_seen)
+            if sd > 0:
+                return float(y - mean) / (3 * sd)
+        return 0.0
 
-    def _new_learning_node(self, initial_class_observations=None, perceptron_weight=None):
+    def _new_learning_node(self, initial_class_observations=None, perceptron_node=None):
         """Create a new learning node. The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
         if self.leaf_prediction == _TARGET_MEAN:
             return ActiveLearningNodeForRegression(initial_class_observations)
         elif self.leaf_prediction == _PERCEPTRON:
-            return ActiveLearningNodePerceptron(initial_class_observations, perceptron_weight,
+            return ActiveLearningNodePerceptron(initial_class_observations, perceptron_node,
                                                 random_state=self.random_state)
 
     def get_weights_for_instance(self, X):
@@ -268,12 +262,12 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             leaf_node = found_node.node
             if leaf_node is None:
                 leaf_node = found_node.parent
-            if isinstance(leaf_node, LearningNode):
+            if isinstance(leaf_node, ActiveLearningNodePerceptron):
                 return leaf_node.perceptron_weight
             else:
                 return None
         else:
-            return []
+            return None
 
     def partial_fit(self, X, y, sample_weight=None):
         """Incrementally trains the model. Train samples (instances) are composed of X attributes and their
@@ -398,7 +392,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             r, _ = get_dimensions(X)
             for i in range(r):
                 if self.leaf_prediction == _TARGET_MEAN:
-                    votes = self.get_votes_for_instance(X[i]).copy()
+                    votes = self.get_votes_for_instance(X[i])   # Gets observed data statistics
                     if votes == {}:
                         # Tree is empty, all target_values equal, default to zero
                         predictions.append(0)
@@ -407,25 +401,19 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                         sum_of_values = votes[1]
                         predictions.append(sum_of_values / number_of_samples_seen)
                 elif self.leaf_prediction == _PERCEPTRON:
-                    var = ((self.sum_of_squares
-                           - self.sum_of_values
-                             * self.sum_of_values
-                             / self.samples_seen)
-                           / self.samples_seen)
-                    perceptron_weights = self.get_weights_for_instance(X[i])
-                    if perceptron_weights is None:
+                    if self.samples_seen > 1:
+                        perceptron_weights = self.get_weights_for_instance(X[i])
+                        if perceptron_weights is None:
+                            predictions.append(0.0)
+                            continue
+                        normalized_sample = self.normalize_sample(X[i])
+                        normalized_prediction = np.dot(perceptron_weights, normalized_sample)
+                        # De-normalize prediction
+                        mean = self.sum_of_values / self.samples_seen
+                        sd = compute_sd(self.sum_of_squares, self.sum_of_values, self.samples_seen)
+                        predictions.append(normalized_prediction * sd * 3 + mean)
+                    else:
                         predictions.append(0.0)
-                        continue
-                    normalized_sample = self.normalize_sample(X[i])
-                    normalized_prediction = np.dot(
-                        perceptron_weights, normalized_sample
-                    )
-                    mean = self.sum_of_values / self.samples_seen
-                    try:
-                        std = sqrt(var)
-                        predictions.append(normalized_prediction * std * 3 + mean)
-                    except ValueError:
-                        predictions.append(mean)
         else:
             # Model is empty
             predictions.append(0.0)
@@ -506,15 +494,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                                                 node.get_observed_class_distribution())
                 for i in range(split_decision.num_splits()):
                     if self.leaf_prediction == _PERCEPTRON:
-                        new_child = self._new_learning_node(
-                            split_decision.resulting_class_distribution_from_split(i),
-                            node.perceptron_weight
-                        )
+                        new_child = self._new_learning_node(split_decision.resulting_class_distribution_from_split(i),
+                                                            node)
                     else:
-                        new_child = self._new_learning_node(
-                            split_decision.resulting_class_distribution_from_split(i),
-                            None
-                        )
+                        new_child = self._new_learning_node(split_decision.resulting_class_distribution_from_split(i),
+                                                            None)
                     new_split.set_child(i, new_child)
                 self._active_leaf_node_cnt -= 1
                 self._decision_node_cnt += 1
