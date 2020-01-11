@@ -113,7 +113,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
         """
         normalized_sample = rht.normalize_sample(X)
         normalized_pred = np.dot(self.perceptron_weight, normalized_sample)
-        normalized_target_value = rht.normalized_target_value(y)
+        normalized_target_value = rht.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
         self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * normalized_sample
 
