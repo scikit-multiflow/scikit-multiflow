@@ -93,7 +93,7 @@ Naming methods properly is important for multiple reasons:
 
 where `type` is optional since in some cases it could be inferred from the method/class name itself. E.g. `RegressorChain`
 
-### Template code
+## Template code
 
     # Import required packages such as estimators, generators, etc.
     from skmultiflow.data import SEAGenerator
