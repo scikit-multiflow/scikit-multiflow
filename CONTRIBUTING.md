@@ -31,6 +31,43 @@ pip install -e .
 pip install --editable .
 ```
 
+### Template code
+
+```python
+   
+   # Import required packages such as estimators, generators, etc
+   from skmultiflow.data import SEAGenerator
+   from skmultiflow.lazy import KNN
+
+   # Setup a data stream
+   stream = SEAGenerator(random_state=1)
+
+   # Prepare stream for use
+   stream.prepare_for_use()    
+
+   # Setup the desired estimator
+   estimator = KNN(n_neighbors=8,
+                   max_window_size=2000,
+                   leaf_size=30)
+
+   # Auxiliary variables to control loop and track performance
+   n_samples = 0
+   correct_cnt = 0
+   max_samples = 200
+
+   # Run test-then-train loop for max_samples or while there is data in the stream
+   while n_samples < max_samples and stream.has_more_samples():
+       X, y = stream.next_sample()
+       y_pred = estimator.predict(X)
+       if y[0] == y_pred[0]:
+           correct_cnt += 1
+       estimator.partial_fit(X, y)
+       n_samples += 1
+
+   print('{} samples analyzed.'.format(n_samples))   
+   print('Estimator accuracy: {}'.format(correct_cnt / n_samples))
+```
+
 ### Random number generators
 Random number generators are handled as in `scikit-learn`. Meaning that, random number generators/seeds are refered as `random_state`. Before using a `random_state` object, we must ensure that it is valid, this is done via the utility function `skmultiflow.core.utils.validation.check_random_state`.
 
@@ -92,40 +129,3 @@ Naming methods properly is important for multiple reasons:
 `method's name` + `type
 
 where `type` is optional since in some cases it could be inferred from the method/class name itself. E.g. `RegressorChain`
-
-## Template code
-
-```python
-   
-   # Import required packages such as estimators, generators, etc
-   from skmultiflow.data import SEAGenerator
-   from skmultiflow.lazy import KNN
-
-   # Setup a data stream
-   stream = SEAGenerator(random_state=1)
-
-   # Prepare stream for use
-   stream.prepare_for_use()    
-
-   # Setup the desired estimator
-   estimator = KNN(n_neighbors=8,
-                   max_window_size=2000,
-                   leaf_size=30)
-
-   # Auxiliary variables to control loop and track performance
-   n_samples = 0
-   correct_cnt = 0
-   max_samples = 200
-
-   # Run test-then-train loop for max_samples or while there is data in the stream
-   while n_samples < max_samples and stream.has_more_samples():
-       X, y = stream.next_sample()
-       y_pred = estimator.predict(X)
-       if y[0] == y_pred[0]:
-           correct_cnt += 1
-       estimator.partial_fit(X, y)
-       n_samples += 1
-
-   print('{} samples analyzed.'.format(n_samples))   
-   print('Estimator accuracy: {}'.format(correct_cnt / n_samples))
-```
