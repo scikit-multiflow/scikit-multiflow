@@ -108,8 +108,8 @@ stream.prepare_for_use()
 
 # Setup the desired estimator
 estimator = KNNClassifier(n_neighbors=8,
-                         max_window_size=2000,
-                         leaf_size=30)
+                          max_window_size=2000,
+                          leaf_size=30)
 
 # Auxiliary variables to control loop and track performance
 n_samples = 0
