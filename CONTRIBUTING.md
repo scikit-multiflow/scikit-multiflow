@@ -105,17 +105,21 @@ from skmultiflow.lazy import KNNClassifier
 stream = SEAGenerator(random_state=1)
 
 # Prepare stream for use
-stream.prepare_for_use()    
+stream.prepare_for_use()
+
+# Variables to control loop and track performance
+n_samples = 0
+correct_cnt = 0
+max_samples = 200
+X, y = stream.next_sample(max_samples)
 
 # Setup the desired estimator
 estimator = KNNClassifier(n_neighbors=8,
                           max_window_size=2000,
                           leaf_size=30)
 
-# Auxiliary variables to control loop and track performance
-n_samples = 0
-correct_cnt = 0
-max_samples = 200
+# Pre train the estimator with the max samples specified
+estimator.partial_fit(X, y)
 
 # Run test-then-train loop for max_samples or while there is data in the stream
 while n_samples < max_samples and stream.has_more_samples():
