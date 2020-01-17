@@ -69,7 +69,7 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
        stream.prepare_for_use()
 
        # Setup Half-Space Trees estimator
-       half_space_trees = HalfSpaceTrees(n_features=1,
+       half_space_trees = HalfSpaceTrees(n_features=stream.n_features,
                                          n_estimators=25,
                                          window_size=250,
                                          depth=15,
@@ -77,10 +77,14 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
                                          anomaly_threshold=0.5,
                                          random_state=None)
 
+       # Pre-train estimator with 200 samples
+       max_samples = 200
+       X, y = stream.next_sample(max_samples)
+       half_space_trees.partial_fit(X, y)
+
        # Setup variables to control loop and track performance
        n_samples = 0
        correct_cnt = 0
-       max_samples = 200
 
        # Train the estimator(s) with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
