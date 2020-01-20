@@ -52,6 +52,44 @@ class AdditiveExpertEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
     ----------
     .. [1] Kolter and Maloof. Using additive expert ensembles to cope with Concept drift.
        Proc. 22 International Conference on Machine Learning, 2005.
+
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import SEAGenerator
+       from skmultiflow.meta import AdditiveExpertEnsembleClassifier
+       from skmultiflow.bayes import NaiveBayes
+
+       # Setup a data stream
+       stream = SEAGenerator(random_state=1)
+       stream.prepare_for_use()
+
+       # Setup Additive Expert Ensemble Classifier
+       additive_expert_ensemble_classifier = AdditiveExpertEnsembleClassifier(n_estimators=5,
+                                                                              base_estimator=NaiveBayes(nominal_attributes=None),
+                                                                              beta=0.8,
+                                                                              gamma=0.1,
+                                                                              pruning='weakest')
+
+       # Setup variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+
+       # Train the classifier with the samples provided by the data stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_pred = additive_expert_ensemble_classifier.predict(X)
+           if y[0] == y_pred[0]:
+               correct_cnt += 1
+           additive_expert_ensemble_classifier = additive_expert_ensemble_classifier.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed'.format(n_samples))
+       print('Additive Expert Ensemble Classifier accuracy: {}'.format(correct_cnt / n_samples))
     """
 
     class WeightedExpert:
