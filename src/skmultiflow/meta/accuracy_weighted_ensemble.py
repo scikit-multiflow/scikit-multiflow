@@ -51,6 +51,42 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
        on Knowledge discovery and data mining (KDD '03).
        ACM, New York, NY, USA, 226-235.
 
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import SEAGenerator
+       from skmultiflow.meta import AccuracyWeightedEnsembleClassifier
+       from skmultiflow.bayes import NaiveBayes
+
+       # Setting up a data stream
+       stream = SEAGenerator(random_state=1)
+       stream.prepare_for_use()
+
+       # Setup Accuracy Weighted Ensemble Classifier
+       accuracy_weighted_ensemble_classifier = AccuracyWeightedEnsembleClassifier(n_estimators=10,
+                                                                                  base_estimator=NaiveBayes(nominal_attributes=None),
+                                                                                  window_size=200,
+                                                                                  n_splits=5)
+
+       # Setup variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+
+       # Train the classifier with the samples provided by the data stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_pred = accuracy_weighted_ensemble_classifier.predict(X)
+           if y[0] == y_pred[0]:
+               correct_cnt += 1
+           accuracy_weighted_ensemble_classifier = accuracy_weighted_ensemble_classifier.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed.'.format(n_samples))
+       print('Accuracy Weighted Ensemble Classifier accuracy: {}'.format(correct_cnt / n_samples))
     """
 
     class WeightedClassifier:

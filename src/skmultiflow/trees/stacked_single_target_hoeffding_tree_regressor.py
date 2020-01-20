@@ -75,6 +75,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
     .. [1] Mastelini, S. M., Barbon Jr, S., de Carvalho, A. C. P. L. F. (2019).
        "Online Multi-target regression trees with stacked leaf models". arXiv
        preprint arXiv:1903.12483.
+
     """
 
     # =====================================================================
