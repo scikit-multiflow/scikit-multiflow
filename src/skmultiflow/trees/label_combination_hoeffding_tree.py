@@ -88,6 +88,7 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         List of Nominal attributes. If emtpy, then assume that all attributes are numerical.
     n_labels: int (default=None)
         the number of labels the problem has.
+
     """
     def __init__(self,
                  max_byte_size=33554432,

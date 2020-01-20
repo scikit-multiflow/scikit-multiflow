@@ -115,6 +115,50 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
     .. [2] Albert Bifet, Geoff Holmes, Richard Kirkby, Bernhard Pfahringer.
        MOA: Massive Online Analysis; Journal of Machine Learning Research 11: 1601-1604, 2010.
 
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import SEAGenerator
+       from skmultiflow.trees import HoeffdingTreeClassifier
+
+       # Setting up a data stream
+       stream = SEAGenerator(random_state=1)
+       stream.prepare_for_use()
+
+       # Setup Hoeffding Tree estimator
+       hoeffding_tree = HoeffdingTreeClassifier(max_byte_size=33554432,
+                                                memory_estimate_period=1000000,
+                                                grace_period=200,
+                                                split_criterion='info_gain',
+                                                split_confidence=0.0000001,
+                                                tie_threshold=0.05,
+                                                binary_split=False,
+                                                stop_mem_management=False,
+                                                remove_poor_atts=False,
+                                                no_preprune=False,
+                                                leaf_prediction='nba',
+                                                nb_threshold=0,
+                                                nominal_attributes=None)
+
+       # Setup variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+
+       # Train the estimator with the samples provided by the data stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_pred = hoeffding_tree.predict(X)
+           if y[0] == y_pred[0]:
+               correct_cnt += 1
+           hoeffding_tree = hoeffding_tree.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed.'.format(n_samples))
+       print('Hoeffding Tree accuracy: {}'.format(correct_cnt / n_samples))
     """
     # ====================================
     # == Hoeffding Tree implementation ===

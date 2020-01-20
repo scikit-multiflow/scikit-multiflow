@@ -62,6 +62,44 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
        Publishing, Cham (2020)
     .. [2] Sambu Seo and Klaus Obermayer. 2003. Soft learning vector
        quantization. Neural Comput. 15, 7 (July 2003), 1589-1604
+
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import SEAGenerator
+       from skmultiflow.prototype import RobustSoftLearningVectorQuantization
+
+       # Setting up a data stream
+       stream = SEAGenerator(random_state=1)
+       stream.prepare_for_use()
+
+       # Pre-train the estimator with 200 samples
+       X, y = stream.next_sample(200)
+       robust_soft_learning_vector_quantization = RobustSoftLearningVectorQuantization(prototypes_per_class=1,
+                                                                                       initial_prototypes=[[2.59922826, 2.57368134, 4.92501, 0], [6.05801971, 6.01383352, 5.02135783, 1]],
+                                                                                       sigma=1.0,
+                                                                                       random_state=None,
+                                                                                       gamma=0.9,
+                                                                                       gradient_descent='vanilla')
+       robust_soft_learning_vector_quantization.partial_fit(X, y)
+
+       # Preparing the processing of 5000 samples and correct prediction count
+       n_samples = 0
+       correct_cnt = 0
+       while n_samples < 5000:
+           X, y = stream.next_sample()
+           y_pred = robust_soft_learning_vector_quantization.predict(X)
+           if y[0] == y_pred[0]:
+               correct_cnt += 1
+           robust_soft_learning_vector_quantization = robust_soft_learning_vector_quantization.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('Robust Soft Learning Vector Quantization usage example')
+       print('{} samples analyzed.'.format(n_samples))
+       print('Robust Soft Learning Vector Quantization performance: {}'.format(correct_cnt / n_samples))
     """
 
     def __init__(self, prototypes_per_class=1, initial_prototypes=None,
