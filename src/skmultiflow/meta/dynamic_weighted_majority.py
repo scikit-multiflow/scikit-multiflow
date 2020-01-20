@@ -47,6 +47,44 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
     .. [1] Kolter and Maloof. Dynamic weighted majority: An ensemble method
        for drifting concepts. The Journal of Machine Learning Research,
        8:2755-2790, December 2007. ISSN 1532-4435.
+
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import SEAGenerator
+       from skmultiflow.meta import DynamicWeightedMajorityClassifier
+       from skmultiflow.bayes import NaiveBayes
+
+       # Setup a data stream
+       stream = SEAGenerator(random_state=1)
+       stream.prepare_for_use()
+
+       # Setup Dynamic Weighted Majority Ensemble Classifier
+       dynamic_weighted_majority_classifier = DynamicWeightedMajorityClassifier(n_estimators=5,
+                                                                               base_estimator=NaiveBayes(nominal_attributes=None),
+                                                                               period=50,
+                                                                               beta=0.5,
+                                                                               theta=0.01)
+
+       # Setup varibles to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+
+       # Train the classifier with the samples provided by the data stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_pred = dynamic_weighted_majority_classifier.predict(X)
+           if y[0] == y_pred[0]:
+               correct_cnt += 1
+           dynamic_weighted_majority_classifier = dynamic_weighted_majority_classifier.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed.'.format(n_samples))
+       print('Dynamic Weighted Majority Classifier: {}'.format(correct_cnt / n_samples))
     """
 
     class WeightedExpert:
