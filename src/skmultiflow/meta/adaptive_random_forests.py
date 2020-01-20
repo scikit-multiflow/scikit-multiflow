@@ -179,6 +179,58 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
            Adaptive random forests for evolving data stream classification.
            In Machine Learning, DOI: 10.1007/s10994-017-5642-8, Springer, 2017.
 
+        Examples
+        --------
+        .. code-block:: python
+
+           # Imports
+           from skmultiflow.data import SEAGenerator
+           from skmultiflow.meta import AdaptiveRandomForestClassifier
+           from skmultiflow.drift_detection import ADWIN
+
+           # Setting up a data stream
+           stream = SEAGenerator(random_state=1)
+           stream.prepare_for_use()
+
+           # Setup Adaptive Random Forest Classifier
+           adaptive_random_forest_classifier = AdaptiveRandomForestClassifier(n_estimators=10,
+                                                                              max_features='auto',
+                                                                              disable_weighted_vote=False,
+                                                                              lambda_value=6,
+                                                                              performance_metric='acc',
+                                                                              drift_detection_method=ADWIN(0.001),
+                                                                              warning_detection_method=ADWIN(0.01),
+                                                                              max_byte_size=33554432,
+                                                                              memory_estimate_period=2000000,
+                                                                              grace_period=50,
+                                                                              split_criterion='info_gain',
+                                                                              split_confidence=0.01,
+                                                                              tie_threshold=0.05,
+                                                                              binary_split=False,
+                                                                              stop_mem_management=False,
+                                                                              no_preprune=False,
+                                                                              leaf_prediction='nba',
+                                                                              nb_threshold=0,
+                                                                              nominal_attributes=None,
+                                                                              random_state=None)
+
+           # Setup variables to control loop and track performance
+           n_samples = 0
+           correct_cnt = 0
+           max_samples = 200
+
+           # Train the estimator with the samples provided by the data stream
+           while n_samples < max_samples and stream.has_more_samples():
+               X, y = stream.next_sample()
+               y_pred = adaptive_random_forest_classifier.predict(X)
+               if y[0] == y_pred[0]:
+                   correct_cnt += 1
+               adaptive_random_forest_classifier = adaptive_random_forest_classifier.partial_fit(X, y)
+               n_samples += 1
+
+           # Display results
+           print('{} samples analyzed.'.format(n_samples))
+           print('Adaptive Random Forest Classifier accuracy: {}'.format(correct_cnt / n_samples))
     """
 
     def __init__(self,
