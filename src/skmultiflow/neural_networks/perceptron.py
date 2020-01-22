@@ -9,6 +9,40 @@ class PerceptronMask(BaseSKMObject, ClassifierMixin):
     scikit-multiflow requires a few interfaces, not present in scikit-learn,
     This mask serves as a wrapper for the Perceptron classifier.
 
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.neural_networks import PerceptronMask
+       from skmultiflow.data import SEAGenerator
+
+       # Setup a data stream
+       stream = SEAGenerator(random_state=1)
+       stream.prepare_for_use()
+
+       # Setup the Perceptron Mask
+       perceptron_mask = PerceptronMask()
+
+       # Pre-train the Perceptron Mask with 200 samples
+       X, y = stream.next_sample(200)
+       perceptron_mask.partial_fit(X, y, classes=stream.target_values)
+
+       # Prepare the processing of 5000 samples and correct prediction count
+       n_samples = 0
+       correct_cnt = 0
+       while n_samples < 5000:
+           X, y = stream.next_sample()
+           my_pred = perceptron_mask.predict(X)
+           if y[0] == my_pred[0]:
+               correct_cnt += 1
+           perceptron_mask = perceptron_mask.partial_fit(X, y, classes=stream.target_values)
+           n_samples += 1
+
+       # Display the results
+       print('Perceptron Mask usage example')
+       print('{} samples analyzed'.format(n_samples))
+       print("Perceptron Mask's performance: {}".format(correct_cnt / n_samples))
     """
     def __init__(self,
                  penalty=None,

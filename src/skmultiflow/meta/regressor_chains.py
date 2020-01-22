@@ -33,6 +33,7 @@ class RegressorChain(BaseSKMObject, RegressorMixin, MetaEstimatorMixin, MultiOut
     .. [1] Read, Jesse, Bernhard Pfahringer, Geoff Holmes, and Eibe Frank. "Classifier chains for multi-label
        classification." In Joint European Conference on Machine Learning and Knowledge Discovery in Databases,
        pp. 254-269. Springer, Berlin, Heidelberg, 2009.
+
     """
     def __init__(self, base_estimator=SGDRegressor(), order=None, random_state=None):
         super().__init__()
