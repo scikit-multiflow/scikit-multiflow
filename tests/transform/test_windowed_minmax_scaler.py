@@ -1,9 +1,9 @@
 import os
 import numpy as np
 from copy import copy
-from skmultiflow.transform.minmax_scaler import MinmaxScaler
+from skmultiflow.transform.windowed_minmax_scaler import WindowedMinmaxScaler
 
-def test_minmax_scaler(test_path):
+def test_windowed_minmax_scaler(test_path):
     X_orig = np.array([[1., 2., 3., 4.], [2., 3., 4., 5.], [3., 4., 5., 6.], [5., 4., 3., 2.], [4., 3., 2., 1.], [0., 1., 0., 1.], [3., 2., 3., 4.],
                        [1., 2., 3., 4.], [2., 3., 4., 5.], [3., 4., 5., 6.], [5., 4., 3., 2.], [4., 3., 2., 1.], [0., 1., 0., 1.], [3., 2., 3., 4.],
                        [1., 2., 3., 4.], [2., 3., 4., 5.], [3., 4., 5., 6.], [5., 4., 3., 2.], [4., 3., 2., 1.], [0., 1., 0., 1.], [3., 2., 3., 4.],
@@ -17,7 +17,7 @@ def test_minmax_scaler(test_path):
                        [1., 2., 3., 4.], [2., 3., 4., 5.], [3., 4., 5., 6.], [5., 4., 3., 2.], [4., 3., 2., 1.], [0., 1., 0., 1.], [3., 2., 3., 4.]])
     X = copy(X_orig)
 
-    cleaner = MinmaxScaler(window_size=20)
+    cleaner = WindowedMinmaxScaler(window_size=20)
 
     X_complete = cleaner.transform(X)
 
