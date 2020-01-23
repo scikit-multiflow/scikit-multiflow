@@ -114,7 +114,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
        # Prepare stream for use
        stream.prepare_for_use()
 
-       # Setup the desired estimator
+       # Setup the Hoeffding Tree Regressor
        hoeffding_tree_regressor = HoeffdingTreeRegressor(max_byte_size=33554432,
                                                          memory_estimate_period=1000000,
                                                          grace_period=200,
@@ -130,7 +130,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                                                          learning_ratio_perceptron=0.02,
                                                          learning_ratio_decay=0.01,
                                                          learning_ratio_const=True,
-                                                         random_state=1)
+                                                         random_state=None)
 
        # Auxiliary variables to control loop and track performance
        n_samples = 0
@@ -147,6 +147,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
            hoeffding_tree_regressor.partial_fit(X, y)
            n_samples += 1
 
+       # Display results
        print('{} samples analyzed.'.format(n_samples))
        print('Hoeffding Tree regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
