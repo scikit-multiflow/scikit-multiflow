@@ -105,6 +105,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
     ----------
     .. [1] Aljaž Osojnik, Panče Panov, and Sašo Džeroski. "Tree-based methods for online multi-target regression."
        Journal of Intelligent Information Systems 50.2 (2018): 315-339.
+
     """
 
     # ============================================================

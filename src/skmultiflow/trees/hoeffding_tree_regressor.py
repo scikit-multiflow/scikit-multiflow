@@ -105,14 +105,16 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
     .. code-block:: python
 
        # Imports
-       from skmultiflow.data import SEAGenerator
+       from skmultiflow.data import RegressionGenerator
        from skmultiflow.trees import HoeffdingTreeRegressor
+       import numpy as np
 
-       # Setting up a data stream
-       stream = SEAGenerator(random_state=1)
+       # Setup a data stream
+       stream = RegressionGenerator(random_state=1)
+       # Prepare stream for use
        stream.prepare_for_use()
 
-       # Setup Hoeffding Tree estimator
+       # Setup the desired estimator
        hoeffding_tree_regressor = HoeffdingTreeRegressor(max_byte_size=33554432,
                                                          memory_estimate_period=1000000,
                                                          grace_period=200,
@@ -125,28 +127,28 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                                                          leaf_prediction='perceptron',
                                                          nb_threshold=0,
                                                          nominal_attributes=None,
-                                                         learning_ratio_perceptron=0.2,
-                                                         learning_ratio_decay=0.5,
-                                                         learning_ratio_const=False,
-                                                         random_state=None)
+                                                         learning_ratio_perceptron=0.02,
+                                                         learning_ratio_decay=0.01,
+                                                         learning_ratio_const=True,
+                                                         random_state=1)
 
-       # Setup variables to control loop and track performance
+       # Auxiliary variables to control loop and track performance
        n_samples = 0
        correct_cnt = 0
        max_samples = 200
+       y_pred = np.zeros(max_samples)
+       y_true = np.zeros(max_samples)
 
-       # Train the estimator with the samples provided by the data stream
+       # Run test-then-train loop for max_samples or while there is data in the stream
        while n_samples < max_samples and stream.has_more_samples():
            X, y = stream.next_sample()
-           y_pred = hoeffding_tree_regressor.predict(X)
-           if y[0] == y_pred[0]:
-               correct_cnt += 1
+           y_true[n_samples] = y[0]
+           y_pred[n_samples] = hoeffding_tree_regressor.predict(X)[0]
            hoeffding_tree_regressor.partial_fit(X, y)
            n_samples += 1
 
-       # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Hoeffding Tree Regressor accuracy: {}'.format(correct_cnt / n_samples))
+       print('Hoeffding Tree regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
 
     # =============================================

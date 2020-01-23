@@ -89,53 +89,6 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
     n_labels: int (default=None)
         the number of labels the problem has.
 
-    Examples
-    --------
-    .. code-block:: python
-
-       # This example does not work
-
-       # Imports
-       from skmultiflow.data import SEAGenerator
-       from skmultiflow.trees import LabelCombinationHoeffdingTreeClassifier
-
-       # Setting up a data stream
-       stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
-
-       # Setup Hoeffding Tree estimator
-       label_combination_hoeffding_tree = LabelCombinationHoeffdingTreeClassifier(max_byte_size=33554432,
-                                                                                  memory_estimate_period=1000000,
-                                                                                  grace_period=200,
-                                                                                  split_criterion='info_gain',
-                                                                                  split_confidence=0.0000001,
-                                                                                  tie_threshold=0.05,
-                                                                                  binary_split=False,
-                                                                                  stop_mem_management=False,
-                                                                                  remove_poor_atts=False,
-                                                                                  no_preprune=False,
-                                                                                  leaf_prediction='nba',
-                                                                                  nb_threshold=0,
-                                                                                  nominal_attributes=None,
-                                                                                  n_labels=stream.n_features)
-
-       # Setup variables to control loop and track performance
-       n_samples = 0
-       correct_cnt = 0
-       max_samples = 200
-
-       # Train the estimator with the samples provided by the data stream
-       while n_samples < max_samples and stream.has_more_samples():
-           X, y = stream.next_sample()
-           y_pred = label_combination_hoeffding_tree.predict(X)
-           if y[0] == y_pred[0]:
-               correct_cnt += 1
-           label_combination_hoeffding_tree.partial_fit(X, y)
-           n_samples += 1
-
-       # Display results
-       print('{} samples analyzed.'.format(n_samples))
-       print('Label Combination Hoeffding Tree Classifier accuracy: {}'.format(correct_cnt / n_samples))
     """
     def __init__(self,
                  max_byte_size=33554432,
