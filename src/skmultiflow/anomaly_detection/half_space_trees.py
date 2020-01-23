@@ -56,11 +56,6 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
        in IJCAI Proceedings - International Joint Conference on Artificial Intelligence,
        2011, vol. 22, no. 1, pp. 1511–1516.
 
-    Examples
-    --------
-
-    >>> # Imports
-    >>> from skmultiflow.anomaly_detection import HalfSpaceTrees
     """
 
     def __init__(self,
