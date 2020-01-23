@@ -145,7 +145,7 @@ class OnlineUnderOverBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         passed in the first partial_fit call, or if they are passed in further
         calls but differ from the initial classes list passed..
         """
-        if self.adwin_ensemble is None:
+        if self.ensemble is None:
             self.__configure()
 
         if self.classes is None:
@@ -265,7 +265,7 @@ class OnlineUnderOverBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         proba = []
         r, c = get_dimensions(X)
 
-        if self.adwin_ensemble is None:
+        if self.ensemble is None:
             return np.zeros((r, 1))
 
         with warnings.catch_warnings():  # Context manager to catch errors raised by numpy as RuntimeWarning

@@ -108,7 +108,6 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
         self.lam_sc = np.zeros(self.actual_n_estimators)
         self.lam_sw = np.zeros(self.actual_n_estimators)
         self.epsilon = np.zeros(self.actual_n_estimators)
-        self._is_empty = True
 
     def reset(self):
         self.__configure()

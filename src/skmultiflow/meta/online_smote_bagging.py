@@ -143,7 +143,7 @@ class OnlineSMOTEBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimator
         self
 
         """
-        if self.adwin_ensemble is None:
+        if self.ensemble is None:
             self.__configure()
 
         if self.classes is None:
@@ -288,7 +288,7 @@ class OnlineSMOTEBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimator
         proba = []
         r, c = get_dimensions(X)
 
-        if self.adwin_ensemble is None:
+        if self.ensemble is None:
             return np.zeros((r, 1))
 
         with warnings.catch_warnings():  # Context manager to catch errors raised by numpy as RuntimeWarning

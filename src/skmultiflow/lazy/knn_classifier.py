@@ -156,7 +156,7 @@ class KNNClassifier(BaseSKMObject, ClassifierMixin):
         return np.array(predictions)
 
     def predict_proba(self, X):
-        """ Estimates the probability of each sample in X belonging to each of the class-labels.pyte
+        """ Estimates the probability of each sample in X belonging to each of the class-labels.
         
         Parameters
         ----------
