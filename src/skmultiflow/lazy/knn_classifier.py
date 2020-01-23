@@ -16,11 +16,12 @@ def KNN(n_neighbors=5, max_window_size=1000, leaf_size=30, nominal_attributes=No
 
 
 class KNNClassifier(BaseSKMObject, ClassifierMixin):
-    """ K-Nearest Neighbors classifier.
+    """ k-Nearest Neighbors classifier.
     
-    This non-parametric classification method keeps track of the last max_window_size
-    training samples. Predictions are obtained by aggregating the values of the
-    closest n_neighbors stored-samples with respect to the query sample.
+    This non-parametric classification method keeps a data window with the last max_window_size
+    training samples. The predicted class-label for a given query sample is obtained in two steps:
+    first, find the closest n_neighbors to the query sample in the data window. Second, aggregate
+    the class-labels of the n_neighbors to define the predicted class for the query sample.
 
     
     Parameters
