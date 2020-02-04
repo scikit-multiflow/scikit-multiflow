@@ -106,6 +106,57 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
     .. [1] Aljaž Osojnik, Panče Panov, and Sašo Džeroski. "Tree-based methods for online multi-target regression."
        Journal of Intelligent Information Systems 50.2 (2018): 315-339.
 
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import RegressionGenerator
+       from skmultiflow.trees import iSOUPTreeRegressor
+       import numpy as np
+
+       # Setup a data stream
+       n_targets = 3
+       stream = RegressionGenerator(n_targets=n_targets, random_state=1)
+       # Prepare stream for us
+       stream.prepare_for_use()
+
+       # Setup iSOUP Tree Regressor
+       isoup_tree = iSOUPTreeRegressor(max_byte_size=33554432,
+                                       memory_estimate_period=1000000,
+                                       grace_period=200,
+                                       split_confidence=0.0000001,
+                                       tie_threshold=0.05,
+                                       binary_split=False,
+                                       stop_mem_management=False,
+                                       remove_poor_atts=False,
+                                       no_preprune=False,
+                                       leaf_prediction='perceptron',
+                                       nb_threshold=0,
+                                       nominal_attributes=None,
+                                       learning_ratio_perceptron=0.02,
+                                       learning_ratio_decay=0.01,
+                                       learning_ratio_const=True,
+                                       random_state=None)
+
+       # Auxiliary variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+       y_pred = np.zeros((max_samples, n_targets))
+       y_true = np.zeros((max_samples, n_targets))
+
+       # Run test-then-train loop for max_samples or while there is data in the stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_true[n_samples] = y[0]
+           y_pred[n_samples] = isoup_tree.predict(X)[0]
+           isoup_tree.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed.'.format(n_samples))
+       print('iSOUP Tree Regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
 
     # ============================================================

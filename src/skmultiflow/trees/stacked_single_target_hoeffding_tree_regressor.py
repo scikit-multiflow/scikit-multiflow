@@ -76,6 +76,57 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
        "Online Multi-target regression trees with stacked leaf models". arXiv
        preprint arXiv:1903.12483.
 
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import RegressionGenerator
+       from skmultiflow.trees import StackedSingleTargetHoeffdingTreeRegressor
+       import numpy as np
+
+       # Setup a data stream
+       n_targets = 3
+       stream = RegressionGenerator(n_targets=n_targets, random_state=1)
+       # Prepare stream for use
+       stream.prepare_for_use()
+
+       # Setup the Stacked Single-target Hoeffding Tree Regressor
+       stacked_single_target_hoeffding_tree_regressor = StackedSingleTargetHoeffdingTreeRegressor(max_byte_size=33554432,
+                                                                                                  memory_estimate_period=1000000,
+                                                                                                  grace_period=200,
+                                                                                                  split_confidence=0.0000001,
+                                                                                                  tie_threshold=0.05,
+                                                                                                  binary_split=False,
+                                                                                                  stop_mem_management=False,
+                                                                                                  remove_poor_atts=False,
+                                                                                                  no_preprune=False,
+                                                                                                  leaf_prediction='perceptron',
+                                                                                                  nb_threshold=0,
+                                                                                                  nominal_attributes=None,
+                                                                                                  learning_ratio_perceptron=0.02,
+                                                                                                  learning_ratio_decay=0.01,
+                                                                                                  learning_ratio_const=True,
+                                                                                                  random_state=None)
+
+       # Auxiliary variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+       y_pred = np.zeros((max_samples, n_targets))
+       y_true = np.zeros((max_samples, n_targets))
+
+       # Run test-then-train loop for max_samples or while there is data in the stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_true[n_samples] = y[0]
+           y_pred[n_samples] = stacked_single_target_hoeffding_tree_regressor.predict(X)[0]
+           stacked_single_target_hoeffding_tree_regressor.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed.'.format(n_samples))
+       print('Hoeffding Tree Regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
 
     # =====================================================================
