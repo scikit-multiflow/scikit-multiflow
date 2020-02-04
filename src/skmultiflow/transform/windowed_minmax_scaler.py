@@ -74,8 +74,8 @@ class WindowedMinmaxScaler(StreamTransform):
         X: numpy.ndarray of shape (n_samples, n_features)
             The sample or set of samples that should be transformed.
 
-        y: Array-like
-            The true labels.
+        y: numpy.ndarray (optional, default=None)
+            The target values.
 
         Returns
         -------
@@ -95,8 +95,8 @@ class WindowedMinmaxScaler(StreamTransform):
         X: numpy.ndarray of shape (n_samples, n_features)
             The sample or set of samples that should be transformed.
 
-        y: Array-like
-            The true labels.
+        y: numpy.ndarray (optional, default=None)
+            The target values.
 
         Returns
         -------

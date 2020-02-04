@@ -98,8 +98,6 @@ class MissingValuesCleaner(StreamTransform):
         
         """
         r, c = get_dimensions(X)
-        print("dimensions: {}x{}".format(r, c)) # TODO delete
-        print("dimensions: {}".format(X))  # TODO delete
         for i in range(r):
             if self.strategy in ['mean', 'median', 'mode']:
                 self.window.add_element([X[i][:]])
