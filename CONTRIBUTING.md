@@ -93,37 +93,3 @@ Naming methods properly is important for multiple reasons:
 
 where `type` is optional since in some cases it could be inferred from the method/class name itself. E.g. `RegressorChain`
 
-### Template code
-
-```python
-
-# Import required packages such as estimators, generators, etc
-from skmultiflow.data import SEAGenerator
-from skmultiflow.bayes import NaiveBayes
-
-# Setup a data stream
-stream = SEAGenerator(random_state=1)
-
-# Prepare stream for use
-stream.prepare_for_use()
-
-# Setup the desired estimator
-estimator = NaiveBayes(nominal_attributes=None)
-
-# Auxiliary variables to control loop and track performance
-n_samples = 0
-correct_cnt = 0
-max_samples = 200
-
-# Run test-then-train loop for max_samples or while there is data in the stream
-while n_samples < max_samples and stream.has_more_samples():
-   X, y = stream.next_sample()
-   y_pred = estimator.predict(X)
-   if y[0] == y_pred[0]:
-       correct_cnt += 1
-   estimator = estimator.partial_fit(X, y)
-   n_samples += 1
-
-print('{} samples analyzed.'.format(n_samples))   
-print('Estimator accuracy: {}'.format(correct_cnt / n_samples))
-```
