@@ -181,7 +181,7 @@ def is_scalar_nan(x):
     return bool(isinstance(x, numbers.Real) and np.isnan(x))
 
 
-def add_values_in_dict(dict_a: dict, dict_b: dict, inplace=False) -> dict:
+def add_dict_values(dict_a: dict, dict_b: dict, inplace=False) -> dict:
     """ Adds two dictionaries, summing the values of elements with the same key.
 
     This function iterates over the keys of dict_b and adds their corresponding
