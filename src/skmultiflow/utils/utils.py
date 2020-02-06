@@ -191,17 +191,16 @@ def add_dict_values(dict_a: dict, dict_b: dict, inplace=False) -> dict:
     Parameters
     ----------
     dict_a: dictionary to update.
-    dict_b: dictionary containing the new observations.
+    dict_b: dictionary whose values will be added to `dict_a`.
     inplace: boolean (default: False)
-        Determines whether the changes will be implemented in-place (directly
-        on dict_a, when set to True) or in a copy of dict_a (default behavior).
+        If `True`, the addition is performed in-place and results are stored in `dict_a`.
+        If `False`, `dict_a` is not changed and the results are returned in a new dictionary.
 
     Returns
     -------
         dict
-            A dictionary containing the result of the merging operation.
-            Can be either be a pointer to dict_a or a newly created structure.
-            The behavior for the return value depends on `inplace`.
+            A dictionary containing the result of the operation.
+            Either a pointer to `dict_a` or a new dictionary depending on parameter `inplace`.
     """
     if inplace:
         result = dict_a
