@@ -54,21 +54,7 @@ class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMi
 
        # Pre-training the classifier with 200 samples
        X, y = stream.next_sample(200)
-       batch_incremental_classifier = BatchIncrementalClassifier(base_estimator=HoeffdingTreeClassifier(max_byte_size=33554432,
-                                                                                                        memory_estimate_period=1000000,
-                                                                                                        grace_period=200,
-                                                                                                        split_criterion='info_gain',
-                                                                                                        split_confidence=0.0000001,
-                                                                                                        tie_threshold=0.05,
-                                                                                                        binary_split=False,
-                                                                                                        stop_mem_management=False,
-                                                                                                        remove_poor_atts=False,
-                                                                                                        no_preprune=False,
-                                                                                                        leaf_prediction='nba',
-                                                                                                        nb_threshold=0,
-                                                                                                        nominal_attributes=None),
-                                                                 window_size=100,
-                                                                 n_estimators=100)
+       batch_incremental_classifier = BatchIncrementalClassifier()
        batch_incremental_classifier.partial_fit(X, y)
 
        # Preparing the processing of 5000 samples and correct prediction count

@@ -71,18 +71,13 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
        from skmultiflow.data import SEAGenerator
        from skmultiflow.prototype import RobustSoftLearningVectorQuantization
 
-       # Setting up a data stream
+       # Setup a data stream
        stream = SEAGenerator(random_state=1)
        stream.prepare_for_use()
 
        # Pre-train the estimator with 200 samples
        X, y = stream.next_sample(200)
-       robust_soft_learning_vector_quantization = RobustSoftLearningVectorQuantization(prototypes_per_class=1,
-                                                                                       initial_prototypes=[[2.59922826, 2.57368134, 4.92501, 0], [6.05801971, 6.01383352, 5.02135783, 1]],
-                                                                                       sigma=1.0,
-                                                                                       random_state=None,
-                                                                                       gamma=0.9,
-                                                                                       gradient_descent='vanilla')
+       robust_soft_learning_vector_quantization = RobustSoftLearningVectorQuantization()
        robust_soft_learning_vector_quantization.partial_fit(X, y)
 
        # Preparing the processing of 5000 samples and correct prediction count

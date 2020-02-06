@@ -389,7 +389,7 @@ class MonteCarloClassifierChain(ProbabilisticClassifierChain):
     >>> print(Y)
     >>> print("vs")
     >>> print("MCC")
-    >>> mcc = MonteCarloClassifierChain(base_estimator=SGDClassifier(max_iter=100, loss='log', random_state=1), M=1000)
+    >>> mcc = MonteCarloClassifierChain()
     >>> mcc.fit(X, Y)
     >>> Yp = mcc.predict(X, M=50)
     >>> print("with 50 iterations ...")

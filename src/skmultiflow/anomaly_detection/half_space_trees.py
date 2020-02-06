@@ -64,18 +64,12 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
        from skmultiflow.data import SEAGenerator
        from skmultiflow.anomaly_detection import HalfSpaceTrees
 
-       # Setting up a data stream
+       # Setup a data stream
        stream = SEAGenerator(random_state=1)
        stream.prepare_for_use()
 
        # Setup Half-Space Trees estimator
-       half_space_trees = HalfSpaceTrees(n_features=stream.n_features,
-                                         n_estimators=25,
-                                         window_size=250,
-                                         depth=15,
-                                         size_limit=50,
-                                         anomaly_threshold=0.5,
-                                         random_state=None)
+       half_space_trees = HalfSpaceTrees()
 
        # Pre-train estimator with 200 samples
        max_samples = 200

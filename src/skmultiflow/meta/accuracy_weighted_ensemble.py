@@ -65,10 +65,7 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
        stream.prepare_for_use()
 
        # Setup Accuracy Weighted Ensemble Classifier
-       accuracy_weighted_ensemble_classifier = AccuracyWeightedEnsembleClassifier(n_estimators=10,
-                                                                                  base_estimator=NaiveBayes(nominal_attributes=None),
-                                                                                  window_size=200,
-                                                                                  n_splits=5)
+       accuracy_weighted_ensemble_classifier = AccuracyWeightedEnsembleClassifier()
 
        # Setup variables to control loop and track performance
        n_samples = 0

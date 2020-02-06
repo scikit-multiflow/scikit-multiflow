@@ -67,11 +67,7 @@ class AdditiveExpertEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
        stream.prepare_for_use()
 
        # Setup Additive Expert Ensemble Classifier
-       additive_expert_ensemble_classifier = AdditiveExpertEnsembleClassifier(n_estimators=5,
-                                                                              base_estimator=NaiveBayes(nominal_attributes=None),
-                                                                              beta=0.8,
-                                                                              gamma=0.1,
-                                                                              pruning='weakest')
+       additive_expert_ensemble_classifier = AdditiveExpertEnsembleClassifier()
 
        # Setup variables to control loop and track performance
        n_samples = 0

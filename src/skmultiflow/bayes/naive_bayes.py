@@ -36,12 +36,12 @@ class NaiveBayes(BaseSKMObject, ClassifierMixin):
        from skmultiflow.data import SEAGenerator
        from skmultiflow.bayes import NaiveBayes
 
-       # Setting up a data stream
+       # Setup a data stream
        stream = SEAGenerator(random_state=1)
        stream.prepare_for_use()
 
        # Setup Naive Bayes estimator
-       naive_bayes = NaiveBayes(nominal_attributes=None)
+       naive_bayes = NaiveBayes()
 
        # Setup variables to control loop and track performance
        n_samples = 0

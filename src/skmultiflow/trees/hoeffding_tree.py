@@ -128,19 +128,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
        stream.prepare_for_use()
 
        # Setup Hoeffding Tree estimator
-       hoeffding_tree = HoeffdingTreeClassifier(max_byte_size=33554432,
-                                                memory_estimate_period=1000000,
-                                                grace_period=200,
-                                                split_criterion='info_gain',
-                                                split_confidence=0.0000001,
-                                                tie_threshold=0.05,
-                                                binary_split=False,
-                                                stop_mem_management=False,
-                                                remove_poor_atts=False,
-                                                no_preprune=False,
-                                                leaf_prediction='nba',
-                                                nb_threshold=0,
-                                                nominal_attributes=None)
+       hoeffding_tree = HoeffdingTreeClassifier()
 
        # Setup variables to control loop and track performance
        n_samples = 0

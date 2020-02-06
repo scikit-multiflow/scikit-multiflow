@@ -96,22 +96,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
        stream.prepare_for_use()
 
        # Setup the Hoeffding Adaptive Tree Regressor
-       hoeffding_adaptive_tree_regressor = HoeffdingAdaptiveTreeRegressor(max_byte_size=33554432,
-                                                                          memory_estimate_period=1000000,
-                                                                          grace_period=200,
-                                                                          split_confidence=0.0000001,
-                                                                          tie_threshold=0.05,
-                                                                          binary_split=False,
-                                                                          stop_mem_management=False,
-                                                                          remove_poor_atts=False,
-                                                                          no_preprune=False,
-                                                                          leaf_prediction='perceptron',
-                                                                          nb_threshold=0,
-                                                                          nominal_attributes=None,
-                                                                          learning_ratio_perceptron=0.02,
-                                                                          learning_ratio_decay=0.01,
-                                                                          learning_ratio_const=True,
-                                                                          random_state=None)
+       hoeffding_adaptive_tree_regressor = HoeffdingAdaptiveTreeRegressor()
 
        # Auxiliary variables to control loop and track performance
        n_samples = 0

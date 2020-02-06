@@ -193,26 +193,7 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
            stream.prepare_for_use()
 
            # Setup Adaptive Random Forest Classifier
-           adaptive_random_forest_classifier = AdaptiveRandomForestClassifier(n_estimators=10,
-                                                                              max_features='auto',
-                                                                              disable_weighted_vote=False,
-                                                                              lambda_value=6,
-                                                                              performance_metric='acc',
-                                                                              drift_detection_method=ADWIN(0.001),
-                                                                              warning_detection_method=ADWIN(0.01),
-                                                                              max_byte_size=33554432,
-                                                                              memory_estimate_period=2000000,
-                                                                              grace_period=50,
-                                                                              split_criterion='info_gain',
-                                                                              split_confidence=0.01,
-                                                                              tie_threshold=0.05,
-                                                                              binary_split=False,
-                                                                              stop_mem_management=False,
-                                                                              no_preprune=False,
-                                                                              leaf_prediction='nba',
-                                                                              nb_threshold=0,
-                                                                              nominal_attributes=None,
-                                                                              random_state=None)
+           adaptive_random_forest_classifier = AdaptiveRandomForestClassifier()
 
            # Setup variables to control loop and track performance
            n_samples = 0

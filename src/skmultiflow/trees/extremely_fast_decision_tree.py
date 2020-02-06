@@ -101,18 +101,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
        stream.prepare_for_use()
 
        # Setup Extremely Fast Decision Tree estimator
-       extremely_fast_decicision_tree = ExtremelyFastDecisionTreeClassifier(max_byte_size=33554432,
-                                                                            memory_estimate_period=1000000,
-                                                                            grace_period=200,
-                                                                            min_samples_reevaluate=20,
-                                                                            split_criterion='info_gain',
-                                                                            split_confidence=0.0000001,
-                                                                            tie_threshold=0.05,
-                                                                            binary_split=False,
-                                                                            stop_mem_management=False,
-                                                                            leaf_prediction='nba',
-                                                                            nb_threshold=0,
-                                                                            nominal_attributes=None)
+       extremely_fast_decicision_tree = ExtremelyFastDecisionTreeClassifier()
 
        # Setup variables to control loop and track performance
        n_samples = 0

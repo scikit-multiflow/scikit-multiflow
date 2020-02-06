@@ -62,11 +62,7 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
        stream.prepare_for_use()
 
        # Setup Dynamic Weighted Majority Ensemble Classifier
-       dynamic_weighted_majority_classifier = DynamicWeightedMajorityClassifier(n_estimators=5,
-                                                                               base_estimator=NaiveBayes(nominal_attributes=None),
-                                                                               period=50,
-                                                                               beta=0.5,
-                                                                               theta=0.01)
+       dynamic_weighted_majority_classifier = DynamicWeightedMajorityClassifier()
 
        # Setup varibles to control loop and track performance
        n_samples = 0
