@@ -106,7 +106,6 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
         self.lam_neg = None
         self.lam_sw = None
         self.epsilon = None
-        self.__configure()
 
     def __configure(self):
         if hasattr(self.base_estimator, "reset"):
@@ -129,7 +128,7 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
     def reset(self):
         self.__configure()
 
-    def partial_fit(self, X, y, classes=None, weight=None):
+    def partial_fit(self, X, y, classes=None, sample_weight=None):
         """ Partially fits the model, based on the X and y matrix.
 
         Since it's an ensemble learner, if X and y matrix of more than one
@@ -167,6 +166,9 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
         self
 
         """
+        if self.ensemble is None:
+            self.__configure()
+
         if self.classes is None:
             if classes is None:
                 raise ValueError("The first partial_fit call should pass all the classes.")
@@ -220,7 +222,7 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
                 k = self._random_state.poisson(lam_rus)
                 if k > 0:
                     for b in range(k):
-                        self.ensemble[i].partial_fit([X[j]], [y[j]], classes, weight)
+                        self.ensemble[i].partial_fit([X[j]], [y[j]], classes, sample_weight)
                 if self.ensemble[i].predict([X[j]])[0] == y[j]:
                     self.lam_sc[i] += lam
                     self.epsilon[i] = (self.lam_sw[i]) / (self.lam_sc[i] + self.lam_sw[i])
@@ -325,26 +327,36 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
         """
         proba = []
         r, c = get_dimensions(X)
-        try:
-            for i in range(self.actual_n_estimators):
-                partial_proba = self.ensemble[i].predict_proba(X)
-                if len(partial_proba[0]) > max(self.classes) + 1:
-                    raise ValueError("The number of classes in the base learner is larger than in the ensemble.")
 
-                if len(proba) < 1:
+        if self.ensemble is None:
+            return np.zeros((r, 1))
+
+        with warnings.catch_warnings():   # Context manager to catch errors raised by numpy as RuntimeWarning
+            warnings.filterwarnings('error')
+            try:
+                for i in range(self.actual_n_estimators):
+                    partial_proba = self.ensemble[i].predict_proba(X)
+                    if len(partial_proba[0]) > max(self.classes) + 1:
+                        raise ValueError("The number of classes in the base learner is larger than in the ensemble.")
+
+                    if len(proba) < 1:
+                        for n in range(r):
+                            proba.append([0.0 for _ in partial_proba[n]])
+
                     for n in range(r):
-                        proba.append([0.0 for _ in partial_proba[n]])
+                        for l in range(len(partial_proba[n])):
+                            try:
+                                proba[n][l] += np.log((1 - self.epsilon[i]) / self.epsilon[i]) * partial_proba[n][l]
+                            except IndexError:
+                                proba[n].append(partial_proba[n][l])
+                            except RuntimeWarning:
+                                # Catch division by zero errors raised by numpy as RuntimeWarning
+                                continue
 
-                for n in range(r):
-                    for l in range(len(partial_proba[n])):
-                        try:
-                            proba[n][l] += np.log((1 - self.epsilon[i]) / self.epsilon[i]) * partial_proba[n][l]
-                        except IndexError:
-                            proba[n].append(partial_proba[n][l])
-        except ValueError:
-            return np.zeros((r, 1))
-        except TypeError:
-            return np.zeros((r, 1))
+            except ValueError:
+                return np.zeros((r, 1))
+            except TypeError:
+                return np.zeros((r, 1))
 
         # normalizing probabilities
         sum_proba = []
