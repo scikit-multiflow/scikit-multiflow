@@ -56,7 +56,6 @@ class ADWIN(BaseDriftDetector):
     ...               + str(data_stream[i])
     ...               + ' - at index: '
     ...               + str(i))
-
     """
 
     MAX_BUCKETS = 5
@@ -66,7 +65,6 @@ class ADWIN(BaseDriftDetector):
 
         The sliding window is stored in `bucket_rows` as a list of
         `Row`s, each one keeping a list of buckets of the same size.
-
         """
         super().__init__()
         # default values affected by init_bucket()
@@ -105,7 +103,6 @@ class ADWIN(BaseDriftDetector):
         -------
         ADWIN
             self
-
         """
         self.__init__(delta=self.delta)
 
@@ -116,7 +113,6 @@ class ADWIN(BaseDriftDetector):
         -------
         bool
             Whether or not a drift occurred.
-
         """
         return self.was_bucket_deleted
 
@@ -145,7 +141,6 @@ class ADWIN(BaseDriftDetector):
         """ Initialize the buckets List and statistics.
 
         Set all statistics to 0 and create a new bucket List.
-
         """
         self.bucket_rows = List()
         self.last_bucket_row = 0
@@ -176,7 +171,6 @@ class ADWIN(BaseDriftDetector):
         1: the learners prediction was correct
 
         This function should be used at every new sample analysed.
-
         """
         self.width += 1
         self._insert_element_bucket(0, value, self.bucket_rows.first)
@@ -216,7 +210,6 @@ class ADWIN(BaseDriftDetector):
         -------
         int
             The bucket size from the updated bucket.
-
         """
         row = self.bucket_rows.last
         n1 = self.bucket_size(self.last_bucket_row)
@@ -284,7 +277,6 @@ class ADWIN(BaseDriftDetector):
         -----
         If change was detected, one should verify the new window size,
         by reading the width property.
-
         """
         has_changed = False
         should_exit = False
@@ -376,7 +368,6 @@ class List(object):
     Used for storing ADWIN's bucket list. Is composed of Row objects.
     Acts as a doubly-linked list, where each element points to its
     predecessor and successor.
-
     """
 
     def __init__(self):
@@ -433,7 +424,6 @@ class Row(object):
         Reference to the next Row in the List
     previous_item: Row object
         Reference to the previous Row in the List
-
     """
     def __init__(self, next=None, previous=None):
         super().__init__()
@@ -456,7 +446,6 @@ class Row(object):
         -------
         ADWIN
             self.
-
         """
         self.size = 0
         for i in range(ADWIN.MAX_BUCKETS + 1):
