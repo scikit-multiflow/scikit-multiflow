@@ -179,14 +179,18 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
         # Metrics configuration
         self.metrics = [x.lower() for x in self.metrics]
 
+        metrics_with_plot = []
+        metrics_with_no_plot = []
         for metric in self.metrics:
             if metric not in constants.PLOT_TYPES:
                 raise ValueError('Metric type not supported: {}.'.format(metric))
+            if metric == constants.MODEL_SIZE or metric == constants.RUNNING_TIME:
+                metrics_with_no_plot.append(metric)
+            else:
+                metrics_with_plot.append(metric)
 
         # Re-order metrics list to ensure that metrics with plots come first
-        no_plot_metrics = {constants.MODEL_SIZE, constants.RUNNING_TIME}
-        metrics_set = set(self.metrics)
-        self.metrics = list(metrics_set.difference(no_plot_metrics)) + list(metrics_set.intersection(no_plot_metrics))
+        self.metrics = metrics_with_plot + metrics_with_no_plot
 
         # Check consistency between output type and metrics and between metrics
         if self._output_type == constants.SINGLE_OUTPUT:
