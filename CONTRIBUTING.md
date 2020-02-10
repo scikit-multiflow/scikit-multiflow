@@ -93,6 +93,19 @@ Naming methods properly is important for multiple reasons:
 
 where `type` is optional since in some cases it could be inferred from the method/class name itself. E.g. `NaiveBayes`
 
+### Example code in docstrings
+
+The documentation of a new method shall include an example of its usage (or more if required). Code examples shall be added into a method's docstring under the **"Examples"** section. Code examples shall be:
+
+* Clear.
+* Concise.
+* Reproducible.
+* Focus on the method being documented.
+
+The goal is for the user to be able to run the example code without requiring any modifications.
+
+ The following code snippet is intended as a template and should be modified accordingly:
+
 ### Template code
 
 ```python
