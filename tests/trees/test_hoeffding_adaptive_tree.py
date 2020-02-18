@@ -1,7 +1,7 @@
 import numpy as np
 from array import array
 import os
-from skmultiflow.data import ConceptDriftStream, SEAGenerator, HyperplaneGenerator
+from skmultiflow.data import ConceptDriftStream, SEAGenerator, HyperplaneGenerator, AGRAWALGenerator
 from skmultiflow.trees import HoeffdingAdaptiveTreeClassifier
 
 
@@ -173,3 +173,35 @@ def test_hoeffding_adaptive_tree_categorical_features(test_path):
                            "  Leaf = Class 3.0 | {3.0: 65.0, 4.0: 55.0}\n"
 
     assert learner.get_model_description() == expected_description
+
+
+def test_hoeffding_adaptive_tree_alternate_tree():
+    stream = AGRAWALGenerator(random_state=7)
+
+    learner = HoeffdingAdaptiveTreeClassifier()
+
+    cnt = 0
+    change_point1 = 1500
+    change_point2 = 2500
+    change_point3 = 4000
+    max_samples = 5000
+
+    while cnt < max_samples:
+        X, y = stream.next_sample()
+        learner.partial_fit(X, y)
+        cnt += 1
+
+        if cnt > change_point1:
+            stream.generate_drift()
+            change_point1 = float('Inf')
+
+        if cnt > change_point2:
+            stream.generate_drift()
+            change_point2 = float('Inf')
+
+        if cnt > change_point3:
+            stream.generate_drift()
+            change_point3 = float('Inf')
+
+    expected_description = "Leaf = Class 0 | {0: 1083.0, 1: 2.0}\n"
+    assert expected_description == learner.get_model_description()
