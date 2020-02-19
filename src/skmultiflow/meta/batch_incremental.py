@@ -50,7 +50,6 @@ class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMi
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Pre-training the classifier with 200 samples
        X, y = stream.next_sample(200)

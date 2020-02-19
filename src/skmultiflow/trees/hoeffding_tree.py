@@ -125,7 +125,6 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
 
        # Setting up a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Setup Hoeffding Tree estimator
        hoeffding_tree = HoeffdingTreeClassifier()

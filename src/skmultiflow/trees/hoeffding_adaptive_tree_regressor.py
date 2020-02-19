@@ -93,7 +93,6 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
        # Setup a data stream
        stream = RegressionGenerator(random_state=1)
        # Prepare stream for use
-       stream.prepare_for_use()
 
        # Setup the Hoeffding Adaptive Tree Regressor
        hoeffding_adaptive_tree_regressor = HoeffdingAdaptiveTreeRegressor()

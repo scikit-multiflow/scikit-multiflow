@@ -111,8 +111,6 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
        # Setup a data stream
        stream = RegressionGenerator(random_state=1)
-       # Prepare stream for use
-       stream.prepare_for_use()
 
        # Setup the Hoeffding Tree Regressor
        hoeffding_tree_regressor = HoeffdingTreeRegressor()

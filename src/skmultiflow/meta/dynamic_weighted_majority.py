@@ -59,7 +59,6 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Setup Dynamic Weighted Majority Ensemble Classifier
        dynamic_weighted_majority_classifier = DynamicWeightedMajorityClassifier()

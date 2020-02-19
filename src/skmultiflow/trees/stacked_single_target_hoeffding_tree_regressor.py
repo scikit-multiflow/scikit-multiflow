@@ -88,8 +88,6 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
        # Setup a data stream
        n_targets = 3
        stream = RegressionGenerator(n_targets=n_targets, random_state=1)
-       # Prepare stream for use
-       stream.prepare_for_use()
 
        # Setup the Stacked Single-target Hoeffding Tree Regressor
        stacked_single_target_hoeffding_tree_regressor = StackedSingleTargetHoeffdingTreeRegressor()

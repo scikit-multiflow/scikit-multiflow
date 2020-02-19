@@ -64,7 +64,6 @@ class AdditiveExpertEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Setup Additive Expert Ensemble Classifier
        additive_expert_ensemble_classifier = AdditiveExpertEnsembleClassifier()

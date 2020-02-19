@@ -38,7 +38,6 @@ class NaiveBayes(BaseSKMObject, ClassifierMixin):
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Setup Naive Bayes estimator
        naive_bayes = NaiveBayes()

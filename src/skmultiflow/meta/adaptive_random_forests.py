@@ -190,7 +190,6 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
 
            # Setting up a data stream
            stream = SEAGenerator(random_state=1)
-           stream.prepare_for_use()
 
            # Setup Adaptive Random Forest Classifier
            adaptive_random_forest_classifier = AdaptiveRandomForestClassifier()

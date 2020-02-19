@@ -19,7 +19,6 @@ class PerceptronMask(BaseSKMObject, ClassifierMixin):
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Setup the Perceptron Mask
        perceptron_mask = PerceptronMask()

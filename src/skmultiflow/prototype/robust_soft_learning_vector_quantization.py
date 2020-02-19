@@ -73,7 +73,6 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Pre-train the estimator with 200 samples
        X, y = stream.next_sample(200)

@@ -118,8 +118,6 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
        # Setup a data stream
        n_targets = 3
        stream = RegressionGenerator(n_targets=n_targets, random_state=1)
-       # Prepare stream for us
-       stream.prepare_for_use()
 
        # Setup iSOUP Tree Regressor
        isoup_tree = iSOUPTreeRegressor()

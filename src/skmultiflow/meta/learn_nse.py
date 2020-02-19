@@ -66,7 +66,6 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
-       stream.prepare_for_use()
 
        # Setup Dynamic Weighted Majority Ensemble Classifier
        learn_pp_nse = LearnPPNSEClassifier()
