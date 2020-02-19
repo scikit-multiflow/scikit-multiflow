@@ -277,7 +277,8 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                     )
                     mean = self.sum_of_values / self.examples_seen
                     variance = (self.sum_of_squares -
-                                (self.sum_of_values ** 2) /
+                                (self.sum_of_values *
+                                 self.sum_of_values) /
                                 self.examples_seen) / (self.examples_seen - 1)
                     sd = np.sqrt(variance, out=np.zeros_like(variance),
                                  where=variance >= 0.0)
@@ -314,7 +315,8 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
 
                         mean = self.sum_of_values / self.examples_seen
                         variance = (self.sum_of_squares -
-                                    (self.sum_of_values ** 2) /
+                                    (self.sum_of_values *
+                                     self.sum_of_values) /
                                     self.examples_seen) / (self.examples_seen - 1)
                         sd = np.sqrt(variance, out=np.zeros_like(variance),
                                      where=variance >= 0.0)
