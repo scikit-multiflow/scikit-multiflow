@@ -195,9 +195,26 @@ def test_hoeffding_adaptive_tree_alternate_tree():
             stream.generate_drift()
             change_point1 = float('Inf')
 
+            expected_description = "if Attribute 2 <= 63.63636363636363:\n" \
+                                   "  if Attribute 2 <= 39.54545454545455:\n" \
+                                   "    Leaf = Class 0 | {0: 397.5023676194098}\n" \
+                                   "  if Attribute 2 > 39.54545454545455:\n" \
+                                   "    if Attribute 2 <= 58.81818181818181:\n" \
+                                   "      Leaf = Class 1 | {1: 299.8923824199619}\n" \
+                                   "    if Attribute 2 > 58.81818181818181:\n" \
+                                   "      Leaf = Class 0 | {0: 54.0, 1: 20.107617580038095}\n" \
+                                   "if Attribute 2 > 63.63636363636363:\n" \
+                                   "  Leaf = Class 0 | {0: 512.5755895049351}\n"
+            assert expected_description == learner.get_model_description()
+
         if cnt > change_point2:
             stream.generate_drift()
             change_point2 = float('Inf')
+            expected_description = "if Attribute 8 <= 268547.7178694747:\n" \
+                                   "  Leaf = Class 0 | {0: 446.18690518790413, 1: 80.6180778406834}\n" \
+                                   "if Attribute 8 > 268547.7178694747:\n" \
+                                   "  Leaf = Class 1 | {0: 36.8130948120959, 1: 356.38192215931656}\n"
+            assert expected_description == learner.get_model_description()
 
         if cnt > change_point3:
             stream.generate_drift()
