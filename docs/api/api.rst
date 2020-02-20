@@ -238,6 +238,8 @@ Drift Detection: :mod:`skmultiflow.drift_detection`
    drift_detection.ADWIN
    drift_detection.DDM
    drift_detection.EDDM
+   drift_detection.HDDM_A
+   drift_detection.HDDM_W
    drift_detection.PageHinkley
 
 Evaluation: :mod:`skmultiflow.evaluation`
@@ -271,6 +273,8 @@ Transform: :mod:`skmultiflow.transform`
 
    transform.MissingValuesCleaner
    transform.OneHotToCategorical
+   transform.WindowedMinmaxScaler
+   transform.WindowedStandardScaler
 
 Misc:
 =====
