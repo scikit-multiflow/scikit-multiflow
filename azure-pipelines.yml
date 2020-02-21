@@ -3,30 +3,32 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-pool:
-  vmImage: 'ubuntu-16.04'
-strategy:
-  matrix:
-    Python35:
-      python.version: '3.5'
+-job:
 
-steps:
+  pool:
+    vmImage: 'ubuntu-16.04'
+  strategy:
+    matrix:
+      Python35:
+        python.version: '3.5'
 
-- task: UsePythonVersion@0
-    displayName: 'Use Python $(python.version)'
-    inputs:
-      versionSpec: '$(python.version)'
+  steps:
 
-  - script: |
-      pip install --upgrade pip setuptools wheel
-      pip install --only-binary=numpy,scipy numpy scipy
-      pip install cython
-      pip install .
-    displayName: 'Installing scikit-multiflow'
+  - task: UsePythonVersion@0
+      displayName: 'Use Python $(python.version)'
+      inputs:
+        versionSpec: '$(python.version)'
 
-  - script: |
-      pip install --upgrade pip
-      pip install pytest
-      pip install pytest-cov
-      pytest tests --showlocals -v --cov=skmultiflow
-    displayName: 'Running tests'
+    - script: |
+        pip install --upgrade pip setuptools wheel
+        pip install --only-binary=numpy,scipy numpy scipy
+        pip install cython
+        pip install .
+      displayName: 'Installing scikit-multiflow'
+
+    - script: |
+        pip install --upgrade pip
+        pip install pytest
+        pip install pytest-cov
+        pytest tests --showlocals -v --cov=skmultiflow
+      displayName: 'Running tests'
