@@ -6,10 +6,6 @@
 jobs:
 
 - job: LinuxSDist
-- task: UsePythonVersion@0
-  inputs:
-    addToPath: true
-    architecture: 'x64'
   strategy:
     matrix:
       Python36:
@@ -21,6 +17,13 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        addToPath: true
+        architecture: 'x64'
+        displayName: 'Use Python $(python.version)'
+
     - script: |
         python -m pip install --upgrade pip
         python -m pip install setuptool
