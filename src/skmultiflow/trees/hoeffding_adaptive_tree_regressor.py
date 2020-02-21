@@ -8,7 +8,6 @@ import warnings
 
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
-ERROR_WIDTH_THRESHOLD = 300
 
 
 def RegressionHAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, split_confidence=0.0000001,
@@ -86,6 +85,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
     # ======================================================
     # == Hoeffding Adaptive Tree Regressor implementation ==
     # ======================================================
+    ERROR_WIDTH_THRESHOLD = 300
 
     def __init__(self,
                  max_byte_size=33554432,
