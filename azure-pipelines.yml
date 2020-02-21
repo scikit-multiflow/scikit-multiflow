@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- script: |
+    pip3 install --upgrade pip setuptools wheel
+    pip3 install --only-binary=numpy,scipy numpy scipy
+    pip3 install codecov pytest-cov cython
+  displayName: 'Installing requirements'
+
+- script: pip3 install -U .
+  displayName: 'Installing scikit-multiflow'
+
+- script: pytest tests --showlocals -v --cov=skmultiflow
+  displayName: 'Running tests'
