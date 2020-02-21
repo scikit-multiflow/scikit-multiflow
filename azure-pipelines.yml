@@ -11,11 +11,13 @@ steps:
   - script: |
       pip3 install --upgrade pip setuptools wheel
       pip3 install --only-binary=numpy,scipy numpy scipy
-      pip3 install pytest codecov pytest-cov cython
-    displayName: 'Installing requirements'
-
-  - script: pip3 install -U .
+      pip3 install cython
+      pip3 install .
     displayName: 'Installing scikit-multiflow'
 
-  - script: pytest tests --showlocals -v --cov=skmultiflow
+  - script: |
+      pip install pytest
+      pip install codecov
+      pip install pytest-cov
+      pytest tests --showlocals -v --cov=skmultiflow
     displayName: 'Running tests'
