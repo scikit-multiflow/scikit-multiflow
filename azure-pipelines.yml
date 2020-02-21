@@ -12,6 +12,11 @@ strategy:
 
 steps:
 
+- task: UsePythonVersion@0
+    displayName: 'Use Python $(python.version)'
+    inputs:
+      versionSpec: '$(python.version)'
+
   - script: |
       pip install --upgrade pip setuptools wheel
       pip install --only-binary=numpy,scipy numpy scipy
