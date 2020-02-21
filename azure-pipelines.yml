@@ -5,17 +5,22 @@
 
 pool:
   vmImage: 'ubuntu-16.04'
+strategy:
+  matrix:
+    Python35:
+      python.version: '3.5'
 
 steps:
 
   - script: |
-      pip3 install --upgrade pip setuptools wheel
-      pip3 install --only-binary=numpy,scipy numpy scipy
-      pip3 install cython
-      pip3 install .
+      pip install --upgrade pip setuptools wheel
+      pip install --only-binary=numpy,scipy numpy scipy
+      pip install cython
+      pip install .
     displayName: 'Installing scikit-multiflow'
 
   - script: |
+      pip install --upgrade pip
       pip install pytest
       pip install pytest-cov
       pytest tests --showlocals -v --cov=skmultiflow
