@@ -167,3 +167,26 @@ def test_regression_hoeffding_adaptive_tree_categorical_features(test_path):
     assert SequenceMatcher(
         None, expected_description, learner.get_model_description()
     ).ratio() > 0.9
+
+
+def test_hoeffding_adaptive_tree_regressor_alternate_tree():
+    stream = RegressionGenerator(
+        n_samples=3000, n_features=10, n_informative=7, random_state=7
+    )
+
+    learner = HoeffdingAdaptiveTreeRegressor(leaf_prediction='mean')
+
+    cnt = 0
+    change_point = 1500
+    max_samples = 4000
+
+    while cnt < max_samples:
+        X, y = stream.next_sample()
+
+        learner.partial_fit(X, y)
+        cnt += 1
+
+        if cnt > change_point:
+            stream = RegressionGenerator(
+                n_samples=3000, n_features=10, n_informative=3, random_state=8
+            )
