@@ -4,6 +4,7 @@ conversion and generators.
 """
 
 from .data_stream import DataStream
+from .temporal_data_stream import TemporalDataStream
 from .file_stream import FileStream
 from .agrawal_generator import AGRAWALGenerator
 from .concept_drift_stream import ConceptDriftStream
