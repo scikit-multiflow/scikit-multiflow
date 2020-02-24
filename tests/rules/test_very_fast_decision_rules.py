@@ -57,17 +57,10 @@ def test_vfdr_info_gain():
     assert (learner.get_model_description() == expected_model_description_1) or \
            (learner.get_model_description() == expected_model_description_2)
 
-    if sys.platform == 'linux' and sys.version_info[:2] >= (3, 6):
-        # "expected" measurements for Python 3.6+ on linux systems
-        expected_model_measurements_1 = {'Number of rules: ': 3, 'model_size in bytes': 61735}
-        expected_model_measurements_2 = {'Number of rules: ': 3, 'model_size in bytes': 72607}
-        expected_model_measurements_3 = {'Number of rules: ': 3, 'model_size in bytes': 63823}
-        assert (learner.get_model_measurements() == expected_model_measurements_1) or \
-               (learner.get_model_measurements() == expected_model_measurements_2) or \
-               (learner.get_model_measurements() == expected_model_measurements_3)
-    else:
-        # run for coverage
-        learner.get_model_measurements()
+    # Following test only covers 'Number of rules' since 'model_size in bytes' is calculated using
+    # the 'calculate_object_size' utility function which is validated in its own test
+    expected_number_of_rules = 3
+    assert learner.get_model_measurements()['Number of rules: '] == expected_number_of_rules
 
 
 def test_vfdr_foil():

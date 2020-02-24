@@ -78,8 +78,10 @@ def test_calculate_object_size():
         # following are "expected" sizes for Python 3.6+ on linux systems
         expected_size_in_bytes_1 = 37335
         expected_size_in_bytes_2 = 37343
+        expected_size_in_bytes_3 = 37327
         assert np.isclose(calculate_object_size(elems, 'byte'), expected_size_in_bytes_1) or \
-               np.isclose(calculate_object_size(elems, 'byte'), expected_size_in_bytes_2)
+               np.isclose(calculate_object_size(elems, 'byte'), expected_size_in_bytes_2) or \
+               np.isclose(calculate_object_size(elems, 'byte'), expected_size_in_bytes_3)
     else:
         # only run for coverage
         calculate_object_size(elems, 'byte')
