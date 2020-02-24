@@ -1,4 +1,8 @@
 import pandas as pd
+import numpy as np
+
+import warnings
+
 from skmultiflow.data.data_stream import DataStream
 
 # implement temporal data stream
@@ -30,6 +34,10 @@ class TemporalDataStream(DataStream):
     name: str, optional (default=None)
         A string to id the data.
 
+    ordered: boolean, optional (default=True)
+        If True, consider that data, time and y are already ordered by timestamp.
+        Otherwise, the data is ordered based on `time` timestamps.
+
     allow_nan: bool, optional (default=False)
         If True, allows NaN values in the data. Otherwise, an error is raised.
 
@@ -40,8 +48,22 @@ class TemporalDataStream(DataStream):
 
     """
     # includes time as datetime
-    def __init__(self, data, time, y=None, target_idx=-1, n_targets=1, cat_features=None, name=None):
-        self.time = pd.to_datetime(time)
+    def __init__(self, data, time, y=None, target_idx=-1, n_targets=1, cat_features=None, name=None, ordered=True):
+        # check if time is pandas dataframe or a numpy.ndarray
+        if isinstance(time, pd.Series):
+            self.time = pd.to_datetime(time)
+        elif isinstance(time, np.ndarray):
+            self.time = pd.to_datetime(time)
+        else:
+            raise ValueError("np.ndarray or pd.Series time object expected, and {} was passed".format(type(time)))
+        # if data is not ordered, order it
+        if not ordered:
+            # order data based on self.time
+            data = data[np.argsort(self.time)]
+            # order y based on self.time
+            y = y[np.argsort(self.time)]
+            # order self.time
+            self.time = self.time.sort_values()
         super().__init__(data, y, target_idx, n_targets, cat_features, name)
     
     # get next sample, returning sample_x, sample_time and sample_y
