@@ -19,9 +19,13 @@ class TemporalDataStream(DataStream):
     time: np.ndarray(dtype=datetime64) or pd.DataFrame (Default=None)
         The timestamp column of each instance. If its a np.ndarray, it will
         be converted into a pandas datetime dataframe. 
+    sample_weight: np.ndarray or pd.DataFrame, optional (Default=None)
+        Sample weights.
+    sample_delay: np.ndarray(pd.tseries.offsets.DateOffset) or pd.tseries.offsets.DateOffset, optional (Default=None)
+        Samples delay in pd.tseries.offsets.DateOffset (the dateoffset difference between the event time 
+        and when the label is available).
     y: np.ndarray or pd.DataFrame, optional (Default=None)
         The targets' columns.
-
     target_idx: int, optional (default=-1)
         The column index from which the targets start.
 
@@ -34,7 +38,7 @@ class TemporalDataStream(DataStream):
     name: str, optional (default=None)
         A string to id the data.
 
-    ordered: boolean, optional (default=True)
+    ordered: bool, optional (default=True)
         If True, consider that data, time and y are already ordered by timestamp.
         Otherwise, the data is ordered based on `time` timestamps.
 
@@ -48,18 +52,41 @@ class TemporalDataStream(DataStream):
 
     """
     # includes time as datetime
-    def __init__(self, data, time, y=None, target_idx=-1, n_targets=1, cat_features=None, name=None, ordered=True):
+    def __init__(self, data, time, y=None, sample_weight=None, sample_delay=None, target_idx=-1, n_targets=1, cat_features=None, name=None, ordered=True):
         # check if time is pandas dataframe or a numpy.ndarray
         if isinstance(time, pd.Series) or isinstance(time, np.ndarray):
             self.time = pd.to_datetime(time)
         else:
             raise ValueError("np.ndarray or pd.Series time object expected, and {} was passed".format(type(time)))
+        # save sample weights if available
+        if sample_weight is not None:
+            self.sample_weight = sample_weight
+        else:
+            self.sample_weight = None
+        # save sample delay if available
+        if sample_delay is not None:
+            self.sample_delay = sample_delay
+            # check if its a single delay or a delay for instance
+            if isinstance(self.sample_delay, pd.Series) or isinstance(self.sample_delay, np.ndarray):
+                self.single_delay = False
+            else:
+                self.single_delay = True
+        else:
+            self.sample_delay = None
         # if data is not ordered, order it
         if not ordered:
             # order data based on self.time
             data = data[np.argsort(self.time)]
             # order y based on self.time
             y = y[np.argsort(self.time)]
+            # order sample_weight if available
+            if self.sample_weight is not None:
+                self.sample_weight[np.argsort(self.time)]
+            # order sample_delay if available
+            if self.sample_delay is not None:
+                # check if not single delay
+                if not self.single_delay:
+                    self.sample_delay[np.argsort(self.time)]
             # order self.time
             self.time = self.time.sort_values()
         super().__init__(data, y, target_idx, n_targets, cat_features, name)
@@ -76,7 +103,7 @@ class TemporalDataStream(DataStream):
         Returns
         -------
         tuple or tuple list
-            Returns the next batch_size instances.
+            Returns the next batch_size instances (sample_x, sample_time, sample_y, sample_weight (if available), sample_delay (if available)).
             For general purposes the return can be treated as a numpy.ndarray.
         """
         self.sample_idx += batch_size
@@ -86,15 +113,46 @@ class TemporalDataStream(DataStream):
             self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
             self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx, :]
             self.current_sample_time = self.time[self.sample_idx - batch_size:self.sample_idx]
+
             if self.n_targets < 2:
                 self.current_sample_y = self.current_sample_y.flatten()
+
+            # create base output
+            output = [self.current_sample_x, self.current_sample_time, self.current_sample_y]
+
+            # check if sampe_weight is available
+            if self.sample_weight is not None:
+                self.current_sample_weight = self.sample_weight[self.sample_idx - batch_size:self.sample_idx, :]
+                # add to output
+                output.append(self.current_sample_weight)
+            # check if sample_delay is available
+            if self.sample_delay is not None:
+                # check if its a single delay
+                if self.single_delay:
+                    # create list with same delay for each instance
+                    self.current_sample_delay = np.full(batch_size, self.sample_delay)
+                else:
+                    # get delays for each instance
+                    self.current_sample_delay = self.sample_delay[self.sample_idx - batch_size:self.sample_idx]
+                # add to output
+                output.append(self.current_sample_delay)
 
         except IndexError:
             self.current_sample_x = None
             self.current_sample_y = None
             self.current_sample_time = None
+            # create base output
+            output = [self.current_sample_x, self.current_sample_time, self.current_sample_y]
+            # check if sampe_weight is available
+            if self.sample_weight is not None:
+                self.current_sample_weight = None
+                output.append(self.current_sample_weight)
+            # check if sample_delay is available
+            if self.sample_delay is not None:
+                self.current_sample_delay = None
+                output.append(self.current_sample_delay)
             
-        return self.current_sample_x, self.current_sample_time, self.current_sample_y
+        return output
     
     def get_temporal_information(self):
         return self.time
