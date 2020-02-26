@@ -265,7 +265,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         # get samples that have label available
         delayed_samples = self.delay_queue[self.delay_queue['available_time'] <= self.current_timestamp]
         # remove these samples from delay_queue
-        self.delay_queue[self.delay_queue['available_time'] > self.current_timestamp]
+        self.delay_queue = self.delay_queue[self.delay_queue['available_time'] > self.current_timestamp]
         # transpose prediction matrix to model-sample again 
         y_pred = delayed_samples["y_pred"].to_numpy().T.tolist()
         # return X, y_real and y_pred for the unqueued samples
@@ -398,6 +398,21 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
                 # get delayed samples to update model before predicting a new batch
                 X_delayed, y_real_delayed, y_pred_delayed = self._get_delayed_samples()
+                # update metrics if y_pred_delayed has items
+                if len(y_pred_delayed) > 0: 
+                    for j in range(self.n_models):
+                        for i in range(len(y_pred_delayed[0])):
+                            self.mean_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
+                            self.current_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
+                    self._check_progress(actual_max_samples)
+
+                    if ((self.global_sample_count % self.n_wait) == 0 or
+                            (self.global_sample_count >= self.max_samples) or
+                            (self.global_sample_count / self.n_wait > self.update_count + 1)):
+                        if y_pred_delayed is not None:
+                            self._update_metrics()
+                        self.update_count += 1
+
                 # before getting new samples, update classifiers with samples that are already available
                 self._update_classifiers(X_delayed, y_real_delayed)
 
@@ -421,21 +436,6 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
                     # add current samples to delayed queue
                     self._update_delayed_queue(X, arrival_time, available_time, y_real, y_pred)
-
-                # update metrics if y_pred_delayed has items
-                if len(y_pred_delayed) > 0: 
-                    for j in range(self.n_models):
-                        for i in range(len(y_pred_delayed[0])):
-                            self.mean_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
-                            self.current_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
-                    self._check_progress(actual_max_samples)
-
-                    if ((self.global_sample_count % self.n_wait) == 0 or
-                            (self.global_sample_count >= self.max_samples) or
-                            (self.global_sample_count / self.n_wait > self.update_count + 1)):
-                        if y_pred_delayed is not None:
-                            self._update_metrics()
-                        self.update_count += 1
 
                 self._end_time = timer()
             except BaseException as exc:
