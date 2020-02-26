@@ -13,11 +13,11 @@ def test_srp_randompatches():
                                                training_method='randompatches',
                                                random_state=1)
 
-    y_expected = np.asarray([0, 0, 0, 0, 1, 0, 0, 1, 1, 0,
-                             0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-                             0, 1, 0, 0, 0, 1, 1, 1, 0, 1,
-                             1, 0, 1, 0, 1, 0, 1, 1, 0, 1,
-                             1, 1, 0, 0, 0, 1, 0, 1, 0, 0], dtype=np.int)
+    y_expected = np.asarray([0, 1, 0, 0, 0, 1, 1, 0, 0, 0,
+                             1, 1, 0, 1, 1, 1, 0, 1, 0, 0,
+                             0, 1, 0, 0, 0, 1, 0, 1, 0, 0,
+                             0, 0, 0, 1, 1, 0, 1, 0, 1, 1,
+                             0, 1, 1, 1, 1, 0, 0, 1, 0, 0], dtype=np.int)
 
     run_prequential_supervised(stream, learner, max_samples=2000, n_wait=40, y_expected=y_expected)
 
@@ -30,11 +30,11 @@ def test_srp_randomsubspaces():
                                                training_method='randomsubspaces',
                                                random_state=1)
 
-    y_expected = np.asarray([0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                             0, 1, 1, 1, 0, 1, 1, 0, 0, 1,
-                             0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-                             1, 0, 1, 1, 1, 0, 0, 0, 0, 1,
-                             0, 0, 1, 0, 1, 1, 0, 0, 0, 0], dtype=np.int)
+    y_expected = np.asarray([0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                             1, 1, 0, 0, 0, 0, 0, 1, 0, 1,
+                             1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
+                             1, 0, 0, 1, 0, 1, 1, 1, 1, 0], dtype=np.int)
 
     run_prequential_supervised(stream, learner, max_samples=2000, n_wait=40, y_expected=y_expected)
 
@@ -46,11 +46,11 @@ def test_srp_resampling():
                                                training_method='resampling',
                                                random_state=1)
 
-    y_expected = np.asarray([0, 0, 0, 1, 0, 0, 0, 0, 1, 1,
-                             0, 0, 0, 1, 0, 1, 0, 0, 1, 0,
-                             0, 0, 0, 0, 1, 0, 0, 0, 1, 1,
-                             1, 1, 1, 0, 1, 0, 0, 0, 1, 1,
-                             0, 0, 0, 1, 1, 1, 0, 1, 1, 0], dtype=np.int)
+    y_expected = np.asarray([1, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                             0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+                             0, 0, 1, 1, 0, 0, 1, 0, 0, 0,
+                             0, 1, 1, 1, 0, 0, 1, 1, 1, 1,
+                             0, 1, 1, 1, 0, 1, 1, 0, 1, 0], dtype=np.int)
 
     run_prequential_supervised(stream, learner, max_samples=2000, n_wait=40, y_expected=y_expected)
 

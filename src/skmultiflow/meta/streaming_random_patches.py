@@ -428,7 +428,7 @@ class StreamingRandomPatchesBaseLearner:
         self.n_warnings_induced = 0
 
         # Background learner
-        self._background_learner = None   # type: List[StreamingRandomPatchesBaseLearner]
+        self._background_learner = None   # type: Optional[StreamingRandomPatchesBaseLearner]
         self._background_learner_class = StreamingRandomPatchesBaseLearner
 
         # Nominal attributes
