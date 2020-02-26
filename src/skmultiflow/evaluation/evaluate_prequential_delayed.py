@@ -323,7 +323,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         """
         self._start_time = timer()
         self._end_time = timer()
-        print('Prequential Evaluation')
+        print('Prequential Evaluation Delayed')
         print('Evaluating {} target(s).'.format(self.stream.n_targets))
 
         actual_max_samples = self.stream.n_remaining_samples()
@@ -443,6 +443,23 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 if exc is KeyboardInterrupt:
                     self._update_metrics()
                 break
+
+        # get delayed samples to update model before predicting a new batch
+        X_delayed, y_real_delayed, y_pred_delayed = self._get_delayed_samples()
+        # update metrics if y_pred_delayed has items
+        if len(y_pred_delayed) > 0: 
+            for j in range(self.n_models):
+                for i in range(len(y_pred_delayed[0])):
+                    self.mean_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
+                    self.current_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
+            self._check_progress(actual_max_samples)
+
+            if ((self.global_sample_count % self.n_wait) == 0 or
+                    (self.global_sample_count >= self.max_samples) or
+                    (self.global_sample_count / self.n_wait > self.update_count + 1)):
+                if y_pred_delayed is not None:
+                    self._update_metrics()
+                self.update_count += 1
 
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
