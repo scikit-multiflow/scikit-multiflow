@@ -19,7 +19,8 @@ jobs:
     vmImage: 'ubuntu-latest'
   
   steps:
-    - template: .ci/azure-install.yml
+    - template: azure-install.yml
+    - template: azure-test.yml
 
 - job: macOS
   
@@ -34,7 +35,9 @@ jobs:
     vmImage: 'macOS-latest'
   
   steps:
-    - template: .ci/azure-install.yml
+    - template: azure-install.yml
+    - template: azure-test.yml
+
 
 - job: Windows
   
@@ -49,4 +52,5 @@ jobs:
     vmImage: 'windows-latest'
   
   steps:
-    - template: .ci/azure-install.yml
+    - template: azure-install.yml
+    - template: azure-test.yml
