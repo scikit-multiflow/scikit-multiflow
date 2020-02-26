@@ -7,7 +7,9 @@
       displayName: 'Use Python $(python.version)'
 
     - script: |
-        python -m pip install --upgrade pip && python -m pip install -r requirements-dev.txt
+        python -m pip install --upgrade pip
+        python -m pip install setuptool
+        python -m pip install -r requirements-dev.txt
         pip install --only-binary=numpy,scipy numpy scipy
         pip install .
       displayName: 'Installing scikit-multiflow'
