@@ -351,7 +351,7 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
     def _init_ensemble_members(self):
         # Create empty ensemble:
         base_learner_class = self._base_learner_class
-        self.ensemble: List[base_learner_class] = []
+        self.ensemble = []   # type: List[base_learner_class]
 
         performance_evaluator = self._base_performance_evaluator
 
@@ -414,8 +414,8 @@ class StreamingRandomPatchesBaseLearner:
         # Drift detection
         self.disable_background_learner = disable_background_learner
         self.disable_drift_detector = disable_drift_detector
-        self.drift_detection_method: BaseDriftDetector = clone(drift_detection_method)
-        self.warning_detection_method: BaseDriftDetector = clone(warning_detection_method)
+        self.drift_detection_method = clone(drift_detection_method)   # type: BaseDriftDetector
+        self.warning_detection_method = clone(warning_detection_method)   # type: BaseDriftDetector
         self.drift_detection_criteria = drift_detection_criteria
 
         # Background learner
@@ -428,7 +428,7 @@ class StreamingRandomPatchesBaseLearner:
         self.n_warnings_induced = 0
 
         # Background learner
-        self._background_learner: Optional[StreamingRandomPatchesBaseLearner] = None
+        self._background_learner = None   # type: List[StreamingRandomPatchesBaseLearner]
         self._background_learner_class = StreamingRandomPatchesBaseLearner
 
         # Nominal attributes
