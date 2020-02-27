@@ -269,7 +269,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         # transpose prediction matrix to model-sample again 
         y_pred = np.array(delayed_samples["y_pred"].to_list()).T.tolist()
         # return X, y_real and y_pred for the unqueued samples
-        return(delayed_samples["X"].to_numpy(), delayed_samples["y_real"].to_numpy(), y_pred)
+        return(delayed_samples["X"].to_list(), delayed_samples["y_real"].to_list(), y_pred)
 
     def _update_classifiers(self, X, y):
         # check if there are samples to update
@@ -363,7 +363,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             self.first_run = False
 
             # save actual timestamp, which is based on the last sample from the training data
-            self.current_timestamp = arrival_time.to_numpy()[-1]
+            self.current_timestamp = arrival_time.to_list()[-1]
             # create dataframe to save delayed data
             # X = features
             # y_real = real label
@@ -394,7 +394,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     X, arrival_time, available_time, y_real = current_batch
 
                 # update current timestamp
-                self.current_timestamp = arrival_time.to_numpy()[-1]
+                self.current_timestamp = arrival_time.to_list()[-1]
 
                 # get delayed samples to update model before predicting a new batch
                 X_delayed, y_real_delayed, y_pred_delayed = self._get_delayed_samples()
