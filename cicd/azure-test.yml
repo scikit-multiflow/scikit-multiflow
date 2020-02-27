@@ -1,6 +1,6 @@
   steps:
     - script: |
-        python -m pytest --junitxml=junit/test-results.xml --cov=skmultiflow --cov-report=xml --cov-report=html --showlocals -v tests
+        python -m pytest --junitxml=junit/test-results.xml --cov=skmultiflow --cov-report=xml --showlocals -v tests
       displayName: 'Running tests'
 
     - task: PublishTestResults@2
@@ -17,4 +17,3 @@
       inputs:
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
-        reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
