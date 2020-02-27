@@ -6,11 +6,11 @@
     - task: PublishTestResults@2
       inputs:
         testResultsFiles: '**/test-results.xml'
-        testRunTitle: 'Python $(python.version)'
+        testRunTitle: '$(Agent.OS) - Python $(python.version)'
       condition: succeededOrFailed()
 
     - script: |
-        bash <(curl https://codecov.io/bash) -t f9f0bf07-aa4b-4349-af68-7cf713422d09 -f coverage.xml -F adder -F subtractor
+        curl https://codecov.io/bash -t f9f0bf07-aa4b-4349-af68-7cf713422d09 -f coverage.xml -F adder -F subtractor | bash
       displayName: 'Uploading to codecov.io'
 
     - task: PublishCodeCoverageResults@1
