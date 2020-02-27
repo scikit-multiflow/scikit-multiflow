@@ -71,18 +71,26 @@ def test_srp_coverage():
 
     learner = StreamingRandomPatchesClassifier(n_estimators=3,
                                                subspace_mode='MsqrtM1',
+                                               disable_drift_detection=True,
+                                               disable_weighted_vote=True,
                                                random_state=1)
     run_prequential_supervised(stream, learner, max_samples=100, n_wait=10)
 
     learner = StreamingRandomPatchesClassifier(n_estimators=3,
                                                disable_background_learner=True,
-                                               disable_drift_detection=True,
-                                               disable_weighted_vote=True,
+                                               nominal_attributes=[3, 4, 5],
                                                random_state=1)
     run_prequential_supervised(stream, learner, max_samples=2000, n_wait=40)
 
+    # Cover model reset and init ensemble calls from predict_proba and partial_fit
     learner.reset()
     assert learner.ensemble is None
+
+    X, y = stream.next_sample()
+    learner.partial_fit(X, y)
+    learner.reset()
+    X, y = stream.next_sample()
+    assert learner.predict_proba(X)[0] == 0.0
 
     with pytest.raises(ValueError):
         _ = StreamingRandomPatchesClassifier(training_method='invalid')
