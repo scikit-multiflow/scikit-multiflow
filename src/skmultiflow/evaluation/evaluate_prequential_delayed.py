@@ -267,7 +267,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         # remove these samples from delay_queue
         self.delay_queue = self.delay_queue[self.delay_queue['available_time'] > self.current_timestamp]
         # transpose prediction matrix to model-sample again 
-        y_pred = delayed_samples["y_pred"].to_numpy().T.tolist()
+        y_pred = np.array(delayed_samples["y_pred"].to_list()).T.tolist()
         # return X, y_real and y_pred for the unqueued samples
         return(delayed_samples["X"].to_numpy(), delayed_samples["y_real"].to_numpy(), y_pred)
 
@@ -392,12 +392,13 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     X, arrival_time, available_time, y_real, weight = current_batch
                 else:
                     X, arrival_time, available_time, y_real = current_batch
-                
+
                 # update current timestamp
                 self.current_timestamp = arrival_time.to_numpy()[-1]
 
                 # get delayed samples to update model before predicting a new batch
                 X_delayed, y_real_delayed, y_pred_delayed = self._get_delayed_samples()
+
                 # update metrics if y_pred_delayed has items
                 if len(y_pred_delayed) > 0: 
                     for j in range(self.n_models):
@@ -443,23 +444,6 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 if exc is KeyboardInterrupt:
                     self._update_metrics()
                 break
-
-        # get delayed samples to update model before predicting a new batch
-        X_delayed, y_real_delayed, y_pred_delayed = self._get_delayed_samples()
-        # update metrics if y_pred_delayed has items
-        if len(y_pred_delayed) > 0: 
-            for j in range(self.n_models):
-                for i in range(len(y_pred_delayed[0])):
-                    self.mean_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
-                    self.current_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
-            self._check_progress(actual_max_samples)
-
-            if ((self.global_sample_count % self.n_wait) == 0 or
-                    (self.global_sample_count >= self.max_samples) or
-                    (self.global_sample_count / self.n_wait > self.update_count + 1)):
-                if y_pred_delayed is not None:
-                    self._update_metrics()
-                self.update_count += 1
 
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
