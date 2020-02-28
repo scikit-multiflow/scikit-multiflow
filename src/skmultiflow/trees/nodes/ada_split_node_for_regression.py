@@ -32,6 +32,10 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         self._random_seed = 1
         self._classifier_random = check_random_state(self._random_seed)
 
+        # To normalize the observed errors in the [0, 1] range
+        self._min_error = float('Inf')
+        self._max_error = float('-Inf')
+
     # Override AdaNode
     def number_leaves(self):
         num_of_leaves = 0
@@ -59,14 +63,11 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
 
     # Override AdaNode
     def learn_from_instance(self, X, y, weight, rhat, parent, parent_branch):
-
-        true_target = y
-
         normalized_error = 0.0
 
         if self.filter_instance_to_leaf(X, parent, parent_branch).node is not None:
-            target_prediction = rhat.predict([X])[0]
-            normalized_error = rhat.get_normalized_error(target_prediction, true_target)
+            y_pred = rhat.predict([X])[0]
+            normalized_error = self.get_normalized_error(y, y_pred)
         if self._estimation_error_weight is None:
             self._estimation_error_weight = ADWIN()
 
@@ -185,3 +186,17 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         if self._alternate_tree is not None:
             self._alternate_tree.filter_instance_to_leaves(X, y, weight, self, -999,
                                                            update_splitter_counts, found_nodes)
+
+    def get_normalized_error(self, y, y_pred):
+        abs_error = abs(y - y_pred)
+
+        # Incremental maintenance of the normalization ranges
+        if abs_error < self._min_error:
+            self._min_error = abs_error
+        if abs_error > self._max_error:
+            self._max_error = abs_error
+
+        if self._min_error != self._max_error:
+            return (abs_error - self._min_error) / (self._max_error - self._min_error)
+        else:
+            return 0.0

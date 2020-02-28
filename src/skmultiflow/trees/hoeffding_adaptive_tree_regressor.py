@@ -179,11 +179,6 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
             self._active_leaf_node_cnt = 1
         self._tree_root.learn_from_instance(X, y, weight, self, None, -1)
 
-    def get_normalized_error(self, prediction, y):
-        normal_prediction = self.normalize_target_value(prediction)
-        normal_value = self.normalize_target_value(y)
-        return np.abs(normal_value-normal_prediction)
-
     def filter_instance_to_leaves(self, X, y, weight, split_parent, parent_branch, update_splitter_counts):
         nodes = []
         self._tree_root.filter_instance_to_leaves(X, y, weight, split_parent, parent_branch,
