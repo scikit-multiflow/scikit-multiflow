@@ -4,12 +4,14 @@ from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 
 
 def test_random_rbf_generator(test_path):
-    stream = RandomRBFGenerator(model_random_state=99, sample_random_state=50, n_classes=4, n_features=10, n_centroids=50)
+    stream = RandomRBFGenerator(model_random_state=99, sample_random_state=50, n_classes=4,
+                                n_features=10,
+                                n_centroids=50)
 
     assert stream.n_remaining_samples() == -1
 
     expected_names = ['att_num_0', 'att_num_1', 'att_num_2', 'att_num_3', 'att_num_4',
-                       'att_num_5', 'att_num_6', 'att_num_7', 'att_num_8', 'att_num_9']
+                      'att_num_5', 'att_num_6', 'att_num_7', 'att_num_8', 'att_num_9']
     assert stream.feature_names == expected_names
 
     expected_target_values = [0, 1, 2, 3]

@@ -4,7 +4,8 @@ from skmultiflow.data.sine_generator import SineGenerator
 
 
 def test_sine_generator(test_path):
-    stream = SineGenerator(classification_function=2, random_state=112, balance_classes=False, has_noise=True)
+    stream = SineGenerator(classification_function=2, random_state=112, balance_classes=False,
+                           has_noise=True)
 
     assert stream.n_remaining_samples() == -1
 
@@ -55,6 +56,6 @@ def test_sine_generator(test_path):
 
     assert 'stream' == stream._estimator_type
 
-    expected_info = "SineGenerator(balance_classes=False, classification_function=2, has_noise=True,\n" \
-                    "              random_state=112)"
+    expected_info = "SineGenerator(balance_classes=False, classification_function=2,\n" \
+                    "              has_noise=True, random_state=112)"
     assert stream.get_info() == expected_info

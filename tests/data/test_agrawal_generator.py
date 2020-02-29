@@ -4,11 +4,13 @@ from skmultiflow.data.agrawal_generator import AGRAWALGenerator
 
 
 def test_agrawal_generator(test_path):
-    stream = AGRAWALGenerator(classification_function=2, random_state=112, balance_classes=False, perturbation=0.28)
+    stream = AGRAWALGenerator(classification_function=2, random_state=112, balance_classes=False,
+                              perturbation=0.28)
 
     assert stream.n_remaining_samples() == -1
 
-    expected_names = ["salary", "commission", "age", "elevel", "car", "zipcode", "hvalue", "hyears", "loan"]
+    expected_names = ["salary", "commission", "age", "elevel", "car", "zipcode", "hvalue",
+                      "hyears", "loan"]
     assert stream.feature_names == expected_names
 
     expected_targets = [0, 1]
@@ -20,7 +22,7 @@ def test_agrawal_generator(test_path):
 
     assert stream.n_cat_features == 3
 
-    assert  stream.n_num_features == 6
+    assert stream.n_num_features == 6
 
     assert stream.n_targets == 1
 

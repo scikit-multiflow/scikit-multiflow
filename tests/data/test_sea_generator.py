@@ -4,7 +4,8 @@ from skmultiflow.data.sea_generator import SEAGenerator
 
 
 def test_sea_generator(test_path):
-    stream = SEAGenerator(classification_function=2, random_state=112, balance_classes=False, noise_percentage=0.28)
+    stream = SEAGenerator(classification_function=2, random_state=112, balance_classes=False,
+                          noise_percentage=0.28)
 
     assert stream.n_remaining_samples() == -1
 

@@ -4,15 +4,19 @@ from skmultiflow.data.random_tree_generator import RandomTreeGenerator
 
 
 def test_random_tree_generator(test_path):
-    stream = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2, n_cat_features=2,
-                                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=6, min_leaf_depth=3,
+    stream = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2,
+                                 n_cat_features=2,
+                                 n_num_features=5, n_categories_per_cat_feature=5,
+                                 max_tree_depth=6, min_leaf_depth=3,
                                  fraction_leaves_per_level=0.15)
 
     assert stream.n_remaining_samples() == -1
 
     expected_names = ['att_num_0', 'att_num_1', 'att_num_2', 'att_num_3', 'att_num_4',
-                       'att_nom_0_val0', 'att_nom_0_val1', 'att_nom_0_val2', 'att_nom_0_val3', 'att_nom_0_val4',
-                       'att_nom_1_val0', 'att_nom_1_val1', 'att_nom_1_val2', 'att_nom_1_val3', 'att_nom_1_val4']
+                      'att_nom_0_val0', 'att_nom_0_val1', 'att_nom_0_val2', 'att_nom_0_val3',
+                      'att_nom_0_val4',
+                      'att_nom_1_val0', 'att_nom_1_val1', 'att_nom_1_val2', 'att_nom_1_val3',
+                      'att_nom_1_val4']
     assert stream.feature_names == expected_names
 
     expected_target_values = [0, 1]

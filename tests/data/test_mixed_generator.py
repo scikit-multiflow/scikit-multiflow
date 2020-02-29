@@ -31,7 +31,6 @@ def test_mixed_generator(test_path):
 
     assert stream.is_restartable() is True
 
-
     # Load test data corresponding to first 10 instances
     test_file = os.path.join(test_path, 'mixed_stream.npz')
     data = np.load(test_file)

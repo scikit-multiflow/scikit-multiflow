@@ -4,13 +4,15 @@ from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift
 
 
 def test_random_rbf_generator_drift(test_path):
-    stream = RandomRBFGeneratorDrift(model_random_state=99, sample_random_state=50, n_classes=4, n_features=10, n_centroids=50,
+    stream = RandomRBFGeneratorDrift(model_random_state=99, sample_random_state=50, n_classes=4,
+                                     n_features=10,
+                                     n_centroids=50,
                                      change_speed=0.87, num_drift_centroids=50)
 
     assert stream.n_remaining_samples() == -1
 
     expected_names = ['att_num_0', 'att_num_1', 'att_num_2', 'att_num_3', 'att_num_4',
-                       'att_num_5', 'att_num_6', 'att_num_7', 'att_num_8', 'att_num_9']
+                      'att_num_5', 'att_num_6', 'att_num_7', 'att_num_8', 'att_num_9']
     assert stream.feature_names == expected_names
 
     expected_targets = [0, 1, 2, 3]
@@ -26,7 +28,8 @@ def test_random_rbf_generator_drift(test_path):
 
     assert stream.n_targets == 1
 
-    assert stream.get_data_info() == 'Random RBF Generator with drift - 1 target(s), 4 classes, 10 features'
+    assert stream.get_data_info() == 'Random RBF Generator with drift - 1 target(s), 4 classes,' \
+                                     ' 10 features'
 
     assert stream.has_more_samples() is True
 
