@@ -140,11 +140,11 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
 
     # Override AdaNode
     def kill_tree_children(self, rhat):
-        for child in self._children:
+        for child in self._children.values():
             if child is not None:
                 # Delete alternate tree if it exists
                 if isinstance(child, SplitNode) and child._alternate_tree is not None:
-                    self._pruned_alternate_trees += 1
+                    rhat.pruned_alternate_trees_cnt += 1
                 # Recursive delete of SplitNodes
                 if isinstance(child, SplitNode):
                     child.kill_tree_children(rhat)
