@@ -60,13 +60,12 @@ class AdditiveExpertEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
        # Imports
        from skmultiflow.data import SEAGenerator
        from skmultiflow.meta import AdditiveExpertEnsembleClassifier
-       from skmultiflow.bayes import NaiveBayes
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
 
        # Setup Additive Expert Ensemble Classifier
-       additive_expert_ensemble_classifier = AdditiveExpertEnsembleClassifier()
+       add_exp = AdditiveExpertEnsembleClassifier()
 
        # Setup variables to control loop and track performance
        n_samples = 0
@@ -79,7 +78,7 @@ class AdditiveExpertEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
            y_pred = additive_expert_ensemble_classifier.predict(X)
            if y[0] == y_pred[0]:
                correct_cnt += 1
-           additive_expert_ensemble_classifier = additive_expert_ensemble_classifier.partial_fit(X, y)
+           add_exp = add_exp.partial_fit(X, y)
            n_samples += 1
 
        # Display results

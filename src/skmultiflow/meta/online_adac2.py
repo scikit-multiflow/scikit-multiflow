@@ -109,7 +109,7 @@ class OnlineAdaC2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
        # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Online Ada C2 Classifier: {}'.format(correct_cnt / n_samples))
+       print('Online Ada C2 Classifier performance: {}'.format(correct_cnt / n_samples))
     """
 
     def __init__(self,

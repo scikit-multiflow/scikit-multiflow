@@ -46,7 +46,6 @@ class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMi
        # Imports
        from skmultiflow.data import SEAGenerator
        from skmultiflow.meta import BatchIncrementalClassifier
-       from skmultiflow.trees import HoeffdingTreeClassifier
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
@@ -59,7 +58,7 @@ class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMi
        # Preparing the processing of 5000 samples and correct prediction count
        n_samples = 0
        correct_cnt = 0
-       while n_samples < 5000:
+       while n_samples < 5000 and stream.has_more_samples():
            X, y = stream.next_sample()
            y_pred = batch_incremental_classifier.predict(X)
            if y[0] == y_pred[0]:

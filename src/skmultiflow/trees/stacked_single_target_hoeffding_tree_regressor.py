@@ -90,7 +90,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
        stream = RegressionGenerator(n_targets=n_targets, random_state=1)
 
        # Setup the Stacked Single-target Hoeffding Tree Regressor
-       stacked_single_target_hoeffding_tree_regressor = StackedSingleTargetHoeffdingTreeRegressor()
+       sst_ht = StackedSingleTargetHoeffdingTreeRegressor()
 
        # Auxiliary variables to control loop and track performance
        n_samples = 0
@@ -103,13 +103,13 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
        while n_samples < max_samples and stream.has_more_samples():
            X, y = stream.next_sample()
            y_true[n_samples] = y[0]
-           y_pred[n_samples] = stacked_single_target_hoeffding_tree_regressor.predict(X)[0]
-           stacked_single_target_hoeffding_tree_regressor.partial_fit(X, y)
+           y_pred[n_samples] = sst_ht.predict(X)[0]
+           sst_ht.partial_fit(X, y)
            n_samples += 1
 
        # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Hoeffding Tree Regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
+       print('Stacked Single-target Hoeffding Tree Regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
 
     # =====================================================================

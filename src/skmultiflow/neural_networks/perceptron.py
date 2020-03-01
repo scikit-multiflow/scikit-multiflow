@@ -21,27 +21,25 @@ class PerceptronMask(BaseSKMObject, ClassifierMixin):
        stream = SEAGenerator(random_state=1)
 
        # Setup the Perceptron Mask
-       perceptron_mask = PerceptronMask()
+       perceptron = PerceptronMask()
 
        # Pre-train the Perceptron Mask with 200 samples
-       X, y = stream.next_sample(200)
-       perceptron_mask.partial_fit(X, y, classes=stream.target_values)
 
        # Prepare the processing of 5000 samples and correct prediction count
        n_samples = 0
        correct_cnt = 0
-       while n_samples < 5000:
+       while n_samples < 5000 and stream.has_more_samples():
            X, y = stream.next_sample()
-           my_pred = perceptron_mask.predict(X)
+           my_pred = perceptron.predict(X)
            if y[0] == my_pred[0]:
                correct_cnt += 1
-           perceptron_mask = perceptron_mask.partial_fit(X, y, classes=stream.target_values)
+           perceptron = perceptron.partial_fit(X, y, classes=stream.target_values)
            n_samples += 1
 
        # Display the results
        print('Perceptron Mask usage example')
        print('{} samples analyzed'.format(n_samples))
-       print("Perceptron Mask's performance: {}".format(correct_cnt / n_samples))
+       print("Perceptron's performance: {}".format(correct_cnt / n_samples))
     """
     def __init__(self,
                  penalty=None,

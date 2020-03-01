@@ -100,7 +100,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
        stream = SEAGenerator(random_state=1)
 
        # Setup Extremely Fast Decision Tree estimator
-       extremely_fast_decicision_tree = ExtremelyFastDecisionTreeClassifier()
+       efdt = ExtremelyFastDecisionTreeClassifier()
 
        # Setup variables to control loop and track performance
        n_samples = 0
@@ -110,10 +110,10 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
        # Train the estimator with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
            X, y = stream.next_sample()
-           y_pred = extremely_fast_decicision_tree.predict(X)
+           y_pred = efdt.predict(X)
            if y[0] == y_pred[0]:
                correct_cnt += 1
-           extremely_fast_decicision_tree.partial_fit(X, y)
+           efdt.partial_fit(X, y)
            n_samples += 1
 
        # Display results

@@ -96,8 +96,6 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
        # Setup the Online RUSBoost Classifier
        online_rus_boost_classifier = OnlineRUSBoostClassifier()
-       X, y = stream.next_sample(max_samples)
-       online_rus_boost_classifier.partial_fit(X, y, classes=stream.target_values)
 
        # Train the classifier with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
@@ -110,7 +108,7 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
        # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Online RUS Boost Classifier: {}'.format(correct_cnt / n_samples))
+       print('Online RUS Boost Classifier performance: {}'.format(correct_cnt / n_samples))
     """
 
     def __init__(self,

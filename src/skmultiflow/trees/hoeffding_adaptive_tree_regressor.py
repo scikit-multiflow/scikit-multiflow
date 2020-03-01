@@ -95,7 +95,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
        # Prepare stream for use
 
        # Setup the Hoeffding Adaptive Tree Regressor
-       hoeffding_adaptive_tree_regressor = HoeffdingAdaptiveTreeRegressor()
+       hatr = HoeffdingAdaptiveTreeRegressor()
 
        # Auxiliary variables to control loop and track performance
        n_samples = 0
@@ -108,8 +108,8 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
        while n_samples < max_samples and stream.has_more_samples():
            X, y = stream.next_sample()
            y_true[n_samples] = y[0]
-           y_pred[n_samples] = hoeffding_adaptive_tree_regressor.predict(X)[0]
-           hoeffding_adaptive_tree_regressor.partial_fit(X, y)
+           y_pred[n_samples] = hatr.predict(X)[0]
+           hatr.partial_fit(X, y)
            n_samples += 1
 
        # Display results

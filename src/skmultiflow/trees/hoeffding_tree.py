@@ -127,7 +127,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
        stream = SEAGenerator(random_state=1)
 
        # Setup Hoeffding Tree estimator
-       hoeffding_tree = HoeffdingTreeClassifier()
+       ht = HoeffdingTreeClassifier()
 
        # Setup variables to control loop and track performance
        n_samples = 0
@@ -137,10 +137,10 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
        # Train the estimator with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
            X, y = stream.next_sample()
-           y_pred = hoeffding_tree.predict(X)
+           y_pred = ht.predict(X)
            if y[0] == y_pred[0]:
                correct_cnt += 1
-           hoeffding_tree = hoeffding_tree.partial_fit(X, y)
+           ht = ht.partial_fit(X, y)
            n_samples += 1
 
        # Display results

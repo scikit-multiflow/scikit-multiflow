@@ -62,7 +62,6 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
        # Imports
        from skmultiflow.data import SEAGenerator
        from skmultiflow.meta import LearnPPNSEClassifier
-       from skmultiflow.trees import HoeffdingTreeClassifier
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)

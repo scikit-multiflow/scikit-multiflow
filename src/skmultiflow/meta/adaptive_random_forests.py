@@ -186,13 +186,12 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
            # Imports
            from skmultiflow.data import SEAGenerator
            from skmultiflow.meta import AdaptiveRandomForestClassifier
-           from skmultiflow.drift_detection import ADWIN
 
            # Setting up a data stream
            stream = SEAGenerator(random_state=1)
 
            # Setup Adaptive Random Forest Classifier
-           adaptive_random_forest_classifier = AdaptiveRandomForestClassifier()
+           arf = AdaptiveRandomForestClassifier()
 
            # Setup variables to control loop and track performance
            n_samples = 0
@@ -202,10 +201,10 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
            # Train the estimator with the samples provided by the data stream
            while n_samples < max_samples and stream.has_more_samples():
                X, y = stream.next_sample()
-               y_pred = adaptive_random_forest_classifier.predict(X)
+               y_pred = arf.predict(X)
                if y[0] == y_pred[0]:
                    correct_cnt += 1
-               adaptive_random_forest_classifier = adaptive_random_forest_classifier.partial_fit(X, y)
+               arf = arf.partial_fit(X, y)
                n_samples += 1
 
            # Display results

@@ -113,7 +113,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
        stream = RegressionGenerator(random_state=1)
 
        # Setup the Hoeffding Tree Regressor
-       hoeffding_tree_regressor = HoeffdingTreeRegressor()
+       htr = HoeffdingTreeRegressor()
 
        # Auxiliary variables to control loop and track performance
        n_samples = 0
@@ -126,8 +126,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
        while n_samples < max_samples and stream.has_more_samples():
            X, y = stream.next_sample()
            y_true[n_samples] = y[0]
-           y_pred[n_samples] = hoeffding_tree_regressor.predict(X)[0]
-           hoeffding_tree_regressor.partial_fit(X, y)
+           y_pred[n_samples] = htr.predict(X)[0]
+           htr.partial_fit(X, y)
            n_samples += 1
 
        # Display results

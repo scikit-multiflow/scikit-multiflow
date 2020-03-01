@@ -70,11 +70,6 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
        # Setup Half-Space Trees estimator
        half_space_trees = HalfSpaceTrees()
 
-       # Pre-train estimator with 200 samples
-       max_samples = 200
-       X, y = stream.next_sample(max_samples)
-       half_space_trees.partial_fit(X, y)
-
        # Setup variables to control loop and track performance
        n_samples = 0
        correct_cnt = 0

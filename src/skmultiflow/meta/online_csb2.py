@@ -94,8 +94,6 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
        # Setup the Online CSB2 Classifier
        online_csb2_classifier = OnlineCSB2Classifier()
-       X, y = stream.next_sample(max_samples)
-       online_csb2_classifier.partial_fit(X, y, classes=stream.target_values)
 
        # Train the classifier with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
@@ -108,7 +106,7 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
        # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Online CSB2 Classifier: {}'.format(correct_cnt / n_samples))
+       print('Online CSB2 Classifier performance: {}'.format(correct_cnt / n_samples))
     """
 
     def __init__(self,

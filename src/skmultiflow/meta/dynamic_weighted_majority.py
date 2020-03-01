@@ -55,13 +55,12 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
        # Imports
        from skmultiflow.data import SEAGenerator
        from skmultiflow.meta import DynamicWeightedMajorityClassifier
-       from skmultiflow.bayes import NaiveBayes
 
        # Setup a data stream
        stream = SEAGenerator(random_state=1)
 
        # Setup Dynamic Weighted Majority Ensemble Classifier
-       dynamic_weighted_majority_classifier = DynamicWeightedMajorityClassifier()
+       dwm = DynamicWeightedMajorityClassifier()
 
        # Setup varibles to control loop and track performance
        n_samples = 0
@@ -74,12 +73,12 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
            y_pred = dynamic_weighted_majority_classifier.predict(X)
            if y[0] == y_pred[0]:
                correct_cnt += 1
-           dynamic_weighted_majority_classifier = dynamic_weighted_majority_classifier.partial_fit(X, y)
+           dwm = dwm.partial_fit(X, y)
            n_samples += 1
 
        # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Dynamic Weighted Majority Classifier: {}'.format(correct_cnt / n_samples))
+       print('Dynamic Weighted Majority Classifier accuracy: {}'.format(correct_cnt / n_samples))
     """
 
     class WeightedExpert:

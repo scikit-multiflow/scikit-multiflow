@@ -76,18 +76,18 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
 
        # Pre-train the estimator with 200 samples
        X, y = stream.next_sample(200)
-       robust_soft_learning_vector_quantization = RobustSoftLearningVectorQuantization()
-       robust_soft_learning_vector_quantization.partial_fit(X, y)
+       rslvq = RobustSoftLearningVectorQuantization()
+       rslvq.partial_fit(X, y)
 
        # Preparing the processing of 5000 samples and correct prediction count
        n_samples = 0
        correct_cnt = 0
-       while n_samples < 5000:
+       while n_samples < 5000 and stream.has_more_samples():
            X, y = stream.next_sample()
            y_pred = robust_soft_learning_vector_quantization.predict(X)
            if y[0] == y_pred[0]:
                correct_cnt += 1
-           robust_soft_learning_vector_quantization = robust_soft_learning_vector_quantization.partial_fit(X, y)
+           rslvq = rslvq.partial_fit(X, y)
            n_samples += 1
 
        # Display results

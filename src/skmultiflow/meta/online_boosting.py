@@ -95,8 +95,6 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
        # Setup the Online Boosting Classifier
        online_boosting_classifier = OnlineBoostingClassifier()
-       X, y = stream.next_sample(max_samples)
-       online_boosting_classifier.partial_fit(X, y, classes=stream.target_values)
 
        # Train the classifier with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
@@ -109,7 +107,7 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
        # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Online Boosting Classifier: {}'.format(correct_cnt / n_samples))
+       print('Online Boosting Classifier performance: {}'.format(correct_cnt / n_samples))
     """
 
     def __init__(self, base_estimator=KNNADWINClassifier(), n_estimators=10, drift_detection=True, random_state=None):
