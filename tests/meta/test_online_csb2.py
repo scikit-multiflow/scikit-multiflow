@@ -7,14 +7,15 @@ import numpy as np
 def test_online_csb2():
     stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
     nb = NaiveBayes()
-    learner = OnlineCSB2Classifier(base_estimator=nb, n_estimators=3, cost_positive=1, cost_negative=0.9, random_state=112)
+    learner = OnlineCSB2Classifier(base_estimator=nb, n_estimators=3, cost_positive=1,
+                                   cost_negative=0.9, random_state=112)
     first = True
 
     cnt = 0
     max_samples = 5000
     predictions = []
     wait_samples = 100
-    correct_predictions= 0
+    correct_predictions = 0
 
     while cnt < max_samples:
         X, y = stream.next_sample()
@@ -44,7 +45,8 @@ def test_online_csb2():
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    expected_info = "OnlineCSB2Classifier(base_estimator=NaiveBayes(nominal_attributes=None), cost_negative=0.9, " \
-                    "cost_positive=1, drift_detection=True, n_estimators=3, random_state=112)"
+    expected_info = "OnlineCSB2Classifier(base_estimator=NaiveBayes(nominal_attributes=None), " \
+                    "cost_negative=0.9, cost_positive=1, drift_detection=True, " \
+                    "n_estimators=3, random_state=112)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info

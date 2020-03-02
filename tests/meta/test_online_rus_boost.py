@@ -7,7 +7,8 @@ import numpy as np
 def test_online_rus_1():
     stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
     nb = NaiveBayes()
-    learner = OnlineRUSBoostClassifier(base_estimator=nb, n_estimators=3, sampling_rate=5, algorithm=1,
+    learner = OnlineRUSBoostClassifier(base_estimator=nb, n_estimators=3, sampling_rate=5,
+                                       algorithm=1,
                                        random_state=112)
     first = True
 
@@ -15,7 +16,7 @@ def test_online_rus_1():
     max_samples = 5000
     predictions = []
     wait_samples = 100
-    correct_predictions= 0
+    correct_predictions = 0
 
     while cnt < max_samples:
         X, y = stream.next_sample()
@@ -47,7 +48,8 @@ def test_online_rus_1():
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    expected_info = "OnlineRUSBoostClassifier(algorithm=1, base_estimator=NaiveBayes(nominal_attributes=None), " \
+    expected_info = "OnlineRUSBoostClassifier(algorithm=1, " \
+                    "base_estimator=NaiveBayes(nominal_attributes=None), " \
                     "drift_detection=True, n_estimators=3, random_state=112, sampling_rate=5)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
@@ -56,7 +58,8 @@ def test_online_rus_1():
 def test_online_rus_2():
     stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
     nb = NaiveBayes()
-    learner = OnlineRUSBoostClassifier(base_estimator=nb, n_estimators=3, sampling_rate=5, algorithm=2,
+    learner = OnlineRUSBoostClassifier(base_estimator=nb, n_estimators=3, sampling_rate=5,
+                                       algorithm=2,
                                        random_state=112)
     first = True
 
@@ -64,7 +67,7 @@ def test_online_rus_2():
     max_samples = 5000
     predictions = []
     wait_samples = 100
-    correct_predictions= 0
+    correct_predictions = 0
 
     while cnt < max_samples:
         X, y = stream.next_sample()
@@ -100,7 +103,8 @@ def test_online_rus_2():
 def test_online_rus_3():
     stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
     nb = NaiveBayes()
-    learner = OnlineRUSBoostClassifier(base_estimator=nb, n_estimators=3, sampling_rate=5, algorithm=3,
+    learner = OnlineRUSBoostClassifier(base_estimator=nb, n_estimators=3, sampling_rate=5,
+                                       algorithm=3,
                                        random_state=112)
     first = True
 
@@ -108,7 +112,7 @@ def test_online_rus_3():
     max_samples = 5000
     predictions = []
     wait_samples = 100
-    correct_predictions= 0
+    correct_predictions = 0
 
     while cnt < max_samples:
         X, y = stream.next_sample()

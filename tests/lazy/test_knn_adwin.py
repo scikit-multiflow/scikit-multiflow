@@ -6,7 +6,8 @@ import numpy as np
 
 def test_knn_adwin():
     stream = ConceptDriftStream(stream=SEAGenerator(random_state=1),
-                                drift_stream=SEAGenerator(random_state=2, classification_function=2),
+                                drift_stream=SEAGenerator(random_state=2,
+                                                          classification_function=2),
                                 random_state=1, position=250, width=10)
 
     learner = KNNADWINClassifier(n_neighbors=8, leaf_size=40, max_window_size=200)
@@ -40,7 +41,8 @@ def test_knn_adwin():
     learner.reset()
     assert learner.window.n_samples == 0
 
-    expected_info = 'KNNADWINClassifier(leaf_size=40, max_window_size=200, n_neighbors=8, nominal_attributes=None)'
+    expected_info = 'KNNADWINClassifier(leaf_size=40, max_window_size=200, n_neighbors=8,' \
+                    ' nominal_attributes=None)'
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
 

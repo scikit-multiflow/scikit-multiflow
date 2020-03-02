@@ -6,7 +6,8 @@ from skmultiflow.drift_detection import PageHinkley
 def test_page_hinkley(test_path):
     """
     ADWIN drift detection test.
-    The first half of the stream contains a sequence corresponding to a normal distribution of integers from 0 to 1.
+    The first half of the stream contains a sequence corresponding to a normal
+    distribution of integers from 0 to 1.
     From index 999 to 1999 the sequence is a normal distribution of integers from 0 to 7.
     """
     ph = PageHinkley()

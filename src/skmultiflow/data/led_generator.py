@@ -102,7 +102,7 @@ class LEDGenerator(Stream):
     def __init__(self, random_state=None, noise_percentage=0.0, has_noise=False):
         super().__init__()
         self.random_state = random_state
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.noise_percentage = noise_percentage
         self.n_cat_features = self._NUM_BASE_ATTRIBUTES
         self.n_features = self.n_cat_features
@@ -141,7 +141,8 @@ class LEDGenerator(Stream):
         if (0.0 <= noise_percentage) and (noise_percentage <= 1.0):
             self._noise_percentage = noise_percentage
         else:
-            raise ValueError("noise percentage should be in [0.0..1.0], and {} was passed".format(noise_percentage))
+            raise ValueError("noise percentage should be in [0.0..1.0], and {} was passed".format(
+                noise_percentage))
 
     @property
     def has_noise(self):

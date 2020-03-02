@@ -81,7 +81,7 @@ class WaveformGenerator(Stream):
     True
         
     """
-    
+
     _NUM_CLASSES = 3
     _NUM_BASE_ATTRIBUTES = 21
     _TOTAL_ATTRIBUTES_INCLUDING_NOISE = 40
@@ -93,7 +93,7 @@ class WaveformGenerator(Stream):
         super().__init__()
 
         self.random_state = random_state
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.has_noise = has_noise
         self.n_num_features = self._NUM_BASE_ATTRIBUTES
         self.n_classes = self._NUM_CLASSES
@@ -177,8 +177,8 @@ class WaveformGenerator(Stream):
 
             for i in range(self._NUM_BASE_ATTRIBUTES):
                 data[j, i] = multiplier_a * self._H_FUNCTION[choice_a][i] \
-                            + multiplier_b * self._H_FUNCTION[choice_b][i] \
-                            + self._random_state.normal()
+                             + multiplier_b * self._H_FUNCTION[choice_b][i] \
+                             + self._random_state.normal()
 
             if self.has_noise:
                 for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):

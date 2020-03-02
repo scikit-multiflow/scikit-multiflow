@@ -9,8 +9,10 @@ from skmultiflow.evaluation import EvaluatePrequential
 
 def test_evaluate_prequential_classifier(tmpdir, test_path):
     # Setup file stream
-    stream = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=4, n_cat_features=2,
-                                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=6, min_leaf_depth=3,
+    stream = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=4,
+                                 n_cat_features=2,
+                                 n_num_features=5, n_categories_per_cat_feature=5,
+                                 max_tree_depth=6, min_leaf_depth=3,
                                  fraction_leaves_per_level=0.15)
 
     # Setup learner
@@ -67,8 +69,10 @@ def test_evaluate_prequential_classifier(tmpdir, test_path):
 
 def test_evaluate_classification_coverage(tmpdir):
     # A simple coverage test. Tests for metrics are placed in the corresponding test module.
-    stream = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2, n_cat_features=2,
-                                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=6, min_leaf_depth=3,
+    stream = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2,
+                                 n_cat_features=2,
+                                 n_num_features=5, n_categories_per_cat_feature=5,
+                                 max_tree_depth=6, min_leaf_depth=3,
                                  fraction_leaves_per_level=0.15)
 
     # Learner
@@ -77,7 +81,8 @@ def test_evaluate_classification_coverage(tmpdir):
 
     max_samples = 1000
     output_file = os.path.join(str(tmpdir), "prequential_summary.csv")
-    metrics = ['accuracy', 'kappa', 'kappa_t', 'kappa_m', 'f1', 'precision', 'recall', 'gmean', 'true_vs_predicted']
+    metrics = ['accuracy', 'kappa', 'kappa_t', 'kappa_m', 'f1', 'precision', 'recall', 'gmean',
+               'true_vs_predicted']
     evaluator = EvaluatePrequential(max_samples=max_samples,
                                     metrics=metrics,
                                     output_file=output_file)
@@ -149,7 +154,8 @@ def test_evaluate_multi_target_regression_coverage(tmpdir):
     mtrht = iSOUPTreeRegressor(leaf_prediction='adaptive')
 
     output_file = os.path.join(str(tmpdir), "prequential_summary.csv")
-    metrics = ['average_mean_square_error', 'average_mean_absolute_error', 'average_root_mean_square_error']
+    metrics = ['average_mean_square_error', 'average_mean_absolute_error',
+               'average_root_mean_square_error']
     evaluator = EvaluatePrequential(max_samples=max_samples,
                                     metrics=metrics,
                                     output_file=output_file)
@@ -164,7 +170,7 @@ def test_evaluate_coverage(tmpdir):
     max_samples = 1000
 
     # Stream
-    stream = SEAGenerator(random_state =1)
+    stream = SEAGenerator(random_state=1)
 
     # Learner
     nb = NaiveBayes()

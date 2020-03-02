@@ -43,7 +43,8 @@ def test_online_boosting():
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    expected_info = "OnlineBoostingClassifier(base_estimator=NaiveBayes(nominal_attributes=None), " \
-                    "drift_detection=True, n_estimators=None, random_state=112)"
+    expected_info = "OnlineBoostingClassifier(base_estimator=NaiveBayes(" \
+                    "nominal_attributes=None), drift_detection=True, " \
+                    "n_estimators=None, random_state=112)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info

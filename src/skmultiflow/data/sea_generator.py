@@ -90,12 +90,16 @@ class SEAGenerator(Stream):
     True
     
     """
-    def __init__(self, classification_function=0, random_state=None, balance_classes=False, noise_percentage=0.0):
+
+    def __init__(self, classification_function=0, random_state=None, balance_classes=False,
+                 noise_percentage=0.0):
         super().__init__()
 
         # Classification functions to use
-        self._classification_functions = [self._classification_function_zero, self._classification_function_one,
-                                          self._classification_function_two, self._classification_function_three]
+        self._classification_functions = [self._classification_function_zero,
+                                          self._classification_function_one,
+                                          self._classification_function_two,
+                                          self._classification_function_three]
 
         self.classification_function = classification_function
         self.random_state = random_state
@@ -105,7 +109,7 @@ class SEAGenerator(Stream):
         self.n_features = self.n_num_features
         self.n_classes = 2
         self.n_targets = 1
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.next_class_should_be_zero = False
         self.name = "SEA Generator"
 
@@ -163,7 +167,8 @@ class SEAGenerator(Stream):
         if isinstance(balance_classes, bool):
             self._balance_classes = balance_classes
         else:
-            raise ValueError("balance_classes should be boolean, {} was passed".format(balance_classes))
+            raise ValueError(
+                "balance_classes should be boolean, {} was passed".format(balance_classes))
 
     @property
     def noise_percentage(self):
@@ -188,7 +193,8 @@ class SEAGenerator(Stream):
         if (0.0 <= noise_percentage) and (noise_percentage <= 1.0):
             self._noise_percentage = noise_percentage
         else:
-            raise ValueError("noise percentage should be in [0.0..1.0], {} was passed".format(noise_percentage))
+            raise ValueError(
+                "noise percentage should be in [0.0..1.0], {} was passed".format(noise_percentage))
 
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
@@ -231,7 +237,8 @@ class SEAGenerator(Stream):
                 att1 = 10 * self._random_state.rand()
                 att2 = 10 * self._random_state.rand()
                 att3 = 10 * self._random_state.rand()
-                group = self._classification_functions[self.classification_function](att1, att2, att3)
+                group = self._classification_functions[self.classification_function](att1, att2,
+                                                                                     att3)
 
                 if not self.balance_classes:
                     desired_class_found = True

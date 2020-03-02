@@ -194,13 +194,15 @@ def test_adaptive_random_forests_labels_given():
         learner.partial_fit(X, y)
         cnt += 1
 
-    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in predictions]), "Probabilities should sum to 1."
+    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in
+                       predictions]), "Probabilities should sum to 1."
 
     class_probabilities = np.asarray(predictions).squeeze()
     assert class_probabilities.shape == (49, 2)
 
     predictions = class_probabilities.argmax(axis=1)
-    last_version_predictions = [1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
+    last_version_predictions = [1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1,
+                                0, 1, 1, 1, 1, 1, 1,
                                 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0]
 
     assert np.alltrue(predictions == last_version_predictions)
@@ -236,7 +238,8 @@ def test_adaptive_random_forests_batch_predict_proba():
     # all_true_labels = np.asarray(true_labels).flatten()
     # correct_predictions = sum(np.equal(all_true_labels, all_predictions.argmax(axis=1)))
 
-    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in all_predictions]), "Probabilities should sum to 1."
+    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in
+                       all_predictions]), "Probabilities should sum to 1."
     assert all_predictions.shape == (4 * 5, 2)
 
     last_version_predictions = [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1]

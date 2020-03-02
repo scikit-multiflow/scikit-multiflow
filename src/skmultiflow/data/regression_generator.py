@@ -110,7 +110,8 @@ class RegressionGenerator(Stream):
     
     """
 
-    def __init__(self, n_samples=40000, n_features=100, n_informative=10, n_targets=1, random_state=None):
+    def __init__(self, n_samples=40000, n_features=100, n_informative=10, n_targets=1,
+                 random_state=None):
         super().__init__()
         self.X = None
         self.y = None
@@ -121,7 +122,7 @@ class RegressionGenerator(Stream):
         self.n_num_features = n_features
         self.n_features = n_features
         self.random_state = random_state
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.name = "Regression Generator"
 
         self._prepare_for_use()
@@ -196,4 +197,5 @@ class RegressionGenerator(Stream):
         self.current_sample_y = None
 
     def get_data_info(self):
-        return "Regression Generator - {} targets, {} features".format(self.n_targets, self.n_features)
+        return "Regression Generator - {} targets, {} features".format(self.n_targets,
+                                                                       self.n_features)

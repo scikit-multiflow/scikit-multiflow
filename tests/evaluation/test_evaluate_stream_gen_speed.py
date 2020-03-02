@@ -6,7 +6,8 @@ def test_evaluate_stream_gen_speed():
     stream = SEAGenerator(random_state=1)
     stream_name = stream.name
 
-    evaluator = EvaluateStreamGenerationSpeed(n_samples=100000, max_time=float("inf"), output_file=None, batch_size=5)
+    evaluator = EvaluateStreamGenerationSpeed(n_samples=100000, max_time=float("inf"),
+                                              output_file=None, batch_size=5)
     stream = evaluator.evaluate(stream)
     assert stream_name == stream.name
 

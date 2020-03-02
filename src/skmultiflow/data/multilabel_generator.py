@@ -95,7 +95,7 @@ class MultilabelGenerator(Stream):
         self.n_classes = 2
         self.n_num_features = n_features
         self.random_state = random_state
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.name = "Multilabel Generator"
 
         self._prepare_for_use()
@@ -109,7 +109,7 @@ class MultilabelGenerator(Stream):
                                                         random_state=self._random_state)
         self.target_names = ["target_" + str(i) for i in range(self.n_targets)]
         self.feature_names = ["att_num_" + str(i) for i in range(self.n_num_features)]
-        self.target_values = np.unique(self.y).tolist() if self.n_targets == 1 else\
+        self.target_values = np.unique(self.y).tolist() if self.n_targets == 1 else \
             [np.unique(self.y[:, i]).tolist() for i in range(self.n_targets)]
 
     def next_sample(self, batch_size=1):

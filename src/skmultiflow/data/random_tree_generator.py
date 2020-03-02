@@ -101,8 +101,11 @@ class RandomTreeGenerator(Stream):
     True
     
     """
-    def __init__(self, tree_random_state=None, sample_random_state=None, n_classes=2, n_cat_features=5,
-                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=5, min_leaf_depth=3,
+
+    def __init__(self, tree_random_state=None, sample_random_state=None, n_classes=2,
+                 n_cat_features=5,
+                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=5,
+                 min_leaf_depth=3,
                  fraction_leaves_per_level=0.15):
         super().__init__()
 
@@ -118,7 +121,7 @@ class RandomTreeGenerator(Stream):
         self.min_leaf_depth = min_leaf_depth
         self.fraction_leaves_per_level = fraction_leaves_per_level
         self.tree_root = None
-        self._sample_random_state = None   # This is the actual random_state object used internally
+        self._sample_random_state = None  # This is the actual random_state object used internally
         self.name = "Random Tree Generator"
 
         self.target_names = ["class"]
@@ -156,10 +159,12 @@ class RandomTreeGenerator(Stream):
         for i in range(self.n_num_features + self.n_cat_features):
             nominal_att_candidates.append(i)
 
-        self.tree_root = self._generate_random_tree_node(0, nominal_att_candidates, min_numeric_value, max_numeric_value,
+        self.tree_root = self._generate_random_tree_node(0, nominal_att_candidates,
+                                                         min_numeric_value, max_numeric_value,
                                                          tree_random_state)
 
-    def _generate_random_tree_node(self, current_depth, nominal_att_candidates, min_numeric_value, max_numeric_value,
+    def _generate_random_tree_node(self, current_depth, nominal_att_candidates, min_numeric_value,
+                                   max_numeric_value,
                                    random_state):
         """
         Creates a node, choosing at random the splitting feature and the
@@ -228,21 +233,25 @@ class RandomTreeGenerator(Stream):
 
             new_max_value = max_numeric_value[:]
             new_max_value[numeric_index] = node.split_att_value
-            node.children.append(self._generate_random_tree_node(current_depth + 1, nominal_att_candidates,
-                                                                 min_numeric_value, new_max_value, random_state))
+            node.children.append(
+                self._generate_random_tree_node(current_depth + 1, nominal_att_candidates,
+                                                min_numeric_value, new_max_value, random_state))
 
             new_min_value = min_numeric_value[:]
             new_min_value[numeric_index] = node.split_att_value
-            node.children.append(self._generate_random_tree_node(current_depth + 1, nominal_att_candidates,
-                                                                 new_min_value, max_numeric_value, random_state))
+            node.children.append(
+                self._generate_random_tree_node(current_depth + 1, nominal_att_candidates,
+                                                new_min_value, max_numeric_value, random_state))
         else:
             node.split_att_index = nominal_att_candidates[chosen_att]
             new_nominal_candidates = array('d', nominal_att_candidates)
             new_nominal_candidates.remove(node.split_att_index)
 
             for i in range(self.n_categories_per_cat_feature):
-                node.children.append(self._generate_random_tree_node(current_depth + 1, new_nominal_candidates,
-                                                                     min_numeric_value, max_numeric_value, random_state))
+                node.children.append(
+                    self._generate_random_tree_node(current_depth + 1, new_nominal_candidates,
+                                                    min_numeric_value, max_numeric_value,
+                                                    random_state))
 
         return node
 
@@ -275,7 +284,9 @@ class RandomTreeGenerator(Stream):
             return self._classify_instance(node.children[aux], att_values)
         else:
             return self._classify_instance(
-                node.children[self.__get_integer_nominal_attribute_representation(node.split_att_index, att_values)],
+                node.children[
+                    self.__get_integer_nominal_attribute_representation(node.split_att_index,
+                                                                        att_values)],
                 att_values)
 
     def __get_integer_nominal_attribute_representation(self, nominal_index=None, att_values=None):
@@ -346,7 +357,8 @@ class RandomTreeGenerator(Stream):
                     else:
                         data[j, k + i] = 0.0
 
-            data[j, self.n_num_features + (self.n_cat_features * self.n_categories_per_cat_feature)] \
+            data[
+                j, self.n_num_features + (self.n_cat_features * self.n_categories_per_cat_feature)] \
                 = self._classify_instance(self.tree_root, data[j])
 
             self.current_sample_x = data[:self.n_num_features + (self.n_cat_features
@@ -383,6 +395,7 @@ class Node:
         split_att_value.
     
     """
+
     def __init__(self, class_label=None, split_att_index=None, split_att_value=None):
         self.class_label = class_label
         self.split_att_index = split_att_index

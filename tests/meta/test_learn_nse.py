@@ -61,9 +61,10 @@ def test_learn_nse():
     assert len(classifier.X_batch) == 0
     assert len(classifier.y_batch) == 0
 
-    expected_info = 'LearnPPNSEClassifier(base_estimator=GaussianNB(priors=None, var_smoothing=1e-09),\n' \
-                    '                     crossing_point=10, n_estimators=15, pruning=None,\n' \
-                    '                     slope=0.5, window_size=250)'
+    expected_info = 'LearnPPNSEClassifier(base_estimator=GaussianNB(priors=None,\n' \
+                    '                     var_smoothing=1e-09), crossing_point=10,\n' \
+                    '                     n_estimators=15, pruning=None, slope=0.5,\n' \
+                    '                     window_size=250)'
     assert classifier.get_info() == expected_info
     # test pruning error
     corrects, acc, classifier = run_classifier(estimator, stream, pruning="error", ensemble_size=5)

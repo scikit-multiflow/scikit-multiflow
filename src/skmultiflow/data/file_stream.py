@@ -186,7 +186,8 @@ class FileStream(Stream):
             self.n_samples = rows
             labels = raw_data.columns.values.tolist()
 
-            if (self.target_idx + self.n_targets) == cols or (self.target_idx + self.n_targets) == 0:
+            if (self.target_idx + self.n_targets) == cols or (
+                    self.target_idx + self.n_targets) == 0:
                 # Take everything to the right of target_idx
                 self.y = raw_data.iloc[:, self.target_idx:].values
                 self.target_names = raw_data.iloc[:, self.target_idx:].columns.values.tolist()
@@ -204,7 +205,8 @@ class FileStream(Stream):
                     self.n_cat_features = len(self.cat_features_idx)
                 else:
                     raise IndexError('Categorical feature index in {} '
-                                     'exceeds n_features {}'.format(self.cat_features_idx, self.n_features))
+                                     'exceeds n_features {}'.format(self.cat_features_idx,
+                                                                    self.n_features))
             self.n_num_features = self.n_features - self.n_cat_features
 
             if np.issubdtype(self.y.dtype, np.integer):
@@ -296,7 +298,8 @@ class FileStream(Stream):
 
     def get_data_info(self):
         if self.task_type == self._CLASSIFICATION:
-            return "{} - {} target(s), {} classes".format(self.basename, self.n_targets, self.n_classes)
+            return "{} - {} target(s), {} classes".format(self.basename, self.n_targets,
+                                                          self.n_classes)
         elif self.task_type == self._REGRESSION:
             return "{} - {} target(s)".format(self.basename, self.n_targets)
 
@@ -310,5 +313,5 @@ class FileStream(Stream):
             return [float] * self.n_targets
 
     def get_info(self):
-        return 'FileStream(filename={}, target_idx={}, n_targets={}, cat_features={})'\
-            .format("'" + self.basename + "'", self.target_idx, self. n_targets, self.cat_features)
+        return 'FileStream(filename={}, target_idx={}, n_targets={}, cat_features={})' \
+            .format("'" + self.basename + "'", self.target_idx, self.n_targets, self.cat_features)

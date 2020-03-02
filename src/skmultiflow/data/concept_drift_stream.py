@@ -76,7 +76,7 @@ class ConceptDriftStream(Stream):
         self.name = 'Drifting' + stream.name
 
         self.random_state = random_state
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.alpha = alpha
         if self.alpha != 0.0:
             if 0 < self.alpha <= 90.0:

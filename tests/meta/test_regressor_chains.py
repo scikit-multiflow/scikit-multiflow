@@ -91,22 +91,22 @@ def test_regressor_chains():
     assert type(learner.predict(X)) == np.ndarray
 
     # sklearn < .0.21
-    expected_info_0 = "RegressorChain(base_estimator=SGDRegressor(alpha=0.0001, average=False, early_stopping=False, " \
-                      "epsilon=0.1,\n" \
+    expected_info_0 = "RegressorChain(base_estimator=SGDRegressor(alpha=0.0001, average=False, " \
+                      "early_stopping=False, epsilon=0.1,\n" \
                       "       eta0=0.01, fit_intercept=True, l1_ratio=0.15,\n" \
                       "       learning_rate='invscaling', loss='squared_loss', max_iter=10,\n" \
                       "       n_iter=None, n_iter_no_change=5, penalty='l2', power_t=0.25,\n" \
-                      "       random_state=112, shuffle=True, tol=0.001, validation_fraction=0.1,\n" \
-                      "       verbose=0, warm_start=False),\n" \
+                      "       random_state=112, shuffle=True, tol=0.001, \n" \
+                      "       validation_fraction=0.1, verbose=0, warm_start=False),\n" \
                       "               order=None, random_state=112)"
     # sklearn >= .0.21
-    expected_info_1 = "RegressorChain(base_estimator=SGDRegressor(alpha=0.0001, average=False, early_stopping=False, " \
-                      "epsilon=0.1,\n" \
+    expected_info_1 = "RegressorChain(base_estimator=SGDRegressor(alpha=0.0001, average=False, " \
+                      "early_stopping=False, epsilon=0.1,\n" \
                       "             eta0=0.01, fit_intercept=True, l1_ratio=0.15,\n" \
-                      "             learning_rate='invscaling', loss='squared_loss', max_iter=10,\n" \
-                      "             n_iter_no_change=5, penalty='l2', power_t=0.25, random_state=112,\n" \
-                      "             shuffle=True, tol=0.001, validation_fraction=0.1, verbose=0,\n" \
-                      "             warm_start=False),\n" \
-                      "               order=None, random_state=112)"
+                      "             learning_rate='invscaling', loss='squared_loss',\n" \
+                      "             max_iter=10, n_iter_no_change=5, penalty='l2',\n" \
+                      "             power_t=0.25, random_state=112, shuffle=True, tol=0.001,\n" \
+                      "             validation_fraction=0.1, verbose=0,warm_start=False),\n" \
+                      "             order=None, random_state=112)"
 
     assert learner.get_info() == expected_info_0 or learner.get_info() == expected_info_1

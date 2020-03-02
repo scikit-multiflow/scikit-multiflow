@@ -9,15 +9,17 @@ from skmultiflow.data import SEAGenerator
 
 
 def test_sam_knn():
-
     stream = SEAGenerator(random_state=1)
 
-    hyperParams = {'maxSize': 1000, 'nNeighbours': 5, 'knnWeights': 'distance', 'STMSizeAdaption': 'maxACCApprox',
+    hyperParams = {'maxSize': 1000, 'nNeighbours': 5, 'knnWeights': 'distance',
+                   'STMSizeAdaption': 'maxACCApprox',
                    'use_ltm': False}
 
-    learner = SAMKNNClassifier(n_neighbors=hyperParams['nNeighbours'], max_window_size=hyperParams['maxSize'],
+    learner = SAMKNNClassifier(n_neighbors=hyperParams['nNeighbours'],
+                               max_window_size=hyperParams['maxSize'],
                                weighting=hyperParams['knnWeights'],
-                               stm_size_option=hyperParams['STMSizeAdaption'], use_ltm=hyperParams['use_ltm'])
+                               stm_size_option=hyperParams['STMSizeAdaption'],
+                               use_ltm=hyperParams['use_ltm'])
 
     cnt = 0
     max_samples = 5000
@@ -48,7 +50,6 @@ def test_sam_knn():
 
 
 def test_sam_knn_coverage():
-
     stream = SEAGenerator(random_state=1)
 
     hyperParams = {'maxSize': 50,
@@ -86,7 +87,7 @@ def test_sam_knn_coverage():
                                        0, 0, 0, 0, 0, 1, 0, 1, 1])
     assert np.alltrue(predictions == expected_predictions)
 
-    expected_info = "SAMKNNClassifier(ltm_size=0.4, max_window_size=None, min_stm_size=10, n_neighbors=3, " \
-                    "stm_size_option='maxACC', use_ltm=True, weighting='uniform')"
+    expected_info = "SAMKNNClassifier(ltm_size=0.4, max_window_size=None, min_stm_size=10, " \
+                    "n_neighbors=3, stm_size_option='maxACC', use_ltm=True, weighting='uniform')"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info

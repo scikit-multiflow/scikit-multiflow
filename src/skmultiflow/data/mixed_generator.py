@@ -77,10 +77,11 @@ class MIXEDGenerator(Stream):
         super().__init__()
 
         # Classification functions to use
-        self._classification_functions = [self._classification_function_zero, self._classification_function_one]
+        self._classification_functions = [self._classification_function_zero,
+                                          self._classification_function_one]
         self.random_state = random_state
         self.classification_function = classification_function
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.balance_classes = balance_classes
         self.n_cat_features = 2
         self.n_num_features = 2
@@ -119,8 +120,9 @@ class MIXEDGenerator(Stream):
         if classification_function_idx in range(2):
             self._classification_function_idx = classification_function_idx
         else:
-            raise ValueError("classification_function takes only these values: 0, 1, and {} was passed".
-                             format(classification_function_idx))
+            raise ValueError(
+                "classification_function takes only these values: 0, 1, and {} was passed".
+                format(classification_function_idx))
 
     @property
     def balance_classes(self):
@@ -145,7 +147,8 @@ class MIXEDGenerator(Stream):
         if isinstance(balance_classes, bool):
             self._balance_classes = balance_classes
         else:
-            raise ValueError("balance_classes should be boolean, {} was passed".format(balance_classes))
+            raise ValueError(
+                "balance_classes should be boolean, {} was passed".format(balance_classes))
 
     def next_sample(self, batch_size=1):
         """ Returns next sample from the stream.
@@ -186,7 +189,8 @@ class MIXEDGenerator(Stream):
                 att_2 = self._random_state.rand()
                 att_3 = self._random_state.rand()
 
-                group = self._classification_functions[self.classification_function](att_0, att_1, att_2, att_3)
+                group = self._classification_functions[self.classification_function](att_0, att_1,
+                                                                                     att_2, att_3)
 
                 if not self.balance_classes:
                     desired_class_found = True

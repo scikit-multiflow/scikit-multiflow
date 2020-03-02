@@ -86,11 +86,12 @@ class RandomRBFGenerator(Stream):
     
     """
 
-    def __init__(self, model_random_state=None, sample_random_state=None, n_classes=2, n_features=10, n_centroids=50):
+    def __init__(self, model_random_state=None, sample_random_state=None, n_classes=2,
+                 n_features=10, n_centroids=50):
         super().__init__()
         self.sample_random_state = sample_random_state
         self.model_random_state = model_random_state
-        self._sample_random_state = None   # This is the actual random_state object used internally
+        self._sample_random_state = None  # This is the actual random_state object used internally
         self.n_classes = n_classes
         self.n_targets = 1
         self.n_features = n_features
@@ -171,6 +172,7 @@ class RandomRBFGenerator(Stream):
 
 class Centroid:
     """ Class that stores a centroid's attributes. """
+
     def __init__(self):
         self.centre = None
         self.class_label = None

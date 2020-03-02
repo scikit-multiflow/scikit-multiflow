@@ -182,15 +182,16 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
         self._target_names = target_names
 
     @staticmethod
-    def prepare_for_use():     # pragma: no cover
+    def prepare_for_use():  # pragma: no cover
         """ Prepare the stream for use.
 
         Deprecated in v0.5.0 and will be removed in v0.7.0
 
         """
-        warnings.warn("'prepare_for_use' has been deprecated in v0.5.0 and will be removed in v0.7.0.\n"
-                      "New instances of the Stream class are now ready to use after instantiation.",
-                      category=FutureWarning)
+        warnings.warn(
+            "'prepare_for_use' has been deprecated in v0.5.0 and will be removed in v0.7.0.\n"
+            "New instances of the Stream class are now ready to use after instantiation.",
+            category=FutureWarning)
 
     @abstractmethod
     def _prepare_for_use(self):
@@ -277,5 +278,6 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
             Stream data information
         
         """
-        return self.name + " - {} target(s), {} classes, {} features".format(self.n_targets, self.n_classes,
-                                                                           self.n_features)
+        return self.name + " - {} target(s), {} classes, {} features".format(self.n_targets,
+                                                                             self.n_classes,
+                                                                             self.n_features)

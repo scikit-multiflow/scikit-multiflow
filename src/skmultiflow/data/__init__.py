@@ -22,7 +22,9 @@ from .stagger_generator import STAGGERGenerator
 from .synth import make_logical
 from .waveform_generator import WaveformGenerator
 
-__all__ = ["DataStream", "FileStream", "AGRAWALGenerator", "ConceptDriftStream", "HyperplaneGenerator", "LEDGenerator",
+__all__ = ["DataStream", "FileStream", "AGRAWALGenerator", "ConceptDriftStream",
+           "HyperplaneGenerator", "LEDGenerator",
            "LEDGeneratorDrift", "MIXEDGenerator", "MultilabelGenerator", "RandomRBFGenerator",
-           "RandomRBFGeneratorDrift", "RandomTreeGenerator", "RegressionGenerator", "SEAGenerator", "SineGenerator",
+           "RandomRBFGeneratorDrift", "RandomTreeGenerator", "RegressionGenerator", "SEAGenerator",
+           "SineGenerator",
            "STAGGERGenerator", "make_logical", "WaveformGenerator"]

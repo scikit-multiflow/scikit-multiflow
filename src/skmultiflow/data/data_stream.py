@@ -46,7 +46,8 @@ class DataStream(Stream):
     _REGRESSION = 'regression'
     _Y_is_defined = False
 
-    def __init__(self, data, y=None, target_idx=-1, n_targets=1, cat_features=None, name=None, allow_nan=False):
+    def __init__(self, data, y=None, target_idx=-1, n_targets=1, cat_features=None, name=None,
+                 allow_nan=False):
         super().__init__()
         self.X = None
         self.y = y
@@ -100,7 +101,8 @@ class DataStream(Stream):
         if not self._Y_is_defined or (isinstance(y, np.ndarray) or isinstance(y, pd.DataFrame)):
             self._y = y
         else:
-            raise ValueError("np.ndarray or pd.DataFrame y object expected, and {} was passed".format(type(y)))
+            raise ValueError(
+                "np.ndarray or pd.DataFrame y object expected, and {} was passed".format(type(y)))
 
     @property
     def X(self):
@@ -129,7 +131,8 @@ class DataStream(Stream):
             self._X = X
 
         else:
-            raise ValueError("np.ndarray or pd.DataFrame X object expected, and {} was passed".format(type(X)))
+            raise ValueError(
+                "np.ndarray or pd.DataFrame X object expected, and {} was passed".format(type(X)))
 
     @property
     def data(self):
@@ -272,7 +275,8 @@ class DataStream(Stream):
                 self.n_cat_features = len(self.cat_features_idx)
             else:
                 raise IndexError('Categorical feature index in {} '
-                                 'exceeds n_features {}'.format(self.cat_features_idx, self.n_features))
+                                 'exceeds n_features {}'.format(self.cat_features_idx,
+                                                                self.n_features))
         self.n_num_features = self.n_features - self.n_cat_features
 
         if np.issubdtype(self.y.dtype, np.integer):
@@ -309,7 +313,8 @@ class DataStream(Stream):
                 self.n_cat_features = len(self.cat_features_idx)
             else:
                 raise IndexError('Categorical feature index in {} '
-                                 'exceeds n_features {}'.format(self.cat_features_idx, self.n_features))
+                                 'exceeds n_features {}'.format(self.cat_features_idx,
+                                                                self.n_features))
         self.n_num_features = self.n_features - self.n_cat_features
 
         if np.issubdtype(self.y.dtype, np.integer):
@@ -409,7 +414,7 @@ class DataStream(Stream):
             return [float] * self.n_targets
 
     def get_info(self):
-        return 'DataStream(n_targets={}, target_idx={}, cat_features={}, name={})'.\
+        return 'DataStream(n_targets={}, target_idx={}, cat_features={}, name={})'. \
             format(self.target_idx, self.n_targets, self.cat_features,
                    self.name if not self.name else "'" + self.name + "'")
 
@@ -433,12 +438,14 @@ def check_data_consistency(raw_data_frame, allow_nan=False):
     if (raw_data_frame.dtypes == 'object').values.any():
         # scikit-multiflow assumes that data is numeric
         raise ValueError('Non-numeric data found:\n {}'
-                         'scikit-multiflow only supports numeric data.'.format(raw_data_frame.dtypes))
+                         'scikit-multiflow only supports numeric data.'.format(
+            raw_data_frame.dtypes))
 
     if raw_data_frame.isnull().values.any():
         if not allow_nan:
             raise ValueError("NaN values found. Missing values are not fully supported.\n"
                              "You can deactivate this error via the 'allow_nan' option.")
         else:
-            warnings.warn("NaN values found. Functionality is not guaranteed for some methods. Proceed with caution.",
-                          UserWarning)
+            warnings.warn(
+                "NaN values found. Functionality is not guaranteed for some methods. Proceed with caution.",
+                UserWarning)

@@ -6,7 +6,8 @@ from skmultiflow.drift_detection.eddm import EDDM
 def test_eddm():
     """
     EDDM drift detection test.
-    The first half of the data contains a sequence corresponding to a normal distribution with mean 0 and sigma 0.1.
+    The first half of the data contains a sequence corresponding to a normal distribution
+    with mean 0 and sigma 0.1.
     The second half corresponds to a normal distribution with mean 0.5 and sigma 0.1.
     """
     eddm = EDDM()

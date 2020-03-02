@@ -85,12 +85,15 @@ class SineGenerator(Stream):
     _NUM_BASE_ATTRIBUTES = 2
     _TOTAL_ATTRIBUTES_INCLUDING_NOISE = 4
 
-    def __init__(self, classification_function=0, random_state=None, balance_classes=False, has_noise=False):
+    def __init__(self, classification_function=0, random_state=None, balance_classes=False,
+                 has_noise=False):
         super().__init__()
 
         # Classification functions to use
-        self._classification_functions = [self._classification_function_zero, self._classification_function_one,
-                                          self._classification_function_two, self._classification_function_three]
+        self._classification_functions = [self._classification_function_zero,
+                                          self._classification_function_one,
+                                          self._classification_function_two,
+                                          self._classification_function_three]
         self.classification_function = classification_function
         self.random_state = random_state
         self.has_noise = has_noise
@@ -98,7 +101,7 @@ class SineGenerator(Stream):
         self.n_num_features = self._NUM_BASE_ATTRIBUTES
         self.n_classes = 2
         self.n_targets = 1
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.next_class_should_be_zero = False
         self.name = "Sine Generator"
 
