@@ -16,9 +16,8 @@ Changes proposed in this pull request:
 
 Checklist
 
-- [ ] Code complies with PEP-8 and is consistent with the framework.
-- [ ] Code is properly documented.
+- [ ] Code is properly documented (NumPy style docstring).
 - [ ] Tests are included for new functionality or updated accordingly.
-- [ ] Travis CI build passes with no errors.
+- [ ] Azure CI build passes with no errors.
 - [ ] Test Coverage is maintained (threshold is -0.2%).
 - [ ] Files changed (update, add, delete) are in the PR's scope (no extra files are included).
