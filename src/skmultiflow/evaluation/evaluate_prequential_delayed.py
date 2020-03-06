@@ -184,7 +184,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
         super().__init__()
         self._method = 'prequential'
-        self._delayed_columns = ["X","y_real","y_pred","arrival_time","available_time"]
+        self._delayed_columns = ["X", "y_real", "y_pred", "arrival_time", "available_time"]
         self.n_wait = n_wait
         self.max_samples = max_samples
         self.pretrain_size = pretrain_size
@@ -250,7 +250,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             self._init_plot()
             self._init_file()
 
-            self.model = self._train_and_test()
+            self.model = self._train_and_test
 
             if self.show_plot:
                 self.visualizer.hold()
@@ -260,6 +260,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
     def _sort_delay_queue(self):
         # sort values by available_time
         self.delay_queue = self.delay_queue.sort_values(by='available_time')
+        # reset indexes
+        self.delay_queue = self.delay_queue.reset_index(drop=True)
 
     def _get_delayed_samples(self):
         # get samples that have label available
@@ -269,7 +271,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         # transpose prediction matrix to model-sample again 
         y_pred = np.array(delayed_samples["y_pred"].to_list()).T.tolist()
         # return X, y_real and y_pred for the unqueued samples
-        return(delayed_samples["X"].to_list(), delayed_samples["y_real"].to_list(), y_pred)
+        return (delayed_samples["X"].to_list(), delayed_samples["y_real"].to_list(), y_pred)
 
     def _update_classifiers(self, X, y):
         # check if there are samples to update
@@ -278,7 +280,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             if self.first_run:
                 for i in range(self.n_models):
                     if self._task_type != constants.REGRESSION and \
-                        self._task_type != constants.MULTI_TARGET_REGRESSION:
+                            self._task_type != constants.MULTI_TARGET_REGRESSION:
                         # Accounts for the moment of training beginning
                         self.running_time_measurements[i].compute_training_time_begin()
                         self.model[i].partial_fit(X, y, self.stream.target_values)
@@ -299,7 +301,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self.running_time_measurements[i].compute_training_time_end()
                     self.running_time_measurements[i].update_time_measurements(self.batch_size)
 
-    def _update_metrics_delayed(self,y_real_delayed,y_pred_delayed):
+    def _update_metrics_delayed(self, y_real_delayed, y_pred_delayed):
         # update metrics if y_pred_delayed has items
         if len(y_pred_delayed) > 0:
             for j in range(self.n_models):
@@ -314,9 +316,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self._update_metrics()
                 self.update_count += 1
 
-
-    def _predict_samples(self, X, arrival_time, available_time, y_real):
-        if X is not None and y_real is not None:
+    def _predict_samples(self, X):
+        if X is not None:
             # Test
             prediction = [[] for _ in range(self.n_models)]
             for i in range(self.n_models):
@@ -331,16 +332,18 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             self.global_sample_count += self.batch_size
             # adapt prediction matrix to sample-model instead of model-sample by transposing it
             y_pred = np.array(prediction).T.tolist()
-            # add current samples to delayed queue
-            self._update_delayed_queue(X, arrival_time, available_time, y_real, y_pred)
+            # return predictions
+            return y_pred
 
     def _update_delayed_queue(self, X, arrival_time, available_time, y_real, y_pred):
-        delay_frame = pd.DataFrame(list(zip(X, y_real, y_pred, arrival_time, available_time)), columns=self._delayed_columns)
+        delay_frame = pd.DataFrame(list(zip(X, y_real, y_pred, arrival_time, available_time)),
+                                   columns=self._delayed_columns)
         # append new data to delayed queue
         self.delay_queue = self.delay_queue.append(delay_frame)
         # sort delay queue
         self._sort_delay_queue()
 
+    @property
     def _train_and_test(self):
         """ Method to control the prequential evaluation.
 
@@ -407,22 +410,24 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             # available_time = timestamp when the sample label will be avilable
             self.delay_queue = pd.DataFrame(columns=self._delayed_columns)
             # transform time columns in datetime
-            self.delay_queue['arrival_time'] =  pd.to_datetime(self.delay_queue['arrival_time'])
-            self.delay_queue['available_time'] =  pd.to_datetime(self.delay_queue['available_time'])
+            self.delay_queue['arrival_time'] = pd.to_datetime(self.delay_queue['arrival_time'])
+            self.delay_queue['available_time'] = pd.to_datetime(self.delay_queue['available_time'])
             # sort delay queue
             self._sort_delay_queue()
 
         self.update_count = 0
         print('Evaluating...')
-        while ((self.global_sample_count < self.actual_max_samples) & (self._end_time - self._start_time < self.max_time)
+        while ((self.global_sample_count < self.actual_max_samples) & (
+                self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
             try:
 
                 # get current batch
                 current_batch = self.stream.next_sample(self.batch_size)
 
-                # TODO: improve this solution for more optional parameters than just weight
-                # check if batch contains weight (change here if we include more informations in TemporalDataStream)
+                # TODO: improve this solution for more optional parameters than just weight. Also, include weight in
+                #  the delayed_queue check if batch contains weight (change here if we include more informations in
+                #  TemporalDataStream)
                 if len(current_batch) > 4:
                     X, arrival_time, available_time, y_real, weight = current_batch
                 else:
@@ -434,12 +439,16 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 # get delayed samples to update model before predicting a new batch
                 X_delayed, y_real_delayed, y_pred_delayed = self._get_delayed_samples()
 
-                self._update_metrics_delayed(y_real_delayed,y_pred_delayed)
+                self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
 
                 # before getting new samples, update classifiers with samples that are already available
                 self._update_classifiers(X_delayed, y_real_delayed)
 
-                self._predict_samples(X, arrival_time, available_time, y_real)
+                # predict samples and get predictions
+                y_pred = self._predict_samples(X)
+
+                # add current samples to delayed queue
+                self._update_delayed_queue(X, arrival_time, available_time, y_real, y_pred)
 
                 self._end_time = timer()
             except BaseException as exc:
@@ -449,6 +458,21 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 break
 
         # TODO: evaluate remaining samples in the delayed_queue
+        # check if there are samples in delay_queue
+        if self.delay_queue.shape[0] > 0:
+            # sort remaining samples again
+            self._sort_delay_queue()
+            # iterate over delay_queue while it has samples according to batch_size
+            while (self.delay_queue.shape[0] > 0) & (self.delay_queue.shape[0] - self.batch_size > 0):
+                # current samples to process
+                samples = self.delay_queue[:self.batch_size]
+                # TODO: process samples
+                # drop samples and update delay_queue
+                self.delay_queue = self.delay_queue.drop(self.delay_queue.index[[np.arange(self.batch_size)]])
+            # check if we still have samples in queue (delay_queue size < batch_size)
+            if self.delay_queue.shape[0] > 0:
+                # TODO: process remaining samples
+                pass
 
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
