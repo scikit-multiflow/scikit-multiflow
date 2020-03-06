@@ -271,7 +271,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         # transpose prediction matrix to model-sample again 
         y_pred = np.array(delayed_samples["y_pred"].to_list()).T.tolist()
         # return X, y_real and y_pred for the unqueued samples
-        return (delayed_samples["X"].to_list(), delayed_samples["y_real"].to_list(), y_pred)
+        return delayed_samples["X"].to_list(), delayed_samples["y_real"].to_list(), y_pred
 
     def _update_classifiers(self, X, y):
         # check if there are samples to update
@@ -300,6 +300,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self.model[i].partial_fit(X, y)
                     self.running_time_measurements[i].compute_training_time_end()
                     self.running_time_measurements[i].update_time_measurements(self.batch_size)
+            # TODO: check if updating samples_count here is right
+            self.global_sample_count += len(X)  # self.batch_size
 
     def _update_metrics_delayed(self, y_real_delayed, y_pred_delayed):
         # update metrics if y_pred_delayed has items
@@ -329,7 +331,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 except TypeError:
                     raise TypeError("Unexpected prediction value from {}"
                                     .format(type(self.model[i]).__name__))
-            self.global_sample_count += self.batch_size
+            # TODO: check if updating samples_count here is right
+            # self.global_sample_count += self.batch_size
             # adapt prediction matrix to sample-model instead of model-sample by transposing it
             y_pred = np.array(prediction).T.tolist()
             # return predictions
@@ -457,7 +460,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self._update_metrics()
                 break
 
-        # TODO: evaluate remaining samples in the delayed_queue
+        # evaluate remaining samples in the delayed_queue
         # check if there are samples in delay_queue
         if self.delay_queue.shape[0] > 0:
             # sort remaining samples again
@@ -466,13 +469,32 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             while (self.delay_queue.shape[0] > 0) & (self.delay_queue.shape[0] - self.batch_size > 0):
                 # current samples to process
                 samples = self.delay_queue[:self.batch_size]
-                # TODO: process samples
+                # get samples X, y_real and y_pred
+                X_delayed = samples["X"].to_list()
+                y_real_delayed = samples["y_real"].to_list()
+                y_pred_delayed = np.array(samples["y_pred"].to_list()).T.tolist()
+                # update metrics
+                self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
+                # update classifier with these samples
+                # TODO: does it make sense?
+                self._update_classifiers(X_delayed, y_real_delayed)
                 # drop samples and update delay_queue
                 self.delay_queue = self.delay_queue.drop(self.delay_queue.index[[np.arange(self.batch_size)]])
+
+                self._end_time = timer()
             # check if we still have samples in queue (delay_queue size < batch_size)
             if self.delay_queue.shape[0] > 0:
-                # TODO: process remaining samples
-                pass
+                # get samples X, y_real and y_pred
+                X_delayed = self.delay_queue["X"].to_list()
+                y_real_delayed = self.delay_queue["y_real"].to_list()
+                y_pred_delayed = np.array(self.delay_queue["y_pred"].to_list()).T.tolist()
+                # update metrics
+                self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
+                # update classifier with these samples
+                # TODO: does it make sense?
+                self._update_classifiers(X_delayed, y_real_delayed)
+
+                self._end_time = timer()
 
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
