@@ -17,7 +17,7 @@ def test_srp_randompatches():
     y_expected = np.asarray([0, 0, 0, 0, 0, 1, 0, 0, 1, 1,
                              0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
                              0, 0, 1, 0, 0, 0, 1, 1, 1, 0,
-                             1, 1, 0, 1, 0, 1, 0, 1, 1, 0,
+                             1, 1, 0, 0, 0, 1, 0, 1, 1, 0,
                              1, 1, 1, 0, 0, 0, 1, 0, 1, 0], dtype=np.int)
 
     run_prequential_supervised(stream, learner, max_samples=2000, n_wait=40, y_expected=y_expected)

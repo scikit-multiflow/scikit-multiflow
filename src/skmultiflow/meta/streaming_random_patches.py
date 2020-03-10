@@ -284,13 +284,17 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         for i in range(len(self.ensemble)):
             y_proba_temp = self.ensemble[i].predict_proba(X)
             if np.sum(y_proba_temp) > 0.0:
-                y_proba_temp = normalize(y_proba_temp, norm='l1')[0]
+                y_proba_temp = normalize(y_proba_temp, norm='l1')[0].copy()
                 acc = self.ensemble[i].performance_evaluator.accuracy_score()
                 if not self.disable_weighted_vote and acc > 0.0:
                     y_proba_temp *= acc
+                # Check array length consistency
+                if len(y_proba_temp) != len(y_proba):
+                    if len(y_proba_temp) > len(y_proba):
+                        y_proba.resize((len(y_proba_temp), ), refcheck=False)
+                    else:
+                        y_proba_temp.resize((len(y_proba), ), refcheck=False)
                 # Add values
-                if len(y_proba_temp) > len(y_proba):
-                    y_proba.resize((len(y_proba_temp), ), refcheck=False)
                 y_proba += y_proba_temp
         return y_proba
 
