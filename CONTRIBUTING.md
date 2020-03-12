@@ -9,7 +9,7 @@ If you are not familiar with Git or GitHub, here are good resources to start in 
 
 ## Code style and documentation
 
-* Python Code shall comply with [PEP 8](https://www.python.org/dev/peps/pep-0008/)
+* Python Code shall comply with [PEP 8](https://www.python.org/dev/peps/pep-0008/) with one exception: Max line length is 99 characters.
 
 * Documentation shall be in docstring format and shall follow the
   [NumPy/SciPy guidelines](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard)
