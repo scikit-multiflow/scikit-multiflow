@@ -177,8 +177,8 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         return self
 
     def __fit_batch(self, X, y):
-        ensemble = [copy.deepcopy(self.base_estimator) for _ in range(self.n_estimators)]
-        normalized_errors = [1.0 for _ in range(self.n_estimators)]
+        ensemble = []
+        normalized_errors = []
 
         m = len(X)
         X = np.array(X)
@@ -192,10 +192,10 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             patience = 0
 
             # Set distribution Dt
-            # Adds a small constant value prior to the weight normalization
-            # to avoid division by zero errors
-            Dt += 1e-7
-            Dt = Dt / np.sum(Dt)
+            sum_dt = np.sum(Dt)
+            if sum_dt == 0:  # Early stop in case all instances are correctly classified
+                break
+            Dt = Dt / sum_dt
 
             total_error = 1.0
             while total_error >= self.error_threshold:
@@ -212,7 +212,9 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                 y_test = y[test_items_index]
 
                 # Train a weak learner
-                ensemble[t] = copy.deepcopy(self.base_estimator)
+                if t > len(ensemble) - 1:
+                    ensemble.append(copy.deepcopy(self.base_estimator))
+                    normalized_errors.append(1.0)
                 try:
                     ensemble[t].fit(X_train, y_train)
                 except NotImplementedError:
@@ -299,7 +301,7 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         for i in range(len(self.ensembles)):
             ensemble = self.ensembles[i]
             ensemble_weight = self.ensemble_weights[i]
-            votes += np.array(self.__vote_proba(X, self.n_estimators, ensemble, ensemble_weight))
+            votes += np.array(self.__vote_proba(X, len(ensemble), ensemble, ensemble_weight))
         return votes
 
     def predict(self, X):
