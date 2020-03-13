@@ -192,12 +192,10 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             patience = 0
 
             # Set distribution Dt
-            # Dt = Dt / np.sum(Dt)
-            sum_dt = np.sum(Dt)
-            if sum_dt > 0:
-                Dt = Dt / sum_dt
-            else:  # if weigths shrink to zero, reset them
-                Dt = np.ones((m,)) / m
+            # Adding small constant value in both numerator and denominator
+            # to avoid division by zero in the case where problem has a large
+            # number of classes
+            Dt = (Dt + (1e-7 / len(Dt))) / (np.sum(Dt) + 1e-7)
 
             total_error = 1.0
             while total_error >= self.error_threshold:
