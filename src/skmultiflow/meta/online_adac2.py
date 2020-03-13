@@ -95,8 +95,6 @@ class OnlineAdaC2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
        # Setup the Online Ada C2 Classifier
        online_ada_c2_classifier = OnlineAdaC2Classifier()
-       X, y = stream.next_sample(max_samples)
-       online_ada_c2_classifier.partial_fit(X, y, classes=stream.target_values)
 
        # Train the classifier with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
