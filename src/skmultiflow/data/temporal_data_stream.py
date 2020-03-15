@@ -5,7 +5,6 @@ import warnings
 
 from skmultiflow.data.data_stream import DataStream
 
-# implement temporal data stream
 class TemporalDataStream(DataStream):
     """ Creates a temporal stream from a data source.
 
