@@ -50,3 +50,6 @@ def test_learn_pp():
                     "n_estimators=5, random_state=2212, window_size=100)"
     info = " ".join([line.strip() for line in classifier.get_info().split()])
     assert info == expected_info
+
+    # For coverage purposes
+    classifier.reset()
