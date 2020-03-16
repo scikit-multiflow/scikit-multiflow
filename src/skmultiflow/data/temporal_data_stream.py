@@ -4,6 +4,7 @@ import numpy as np
 import warnings
 
 from skmultiflow.data.data_stream import DataStream
+from skmultiflow.utils import add_delay_to_timestamps
 
 class TemporalDataStream(DataStream):
     """ Creates a temporal stream from a data source.
@@ -15,14 +16,15 @@ class TemporalDataStream(DataStream):
     data: np.ndarray or pd.DataFrame (Default=None)
         The features' columns and targets' columns or the feature columns
         only if they are passed separately.
-    time: np.ndarray(dtype=datetime64) or pd.DataFrame (Default=None)
+    time: np.ndarray(dtype=datetime64) or pd.Series (Default=None)
         The timestamp column of each instance. If its a np.ndarray, it will
         be converted into a pandas datetime dataframe. 
-    sample_weight: np.ndarray or pd.DataFrame, optional (Default=None)
+    sample_weight: np.ndarray or pd.Series, optional (Default=None)
         Sample weights.
-    sample_delay: np.ndarray(pd.tseries.offsets.DateOffset) or pd.tseries.offsets.DateOffset, optional (Default=pd.tseries.offsets.DateOffset(day=0))
-        Samples delay in pd.tseries.offsets.DateOffset (the dateoffset difference between the event time 
-        and when the label is available).
+    sample_delay: np.ndarray(np.datetime64), pd.DataFrame or np.timedelta64, optional (Default=np.timedelta64(0,"D"))
+        Samples delay in np.timedelta64 (the dateoffset difference between the event time
+        and when the label is available) or np.ndarray(np.datetime64) with the timestamp that the sample
+        will be available.
     y: np.ndarray or pd.DataFrame, optional (Default=None)
         The targets' columns.
     target_idx: int, optional (default=-1)
@@ -51,19 +53,27 @@ class TemporalDataStream(DataStream):
 
     """
     # includes time as datetime
-    def __init__(self, data, time, y=None, sample_weight=None, sample_delay=pd.tseries.offsets.DateOffset(day=0), target_idx=-1, n_targets=1, cat_features=None, name=None, ordered=True):
+    def __init__(self, data, time, y=None, sample_weight=None, sample_delay=np.timedelta64(0,"D"), target_idx=-1, n_targets=1, cat_features=None, name=None, ordered=True):
         # check if time is pandas dataframe or a numpy.ndarray
-        if isinstance(time, pd.Series) or isinstance(time, np.ndarray):
-            self.time = pd.to_datetime(time)
+        if isinstance(time, pd.Series):
+            self.time = pd.to_datetime(time).values
+        elif isinstance(time, np.ndarray):
+            self.time = np.array(time,dtype="datetime64")
         else:
             raise ValueError("np.ndarray or pd.Series time object expected, and {} was passed".format(type(time)))
-        # save sample delay
-        self.sample_delay = sample_delay
-        # check if its a single delay or a delay for instance
-        if isinstance(self.sample_delay, pd.Series) or isinstance(self.sample_delay, np.ndarray):
-            self.single_delay = False
-        else:
+        # check if its a single delay or a delay for instance and save delay
+        if isinstance(sample_delay, np.timedelta64):
             self.single_delay = True
+            # create delays list
+            self.sample_delay = add_delay_to_timestamps(time,sample_delay)
+        elif isinstance(sample_delay, pd.Series):
+            self.single_delay = False
+            self.sample_delay = pd.to_datetime(sample_delay.values).values
+        elif isinstance(sample_delay, np.ndarray):
+            self.single_delay = False
+            self.sample_delay = np.array(sample_delay, dtype="datetime64")
+        else:
+            raise ValueError("np.ndarray(np.datetime64), pd.Series or np.timedelta64 sample_delay object expected, and {} was passed".format(type(sample_delay)))
         # save sample weights if available
         if sample_weight is not None:
             self.sample_weight = sample_weight
@@ -77,12 +87,12 @@ class TemporalDataStream(DataStream):
             y = y[np.argsort(self.time)]
             # order sample_weight if available
             if self.sample_weight is not None:
-                self.sample_weight[np.argsort(self.time)]
+                self.sample_weight = self.sample_weight[np.argsort(self.time)]
             # order sample_delay, check if not single delay
-            if not self.single_delay:
-                self.sample_delay[np.argsort(self.time)]
+            self.sample_delay = self.sample_delay[np.argsort(self.time)]
             # order self.time
-            self.time = self.time.sort_values()
+            self.time.sort()
+        print(self.time[0], self.sample_delay[0])
         super().__init__(data, y, target_idx, n_targets, cat_features, name)
     
     def next_sample(self, batch_size=1):
@@ -106,14 +116,7 @@ class TemporalDataStream(DataStream):
             self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
             self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx, :]
             self.current_sample_time = self.time[self.sample_idx - batch_size:self.sample_idx]
-
-            # check if its a single delay
-            if self.single_delay:
-                # create list with same delay for each instance
-                self.current_sample_delay = np.full(batch_size, self.sample_delay)
-            else:
-                # get delays for each instance
-                self.current_sample_delay = self.sample_delay[self.sample_idx - batch_size:self.sample_idx]
+            self.current_sample_delay = self.sample_delay[self.sample_idx - batch_size:self.sample_idx]
 
             if self.n_targets < 2:
                 self.current_sample_y = self.current_sample_y.flatten()
