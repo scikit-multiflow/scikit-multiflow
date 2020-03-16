@@ -87,8 +87,8 @@ class AdaSplitNode(SplitNode, AdaNode):
 
         # Condition to replace alternate tree
         elif self._alternate_tree is not None and not self._alternate_tree.is_null_error():
-            if self.get_error_width() > hat.ERROR_WIDTH_THRESHOLD \
-                    and self._alternate_tree.get_error_width() > hat.ERROR_WIDTH_THRESHOLD:
+            if self.get_error_width() > hat._ERROR_WIDTH_THRESHOLD \
+                    and self._alternate_tree.get_error_width() > hat._ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
                 alt_error_rate = self._alternate_tree.get_error_estimation()
                 fDelta = .05

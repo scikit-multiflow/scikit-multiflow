@@ -8,9 +8,6 @@ from skmultiflow.utils import add_dict_values
 
 import warnings
 
-_TARGET_MEAN = 'mean'
-_PERCEPTRON = 'perceptron'
-
 
 def RegressionHAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, split_confidence=0.0000001,
                   tie_threshold=0.05, binary_split=False, stop_mem_management=False, remove_poor_atts=False,
@@ -87,7 +84,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
     # ======================================================
     # == Hoeffding Adaptive Tree Regressor implementation ==
     # ======================================================
-    ERROR_WIDTH_THRESHOLD = 300
+    _ERROR_WIDTH_THRESHOLD = 300
 
     def __init__(self,
                  max_byte_size=33554432,
@@ -133,9 +130,13 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
 
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
-        if leaf_prediction not in {_TARGET_MEAN, _PERCEPTRON}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
-            self._leaf_prediction = _PERCEPTRON
+        if leaf_prediction not in {self._TARGET_MEAN, self._PERCEPTRON}:
+            print(
+                "Invalid leaf_prediction option {}', will use default '{}'".format(
+                    leaf_prediction, self._PERCEPTRON
+                )
+            )
+            self._leaf_prediction = self._PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
 
@@ -185,7 +186,6 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
                                                   update_splitter_counts, nodes)
         return nodes
 
-    # Override HoeffdingTreeClassifier
     def get_votes_for_instance(self, X):
         result = {}
         if self._tree_root is not None:
