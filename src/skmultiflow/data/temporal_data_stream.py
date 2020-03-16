@@ -13,7 +13,7 @@ class TemporalDataStream(DataStream):
 
     Parameters
     ----------
-    data: np.ndarray or pd.DataFrame (Default=None)
+    data: np.ndarray or pd.DataFrame
         The features' columns and targets' columns or the feature columns
         only if they are passed separately.
     time: np.ndarray(dtype=datetime64) or pd.Series (Default=None)
