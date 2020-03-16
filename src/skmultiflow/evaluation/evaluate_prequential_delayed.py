@@ -435,8 +435,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             y_pred_delayed = np.array(y_pred_delayed).T.tolist()
             # update metrics
             self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
-            # update classifier with these samples
-            # TODO: does it make sense?
+            # update classifier with these samples for output models
             self._update_classifiers(X_delayed, y_real_delayed)
 
             self._end_time = timer()
