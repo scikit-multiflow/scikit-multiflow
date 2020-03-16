@@ -405,6 +405,9 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 # get delayed samples to update model before predicting a new batch
                 X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.get_available_samples()
 
+                # transpose prediction matrix to model-sample again
+                y_pred_delayed = np.array(y_pred_delayed).T.tolist()
+
                 self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
 
                 # before getting new samples, update classifiers with samples that are already available
@@ -428,6 +431,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         while self.time_manager.has_more_samples():
             # get current samples to process
             X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.next_sample(self.batch_size)
+            # transpose prediction matrix to model-sample again
+            y_pred_delayed = np.array(y_pred_delayed).T.tolist()
             # update metrics
             self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
             # update classifier with these samples

@@ -82,7 +82,7 @@ class FastBuffer(object):
             removed, they are added to an auxiliary list, and that list is returned.
 
         """
-        if (self.current_size+len(element_list)) <= self.max_size:
+        if (self.current_size + len(element_list)) <= self.max_size:
             for i in range(len(element_list)):
                 self.buffer.append(element_list[i])
             self.current_size += len(element_list)
@@ -259,7 +259,7 @@ class FastComplexBuffer(object):
             else:
                 items = element_list
 
-        if (self.current_size+size) <= self.max_size:
+        if (self.current_size + size) <= self.max_size:
             for i in range(size):
                 self.buffer.append(items[i])
             self.current_size += size
@@ -331,8 +331,8 @@ class FastComplexBuffer(object):
         return self.buffer
 
     def get_info(self):
-        return 'FastBuffer: max_size: ' + str(self.max_size)\
-               + ' - current_size: ' + str(self.current_size)\
+        return 'FastBuffer: max_size: ' + str(self.max_size) \
+               + ' - current_size: ' + str(self.current_size) \
                + ' - width: ' + str(self.width)
 
 
@@ -681,7 +681,7 @@ class MOLConfusionMatrix(object):
                 if target > m:
                     return False
                 else:
-                    self.reshape(target+1, 2, 2)
+                    self.reshape(target + 1, 2, 2)
                     return self._update(target, true, pred, weight)
 
     def remove(self, target=None, true=None, pred=None):
@@ -722,7 +722,7 @@ class MOLConfusionMatrix(object):
 
     def reshape(self, target, m, n):
         t, i, j = self.confusion_matrix.shape
-        if (target > t+1) or (m != n) or (m != 2) or (m < i) or (n < j):
+        if (target > t + 1) or (m != n) or (m != 2) or (m < i) or (n < j):
             return False
         aux = self.confusion_matrix.copy()
         self.confusion_matrix = np.zeros((target, m, n), self.dtype)
@@ -771,7 +771,7 @@ class MOLConfusionMatrix(object):
             The complete row indexed by r.
 
         """
-        return self.confusion_matrix[r:r+1, :]
+        return self.confusion_matrix[r:r + 1, :]
 
     def column(self, c):
         """ column
@@ -787,7 +787,7 @@ class MOLConfusionMatrix(object):
             The complete column indexed by c.
 
         """
-        return self.confusion_matrix[:, c:c+1]
+        return self.confusion_matrix[:, c:c + 1]
 
     def target(self, t):
         """ target
@@ -1016,7 +1016,21 @@ class InstanceWindow(object):
                ' - max_size: ' + str(self.max_size) + \
                ' - dtype: ' + str(self.dtype)
 
+
 class TimeManager(object):
+    """ TimeManager
+
+    Manage instances that are related to a timestamp and
+    a delay.
+
+    Parameters
+    ----------
+    timestamp: datetime64
+        Current timestamp of the stream. This timestamp is always
+        updated as the stream is processed to simulate when
+        the labels will be available for each sample.
+
+    """
 
     _columns = ["X", "y_real", "y_pred", "arrival_time", "available_time"]
 
@@ -1050,22 +1064,45 @@ class TimeManager(object):
             self.queue = self.queue.iloc[0:0]
 
     def update_timestamp(self, timestamp):
+        """ update_timestamp
+
+        Update current timestamp of the stream.
+
+        Parameters
+        ----------
+        timestamp: datetime64
+            Current timestamp of the stream. This timestamp is always
+            updated as the stream is processed to simulate when
+            the labels will be available for each sample.
+
+        """
+
         self.timestamp = timestamp
 
     def get_available_samples(self):
+        """ get_available_samples
+
+        Get available samples of the stream, i.e., samples that have
+        their labels available (available_time <= timestamp).
+
+        Returns
+        -------
+        tuple
+            A tuple containing the data, their real labels and predictions.
+
+        """
+
         # get samples that have label available
         samples = self.queue[self.queue['available_time'] <= self.timestamp]
         # remove these samples from queue
         self.queue = self.queue[self.queue['available_time'] > self.timestamp]
-        # transpose prediction matrix to model-sample again
-        y_pred = np.array(samples["y_pred"].to_list()).T.tolist()
         # return X, y_real and y_pred for the unqueued samples
-        return samples["X"].to_list(), samples["y_real"].to_list(), y_pred
+        return samples["X"].to_list(), samples["y_real"].to_list(), samples["y_pred"].to_list()
 
     def update_queue(self, X, arrival_time, available_time, y_real, y_pred):
         # cretae daraframe for current samples
         frame = pd.DataFrame(list(zip(X, y_real, y_pred, arrival_time, available_time)),
-                                   columns=self._columns)
+                             columns=self._columns)
         # append new data to queue
         self.queue = self.queue.append(frame)
         # sort queue
@@ -1080,9 +1117,28 @@ class TimeManager(object):
             True if queue has more samples.
 
         """
+
         return self.queue.shape[0] > 0
 
     def next_sample(self, batch_size=1):
+        """ Returns next sample from the queue.
+
+        If there is enough instances to supply at least batch_size samples, those
+        are returned. Otherwise, the remaining are returned.
+
+        Parameters
+        ----------
+        batch_size: int (optional, default=1)
+            The number of instances to return.
+
+        Returns
+        -------
+        tuple or tuple list
+            Returns the next batch_size instances.
+            For general purposes the return can be treated as a numpy.ndarray.
+
+        """
+
         if self.queue.shape[0] - batch_size >= 0:
             samples = self.queue[:batch_size]
         else:
@@ -1091,8 +1147,8 @@ class TimeManager(object):
         X = samples["X"].to_list()
         # get y_real
         y_real = samples["y_real"].to_list()
-        # transpose prediction matrix to model-sample again
-        y_pred = np.array(samples["y_pred"].to_list()).T.tolist()
+        # get y_pred
+        y_pred = samples["y_pred"].to_list()
         # remove samples from queue
         self._drop_samples(batch_size)
         # return X, y_real and y_pred for the unqueued samples
