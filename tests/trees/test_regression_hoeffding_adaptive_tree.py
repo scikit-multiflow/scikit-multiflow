@@ -216,6 +216,7 @@ def test_hoeffding_adaptive_tree_regressor_alternate_tree():
                 y = [np.random.normal(loc=-3, scale=1)]
         else:
             if not p2:
+                # Subtree turned into leaf (right branch from the root)
                 expected_info = "if Attribute 1 <= -0.347867256929453:\n" \
                                 "  if Attribute 0 <= -0.006772364899497507:\n" \
                                 "    Leaf = Statistics {0: 683.0000, 1: 2035.8518, 2: 6826.7077}\n" \
@@ -235,6 +236,7 @@ def test_hoeffding_adaptive_tree_regressor_alternate_tree():
 
         cnt += 1
 
+    # Root node changed
     expected_info = "if Attribute 0 <= -0.0008180705425056001:\n" \
                     "  Leaf = Statistics {0: 851.0000, 1: -17061.1111, 2: 349640.3908}\n" \
                     "if Attribute 0 > -0.0008180705425056001:\n" \
