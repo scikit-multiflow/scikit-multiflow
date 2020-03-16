@@ -141,6 +141,3 @@ class TemporalDataStream(DataStream):
                 output.append(self.current_sample_weight)
             
         return output
-    
-    def get_temporal_information(self):
-        return self.time
