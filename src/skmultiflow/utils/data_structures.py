@@ -1025,7 +1025,7 @@ class TimeManager(object):
 
     Parameters
     ----------
-    timestamp: datetime64
+    timestamp: np.datetime64
         Current timestamp of the stream. This timestamp is always
         updated as the stream is processed to simulate when
         the labels will be available for each sample.
@@ -1042,7 +1042,7 @@ class TimeManager(object):
         # y_real = real label
         # y_pred = predicted label for each model being evaluated
         # arrival_time = arrival timestamp of the sample
-        # available_time = timestamp when the sample label will be avilable
+        # available_time = timestamp when the sample label will be available
         self.queue = pd.DataFrame(columns=self._columns)
         # transform queue into datetime
         self.queue['arrival_time'] = pd.to_datetime(self.queue['arrival_time'])
