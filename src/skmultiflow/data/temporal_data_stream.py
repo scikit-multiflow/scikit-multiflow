@@ -85,7 +85,6 @@ class TemporalDataStream(DataStream):
             self.time = self.time.sort_values()
         super().__init__(data, y, target_idx, n_targets, cat_features, name)
     
-    # get next sample, returning sample_x, sample_time and sample_y
     def next_sample(self, batch_size=1):
         """ next_sample
         If there is enough instances to supply at least batch_size samples, those
