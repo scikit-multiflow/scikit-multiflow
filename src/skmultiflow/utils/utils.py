@@ -234,4 +234,5 @@ def add_delay_to_timestamps(timestamps, delay):
     delay_timestamps = []
     for t in timestamps:
         delay_timestamps.append(t + delay)
-    return np.array(delay_timestamps)
+    return np.array(delay_timestamps, dtype="datetime64")
+
