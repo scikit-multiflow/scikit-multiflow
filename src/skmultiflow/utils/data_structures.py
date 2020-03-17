@@ -1044,9 +1044,10 @@ class TimeManager(object):
         # arrival_time = arrival timestamp of the sample
         # available_time = timestamp when the sample label will be available
         self.queue = pd.DataFrame(columns=self._columns)
-        # transform queue into datetime
-        self.queue['arrival_time'] = pd.to_datetime(self.queue['arrival_time'])
-        self.queue['available_time'] = pd.to_datetime(self.queue['available_time'])
+        # transform queue into datetime if timestamps are not int
+        if isinstance(self.timestamp, int):
+            self.queue['arrival_time'] = pd.to_datetime(self.queue['arrival_time'])
+            self.queue['available_time'] = pd.to_datetime(self.queue['available_time'])
 
     def _sort_queue(self):
         # sort values by available_time

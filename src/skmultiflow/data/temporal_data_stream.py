@@ -21,10 +21,11 @@ class TemporalDataStream(DataStream):
         be converted into a pandas datetime dataframe. 
     sample_weight: np.ndarray or pd.Series, optional (Default=None)
         Sample weights.
-    sample_delay: np.ndarray(np.datetime64), pd.DataFrame or np.timedelta64, optional (Default=np.timedelta64(0,"D"))
+    sample_delay: np.ndarray(np.datetime64), pd.DataFrame, np.timedelta64 or int, optional (Default=np.timedelta64(0,"D"))
         Samples delay in np.timedelta64 (the dateoffset difference between the event time
-        and when the label is available) or np.ndarray(np.datetime64) with the timestamp that the sample
-        will be available.
+        and when the label is available), np.ndarray(np.datetime64) with the timestamp that the sample
+        will be available or int with the delay in number of samples (similar to MOA, a sample is just processed
+        after a number of sample_delay samples).
     y: np.ndarray or pd.DataFrame, optional (Default=None)
         The targets' columns.
     target_idx: int, optional (default=-1)
@@ -53,27 +54,34 @@ class TemporalDataStream(DataStream):
 
     """
     # includes time as datetime
-    def __init__(self, data, time, y=None, sample_weight=None, sample_delay=np.timedelta64(0,"D"), target_idx=-1, n_targets=1, cat_features=None, name=None, ordered=True):
+    def __init__(self, data, time=None, y=None, sample_weight=None, sample_delay=np.timedelta64(0,"D"), target_idx=-1,
+                 n_targets=1, cat_features=None, name=None, ordered=True):
         # check if time is pandas dataframe or a numpy.ndarray
         if isinstance(time, pd.Series):
             self.time = pd.to_datetime(time).values
         elif isinstance(time, np.ndarray):
             self.time = np.array(time,dtype="datetime64")
+        elif time is None:
+            self.time = None
         else:
-            raise ValueError("np.ndarray or pd.Series time object expected, and {} was passed".format(type(time)))
+            raise ValueError("np.ndarray, pd.Series or Nonw time object expected, and {} was passed".format(type(time)))
         # check if its a single delay or a delay for instance and save delay
         if isinstance(sample_delay, np.timedelta64):
-            self.single_delay = True
             # create delays list
             self.sample_delay = add_delay_to_timestamps(time,sample_delay)
         elif isinstance(sample_delay, pd.Series):
-            self.single_delay = False
             self.sample_delay = pd.to_datetime(sample_delay.values).values
         elif isinstance(sample_delay, np.ndarray):
-            self.single_delay = False
             self.sample_delay = np.array(sample_delay, dtype="datetime64")
+        elif isinstance(sample_delay, int):
+            if self.time is not None:
+                warnings.warn("'time' is not going to be used because 'sample_delay' is int. Delay by number of samples"
+                              "is applied. If you want to use time delay, use np.timedelta64 for 'sample_delay'.")
+            self.time = np.arange(0, self.time.shape[0])
+            self.sample_delay = np.arange(0 + sample_delay, self.time.shape[0] + sample_delay)
         else:
-            raise ValueError("np.ndarray(np.datetime64), pd.Series or np.timedelta64 sample_delay object expected, and {} was passed".format(type(sample_delay)))
+            raise ValueError("np.ndarray(np.datetime64), pd.Series, np.timedelta64 or int sample_delay object expected, and {} was passed".format(type(sample_delay)))
+
         # save sample weights if available
         if sample_weight is not None:
             self.sample_weight = sample_weight
@@ -92,7 +100,6 @@ class TemporalDataStream(DataStream):
             self.sample_delay = self.sample_delay[np.argsort(self.time)]
             # order self.time
             self.time.sort()
-        print(self.time[0], self.sample_delay[0])
         super().__init__(data, y, target_idx, n_targets, cat_features, name)
     
     def next_sample(self, batch_size=1):
