@@ -115,9 +115,12 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     @staticmethod
     def _train_model(estimator, X, y, classes=None):
         try:
-            estimator.fit(X, y)
-        except (NotImplementedError, TypeError):
-            estimator.partial_fit(X, y, classes=classes)
+            estimator.fit(X, y, classes=classes)
+        except TypeError:
+            try:
+                estimator.fit(X, y)
+            except NotImplementedError:
+                estimator.partial_fit(X, y, classes=classes)
 
     def partial_fit(self, X, y=None, classes=None, sample_weight=None):
         """
