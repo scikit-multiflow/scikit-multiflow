@@ -290,10 +290,10 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         proba_ordered = np.zeros(
             (probs.shape[0], all_classes.size), dtype=np.float
         )
-        sorter = np.argsort(all_classes)
+        sorted_classes = np.argsort(all_classes)
         # Find positions to insert existing classes' probs to the complete set
         # of classes
-        idx = sorter[np.searchsorted(all_classes, obs_classes, sorter=sorter)]
+        idx = sorted_classes[np.searchsorted(all_classes, obs_classes, sorter=sorted_classes)]
         proba_ordered[:, idx] = probs
         return proba_ordered
 
