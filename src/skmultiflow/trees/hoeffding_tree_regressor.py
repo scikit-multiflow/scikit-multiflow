@@ -18,9 +18,6 @@ from skmultiflow.trees.nodes.active_learning_node_perceptron import compute_sd
 
 import warnings
 
-_TARGET_MEAN = 'mean'
-_PERCEPTRON = 'perceptron'
-
 
 def RegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
                             split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
@@ -100,7 +97,43 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
     at its leaf nodes, the more homogeneous the partitions are. At its leaf nodes, HTR fits either linear
     perceptron models or uses the sample average as the predictor.
 
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import RegressionGenerator
+       from skmultiflow.trees import HoeffdingTreeRegressor
+       import numpy as np
+
+       # Setup a data stream
+       stream = RegressionGenerator(random_state=1)
+
+       # Setup the Hoeffding Tree Regressor
+       htr = HoeffdingTreeRegressor()
+
+       # Auxiliary variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+       y_pred = np.zeros(max_samples)
+       y_true = np.zeros(max_samples)
+
+       # Run test-then-train loop for max_samples or while there is data in the stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_true[n_samples] = y[0]
+           y_pred[n_samples] = htr.predict(X)[0]
+           htr.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed.'.format(n_samples))
+       print('Hoeffding Tree regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
+
+    _TARGET_MEAN = 'mean'
+    _PERCEPTRON = 'perceptron'
 
     # =============================================
     # == Hoeffding Tree Regressor implementation ==
@@ -163,9 +196,13 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
-        if leaf_prediction not in {_TARGET_MEAN, _PERCEPTRON}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
-            self._leaf_prediction = _PERCEPTRON
+        if leaf_prediction not in {self._TARGET_MEAN, self._PERCEPTRON}:
+            print(
+                "Invalid leaf_prediction option {}', will use default '{}'".format(
+                    leaf_prediction, self._PERCEPTRON
+                )
+            )
+            self._leaf_prediction = self._PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
 
@@ -238,9 +275,9 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         """Create a new learning node. The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
-        if self.leaf_prediction == _TARGET_MEAN:
+        if self.leaf_prediction == self._TARGET_MEAN:
             return ActiveLearningNodeForRegression(initial_class_observations)
-        elif self.leaf_prediction == _PERCEPTRON:
+        elif self.leaf_prediction == self._PERCEPTRON:
             return ActiveLearningNodePerceptron(initial_class_observations, perceptron_node,
                                                 random_state=self.random_state)
 
@@ -391,7 +428,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         if self.samples_seen > 0:
             r, _ = get_dimensions(X)
             for i in range(r):
-                if self.leaf_prediction == _TARGET_MEAN:
+                if self.leaf_prediction == self._TARGET_MEAN:
                     votes = self.get_votes_for_instance(X[i])   # Gets observed data statistics
                     if votes == {}:
                         # Tree is empty, all target_values equal, default to zero
@@ -400,7 +437,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                         number_of_samples_seen = votes[0]
                         sum_of_values = votes[1]
                         predictions.append(sum_of_values / number_of_samples_seen)
-                elif self.leaf_prediction == _PERCEPTRON:
+                elif self.leaf_prediction == self._PERCEPTRON:
                     if self.samples_seen > 1:
                         perceptron_weights = self.get_weights_for_instance(X[i])
                         if perceptron_weights is None:
@@ -493,7 +530,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 new_split = self.new_split_node(split_decision.split_test,
                                                 node.get_observed_class_distribution())
                 for i in range(split_decision.num_splits()):
-                    if self.leaf_prediction == _PERCEPTRON:
+                    if self.leaf_prediction == self._PERCEPTRON:
                         new_child = self._new_learning_node(split_decision.resulting_class_distribution_from_split(i),
                                                             node)
                     else:
@@ -524,7 +561,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             Parent node's branch index.
 
         """
-        if self.leaf_prediction == _TARGET_MEAN:
+        if self.leaf_prediction == self._TARGET_MEAN:
             new_leaf = InactiveLearningNodeForRegression(
                 to_deactivate.get_observed_class_distribution()
             )

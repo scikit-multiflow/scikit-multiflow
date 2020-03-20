@@ -16,10 +16,6 @@ from skmultiflow.trees.nodes import SSTInactiveLearningNode
 from skmultiflow.trees.nodes import SSTInactiveLearningNodeAdaptive
 
 
-_PERCEPTRON = 'perceptron'
-_ADAPTIVE = 'adaptive'
-
-
 class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputMixin):
     """Stacked Single-target Hoeffding Tree regressor.
 
@@ -75,6 +71,41 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
     .. [1] Mastelini, S. M., Barbon Jr, S., de Carvalho, A. C. P. L. F. (2019).
        "Online Multi-target regression trees with stacked leaf models". arXiv
        preprint arXiv:1903.12483.
+
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import RegressionGenerator
+       from skmultiflow.trees import StackedSingleTargetHoeffdingTreeRegressor
+       import numpy as np
+
+       # Setup a data stream
+       n_targets = 3
+       stream = RegressionGenerator(n_targets=n_targets, random_state=1)
+
+       # Setup the Stacked Single-target Hoeffding Tree Regressor
+       sst_ht = StackedSingleTargetHoeffdingTreeRegressor()
+
+       # Auxiliary variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
+       y_pred = np.zeros((max_samples, n_targets))
+       y_true = np.zeros((max_samples, n_targets))
+
+       # Run test-then-train loop for max_samples or while there is data in the stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_true[n_samples] = y[0]
+           y_pred[n_samples] = sst_ht.predict(X)[0]
+           sst_ht.partial_fit(X, y)
+           n_samples += 1
+
+       # Display results
+       print('{} samples analyzed.'.format(n_samples))
+       print('Stacked Single-target Hoeffding Tree Regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
 
     # =====================================================================
@@ -141,9 +172,13 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
 
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
-        if leaf_prediction not in {_PERCEPTRON, _ADAPTIVE}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
-            self._leaf_prediction = _PERCEPTRON
+        if leaf_prediction not in {self._PERCEPTRON, self._ADAPTIVE}:
+            print(
+                "Invalid leaf_prediction option {}', will use default '{}'".format(
+                    leaf_prediction, self._PERCEPTRON
+                )
+            )
+            self._leaf_prediction = self._PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
 
@@ -185,13 +220,13 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
         """
         if initial_class_observations is None:
             initial_class_observations = {}
-        if self.leaf_prediction == _PERCEPTRON:
+        if self.leaf_prediction == self._PERCEPTRON:
             return SSTActiveLearningNode(
                 initial_class_observations,
                 perceptron_weight,
                 self.random_state
             )
-        elif self.leaf_prediction == _ADAPTIVE:
+        elif self.leaf_prediction == self._ADAPTIVE:
             return SSTActiveLearningNodeAdaptive(
                 initial_class_observations,
                 perceptron_weight,
@@ -218,7 +253,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
         except AttributeError:
             return [0.0]
         for i in range(r):
-            if self.leaf_prediction == _PERCEPTRON:
+            if self.leaf_prediction == self._PERCEPTRON:
                 if self.examples_seen > 1:
                     perceptron_weights = self.get_weights_for_instance(X[i])
                     if perceptron_weights is None:
@@ -248,7 +283,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                     # Samples are normalized using just one sd, as proposed in
                     # the iSoup-Tree method
                     predictions[i] = normalized_meta_prediction * sd + mean
-            elif self.leaf_prediction == _ADAPTIVE:
+            elif self.leaf_prediction == self._ADAPTIVE:
                 if self.examples_seen > 1:
                     # Mean predictor
                     votes = self.get_votes_for_instance(X[i]).copy()
@@ -397,13 +432,13 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                     node.get_observed_class_distribution()
                 )
                 for i in range(split_decision.num_splits()):
-                    if self.leaf_prediction == _PERCEPTRON:
+                    if self.leaf_prediction == self._PERCEPTRON:
                         new_child = self._new_learning_node(
                             split_decision.
                             resulting_class_distribution_from_split(i),
                             node.perceptron_weight
                         )
-                    elif self.leaf_prediction == _ADAPTIVE:
+                    elif self.leaf_prediction == self._ADAPTIVE:
                         new_child = self._new_learning_node(
                             split_decision.
                             resulting_class_distribution_from_split(i),
@@ -443,12 +478,12 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
         parent_branch: int
             Parent node's branch index.
         """
-        if self.leaf_prediction == _PERCEPTRON:
+        if self.leaf_prediction == self._PERCEPTRON:
             new_leaf = SSTInactiveLearningNode(
                 to_deactivate.get_observed_class_distribution(),
                 to_deactivate.perceptron_weight
             )
-        elif self.leaf_prediction == _ADAPTIVE:
+        elif self.leaf_prediction == self._ADAPTIVE:
             new_leaf = SSTInactiveLearningNodeAdaptive(
                 to_deactivate.get_observed_class_distribution(),
                 to_deactivate.perceptron_weight

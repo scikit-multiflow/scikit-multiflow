@@ -34,11 +34,6 @@ def LCHT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=20
                                                    n_labels=n_labels)
 
 
-MAJORITY_CLASS = 'mc'
-NAIVE_BAYES = 'nb'
-NAIVE_BAYES_ADAPTIVE = 'nba'
-
-
 class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutputMixin):
     """ Label Combination Hoeffding Tree for multi-label classification.
 
@@ -88,6 +83,41 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         List of Nominal attributes. If emtpy, then assume that all attributes are numerical.
     n_labels: int (default=None)
         the number of labels the problem has.
+
+    Examples
+    --------
+    .. code-block:: python
+
+       # Imports
+       from skmultiflow.data import MultilabelGenerator
+       from skmultiflow.trees import LabelCombinationHoeffdingTreeClassifier
+       from skmultiflow.metrics import hamming_score
+
+       # Setting up a data stream
+       stream = MultilabelGenerator(random_state=1, n_samples=200, n_targets=5, n_features=10)
+
+       # Setup Hoeffding Tree estimator
+       label_combination_hoeffding_tree = LabelCombinationHoeffdingTreeClassifier(n_labels=stream.n_targets)
+
+       # Setup variables to control loop and track performance
+       n_samples = 0
+       max_samples = 200
+       true_labels = []
+       predicts = []
+
+       # Train the estimator with the samples provided by the data stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_pred = label_combination_hoeffding_tree.predict(X)
+           label_combination_hoeffding_tree.partial_fit(X, y)
+           predicts.extend(y_pred)
+           true_labels.extend(y)
+           n_samples += 1
+
+       # Display results
+       perf = hamming_score(true_labels, predicts)
+       print('{} samples analyzed.'.format(n_samples))
+       print('Label Combination Hoeffding Tree Hamming score: ' + str(perf))
     """
     def __init__(self,
                  max_byte_size=33554432,
@@ -179,9 +209,9 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         """Create a new learning node. The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
-        if self._leaf_prediction == MAJORITY_CLASS:
+        if self._leaf_prediction == self._MAJORITY_CLASS:
             return LCActiveLearningNode(initial_class_observations)
-        elif self._leaf_prediction == NAIVE_BAYES:
+        elif self._leaf_prediction == self._NAIVE_BAYES:
             return LCLearningNodeNB(initial_class_observations)
         else:  # NAIVE BAYES ADAPTIVE (default)
             return LCLearningNodeNBA(initial_class_observations)
