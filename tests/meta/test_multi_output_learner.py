@@ -16,7 +16,11 @@ from distutils.version import LooseVersion
 @pytest.mark.filterwarnings('ignore::UserWarning')
 def test_multi_output_learner_classifier():
 
-    stream = MultilabelGenerator(n_samples=5150, n_features=15, n_targets=3, n_labels=4, random_state=112)
+    stream = MultilabelGenerator(n_samples=5150,
+                                 n_features=15,
+                                 n_targets=3,
+                                 n_labels=4,
+                                 random_state=112)
 
     estimator = SGDClassifier(random_state=112, tol=1e-3, max_iter=10, loss='log')
     classifier = MultiOutputLearner(base_estimator=estimator)
@@ -44,16 +48,19 @@ def test_multi_output_learner_classifier():
         cnt += 1
 
     if LooseVersion(sklearn_version) < LooseVersion("0.21"):
-        expected_predictions = [[1.0, 1.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0],
-                                [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 0.0, 1.0], [1.0, 1.0, 1.0], [0.0, 0.0, 1.0],
-                                [0.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0],
-                                [1.0, 0.0, 0.0], [0.0, 1.0, 1.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 1.0, 0.0],
-                                [0.0, 0.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0],
-                                [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0],
-                                [0.0, 1.0, 0.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 0.0, 1.0],
-                                [0.0, 0.0, 1.0], [0.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 0.0, 0.0], [0.0, 1.0, 1.0],
-                                [0.0, 0.0, 1.0], [1.0, 1.0, 0.0], [1.0, 0.0, 1.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0],
-                                [1.0, 1.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]]
+        expected_predictions = [[1.0, 1.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0],
+                                [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 0.0, 1.0],
+                                [1.0, 1.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 1.0],
+                                [0.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 0.0, 0.0],
+                                [0.0, 1.0, 1.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 1.0, 0.0],
+                                [0.0, 0.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0],
+                                [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0],
+                                [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 0.0], [0.0, 1.0, 1.0],
+                                [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0],
+                                [0.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 0.0, 0.0], [0.0, 1.0, 1.0],
+                                [0.0, 0.0, 1.0], [1.0, 1.0, 0.0], [1.0, 0.0, 1.0], [1.0, 0.0, 1.0],
+                                [0.0, 0.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 1.0],
+                                [0.0, 1.0, 1.0]]
         assert np.alltrue(np.array_equal(predictions, expected_predictions))
 
         expected_correct_predictions = 26
@@ -63,26 +70,29 @@ def test_multi_output_learner_classifier():
         performance = hamming_score(true_labels, predictions)
         assert np.isclose(performance, expected_performance)
 
-        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(alpha=0.0001, average=False, " \
-                        "class_weight=None,\n" \
-                        "       early_stopping=False, epsilon=0.1, eta0=0.0, fit_intercept=True,\n" \
-                        "       l1_ratio=0.15, learning_rate='optimal', loss='log', max_iter=10,\n" \
-                        "       n_iter=None, n_iter_no_change=5, n_jobs=None, penalty='l2',\n" \
-                        "       power_t=0.5, random_state=112, shuffle=True, tol=0.001,\n" \
-                        "       validation_fraction=0.1, verbose=0, warm_start=False))"
-        assert classifier.get_info() == expected_info
+        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(alpha=0.0001, " \
+                        "average=False, class_weight=None, early_stopping=False, epsilon=0.1, " \
+                        "eta0=0.0, fit_intercept=True, l1_ratio=0.15, learning_rate='optimal', " \
+                        "loss='log', max_iter=10, n_iter=None, n_iter_no_change=5, n_jobs=None, " \
+                        "penalty='l2', power_t=0.5, random_state=112, shuffle=True, tol=0.001, " \
+                        "validation_fraction=0.1, verbose=0, warm_start=False))"
+        info = " ".join([line.strip() for line in classifier.get_info().split()])
+        assert info == expected_info
 
     else:
-        expected_predictions = [[1.0, 1.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0],
-                              [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 0.0, 1.0], [1.0, 0.0, 1.0], [1.0, 0.0, 1.0],
-                              [0.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0],
-                              [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0],
-                              [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0],
-                              [1.0, 1.0, 1.0], [0.0, 1.0, 0.0], [1.0, 0.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 0.0],
-                              [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0],
-                              [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0], [0.0, 1.0, 1.0],
-                              [0.0, 0.0, 1.0], [1.0, 1.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 0.0, 1.0],
-                              [1.0, 1.0, 1.0], [1.0, 0.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]]
+        expected_predictions = [[1.0, 1.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0],
+                                [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 0.0, 1.0],
+                                [1.0, 0.0, 1.0], [1.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 1.0],
+                                [0.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 0.0],
+                                [1.0, 1.0, 1.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0],
+                                [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0],
+                                [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 0.0], [1.0, 0.0, 1.0],
+                                [0.0, 1.0, 1.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0],
+                                [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 0.0, 1.0],
+                                [0.0, 0.0, 1.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0], [0.0, 1.0, 1.0],
+                                [0.0, 0.0, 1.0], [1.0, 1.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0],
+                                [0.0, 0.0, 1.0], [1.0, 1.0, 1.0], [1.0, 0.0, 0.0], [1.0, 1.0, 1.0],
+                                [0.0, 1.0, 1.0]]
         np.alltrue(np.array_equal(predictions, expected_predictions))
 
         expected_correct_predictions = 23
@@ -92,15 +102,14 @@ def test_multi_output_learner_classifier():
         performance = hamming_score(true_labels, predictions)
         assert np.isclose(performance, expected_performance)
 
-        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(alpha=0.0001, average=False, " \
-                        "class_weight=None,\n" \
-                        "              early_stopping=False, epsilon=0.1, eta0=0.0, fit_intercept=True,\n" \
-                        "              l1_ratio=0.15, learning_rate='optimal', loss='log', max_iter=10,\n" \
-                        "              n_iter_no_change=5, n_jobs=None, penalty='l2', power_t=0.5,\n" \
-                        "              random_state=112, shuffle=True, tol=0.001,\n" \
-                        "              validation_fraction=0.1, verbose=0, warm_start=False))"
-
-        assert classifier.get_info() == expected_info
+        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(alpha=0.0001, " \
+                        "average=False, class_weight=None, early_stopping=False, epsilon=0.1, " \
+                        "eta0=0.0, fit_intercept=True, l1_ratio=0.15, learning_rate='optimal', " \
+                        "loss='log', max_iter=10, n_iter_no_change=5, n_jobs=None, penalty='l2', "\
+                        "power_t=0.5, random_state=112, shuffle=True, tol=0.001, " \
+                        "validation_fraction=0.1, verbose=0, warm_start=False))"
+        info = " ".join([line.strip() for line in classifier.get_info().split()])
+        assert info == expected_info
 
     assert type(classifier.predict(X)) == np.ndarray
     assert type(classifier.predict_proba(X)) == np.ndarray
@@ -109,7 +118,11 @@ def test_multi_output_learner_classifier():
 @pytest.mark.filterwarnings('ignore::UserWarning')
 def test_multi_output_learner_regressor():
 
-    stream = RegressionGenerator(n_samples=5500, n_features=10, n_informative=20, n_targets=2, random_state=1)
+    stream = RegressionGenerator(n_samples=5500,
+                                 n_features=10,
+                                 n_informative=20,
+                                 n_targets=2,
+                                 random_state=1)
 
     estimator = SGDRegressor(random_state=112, tol=1e-3, max_iter=10, loss='squared_loss')
     learner = MultiOutputLearner(base_estimator=estimator)

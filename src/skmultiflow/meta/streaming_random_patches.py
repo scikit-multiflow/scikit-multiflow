@@ -17,99 +17,106 @@ from skmultiflow.metrics import ClassificationPerformanceEvaluator
 class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     """ Streaming Random Patches ensemble classifier.
 
-        Parameters
-        ----------
-        base_estimator: BaseSKMObject or sklearn.BaseObject, (default=HoeffdingTreeClassifier)
-            The base estimator.
+    Parameters
+    ----------
+    base_estimator: BaseSKMObject or sklearn.BaseObject, \
+        (default=HoeffdingTreeClassifier)
+        The base estimator.
 
-        n_estimators: int
-            Number of members in the ensemble.
+    n_estimators: int
+        Number of members in the ensemble.
 
-        subspace_mode: str, (default='percentage')
-            | Defines how ``m``, defined by subspace_size, is interpreted.
-              ``M``  represents the total number of features.
-            | This only applies to subspaces and random patches options.
-            | 'm' - Specified value
-            | 'sqrtM1' - ``sqrt(M)+1``
-            | 'MsqrtM1' - ``M-(sqrt(M)+1)``
-            | 'percentage' - Percentage
+    subspace_mode: str, (default='percentage')
+        | Indicates how ``m``, defined by subspace_size, is interpreted.
+          ``M``  represents the total number of features.
+        | Only applies when training method is random subspaces or
+          random patches.
+        | 'm' - Specified value
+        | 'sqrtM1' - ``sqrt(M)+1``
+        | 'MsqrtM1' - ``M-(sqrt(M)+1)``
+        | 'percentage' - Percentage
 
-        subspace_size: int, (default=60)
-            Number of features per subset for each classifier.
-            Negative value means ``total_features - subspace_size``.
+    subspace_size: int, (default=60)
+        Number of features per subset for each classifier.
+        Negative value means ``total_features - subspace_size``.
 
-        training_method: str, (default='randompatches')
-            | The training method to use.
-            | 'randomsubspaces' - Random subspaces
-            | 'resampling' - Resampling (bagging)
-            | 'randompatches' - Random patches
+    training_method: str, (default='randompatches')
+        | The training method to use.
+        | 'randomsubspaces' - Random subspaces
+        | 'resampling' - Resampling (bagging)
+        | 'randompatches' - Random patches
 
-        lam: float, (default=6.0)
-            Lambda value for bagging.
+    lam: float, (default=6.0)
+        Lambda value for bagging.
 
-        drift_detection_method: BaseDriftDetector, (default=ADWIN(delta=1e-5))
-            Drift detection method.
+    drift_detection_method: BaseDriftDetector, (default=ADWIN(delta=1e-5))
+        Drift detection method.
 
-        warning_detection_method: BaseDriftDetector, (default=ADWIN(delta=1e-4))
-            Warning detection method.
+    warning_detection_method: BaseDriftDetector, (default=ADWIN(delta=1e-4))
+        Warning detection method.
 
-        disable_weighted_vote: bool (default=False)
-            If True, uses weighted voting.
+    disable_weighted_vote: bool (default=False)
+        If True, uses weighted voting.
 
-        disable_drift_detection: bool (default=False)
-            If True, disables drift detection and background learner.
+    disable_drift_detection: bool (default=False)
+        If True, disables drift detection and background learner.
 
-        disable_background_learner: bool (default=False)
-            If True, disables background learner and trees are reset immediately if drift is detected.
+    disable_background_learner: bool (default=False)
+        If True, disables background learner and trees are reset
+        immediately if drift is detected.
 
-        nominal_attributes: list, optional
-            List of Nominal attributes. If emtpy, then assume that all attributes are numerical.
+    nominal_attributes: list, optional
+        List of Nominal attributes. If emtpy, then assume that all
+        attributes are numerical.
 
-        random_state: int, RandomState instance or None, optional (default=None)
-           If int, random_state is the seed used by the random number generator;
-           If RandomState instance, random_state is the random number generator;
-           If None, the random number generator is the RandomState instance used
-           by `np.random`.
+    random_state: int, RandomState instance or None, optional (default=None)
+       If int, random_state is the seed used by the random number generator;
+       If RandomState instance, random_state is the random number generator;
+       If None, the random number generator is the RandomState instance used
+       by `np.random`.
 
-        Notes
-        -----
-        The Streaming Random Patches (SRP) [1]_ ensemble method simulates bagging or
-        random subspaces. The default algorithm uses both bagging and random subspaces,
-        namely Random Patches. The default base estimator is a Hoeffding Tree, but it can
-        be used with any other base estimator (differently from random forest variations).
+    Notes
+    -----
+    The Streaming Random Patches (SRP) [1]_ ensemble method simulates bagging
+    or random subspaces. The default algorithm uses both bagging and random
+    subspaces, namely Random Patches. The default base estimator is a
+    Hoeffding Tree, but it can be used with any other base estimator
+    (differently from random forest variations).
 
-        References
-        ----------
-        .. [1] Heitor Murilo Gomes, Jesse Read, Albert Bifet.
-           Streaming Random Patches for Evolving Data Stream Classification.
-           IEEE International Conference on Data Mining (ICDM), 2019.
+    References
+    ----------
+    .. [1] Heitor Murilo Gomes, Jesse Read, Albert Bifet.
+       Streaming Random Patches for Evolving Data Stream Classification.
+       IEEE International Conference on Data Mining (ICDM), 2019.
 
-        Examples
-        --------
-        .. code-block:: python
+    Examples
+    --------
+    .. code-block:: python
 
-           from skmultiflow.data import AGRAWALGenerator
-           from skmultiflow.meta import StreamingRandomPatchesClassifier
+       from skmultiflow.data import AGRAWALGenerator
+       from skmultiflow.meta import StreamingRandomPatchesClassifier
 
-           stream = AGRAWALGenerator(random_state=1)
-           estimator = StreamingRandomPatchesClassifier(random_state=1, n_estimators=3)
+       stream = AGRAWALGenerator(random_state=1)
+       estimator = StreamingRandomPatchesClassifier(random_state=1,
+                                                    n_estimators=3)
 
-           # Variables to control loop and track performance
-           n_samples = 0
-           correct_cnt = 0
-           max_samples = 200
+       # Variables to control loop and track performance
+       n_samples = 0
+       correct_cnt = 0
+       max_samples = 200
 
-           # Run test-then-train loop for max_samples or while there is data in the stream
-           while n_samples < max_samples and stream.has_more_samples():
-               X, y = stream.next_sample()
-               y_pred = estimator.predict(X)
-               if y[0] == y_pred[0]:
-                   correct_cnt += 1
-               estimator.partial_fit(X, y)
-               n_samples += 1
+       # Run test-then-train loop for max_samples
+       # or while there is data in the stream
+       while n_samples < max_samples and stream.has_more_samples():
+           X, y = stream.next_sample()
+           y_pred = estimator.predict(X)
+           if y[0] == y_pred[0]:
+               correct_cnt += 1
+           estimator.partial_fit(X, y)
+           n_samples += 1
 
-           print('{} samples analyzed.'.format(n_samples))
-           print('Estimator accuracy: {}'.format(correct_cnt / n_samples))
+       print('{} samples analyzed.'.format(n_samples))
+       print('Estimator accuracy: {}'.format(correct_cnt / n_samples))
 
     """
 
@@ -122,7 +129,8 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
     _FEATURES_SQRT_INV = "MsqrtM1"
     _FEATURES_PERCENT = "percentage"
 
-    def __init__(self, base_estimator=HoeffdingTreeClassifier(grace_period=50, split_confidence=0.01),
+    def __init__(self, base_estimator=HoeffdingTreeClassifier(grace_period=50,
+                                                              split_confidence=0.01),
                  n_estimators: int = 100,
                  subspace_mode: str = "percentage",
                  subspace_size: int = 60,
@@ -143,10 +151,12 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
             raise ValueError("Invalid subspace_mode: {}.\n"
                              "Valid options are: {}".format(subspace_mode,
                                                             {self._FEATURES_M, self._FEATURES_SQRT,
-                                                             self._FEATURES_SQRT_INV, self._FEATURES_PERCENT}))
+                                                             self._FEATURES_SQRT_INV,
+                                                             self._FEATURES_PERCENT}))
         self.subspace_mode = subspace_mode
         self.subspace_size = subspace_size
-        if training_method not in {self._TRAIN_RESAMPLING, self._TRAIN_RANDOM_PATCHES, self._TRAIN_RANDOM_SUBSPACES}:
+        if training_method not in {self._TRAIN_RESAMPLING, self._TRAIN_RANDOM_PATCHES,
+                                   self._TRAIN_RANDOM_SUBSPACES}:
             raise ValueError("Invalid training_method: {}.\n"
                              "Valid options are: {}".format(training_method,
                                                             {self._TRAIN_RANDOM_PATCHES,
@@ -159,10 +169,12 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         self.disable_weighted_vote = disable_weighted_vote
         self.disable_drift_detection = disable_drift_detection
         self.disable_background_learner = disable_background_learner
-        self.drift_detection_criteria = 'accuracy'  # Single option. Could be extended in the future.
+        # Single option (accuracy) for drift detection criteria. Could be extended in the future.
+        self.drift_detection_criteria = 'accuracy'
         self.nominal_attributes = nominal_attributes if nominal_attributes else []
         self.random_state = random_state
-        self._random_state = check_random_state(self.random_state)  # This is the actual random_state object used
+        # self._random_state is the actual object used internally
+        self._random_state = check_random_state(self.random_state)
         self.ensemble = None
 
         self._n_samples_seen = 0
@@ -185,8 +197,10 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         classes: numpy.ndarray, optional (default=None)
             No used.
 
-        sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
-            Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the learning method.
+        sample_weight: numpy.ndarray of shape (n_samples), optional \
+            (default=None)
+            Samples weight. If not provided, uniform weights are assumed.
+            Usage varies depending on the learning method.
 
         Returns
         -------
@@ -218,16 +232,22 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
             # Update performance evaluator
             self.ensemble[i].performance_evaluator.add_result(y[0], y_pred[0], sample_weight[0])
 
-            # Train using random subspaces without resampling, i.e. all instances are used for training.
+            # Train using random subspaces without resampling,
+            # i.e. all instances are used for training.
             if self.training_method == self._TRAIN_RANDOM_SUBSPACES:
-                self.ensemble[i].partial_fit(X=X, y=y, classes=classes, sample_weight=np.asarray([1.]),
-                                             n_samples_seen=self._n_samples_seen, random_state=self._random_state)
-            # Train using random patches or resampling, thus we simulate online bagging with Poisson(lambda=...)
+                self.ensemble[i].partial_fit(X=X, y=y, classes=classes,
+                                             sample_weight=np.asarray([1.]),
+                                             n_samples_seen=self._n_samples_seen,
+                                             random_state=self._random_state)
+            # Train using random patches or resampling,
+            # thus we simulate online bagging with Poisson(lambda=...)
             else:
                 k = self._random_state.poisson(lam=self.lam)
                 if k > 0:
-                    self.ensemble[i].partial_fit(X=X, y=y, classes=classes, sample_weight=np.asarray([k]),
-                                                 n_samples_seen=self._n_samples_seen, random_state=self._random_state)
+                    self.ensemble[i].partial_fit(X=X, y=y, classes=classes,
+                                                 sample_weight=np.asarray([k]),
+                                                 n_samples_seen=self._n_samples_seen,
+                                                 random_state=self._random_state)
 
     def predict(self, X):
         """ Predict classes for the passed data.
@@ -253,18 +273,20 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         return y_pred
 
     def predict_proba(self, X):
-        """ Estimates the probability of each sample in X belonging to each of the class-labels.
+        """ Estimate the probability of X belonging to each class-labels.
 
         Parameters
         ----------
         X : numpy.ndarray of shape (n_samples, n_features)
-            The matrix of samples one wants to predict the class probabilities for.
+            Samples one wants to predict the class probabilities for.
 
         Returns
         -------
-        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the
-        same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents
-        the probability that the i-th sample of X belongs to a certain class-label.
+        A numpy.ndarray of shape (n_samples, n_labels), in which each outer
+        entry is associated with the X entry of the same index. And where the
+        list in index [i] contains len(self.target_values) elements, each of
+        which represents the probability that the i-th sample of X belongs to
+        a certain class-label.
 
         """
         n_samples, n_features = get_dimensions(X)
@@ -299,7 +321,8 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         return y_proba
 
     def _init_ensemble(self, n_features: int):
-        # Select the size of k, which depends on 2 parameters: subspace_size and subspace_mode
+        # Select the size of k, which depends on 2 parameters:
+        # subspace_size and subspace_mode
         k = self.subspace_size
 
         if self.training_method != self._TRAIN_RESAMPLING:
@@ -318,31 +341,41 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
                 # k is negative, calculate M - k
                 k = n_features + k
 
-        # Generate subspaces. The subspaces is a 2D matrix of shape (n_estimators, k) where each row contains
-        # the k feature indices to be used by each estimator.
-        if self.training_method == self._TRAIN_RANDOM_SUBSPACES or self.training_method == self._TRAIN_RANDOM_PATCHES:
+        # Generate subspaces. The subspaces is a 2D matrix of shape
+        # (n_estimators, k) where each row contains the k feature indices
+        # to be used by each estimator.
+        if self.training_method == self._TRAIN_RANDOM_SUBSPACES or \
+                self.training_method == self._TRAIN_RANDOM_PATCHES:
             if k != 0 and k < n_features:
-                # For low dimensionality it is better to avoid more than 1 classifier with the same subspace,
-                # thus we generate all possible combinations of subsets of features and select without replacement.
-                # n_features is the total number of features and k is the actual size of the subspaces.
+                # For low dimensionality it is better to avoid more than
+                # 1 classifier with the same subspace, thus we generate all
+                # possible combinations of subsets of features and select
+                # without replacement.
+                # n_features is the total number of features and k is the
+                # actual size of the subspaces.
                 if n_features <= 20 or k < 2:
                     if k == 1 and n_features > 2:
                         k = 2
                     # Generate all possible combinations of size k
                     self._subspaces = get_all_k_combinations(k, n_features)
-                    # Increase the subspaces to match the ensemble size (if required)
+                    # Increase the subspaces to match the ensemble size
+                    # (if required)
                     i = 0
                     while len(self._subspaces) < self.n_estimators:
                         i = 0 if i == len(self._subspaces) else i
                         np.vstack((self._subspaces, self._subspaces[i]))
                         i += 1
-                # For high dimensionality we can't generate all combinations as it is too expensive (memory).
-                # On top of that, the chance of repeating a subspace is lower, so we can just randomly generate
-                # subspaces without worrying about repetitions.
+                # For high dimensionality we can't generate all combinations
+                # as it is too expensive (memory). On top of that, the chance
+                # of repeating a subspace is lower, so we can just randomly
+                # generate subspaces without worrying about repetitions.
                 else:
-                    self._subspaces = get_random_k_combinations(k, n_features, self.n_estimators, self._random_state)
+                    self._subspaces = get_random_k_combinations(k, n_features,
+                                                                self.n_estimators,
+                                                                self._random_state)
 
-            # k == 0 or k > n_features (subspace size is larger than the number of features), then default to resampling
+            # k == 0 or k > n_features (subspace size is larger than the
+            # number of features), then default to re-sampling
             else:
                 self.training_method = self._TRAIN_RESAMPLING
 
@@ -360,11 +393,14 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         performance_evaluator = self._base_performance_evaluator
 
         subspace_indexes = np.arange(self.n_estimators)
-        if self.training_method == self._TRAIN_RANDOM_PATCHES or self.training_method == self._TRAIN_RANDOM_SUBSPACES:
+        if self.training_method == self._TRAIN_RANDOM_PATCHES or \
+                self.training_method == self._TRAIN_RANDOM_SUBSPACES:
             # Shuffle indexes that match subspaces with members of the ensemble
             self._random_state.shuffle(subspace_indexes)
         for i in range(self.n_estimators):
-            features_indexes = None   # When self.training_method == self._TRAIN_RESAMPLING
+            # When self.training_method == self._TRAIN_RESAMPLING
+            features_indexes = None
+            # Otherwise set feature indexes
             if self.training_method == self._TRAIN_RANDOM_PATCHES or \
                     self.training_method == self._TRAIN_RANDOM_SUBSPACES:
                 features_indexes = self._subspaces[subspace_indexes[i]]
@@ -450,19 +486,25 @@ class StreamingRandomPatchesBaseLearner:
             # Select the subset of features to use
             X_subset = np.asarray([X[0][self.feature_indexes]])
             if self._set_nominal_attributes and hasattr(self.base_estimator, 'nominal_attributes'):
-                self.base_estimator.nominal_attributes = self._remap_nominal_attributes(self.feature_indexes,
-                                                                                        self.nominal_attributes)
+                self.base_estimator.nominal_attributes = \
+                    self._remap_nominal_attributes(self.feature_indexes, self.nominal_attributes)
                 self._set_nominal_attributes = False
         else:
             # Use all features
             X_subset = X
 
-        self.base_estimator.partial_fit(X=X_subset, y=y, classes=classes, sample_weight=sample_weight)
+        self.base_estimator.partial_fit(X=X_subset, y=y,
+                                        classes=classes,
+                                        sample_weight=sample_weight)
         correctly_classifies = self.base_estimator.predict(X_subset)[0] == y
         if self._background_learner:
-            # Note: Pass the original instance X so features are correctly selected at the beginning of partial_fit
-            self._background_learner.partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight,
-                                                 n_samples_seen=n_samples_seen, random_state=random_state)
+            # Note: Pass the original instance X so features are correctly
+            # selected at the beginning of partial_fit
+            self._background_learner.partial_fit(X=X, y=y,
+                                                 classes=classes,
+                                                 sample_weight=sample_weight,
+                                                 n_samples_seen=n_samples_seen,
+                                                 random_state=random_state)
 
         if not self.disable_drift_detector and not self.is_background_learner:
             # Check for warnings only if the background learner is active
@@ -472,7 +514,8 @@ class StreamingRandomPatchesBaseLearner:
                 # Check if there was a change
                 if self.warning_detection_method.detected_change():
                     self.n_warnings_detected += 1
-                    self._trigger_warning(n_features=n_features_total, n_samples_seen=n_samples_seen,
+                    self._trigger_warning(n_features=n_features_total,
+                                          n_samples_seen=n_samples_seen,
                                           random_state=random_state)
 
             # ===== Drift detection =====
@@ -482,7 +525,8 @@ class StreamingRandomPatchesBaseLearner:
             if self.drift_detection_method.detected_change():
                 self.n_drifts_detected += 1
                 # There was a change, reset the model
-                self.reset(n_features=n_features_total, n_samples_seen=n_samples_seen, random_state=random_state)
+                self.reset(n_features=n_features_total, n_samples_seen=n_samples_seen,
+                           random_state=random_state)
 
     def predict_proba(self, X):
         if self.feature_indexes is not None:
@@ -556,7 +600,8 @@ class StreamingRandomPatchesBaseLearner:
         return remapped_idx if len(remapped_idx) > 0 else None
 
     def _can_set_nominal_attributes(self):
-        return True if (self.nominal_attributes is not None and len(self.nominal_attributes) > 0) else False
+        return True if (self.nominal_attributes is not None and len(self.nominal_attributes) > 0) \
+            else False
 
 
 def _get_all_k_combinations_rec(offset: int, k: int, combination: deque, original_size: int,
@@ -594,7 +639,8 @@ def get_all_k_combinations(k: int, n_items: int) -> np.ndarray:
     return np.array(combinations)
 
 
-def get_random_k_combinations(k: int, n_items: int, n_combinations: int, random_state: np.random) -> np.ndarray:
+def get_random_k_combinations(k: int, n_items: int, n_combinations: int,
+                              random_state: np.random) -> np.ndarray:
     """ Gets random k-combinations from n_features
 
     Parameters
@@ -606,10 +652,10 @@ def get_random_k_combinations(k: int, n_items: int, n_combinations: int, random_
     n_combinations: int
         Number of combinations
     random_state: int, RandomState instance or None, optional (default=None)
-               If int, random_state is the seed used by the random number generator;
-               If RandomState instance, random_state is the random number generator;
-               If None, the random number generator is the RandomState instance used
-               by `np.random`.
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
 
     Returns
     -------
@@ -617,4 +663,5 @@ def get_random_k_combinations(k: int, n_items: int, n_combinations: int, random_
         2D array containing all k-combinations
 
     """
-    return np.array([random_state.choice(range(n_items), k, replace=False) for _ in range(n_combinations)])
+    return np.array([random_state.choice(range(n_items), k, replace=False)
+                     for _ in range(n_combinations)])
