@@ -273,11 +273,17 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                     try:
                         votes += self.ensemble_weights[i] * y_predicts
                     except ValueError:
-                        # sklearn learner
-                        if hasattr(h, 'classes_'):
+                        if hasattr(h, 'classes_'):  # sklearn learner
                             obs_classes = h.classes_
-                        else:  # skmultiflow learner
+                        elif hasattr(h, 'classes'):  # skmultiflow learner
                             obs_classes = h.classes
+                        else:
+                            raise AttributeError(
+                                'The base estimator does not define the "classes" or "classes_" ' +
+                                'parameter. The base estimator must specify the classes it has ' +
+                                'observed during the training stage in order to maintain ' +
+                                'consistency across the ensemble.'
+                            )
                         votes += self.ensemble_weights[i] * \
                             self._fill_missing_probs(
                                 y_predicts, obs_classes, self.classes
