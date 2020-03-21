@@ -63,16 +63,14 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     Notes
     -----
-        Originally, this ensemble algorithm was designed to train all of its members and combine
-        their predictions considering the observed normalized errors. However, when training the
-        classifiers, if the observed prediction error shrinks to zero before all learners are fit,
-        the error normalization results in a 'ValueError' with the message: "probabilities contain
-        NaN". This happens because the instance error-based weight normalization factor is zero,
-        i.e., the sum of the errors is zero. Hence, the weight normalization result is NaN.
-        This implementation adds an 'early stop' mechanism to circumvent this corner case:
-        LearnPPClassifier stops adding its learner members in case all instances are already
-        correctly classified. Otherwise (its normal behavior), the model creates as many ensemble
-        members as defined in the 'n_estimators' parameter.
+        Originally, Learn++ is designed to train all of its members and combine their predictions
+        considering the observed normalized errors. However, when training the base estimators, if
+        the observed prediction error shrinks to zero before all estimators are trained, the error
+        normalization is ill-defined, i.e., the instance error-based weight normalization factor
+        (the sum of the errors) is zero. This implementation adds an 'early stop' mechanism to
+        circumvent this corner case: LearnPPClassifier stops adding members to the ensemble if all
+        instances are correctly classified. Otherwise (its normal behavior), the model uses as many
+        ensemble members as defined via the ``n_estimators`` parameter.
 
     Examples
     --------
