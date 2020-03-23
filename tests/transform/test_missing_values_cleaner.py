@@ -5,7 +5,6 @@ from skmultiflow.transform.missing_values_cleaner import MissingValuesCleaner
 
 
 def test_missing_values_cleaner(test_path):
-
     test_file = os.path.join(test_path, 'data_nan.npy')
     X_nan = np.load(test_file)
     X = copy(X_nan)
@@ -32,23 +31,22 @@ def test_missing_values_cleaner_coverage(test_path):
 
     cleaner = MissingValuesCleaner(missing_value=np.nan, strategy='mean', window_size=10)
     X = copy(X_nan)
-    X_complete = cleaner.transform(X)
+    _ = cleaner.transform(X)
 
     cleaner = MissingValuesCleaner(missing_value=np.nan, strategy='mode', window_size=10)
     X = copy(X_nan)
-    X_complete = cleaner.transform(X)
+    _ = cleaner.transform(X)
 
     cleaner = MissingValuesCleaner(missing_value=np.nan, strategy='median', window_size=10)
     X = copy(X_nan)
-    X_complete = cleaner.transform(X)
+    _ = cleaner.transform(X)
 
     cleaner = MissingValuesCleaner(missing_value=np.nan, strategy='custom', new_value=-1)
     X = copy(X_nan)
-    X_complete = cleaner.transform(X)
+    _ = cleaner.transform(X)
 
     cleaner = MissingValuesCleaner(missing_value=[np.nan], strategy='mean', new_value=-1)
     X = copy(X_nan)
-    X_complete = cleaner.partial_fit(X)
+    _ = cleaner.partial_fit(X)
 
     cleaner.partial_fit_transform(X=X)
-

@@ -14,7 +14,8 @@ def test_one_hot_to_categorical(test_path):
     X = data['X']
     y = data['y']
 
-    cat_att_idx = [[i+j for i in range(n_categories)] for j in range(0, n_categories * n_categories, n_categories)]
+    cat_att_idx = [[i + j for i in range(n_categories)] for j in
+                   range(0, n_categories * n_categories, n_categories)]
     transformer = OneHotToCategorical(categorical_list=cat_att_idx)
 
     X_decoded = transformer.transform(X)
