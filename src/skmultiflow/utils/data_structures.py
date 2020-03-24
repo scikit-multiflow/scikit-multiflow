@@ -1051,9 +1051,7 @@ class TimeManager(object):
 
     def _sort_queue(self):
         # sort values by available_time
-        self.queue = self.queue.sort_values(by='available_time')
-        # reset indexes
-        self.queue = self.queue.reset_index(drop=True)
+        self.queue = self.queue.sort_values(by='available_time', ignore_index=True)
 
     def _drop_samples(self, batch_size):
         # check if has batch_size samples to be removed
