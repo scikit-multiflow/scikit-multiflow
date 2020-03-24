@@ -13,20 +13,19 @@ from skmultiflow.utils import TimeManager
 
 
 class EvaluatePrequentialDelayed(StreamEvaluator):
-    """ The prequential evaluation method or interleaved test-then-train method.
+    """ The prequential evaluation delayed method.
 
-    An alternative to the traditional holdout evaluation, inherited from
-    batch setting problems.
-
-    The prequential evaluation is designed specifically for stream settings,
+    The prequential evaluation delayed is designed specifically for stream settings,
     in the sense that each sample serves two purposes, and that samples are
-    analysed sequentially, in order of arrival, and become immediately
-    inaccessible.
+    analysed sequentially, in order of arrival, and are used to update the
+    model only when their label are available, given their timestamps (arrival
+     and available times)s.
 
     This method consists of using each sample to test the model, which means
     to make a predictions, and then the same sample is used to train the model
-    (partial fit). This way the model is always tested on samples that it
-    hasn't seen yet.
+    (partial fit) after its label is available after a certain delay.
+     This way the model is always tested on samples that it hasn't seen yet and
+     updated on samples that have their labels available.
 
     Parameters
     ----------
