@@ -1096,7 +1096,7 @@ class TimeManager(object):
         # remove these samples from queue
         self.queue = self.queue[self.queue['available_time'] > self.timestamp]
         # return X, y_real and y_pred for the unqueued samples
-        return samples["X"].to_list(), samples["y_real"].to_list(), samples["y_pred"].to_list()
+        return samples["X"], samples["y_real"], samples["y_pred"]
 
     def update_queue(self, X, arrival_time, available_time, y_real, y_pred):
         # cretae daraframe for current samples
@@ -1143,11 +1143,11 @@ class TimeManager(object):
         else:
             samples = self.queue
         # get X
-        X = samples["X"].to_list()
+        X = samples["X"]
         # get y_real
-        y_real = samples["y_real"].to_list()
+        y_real = samples["y_real"]
         # get y_pred
-        y_pred = samples["y_pred"].to_list()
+        y_pred = samples["y_pred"]
         # remove samples from queue
         self._cleanup_samples(batch_size)
         # return X, y_real and y_pred for the unqueued samples
