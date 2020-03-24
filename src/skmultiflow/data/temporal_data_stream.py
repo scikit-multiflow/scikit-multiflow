@@ -17,15 +17,14 @@ class TemporalDataStream(DataStream):
         The features' columns and targets' columns or the feature columns
         only if they are passed separately.
     time: np.ndarray(dtype=datetime64) or pd.Series (Default=None)
-        The timestamp column of each instance. If its a np.ndarray, it will
-        be converted into a pandas datetime dataframe. 
+        The timestamp column of each instance. If its a pd.Series, it will
+        be converted into a np.ndarray.
     sample_weight: np.ndarray or pd.Series, optional (Default=None)
         Sample weights.
     sample_delay: np.ndarray(np.datetime64), pd.DataFrame, np.timedelta64 or int, optional (Default=np.timedelta64(0,"D"))
         Samples delay in np.timedelta64 (the dateoffset difference between the event time
         and when the label is available), np.ndarray(np.datetime64) with the timestamp that the sample
-        will be available or int with the delay in number of samples (similar to MOA, a sample is just processed
-        after a number of sample_delay samples).
+        will be available or int with the delay in number of samples.
     y: np.ndarray or pd.DataFrame, optional (Default=None)
         The targets' columns.
     target_idx: int, optional (default=-1)
@@ -64,7 +63,7 @@ class TemporalDataStream(DataStream):
         elif time is None:
             self.time = None
         else:
-            raise ValueError("np.ndarray, pd.Series or Nonw time object expected, and {} was passed".format(type(time)))
+            raise ValueError("np.ndarray, pd.Series or None time object expected, and {} was passed".format(type(time)))
         # check if its a single delay or a delay for instance and save delay
         if isinstance(sample_delay, np.timedelta64):
             # create delays list
