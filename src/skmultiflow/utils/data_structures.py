@@ -1053,7 +1053,7 @@ class TimeManager(object):
         # sort values by available_time
         self.queue = self.queue.sort_values(by='available_time', ignore_index=True)
 
-    def _drop_samples(self, batch_size):
+    def _cleanup_samples(self, batch_size):
         # check if has batch_size samples to be removed
         if self.queue.shape[0] - batch_size >= 0:
             # drop samples that were already used
@@ -1149,6 +1149,6 @@ class TimeManager(object):
         # get y_pred
         y_pred = samples["y_pred"].to_list()
         # remove samples from queue
-        self._drop_samples(batch_size)
+        self._cleanup_samples(batch_size)
         # return X, y_real and y_pred for the unqueued samples
         return X, y_real, y_pred
