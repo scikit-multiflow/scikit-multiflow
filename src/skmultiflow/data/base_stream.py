@@ -8,11 +8,11 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
 
     This abstract class defines the minimum requirements of a stream,
     so that it can work along other modules in scikit-multiflow.
-    
+
     Raises
     ------
     NotImplementedError: This is an abstract class.
-    
+
     """
     _estimator_type = 'stream'
 
@@ -200,16 +200,16 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
     @abstractmethod
     def next_sample(self, batch_size=1):
         """ Returns next sample from the stream.
-        
+
         Parameters
         ----------
         batch_size: int (optional, default=1)
             The number of samples to return.
-        
+
         Returns
         -------
         tuple or tuple list
-            A numpy.ndarray of shape (batch_size, n_features) and an array-like of size 
+            A numpy.ndarray of shape (batch_size, n_features) and an array-like of size
             n_targets, representing the next batch_size samples.
 
         """
@@ -267,16 +267,16 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
 
     def get_data_info(self):
         """ Retrieves minimum information from the stream
-        
+
         Used by evaluator methods to id the stream.
-        
+
         The default format is: 'Stream name - n_targets, n_classes, n_features'.
-        
+
         Returns
         -------
         string
             Stream data information
-        
+
         """
         return self.name + " - {} target(s), {} classes, {} features".format(self.n_targets,
                                                                              self.n_classes,

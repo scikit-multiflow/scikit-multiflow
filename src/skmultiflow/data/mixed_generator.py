@@ -6,16 +6,16 @@ from skmultiflow.utils import check_random_state
 class MIXEDGenerator(Stream):
     r""" Mixed data stream generator.
 
-    This generator is an implementation of a data stream with abrupt concept drift and boolean noise-free examples
-    as described in Gama, João, et al [1]_.
+    This generator is an implementation of a data stream with abrupt concept drift and boolean
+    noise-free examples as described in Gama, João, et al [1]_.
 
-    It has four relevant attributes, two boolean attributes :math:`v, w` and two numeric attributes :math:`x, y`
-    uniformly distributed from 0 to 1. The examples are labaled depending on the classification function chosen
-    from below.
+    It has four relevant attributes, two boolean attributes :math:`v, w` and two numeric
+    attributes :math:`x, y` uniformly distributed from 0 to 1. The examples are labaled depending
+    on the classification function chosen from below.
 
     * function 0:
-        if :math:`v` and :math:`w` are true or :math:`v` and :math:`z` are true or :math:`w` and :math:`z` are
-        true then 0 else 1, where :math:`z` is :math:`y < 0.5 + 0.3 sin(3 \pi  x)`
+        if :math:`v` and :math:`w` are true or :math:`v` and :math:`z` are true or :math:`w`and
+        :math:`z` are true then 0 else 1, where :math:`z` is :math:`y < 0.5 + 0.3 sin(3 \pi  x)`
     * function 1:
         The opposite of function 0.
 
@@ -49,7 +49,8 @@ class MIXEDGenerator(Stream):
     >>> # Imports
     >>> from skmultiflow.data.mixed_generator import MIXEDGenerator
     >>> # Setting up the stream
-    >>> stream = MIXEDGenerator(classification_function = 1, random_state= 112, balance_classes = False)
+    >>> stream = MIXEDGenerator(classification_function = 1, random_state= 112,\
+                                balance_classes = False)
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[0.        , 1.        , 0.95001658, 0.0756772 ]]), array([1.]))
@@ -64,7 +65,8 @@ class MIXEDGenerator(Stream):
            [1.        , 1.        , 0.70936161, 0.18840112],
            [1.        , 0.        , 0.50315448, 0.76353033],
            [1.        , 1.        , 0.21415209, 0.76309258],
-           [0.        , 1.        , 0.42563042, 0.23435109]]), array([1., 1., 0., 1., 1., 0., 1., 0., 1., 1.]))
+           [0.        , 1.        , 0.42563042, 0.23435109]]),
+           array([1., 1., 0., 1., 1., 0., 1., 0., 1., 1.]))
 
     >>> stream.n_remaining_samples()
     -1

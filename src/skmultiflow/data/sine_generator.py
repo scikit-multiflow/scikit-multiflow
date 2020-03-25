@@ -60,8 +60,8 @@ class SineGenerator(Stream):
     >>> # Imports
     >>> from skmultiflow.data.sine_generator import SineGenerator
     >>> # Setting up the stream
-    >>> stream = SineGenerator(classification_function = 2, random_state = 112, balance_classes = False,
-    ... has_noise = True)
+    >>> stream = SineGenerator(classification_function = 2, random_state = 112,
+    ...  balance_classes = False, has_noise = True)
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[0.37505713, 0.64030462, 0.95001658, 0.0756772 ]]), array([1.]))
@@ -75,7 +75,8 @@ class SineGenerator(Stream):
        [0.73653322, 0.83921149, 0.70936161, 0.18840112],
        [0.98566856, 0.38800331, 0.50315448, 0.76353033],
        [0.68373245, 0.72195738, 0.21415209, 0.76309258],
-       [0.07521616, 0.6108907 , 0.42563042, 0.23435109]]), array([1., 0., 1., 0., 1., 1., 1., 0., 0., 1.]))
+       [0.07521616, 0.6108907 , 0.42563042, 0.23435109]]),
+       array([1., 0., 1., 0., 1., 1., 1., 0., 0., 1.]))
     >>> stream.n_remaining_samples()
     -1
     >>> stream.has_more_samples()

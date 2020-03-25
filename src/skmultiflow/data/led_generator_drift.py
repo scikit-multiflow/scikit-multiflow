@@ -32,7 +32,8 @@ class LEDGeneratorDrift(LEDGenerator):
        >>> # Imports
        >>> from skmultiflow.data.led_generator_drift import LEDGeneratorDrift
        >>> # Setting up the stream
-       >>> stream = LEDGeneratorDrift(random_state = 112, noise_percentage = 0.28, has_noise= True, n_drift_features=4)
+       >>> stream = LEDGeneratorDrift(random_state = 112, noise_percentage = 0.28,\
+        has_noise= True, n_drift_features=4)
        >>> # Retrieving one sample
        >>> stream.next_sample()
        (array([[0., 1., 1., 1., 0., 1., 1., 0., 1., 0., 0., 0., 1., 0., 1., 1.,
@@ -123,7 +124,7 @@ class LEDGeneratorDrift(LEDGenerator):
             for i in range(self._NUM_BASE_ATTRIBUTES):
                 if (0.01 + self._random_state.rand()) <= self.noise_percentage:
                     data[j, self._numberAttribute[i]] = 1 if (
-                                self._ORIGINAL_INSTANCES[selected, i] == 0) else 0
+                        self._ORIGINAL_INSTANCES[selected, i] == 0) else 0
                 else:
                     data[j, self._numberAttribute[i]] = self._ORIGINAL_INSTANCES[selected, i]
             if self.has_noise:

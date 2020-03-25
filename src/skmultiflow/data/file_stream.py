@@ -9,8 +9,9 @@ from skmultiflow.data.data_stream import check_data_consistency
 class FileStream(Stream):
     """ Creates a stream from a file source.
 
-    For the moment only csv files are supported, but the goal is to support different formats, as long as there is a
-    function that correctly reads, interprets, and returns a pandas' DataFrame or numpy.ndarray with the data.
+    For the moment only csv files are supported, but the goal is to support different formats,
+    as long as there is a function that correctly reads, interprets, and returns
+    a pandas' DataFrame or numpy.ndarray with the data.
 
     Parameters
     ----------
@@ -31,8 +32,8 @@ class FileStream(Stream):
 
     Notes
     -----
-    The stream object provides upon request a number of samples, in a way such that old samples cannot be accessed
-    at a later time. This is done to correctly simulate the stream context.
+    The stream object provides upon request a number of samples, in a way such that old samples
+    cannot be accessed at a later time. This is done to correctly simulate the stream context.
 
     Examples
     --------

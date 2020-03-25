@@ -22,7 +22,7 @@ class MultilabelGenerator(Stream):
 
     n_targets: int (Default: 1)
         Number of targets to generate.
-        
+
     n_labels: int (Default: 2)
         Average number of labels per instance.
 
@@ -35,13 +35,14 @@ class MultilabelGenerator(Stream):
     Notes
     -----
     This is a wrapper for scikit-lean's `make_multilabel_classification`
-        
+
     Examples
     --------
     >>> # Imports
     >>> from skmultiflow.data.multilabel_generator import MultilabelGenerator
     >>> # Setting up the stream
-    >>> stream = MultilabelGenerator(n_samples=100, n_features=20, n_targets=4, n_labels=4, random_state=0)
+    >>> stream = MultilabelGenerator(n_samples=100, n_features=20, n_targets=4,\
+                                        n_labels=4, random_state=0)
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[3., 0., 1., 3., 6., 2., 5., 0., 5., 6., 3., 5., 1., 2., 0., 3.,
@@ -114,18 +115,18 @@ class MultilabelGenerator(Stream):
 
     def next_sample(self, batch_size=1):
         """ Returns next sample from the stream.
-        
+
         Parameters
         ----------
         batch_size: int (optional, default=1)
             The number of samples to return.
-        
+
         Returns
         -------
         tuple or tuple list
-            Return a tuple with the features matrix and the labels matrix for 
+            Return a tuple with the features matrix and the labels matrix for
             the batch_size samples that were requested.
-        
+
         """
         self.sample_idx += batch_size
         try:

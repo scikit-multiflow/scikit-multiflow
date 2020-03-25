@@ -233,7 +233,7 @@ class AGRAWALGenerator(Stream):
             while not desired_class_found:
                 salary = 20000 + 130000 * self._random_state.rand()
                 commission = 0 if (salary >= 75000) else (
-                            10000 + 75000 * self._random_state.rand())
+                    10000 + 75000 * self._random_state.rand())
                 age = 20 + self._random_state.randint(61)
                 elevel = self._random_state.randint(5)
                 car = self._random_state.randint(20)

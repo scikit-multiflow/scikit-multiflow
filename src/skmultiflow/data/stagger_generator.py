@@ -51,7 +51,8 @@ class STAGGERGenerator(Stream):
     >>> # Imports
     >>> from skmultiflow.data.stagger_generator import STAGGERGenerator
     >>> # Setting up the stream
-    >>> stream = STAGGERGenerator(classification_function = 2, random_state = 112, balance_classes = False)
+    >>> stream = STAGGERGenerator(classification_function = 2, random_state = 112,
+    ...  balance_classes = False)
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[0., 0., 2.]]), array([0.]))

@@ -9,8 +9,9 @@ from skmultiflow.data.base_stream import Stream
 class DataStream(Stream):
     """ Creates a stream from a data source.
 
-    DataStream takes the whole data set containing the `X` (features) and `Y` (targets) or takes `X` and `Y` separately.
-    For the first case `target_idx` and `n_targets` need to be provided, in the second case they are not needed.
+    DataStream takes the whole data set containing the `X` (features) and `Y` (targets)
+    or takes `X` and `Y` separately. For the first case `target_idx` and `n_targets` need to
+    be provided, in the second case they are not needed.
 
     Parameters
     ----------
@@ -37,8 +38,8 @@ class DataStream(Stream):
 
     Notes
     -----
-    The stream object provides upon request a number of samples, in a way such that old samples cannot be accessed
-    at a later time. This is done to correctly simulate the stream context.
+    The stream object provides upon request a number of samples, in a way such that old samples
+    cannot be accessed at a later time. This is done to correctly simulate the stream context.
 
     """
 
@@ -438,14 +439,13 @@ def check_data_consistency(raw_data_frame, allow_nan=False):
     if (raw_data_frame.dtypes == 'object').values.any():
         # scikit-multiflow assumes that data is numeric
         raise ValueError('Non-numeric data found:\n {}'
-                         'scikit-multiflow only supports numeric data.'.format(
-            raw_data_frame.dtypes))
+                         'scikit-multiflow only supports numeric data.'
+                         .format(raw_data_frame.dtypes))
 
     if raw_data_frame.isnull().values.any():
         if not allow_nan:
             raise ValueError("NaN values found. Missing values are not fully supported.\n"
                              "You can deactivate this error via the 'allow_nan' option.")
         else:
-            warnings.warn(
-                "NaN values found. Functionality is not guaranteed for some methods. Proceed with caution.",
-                UserWarning)
+            warnings.warn("NaN values found. Functionality is not guaranteed for some methods."
+                          "Proceed with caution.", UserWarning)

@@ -111,7 +111,11 @@ class LEDGenerator(Stream):
         self.n_classes = 10
         self.name = "Led Generator"
 
-        self.n_cat_features = self._TOTAL_ATTRIBUTES_INCLUDING_NOISE if self.has_noise else self._NUM_BASE_ATTRIBUTES
+        if self.has_noise:
+            self.n_cat_features = self._TOTAL_ATTRIBUTES_INCLUDING_NOISE
+        else:
+            self.n_cat_features = self._NUM_BASE_ATTRIBUTES
+
         self.n_features = self.n_cat_features
         self.feature_names = ["att_num_" + str(i) for i in range(self.n_cat_features)]
         self.target_values = [i for i in range(self.n_classes)]
