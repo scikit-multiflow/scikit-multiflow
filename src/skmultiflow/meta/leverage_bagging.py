@@ -9,8 +9,9 @@ from skmultiflow.utils import check_random_state
 import warnings
 
 
-def LeverageBagging(base_estimator=KNNClassifier(), n_estimators=10, w=6, delta=0.002, enable_code_matrix=False,
-                    leverage_algorithm='leveraging_bag', random_state=None):     # pragma: no cover
+def LeverageBagging(base_estimator=KNNClassifier(), n_estimators=10, w=6, delta=0.002,
+                    enable_code_matrix=False, leverage_algorithm='leveraging_bag',
+                    random_state=None):     # pragma: no cover
     warnings.warn("'LeverageBagging' has been renamed to 'LeverageBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return LeverageBaggingClassifier(base_estimator=base_estimator,
@@ -34,7 +35,8 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
         The size of the ensemble, in other words, how many classifiers to train.
 
     w: int (default=6)
-        The poisson distribution's parameter, which is used to simulate re-sampling.
+        The poisson distribution's parameter, which is used to simulate
+        re-sampling.
         
     delta: float (default=0.002)
         The delta parameter for the ADWIN change detector.
@@ -43,13 +45,15 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
         If set, it will enable the output detection code matrix.
     
     leverage_algorithm: string (default='leveraging_bag')
-        The bagging algorithm to use. Can be one of the following: 'leveraging_bag',
-         'leveraging_bag_me', 'leveraging_bag_half', 'leveraging_bag_wt', 'leveraging_subag'
+        The bagging algorithm to use. Can be one of the following:
+        'leveraging_bag', 'leveraging_bag_me', 'leveraging_bag_half',
+        'leveraging_bag_wt', 'leveraging_subag'
 
     random_state: int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
-        If None, the random number generator is the RandomState instance used by `np.random`.
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
     
     Raises
     ------
@@ -81,9 +85,9 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
 
     References
     ----------
-    .. [1] A. Bifet, G. Holmes, and B. Pfahringer, “Leveraging Bagging for Evolving Data Streams,”
-       in Joint European conference on machine learning and knowledge discovery in databases, 2010,
-       no. 1, pp. 135–150.
+    .. [1] A. Bifet, G. Holmes, and B. Pfahringer, “Leveraging Bagging for
+       Evolving Data Streams,” in Joint European Conference on Machine Learning
+       and Knowledge Discovery in Databases, 2010, no. 1, pp. 135–150.
 
     
     Examples
@@ -93,34 +97,36 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
     >>> from skmultiflow.lazy import KNNClassifier
     >>> from skmultiflow.data import SEAGenerator
     >>> # Setting up the stream
-    >>> stream = SEAGenerator(1, noise_percentage=6.7)
+    >>> stream = SEAGenerator(1, noise_percentage=.067)
     >>> # Setting up the LeverageBagging classifier to work with KNN classifiers
-    >>> clf = LeverageBaggingClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30),
-    >>>                                 n_estimators=2)
+    >>> clf = LeverageBaggingClassifier(base_estimator=
+    >>>                                 KNNClassifier(n_neighbors=8,
+    >>>                                               max_window_size=2000,
+    >>>                                               leaf_size=30)
+    >>>                                 , n_estimators=2)
     >>> # Keeping track of sample count and correct prediction count
     >>> sample_count = 0
     >>> corrects = 0
-    >>> # Pre training the classifier with 200 samples
-    >>> X, y = stream.next_sample(200)
-    >>> clf = clf.partial_fit(X, y, classes=stream.target_values)
     >>> for i in range(2000):
-    ...     X, y = stream.next_sample()
-    ...     pred = clf.predict(X)
-    ...     clf = clf.partial_fit(X, y)
-    ...     if pred is not None:
-    ...         if y[0] == pred[0]:
+    >>>     X, y = stream.next_sample()
+    >>>     pred = clf.predict(X)
+    >>>     clf = clf.partial_fit(X, y, classes=stream.target_values)
+    >>>     if pred is not None:
+    >>>         if y[0] == pred[0]:
     ...             corrects += 1
     ...     sample_count += 1
-    >>> 
-    >>> # Displaying the results
-    >>> print(str(sample_count) + ' samples analyzed.')
+    ... # Displaying the results
+    ... print(str(sample_count) + ' samples analyzed.')
     2000 samples analyzed.
     >>> print('LeverageBaggingClassifier performance: ' + str(corrects / sample_count))
-    LeverageBagging classifier performance: 0.945
+    LeverageBagging classifier performance: 0.8465
     
     """
 
-    LEVERAGE_ALGORITHMS = ['leveraging_bag', 'leveraging_bag_me', 'leveraging_bag_half', 'leveraging_bag_wt',
+    LEVERAGE_ALGORITHMS = ['leveraging_bag',
+                           'leveraging_bag_me',
+                           'leveraging_bag_half',
+                           'leveraging_bag_wt',
                            'leveraging_subag']
 
     def __init__(self,
@@ -202,7 +208,8 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
                 pass
             else:
                 raise ValueError(
-                    "The classes passed to the partial_fit function differ from those passed in an earlier moment.")
+                    "The classes passed to the partial_fit function differ from those passed in "
+                    "an earlier call.")
 
         r, c = get_dimensions(X)
         for i in range(r):
@@ -214,9 +221,8 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
         if self.init_matrix_codes:
             self.matrix_codes = np.zeros((self.actual_n_estimators, len(self.classes)), dtype=int)
             for i in range(self.actual_n_estimators):
-                n_zeros = 0
-                n_ones = 0
-                while (n_ones - n_zeros) * (n_ones - n_zeros) > self.actual_n_estimators % 2:
+                condition = True
+                while condition:
                     n_zeros = 0
                     n_ones = 0
                     for j in range(len(self.classes)):
@@ -230,6 +236,8 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
                             n_ones += 1
                         else:
                             n_zeros += 1
+                    condition = ((n_ones - n_zeros) * (n_ones - n_zeros) >
+                                 (self.actual_n_estimators % 2))
             self.init_matrix_codes = False
 
         change_detected = False
@@ -269,7 +277,8 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
                 if self.enable_code_matrix:
                     y_cp = self.matrix_codes[i][int(y_cp)]
                 for l in range(int(k)):
-                    self.ensemble[i].partial_fit(np.asarray([X_cp]), np.asarray([y_cp]), self.classes)
+                    self.ensemble[i].partial_fit(np.asarray([X_cp]), np.asarray([y_cp]),
+                                                 self.classes)
 
             try:
                 pred = self.ensemble[i].predict(np.asarray([X]))
@@ -328,12 +337,12 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
         return np.asarray(predictions)
 
     def predict_proba(self, X):
-        """ Estimates the probability of each sample in X belonging to each of the class-labels.
+        """ Estimate the probability of X belonging to each class-label.
 
         Parameters
         ----------
         X : numpy.ndarray of shape (n_samples, n_features)
-            The matrix of samples one wants to predict the class probabilities for.
+            The matrix of samples to predict the class probabilities for.
 
         Raises
         ------
@@ -342,9 +351,11 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
 
         Returns
         -------
-        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the
-        same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents
-        the probability that the i-th sample of X belongs to a certain class-label.
+        A numpy.ndarray of shape (n_samples, n_labels), in which each outer
+        entry is associated with the X entry of the same index. And where the
+        list in index [i] contains len(self.target_values) elements, each of
+        which represents the probability that the i-th sample of X belongs to
+        a certain class-label.
 
         Notes
         -----
@@ -362,7 +373,8 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
             for i in range(self.actual_n_estimators):
                 partial_proba = self.ensemble[i].predict_proba(X)
                 if len(partial_proba[0]) > max(self.classes) + 1:
-                    raise ValueError("The number of classes in the base learner is larger than in the ensemble.")
+                    raise ValueError("The number of classes in the base learner is larger than in"
+                                     " the ensemble.")
 
                 if len(proba) < 1:
                     for n in range(r):
@@ -392,7 +404,7 @@ class LeverageBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMix
         return np.asarray(aux)
 
     def predict_binary_proba(self, X):
-        """ Calculates the probability of each sample belonging to each coded label.
+        """ Calculates the probability of a sample belonging to each coded label.
 
         This will only be used if matrix codes are enabled.
         Otherwise the method will use the normal predict_proba function.

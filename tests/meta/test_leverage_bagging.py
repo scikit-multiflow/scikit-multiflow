@@ -6,9 +6,15 @@ import numpy as np
 
 
 def test_leverage_bagging():
-    stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
-    knn = KNNClassifier(n_neighbors=8, leaf_size=40, max_window_size=2000)
-    learner = LeverageBaggingClassifier(base_estimator=knn, n_estimators=3, random_state=112)
+    stream = SEAGenerator(classification_function=1,
+                          noise_percentage=0.067,
+                          random_state=112)
+    knn = KNNClassifier(n_neighbors=8,
+                        leaf_size=40,
+                        max_window_size=2000)
+    learner = LeverageBaggingClassifier(base_estimator=knn,
+                                        n_estimators=3,
+                                        random_state=112)
     first = True
 
     cnt = 0
@@ -32,22 +38,22 @@ def test_leverage_bagging():
         cnt += 1
 
     performance = correct_predictions / len(predictions)
-    expected_predictions = [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1,
-                            0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1,
-                            0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1]
+    expected_predictions = [1, 0, 1, 0, 0, 0, 0, 1, 0, 1,
+                            0, 0, 1, 0, 1, 1, 1, 0, 1, 0,
+                            0, 1, 0, 0, 1, 1, 0, 1, 0, 1,
+                            1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
+                            0, 1, 1, 0, 1, 0, 0, 1, 1]
     assert np.alltrue(predictions == expected_predictions)
 
-    expected_performance = 0.8571428571428571
+    expected_performance = 0.8367346938775511
     assert np.isclose(expected_performance, performance)
-
-    expected_correct_predictions = 42
-    assert correct_predictions == expected_correct_predictions
 
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    expected_info = "LeverageBaggingClassifier(base_estimator=KNNClassifier(leaf_size=40, max_window_size=2000, " \
-                    "n_neighbors=8, nominal_attributes=None), delta=0.002, enable_code_matrix=False, " \
-                    "leverage_algorithm='leveraging_bag', n_estimators=3, random_state=112, w=6)"
+    expected_info = "LeverageBaggingClassifier(base_estimator=KNNClassifier(leaf_size=40, " \
+                    "max_window_size=2000, n_neighbors=8, nominal_attributes=None), " \
+                    "delta=0.002, enable_code_matrix=False, leverage_algorithm='leveraging_bag'," \
+                    " n_estimators=3, random_state=112, w=6)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
