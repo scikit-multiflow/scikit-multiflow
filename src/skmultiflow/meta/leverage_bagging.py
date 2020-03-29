@@ -63,8 +63,8 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
     
     Raises
     ------
-    ValueError: A ValueError is raised if the 'classes' parameter is not \
-    passed in the first ``partial_fit call``.
+    ValueError: A ValueError is raised if the ``classes`` parameter is not \
+    passed in the first ``partial_fit`` call.
 
     Notes
     -----
@@ -129,11 +129,11 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
     
     """
 
-    LEVERAGE_ALGORITHMS = ['leveraging_bag',
-                           'leveraging_bag_me',
-                           'leveraging_bag_half',
-                           'leveraging_bag_wt',
-                           'leveraging_subag']
+    _LEVERAGE_ALGORITHMS = ['leveraging_bag',
+                            'leveraging_bag_me',
+                            'leveraging_bag_half',
+                            'leveraging_bag_wt',
+                            'leveraging_subag']
 
     def __init__(self,
                  base_estimator=KNNClassifier(),
@@ -158,8 +158,10 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
         self.enable_code_matrix = enable_code_matrix
         self.w = w
         self.delta = delta
-        if leverage_algorithm not in self.LEVERAGE_ALGORITHMS:
-            raise ValueError("Leverage algorithm not supported.")
+        if leverage_algorithm not in self._LEVERAGE_ALGORITHMS:
+            raise ValueError("Invalid option for leverage_algorithm: '{}'\n"
+                             "Valid options are: {}".format(leverage_algorithm,
+                                                            self._LEVERAGE_ALGORITHMS))
         self.leverage_algorithm = leverage_algorithm
         self.random_state = random_state
         self.__configure()
@@ -229,12 +231,13 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
 
         change_detected = False
         for i in range(self.actual_n_estimators):
-            k = 0.0
 
-            if self.leverage_algorithm == self.LEVERAGE_ALGORITHMS[0]:
+            # leveraging_bag - Leveraging Bagging
+            if self.leverage_algorithm == self._LEVERAGE_ALGORITHMS[0]:
                 k = self._random_state.poisson(self.w)
 
-            elif self.leverage_algorithm == self.LEVERAGE_ALGORITHMS[1]:
+            # leveraging_bag_me - Missclassification Error
+            elif self.leverage_algorithm == self._LEVERAGE_ALGORITHMS[1]:
                 error = self.adwin_ensemble[i].estimation
                 pred = self.ensemble[i].predict(np.asarray([X]))
                 if pred is None:
@@ -246,18 +249,27 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
                 else:
                     k = 0.0
 
-            elif self.leverage_algorithm == self.LEVERAGE_ALGORITHMS[2]:
+            # leveraging_bag_half - Resampling without replacement for
+            #                       half od the instances
+            elif self.leverage_algorithm == self._LEVERAGE_ALGORITHMS[2]:
                 w = 1.0
                 k = 0.0 if (self._random_state.randint(2) == 1) else w
 
-            elif self.leverage_algorithm == self.LEVERAGE_ALGORITHMS[3]:
+            # leveraging_bag_wt - Without taking out all instances
+            elif self.leverage_algorithm == self._LEVERAGE_ALGORITHMS[3]:
                 w = 1.0
                 k = 1.0 + self._random_state.poisson(w)
 
-            elif self.leverage_algorithm == self.LEVERAGE_ALGORITHMS[4]:
+            # leveraging_subag - Resampling without replacement
+            elif self.leverage_algorithm == self._LEVERAGE_ALGORITHMS[4]:
                 w = 1.0
                 k = self._random_state.poisson(1)
                 k = w if k > 0 else 0
+
+            else:
+                raise RuntimeError("Invalid option for leverage_algorithm: '{}'\n"
+                                   "Valid options are: {}".format(self.leverage_algorithm,
+                                                                  self._LEVERAGE_ALGORITHMS))
 
             y_coded = cp.deepcopy(y)
             if k > 0:
