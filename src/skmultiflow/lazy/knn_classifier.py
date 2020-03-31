@@ -139,7 +139,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
             
         Returns
         -------
-        list
+        numpy.ndarray
             A list containing the predicted labels for all instances in X.
         
         """

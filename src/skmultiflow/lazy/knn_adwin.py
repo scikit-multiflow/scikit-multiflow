@@ -1,8 +1,8 @@
 from skmultiflow.lazy import KNNClassifier
 from skmultiflow.drift_detection import ADWIN
-from skmultiflow.utils.data_structures import SlidingWindow
-from skmultiflow.utils.utils import *
+from skmultiflow.utils.utils import get_dimensions
 
+import numpy as np
 
 import warnings
 
@@ -24,8 +24,8 @@ class KNNADWINClassifier(KNNClassifier):
     detector to decide which samples to keep and which ones to forget, 
     and by doing so it regulates the sample window size.
      
-    To know more about the ADWIN change detector, please visit 
-    skmultiflow.classification.core.drift_detection.adwin
+    To know more about the ADWIN change detector, please see
+    :class:`skmultiflow.drift_detection.ADWIN`
 
     It uses the regular KNNClassifier as a base class, with the
     major difference that this class keeps a variable size window, 
@@ -50,14 +50,6 @@ class KNNADWINClassifier(KNNClassifier):
         sklearn.KDTree parameter. The distance metric to use for the KDTree.
         Default=’euclidean’. KNNClassifier.valid_metrics() gives a list of
         the metrics which are valid for KDTree.
-        
-    Raises
-    ------
-    NotImplementedError: A few of the functions described here are not 
-    implemented since they have no application in this context.
-    
-    ValueError: A ValueError is raised if the predict function is called 
-    before at least k samples have been analyzed by the algorithm.
 
     Notes
     -----

@@ -1,7 +1,5 @@
 import numpy as np
 
-from _collections import deque
-
 from skmultiflow.utils import get_dimensions
 
 import warnings
@@ -887,12 +885,9 @@ class SlidingWindow(object):
 
     Raises
     ------
-    ValueError: If at any moment, a sample with a different number of \
-    attributes than that of the n_attributes parameter is passed, a \
-    ValueError is raised.
-
-    TypeError: If the buffer type is altered by the user, or isn't correctly \
-    initialized, a TypeError may be raised.
+    ValueError
+        If at any moment, a sample with a different number of attributes than
+         those already observed is passed.
 
     Notes
     -----

@@ -2,7 +2,7 @@ import numpy as np
 
 from skmultiflow.core import RegressorMixin
 from skmultiflow.lazy.base_neighbors import BaseNeighbors
-from skmultiflow.utils import get_dimensions, SlidingWindow
+from skmultiflow.utils import get_dimensions
 
 
 class KNNRegressor(BaseNeighbors, RegressorMixin):
