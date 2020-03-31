@@ -10,6 +10,7 @@ class PerceptronMask(BaseSKMObject, ClassifierMixin):
     This mask serves as a wrapper for the Perceptron classifier.
 
     """
+
     def __init__(self,
                  penalty=None,
                  alpha=0.0001,
@@ -130,19 +131,19 @@ class PerceptronMask(BaseSKMObject, ClassifierMixin):
 
     def predict_proba(self, X):
         """ Predicts the probability of each sample belonging to each one of the known classes.
-    
+
         Parameters
         ----------
         X: Numpy.ndarray of shape (n_samples, n_features)
             A matrix of the samples we want to predict.
-    
+
         Returns
         -------
         numpy.ndarray
-            An array of shape (n_samples, n_features), in which each outer entry is 
-            associated with the X entry of the same index. And where the list in 
+            An array of shape (n_samples, n_features), in which each outer entry is
+            associated with the X entry of the same index. And where the list in
             index [i] contains len(self.target_values) elements, each of which represents
             the probability that the i-th sample of X belongs to a certain label.
-    
+
         """
         return self.classifier._predict_proba_lr(X)
