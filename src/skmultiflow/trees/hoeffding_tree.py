@@ -831,10 +831,10 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             List of learning nodes in the tree.
         """
         found_list = []
-        self.__find_learning_nodes(self._tree_root, None, -1, found_list)
+        self.__find_learning_nodes(self._tree_root, None, -1, found_list, 0)
         return found_list
 
-    def __find_learning_nodes(self, node, parent, parent_branch, found):
+    def __find_learning_nodes(self, node, parent, parent_branch, found, depth):
         """ Find learning nodes in the tree from a given node.
 
         Parameters
@@ -845,6 +845,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             The node's parent.
         parent_branch: int
             Parent node's branch.
+        depth: int
+            The node's depth.
 
         Returns
         -------
@@ -853,11 +855,13 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         """
         if node is not None:
             if isinstance(node, LearningNode):
-                found.append(FoundNode(node, parent, parent_branch))
+                found.append(FoundNode(node, parent, parent_branch, depth))
             if isinstance(node, SplitNode):
                 split_node = node
                 for i in range(split_node.num_children()):
-                    self.__find_learning_nodes(split_node.get_child(i), split_node, i, found)
+                    self.__find_learning_nodes(
+                        split_node.get_child(i), split_node, i, found, depth + 1
+                    )
 
     def get_model_rules(self):
         """ Returns list of list describing the tree.
