@@ -22,7 +22,8 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
         means. Class label must be placed as last entry of each prototype.
 
         | Example for one prototype per class on a binary classification problem:
-        | `initial_prototypes = [[2.59922826, 2.57368134, 4.92501, 0], [6.05801971, 6.01383352, 5.02135783, 1]]`
+        | `initial_prototypes = [[2.59922826, 2.57368134, 4.92501, 0],
+        | [6.05801971, 6.01383352, 5.02135783, 1]]`
     sigma : float, optional (default=1.0)
         Variance of the distribution.
     random_state : int, RandomState instance or None, optional (default=None)
@@ -104,9 +105,9 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
 
         if self.c_w_[j] == c_xi:
             # Attract prototype to data point
-            self.w_[j] += self.learning_rate * \
-                (self._p(j, xi, prototypes=self.w_, y=c_xi) -
-                 self._p(j, xi, prototypes=self.w_)) * d
+            self.w_[j] += (self.learning_rate * (
+                self._p(j, xi, prototypes=self.w_, y=c_xi)) - self._p(j, xi,
+                                                                      prototypes=self.w_)) * d
         else:
             # Distance prototype from data point
             self.w_[j] -= self.learning_rate * self._p(
@@ -117,26 +118,22 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
         d = xi - prototypes[j]
 
         if self.c_w_[j] == c_xi:
-            gradient = (self._p(j, xi, prototypes=self.w_, y=c_xi) -
-                        self._p(j, xi, prototypes=self.w_)) * d
+            gradient = (self._p(j, xi, prototypes=self.w_, y=c_xi) - (
+                self._p(j, xi, prototypes=self.w_)) * d)
         else:
             gradient = - self._p(j, xi, prototypes=self.w_) * d
 
         # Accumulate gradient
-        self.squared_mean_gradient[j] = (self.gamma
-                                         * self.squared_mean_gradient[j]
-                                         + (1 - self.gamma)
-                                            * gradient
-                                            * gradient)
+        self.squared_mean_gradient[j] = self.gamma * self.squared_mean_gradient[j] + (
+            1 - self.gamma) * gradient * gradient
 
         # Compute update/step
-        step = (np.sqrt((self.squared_mean_step[j] + self.epsilon)
-                        / (self.squared_mean_gradient[j] + self.epsilon))
-                * gradient)
+        step = (np.sqrt((self.squared_mean_step[j] + self.epsilon) / (
+            self.squared_mean_gradient[j] + self.epsilon)) * gradient)
 
         # Accumulate updates
-        self.squared_mean_step[j] = (self.gamma * self.squared_mean_step[j]
-                                     + (1 - self.gamma) * step * step)
+        self.squared_mean_step[j] = (
+            self.gamma * self.squared_mean_step[j] + (1 - self.gamma) * step * step)
 
         # Attract/Distract prototype to/from data point
         self.w_[j] += step
@@ -201,8 +198,8 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
             for actClassIdx in range(len(self.classes_)):
                 actClass = self.classes_[actClassIdx]
                 nb_prot = nb_ppc[actClassIdx]  # nb_ppc: prototypes per class
-                if (self.protos_initialized[actClassIdx] == 0 and
-                        actClass in unique_labels(train_lab)):
+                if (self.protos_initialized[actClassIdx] == 0 and actClass in unique_labels(
+                        train_lab)):
                     mean = np.mean(
                         train_set[train_lab == actClass, :], 0)
 
@@ -295,7 +292,7 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
                     eucl_dis = euclidean_distances(xi.reshape(1, xi.size),
                                                    prototypes[j]
                                                    .reshape(1, prototypes[j]
-                                                   .size))
+                                                            .size))
                     if eucl_dis < best_euclid_corr:
                         best_euclid_corr = eucl_dis
                         corr_index = j
@@ -303,7 +300,7 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
                     eucl_dis = euclidean_distances(xi.reshape(1, xi.size),
                                                    prototypes[j]
                                                    .reshape(1, prototypes[j]
-                                                   .size))
+                                                            .size))
                     if eucl_dis < best_euclid_incorr:
                         best_euclid_incorr = eucl_dis
                         incorr_index = j
