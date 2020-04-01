@@ -41,7 +41,8 @@ class KNNRegressor(BaseNeighbors, RegressorMixin):
     Notes
     -----
     This estimator is not optimal for a mixture of categorical and numerical
-    features.
+    features. This implementation treats all features from a given stream as
+    numerical.
 
     Examples
     --------
@@ -144,7 +145,7 @@ class KNNRegressor(BaseNeighbors, RegressorMixin):
         -------
         np.ndarray
             An array containing the predicted target values for each \
-            samples in X.
+            sample in X.
 
         """
         r, c = get_dimensions(X)

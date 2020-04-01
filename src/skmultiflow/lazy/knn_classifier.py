@@ -48,7 +48,8 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
     Notes
     -----
     This estimator is not optimal for a mixture of categorical and numerical
-    features.
+    features. This implementation treats all features from a given stream as
+    numerical.
 
     Examples
     --------
@@ -58,7 +59,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
     >>> # Setting up the stream
     >>> stream = SEAGenerator(random_state=1, noise_percentage=.1)
     >>> knn = KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=40)
-    >>> # Preparing the processing of 5000 samples and correct prediction count
+    >>> # Keep track of sample count and correct prediction count
     >>> n_samples = 0
     >>> corrects = 0
     >>> while n_samples < 5000:
@@ -158,7 +159,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
         Returns
         -------
         numpy.ndarray
-            A  2D array of shape (n_samples, n_classes). Where each i-row
+            A  2D array of shape (n_samples, n_classes). Where each i-th row
             contains len(self.target_value) elements, representing the
             probability that the i-th sample of X belongs to a certain
             class label.

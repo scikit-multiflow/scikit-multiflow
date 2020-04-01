@@ -23,7 +23,7 @@ class BaseNeighbors(BaseSKMObject):
         self.data_window = SlidingWindow(window_size=max_window_size)
 
     def _get_neighbors(self, X):
-        tree = KDTree(self.data_window.features_buffer, self.leaf_size, metric=self.metric, )
+        tree = KDTree(self.data_window.features_buffer, self.leaf_size, metric=self.metric)
         dist, idx = tree.query(X=X,
                                k=self.n_neighbors)
         return dist, idx

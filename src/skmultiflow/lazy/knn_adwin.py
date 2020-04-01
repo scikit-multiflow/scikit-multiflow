@@ -54,7 +54,8 @@ class KNNADWINClassifier(KNNClassifier):
     Notes
     -----
     This estimator is not optimal for a mixture of categorical and numerical
-    features.
+    features. This implementation treats all features from a given stream as
+    numerical.
     
     Examples
     --------
@@ -65,7 +66,7 @@ class KNNADWINClassifier(KNNClassifier):
     >>> stream = ConceptDriftStream(position=2500, width=100, random_state=1)
     >>> # Setting up the KNNAdwin classifier
     >>> knn_adwin = KNNADWINClassifier(n_neighbors=8, leaf_size=40, max_window_size=1000)
-    >>> # Keeping track of sample count and correct prediction count
+    >>> # Keep track of sample count and correct prediction count
     >>> n_samples = 0
     >>> corrects = 0
     >>> while n_samples < 5000:
