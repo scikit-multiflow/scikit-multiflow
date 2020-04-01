@@ -97,10 +97,9 @@ class KNNADWINClassifier(KNNClassifier):
         self.adwin = ADWIN()
 
     def reset(self):
-        """ reset
+        """ Reset the estimator.
         
-        Resets the adwin algorithm as well as the base model 
-        kept by the KNNClassifier base class.
+        Resets the ADWIN Drift detector as well as the KNN model.
         
         Returns
         -------
@@ -112,12 +111,7 @@ class KNNADWINClassifier(KNNClassifier):
         return super().reset()
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
-        """ partial_fit
-        
-        Partially fits the model. This is done by updating the window 
-        with new samples while also updating the adwin algorithm. Then 
-        we verify if a change was detected, and if so, the window is 
-        correctly split at the drift moment.
+        """ Partially (incrementally) fit the model.
         
         Parameters
         ----------
@@ -137,6 +131,13 @@ class KNNADWINClassifier(KNNClassifier):
         -------
         KNNADWINClassifier
             self
+
+        Notes
+        -----
+        Partially fits the model by updating the window with new samples
+        while also updating the ADWIN algorithm. IF ADWIN detects a change,
+        the window is split in such a wat that samples from the previous
+        concept are dropped.
         
         """
         r, c = get_dimensions(X)

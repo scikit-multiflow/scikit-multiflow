@@ -905,13 +905,11 @@ class SlidingWindow(object):
         super().__init__()
 
         self.window_size = window_size
-        # self._current_idx = 0
         self._n_features = -1
         self._n_targets = -1
         self._X_queue = None
         self._y_queue = None
         self._is_initialized = False
-        # self._is_full = False
 
     def configure(self):
         self._X_queue = np.zeros((0, self._n_features))

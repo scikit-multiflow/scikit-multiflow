@@ -43,6 +43,39 @@ class KNNRegressor(BaseNeighbors, RegressorMixin):
     This estimator is not optimal for a mixture of categorical and numerical
     features.
 
+    Examples
+    --------
+    >>> # Imports
+    >>> from skmultiflow.data import RegressionGenerator
+    >>> from skmultiflow.lazy import KNNRegressor
+    >>> import numpy as np
+    >>>
+    >>> # Setup the data stream
+    >>> stream = RegressionGenerator(random_state=1)
+    >>> # Setup the estimator
+    >>> knn = KNNRegressor()
+    >>>
+    >>> # Auxiliary variables to control loop and track performance
+    >>> n_samples = 0
+    >>> correct_cnt = 0
+    >>> max_samples = 2000
+    >>> y_pred = np.zeros(max_samples)
+    >>> y_true = np.zeros(max_samples)
+    >>>
+    >>> # Run test-then-train loop for max_samples or while there is data in the stream
+    >>> while n_samples < max_samples and stream.has_more_samples():
+    ...     X, y = stream.next_sample()
+    ...     y_true[n_samples] = y[0]
+    ...     y_pred[n_samples] = knn.predict(X)[0]
+    ...     knn.partial_fit(X, y)
+    ...     n_samples += 1
+    >>>
+    >>> # Display results
+    >>> print('{} samples analyzed.'.format(n_samples))
+    2000 samples analyzed
+    >>> print('KNN regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
+    KNN regressor mean absolute error: 144.5672450178514
+
     """
 
     _MEAN = 'mean'
@@ -66,7 +99,7 @@ class KNNRegressor(BaseNeighbors, RegressorMixin):
         self.aggregation_method = aggregation_method
 
     def partial_fit(self, X, y, sample_weight=None):
-        """ Partially fits the model on the samples X and targets y.
+        """ Partially (incrementally) fit the model.
 
         Parameters
         ----------

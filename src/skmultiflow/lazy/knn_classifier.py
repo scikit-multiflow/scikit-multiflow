@@ -90,7 +90,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
         self.classes = []
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
-        """ Partially fits the model on the samples X and corresponding targets y.
+        """ Partially (incrementally) fit the model.
         
         Parameters
         ----------
@@ -130,7 +130,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
         return self
 
     def predict(self, X):
-        """ Predicts the class label of the X sample.
+        """ Predict the class label for sample X
         
         Parameters
         ----------
@@ -140,18 +140,16 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
         Returns
         -------
         numpy.ndarray
-            A list containing the predicted labels for all instances in X.
+            A 1D array of shape (, n_samples), containing the
+            predicted class labels for all instances in X.
         
         """
-        r, c = get_dimensions(X)
-        proba = self.predict_proba(X)
-        predictions = []
-        for i in range(r):
-            predictions.append(np.argmax(proba[i]))
-        return np.array(predictions)
+        y_proba = self.predict_proba(X)
+        y_pred = np.argmax(y_proba, axis=1)
+        return y_pred
 
     def predict_proba(self, X):
-        """ Estimates the probability of each sample in X belonging to each of the class-labels.
+        """ Estimate the probability of X belonging to each class-labels.
         
         Parameters
         ----------
@@ -160,10 +158,10 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
         Returns
         -------
         numpy.ndarray
-            An array of shape (n_samples, n_features), in which each outer entry is 
-            associated with the X entry of the same index. And where the list in 
-            index [i] contains len(self.target_value) elements, each of which represents
-            the probability that the i-th sample of X belongs to a certain label.
+            A  2D array of shape (n_samples, n_classes). Where each i-row
+            contains len(self.target_value) elements, representing the
+            probability that the i-th sample of X belongs to a certain
+            class label.
          
         """
         r, c = get_dimensions(X)
@@ -183,4 +181,3 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
             proba.append(votes)
 
         return np.asarray(proba)
-
