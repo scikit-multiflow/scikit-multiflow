@@ -613,7 +613,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         else:
             new_leaf = InactiveLearningNodePerceptron(
                 to_deactivate.get_observed_class_distribution(),
-                to_deactivate.perceptron_weight
+                to_deactivate
             )
         if parent is None:
             self._tree_root = new_leaf
