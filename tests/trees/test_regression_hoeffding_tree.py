@@ -4,6 +4,7 @@ from array import array
 from sklearn.metrics import mean_absolute_error
 from skmultiflow.data import RegressionGenerator
 from skmultiflow.trees import HoeffdingTreeRegressor
+from skmultiflow.utils import calculate_object_size
 from difflib import SequenceMatcher
 
 
@@ -95,7 +96,7 @@ def test_hoeffding_tree_regressor_perceptron():
                                        -2.636583876625667, 24.787714491718187, 29.325261678088406,
                                        45.31267371823666, -48.271054430207776, -59.7649172085901,
                                        48.22724814037523])
-    # assert np.allclose(y_pred, expected_predictions)
+    assert np.allclose(y_pred, expected_predictions)
 
     error = mean_absolute_error(y_true, y_pred)
     expected_error = 152.12931270533377
@@ -184,3 +185,33 @@ def test_hoeffding_tree_regressor_categorical_features(test_path):
     assert SequenceMatcher(
         None, expected_description, learner.get_model_description()
     ).ratio() > 0.9
+
+
+def test_hoeffding_tree_regressor_memory_management():
+    max_samples = 4000
+    max_size_mb = 5
+
+    # A tree without memory management enabled reaches over 7 MB in size
+    stream = RegressionGenerator(
+        n_samples=max_samples, n_features=10, n_informative=7, n_targets=1,
+        random_state=42
+    )
+    tree = HoeffdingTreeRegressor(
+        leaf_prediction='mean', grace_period=200,
+        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
+    )
+
+    X, y = stream.next_sample(max_samples)
+    tree.partial_fit(X, y)
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
+
+    stream.reset()
+
+    tree = HoeffdingTreeRegressor(
+        leaf_prediction='perceptron', grace_period=200,
+        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
+    )
+
+    X, y = stream.next_sample(max_samples)
+    tree.partial_fit(X, y)
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
