@@ -170,12 +170,12 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
         else:
             self._leaf_prediction = leaf_prediction
 
-    def _new_learning_node(self, initial_class_observations=None, perceptron_weight=None):
+    def _new_learning_node(self, initial_class_observations=None, parent_node=None):
         """Create a new learning node. The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
 
-        return AdaLearningNodeForRegression(initial_class_observations, perceptron_weight,
+        return AdaLearningNodeForRegression(initial_class_observations, parent_node,
                                             random_state=self.random_state)
 
     def _partial_fit(self, X, y, weight):
