@@ -563,16 +563,19 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             return self._tree_root.subtree_depth()
         return 0
 
-    def _new_learning_node(self, initial_class_observations=None):
+    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
         """ Create a new learning node. The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
-        if self._leaf_prediction == self._MAJORITY_CLASS:
-            return ActiveLearningNode(initial_class_observations)
-        elif self._leaf_prediction == self._NAIVE_BAYES:
-            return LearningNodeNB(initial_class_observations)
-        else:  # NAIVE BAYES ADAPTIVE (default)
-            return LearningNodeNBAdaptive(initial_class_observations)
+        if is_active_node:
+            if self._leaf_prediction == self._MAJORITY_CLASS:
+                return ActiveLearningNode(initial_class_observations)
+            elif self._leaf_prediction == self._NAIVE_BAYES:
+                return LearningNodeNB(initial_class_observations)
+            else:  # NAIVE BAYES ADAPTIVE (default)
+                return LearningNodeNBAdaptive(initial_class_observations)
+        else:
+            return InactiveLearningNode(initial_class_observations)
 
     def get_model_description(self):
         """ Walk the tree and return its structure in a buffer.
@@ -796,7 +799,9 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             Parent node's branch index.
 
         """
-        new_leaf = InactiveLearningNode(to_deactivate.get_observed_class_distribution())
+        new_leaf = self._new_learning_node(
+            to_deactivate.get_observed_class_distribution(), is_active_node=False
+        )
         if parent is None:
             self._tree_root = new_leaf
         else:
