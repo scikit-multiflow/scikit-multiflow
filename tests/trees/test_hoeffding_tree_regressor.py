@@ -8,7 +8,7 @@ from skmultiflow.utils import calculate_object_size
 from difflib import SequenceMatcher
 
 
-def test_hoeffding_tree_regressor():
+def test_hoeffding_tree_regressor_mean():
     stream = RegressionGenerator(n_samples=500, n_features=20, n_informative=15, random_state=1)
 
     learner = HoeffdingTreeRegressor(leaf_prediction='mean')
