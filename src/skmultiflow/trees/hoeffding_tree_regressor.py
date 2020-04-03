@@ -596,6 +596,30 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             # Manage memory
             self.enforce_tracker_limit()
 
+    def _activate_learning_node(self, to_activate: InactiveLearningNode, parent: SplitNode,
+                                parent_branch: int):
+        """ Activate a learning node.
+
+        Parameters
+        ----------
+        to_activate: InactiveLearningNode
+            The node to activate.
+        parent: SplitNode
+            The node's parent.
+        parent_branch: int
+            Parent node's branch index.
+
+        """
+        new_leaf = self._new_learning_node(
+            to_activate.get_observed_class_distribution(), to_activate
+        )
+        if parent is None:
+            self._tree_root = new_leaf
+        else:
+            parent.set_child(parent_branch, new_leaf)
+        self._active_leaf_node_cnt += 1
+        self._inactive_leaf_node_cnt -= 1
+
     def _deactivate_learning_node(self, to_deactivate: ActiveLearningNode,
                                   parent: SplitNode, parent_branch: int):
         """Deactivate a learning node.
