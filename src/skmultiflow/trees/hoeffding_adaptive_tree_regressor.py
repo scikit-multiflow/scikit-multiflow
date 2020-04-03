@@ -6,8 +6,6 @@ from skmultiflow.trees.nodes import AdaLearningNodeForRegression
 
 import warnings
 
-_TARGET_MEAN = 'mean'
-_PERCEPTRON = 'perceptron'
 ERROR_WIDTH_THRESHOLD = 300
 
 
@@ -117,6 +115,8 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
        print('Hoeffding Adaptive Tree regressor mean absolute error: {}'.format(np.mean(np.abs(y_true - y_pred))))
     """
 
+    _TARGET_MEAN = 'mean'
+    _PERCEPTRON = 'perceptron'
     # ======================================================
     # == Hoeffding Adaptive Tree Regressor implementation ==
     # ======================================================
@@ -165,9 +165,9 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
 
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
-        if leaf_prediction not in {_TARGET_MEAN, _PERCEPTRON}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
-            self._leaf_prediction = _PERCEPTRON
+        if leaf_prediction not in {self._TARGET_MEAN, self._PERCEPTRON}:
+            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, self._PERCEPTRON))
+            self._leaf_prediction = self._PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
 
