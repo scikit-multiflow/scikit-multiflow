@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.metrics import mean_absolute_error
 from skmultiflow.data import RegressionGenerator
 from skmultiflow.trees import StackedSingleTargetHoeffdingTreeRegressor
+from skmultiflow.utils import calculate_object_size
 from difflib import SequenceMatcher
 
 
@@ -185,3 +186,34 @@ def test_stacked_single_target_hoeffding_tree_categorical_features(test_path):
 
     learner.partial_fit(X, y)
     learner.predict([new_sample])
+
+
+def test_sst_ht_memory_management():
+    max_samples = 4000
+    max_size_mb = 5
+
+    # A tree without memory management enabled reaches over 7 MB in size
+    stream = RegressionGenerator(
+        n_samples=max_samples, n_features=10, n_informative=7, n_targets=3,
+        random_state=42
+    )
+    tree = StackedSingleTargetHoeffdingTreeRegressor(
+        leaf_prediction='perceptron', grace_period=200,
+        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
+    )
+
+    X, y = stream.next_sample(max_samples)
+    tree.partial_fit(X, y)
+
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
+
+    stream.reset()
+
+    tree = StackedSingleTargetHoeffdingTreeRegressor(
+        leaf_prediction='adaptive', grace_period=200,
+        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
+    )
+
+    X, y = stream.next_sample(max_samples)
+    tree.partial_fit(X, y)
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
