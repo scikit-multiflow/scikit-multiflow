@@ -7,11 +7,6 @@ from skmultiflow.trees.nodes import AdaNode
 
 from skmultiflow.utils import get_max_value_key, normalize_values_in_dict
 
-MAJORITY_CLASS = 'mc'
-NAIVE_BAYES = 'nb'
-NAIVE_BAYES_ADAPTIVE = 'nba'
-ERROR_WIDTH_THRESHOLD = 300
-
 
 class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
     """ Learning node for Hoeffding Adaptive Tree that uses Adaptive Naive
@@ -93,10 +88,10 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
         # dist = {}
         prediction_option = ht.leaf_prediction
         # MC
-        if prediction_option == MAJORITY_CLASS:
+        if prediction_option == ht._MAJORITY_CLASS:
             dist = self.get_observed_class_distribution()
         # NB
-        elif prediction_option == NAIVE_BAYES:
+        elif prediction_option == ht._NAIVE_BAYES:
             dist = do_naive_bayes_prediction(X, self._observed_class_distribution, self._attribute_observers)
         # NBAdaptive (default)
         else:

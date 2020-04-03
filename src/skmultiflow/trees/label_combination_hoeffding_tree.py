@@ -1,7 +1,7 @@
 import numpy as np
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
-from skmultiflow.utils import *
+from skmultiflow.utils import get_dimensions
 
 from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import LCActiveLearningNode
@@ -32,11 +32,6 @@ def LCHT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=20
                                                    nb_threshold=nb_threshold,
                                                    nominal_attributes=nominal_attributes,
                                                    n_labels=n_labels)
-
-
-MAJORITY_CLASS = 'mc'
-NAIVE_BAYES = 'nb'
-NAIVE_BAYES_ADAPTIVE = 'nba'
 
 
 class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutputMixin):
@@ -214,9 +209,9 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         """Create a new learning node. The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
-        if self._leaf_prediction == MAJORITY_CLASS:
+        if self._leaf_prediction == self._MAJORITY_CLASS:
             return LCActiveLearningNode(initial_class_observations)
-        elif self._leaf_prediction == NAIVE_BAYES:
+        elif self._leaf_prediction == self._NAIVE_BAYES:
             return LCLearningNodeNB(initial_class_observations)
         else:  # NAIVE BAYES ADAPTIVE (default)
             return LCLearningNodeNBA(initial_class_observations)

@@ -6,8 +6,6 @@ from skmultiflow.trees.nodes import AdaLearningNodeForRegression
 
 import warnings
 
-ERROR_WIDTH_THRESHOLD = 300
-
 
 def RegressionHAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, split_confidence=0.0000001,
                   tie_threshold=0.05, binary_split=False, stop_mem_management=False, remove_poor_atts=False,
@@ -117,6 +115,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
 
     _TARGET_MEAN = 'mean'
     _PERCEPTRON = 'perceptron'
+    _ERROR_WIDTH_THRESHOLD = 300
     # ======================================================
     # == Hoeffding Adaptive Tree Regressor implementation ==
     # ======================================================

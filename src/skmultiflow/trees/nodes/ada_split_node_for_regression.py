@@ -10,8 +10,6 @@ from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection.adwin import ADWIN
 from skmultiflow.utils import check_random_state
 
-ERROR_WIDTH_THRESHOLD = 300
-
 
 class AdaSplitNodeForRegression(SplitNode, AdaNode):
     """ Node that splits the data in a Regression Hoeffding Adaptive Tree.
@@ -90,8 +88,8 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
 
         # Condition to replace alternate tree
         elif self._alternate_tree is not None and not self._alternate_tree.is_null_error():
-            if self.get_error_width() > ERROR_WIDTH_THRESHOLD \
-                    and self._alternate_tree.get_error_width() > ERROR_WIDTH_THRESHOLD:
+            if self.get_error_width() > rhat._ERROR_WIDTH_THRESHOLD \
+                    and self._alternate_tree.get_error_width() > rhat._ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
                 alt_error_rate = self._alternate_tree.get_error_estimation()
                 fDelta = .05
