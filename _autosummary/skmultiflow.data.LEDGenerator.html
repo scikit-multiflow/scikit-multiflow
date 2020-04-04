@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -94,13 +94,16 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
@@ -264,7 +267,7 @@
 <h1>skmultiflow.data.LEDGenerator<a class="headerlink" href="#skmultiflow-data-ledgenerator" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.data.LEDGenerator">
-<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.data.</code><code class="sig-name descname">LEDGenerator</code><span class="sig-paren">(</span><em class="sig-param">random_state=None</em>, <em class="sig-param">noise_percentage=0.0</em>, <em class="sig-param">has_noise=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/led_generator.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.data.</code><code class="sig-name descname">LEDGenerator</code><span class="sig-paren">(</span><em class="sig-param">random_state=None</em>, <em class="sig-param">noise_percentage=0.0</em>, <em class="sig-param">has_noise=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/led_generator.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator" title="Permalink to this definition">¶</a></dt>
 <dd><p>LED stream generator.</p>
 <p>This data source originates from the CART book <a class="footnote-reference brackets" href="#id3" id="id1">1</a>. An implementation
 in C was donated to the UCI <a class="footnote-reference brackets" href="#id4" id="id2">2</a> machine learning repository by David Aha.
@@ -276,15 +279,15 @@ generator used for experiments ( LED ) produces 24 binary attributes,
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
 If RandomState instance, random_state is the random number generator;
 If None, the random number generator is the RandomState instance used
 by <cite>np.random</cite>.</p></li>
-<li><p><strong>noise_percentage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>Default: 0.0</em><em>)</em>) – The probability that noise will happen in the generation. At each
+<li><p><strong>noise_percentage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> (</em><em>Default: 0.0</em><em>)</em>) – The probability that noise will happen in the generation. At each
 new sample generated, a random probability is generated, and if that
 probability is equal or less than the noise_percentage, the selected
 data  will be switched</p></li>
-<li><p><strong>has_noise</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em> (</em><em>Default: False</em><em>)</em>) – Adds 17 non relevant attributes to the stream.</p></li>
+<li><p><strong>has_noise</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em> (</em><em>Default: False</em><em>)</em>) – Adds 17 non relevant attributes to the stream.</p></li>
 </ul>
 </dd>
 </dl>
@@ -303,8 +306,8 @@ Computer Sciences,2007.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.led_generator</span> <span class="k">import</span> <span class="n">LEDGenerator</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.led_generator</span> <span class="kn">import</span> <span class="n">LEDGenerator</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">LEDGenerator</span><span class="p">(</span><span class="n">random_state</span> <span class="o">=</span> <span class="mi">112</span><span class="p">,</span> <span class="n">noise_percentage</span> <span class="o">=</span> <span class="mf">0.28</span><span class="p">,</span> <span class="n">has_noise</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
@@ -314,7 +317,7 @@ Computer Sciences,2007.</p>
 <span class="go">  1., 0., 0., 1., 1., 0., 1., 1.]]), array([4]))</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving 10 samples</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving 10 samples</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="go">(array([[0., 0., 1., 0., 0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 0., 0.,</span>
 <span class="go">  1., 1., 1., 0., 0., 0., 1., 1.],</span>
@@ -339,7 +342,7 @@ Computer Sciences,2007.</p>
 <span class="go"> array([1, 0, 7, 9, 7, 1, 3, 1, 4, 1]))</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
 <span class="go">-1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">has_more_samples</span><span class="p">()</span>
 <span class="go">True</span>
@@ -347,7 +350,7 @@ Computer Sciences,2007.</p>
 </div>
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">random_state=None</em>, <em class="sig-param">noise_percentage=0.0</em>, <em class="sig-param">has_noise=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/led_generator.py#L103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">random_state=None</em>, <em class="sig-param">noise_percentage=0.0</em>, <em class="sig-param">has_noise=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/led_generator.py#L103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -358,43 +361,43 @@ Computer Sciences,2007.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.__init__" title="skmultiflow.data.LEDGenerator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([random_state, noise_percentage, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.__init__" title="skmultiflow.data.LEDGenerator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([random_state, noise_percentage, …])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.get_data_info" title="skmultiflow.data.LEDGenerator.get_data_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_info</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.get_data_info" title="skmultiflow.data.LEDGenerator.get_data_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_info</span></code></a>()</p></td>
 <td><p>Retrieves minimum information from the stream</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.get_info" title="skmultiflow.data.LEDGenerator.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.get_info" title="skmultiflow.data.LEDGenerator.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
 <td><p>Collects and returns the information about the configuration of the estimator</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.get_params" title="skmultiflow.data.LEDGenerator.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.get_params" title="skmultiflow.data.LEDGenerator.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
 <td><p>Get parameters for this estimator.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.has_more_samples" title="skmultiflow.data.LEDGenerator.has_more_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_more_samples</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.has_more_samples" title="skmultiflow.data.LEDGenerator.has_more_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_more_samples</span></code></a>()</p></td>
 <td><p>Checks if stream has more samples.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.is_restartable" title="skmultiflow.data.LEDGenerator.is_restartable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_restartable</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.is_restartable" title="skmultiflow.data.LEDGenerator.is_restartable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_restartable</span></code></a>()</p></td>
 <td><p>Determine if the stream is restartable.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.last_sample" title="skmultiflow.data.LEDGenerator.last_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_sample</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.last_sample" title="skmultiflow.data.LEDGenerator.last_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_sample</span></code></a>()</p></td>
 <td><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.n_remaining_samples" title="skmultiflow.data.LEDGenerator.n_remaining_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_remaining_samples</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.n_remaining_samples" title="skmultiflow.data.LEDGenerator.n_remaining_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_remaining_samples</span></code></a>()</p></td>
 <td><p>Returns the estimated number of remaining samples.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.next_sample" title="skmultiflow.data.LEDGenerator.next_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_sample</span></code></a>([batch_size])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.next_sample" title="skmultiflow.data.LEDGenerator.next_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_sample</span></code></a>([batch_size])</p></td>
 <td><p>An instance is generated based on the parameters passed.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.prepare_for_use" title="skmultiflow.data.LEDGenerator.prepare_for_use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_for_use</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.prepare_for_use" title="skmultiflow.data.LEDGenerator.prepare_for_use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_for_use</span></code></a>()</p></td>
 <td><p>Prepares the stream for use.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.reset" title="skmultiflow.data.LEDGenerator.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.reset" title="skmultiflow.data.LEDGenerator.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
 <td><p>Resets the estimator to its initial state.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.restart" title="skmultiflow.data.LEDGenerator.restart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restart</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.restart" title="skmultiflow.data.LEDGenerator.restart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restart</span></code></a>()</p></td>
 <td><p>Restart the stream.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.set_params" title="skmultiflow.data.LEDGenerator.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.set_params" title="skmultiflow.data.LEDGenerator.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
 <td><p>Set the parameters of this estimator.</p></td>
 </tr>
 </tbody>
@@ -406,31 +409,31 @@ Computer Sciences,2007.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.feature_names" title="skmultiflow.data.LEDGenerator.feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_names</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.feature_names" title="skmultiflow.data.LEDGenerator.feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_names</span></code></a></p></td>
 <td><p>Retrieve the names of the features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.has_noise" title="skmultiflow.data.LEDGenerator.has_noise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_noise</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.has_noise" title="skmultiflow.data.LEDGenerator.has_noise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_noise</span></code></a></p></td>
 <td><p>add noise.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.n_cat_features" title="skmultiflow.data.LEDGenerator.n_cat_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cat_features</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.n_cat_features" title="skmultiflow.data.LEDGenerator.n_cat_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cat_features</span></code></a></p></td>
 <td><p>Retrieve the number of integer features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.n_features" title="skmultiflow.data.LEDGenerator.n_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.n_features" title="skmultiflow.data.LEDGenerator.n_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features</span></code></a></p></td>
 <td><p>Retrieve the number of features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.n_num_features" title="skmultiflow.data.LEDGenerator.n_num_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_num_features</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.n_num_features" title="skmultiflow.data.LEDGenerator.n_num_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_num_features</span></code></a></p></td>
 <td><p>Retrieve the number of numerical features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.n_targets" title="skmultiflow.data.LEDGenerator.n_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_targets</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.n_targets" title="skmultiflow.data.LEDGenerator.n_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_targets</span></code></a></p></td>
 <td><p>Retrieve the number of targets</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.noise_percentage" title="skmultiflow.data.LEDGenerator.noise_percentage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">noise_percentage</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.noise_percentage" title="skmultiflow.data.LEDGenerator.noise_percentage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">noise_percentage</span></code></a></p></td>
 <td><p>Noise percentage</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.target_names" title="skmultiflow.data.LEDGenerator.target_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_names</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.target_names" title="skmultiflow.data.LEDGenerator.target_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_names</span></code></a></p></td>
 <td><p>Retrieve the names of the targets</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.LEDGenerator.target_values" title="skmultiflow.data.LEDGenerator.target_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_values</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.LEDGenerator.html#skmultiflow.data.LEDGenerator.target_values" title="skmultiflow.data.LEDGenerator.target_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_values</span></code></a></p></td>
 <td><p>Retrieve all target_values in the stream for each target.</p></td>
 </tr>
 </tbody>
@@ -444,14 +447,14 @@ Computer Sciences,2007.</p>
 <dd class="field-odd"><p>names of the features</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.get_data_info">
-<code class="sig-name descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/led_generator.py#L230"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.get_data_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/led_generator.py#L230"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.get_data_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves minimum information from the stream</p>
 <p>Used by evaluator methods to id the stream.</p>
 <p>The default format is: ‘Stream name - n_targets, n_classes, n_features’.</p>
@@ -467,7 +470,7 @@ Computer Sciences,2007.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.get_info">
-<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -481,7 +484,7 @@ Computer Sciences,2007.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -499,7 +502,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.has_more_samples">
-<code class="sig-name descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.has_more_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.has_more_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if stream has more samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -530,7 +533,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.is_restartable">
-<code class="sig-name descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.is_restartable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.is_restartable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine if the stream is restartable.
 :returns: True if stream is restartable.
 :rtype: Boolean</p>
@@ -538,7 +541,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.last_sample">
-<code class="sig-name descname">last_sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.last_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">last_sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.last_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -546,7 +549,7 @@ contained subobjects that are estimators.</p>
 (batch_size, n_targets), representing the next batch_size samples.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or tuple list</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -560,7 +563,7 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The number of integer features in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -574,7 +577,7 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The total number of features.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -588,21 +591,21 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The number of numerical features in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.n_remaining_samples">
-<code class="sig-name descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the estimated number of remaining samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Remaining number of samples. -1 if infinite (e.g. generator)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -616,27 +619,27 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>the number of targets in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.next_sample">
-<code class="sig-name descname">next_sample</code><span class="sig-paren">(</span><em class="sig-param">batch_size=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/led_generator.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.next_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">next_sample</code><span class="sig-paren">(</span><em class="sig-param">batch_size=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/led_generator.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.next_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>An instance is generated based on the parameters passed. If noise
 is included the total number of attributes will be 24, if it’s not
 included there will be 7 attributes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of samples to return.</p>
+<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of samples to return.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Return a tuple with the features matrix
 for the batch_size samples that were requested.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or tuple list</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -650,7 +653,7 @@ for the batch_size samples that were requested.</p>
 <dd class="field-odd"><p>The value of the noise percentage</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Retrieve the value of the option</p>
@@ -660,7 +663,7 @@ for the batch_size samples that were requested.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.prepare_for_use">
-<code class="sig-name descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/led_generator.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.prepare_for_use" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/led_generator.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.prepare_for_use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the stream for use.</p>
 <p class="rubric">Notes</p>
 <p>This functions should always be called after the stream initialization.</p>
@@ -668,7 +671,7 @@ for the batch_size samples that were requested.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the estimator to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -682,13 +685,13 @@ for the batch_size samples that were requested.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.restart">
-<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/led_generator.py#L227"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.restart" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/led_generator.py#L227"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.restart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restart the stream.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.LEDGenerator.set_params">
-<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.LEDGenerator.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -713,7 +716,7 @@ component of a nested object.</p>
 <dd class="field-odd"><p>the names of the targets in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -727,7 +730,7 @@ component of a nested object.</p>
 <dd class="field-odd"><p>list of lists of all target_values for each target</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>

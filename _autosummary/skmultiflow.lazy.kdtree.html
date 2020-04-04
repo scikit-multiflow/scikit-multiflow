@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.lazy.kdtree &mdash; scikit-multiflow 0.2.0 documentation</title>
+  <title>skmultiflow.lazy.KDTree &mdash; scikit-multiflow 0.4.1 documentation</title>
   
 
   
@@ -21,23 +21,23 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/skmultiflow.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="skmultiflow.lazy.knn" href="skmultiflow.lazy.knn.html" />
-    <link rel="prev" title="skmultiflow.meta.learn_nse" href="skmultiflow.meta.learn_nse.html" /> 
+    <link rel="next" title="skmultiflow.core.clone" href="skmultiflow.core.clone.html" />
+    <link rel="prev" title="skmultiflow.transform.OneHotToCategorical" href="skmultiflow.transform.OneHotToCategorical.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.4.1
               </div>
             
           
@@ -94,15 +94,19 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
@@ -129,31 +133,54 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../documentation.html">scikit-multiflow API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.core">Core: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.core</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.base.BaseEstimator.html">skmultiflow.core.base.BaseEstimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.BaseSKMObject.html">skmultiflow.core.BaseSKMObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.ClassifierMixin.html">skmultiflow.core.ClassifierMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.RegressorMixin.html">skmultiflow.core.RegressorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.MetaEstimatorMixin.html">skmultiflow.core.MetaEstimatorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.MultiOutputMixin.html">skmultiflow.core.MultiOutputMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.Pipeline.html">skmultiflow.core.Pipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.data">Data: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.base_stream.Stream.html">skmultiflow.data.base_stream.Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.DataStream.html">skmultiflow.data.DataStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.FileStream.html">skmultiflow.data.FileStream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.prototype">Prototype based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Trees based methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.ddm.html">skmultiflow.drift_detection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.ADWIN.html">skmultiflow.drift_detection.ADWIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.DDM.html">skmultiflow.drift_detection.DDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.EDDM.html">skmultiflow.drift_detection.EDDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.PageHinkley.html">skmultiflow.drift_detection.PageHinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.EvaluateHoldout.html">skmultiflow.evaluation.EvaluateHoldout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.EvaluatePrequential.html">skmultiflow.evaluation.EvaluatePrequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.transform">Transform: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.transform</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.transform.MissingValuesCleaner.html">skmultiflow.transform.MissingValuesCleaner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.transform.OneHotToCategorical.html">skmultiflow.transform.OneHotToCategorical</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#misc">Misc:</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../documentation.html#data-structure">Data structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#utilities">Utilities</a></li>
 </ul>
 </li>
 </ul>
@@ -163,6 +190,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's new (Changelog)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Other versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Previous versions</a></li>
 </ul>
 
             
@@ -210,14 +242,14 @@
         
           <li><a href="../documentation.html">API Documentation</a> &raquo;</li>
         
-      <li>skmultiflow.lazy.kdtree</li>
+      <li>skmultiflow.lazy.KDTree</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_autosummary/skmultiflow.lazy.kdtree.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_autosummary/skmultiflow.lazy.KDTree.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -231,26 +263,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-skmultiflow.lazy.kdtree">
-<span id="skmultiflow-lazy-kdtree"></span><h1>skmultiflow.lazy.kdtree<a class="headerlink" href="#module-skmultiflow.lazy.kdtree" title="Permalink to this headline">¶</a></h1>
-<p class="rubric">Classes</p>
-<table class="longtable docutils align-center">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.lazy.kdtree.KDTree" title="skmultiflow.lazy.kdtree.KDTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KDTree</span></code></a>(X[, metric, categorical_list, …])</p></td>
-<td><p>A K-dimensional tree implementation, adapted for k dimensional problems.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.lazy.kdtree.KDTreeNode" title="skmultiflow.lazy.kdtree.KDTreeNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KDTreeNode</span></code></a>(data, left_indexes, …)</p></td>
-<td><p>A node from a KD Tree.</p></td>
-</tr>
-</tbody>
-</table>
+  <div class="section" id="skmultiflow-lazy-kdtree">
+<h1>skmultiflow.lazy.KDTree<a class="headerlink" href="#skmultiflow-lazy-kdtree" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="skmultiflow.lazy.kdtree.KDTree">
-<em class="property">class </em><code class="descclassname">skmultiflow.lazy.kdtree.</code><code class="descname">KDTree</code><span class="sig-paren">(</span><em>X</em>, <em>metric='mixed'</em>, <em>categorical_list=None</em>, <em>return_distance=False</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTree"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTree" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.lazy.KDTree">
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.lazy.</code><code class="sig-name descname">KDTree</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">metric='mixed'</em>, <em class="sig-param">categorical_list=None</em>, <em class="sig-param">return_distance=False</em>, <em class="sig-param">leaf_size=40</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/kdtree.py#L8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>A K-dimensional tree implementation, adapted for k dimensional problems.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -259,9 +276,9 @@
 <li><p><strong>metric</strong> (<em>a string representation of a metric.</em>) – In the future custom metrics are going to be accepted.</p></li>
 <li><p><strong>categorical_list</strong> (<em>a list of the categorical feature's indexes.</em>) – It may be used by some custom metric to differentiate between
 categorical and numerical attributes.</p></li>
-<li><p><strong>return_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Whether to return only the indexes of the closes neighbors or
+<li><p><strong>return_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether to return only the indexes of the closes neighbors or
 also their distances.</p></li>
-<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of samples that can be held by a leaf node, at which
+<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of samples that can be held by a leaf node, at which
 point the query algorithm will switch to brute force. The greater
 the number the faster the tree will be build, and the slower the
 query will be.</p></li>
@@ -269,10 +286,7 @@ query will be.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>May raise ValueErrors if the parameters passed don't have the correct</strong> – </p></li>
-<li><p><strong>types.</strong> – </p></li>
-</ul>
+<dd class="field-even"><p><strong>May raise ValueErrors if the parameters passed don't have the correct types.</strong> – </p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -293,46 +307,94 @@ the nodes won’t become long and thin.</p>
 nor than scipy’s implementation, but it allow users to use a custom
 metric for the distance calculation.</p>
 <dl class="method">
-<dt id="skmultiflow.lazy.kdtree.KDTree.get_class_type">
-<code class="descname">get_class_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTree.get_class_type"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L226"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTree.get_class_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>The class type is a string that identifies the type of object
-generated by that module.</p>
+<dt id="skmultiflow.lazy.KDTree.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">metric='mixed'</em>, <em class="sig-param">categorical_list=None</em>, <em class="sig-param">return_distance=False</em>, <em class="sig-param">leaf_size=40</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/kdtree.py#L65"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.lazy.KDTree.html#skmultiflow.lazy.KDTree.__init__" title="skmultiflow.lazy.KDTree.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(X[, metric, categorical_list, …])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.lazy.KDTree.html#skmultiflow.lazy.KDTree.get_info" title="skmultiflow.lazy.KDTree.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<td><p>Collects and returns the information about the configuration of the estimator</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.lazy.KDTree.html#skmultiflow.lazy.KDTree.get_params" title="skmultiflow.lazy.KDTree.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.lazy.KDTree.html#skmultiflow.lazy.KDTree.query" title="skmultiflow.lazy.KDTree.query"><code class="xref py py-obj docutils literal notranslate"><span class="pre">query</span></code></a>(X[, k])</p></td>
+<td><p>Searches the tree for the k nearest neighbors of X</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.lazy.KDTree.html#skmultiflow.lazy.KDTree.query_radius" title="skmultiflow.lazy.KDTree.query_radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">query_radius</span></code></a>(X, r)</p></td>
+<td><p>Radius based query</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.lazy.KDTree.html#skmultiflow.lazy.KDTree.reset" title="skmultiflow.lazy.KDTree.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<td><p>Resets the estimator to its initial state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.lazy.KDTree.html#skmultiflow.lazy.KDTree.set_params" title="skmultiflow.lazy.KDTree.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">METRICS</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skmultiflow.lazy.KDTree.get_info">
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/kdtree.py#L219"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
+<dd class="field-odd"><p>Configuration of the estimator.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>The class type</p>
+<dd class="field-even"><p>string</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.lazy.kdtree.KDTree.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTree.get_info"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L219"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTree.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum-up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dt id="skmultiflow.lazy.KDTree.get_params">
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p><em>string</em></p></li>
-<li><p><em>A string with the class’ relevant information.</em></p></li>
-</ul>
-</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapping of string to any</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.lazy.kdtree.KDTree.query">
-<code class="descname">query</code><span class="sig-paren">(</span><em>X</em>, <em>k=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTree.query"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L143"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTree.query" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.lazy.KDTree.query">
+<code class="sig-name descname">query</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">k=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/kdtree.py#L143"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.query" title="Permalink to this definition">¶</a></dt>
 <dd><p>Searches the tree for the k nearest neighbors of X</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>Array-like of size n_features</em><em> or </em><em>matrix of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Stores the samples we want to find the nearest neighbors for.</p></li>
-<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of nearest neighbors to query for.</p></li>
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of nearest neighbors to query for.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -340,14 +402,14 @@ ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_
 (dist, idx): Distance to neighbors and corresponding index ()if return_distance is True).</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a> or tuple list</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.lazy.kdtree.KDTree.query_radius">
-<code class="descname">query_radius</code><span class="sig-paren">(</span><em>X</em>, <em>r</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTree.query_radius"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTree.query_radius" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.lazy.KDTree.query_radius">
+<code class="sig-name descname">query_radius</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">r</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/kdtree.py#L192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.query_radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>Radius based query</p>
 <p>Queries the tree based on a limited radius rather than a number of
 neighbors.</p>
@@ -355,7 +417,7 @@ neighbors.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>Array-like of size n_features</em><em> or </em><em>matrix of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Stores the samples we want to find the nearest neighbors for.</p></li>
-<li><p><strong>r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The maximum radius for the query</p></li>
+<li><p><strong>r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The maximum radius for the query</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -363,91 +425,39 @@ neighbors.</p>
 from all the neighbors within the maximum query radius.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a> or tuple list</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="skmultiflow.lazy.kdtree.KDTreeNode">
-<em class="property">class </em><code class="descclassname">skmultiflow.lazy.kdtree.</code><code class="descname">KDTreeNode</code><span class="sig-paren">(</span><em>data</em>, <em>left_indexes</em>, <em>right_indexes</em>, <em>split_axis</em>, <em>split_value</em>, <em>distance_function</em>, <em>leaf_size</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTreeNode"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L230"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTreeNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>A node from a KD Tree. A node object will store the indexes of its children’s
-samples, and only a reference to the tree’s complete data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>Numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – A reference to all the samples upon which the tree will be built.</p></li>
-<li><p><strong>left_indexes</strong> (<em>An array-like</em>) – All the indexes from the samples that should be kept under the node’s left
-child.</p></li>
-<li><p><strong>right_indexes</strong> (<em>An array-like</em>) – All the indexes from the samples that should be kept under the node’s right
-child.</p></li>
-<li><p><strong>split_axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The node’s chosen feature’s index. This will be the node’s splitting axis.</p></li>
-<li><p><strong>split_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>numeric value</em><em>)</em>) – The node’s splitting value.</p></li>
-<li><p><strong>distance_function</strong> (<em>A distance function.</em>) – Any function that computes the distance between two samples.</p></li>
-<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of samples that can be stored in one leaf node, from which point
-the algorithm switches to a brute-force approach.</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The sliding midpoint rule, described in Maneewongvatana and Mount 1999, is the
-algorithm of choice for building the KDTree. All the calculations are done by
-the node’s parent. This changes for the root node, in which case it’s the
-KDTree __build function that does all the calculations.</p>
 <dl class="method">
-<dt id="skmultiflow.lazy.kdtree.KDTreeNode.get_class_type">
-<code class="descname">get_class_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTreeNode.get_class_type"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L553"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTreeNode.get_class_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>The class type is a string that identifies the type of object
-generated by that module.</p>
+<dt id="skmultiflow.lazy.KDTree.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the estimator to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>The class type</p>
+<dd class="field-even"><p>self</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.lazy.kdtree.KDTreeNode.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTreeNode.get_info"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L546"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTreeNode.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sum-up of all important characteristics of a class.</p>
-<p>The default format of the return string is as follows:
-ClassName: attribute_one: value_one - attribute_two: value_two - info_one: info_one_value</p>
+<dt id="skmultiflow.lazy.KDTree.set_params">
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KDTree.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as pipelines). The latter have parameters of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s possible to update each
+component of a nested object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p><em>string</em></p></li>
-<li><p><em>A string with the class’ relevant information.</em></p></li>
-</ul>
-</p>
+<dd class="field-odd"><p></p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.lazy.kdtree.KDTreeNode.query_node">
-<code class="descname">query_node</code><span class="sig-paren">(</span><em>X</em>, <em>k</em>, <em>neighbors_distance_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/lazy/kdtree.html#KDTreeNode.query_node"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/lazy/kdtree.py#L436"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.kdtree.KDTreeNode.query_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query a node</p>
-<p>Queries a node and all of it’s sub nodes, if there is a chance of finding
-a nearest neighbor in that branch.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>Array-like</em>) – The sample (only one) wants to find the nearest neighbors for.</p></li>
-<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of nearest neighbors to query for.</p></li>
-<li><p><strong>neighbors_distance_list</strong> (<em>A list of tuples</em>) – A list containing tuples that represent the current nearest
-neighbors found. The tuples are stored in the format (index, distance)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An updated version of the neighbors_distance_list</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -464,10 +474,10 @@ neighbors found. The tuples are stored in the format (index, distance)</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="skmultiflow.lazy.knn.html" class="btn btn-neutral float-right" title="skmultiflow.lazy.knn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="skmultiflow.core.clone.html" class="btn btn-neutral float-right" title="skmultiflow.core.clone" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.meta.learn_nse.html" class="btn btn-neutral float-left" title="skmultiflow.meta.learn_nse" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.transform.OneHotToCategorical.html" class="btn btn-neutral float-left" title="skmultiflow.transform.OneHotToCategorical" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -94,13 +94,16 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
@@ -264,16 +267,16 @@
 <h1>skmultiflow.meta.AccuracyWeightedEnsemble<a class="headerlink" href="#skmultiflow-meta-accuracyweightedensemble" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble">
-<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.meta.</code><code class="sig-name descname">AccuracyWeightedEnsemble</code><span class="sig-paren">(</span><em class="sig-param">n_estimators=10</em>, <em class="sig-param">n_kept_estimators=30</em>, <em class="sig-param">base_estimator=NaiveBayes(nominal_attributes=None)</em>, <em class="sig-param">window_size=200</em>, <em class="sig-param">n_splits=5</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.meta.</code><code class="sig-name descname">AccuracyWeightedEnsemble</code><span class="sig-paren">(</span><em class="sig-param">n_estimators=10</em>, <em class="sig-param">n_kept_estimators=30</em>, <em class="sig-param">base_estimator=NaiveBayes(nominal_attributes=None)</em>, <em class="sig-param">window_size=200</em>, <em class="sig-param">n_splits=5</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accuracy Weighted Ensemble classifier</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_estimators</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=10</em><em>)</em>) – Maximum number of estimators to be kept in the ensemble</p></li>
-<li><p><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.BaseSKMObject.html#skmultiflow.core.BaseSKMObject" title="skmultiflow.core.BaseSKMObject"><em>skmultiflow.core.BaseSKMObject</em></a><em> or </em><em>sklearn.BaseEstimator</em><em> (</em><em>default=NaiveBayes</em><em>)</em>) – Each member of the ensemble is an instance of the base estimator.</p></li>
-<li><p><strong>window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=200</em><em>)</em>) – The size of one chunk to be processed
+<li><p><strong>n_estimators</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=10</em><em>)</em>) – Maximum number of estimators to be kept in the ensemble</p></li>
+<li><p><strong>base_estimator</strong> (<a class="reference internal" href="../api/generated/skmultiflow.core.BaseSKMObject.html#skmultiflow.core.BaseSKMObject" title="skmultiflow.core.BaseSKMObject"><em>skmultiflow.core.BaseSKMObject</em></a><em> or </em><em>sklearn.BaseEstimator</em><em> (</em><em>default=NaiveBayes</em><em>)</em>) – Each member of the ensemble is an instance of the base estimator.</p></li>
+<li><p><strong>window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=200</em><em>)</em>) – The size of one chunk to be processed
 (warning: the chunk size is not always the same as the batch size)</p></li>
-<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=5</em><em>)</em>) – Number of folds to run cross-validation for computing the weight
+<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=5</em><em>)</em>) – Number of folds to run cross-validation for computing the weight
 of a classifier in the ensemble</p></li>
 </ul>
 </dd>
@@ -295,7 +298,7 @@ ACM, New York, NY, USA, 226-235.</p>
 </dl>
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">n_estimators=10</em>, <em class="sig-param">n_kept_estimators=30</em>, <em class="sig-param">base_estimator=NaiveBayes(nominal_attributes=None)</em>, <em class="sig-param">window_size=200</em>, <em class="sig-param">n_splits=5</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L80"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">n_estimators=10</em>, <em class="sig-param">n_kept_estimators=30</em>, <em class="sig-param">base_estimator=NaiveBayes(nominal_attributes=None)</em>, <em class="sig-param">window_size=200</em>, <em class="sig-param">n_splits=5</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L80"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new ensemble</p>
 </dd></dl>
 
@@ -358,7 +361,7 @@ ACM, New York, NY, USA, 226-235.</p>
 </table>
 <dl class="class">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.WeightedClassifier">
-<em class="property">class </em><code class="sig-name descname">WeightedClassifier</code><span class="sig-paren">(</span><em class="sig-param">estimator</em>, <em class="sig-param">weight</em>, <em class="sig-param">seen_labels</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L42"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.WeightedClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">WeightedClassifier</code><span class="sig-paren">(</span><em class="sig-param">estimator</em>, <em class="sig-param">weight</em>, <em class="sig-param">seen_labels</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L42"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.WeightedClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>A wrapper that includes a base estimator and its associated weight
 (and additional information)</p>
 <dl class="field-list simple">
@@ -366,7 +369,7 @@ ACM, New York, NY, USA, 226-235.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>estimator</strong> (<em>StreamModel</em><em> or </em><em>sklearn.BaseEstimator</em>) – The base estimator to be wrapped up with additional information.
 This estimator must already been trained on a data chunk.</p></li>
-<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The weight associated to this estimator</p></li>
+<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The weight associated to this estimator</p></li>
 <li><p><strong>seen_labels</strong> (<em>array</em>) – The array containing the unique class labels of the data chunk this estimator
 is trained on.</p></li>
 </ul>
@@ -376,7 +379,7 @@ is trained on.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.compute_baseline">
-<em class="property">static </em><code class="sig-name descname">compute_baseline</code><span class="sig-paren">(</span><em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L368"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_baseline" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">compute_baseline</code><span class="sig-paren">(</span><em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L368"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_baseline" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method computes the score produced by a random classifier, served as a baseline.
 The baseline score is MSE<sub>r</sub> in case of a normal classifier, b<sub>r</sub> in case of a cost-sensitive
 classifier.</p>
@@ -388,14 +391,14 @@ classifier.</p>
 <dd class="field-even"><p>The baseline score of a random learner</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.compute_score">
-<em class="property">static </em><code class="sig-name descname">compute_score</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">X</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L266"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_score" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">compute_score</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">X</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L266"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the mean square error of a classifier, via the predicted probabilities.</p>
 <p>This code needs to take into account the fact that a classifier C trained on a
 previous data chunk may not have seen all the labels that appear in a new chunk
@@ -412,20 +415,20 @@ previous data chunk may not have seen all the labels that appear in a new chunk
 <dd class="field-even"><p>The mean square error of the model (MSE_i)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.compute_score_crossvalidation">
-<code class="sig-name descname">compute_score_crossvalidation</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">n_splits</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L303"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_score_crossvalidation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_score_crossvalidation</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">n_splits</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L303"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_score_crossvalidation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the score of interests, using cross-validation or not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>StreamModel</em><em> or </em><em>sklearn.BaseEstimator</em>) – The estimator in the ensemble to compute the score on</p></li>
-<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of CV folds.
+<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of CV folds.
 If None, the score is computed directly on the entire data chunk.
 Else, we proceed as in traditional cross-validation setting.</p></li>
 </ul>
@@ -434,14 +437,14 @@ Else, we proceed as in traditional cross-validation setting.</p></li>
 <dd class="field-even"><p>The score of an estimator computed via CV</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.compute_weight">
-<code class="sig-name descname">compute_weight</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">baseline_score</em>, <em class="sig-param">n_splits=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L341"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_weight" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_weight</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">baseline_score</em>, <em class="sig-param">n_splits=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L341"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.compute_weight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the weight of a classifier given the baseline score calculated on a random learner.
 The weight relies on either (1) MSE if it is a normal classifier,
 or (2) benefit if it is a cost-sensitive classifier.</p>
@@ -449,8 +452,8 @@ or (2) benefit if it is a cost-sensitive classifier.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>StreamModel</em><em> or </em><em>sklearn.BaseEstimator</em>) – The learner to compute the weight on</p></li>
-<li><p><strong>baseline_score</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The baseline score calculated on a random learner</p></li>
-<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=None</em><em>)</em>) – The number of CV folds.
+<li><p><strong>baseline_score</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The baseline score calculated on a random learner</p></li>
+<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=None</em><em>)</em>) – The number of CV folds.
 If not None (and is a number), we compute the weight using CV</p></li>
 </ul>
 </dd>
@@ -458,14 +461,14 @@ If not None (and is a number), we compute the weight using CV</p></li>
 <dd class="field-even"><p>The weight computed from the MSE score of the classifier</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -487,7 +490,7 @@ If not None (and is a number), we compute the weight using CV</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.get_info">
-<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -501,7 +504,7 @@ If not None (and is a number), we compute the weight using CV</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -519,7 +522,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.partial_fit">
-<code class="sig-name descname">partial_fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y=None</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.partial_fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">partial_fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y=None</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.partial_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partially (incrementally) fit the model.</p>
 <p>Updates the ensemble when a new data chunk arrives (Algorithm 1 in the paper).
 The update is only launched when the chunk is filled up.</p>
@@ -530,7 +533,7 @@ The update is only launched when the chunk is filled up.</p>
 <li><p><strong>y</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em>) – An array-like with the class labels of all samples in X.</p></li>
 <li><p><strong>classes</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Contains the class values in the stream. If defined, will be used to define the length of the arrays
 returned by <cite>predict_proba</cite></p></li>
-<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> or </em><em>array-like</em>) – Samples weight. If not provided, uniform weights are assumed.</p></li>
+<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> or </em><em>array-like</em>) – Samples weight. If not provided, uniform weights are assumed.</p></li>
 </ul>
 </dd>
 </dl>
@@ -538,7 +541,7 @@ returned by <cite>predict_proba</cite></p></li>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts the labels of X in a general classification setting.</p>
 <p>The prediction is done via normalized weighted voting (choosing the maximum).</p>
 <dl class="field-list simple">
@@ -556,7 +559,7 @@ returned by <cite>predict_proba</cite></p></li>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.predict_proba">
-<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimates the probability of each sample in X belonging to each of the class-labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -575,13 +578,13 @@ returned by <cite>predict_proba</cite></p></li>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L259"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L259"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets all parameters to its default value</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.score">
-<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mean accuracy on the given test data and labels.</p>
 <p>In multi-label classification, this is the subset accuracy
 which is a harsh metric since you require for each sample that
@@ -598,14 +601,14 @@ each label set be correctly predicted.</p>
 <dd class="field-even"><p><strong>score</strong> – Mean accuracy of self.predict(X) wrt. y.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.set_params">
-<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -623,7 +626,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.AccuracyWeightedEnsemble.train_model">
-<em class="property">static </em><code class="sig-name descname">train_model</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L183"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.train_model" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">train_model</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/accuracy_weighted_ensemble.py#L183"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.AccuracyWeightedEnsemble.train_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trains a model, taking care of the fact that either fit or partial_fit is implemented</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -631,8 +634,8 @@ component of a nested object.</p>
 <li><p><strong>model</strong> (<em>StreamModel</em><em> or </em><em>sklearn.BaseEstimator</em>) – The model to train</p></li>
 <li><p><strong>X</strong> (<em>numpy.ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data chunk</p></li>
 <li><p><strong>y</strong> (<em>numpy.array of shape</em><em> (</em><em>n_samples</em><em>)</em>) – The labels in the chunk</p></li>
-<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em> or </em><em>numpy.array</em>) – The unique classes in the data chunk</p></li>
-<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> or </em><em>array-like</em>) – Instance weight. If not provided, uniform weights are assumed.</p></li>
+<li><p><strong>classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em> or </em><em>numpy.array</em>) – The unique classes in the data chunk</p></li>
+<li><p><strong>sample_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> or </em><em>array-like</em>) – Instance weight. If not provided, uniform weights are assumed.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

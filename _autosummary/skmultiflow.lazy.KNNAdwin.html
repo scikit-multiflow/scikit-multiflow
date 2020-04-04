@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -94,13 +94,16 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
@@ -264,7 +267,7 @@
 <h1>skmultiflow.lazy.KNNAdwin<a class="headerlink" href="#skmultiflow-lazy-knnadwin" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.lazy.KNNAdwin">
-<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.lazy.</code><code class="sig-name descname">KNNAdwin</code><span class="sig-paren">(</span><em class="sig-param">n_neighbors=5</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">leaf_size=30</em>, <em class="sig-param">nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/lazy/knn_adwin.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.lazy.</code><code class="sig-name descname">KNNAdwin</code><span class="sig-paren">(</span><em class="sig-param">n_neighbors=5</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">leaf_size=30</em>, <em class="sig-param">nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/knn_adwin.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin" title="Permalink to this definition">¶</a></dt>
 <dd><p>K-Nearest Neighbors classifier with ADWIN change detector.</p>
 <p>This Classifier is an improvement from the regular KNN classifier,
 as it is resistant to concept drift. It utilises the ADWIN change
@@ -279,9 +282,9 @@ at each partial_fit call.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=5</em><em>)</em>) – The number of nearest neighbors to search for.</p></li>
-<li><p><strong>max_window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=1000</em><em>)</em>) – The maximum size of the window storing the last viewed samples.</p></li>
-<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=30</em><em>)</em>) – The maximum number of samples that can be stored in one leaf node,
+<li><p><strong>n_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=5</em><em>)</em>) – The number of nearest neighbors to search for.</p></li>
+<li><p><strong>max_window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=1000</em><em>)</em>) – The maximum size of the window storing the last viewed samples.</p></li>
+<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=30</em><em>)</em>) – The maximum number of samples that can be stored in one leaf node,
 which determines from which point the algorithm will switch for a
 brute-force approach. The bigger this number the faster the tree
 construction time, but the slower the query time will be.</p></li>
@@ -290,17 +293,17 @@ construction time, but the slower the query time will be.</p></li>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – A few of the functions described here are not:</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.8)"><strong>NotImplementedError</strong></a> – A few of the functions described here are not:</p></li>
 <li><p><strong>implemented since they have no application in this context.</strong> – </p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – A ValueError is raised if the predict function is called:</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – A ValueError is raised if the predict function is called:</p></li>
 <li><p><strong>before at least k samples have been analyzed by the algorithm.</strong> – </p></li>
 </ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn_adwin</span> <span class="k">import</span> <span class="n">KNNAdwin</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy.knn_adwin</span> <span class="kn">import</span> <span class="n">KNNAdwin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="kn">import</span> <span class="n">FileStream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s1">&#39;skmultiflow/data/datasets/covtype.csv&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
@@ -330,7 +333,7 @@ construction time, but the slower the query time will be.</p></li>
 </div>
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">n_neighbors=5</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">leaf_size=30</em>, <em class="sig-param">nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/lazy/knn_adwin.py#L81"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">n_neighbors=5</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">leaf_size=30</em>, <em class="sig-param">nominal_attributes=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/knn_adwin.py#L81"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -375,7 +378,7 @@ construction time, but the slower the query time will be.</p></li>
 </table>
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -397,7 +400,7 @@ construction time, but the slower the query time will be.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.get_info">
-<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -411,7 +414,7 @@ construction time, but the slower the query time will be.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -429,7 +432,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.partial_fit">
-<code class="sig-name descname">partial_fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/lazy/knn_adwin.py#L103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.partial_fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">partial_fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/knn_adwin.py#L103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.partial_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partially fits the model. This is done by updating the window
 with new samples while also updating the adwin algorithm. Then
 we verify if a change was detected, and if so, the window is
@@ -455,7 +458,7 @@ samples in X.</p></li>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/lazy/knn.py#L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/knn.py#L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts the label of the X sample, by searching the KDTree for
 the n_neighbors-Nearest Neighbors.</p>
 <dl class="field-list simple">
@@ -466,14 +469,14 @@ the n_neighbors-Nearest Neighbors.</p>
 <dd class="field-even"><p>A list containing the predicted labels for all instances in X.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.predict_proba">
-<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/lazy/knn.py#L176"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/knn.py#L176"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the probability of each sample in X belonging to each
 of the labels, based on the knn algorithm.</p>
 <dl class="field-list simple">
@@ -482,7 +485,7 @@ of the labels, based on the knn algorithm.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – If there is an attempt to call this function before,:</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If there is an attempt to call this function before,:</p></li>
 <li><p><strong>at least</strong><strong>, </strong><strong>n_neighbors samples have been analyzed by the learner</strong><strong>, </strong><strong>a ValueError</strong> – </p></li>
 <li><p><strong>is raised.</strong> – </p></li>
 </ul>
@@ -501,7 +504,7 @@ the probability that the i-th sample of X belongs to a certain label.</p>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/lazy/knn_adwin.py#L88"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/lazy/knn_adwin.py#L88"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the adwin algorithm as well as the base model
 kept by the KNN base class.</p>
 <dl class="field-list simple">
@@ -516,7 +519,7 @@ kept by the KNN base class.</p>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.score">
-<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mean accuracy on the given test data and labels.</p>
 <p>In multi-label classification, this is the subset accuracy
 which is a harsh metric since you require for each sample that
@@ -533,14 +536,14 @@ each label set be correctly predicted.</p>
 <dd class="field-even"><p><strong>score</strong> – Mean accuracy of self.predict(X) wrt. y.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.lazy.KNNAdwin.set_params">
-<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.lazy.KNNAdwin.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form

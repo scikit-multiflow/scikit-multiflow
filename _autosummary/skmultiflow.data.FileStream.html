@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -94,13 +94,16 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
@@ -264,7 +267,7 @@
 <h1>skmultiflow.data.FileStream<a class="headerlink" href="#skmultiflow-data-filestream" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.data.FileStream">
-<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.data.</code><code class="sig-name descname">FileStream</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">target_idx=-1</em>, <em class="sig-param">n_targets=1</em>, <em class="sig-param">cat_features=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.data.</code><code class="sig-name descname">FileStream</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">target_idx=-1</em>, <em class="sig-param">n_targets=1</em>, <em class="sig-param">cat_features=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a stream from a file source.</p>
 <p>For the moment only csv files are supported, but the goal is to support different formats, as long as there is a
 function that correctly reads, interprets, and returns a pandas’ DataFrame or numpy.ndarray with the data.</p>
@@ -272,9 +275,9 @@ function that correctly reads, interprets, and returns a pandas’ DataFrame or 
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filepath</strong> – Path to the data file</p></li>
-<li><p><strong>target_idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=-1</em><em>)</em>) – The column index from which the targets start.</p></li>
-<li><p><strong>n_targets</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=1</em><em>)</em>) – The number of targets.</p></li>
-<li><p><strong>cat_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A list of indices corresponding to the location of categorical features.</p></li>
+<li><p><strong>target_idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=-1</em><em>)</em>) – The column index from which the targets start.</p></li>
+<li><p><strong>n_targets</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=1</em><em>)</em>) – The number of targets.</p></li>
+<li><p><strong>cat_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A list of indices corresponding to the location of categorical features.</p></li>
 </ul>
 </dd>
 </dl>
@@ -282,8 +285,8 @@ function that correctly reads, interprets, and returns a pandas’ DataFrame or 
 <p>The stream object provides upon request a number of samples, in a way such that old samples cannot be accessed
 at a later time. This is done to correctly simulate the stream context.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="k">import</span> <span class="n">FileStream</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.file_stream</span> <span class="kn">import</span> <span class="n">FileStream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup the stream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">FileStream</span><span class="p">(</span><span class="s1">&#39;skmultiflow/data/datasets/sea_stream.csv&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
@@ -311,7 +314,7 @@ at a later time. This is done to correctly simulate the stream context.</p>
 </div>
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">target_idx=-1</em>, <em class="sig-param">n_targets=1</em>, <em class="sig-param">cat_features=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">target_idx=-1</em>, <em class="sig-param">n_targets=1</em>, <em class="sig-param">cat_features=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -322,49 +325,49 @@ at a later time. This is done to correctly simulate the stream context.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.__init__" title="skmultiflow.data.FileStream.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(filepath[, target_idx, n_targets, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.__init__" title="skmultiflow.data.FileStream.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(filepath[, target_idx, n_targets, …])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.get_all_samples" title="skmultiflow.data.FileStream.get_all_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_samples</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.get_all_samples" title="skmultiflow.data.FileStream.get_all_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_samples</span></code></a>()</p></td>
 <td><p>returns all the samples in the stream.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.get_data_info" title="skmultiflow.data.FileStream.get_data_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_info</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.get_data_info" title="skmultiflow.data.FileStream.get_data_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_info</span></code></a>()</p></td>
 <td><p>Retrieves minimum information from the stream</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.get_info" title="skmultiflow.data.FileStream.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.get_info" title="skmultiflow.data.FileStream.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
 <td><p>Collects and returns the information about the configuration of the estimator</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.get_params" title="skmultiflow.data.FileStream.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.get_params" title="skmultiflow.data.FileStream.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
 <td><p>Get parameters for this estimator.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_target_values</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.has_more_samples" title="skmultiflow.data.FileStream.has_more_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_more_samples</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.has_more_samples" title="skmultiflow.data.FileStream.has_more_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_more_samples</span></code></a>()</p></td>
 <td><p>Checks if stream has more samples.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.is_restartable" title="skmultiflow.data.FileStream.is_restartable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_restartable</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.is_restartable" title="skmultiflow.data.FileStream.is_restartable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_restartable</span></code></a>()</p></td>
 <td><p>Determine if the stream is restartable.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.last_sample" title="skmultiflow.data.FileStream.last_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_sample</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.last_sample" title="skmultiflow.data.FileStream.last_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_sample</span></code></a>()</p></td>
 <td><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.n_remaining_samples" title="skmultiflow.data.FileStream.n_remaining_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_remaining_samples</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.n_remaining_samples" title="skmultiflow.data.FileStream.n_remaining_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_remaining_samples</span></code></a>()</p></td>
 <td><p>Returns the estimated number of remaining samples.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.next_sample" title="skmultiflow.data.FileStream.next_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_sample</span></code></a>([batch_size])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.next_sample" title="skmultiflow.data.FileStream.next_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_sample</span></code></a>([batch_size])</p></td>
 <td><p>If there is enough instances to supply at least batch_size samples, those are returned.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.prepare_for_use" title="skmultiflow.data.FileStream.prepare_for_use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_for_use</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.prepare_for_use" title="skmultiflow.data.FileStream.prepare_for_use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_for_use</span></code></a>()</p></td>
 <td><p>Prepares the stream for use.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.reset" title="skmultiflow.data.FileStream.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.reset" title="skmultiflow.data.FileStream.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
 <td><p>Resets the estimator to its initial state.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.restart" title="skmultiflow.data.FileStream.restart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restart</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.restart" title="skmultiflow.data.FileStream.restart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restart</span></code></a>()</p></td>
 <td><p>Restarts the stream’s sample feeding, while keeping all of its parameters.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.set_params" title="skmultiflow.data.FileStream.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.set_params" title="skmultiflow.data.FileStream.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
 <td><p>Set the parameters of this estimator.</p></td>
 </tr>
 </tbody>
@@ -376,31 +379,31 @@ at a later time. This is done to correctly simulate the stream context.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.cat_features_idx" title="skmultiflow.data.FileStream.cat_features_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cat_features_idx</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.cat_features_idx" title="skmultiflow.data.FileStream.cat_features_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cat_features_idx</span></code></a></p></td>
 <td><p>Get the list of the categorical features index.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.feature_names" title="skmultiflow.data.FileStream.feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_names</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.feature_names" title="skmultiflow.data.FileStream.feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_names</span></code></a></p></td>
 <td><p>Retrieve the names of the features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.n_cat_features" title="skmultiflow.data.FileStream.n_cat_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cat_features</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.n_cat_features" title="skmultiflow.data.FileStream.n_cat_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cat_features</span></code></a></p></td>
 <td><p>Retrieve the number of integer features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.n_features" title="skmultiflow.data.FileStream.n_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.n_features" title="skmultiflow.data.FileStream.n_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features</span></code></a></p></td>
 <td><p>Retrieve the number of features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.n_num_features" title="skmultiflow.data.FileStream.n_num_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_num_features</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.n_num_features" title="skmultiflow.data.FileStream.n_num_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_num_features</span></code></a></p></td>
 <td><p>Retrieve the number of numerical features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.n_targets" title="skmultiflow.data.FileStream.n_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_targets</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.n_targets" title="skmultiflow.data.FileStream.n_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_targets</span></code></a></p></td>
 <td><p>Get the number of targets.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.target_idx" title="skmultiflow.data.FileStream.target_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_idx</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.target_idx" title="skmultiflow.data.FileStream.target_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_idx</span></code></a></p></td>
 <td><p>Get the number of the column where Y begins.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.target_names" title="skmultiflow.data.FileStream.target_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_names</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.target_names" title="skmultiflow.data.FileStream.target_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_names</span></code></a></p></td>
 <td><p>Retrieve the names of the targets</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.FileStream.target_values" title="skmultiflow.data.FileStream.target_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_values</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.FileStream.html#skmultiflow.data.FileStream.target_values" title="skmultiflow.data.FileStream.target_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_values</span></code></a></p></td>
 <td><p>Retrieve all target_values in the stream for each target.</p></td>
 </tr>
 </tbody>
@@ -414,7 +417,7 @@ at a later time. This is done to correctly simulate the stream context.</p>
 <dd class="field-odd"><p>List of categorical features index.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -428,14 +431,14 @@ at a later time. This is done to correctly simulate the stream context.</p>
 <dd class="field-odd"><p>names of the features</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.get_all_samples">
-<code class="sig-name descname">get_all_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_all_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_all_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_all_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns all the samples in the stream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -450,7 +453,7 @@ at a later time. This is done to correctly simulate the stream context.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.get_data_info">
-<code class="sig-name descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L307"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_data_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L307"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_data_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves minimum information from the stream</p>
 <p>Used by evaluator methods to id the stream.</p>
 <p>The default format is: ‘Stream name - n_targets, n_classes, n_features’.</p>
@@ -466,7 +469,7 @@ at a later time. This is done to correctly simulate the stream context.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.get_info">
-<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L322"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L322"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -480,7 +483,7 @@ at a later time. This is done to correctly simulate the stream context.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -498,7 +501,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.has_more_samples">
-<code class="sig-name descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L272"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.has_more_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L272"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.has_more_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if stream has more samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -512,7 +515,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.is_restartable">
-<code class="sig-name descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.is_restartable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.is_restartable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine if the stream is restartable.
 :returns: True if stream is restartable.
 :rtype: Boolean</p>
@@ -520,7 +523,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.last_sample">
-<code class="sig-name descname">last_sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.last_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">last_sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.last_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -528,7 +531,7 @@ contained subobjects that are estimators.</p>
 (batch_size, n_targets), representing the next batch_size samples.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or tuple list</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -542,7 +545,7 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The number of integer features in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -556,7 +559,7 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The total number of features.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -570,21 +573,21 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The number of numerical features in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.n_remaining_samples">
-<code class="sig-name descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L283"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L283"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the estimated number of remaining samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Remaining number of samples.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -598,33 +601,33 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The number of targets.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.next_sample">
-<code class="sig-name descname">next_sample</code><span class="sig-paren">(</span><em class="sig-param">batch_size=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.next_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">next_sample</code><span class="sig-paren">(</span><em class="sig-param">batch_size=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.next_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>If there is enough instances to supply at least batch_size samples, those
 are returned. If there aren’t a tuple of (None, None) is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of instances to return.</p>
+<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of instances to return.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Returns the next batch_size instances.
 For general purposes the return can be treated as a numpy.ndarray.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or tuple list</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.prepare_for_use">
-<code class="sig-name descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L169"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.prepare_for_use" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L169"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.prepare_for_use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the stream for use.</p>
 <p class="rubric">Notes</p>
 <p>This functions should always be called after the stream initialization.</p>
@@ -632,7 +635,7 @@ For general purposes the return can be treated as a numpy.ndarray.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the estimator to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -646,7 +649,7 @@ For general purposes the return can be treated as a numpy.ndarray.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.restart">
-<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/file_stream.py#L227"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.restart" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/file_stream.py#L227"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.restart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restarts the stream’s sample feeding, while keeping all of its
 parameters.</p>
 <p>It basically server the purpose of reinitializing the stream to
@@ -655,7 +658,7 @@ its initial state.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.FileStream.set_params">
-<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.FileStream.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -680,7 +683,7 @@ component of a nested object.</p>
 <dd class="field-odd"><p>The number of the column where Y begins.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -694,7 +697,7 @@ component of a nested object.</p>
 <dd class="field-odd"><p>the names of the targets in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -708,7 +711,7 @@ component of a nested object.</p>
 <dd class="field-odd"><p>list of lists of all target_values for each target</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>

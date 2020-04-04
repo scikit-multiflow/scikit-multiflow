@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -94,13 +94,16 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
@@ -264,7 +267,7 @@
 <h1>skmultiflow.drift_detection.PageHinkley<a class="headerlink" href="#skmultiflow-drift-detection-pagehinkley" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.drift_detection.PageHinkley">
-<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.drift_detection.</code><code class="sig-name descname">PageHinkley</code><span class="sig-paren">(</span><em class="sig-param">min_instances=30</em>, <em class="sig-param">delta=0.005</em>, <em class="sig-param">threshold=50</em>, <em class="sig-param">alpha=0.9999</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/drift_detection/page_hinkley.py#L4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.drift_detection.</code><code class="sig-name descname">PageHinkley</code><span class="sig-paren">(</span><em class="sig-param">min_instances=30</em>, <em class="sig-param">delta=0.005</em>, <em class="sig-param">threshold=50</em>, <em class="sig-param">alpha=0.9999</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/page_hinkley.py#L4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley" title="Permalink to this definition">¶</a></dt>
 <dd><p>Page-Hinkley method for concept drift detection.</p>
 <p class="rubric">Notes</p>
 <p>This change detection method works by computing the observed
@@ -283,18 +286,18 @@ Biometrika 41, 1/2 (1954), 100–115.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>min_instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=30</em><em>)</em>) – The minimum number of instances before detecting change.</p></li>
-<li><p><strong>delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>default=0.005</em><em>)</em>) – The delta factor for the Page Hinkley test.</p></li>
-<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=50</em><em>)</em>) – The change detection threshold (lambda).</p></li>
-<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>default=1 - 0.0001</em><em>)</em>) – The forgetting factor, used to weight the observed value
+<li><p><strong>min_instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=30</em><em>)</em>) – The minimum number of instances before detecting change.</p></li>
+<li><p><strong>delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> (</em><em>default=0.005</em><em>)</em>) – The delta factor for the Page Hinkley test.</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=50</em><em>)</em>) – The change detection threshold (lambda).</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> (</em><em>default=1 - 0.0001</em><em>)</em>) – The forgetting factor, used to weight the observed value
 and the mean.</p></li>
 </ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.drift_detection</span> <span class="k">import</span> <span class="n">PageHinkley</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.drift_detection</span> <span class="kn">import</span> <span class="n">PageHinkley</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ph</span> <span class="o">=</span> <span class="n">PageHinkley</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Simulating a data stream as a normal distribution of 1&#39;s and 0&#39;s</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data_stream</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
@@ -310,7 +313,7 @@ and the mean.</p></li>
 </div>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">min_instances=30</em>, <em class="sig-param">delta=0.005</em>, <em class="sig-param">threshold=50</em>, <em class="sig-param">alpha=0.9999</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/drift_detection/page_hinkley.py#L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">min_instances=30</em>, <em class="sig-param">delta=0.005</em>, <em class="sig-param">threshold=50</em>, <em class="sig-param">alpha=0.9999</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/page_hinkley.py#L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -321,31 +324,31 @@ and the mean.</p></li>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.__init__" title="skmultiflow.drift_detection.PageHinkley.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([min_instances, delta, threshold, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.__init__" title="skmultiflow.drift_detection.PageHinkley.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([min_instances, delta, threshold, …])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.add_element" title="skmultiflow.drift_detection.PageHinkley.add_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_element</span></code></a>(x)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.add_element" title="skmultiflow.drift_detection.PageHinkley.add_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_element</span></code></a>(x)</p></td>
 <td><p>Add a new element to the statistics</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.detected_change" title="skmultiflow.drift_detection.PageHinkley.detected_change"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detected_change</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.detected_change" title="skmultiflow.drift_detection.PageHinkley.detected_change"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detected_change</span></code></a>()</p></td>
 <td><p>This function returns whether concept drift was detected or not.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.detected_warning_zone" title="skmultiflow.drift_detection.PageHinkley.detected_warning_zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detected_warning_zone</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.detected_warning_zone" title="skmultiflow.drift_detection.PageHinkley.detected_warning_zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detected_warning_zone</span></code></a>()</p></td>
 <td><p>If the change detector supports the warning zone, this function will return whether it’s inside the warning zone or not.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.get_info" title="skmultiflow.drift_detection.PageHinkley.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.get_info" title="skmultiflow.drift_detection.PageHinkley.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
 <td><p>Collects and returns the information about the configuration of the estimator</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.get_length_estimation" title="skmultiflow.drift_detection.PageHinkley.get_length_estimation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_length_estimation</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.get_length_estimation" title="skmultiflow.drift_detection.PageHinkley.get_length_estimation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_length_estimation</span></code></a>()</p></td>
 <td><p>Returns the length estimation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.get_params" title="skmultiflow.drift_detection.PageHinkley.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.get_params" title="skmultiflow.drift_detection.PageHinkley.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
 <td><p>Get parameters for this estimator.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.reset" title="skmultiflow.drift_detection.PageHinkley.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.reset" title="skmultiflow.drift_detection.PageHinkley.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
 <td><p>Resets the change detector parameters.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.PageHinkley.set_params" title="skmultiflow.drift_detection.PageHinkley.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.PageHinkley.html#skmultiflow.drift_detection.PageHinkley.set_params" title="skmultiflow.drift_detection.PageHinkley.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
 <td><p>Set the parameters of this estimator.</p></td>
 </tr>
 </tbody>
@@ -364,7 +367,7 @@ and the mean.</p></li>
 </table>
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.add_element">
-<code class="sig-name descname">add_element</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/drift_detection/page_hinkley.py#L73"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.add_element" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_element</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/page_hinkley.py#L73"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.add_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new element to the statistics</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -380,21 +383,21 @@ if concept drift was detected and False otherwise.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.detected_change">
-<code class="sig-name descname">detected_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/drift_detection/base_drift_detector.py#L39"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.detected_change" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">detected_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/base_drift_detector.py#L39"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.detected_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns whether concept drift was detected or not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Whether concept drift was detected or not.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.detected_warning_zone">
-<code class="sig-name descname">detected_warning_zone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/drift_detection/base_drift_detector.py#L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.detected_warning_zone" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">detected_warning_zone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/base_drift_detector.py#L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.detected_warning_zone" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the change detector supports the warning zone, this function will return
 whether it’s inside the warning zone or not.</p>
 <dl class="field-list simple">
@@ -402,14 +405,14 @@ whether it’s inside the warning zone or not.</p>
 <dd class="field-odd"><p>Whether the change detector is in the warning zone or not.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.get_info">
-<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -423,21 +426,21 @@ whether it’s inside the warning zone or not.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.get_length_estimation">
-<code class="sig-name descname">get_length_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/drift_detection/base_drift_detector.py#L66"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.get_length_estimation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_length_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/base_drift_detector.py#L66"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.get_length_estimation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the length estimation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The length estimation</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -455,13 +458,13 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/drift_detection/page_hinkley.py#L62"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/page_hinkley.py#L62"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the change detector parameters.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.drift_detection.PageHinkley.set_params">
-<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.PageHinkley.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form

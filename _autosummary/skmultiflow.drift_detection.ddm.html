@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>skmultiflow.drift_detection.ddm &mdash; scikit-multiflow 0.2.0 documentation</title>
+  <title>skmultiflow.drift_detection.DDM &mdash; scikit-multiflow 0.4.1 documentation</title>
   
 
   
@@ -21,23 +21,23 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/skmultiflow.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="skmultiflow.drift_detection.eddm" href="skmultiflow.drift_detection.eddm.html" />
-    <link rel="prev" title="skmultiflow.drift_detection.adwin" href="skmultiflow.drift_detection.adwin.html" /> 
+    <link rel="next" title="skmultiflow.drift_detection.EDDM" href="skmultiflow.drift_detection.EDDM.html" />
+    <link rel="prev" title="skmultiflow.drift_detection.ADWIN" href="skmultiflow.drift_detection.ADWIN.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.4.1
               </div>
             
           
@@ -94,15 +94,19 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
@@ -129,31 +133,54 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../documentation.html">scikit-multiflow API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.core">Core: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.core</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.base.BaseEstimator.html">skmultiflow.core.base.BaseEstimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.BaseSKMObject.html">skmultiflow.core.BaseSKMObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.ClassifierMixin.html">skmultiflow.core.ClassifierMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.RegressorMixin.html">skmultiflow.core.RegressorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.MetaEstimatorMixin.html">skmultiflow.core.MetaEstimatorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.MultiOutputMixin.html">skmultiflow.core.MultiOutputMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.core.Pipeline.html">skmultiflow.core.Pipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.data">Data: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.base_stream.html">skmultiflow.data.base_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.data_stream.html">skmultiflow.data.data_stream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.file_stream.html">skmultiflow.data.file_stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.base_stream.Stream.html">skmultiflow.data.base_stream.Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.DataStream.html">skmultiflow.data.DataStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.data.FileStream.html">skmultiflow.data.FileStream</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#stream-generators">Stream Generators</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Tree methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.prototype">Prototype based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.rules">Rules based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#module-skmultiflow.trees">Trees based methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.adwin.html">skmultiflow.drift_detection.adwin</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">skmultiflow.drift_detection.ddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.eddm.html">skmultiflow.drift_detection.eddm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.page_hinkley.html">skmultiflow.drift_detection.page_hinkley</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.ADWIN.html">skmultiflow.drift_detection.ADWIN</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">skmultiflow.drift_detection.DDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.EDDM.html">skmultiflow.drift_detection.EDDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.drift_detection.PageHinkley.html">skmultiflow.drift_detection.PageHinkley</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.evaluate_holdout.html">skmultiflow.evaluation.evaluate_holdout</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.evaluate_prequential.html">skmultiflow.evaluation.evaluate_prequential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.EvaluateHoldout.html">skmultiflow.evaluation.EvaluateHoldout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.evaluation.EvaluatePrequential.html">skmultiflow.evaluation.EvaluatePrequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#module-skmultiflow.transform">Transform: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.transform</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.transform.MissingValuesCleaner.html">skmultiflow.transform.MissingValuesCleaner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skmultiflow.transform.OneHotToCategorical.html">skmultiflow.transform.OneHotToCategorical</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#misc">Misc:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#data-structure">Data structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../documentation.html#utilities">Utilities</a></li>
 </ul>
 </li>
 </ul>
@@ -163,6 +190,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's new (Changelog)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Other versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Previous versions</a></li>
 </ul>
 
             
@@ -210,14 +242,14 @@
         
           <li><a href="../documentation.html">API Documentation</a> &raquo;</li>
         
-      <li>skmultiflow.drift_detection.ddm</li>
+      <li>skmultiflow.drift_detection.DDM</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_autosummary/skmultiflow.drift_detection.ddm.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/_autosummary/skmultiflow.drift_detection.DDM.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -231,37 +263,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-skmultiflow.drift_detection.ddm">
-<span id="skmultiflow-drift-detection-ddm"></span><h1>skmultiflow.drift_detection.ddm<a class="headerlink" href="#module-skmultiflow.drift_detection.ddm" title="Permalink to this headline">¶</a></h1>
-<p class="rubric">Classes</p>
-<table class="longtable docutils align-center">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.drift_detection.ddm.DDM" title="skmultiflow.drift_detection.ddm.DDM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DDM</span></code></a>([min_num_instances, warning_level, …])</p></td>
-<td><p>DDM method for concept drift detection</p></td>
-</tr>
-</tbody>
-</table>
+  <div class="section" id="skmultiflow-drift-detection-ddm">
+<h1>skmultiflow.drift_detection.DDM<a class="headerlink" href="#skmultiflow-drift-detection-ddm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="skmultiflow.drift_detection.ddm.DDM">
-<em class="property">class </em><code class="descclassname">skmultiflow.drift_detection.ddm.</code><code class="descname">DDM</code><span class="sig-paren">(</span><em>min_num_instances=30</em>, <em>warning_level=2.0</em>, <em>out_control_level=3.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/drift_detection/ddm.html#DDM"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/ddm.py#L5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM" title="Permalink to this definition">¶</a></dt>
-<dd><p>DDM method for concept drift detection</p>
+<dt id="skmultiflow.drift_detection.DDM">
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.drift_detection.</code><code class="sig-name descname">DDM</code><span class="sig-paren">(</span><em class="sig-param">min_num_instances=30</em>, <em class="sig-param">warning_level=2.0</em>, <em class="sig-param">out_control_level=3.0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/ddm.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drift Detection Method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>min_num_instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=30</em><em>)</em>) – The minimum required number of analyzed samples so change can be
+<li><p><strong>min_num_instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=30</em><em>)</em>) – The minimum required number of analyzed samples so change can be
 detected. This is used to avoid false detections during the early
 moments of the detector, when the weight of one sample is important.</p></li>
-<li><p><strong>warning_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>default=2.0</em><em>)</em>) – Warning Level</p></li>
-<li><p><strong>out_control_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>default=3.0</em><em>)</em>) – Out-control Level</p></li>
+<li><p><strong>warning_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> (</em><em>default=2.0</em><em>)</em>) – Warning Level</p></li>
+<li><p><strong>out_control_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> (</em><em>default=3.0</em><em>)</em>) – Out-control Level</p></li>
 </ul>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>DDM (Drift Detection Method) <a class="reference internal" href="#r3f7537f14004-1" id="id1">[1]</a> is a concept change detection method
+<p>DDM (Drift Detection Method) <a class="footnote-reference brackets" href="#id2" id="id1">1</a> is a concept change detection method
 based on the PAC learning model premise, that the learner’s error rate
 will decrease as the number of analysed samples increase, as long as the
 data distribution is stationary.</p>
@@ -272,31 +292,31 @@ the warning zone.</p>
 <p>The detection threshold is calculated in function of two statistics,
 obtained when <cite>(pi + si)</cite> is minimum:</p>
 <ul class="simple">
-<li><p><cite>pmin</cite>: The minimum recorded error rate.</p></li>
-<li><p><cite>smin</cite>: The minimum recorded standard deviation.</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_{min}\)</span>: The minimum recorded error rate.</p></li>
+<li><p><cite>s_{min}</cite>: The minimum recorded standard deviation.</p></li>
 </ul>
-<p>At instant <cite>i</cite>, the detection algorithm uses:</p>
+<p>At instant <span class="math notranslate nohighlight">\(i\)</span>, the detection algorithm uses:</p>
 <ul class="simple">
-<li><p><cite>pi</cite>: The error rate at instant i.</p></li>
-<li><p><cite>si</cite>: The standard deviation at instant i.</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_i\)</span>: The error rate at instant i.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s_i\)</span>: The standard deviation at instant i.</p></li>
 </ul>
 <p>The conditions for entering the warning zone and detecting change are
 as follows:</p>
 <ul class="simple">
-<li><p>if <cite>pi + si &gt;= pmin + 2 * smin</cite> -&gt; Warning zone</p></li>
-<li><p>if <cite>pi + si &gt;= pmin + 3 * smin</cite> -&gt; Change detected</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(p_i + s_i \geq p_{min} + 2 * s_{min}\)</span> -&gt; Warning zone</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(p_i + s_i \geq p_{min} + 3 * s_{min}\)</span> -&gt; Change detected</p></li>
 </ul>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r3f7537f14004-1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>João Gama, Pedro Medas, Gladys Castillo, Pedro Pereira Rodrigues: Learning
 with Drift Detection. SBIA 2004: 286-295</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.drift_detection</span> <span class="k">import</span> <span class="n">DDM</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.drift_detection</span> <span class="kn">import</span> <span class="n">DDM</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ddm</span> <span class="o">=</span> <span class="n">DDM</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Simulating a data stream as a normal distribution of 1&#39;s and 0&#39;s</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data_stream</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
@@ -314,12 +334,66 @@ with Drift Detection. SBIA 2004: 286-295</p>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="skmultiflow.drift_detection.ddm.DDM.add_element">
-<code class="descname">add_element</code><span class="sig-paren">(</span><em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/drift_detection/ddm.html#DDM.add_element"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/ddm.py#L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM.add_element" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.drift_detection.DDM.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">min_num_instances=30</em>, <em class="sig-param">warning_level=2.0</em>, <em class="sig-param">out_control_level=3.0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/ddm.py#L78"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.__init__" title="skmultiflow.drift_detection.DDM.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([min_num_instances, warning_level, …])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.add_element" title="skmultiflow.drift_detection.DDM.add_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_element</span></code></a>(prediction)</p></td>
+<td><p>Add a new element to the statistics</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.detected_change" title="skmultiflow.drift_detection.DDM.detected_change"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detected_change</span></code></a>()</p></td>
+<td><p>This function returns whether concept drift was detected or not.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.detected_warning_zone" title="skmultiflow.drift_detection.DDM.detected_warning_zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detected_warning_zone</span></code></a>()</p></td>
+<td><p>If the change detector supports the warning zone, this function will return whether it’s inside the warning zone or not.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.get_info" title="skmultiflow.drift_detection.DDM.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<td><p>Collects and returns the information about the configuration of the estimator</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.get_length_estimation" title="skmultiflow.drift_detection.DDM.get_length_estimation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_length_estimation</span></code></a>()</p></td>
+<td><p>Returns the length estimation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.get_params" title="skmultiflow.drift_detection.DDM.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.reset" title="skmultiflow.drift_detection.DDM.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<td><p>Resets the change detector parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.drift_detection.DDM.html#skmultiflow.drift_detection.DDM.set_params" title="skmultiflow.drift_detection.DDM.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">estimator_type</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skmultiflow.drift_detection.DDM.add_element">
+<code class="sig-name descname">add_element</code><span class="sig-paren">(</span><em class="sig-param">prediction</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/ddm.py#L105"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.add_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new element to the statistics</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>prediction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>either 0</em><em> or </em><em>1</em><em>)</em>) – This parameter indicates whether the last sample analyzed was
+<dd class="field-odd"><p><strong>prediction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>either 0</em><em> or </em><em>1</em><em>)</em>) – This parameter indicates whether the last sample analyzed was
 correctly classified or not. 1 indicates an error (miss-classification).</p>
 </dd>
 </dl>
@@ -331,22 +405,22 @@ False otherwise.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.drift_detection.ddm.DDM.detected_change">
-<code class="descname">detected_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/base_drift_detector.py#L38"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM.detected_change" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.drift_detection.DDM.detected_change">
+<code class="sig-name descname">detected_change</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/base_drift_detector.py#L39"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.detected_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns whether concept drift was detected or not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Whether concept drift was detected or not.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.drift_detection.ddm.DDM.detected_warning_zone">
-<code class="descname">detected_warning_zone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/base_drift_detector.py#L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM.detected_warning_zone" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.drift_detection.DDM.detected_warning_zone">
+<code class="sig-name descname">detected_warning_zone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/base_drift_detector.py#L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.detected_warning_zone" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the change detector supports the warning zone, this function will return
 whether it’s inside the warning zone or not.</p>
 <dl class="field-list simple">
@@ -354,33 +428,18 @@ whether it’s inside the warning zone or not.</p>
 <dd class="field-odd"><p>Whether the change detector is in the warning zone or not.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.drift_detection.ddm.DDM.get_class_type">
-<code class="descname">get_class_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/base_drift_detector.py#L101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM.get_class_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>The class type is a string that identifies the type of object
-generated by that module.</p>
+<dt id="skmultiflow.drift_detection.DDM.get_info">
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>The class type</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="skmultiflow.drift_detection.ddm.DDM.get_info">
-<code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/drift_detection/ddm.html#DDM.get_info"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/ddm.py#L156"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM.get_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Collect information about the concept drift detector.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Configuration for the concept drift detector.</p>
+<dd class="field-odd"><p>Configuration of the estimator.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>string</p>
@@ -389,23 +448,59 @@ generated by that module.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.drift_detection.ddm.DDM.get_length_estimation">
-<code class="descname">get_length_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/base_drift_detector.py#L65"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM.get_length_estimation" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.drift_detection.DDM.get_length_estimation">
+<code class="sig-name descname">get_length_estimation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/base_drift_detector.py#L66"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.get_length_estimation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the length estimation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The length estimation</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="skmultiflow.drift_detection.ddm.DDM.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skmultiflow/drift_detection/ddm.html#DDM.reset"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/caef462/src/skmultiflow/drift_detection/ddm.py#L93"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.ddm.DDM.reset" title="Permalink to this definition">¶</a></dt>
+<dt id="skmultiflow.drift_detection.DDM.get_params">
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapping of string to any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.drift_detection.DDM.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/drift_detection/ddm.py#L91"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the change detector parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.drift_detection.DDM.set_params">
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.drift_detection.DDM.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as pipelines). The latter have parameters of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s possible to update each
+component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -420,10 +515,10 @@ generated by that module.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="skmultiflow.drift_detection.eddm.html" class="btn btn-neutral float-right" title="skmultiflow.drift_detection.eddm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="skmultiflow.drift_detection.EDDM.html" class="btn btn-neutral float-right" title="skmultiflow.drift_detection.EDDM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="skmultiflow.drift_detection.adwin.html" class="btn btn-neutral float-left" title="skmultiflow.drift_detection.adwin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="skmultiflow.drift_detection.ADWIN.html" class="btn btn-neutral float-left" title="skmultiflow.drift_detection.ADWIN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

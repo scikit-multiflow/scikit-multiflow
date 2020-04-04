@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -94,13 +94,16 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
@@ -264,29 +267,29 @@
 <h1>skmultiflow.meta.LeverageBagging<a class="headerlink" href="#skmultiflow-meta-leveragebagging" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.meta.LeverageBagging">
-<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.meta.</code><code class="sig-name descname">LeverageBagging</code><span class="sig-paren">(</span><em class="sig-param">base_estimator=KNN(leaf_size=30</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">n_neighbors=5</em>, <em class="sig-param">nominal_attributes=None)</em>, <em class="sig-param">n_estimators=10</em>, <em class="sig-param">w=6</em>, <em class="sig-param">delta=0.002</em>, <em class="sig-param">enable_code_matrix=False</em>, <em class="sig-param">leverage_algorithm='leveraging_bag'</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/leverage_bagging.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.meta.</code><code class="sig-name descname">LeverageBagging</code><span class="sig-paren">(</span><em class="sig-param">base_estimator=KNN(leaf_size=30</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">n_neighbors=5</em>, <em class="sig-param">nominal_attributes=None)</em>, <em class="sig-param">n_estimators=10</em>, <em class="sig-param">w=6</em>, <em class="sig-param">delta=0.002</em>, <em class="sig-param">enable_code_matrix=False</em>, <em class="sig-param">leverage_algorithm='leveraging_bag'</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/leverage_bagging.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Leverage Bagging ensemble classifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>base_estimator</strong> (<a class="reference internal" href="skmultiflow.core.BaseSKMObject.html#skmultiflow.core.BaseSKMObject" title="skmultiflow.core.BaseSKMObject"><em>skmultiflow.core.BaseSKMObject</em></a><em> or </em><em>sklearn.BaseEstimator</em><em> (</em><em>default=KNN</em><em>)</em>) – Each member of the ensemble is an instance of the base estimator.</p></li>
-<li><p><strong>n_estimators</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=10</em><em>)</em>) – The size of the ensemble, in other words, how many classifiers to train.</p></li>
-<li><p><strong>w</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>default=6</em><em>)</em>) – The poisson distribution’s parameter, which is used to simulate re-sampling.</p></li>
-<li><p><strong>delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>default=0.002</em><em>)</em>) – The delta parameter for the ADWIN change detector.</p></li>
-<li><p><strong>enable_code_matrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – If set, it will enable the output detection code matrix.</p></li>
+<li><p><strong>base_estimator</strong> (<a class="reference internal" href="../api/generated/skmultiflow.core.BaseSKMObject.html#skmultiflow.core.BaseSKMObject" title="skmultiflow.core.BaseSKMObject"><em>skmultiflow.core.BaseSKMObject</em></a><em> or </em><em>sklearn.BaseEstimator</em><em> (</em><em>default=KNN</em><em>)</em>) – Each member of the ensemble is an instance of the base estimator.</p></li>
+<li><p><strong>n_estimators</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=10</em><em>)</em>) – The size of the ensemble, in other words, how many classifiers to train.</p></li>
+<li><p><strong>w</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default=6</em><em>)</em>) – The poisson distribution’s parameter, which is used to simulate re-sampling.</p></li>
+<li><p><strong>delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> (</em><em>default=0.002</em><em>)</em>) – The delta parameter for the ADWIN change detector.</p></li>
+<li><p><strong>enable_code_matrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – If set, it will enable the output detection code matrix.</p></li>
 <li><p><strong>leverage_algorithm</strong> (<em>string</em><em> (</em><em>default='leveraging_bag'</em><em>)</em>) – <dl class="simple">
 <dt>The bagging algorithm to use. Can be one of the following: ‘leveraging_bag’,</dt><dd><p>’leveraging_bag_me’, ‘leveraging_bag_half’, ‘leveraging_bag_wt’, ‘leveraging_subag’</p>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
 If RandomState instance, random_state is the random number generator;
 If None, the random number generator is the RandomState instance used by <cite>np.random</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – A ValueError is raised if the ‘classes’ parameter is:</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – A ValueError is raised if the ‘classes’ parameter is:</p></li>
 <li><p><strong>not passed in the first partial_fit call.</strong> – </p></li>
 </ul>
 </dd>
@@ -318,10 +321,10 @@ no. 1, pp. 135–150.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.meta</span> <span class="k">import</span> <span class="n">LeverageBagging</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy</span> <span class="k">import</span> <span class="n">KNN</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data</span> <span class="k">import</span> <span class="n">SEAGenerator</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.meta</span> <span class="kn">import</span> <span class="n">LeverageBagging</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.lazy</span> <span class="kn">import</span> <span class="n">KNN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data</span> <span class="kn">import</span> <span class="n">SEAGenerator</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">SEAGenerator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_percentage</span><span class="o">=</span><span class="mf">6.7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
@@ -351,7 +354,7 @@ no. 1, pp. 135–150.</p>
 </div>
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">base_estimator=KNN(leaf_size=30</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">n_neighbors=5</em>, <em class="sig-param">nominal_attributes=None)</em>, <em class="sig-param">n_estimators=10</em>, <em class="sig-param">w=6</em>, <em class="sig-param">delta=0.002</em>, <em class="sig-param">enable_code_matrix=False</em>, <em class="sig-param">leverage_algorithm='leveraging_bag'</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/leverage_bagging.py#L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">base_estimator=KNN(leaf_size=30</em>, <em class="sig-param">max_window_size=1000</em>, <em class="sig-param">n_neighbors=5</em>, <em class="sig-param">nominal_attributes=None)</em>, <em class="sig-param">n_estimators=10</em>, <em class="sig-param">w=6</em>, <em class="sig-param">delta=0.002</em>, <em class="sig-param">enable_code_matrix=False</em>, <em class="sig-param">leverage_algorithm='leveraging_bag'</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/leverage_bagging.py#L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -411,7 +414,7 @@ no. 1, pp. 135–150.</p>
 </table>
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L372"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -433,7 +436,7 @@ no. 1, pp. 135–150.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.get_info">
-<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -447,7 +450,7 @@ no. 1, pp. 135–150.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -465,7 +468,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.partial_fit">
-<code class="sig-name descname">partial_fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/leverage_bagging.py#L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.partial_fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">partial_fit</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/leverage_bagging.py#L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.partial_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partially (incrementally) fit the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -478,7 +481,7 @@ contained subobjects that are estimators.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – A ValueError is raised if the ‘classes’ parameter is not:</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – A ValueError is raised if the ‘classes’ parameter is not:</p></li>
 <li><p><strong>passed in the first partial_fit call</strong><strong>, or </strong><strong>if they are passed in further</strong> – </p></li>
 <li><p><strong>calls but differ from the initial classes list passed.</strong> – </p></li>
 </ul>
@@ -494,7 +497,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/leverage_bagging.py#L292"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/leverage_bagging.py#L292"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict classes for the passed data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -511,7 +514,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.predict_binary_proba">
-<code class="sig-name descname">predict_binary_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/leverage_bagging.py#L379"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.predict_binary_proba" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_binary_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/leverage_bagging.py#L379"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.predict_binary_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the probability of each sample belonging to each coded label.</p>
 <p>This will only be used if matrix codes are enabled.
 Otherwise the method will use the normal predict_proba function.</p>
@@ -527,14 +530,14 @@ the probability that the i-th sample of X belongs to a certain
 label.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.predict_proba">
-<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/leverage_bagging.py#L315"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param">X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/leverage_bagging.py#L315"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimates the probability of each sample in X belonging to each of the class-labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -542,7 +545,7 @@ label.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – A ValueError is raised if the number of classes in the base:</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – A ValueError is raised if the number of classes in the base:</p></li>
 <li><p><strong>learner exceed that of the ensemble learner.</strong> – </p></li>
 </ul>
 </dd>
@@ -564,7 +567,7 @@ then taking the absolute probability from the ensemble itself.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/meta/leverage_bagging.py#L437"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/meta/leverage_bagging.py#L437"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets all the estimators, as well as all the ADWIN change detectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -578,7 +581,7 @@ then taking the absolute probability from the ensemble itself.</p>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.score">
-<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">y</em>, <em class="sig-param">sample_weight=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mean accuracy on the given test data and labels.</p>
 <p>In multi-label classification, this is the subset accuracy
 which is a harsh metric since you require for each sample that
@@ -595,14 +598,14 @@ each label set be correctly predicted.</p>
 <dd class="field-even"><p><strong>score</strong> – Mean accuracy of self.predict(X) wrt. y.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.meta.LeverageBagging.set_params">
-<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.meta.LeverageBagging.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form

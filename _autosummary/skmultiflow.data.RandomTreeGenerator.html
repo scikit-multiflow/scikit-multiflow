@@ -21,11 +21,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -94,13 +94,16 @@
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../package_map.html">Package map</a></li>
@@ -264,7 +267,7 @@
 <h1>skmultiflow.data.RandomTreeGenerator<a class="headerlink" href="#skmultiflow-data-randomtreegenerator" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="skmultiflow.data.RandomTreeGenerator">
-<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.data.</code><code class="sig-name descname">RandomTreeGenerator</code><span class="sig-paren">(</span><em class="sig-param">tree_random_state=None</em>, <em class="sig-param">sample_random_state=None</em>, <em class="sig-param">n_classes=2</em>, <em class="sig-param">n_cat_features=5</em>, <em class="sig-param">n_num_features=5</em>, <em class="sig-param">n_categories_per_cat_feature=5</em>, <em class="sig-param">max_tree_depth=5</em>, <em class="sig-param">min_leaf_depth=3</em>, <em class="sig-param">fraction_leaves_per_level=0.15</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/random_tree_generator.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.data.</code><code class="sig-name descname">RandomTreeGenerator</code><span class="sig-paren">(</span><em class="sig-param">tree_random_state=None</em>, <em class="sig-param">sample_random_state=None</em>, <em class="sig-param">n_classes=2</em>, <em class="sig-param">n_cat_features=5</em>, <em class="sig-param">n_num_features=5</em>, <em class="sig-param">n_categories_per_cat_feature=5</em>, <em class="sig-param">max_tree_depth=5</em>, <em class="sig-param">min_leaf_depth=3</em>, <em class="sig-param">fraction_leaves_per_level=0.15</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/random_tree_generator.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Random Tree stream generator.</p>
 <p>This generator is built based on its description in Domingo and Hulten’s
 ‘Knowledge Discovery and Data Mining’. The generator is based on a random
@@ -277,22 +280,22 @@ structure, in theory, it should favour decision tree learners.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tree_random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: None</em><em>)</em>) – Seed for random generation of tree.</p></li>
-<li><p><strong>sample_random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: None</em><em>)</em>) – Seed for random generation of instances.</p></li>
-<li><p><strong>n_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: 2</em><em>)</em>) – The number of classes to generate.</p></li>
-<li><p><strong>n_cat_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The number of categorical features to generate. Categorical features are binary encoded, the actual number of
+<li><p><strong>tree_random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: None</em><em>)</em>) – Seed for random generation of tree.</p></li>
+<li><p><strong>sample_random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: None</em><em>)</em>) – Seed for random generation of instances.</p></li>
+<li><p><strong>n_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: 2</em><em>)</em>) – The number of classes to generate.</p></li>
+<li><p><strong>n_cat_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The number of categorical features to generate. Categorical features are binary encoded, the actual number of
 categorical features is <cite>n_cat_features`x`n_categories_per_cat_feature</cite></p></li>
-<li><p><strong>n_num_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The number of numerical features to generate.</p></li>
-<li><p><strong>n_categories_per_cat_feature</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The number of values to generate per categorical feature.</p></li>
-<li><p><strong>max_tree_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The maximum depth of the tree concept.</p></li>
-<li><p><strong>min_leaf_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> (</em><em>Default: 3</em><em>)</em>) – The first level of the tree above MaxTreeDepth that can have leaves.</p></li>
-<li><p><strong>fraction_leaves_per_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> (</em><em>Default: 0.15</em><em>)</em>) – The fraction of leaves per level from min_leaf_depth onwards.</p></li>
+<li><p><strong>n_num_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The number of numerical features to generate.</p></li>
+<li><p><strong>n_categories_per_cat_feature</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The number of values to generate per categorical feature.</p></li>
+<li><p><strong>max_tree_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: 5</em><em>)</em>) – The maximum depth of the tree concept.</p></li>
+<li><p><strong>min_leaf_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>Default: 3</em><em>)</em>) – The first level of the tree above MaxTreeDepth that can have leaves.</p></li>
+<li><p><strong>fraction_leaves_per_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em> (</em><em>Default: 0.15</em><em>)</em>) – The fraction of leaves per level from min_leaf_depth onwards.</p></li>
 </ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.random_tree_generator</span> <span class="k">import</span> <span class="n">RandomTreeGenerator</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.random_tree_generator</span> <span class="kn">import</span> <span class="n">RandomTreeGenerator</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">RandomTreeGenerator</span><span class="p">(</span><span class="n">tree_random_state</span><span class="o">=</span><span class="mi">8873</span><span class="p">,</span> <span class="n">sample_random_seed</span><span class="o">=</span><span class="mi">69</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_cat_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="gp">... </span><span class="n">n_num_features</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_categories_per_cat_feature</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_tree_depth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">min_leaf_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -345,7 +348,7 @@ categorical features is <cite>n_cat_features`x`n_categories_per_cat_feature</cit
 </div>
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">tree_random_state=None</em>, <em class="sig-param">sample_random_state=None</em>, <em class="sig-param">n_classes=2</em>, <em class="sig-param">n_cat_features=5</em>, <em class="sig-param">n_num_features=5</em>, <em class="sig-param">n_categories_per_cat_feature=5</em>, <em class="sig-param">max_tree_depth=5</em>, <em class="sig-param">min_leaf_depth=3</em>, <em class="sig-param">fraction_leaves_per_level=0.15</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/random_tree_generator.py#L105"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">tree_random_state=None</em>, <em class="sig-param">sample_random_state=None</em>, <em class="sig-param">n_classes=2</em>, <em class="sig-param">n_cat_features=5</em>, <em class="sig-param">n_num_features=5</em>, <em class="sig-param">n_categories_per_cat_feature=5</em>, <em class="sig-param">max_tree_depth=5</em>, <em class="sig-param">min_leaf_depth=3</em>, <em class="sig-param">fraction_leaves_per_level=0.15</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/random_tree_generator.py#L105"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -356,52 +359,52 @@ categorical features is <cite>n_cat_features`x`n_categories_per_cat_feature</cit
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.__init__" title="skmultiflow.data.RandomTreeGenerator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([tree_random_state, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.__init__" title="skmultiflow.data.RandomTreeGenerator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([tree_random_state, …])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.classify_instance" title="skmultiflow.data.RandomTreeGenerator.classify_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classify_instance</span></code></a>(node, att_values)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.classify_instance" title="skmultiflow.data.RandomTreeGenerator.classify_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classify_instance</span></code></a>(node, att_values)</p></td>
 <td><p>After a sample is generated it passes through this function, which advances the tree structure until it finds a leaf node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.generate_random_tree" title="skmultiflow.data.RandomTreeGenerator.generate_random_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_random_tree</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.generate_random_tree" title="skmultiflow.data.RandomTreeGenerator.generate_random_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_random_tree</span></code></a>()</p></td>
 <td><p>Generates the random tree, starting from the root node and following the constraints passed as parameters to the initializer.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.generate_random_tree_node" title="skmultiflow.data.RandomTreeGenerator.generate_random_tree_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_random_tree_node</span></code></a>(current_depth, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.generate_random_tree_node" title="skmultiflow.data.RandomTreeGenerator.generate_random_tree_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_random_tree_node</span></code></a>(current_depth, …)</p></td>
 <td><p>Creates a node, choosing at random the splitting feature and the split value.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.get_data_info" title="skmultiflow.data.RandomTreeGenerator.get_data_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_info</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.get_data_info" title="skmultiflow.data.RandomTreeGenerator.get_data_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_info</span></code></a>()</p></td>
 <td><p>Retrieves minimum information from the stream</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.get_info" title="skmultiflow.data.RandomTreeGenerator.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.get_info" title="skmultiflow.data.RandomTreeGenerator.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
 <td><p>Collects and returns the information about the configuration of the estimator</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.get_params" title="skmultiflow.data.RandomTreeGenerator.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.get_params" title="skmultiflow.data.RandomTreeGenerator.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
 <td><p>Get parameters for this estimator.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.has_more_samples" title="skmultiflow.data.RandomTreeGenerator.has_more_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_more_samples</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.has_more_samples" title="skmultiflow.data.RandomTreeGenerator.has_more_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_more_samples</span></code></a>()</p></td>
 <td><p>Checks if stream has more samples.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.is_restartable" title="skmultiflow.data.RandomTreeGenerator.is_restartable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_restartable</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.is_restartable" title="skmultiflow.data.RandomTreeGenerator.is_restartable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_restartable</span></code></a>()</p></td>
 <td><p>Determine if the stream is restartable.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.last_sample" title="skmultiflow.data.RandomTreeGenerator.last_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_sample</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.last_sample" title="skmultiflow.data.RandomTreeGenerator.last_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_sample</span></code></a>()</p></td>
 <td><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.n_remaining_samples" title="skmultiflow.data.RandomTreeGenerator.n_remaining_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_remaining_samples</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.n_remaining_samples" title="skmultiflow.data.RandomTreeGenerator.n_remaining_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_remaining_samples</span></code></a>()</p></td>
 <td><p>Returns the estimated number of remaining samples.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.next_sample" title="skmultiflow.data.RandomTreeGenerator.next_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_sample</span></code></a>([batch_size])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.next_sample" title="skmultiflow.data.RandomTreeGenerator.next_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_sample</span></code></a>([batch_size])</p></td>
 <td><p>Randomly generates attributes values, and then classify each instance generated.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.prepare_for_use" title="skmultiflow.data.RandomTreeGenerator.prepare_for_use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_for_use</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.prepare_for_use" title="skmultiflow.data.RandomTreeGenerator.prepare_for_use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_for_use</span></code></a>()</p></td>
 <td><p>Prepares the stream for use.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.reset" title="skmultiflow.data.RandomTreeGenerator.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.reset" title="skmultiflow.data.RandomTreeGenerator.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
 <td><p>Resets the estimator to its initial state.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.restart" title="skmultiflow.data.RandomTreeGenerator.restart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restart</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.restart" title="skmultiflow.data.RandomTreeGenerator.restart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restart</span></code></a>()</p></td>
 <td><p>Restart the stream.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.set_params" title="skmultiflow.data.RandomTreeGenerator.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.set_params" title="skmultiflow.data.RandomTreeGenerator.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
 <td><p>Set the parameters of this estimator.</p></td>
 </tr>
 </tbody>
@@ -413,32 +416,32 @@ categorical features is <cite>n_cat_features`x`n_categories_per_cat_feature</cit
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.feature_names" title="skmultiflow.data.RandomTreeGenerator.feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_names</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.feature_names" title="skmultiflow.data.RandomTreeGenerator.feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_names</span></code></a></p></td>
 <td><p>Retrieve the names of the features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.n_cat_features" title="skmultiflow.data.RandomTreeGenerator.n_cat_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cat_features</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.n_cat_features" title="skmultiflow.data.RandomTreeGenerator.n_cat_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cat_features</span></code></a></p></td>
 <td><p>Retrieve the number of integer features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.n_features" title="skmultiflow.data.RandomTreeGenerator.n_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.n_features" title="skmultiflow.data.RandomTreeGenerator.n_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features</span></code></a></p></td>
 <td><p>Retrieve the number of features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.n_num_features" title="skmultiflow.data.RandomTreeGenerator.n_num_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_num_features</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.n_num_features" title="skmultiflow.data.RandomTreeGenerator.n_num_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_num_features</span></code></a></p></td>
 <td><p>Retrieve the number of numerical features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.n_targets" title="skmultiflow.data.RandomTreeGenerator.n_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_targets</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.n_targets" title="skmultiflow.data.RandomTreeGenerator.n_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_targets</span></code></a></p></td>
 <td><p>Retrieve the number of targets</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.target_names" title="skmultiflow.data.RandomTreeGenerator.target_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_names</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.target_names" title="skmultiflow.data.RandomTreeGenerator.target_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_names</span></code></a></p></td>
 <td><p>Retrieve the names of the targets</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.RandomTreeGenerator.target_values" title="skmultiflow.data.RandomTreeGenerator.target_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_values</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/generated/skmultiflow.data.RandomTreeGenerator.html#skmultiflow.data.RandomTreeGenerator.target_values" title="skmultiflow.data.RandomTreeGenerator.target_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_values</span></code></a></p></td>
 <td><p>Retrieve all target_values in the stream for each target.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.classify_instance">
-<code class="sig-name descname">classify_instance</code><span class="sig-paren">(</span><em class="sig-param">node</em>, <em class="sig-param">att_values</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/random_tree_generator.py#L261"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.classify_instance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">classify_instance</code><span class="sig-paren">(</span><em class="sig-param">node</em>, <em class="sig-param">att_values</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/random_tree_generator.py#L261"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.classify_instance" title="Permalink to this definition">¶</a></dt>
 <dd><p>After a sample is generated it passes through this function, which
 advances the tree structure until it finds a leaf node.</p>
 <dl class="field-list simple">
@@ -455,7 +458,7 @@ will continue to advance in the structure.</p></li>
 for the batch_size samples that were requested.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or tuple list</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -469,14 +472,14 @@ for the batch_size samples that were requested.</p>
 <dd class="field-odd"><p>names of the features</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.generate_random_tree">
-<code class="sig-name descname">generate_random_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/random_tree_generator.py#L147"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.generate_random_tree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">generate_random_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/random_tree_generator.py#L147"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.generate_random_tree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the random tree, starting from the root node and following
 the constraints passed as parameters to the initializer.</p>
 <p>The tree is recursively generated, node by node, until it reaches the
@@ -485,7 +488,7 @@ maximum tree depth.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.generate_random_tree_node">
-<code class="sig-name descname">generate_random_tree_node</code><span class="sig-paren">(</span><em class="sig-param">current_depth</em>, <em class="sig-param">nominal_att_candidates</em>, <em class="sig-param">min_numeric_value</em>, <em class="sig-param">max_numeric_value</em>, <em class="sig-param">random_state</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/random_tree_generator.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.generate_random_tree_node" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">generate_random_tree_node</code><span class="sig-paren">(</span><em class="sig-param">current_depth</em>, <em class="sig-param">nominal_att_candidates</em>, <em class="sig-param">min_numeric_value</em>, <em class="sig-param">max_numeric_value</em>, <em class="sig-param">random_state</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/random_tree_generator.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.generate_random_tree_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a node, choosing at random the splitting feature and the
 split value. Fill the features with random feature values, and then
 recursively generates its children. If the split feature is a
@@ -501,7 +504,7 @@ maximum depth, a leaf node is immediately returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>current_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The current tree depth.</p></li>
+<li><p><strong>current_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The current tree depth.</p></li>
 <li><p><strong>nominal_att_candidates</strong> (<em>array</em>) – A list containing all the, still not chosen for the split,
 nominal attributes.</p></li>
 <li><p><strong>min_numeric_value</strong> (<em>array</em>) – The minimum value reachable, at this branch of the
@@ -526,7 +529,7 @@ as it would have no use for that split.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.get_data_info">
-<code class="sig-name descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L263"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.get_data_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L263"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.get_data_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves minimum information from the stream</p>
 <p>Used by evaluator methods to id the stream.</p>
 <p>The default format is: ‘Stream name - n_targets, n_classes, n_features’.</p>
@@ -542,7 +545,7 @@ as it would have no use for that split.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.get_info">
-<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.get_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.get_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects and returns the information about the configuration of the estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -556,7 +559,7 @@ as it would have no use for that split.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -574,7 +577,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.has_more_samples">
-<code class="sig-name descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.has_more_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.has_more_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if stream has more samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -588,7 +591,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.is_restartable">
-<code class="sig-name descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.is_restartable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.is_restartable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine if the stream is restartable.
 :returns: True if stream is restartable.
 :rtype: Boolean</p>
@@ -596,7 +599,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.last_sample">
-<code class="sig-name descname">last_sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.last_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">last_sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.last_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -604,7 +607,7 @@ contained subobjects that are estimators.</p>
 (batch_size, n_targets), representing the next batch_size samples.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or tuple list</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -618,7 +621,7 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The number of integer features in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -632,7 +635,7 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The total number of features.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -646,21 +649,21 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>The number of numerical features in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.n_remaining_samples">
-<code class="sig-name descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the estimated number of remaining samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Remaining number of samples. -1 if infinite (e.g. generator)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -674,33 +677,33 @@ contained subobjects that are estimators.</p>
 <dd class="field-odd"><p>the number of targets in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.next_sample">
-<code class="sig-name descname">next_sample</code><span class="sig-paren">(</span><em class="sig-param">batch_size=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/random_tree_generator.py#L326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.next_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">next_sample</code><span class="sig-paren">(</span><em class="sig-param">batch_size=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/random_tree_generator.py#L326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.next_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Randomly generates attributes values, and then classify each instance
 generated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of samples to return.</p>
+<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of samples to return.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Return a tuple with the features matrix and the labels matrix for the
 batch_size samples that were requested.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a> or tuple list</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.prepare_for_use">
-<code class="sig-name descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/random_tree_generator.py#L134"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.prepare_for_use" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/random_tree_generator.py#L134"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.prepare_for_use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the stream for use.</p>
 <p class="rubric">Notes</p>
 <p>This functions should always be called after the stream initialization.</p>
@@ -708,7 +711,7 @@ batch_size samples that were requested.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the estimator to its initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -722,13 +725,13 @@ batch_size samples that were requested.</p>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.restart">
-<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/data/base_stream.py#L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.restart" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.restart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restart the stream.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="skmultiflow.data.RandomTreeGenerator.set_params">
-<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/3e4bc68/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.RandomTreeGenerator.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -753,7 +756,7 @@ component of a nested object.</p>
 <dd class="field-odd"><p>the names of the targets in the stream.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -767,7 +770,7 @@ component of a nested object.</p>
 <dd class="field-odd"><p>list of lists of all target_values for each target</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,0 +1,781 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>skmultiflow.data.MIXEDGenerator &mdash; scikit-multiflow 0.4.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/skmultiflow.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> scikit-multiflow
+          
+
+          
+            
+            <img src="../../_static/skmultiflow-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference external" href="https://scikit-multiflow.github.io/">Webpage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#dependencies">Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#option-1-install-from-source-code">Option 1. Install from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#option-2-install-from-pypi">Option 2. Install from PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#option-3-install-from-conda-forge">Option 3. Install from conda-forge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#option-4-install-with-docker">Option 4. Install with Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#option-5-development-version">Option 5. Development version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#matplotlib-backend-considerations">matplotlib backend considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../package_map.html">Package map</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user-guide.core-concepts.html">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide.core-concepts.architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide.core-concepts.stream-class.html">Stream class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user-guide.quick-start.html">Quick-Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide.quick-start.html#train-and-test-a-stream-classification-model-in-scikit-multiflow">Train and test a stream classification model in <code class="docutils literal notranslate"><span class="pre">scikit-multiflow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide.quick-start.html#load-data-from-a-file-as-a-stream-and-save-test-results-into-a-file">Load data from a file as a stream and save test results into a file.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user-guide.quick-start-docker.html">Quick-Start Guide with Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide.quick-start-docker.html#run-hello-world-example">Run Hello World example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide.quick-start-docker.html#write-your-code-and-run-it-in-scikit-multiflow-container">Write your code and run it in scikit-multiflow container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user-guide.streams-intro.html">Using Streams in scikit-multiflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide.streams-intro.html#stream-generators">Stream generators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../documentation.html">scikit-multiflow API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#module-skmultiflow.core">Core: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.core</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.core.base.BaseEstimator.html">skmultiflow.core.base.BaseEstimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.core.BaseSKMObject.html">skmultiflow.core.BaseSKMObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.core.ClassifierMixin.html">skmultiflow.core.ClassifierMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.core.RegressorMixin.html">skmultiflow.core.RegressorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.core.MetaEstimatorMixin.html">skmultiflow.core.MetaEstimatorMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.core.MultiOutputMixin.html">skmultiflow.core.MultiOutputMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.core.Pipeline.html">skmultiflow.core.Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#module-skmultiflow.data">Data: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.data</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.data.base_stream.Stream.html">skmultiflow.data.base_stream.Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.data.DataStream.html">skmultiflow.data.DataStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.data.FileStream.html">skmultiflow.data.FileStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#stream-generators">Stream Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#learning-methods">Learning methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.anomaly_detection">Anomaly detection methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.bayes">Bayes methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.lazy">Lazy learning methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.meta">Ensemble methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.neural_networks">Neural Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.prototype">Prototype based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.rules">Rules based methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#module-skmultiflow.trees">Trees based methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#module-skmultiflow.drift_detection">Drift Detection: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.drift_detection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.drift_detection.ADWIN.html">skmultiflow.drift_detection.ADWIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.drift_detection.DDM.html">skmultiflow.drift_detection.DDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.drift_detection.EDDM.html">skmultiflow.drift_detection.EDDM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.drift_detection.PageHinkley.html">skmultiflow.drift_detection.PageHinkley</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#module-skmultiflow.evaluation">Evaluation: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.evaluation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.evaluation.EvaluateHoldout.html">skmultiflow.evaluation.EvaluateHoldout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.evaluation.EvaluatePrequential.html">skmultiflow.evaluation.EvaluatePrequential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#module-skmultiflow.transform">Transform: <code class="xref py py-mod docutils literal notranslate"><span class="pre">skmultiflow.transform</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.transform.MissingValuesCleaner.html">skmultiflow.transform.MissingValuesCleaner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/skmultiflow.transform.OneHotToCategorical.html">skmultiflow.transform.OneHotToCategorical</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#misc">Misc:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#data-structure">Data structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../documentation.html#utilities">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow">Github Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's new (Changelog)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Other versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../versions.html">Previous versions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scikit-multiflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>skmultiflow.data.MIXEDGenerator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/scikit-multiflow/scikit-multiflow/blob/master/docs/api/generated/skmultiflow.data.MIXEDGenerator.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="skmultiflow-data-mixedgenerator">
+<h1>skmultiflow.data.MIXEDGenerator<a class="headerlink" href="#skmultiflow-data-mixedgenerator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="skmultiflow.data.MIXEDGenerator">
+<em class="property">class </em><code class="sig-prename descclassname">skmultiflow.data.</code><code class="sig-name descname">MIXEDGenerator</code><span class="sig-paren">(</span><em class="sig-param">classification_function=0</em>, <em class="sig-param">random_state=None</em>, <em class="sig-param">balance_classes=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/mixed_generator.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixed data stream generator.</p>
+<p>This generator is an implementation of a data stream with abrupt concept drift and boolean noise-free examples
+as described in Gama, João, et al <a class="footnote-reference brackets" href="#id2" id="id1">1</a>.</p>
+<p>It has four relevant attributes, two boolean attributes <span class="math notranslate nohighlight">\(v, w\)</span> and two numeric attributes <span class="math notranslate nohighlight">\(x, y\)</span>
+uniformly distributed from 0 to 1. The examples are labaled depending on the classification function chosen
+from below.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>function 0:</dt><dd><p>if <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(w\)</span> are true or <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(z\)</span> are true or <span class="math notranslate nohighlight">\(w\)</span> and <span class="math notranslate nohighlight">\(z\)</span> are
+true then 0 else 1, where <span class="math notranslate nohighlight">\(z\)</span> is <span class="math notranslate nohighlight">\(y &lt; 0.5 + 0.3 sin(3 \pi  x)\)</span></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>function 1:</dt><dd><p>The opposite of function 0.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Concept drift can be introduced by changing the classification function.
+This can be done manually or using <code class="docutils literal notranslate"><span class="pre">ConceptDriftStream</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classification_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> (</em><em>default: 0</em><em>)</em>) – Which of the four classification functions to use for the generation.
+The value can vary from 0 to 1.</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If int, random_state is the seed used by the random number generator;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <cite>np.random</cite>.</p></li>
+<li><p><strong>balance_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em> (</em><em>Default: False</em><em>)</em>) – Whether to balance classes or not. If balanced, the class distribution
+will converge to a uniform distribution.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Gama, Joao, et al. “Learning with drift detection.” Advances in
+artificial intelligence–SBIA 2004. Springer Berlin Heidelberg,
+2004. 286-295”</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Imports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skmultiflow.data.mixed_generator</span> <span class="kn">import</span> <span class="n">MIXEDGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setting up the stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">MIXEDGenerator</span><span class="p">(</span><span class="n">classification_function</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span> <span class="mi">112</span><span class="p">,</span> <span class="n">balance_classes</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">prepare_for_use</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Retrieving one sample</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">()</span>
+<span class="go">(array([[0.        , 1.        , 0.95001658, 0.0756772 ]]), array([1.]))</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">next_sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">(array([[1.        , 1.        , 0.05480574, 0.81767738],</span>
+<span class="go">       [1.        , 1.        , 0.00255603, 0.98119928],</span>
+<span class="go">       [0.        , 0.        , 0.39464259, 0.00494492],</span>
+<span class="go">       [1.        , 1.        , 0.82060937, 0.344983  ],</span>
+<span class="go">       [0.        , 1.        , 0.08623151, 0.54607394],</span>
+<span class="go">       [0.        , 0.        , 0.04500817, 0.33218776],</span>
+<span class="go">       [1.        , 1.        , 0.70936161, 0.18840112],</span>
+<span class="go">       [1.        , 0.        , 0.50315448, 0.76353033],</span>
+<span class="go">       [1.        , 1.        , 0.21415209, 0.76309258],</span>
+<span class="go">       [0.        , 1.        , 0.42563042, 0.23435109]]), array([1., 1., 0., 1., 1., 0., 1., 0., 1., 1.]))</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">n_remaining_samples</span><span class="p">()</span>
+<span class="go">-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">has_more_samples</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">classification_function=0</em>, <em class="sig-param">random_state=None</em>, <em class="sig-param">balance_classes=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/mixed_generator.py#L77"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.__init__" title="skmultiflow.data.MIXEDGenerator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([classification_function, …])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.generate_drift" title="skmultiflow.data.MIXEDGenerator.generate_drift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_drift</span></code></a>()</p></td>
+<td><p>Generate drift by switching the classification function randomly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.get_data_info" title="skmultiflow.data.MIXEDGenerator.get_data_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_info</span></code></a>()</p></td>
+<td><p>Retrieves minimum information from the stream</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.get_info" title="skmultiflow.data.MIXEDGenerator.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<td><p>Collects and returns the information about the configuration of the estimator</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.get_params" title="skmultiflow.data.MIXEDGenerator.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.has_more_samples" title="skmultiflow.data.MIXEDGenerator.has_more_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_more_samples</span></code></a>()</p></td>
+<td><p>Checks if stream has more samples.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.is_restartable" title="skmultiflow.data.MIXEDGenerator.is_restartable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_restartable</span></code></a>()</p></td>
+<td><p>Determine if the stream is restartable.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.last_sample" title="skmultiflow.data.MIXEDGenerator.last_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_sample</span></code></a>()</p></td>
+<td><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.n_remaining_samples" title="skmultiflow.data.MIXEDGenerator.n_remaining_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_remaining_samples</span></code></a>()</p></td>
+<td><p>Returns the estimated number of remaining samples.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.next_sample" title="skmultiflow.data.MIXEDGenerator.next_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_sample</span></code></a>([batch_size])</p></td>
+<td><p>The sample generation works as follows: The two numeric attributes are generated with the random  generator, initialized with the seed passed by the user.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.prepare_for_use" title="skmultiflow.data.MIXEDGenerator.prepare_for_use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_for_use</span></code></a>()</p></td>
+<td><p>Prepares the stream for use.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.reset" title="skmultiflow.data.MIXEDGenerator.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>()</p></td>
+<td><p>Resets the estimator to its initial state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.restart" title="skmultiflow.data.MIXEDGenerator.restart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restart</span></code></a>()</p></td>
+<td><p>Restart the stream.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.set_params" title="skmultiflow.data.MIXEDGenerator.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.balance_classes" title="skmultiflow.data.MIXEDGenerator.balance_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">balance_classes</span></code></a></p></td>
+<td><p>Balance classes</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.classification_function" title="skmultiflow.data.MIXEDGenerator.classification_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classification_function</span></code></a></p></td>
+<td><p>Retrieve the index of the current classification function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.feature_names" title="skmultiflow.data.MIXEDGenerator.feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_names</span></code></a></p></td>
+<td><p>Retrieve the names of the features.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.n_cat_features" title="skmultiflow.data.MIXEDGenerator.n_cat_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cat_features</span></code></a></p></td>
+<td><p>Retrieve the number of integer features.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.n_features" title="skmultiflow.data.MIXEDGenerator.n_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features</span></code></a></p></td>
+<td><p>Retrieve the number of features.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.n_num_features" title="skmultiflow.data.MIXEDGenerator.n_num_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_num_features</span></code></a></p></td>
+<td><p>Retrieve the number of numerical features.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.n_targets" title="skmultiflow.data.MIXEDGenerator.n_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_targets</span></code></a></p></td>
+<td><p>Retrieve the number of targets</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.target_names" title="skmultiflow.data.MIXEDGenerator.target_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_names</span></code></a></p></td>
+<td><p>Retrieve the names of the targets</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#skmultiflow.data.MIXEDGenerator.target_values" title="skmultiflow.data.MIXEDGenerator.target_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target_values</span></code></a></p></td>
+<td><p>Retrieve all target_values in the stream for each target.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.balance_classes">
+<em class="property">property </em><code class="sig-name descname">balance_classes</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.balance_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Balance classes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True is the classes are balanced</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Retrieve the value of the option</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.classification_function">
+<em class="property">property </em><code class="sig-name descname">classification_function</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.classification_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the index of the current classification function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>index of the classification function [0,1,2]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.feature_names">
+<em class="property">property </em><code class="sig-name descname">feature_names</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.feature_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the names of the features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>names of the features</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.generate_drift">
+<code class="sig-name descname">generate_drift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/mixed_generator.py#L287"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.generate_drift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate drift by switching the classification function randomly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.get_data_info">
+<code class="sig-name descname">get_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L263"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.get_data_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves minimum information from the stream</p>
+<p>Used by evaluator methods to id the stream.</p>
+<p>The default format is: ‘Stream name - n_targets, n_classes, n_features’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Stream data information</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.get_info">
+<code class="sig-name descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects and returns the information about the configuration of the estimator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Configuration of the estimator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.get_params">
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapping of string to any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.has_more_samples">
+<code class="sig-name descname">has_more_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.has_more_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if stream has more samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if stream has more samples.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.is_restartable">
+<code class="sig-name descname">is_restartable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.is_restartable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the stream is restartable.
+:returns: True if stream is restartable.
+:rtype: Boolean</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.last_sample">
+<code class="sig-name descname">last_sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.last_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves last <cite>batch_size</cite> samples in the stream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A numpy.ndarray of shape (batch_size, n_features) and an array-like of shape
+(batch_size, n_targets), representing the next batch_size samples.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.n_cat_features">
+<em class="property">property </em><code class="sig-name descname">n_cat_features</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.n_cat_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the number of integer features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of integer features in the stream.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.n_features">
+<em class="property">property </em><code class="sig-name descname">n_features</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.n_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the number of features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The total number of features.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.n_num_features">
+<em class="property">property </em><code class="sig-name descname">n_num_features</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.n_num_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the number of numerical features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of numerical features in the stream.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.n_remaining_samples">
+<code class="sig-name descname">n_remaining_samples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.n_remaining_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the estimated number of remaining samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Remaining number of samples. -1 if infinite (e.g. generator)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.n_targets">
+<em class="property">property </em><code class="sig-name descname">n_targets</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.n_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the number of targets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of targets in the stream.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.next_sample">
+<code class="sig-name descname">next_sample</code><span class="sig-paren">(</span><em class="sig-param">batch_size=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/mixed_generator.py#L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.next_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample generation works as follows: The two numeric attributes are
+generated with the random  generator, initialized with the seed
+passed by the user. The boolean attributes are either 0 or 1
+based on the comparison of the random generator and 0.5 ,
+the classification function decides whether to classify the instance
+as class 0 or class 1. The next step is to verify if the classes should
+be balanced, and if so, balance the classes.</p>
+<p>The generated sample will have 4 relevant features and 1 label (it has
+one classification task).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of samples to return.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Return a tuple with the features matrix and the labels matrix for</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a> or tuple list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.prepare_for_use">
+<code class="sig-name descname">prepare_for_use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/mixed_generator.py#L214"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.prepare_for_use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares the stream for use.</p>
+<p class="rubric">Notes</p>
+<p>This functions should always be called after the stream initialization.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the estimator to its initial state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.restart">
+<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/data/base_stream.py#L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restart the stream.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.set_params">
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scikit-multiflow/scikit-multiflow/blob/4f4f7a90/src/skmultiflow/core/base.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as pipelines). The latter have parameters of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s possible to update each
+component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.target_names">
+<em class="property">property </em><code class="sig-name descname">target_names</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.target_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the names of the targets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the names of the targets in the stream.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skmultiflow.data.MIXEDGenerator.target_values">
+<em class="property">property </em><code class="sig-name descname">target_values</code><a class="headerlink" href="#skmultiflow.data.MIXEDGenerator.target_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all target_values in the stream for each target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of lists of all target_values for each target</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
