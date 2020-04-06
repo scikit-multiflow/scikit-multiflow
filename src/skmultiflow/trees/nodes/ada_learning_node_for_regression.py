@@ -28,10 +28,7 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         super().__init__(initial_class_observations, parent_node, random_state)
         self._estimation_error_weight = ADWIN()
         self._error_change = False
-
-        # TODO: verify the possibility of removing the two next lines
-        self._randomSeed = 1
-        self._classifier_random = check_random_state(self._randomSeed)
+        self._random_state = check_random_state(random_state)
 
     # Override AdaNode
     def number_leaves(self):

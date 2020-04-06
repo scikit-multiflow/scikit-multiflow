@@ -18,12 +18,11 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_class_observations, random_state=None):
         super().__init__(initial_class_observations)
         self._estimation_error_weight = ADWIN()
         self.error_change = False
-        self._randomSeed = 1
-        self._classifier_random = check_random_state(self._randomSeed)
+        self._random_state = check_random_state(random_state)
 
     # Override AdaNode
     def number_leaves(self):
@@ -50,7 +49,7 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
 
         if hat.bootstrap_sampling:
             # Perform bootstrap-sampling
-            k = self._classifier_random.poisson(1.0)
+            k = self._random_state.poisson(1.0)
             if k > 0:
                 weight = weight * k
 

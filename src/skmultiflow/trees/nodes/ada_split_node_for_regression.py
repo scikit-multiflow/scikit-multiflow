@@ -24,13 +24,12 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
     """
-    def __init__(self, split_test, class_observations):
+    def __init__(self, split_test, class_observations, random_state=None):
         super().__init__(split_test, class_observations)
         self._estimation_error_weight = ADWIN()
         self._alternate_tree = None
         self.error_change = False
-        self._random_seed = 1
-        self._classifier_random = check_random_state(self._random_seed)
+        self._random_state = check_random_state(random_state)
 
     # Override AdaNode
     def number_leaves(self):
