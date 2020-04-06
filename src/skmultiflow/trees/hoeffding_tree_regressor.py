@@ -234,7 +234,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         """
         normalized_sample = []
         for i in range(len(X)):
-            if (self._nominal_attributes is not None and i not in self._nominal_attributes) and \
+            if (self._nominal_attributes is None or (self._nominal_attributes is not None and
+                                                     i not in self._nominal_attributes)) and \
                     self.samples_seen > 1:
                 mean = self.sum_of_attribute_values[i] / self.samples_seen
                 sd = compute_sd(self.sum_of_attribute_squares[i], self.sum_of_attribute_values[i],

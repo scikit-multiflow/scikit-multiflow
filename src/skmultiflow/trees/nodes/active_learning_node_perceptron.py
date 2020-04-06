@@ -116,6 +116,8 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
         normalized_target_value = rht.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
         self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * normalized_sample
+        # Normalize perceptron weights
+        self.perceptron_weight = self.perceptron_weight / np.sum(self.perceptron_weight)
 
 
 def compute_sd(square_val: float, val: float, size: float):
