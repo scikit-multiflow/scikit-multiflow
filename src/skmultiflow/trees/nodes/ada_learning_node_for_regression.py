@@ -16,7 +16,7 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
-    perceptron_node: ActiveLearningNodePerceptron (default=None)
+    parent_node: AdaLearningNodeForRegression (default=None)
         A node containing statistics about observed data.
     random_state: int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;
