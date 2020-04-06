@@ -612,7 +612,9 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
         return predictions
 
     def predict_proba(self, X):
-        pass
+        """Not implemented for this method
+        """
+        raise NotImplementedError
 
     def _attempt_to_split(self, node, parent, parent_idx: int):
         """Attempt to split a node.
