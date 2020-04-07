@@ -66,5 +66,5 @@ class ActiveLearningNodeAdaptiveMultiTarget(ActiveLearningNodePerceptronMultiTar
         self.fMAE_M = 0.95 * self.fMAE_M + np.abs(
             normalized_target_value - rht.
             normalize_target_value(self._observed_class_distribution[1] /
-                                    self._observed_class_distribution[0])
+                                   self._observed_class_distribution[0])
         )

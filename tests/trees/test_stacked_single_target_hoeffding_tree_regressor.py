@@ -39,7 +39,8 @@ def test_stacked_single_target_hoeffding_tree_regressor_perceptron(test_path):
     expected_predictions = np.load(test_file)
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 151.52171404209466
+
+    expected_error = 154.59132974633712
     assert np.isclose(error, expected_error)
 
     expected_info = "StackedSingleTargetHoeffdingTreeRegressor(binary_split=False, grace_period=200,\n" \
@@ -93,7 +94,8 @@ def test_stacked_single_target_hoeffding_tree_regressor_adaptive(test_path):
 
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 150.7836894811965
+
+    expected_error = 152.8716829154756
     assert np.isclose(error, expected_error)
 
     expected_info = "StackedSingleTargetHoeffdingTreeRegressor(binary_split=False, grace_period=200,\n" \

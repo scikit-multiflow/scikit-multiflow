@@ -81,7 +81,8 @@ def test_isoup_tree_perceptron(test_path):
     expected_predictions = np.load(test_file)
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 144.44877909957646
+
+    expected_error = 148.36534180008894
     assert np.isclose(error, expected_error)
 
     expected_info = "iSOUPTreeRegressor(binary_split=False, grace_period=200, leaf_prediction='perceptron', " \
@@ -124,7 +125,8 @@ def test_isoup_tree_adaptive(test_path):
 
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 150.63043466390528
+
+    expected_error = 152.8716829154756
     assert np.isclose(error, expected_error)
 
     expected_info = "iSOUPTreeRegressor(binary_split=False, grace_period=200, leaf_prediction='adaptive', " \

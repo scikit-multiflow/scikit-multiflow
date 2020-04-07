@@ -33,8 +33,7 @@ class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
         if parent_node is None:
             self.perceptron_weight = None
         else:
-            # self.perceptron_weight = deepcopy(parent_node.perceptron_weight)
-            self.perceptron_weight = parent_node.perceptron_weight
+            self.perceptron_weight = deepcopy(parent_node.perceptron_weight)
         self.random_state = check_random_state(random_state)
 
     def learn_from_instance(self, X, y, weight, rht):
