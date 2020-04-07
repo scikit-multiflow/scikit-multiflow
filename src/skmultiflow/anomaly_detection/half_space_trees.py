@@ -198,7 +198,7 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
                 predictions.append(0)
             else:
                 # if prediction of this instance is greater than the threshold
-                # defined,then this instance is classified as an anomaly.
+                # defined, then this instance is classified as an anomaly.
                 if y_proba[0][1] > self.anomaly_threshold:
                     predictions.append(1)
                 else:
@@ -386,7 +386,7 @@ class HalfSpaceTree:
         dict (class_value, weight)
 
         """
-        if self.root is not None and self.is_learning_phase_on is not True:
+        if self.root is not None and not self.is_learning_phase_on:
             score = self.anomaly_score(X)
             anomaly_score = 1 - score / max_score
             return {0: 1 - anomaly_score, 1: anomaly_score}
@@ -426,7 +426,7 @@ class HalfSpaceTree:
             Anomaly score of the instance X.
 
         """
-        if node.internal_node is not True or node.right_mass <= self.size_limit:
+        if not node.internal_node or node.right_mass <= self.size_limit:
             return node.right_mass * pow(2.0, node.depth)
         else:
             if X[node.split_attribute] > node.split_value:
@@ -521,10 +521,10 @@ class HalfSpaceTree:
 
         """
         if node is not None:
-            if node.right_mass is not 0 or node.left_mass is not 0:
+            if node.right_mass != 0 or node.left_mass != 0:
                 node.right_mass = node.left_mass
 
-            if node.left_mass is not 0:
+            if node.left_mass != 0:
                 node.left_mass = 0
 
             self.update_model(node.left)
