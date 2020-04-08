@@ -4,7 +4,6 @@ import numpy as np
 
 from skmultiflow.utils import check_random_state
 from skmultiflow.trees.nodes import InactiveLearningNode
-from skmultiflow.trees.nodes.active_learning_node_perceptron import compute_sd
 
 
 class InactiveLearningNodePerceptron(InactiveLearningNode):
@@ -26,6 +25,7 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
+
     def __init__(self, initial_class_observations, perceptron_node=None, random_state=None):
         """ InactiveLearningNodePerceptron class constructor."""
         super().__init__(initial_class_observations)
@@ -71,7 +71,7 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
             learning_ratio = rht.learning_ratio_perceptron
         else:
             learning_ratio = rht.learning_ratio_perceptron / \
-                             (1 + self.samples_seen * rht.learning_ratio_decay)
+                (1 + self.samples_seen * rht.learning_ratio_decay)
 
         # Loop for compatibility with bagging methods
         for i in range(int(weight)):
@@ -95,4 +95,5 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
         normalized_pred = np.dot(self.perceptron_weight, normalized_sample)
         normalized_target_value = ht.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
-        self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * normalized_sample
+        self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * \
+            normalized_sample

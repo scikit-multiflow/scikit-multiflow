@@ -12,6 +12,7 @@ class AnyTimeLearningNodeNBAdaptive(AnyTimeLearningNodeNB):
         Initial class observations
 
     """
+
     def __init__(self, initial_class_observations):
         """ AnyTimeLearningNodeNBAdaptive class constructor. """
         super().__init__(initial_class_observations)
@@ -37,7 +38,8 @@ class AnyTimeLearningNodeNBAdaptive(AnyTimeLearningNodeNB):
             # All classes equal, default to class 0
             if 0 == y:
                 self._mc_correct_weight += weight
-        elif max(self._observed_class_distribution, key=self._observed_class_distribution.get) == y:
+        elif max(self._observed_class_distribution,
+                 key=self._observed_class_distribution.get) == y:
             self._mc_correct_weight += weight
         nb_prediction = do_naive_bayes_prediction(
             X, self._observed_class_distribution, self._attribute_observers

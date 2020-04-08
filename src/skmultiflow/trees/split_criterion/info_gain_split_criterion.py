@@ -5,12 +5,13 @@ import numpy as np
 class InfoGainSplitCriterion(SplitCriterion):
     """ Information Gain split criterion.
 
-    A measure of how often a randomly chosen element from the set would be incorrectly labeled if it was randomly
-    labeled according to the distribution of labels in the subset.
+    A measure of how often a randomly chosen element from the set would be incorrectly labeled
+    if it was randomly labeled according to the distribution of labels in the subset.
 
     `Wikipedia entry <https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity>`_
 
     """
+
     def __init__(self, min_branch_frac_option=0.01):
         super().__init__()
         # Minimum fraction of weight required down at least two branches.
@@ -45,7 +46,7 @@ class InfoGainSplitCriterion(SplitCriterion):
 
     def _compute_entropy_list(self, dists):
         total_weight = 0.0
-        dist_weights = [0.0]*len(dists)
+        dist_weights = [0.0] * len(dists)
         for i in range(len(dists)):
             dist_weights[i] = sum(dists[i].values())
             total_weight += dist_weights[i]
@@ -57,7 +58,7 @@ class InfoGainSplitCriterion(SplitCriterion):
     @staticmethod
     def num_subsets_greater_than_frac(distributions, min_frac):
         total_weight = 0.0
-        dist_sums = [0.0]*len(distributions)
+        dist_sums = [0.0] * len(distributions)
         for i in range(len(dist_sums)):
             dist_sums[i] = sum(distributions[i].values())
             total_weight += dist_sums[i]

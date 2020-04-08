@@ -15,6 +15,7 @@ class ActiveLearningNodeForRegression(ActiveLearningNode):
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
     """
+
     def __init__(self, initial_class_observations):
         """ ActiveLearningNodeForRegression class constructor. """
         super().__init__(initial_class_observations)

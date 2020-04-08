@@ -4,8 +4,7 @@ import numpy as np
 
 # This class extends VarianceReductionSplitCriterion since it just computes
 # the SD differently than its Ancestor (considering multiple targets)
-class IntraClusterVarianceReductionSplitCriterion(
-        VarianceReductionSplitCriterion):
+class IntraClusterVarianceReductionSplitCriterion(VarianceReductionSplitCriterion):
 
     def __init__(self):
         super().__init__()
@@ -25,7 +24,7 @@ class IntraClusterVarianceReductionSplitCriterion(
             SDR = self.compute_SD(pre_split_dist)
             for dist in post_split_dist:
                 Ni = dist[0]
-                SDR -= Ni/N * self.compute_SD(dist)
+                SDR -= Ni / N * self.compute_SD(dist)
         return SDR
 
     @staticmethod

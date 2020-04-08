@@ -23,6 +23,7 @@ class ActiveLearningNodeAdaptiveMultiTarget(ActiveLearningNodePerceptronMultiTar
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
+
     def __init__(self, initial_class_observations, perceptron_weight=None,
                  random_state=None):
         """ActiveLearningNodeAdaptiveMultiTarget class constructor."""
@@ -66,7 +67,5 @@ class ActiveLearningNodeAdaptiveMultiTarget(ActiveLearningNodePerceptronMultiTar
         )
 
         self.fMAE_M = 0.95 * self.fMAE_M + np.abs(
-            normalized_target_value - rht.
-            normalize_target_value(self._observed_class_distribution[1] /
-                                    self._observed_class_distribution[0])
-        )
+            normalized_target_value - rht.normalize_target_value(
+                self._observed_class_distribution[1] / self._observed_class_distribution[0]))

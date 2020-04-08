@@ -14,9 +14,12 @@ from skmultiflow.utils import get_dimensions, calculate_object_size
 import warnings
 
 
-def HATT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, min_samples_reevaluate=20,
-         split_criterion='info_gain', split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
-         stop_mem_management=False, leaf_prediction='nba', nb_threshold=0, nominal_attributes=None):  # pragma: no cover
+def HATT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
+         min_samples_reevaluate=20,
+         split_criterion='info_gain', split_confidence=0.0000001, tie_threshold=0.05,
+         binary_split=False,
+         stop_mem_management=False, leaf_prediction='nba', nb_threshold=0,
+         nominal_attributes=None):  # pragma: no cover
     warnings.warn("'HATT' has been renamed to 'ExtremelyFastDecisionTreeClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return ExtremelyFastDecisionTreeClassifier(max_byte_size=max_byte_size,
@@ -31,6 +34,7 @@ def HATT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=20
                                                leaf_prediction=leaf_prediction,
                                                nb_threshold=nb_threshold,
                                                nominal_attributes=nominal_attributes)
+
 
 GINI_SPLIT = 'gini'
 INFO_GAIN_SPLIT = 'info_gain'
@@ -385,7 +389,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
                 #  Compute Hoeffding bound
                 hoeffding_bound = self.compute_hoeffding_bound(
-                    split_criterion.get_range_of_merit(node.get_observed_class_distribution()), self.split_confidence,
+                    split_criterion.get_range_of_merit(node.get_observed_class_distribution()),
+                    self.split_confidence,
                     node.get_weight_seen())
 
                 if x_null.merit - x_best.merit > hoeffding_bound:
@@ -411,7 +416,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                     # Manage memory
                     self.enforce_tracker_limit()
 
-                elif (x_best.merit - x_current.merit > hoeffding_bound or hoeffding_bound < self.tie_threshold) and (
+                elif (
+                        x_best.merit - x_current.merit > hoeffding_bound or hoeffding_bound < self.tie_threshold) and (
                         id_current != id_best):
 
                     # Create a new branch
@@ -423,7 +429,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
                     # Update EFDT
                     for i in range(x_best.num_splits()):
-                        new_child = self._new_learning_node(x_best.resulting_class_distribution_from_split(i))
+                        new_child = self._new_learning_node(
+                            x_best.resulting_class_distribution_from_split(i))
                         new_split.set_child(i, new_child)
 
                     deleted_node_cnt = node.count_nodes()
@@ -444,7 +451,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                     # Manage memory
                     self.enforce_tracker_limit()
 
-                elif (x_best.merit - x_current.merit > hoeffding_bound or hoeffding_bound < self.tie_threshold) and (
+                elif (
+                        x_best.merit - x_current.merit > hoeffding_bound or hoeffding_bound < self.tie_threshold) and (
                         id_current == id_best):
                     node._split_test = x_best.split_test
 
@@ -499,7 +507,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                     x_null.merit = 0.0
 
                 hoeffding_bound = self.compute_hoeffding_bound(
-                    split_criterion.get_range_of_merit(node.get_observed_class_distribution()), self.split_confidence,
+                    split_criterion.get_range_of_merit(node.get_observed_class_distribution()),
+                    self.split_confidence,
                     node.get_weight_seen())
 
                 if x_best.merit - x_null.merit > hoeffding_bound or hoeffding_bound < self.tie_threshold:
@@ -513,7 +522,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                     new_split.update_weight_seen_at_last_split_reevaluation()
 
                     for i in range(x_best.num_splits()):
-                        new_child = self._new_learning_node(x_best.resulting_class_distribution_from_split(i))
+                        new_child = self._new_learning_node(
+                            x_best.resulting_class_distribution_from_split(i))
                         new_split.set_child(i, new_child)
                     self._active_leaf_node_cnt -= 1
                     self._decision_node_cnt += 1
@@ -565,7 +575,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
         max_active = 0
         while max_active < len(learning_nodes):
             max_active += 1
-            if ((max_active * self._active_leaf_byte_size_estimate + (len(learning_nodes) - max_active)
+            if ((max_active * self._active_leaf_byte_size_estimate + (
+                    len(learning_nodes) - max_active)
                  * self._inactive_leaf_byte_size_estimate) * self._byte_size_estimate_overhead_fraction) \
                     > self.max_byte_size:
                 max_active -= 1
@@ -616,7 +627,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                                                learning_nodes[i].parent_branch)
 
     # Override _deactivate_learning_node
-    def _deactivate_learning_node(self, to_deactivate: AnyTimeActiveLearningNode, parent: AnyTimeSplitNode,
+    def _deactivate_learning_node(self, to_deactivate: AnyTimeActiveLearningNode,
+                                  parent: AnyTimeSplitNode,
                                   parent_branch: int):
         """ Deactivate a learning node.
 
@@ -639,7 +651,8 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
         self._inactive_leaf_node_cnt += 1
 
     # Override _activate_learning_node
-    def _activate_learning_node(self, to_activate: AnyTimeInactiveLearningNode, parent: AnyTimeSplitNode,
+    def _activate_learning_node(self, to_activate: AnyTimeInactiveLearningNode,
+                                parent: AnyTimeSplitNode,
                                 parent_branch: int):
         """ Activate a learning node.
 

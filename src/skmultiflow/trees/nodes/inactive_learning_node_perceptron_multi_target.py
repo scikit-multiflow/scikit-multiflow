@@ -25,6 +25,7 @@ class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
+
     def __init__(self, initial_class_observations, perceptron_weight=None,
                  random_state=None):
         """ InactiveLearningNodeForRegression class constructor."""
@@ -66,8 +67,7 @@ class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):
             learning_ratio = rht.learning_ratio_perceptron
         else:
             learning_ratio = rht.learning_ratio_perceptron / \
-                            (1 + self._observed_class_distribution[0] *
-                             rht.learning_ratio_decay)
+                (1 + self._observed_class_distribution[0] * rht.learning_ratio_decay)
 
         try:
             self._observed_class_distribution[1] += weight * y

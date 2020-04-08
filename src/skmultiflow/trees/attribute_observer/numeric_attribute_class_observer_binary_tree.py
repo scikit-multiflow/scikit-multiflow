@@ -27,14 +27,14 @@ class NumericAttributeClassObserverBinaryTree(AttributeClassObserver):
             elif val < self._cut_point:
                 self._class_count_left[label] += weight
                 if self._left is None:
-                    self._left = NumericAttributeClassObserverBinaryTree.\
+                    self._left = NumericAttributeClassObserverBinaryTree. \
                         Node(val, label, weight)
                 else:
                     self._left.insert_value(val, label, weight)
             else:
                 self._class_count_right[label] += weight
                 if self._right is None:
-                    self._right = NumericAttributeClassObserverBinaryTree.\
+                    self._right = NumericAttributeClassObserverBinaryTree. \
                         Node(val, label, weight)
                 else:
                     self._right.insert_value(val, label, weight)
@@ -53,7 +53,7 @@ class NumericAttributeClassObserverBinaryTree(AttributeClassObserver):
             return
         else:
             if self._root is None:
-                self._root = NumericAttributeClassObserverBinaryTree.\
+                self._root = NumericAttributeClassObserverBinaryTree. \
                     Node(att_val, class_val, weight)
             else:
                 self._root.insert_value(att_val, class_val, weight)
@@ -88,103 +88,45 @@ class NumericAttributeClassObserverBinaryTree(AttributeClassObserver):
 
         if parent_left is None:
 
-            left_dist.update(
-                dict(
-                    Counter(left_dist) +
-                    Counter(current_node._class_count_left)
-                )
-            )
+            left_dist.update(dict(Counter(left_dist) + Counter(current_node._class_count_left)))
 
-            right_dist.update(
-                dict(
-                    Counter(right_dist) +
-                    Counter(current_node._class_count_right)
-                )
-            )
+            right_dist.update(dict(Counter(right_dist) + Counter(current_node._class_count_right)))
         else:
-            left_dist.update(
-                dict(
-                    Counter(left_dist) +
-                    Counter(parent_left)
-                )
-            )
+            left_dist.update(dict(Counter(left_dist) + Counter(parent_left)))
 
-            right_dist.update(
-                dict(
-                    Counter(right_dist) +
-                    Counter(parent_right)
-                )
-            )
+            right_dist.update(dict(Counter(right_dist) + Counter(parent_right)))
 
             if left_child:
 
                 """get the exact statistics of the parent value"""
                 exact_parent_dist = {}
                 exact_parent_dist.update(
-                    dict(
-                        Counter(exact_parent_dist) +
-                        Counter(actual_parent_left)
-                    )
-                )
+                    dict(Counter(exact_parent_dist) + Counter(actual_parent_left)))
 
                 exact_parent_dist.update(
-                    dict(
-                        Counter(exact_parent_dist) -
-                        Counter(current_node._class_count_left)
-                    )
-                )
+                    dict(Counter(exact_parent_dist) - Counter(current_node._class_count_left)))
 
                 exact_parent_dist.update(
-                    dict(
-                        Counter(exact_parent_dist) -
-                        Counter(current_node._class_count_right)
-                    )
-                )
+                    dict(Counter(exact_parent_dist) - Counter(current_node._class_count_right)))
 
                 """move the subtrees"""
                 left_dist.update(
-                    dict(
-                        Counter(left_dist) -
-                        Counter(current_node._class_count_right)
-                    )
-                )
+                    dict(Counter(left_dist) - Counter(current_node._class_count_right)))
 
                 right_dist.update(
-                    dict(
-                        Counter(right_dist) +
-                        Counter(current_node._class_count_right)
-                    )
-                )
+                    dict(Counter(right_dist) + Counter(current_node._class_count_right)))
 
                 """move the exact value from the parent"""
-                right_dist.update(
-                    dict(
-                        Counter(right_dist) +
-                        Counter(exact_parent_dist)
-                    )
-                )
+                right_dist.update(dict(Counter(right_dist) + Counter(exact_parent_dist)))
 
-                left_dist.update(
-                    dict(
-                        Counter(left_dist) -
-                        Counter(exact_parent_dist)
-                    )
-                )
+                left_dist.update(dict(Counter(left_dist) - Counter(exact_parent_dist)))
 
             else:
                 left_dist.update(
-                    dict(
-                        Counter(left_dist) +
-                        Counter(current_node._class_count_left)
-                    )
-                )
+                    dict(Counter(left_dist) + Counter(current_node._class_count_left)))
 
                 right_dist.update(
-                    dict(
-                        Counter(right_dist) -
-                        Counter(current_node._class_count_left)
-                    )
-                )
+                    dict(Counter(right_dist) - Counter(current_node._class_count_left)))
 
         post_split_dists = [left_dist, right_dist]
         merit = criterion.get_merit_of_split(pre_split_dist, post_split_dists)

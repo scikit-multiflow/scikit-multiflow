@@ -6,7 +6,8 @@ from skmultiflow.trees.split_criterion import SplitCriterion
 class FoilGainExpandCriterion(SplitCriterion):
     """ FOIL's Information Gain rule split criterion.
 
-    A measure similar to Information Gain, used in the first-order inductive learner (FOIL) algorithm.
+    A measure similar to Information Gain, used in the first-order inductive learner (FOIL)
+    algorithm.
 
     This implementation is specific to rule-based methods.
 
@@ -39,7 +40,8 @@ class FoilGainExpandCriterion(SplitCriterion):
         # num_classes = num_classes if num_classes > 2 else 2
         return np.log2(num_classes)
         # return  1
-        # return -np.log2(pre_split_dist[self.class_idx]/sum(pre_split_dist.values())) * pre_split_dist[self.class_idx]
+        # return -np.log2(pre_split_dist[self.class_idx]/sum(pre_split_dist.values())) \
+        # * pre_split_dist[self.class_idx]
 
     def compute_entropy(self, dist):
         try:

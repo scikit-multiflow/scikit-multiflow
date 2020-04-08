@@ -11,13 +11,18 @@ _PERCEPTRON = 'perceptron'
 ERROR_WIDTH_THRESHOLD = 300
 
 
-def RegressionHAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, split_confidence=0.0000001,
-                  tie_threshold=0.05, binary_split=False, stop_mem_management=False, remove_poor_atts=False,
-                  leaf_prediction="perceptron", no_preprune=False, nb_threshold=0, nominal_attributes=None,
-                  learning_ratio_perceptron=0.02, learning_ratio_decay=0.001, learning_ratio_const=True,
-                  random_state=None):     # pragma: no cover
-    warnings.warn("'RegressionHAT' has been renamed to 'HoeffdingAdaptiveTreeRegressor' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+def RegressionHAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
+                  split_confidence=0.0000001,
+                  tie_threshold=0.05, binary_split=False, stop_mem_management=False,
+                  remove_poor_atts=False,
+                  leaf_prediction="perceptron", no_preprune=False, nb_threshold=0,
+                  nominal_attributes=None,
+                  learning_ratio_perceptron=0.02, learning_ratio_decay=0.001,
+                  learning_ratio_const=True,
+                  random_state=None):  # pragma: no cover
+    warnings.warn(
+        "'RegressionHAT' has been renamed to 'HoeffdingAdaptiveTreeRegressor' in v0.5.0.\n"
+        "The old name will be removed in v0.7.0", category=FutureWarning)
     return HoeffdingAdaptiveTreeRegressor(max_byte_size=max_byte_size,
                                           memory_estimate_period=memory_estimate_period,
                                           grace_period=grace_period,
@@ -132,7 +137,9 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
         if leaf_prediction not in {_TARGET_MEAN, _PERCEPTRON}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
+            print(
+                "Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction,
+                                                                                   _PERCEPTRON))
             self._leaf_prediction = _PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
@@ -166,8 +173,10 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
         self.sum_of_squares += weight * y * y
 
         try:
-            self.sum_of_attribute_values = np.add(self.sum_of_attribute_values, np.multiply(weight, X))
-            self.sum_of_attribute_squares = np.add(self.sum_of_attribute_squares, np.multiply(weight, np.power(X, 2)))
+            self.sum_of_attribute_values = np.add(self.sum_of_attribute_values,
+                                                  np.multiply(weight, X))
+            self.sum_of_attribute_squares = np.add(self.sum_of_attribute_squares,
+                                                   np.multiply(weight, np.power(X, 2)))
         except ValueError:
             self.sum_of_attribute_values = np.multiply(weight, X)
             self.sum_of_attribute_squares = np.multiply(weight, np.power(X, 2))
@@ -180,9 +189,10 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
     def get_normalized_error(self, prediction, y):
         normal_prediction = self.normalize_target_value(prediction)
         normal_value = self.normalize_target_value(y)
-        return np.abs(normal_value-normal_prediction)
+        return np.abs(normal_value - normal_prediction)
 
-    def filter_instance_to_leaves(self, X, y, weight, split_parent, parent_branch, update_splitter_counts):
+    def filter_instance_to_leaves(self, X, y, weight, split_parent, parent_branch,
+                                  update_splitter_counts):
         nodes = []
         self._tree_root.filter_instance_to_leaves(X, y, weight, split_parent, parent_branch,
                                                   update_splitter_counts, nodes)

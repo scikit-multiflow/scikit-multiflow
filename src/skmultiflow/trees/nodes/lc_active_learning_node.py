@@ -14,12 +14,13 @@ class LCActiveLearningNode(ActiveLearningNode):
         Initial class observations
 
     """
+
     def __init__(self, initial_class_observations):
         super().__init__(initial_class_observations)
 
     def learn_from_instance(self, X, y, weight, ht):
 
-        if not(ht.leaf_prediction == NAIVE_BAYES_ADAPTIVE):
+        if not (ht.leaf_prediction == NAIVE_BAYES_ADAPTIVE):
             y = ''.join(str(e) for e in y)
             y = int(y, 2)
 

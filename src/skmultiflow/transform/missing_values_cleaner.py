@@ -9,24 +9,24 @@ from skmultiflow.utils import FastBuffer, get_dimensions
 class MissingValuesCleaner(StreamTransform):
     """ Fill missing values with some defined value.
 
-    Provides a simple way to replace missing values in data samples with some value. The imputation value
-    can be set via a set of imputation strategies.
-    
+    Provides a simple way to replace missing values in data samples with some value.
+    The imputation value can be set via a set of imputation strategies.
+
     Parameters
     ----------
     missing_value: int, float or list (Default: numpy.nan)
         Missing value to replace
-    
+
     strategy: string (Default: 'zero')
-        The strategy adopted to find the missing value replacement. It can 
+        The strategy adopted to find the missing value replacement. It can
         be one of the following: 'zero', 'mean', 'median', 'mode', 'custom'.
-    
+
     window_size: int (Default: 200)
         Defines the window size for the 'mean', 'median' and 'mode' strategies.
-    
+
     new_value: int (Default: 1)
         This is the replacement value in case the chosen strategy is 'custom'.
-        
+
     Examples
     --------
     >>> # Imports
@@ -47,8 +47,7 @@ class MissingValuesCleaner(StreamTransform):
     >>>     X_transf = cleaner.partial_fit_transform([X[i].tolist()])
     >>>     data.append(X_transf[0][0])
     >>>
-    >>> # Transform last sample. The first feature should be replaced by the list's 
-    >>> # median value
+    >>> # Transform last sample. The first feature should be replaced by the list's median value
     >>> X_transf = cleaner.partial_fit_transform([X[9].tolist()])
     >>> np.median(data)
 
@@ -87,14 +86,14 @@ class MissingValuesCleaner(StreamTransform):
 
     def transform(self, X):
         """ transform
-        
+
         Does the transformation process in the samples in X.
-        
+
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
             The sample or set of samples that should be transformed.
-        
+
         """
         r, c = get_dimensions(X)
         for i in range(r):
@@ -108,19 +107,19 @@ class MissingValuesCleaner(StreamTransform):
 
     def _get_substitute(self, column_index):
         """ _get_substitute
-        
+
         Computes the replacement for a missing value.
-        
+
         Parameters
         ----------
         column_index: int
             The index from the column where the missing value was found.
-            
+
         Returns
         -------
         int or float
             The replacement.
-        
+
         """
         if self.strategy == 'zero':
             return 0
@@ -145,22 +144,22 @@ class MissingValuesCleaner(StreamTransform):
 
     def partial_fit_transform(self, X, y=None):
         """ partial_fit_transform
-        
+
         Partially fits the model and then apply the transform to the data.
-        
+
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
             The sample or set of samples that should be transformed.
-            
+
         y: Array-like
             The true labels.
-         
+
         Returns
         -------
         numpy.ndarray of shape (n_samples, n_features)
             The transformed data.
-        
+
         """
         X = self.transform(X)
 
@@ -168,22 +167,22 @@ class MissingValuesCleaner(StreamTransform):
 
     def partial_fit(self, X, y=None):
         """ partial_fit
-        
+
         Partial fits the model.
-        
+
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
             The sample or set of samples that should be transformed.
-            
+
         y: Array-like
             The true labels.
-        
+
         Returns
         -------
         MissingValuesCleaner
             self
-        
+
         """
         X = np.asarray(X)
         if self.strategy in ['mean', 'median', 'mode']:

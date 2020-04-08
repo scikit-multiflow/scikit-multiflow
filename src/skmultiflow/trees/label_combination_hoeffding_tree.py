@@ -12,12 +12,16 @@ from skmultiflow.trees.nodes import LCLearningNodeNBA
 import warnings
 
 
-def LCHT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, split_criterion='info_gain',
-         split_confidence=0.0000001, tie_threshold=0.05, binary_split=False, stop_mem_management=False,
-         remove_poor_atts=False, no_preprune=False, leaf_prediction='nba', nb_threshold=0, nominal_attributes=None,
-         n_labels=None):     # pragma: no cover
-    warnings.warn("'LCHT' has been renamed to 'LabelCombinationHoeffdingTreeClassifier' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+def LCHT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
+         split_criterion='info_gain',
+         split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
+         stop_mem_management=False,
+         remove_poor_atts=False, no_preprune=False, leaf_prediction='nba', nb_threshold=0,
+         nominal_attributes=None,
+         n_labels=None):  # pragma: no cover
+    warnings.warn(
+        "'LCHT' has been renamed to 'LabelCombinationHoeffdingTreeClassifier' in v0.5.0.\n"
+        "The old name will be removed in v0.7.0", category=FutureWarning)
     return LabelCombinationHoeffdingTreeClassifier(max_byte_size=max_byte_size,
                                                    memory_estimate_period=memory_estimate_period,
                                                    grace_period=grace_period,
@@ -89,6 +93,7 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
     n_labels: int (default=None)
         the number of labels the problem has.
     """
+
     def __init__(self,
                  max_byte_size=33554432,
                  memory_estimate_period=1000000,
@@ -148,7 +153,7 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         -------
             self
             """
-        super().partial_fit(X, y, sample_weight=sample_weight)    # Override HT, infer the classes
+        super().partial_fit(X, y, sample_weight=sample_weight)  # Override HT, infer the classes
 
     def predict(self, X):
         """Predicts the label of the X instance(s)
@@ -169,7 +174,7 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         y_proba = self.predict_proba(X)
         for i in range(r):
             index = np.argmax(y_proba[i])
-            pred = str("{0:0"+str(self.n_labels)+"b}").format(index)
+            pred = str("{0:0" + str(self.n_labels) + "b}").format(index)
             pred = [int(e) for e in pred]
             predictions.append(pred)
 
@@ -186,7 +191,8 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         else:  # NAIVE BAYES ADAPTIVE (default)
             return LCLearningNodeNBA(initial_class_observations)
 
-    def _deactivate_learning_node(self, to_deactivate: LCActiveLearningNode, parent: SplitNode, parent_branch: int):
+    def _deactivate_learning_node(self, to_deactivate: LCActiveLearningNode, parent: SplitNode,
+                                  parent_branch: int):
         """Deactivate a learning node.
 
         Parameters

@@ -10,6 +10,7 @@ class LCInactiveLearningNode(InactiveLearningNode):
         Initial class observations
 
     """
+
     def __init__(self, initial_class_observations=None):
         """ LCInactiveLearningNode class constructor. """
         super().__init__(initial_class_observations)

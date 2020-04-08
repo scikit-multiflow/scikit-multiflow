@@ -1,3 +1,4 @@
+import warnings
 import copy
 from operator import attrgetter, itemgetter
 import numpy as np
@@ -9,12 +10,12 @@ from skmultiflow.rules.foil_gain_rule_criterion import FoilGainExpandCriterion
 from skmultiflow.rules.hellinger_distance_criterion import HellingerDistanceCriterion
 from skmultiflow.rules.info_gain_rule_criterion import InfoGainExpandCriterion
 from skmultiflow.rules.nominal_attribute_class_observer import NominalAttributeClassObserver
-from skmultiflow.rules.numeric_attribute_class_observer import GaussianNumericAttributeClassObserver
+from skmultiflow.rules.numeric_attribute_class_observer import \
+    GaussianNumericAttributeClassObserver
 from skmultiflow.trees.attribute_observer import AttributeClassObserverNull
 from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, \
     calculate_object_size
-
 
 _FIRSTHIT = 'first_hit'
 _WEIGHTEDMAX = 'weighted_max'
@@ -26,12 +27,12 @@ _EDDM = 'eddm'
 _ADWIN = 'adwin'
 _DDM = 'ddm'
 
-import warnings
-
 
 def VFDR(expand_confidence=0.0000001, ordered_rules=True, grace_period=200, tie_threshold=0.05,
-         rule_prediction='first_hit', nominal_attributes=None, max_rules=1000, nb_threshold=0, nb_prediction=True,
-         drift_detector=None, expand_criterion='info_gain', remove_poor_atts=False, min_weight=100):  # pragma: no cover
+         rule_prediction='first_hit', nominal_attributes=None, max_rules=1000, nb_threshold=0,
+         nb_prediction=True,
+         drift_detector=None, expand_criterion='info_gain', remove_poor_atts=False,
+         min_weight=100):  # pragma: no cover
     warnings.warn("'VFDR' has been renamed to 'VeryFastDecisionRulesClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return VeryFastDecisionRulesClassifier(expand_confidence=expand_confidence,
@@ -149,11 +150,12 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
     class Rule(Rule):
         """ Rule class
 
-        A rule is collection of predicates(conditions) that make up the conjunction (the IF part of the rule).
-        The conditions are in the form of: :math:`Att_{idx} > value`,  :math:`Att_{idx} <= value` and
-        :math:`Att_{idx} = value`.
+        A rule is collection of predicates(conditions) that make up the conjunction
+        (the IF part of the rule). The conditions are in the form of: :math:`Att_{idx} > value`,
+        :math:`Att_{idx} <= value` and :math:`Att_{idx} = value`.
 
-        The rule can also track the class distribution and use a drift detector to track change in concept.
+        The rule can also track the class distribution and use a drift detector to track change
+        in concept.
 
         Parameters
         ----------
@@ -166,7 +168,10 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
         def __init__(self, class_distribution, drift_detector, class_idx):
             """ Rule class constructor"""
-            super().__init__(class_distribution=class_distribution, drift_detector=drift_detector, class_idx=class_idx)
+            super().__init__(
+                class_distribution=class_distribution,
+                drift_detector=drift_detector,
+                class_idx=class_idx)
             self._weight_seen_at_last_expand = self.get_weight_seen()
             self._attribute_observers = {}
 
@@ -196,10 +201,10 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
         def learn_from_instance(self, X, y, weight, avfdr):
             """Update the rule with the provided instance.
-            The model class distribution of the model and each attribute are updated. The one for the model is used
-            for prediction and the distributions for the attributes are used for learning
-            Gaussian estimators are used to track distribution of numeric attributes and dict with class count
-            for nominal and the model distributions.
+            The model class distribution of the model and each attribute are updated. The one
+            for the model is used for prediction and the distributions for the attributes are used
+            for learning Gaussian estimators are used to track distribution of numeric attributes
+            and dict with class count for nominal and the model distributions.
 
             Parameters
             ----------
@@ -217,7 +222,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                 self._observed_class_distribution[y] += weight
             except KeyError:
                 self._observed_class_distribution[y] = weight
-                self._observed_class_distribution = dict(sorted(self._observed_class_distribution.items()))
+                self._observed_class_distribution = dict(
+                    sorted(self._observed_class_distribution.items()))
 
             for i in range(len(X)):
                 try:
@@ -239,7 +245,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                 Total weight seen.
 
             """
-            return sum(self.observed_class_distribution.values()) if self.observed_class_distribution != {} else 0
+            return sum(self.observed_class_distribution.values()
+                       ) if self.observed_class_distribution != {} else 0
 
         def get_best_expand_suggestion(self, criterion, class_idx):
             """Find possible expand candidates.
@@ -260,7 +267,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
             best_suggestions = []
             pre_expand_dist = self.observed_class_distribution
             for i, obs in self._attribute_observers.items():
-                best_suggestion = obs.get_best_evaluated_split_suggestion(criterion, pre_expand_dist, i, class_idx)
+                best_suggestion = obs.get_best_evaluated_split_suggestion(
+                    criterion, pre_expand_dist, i, class_idx)
                 if best_suggestion is not None:
                     best_suggestions.append(best_suggestion)
 
@@ -284,7 +292,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
             """
             if self.get_weight_seen() >= vfdr.nb_threshold and vfdr.nb_prediction:
-                return do_naive_bayes_prediction(X, self.observed_class_distribution, self._attribute_observers)
+                return do_naive_bayes_prediction(
+                    X, self.observed_class_distribution, self._attribute_observers)
             else:
                 return self.observed_class_distribution
 
@@ -442,7 +451,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                 votes = copy.deepcopy(rule.get_class_votes(X, self))
                 if sum(votes.values()) != 0:
                     votes = normalize_values_in_dict(votes, inplace=False)
-                final_votes = {k: final_votes.get(k, 0) + votes.get(k, 0) for k in set(final_votes) | set(votes)}
+                final_votes = {k: final_votes.get(k, 0) + votes.get(k, 0)
+                               for k in set(final_votes) | set(votes)}
                 if sum(final_votes.values()) != 0:
                     normalize_values_in_dict(final_votes)
 
@@ -461,9 +471,10 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
         Training tasks:
 
-        * If the rule_set is empty, update the default_rule and if enough statistics are collected try to create rule.
-        * If rules exist in the rule_set, check if they cover the instance. The statistics of the ones that fire are
-          updated using the instance.
+        * If the rule_set is empty, update the default_rule and if enough statistics
+            are collected try to create rule.
+        * If rules exist in the rule_set, check if they cover the instance.
+            The statistics of the ones that fire are updated using the instance.
         * If enough statistics are collected if a rule then attempt to expand it.
 
         Parameters
@@ -473,8 +484,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
         y: array_like
             Classes (targets) for all samples in X.
         classes: list or numpy.array
-            Contains the class values in the stream. If defined, will be used to define the length of the arrays
-            returned by `predict_proba`
+            Contains the class values in the stream. If defined, will be used to define
+            the length of the arrays returned by `predict_proba`
         sample_weight: float or array-like
             Instance weight. If not provided, uniform weights are assumed.
 
@@ -490,7 +501,9 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
             if sample_weight is None:
                 sample_weight = np.ones(row_cnt)
             if row_cnt != len(sample_weight):
-                raise ValueError('Inconsistent number of instances ({}) and weights ({}).'.format(row_cnt, len(sample_weight)))
+                raise ValueError(
+                    'Inconsistent number of instances ({}) and weights ({}).'.format(
+                        row_cnt, len(sample_weight)))
             for i in range(row_cnt):
                 if sample_weight[i] != 0.0:
                     self._partial_fit(X[i], y[i], sample_weight[i])
@@ -520,11 +533,13 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                     if self.drift_detector is not None:
                         prediction = rule.predict(y)
                         rule.drift_detector.add_element(prediction)
-                        if rule.drift_detector.detected_change() and rule.get_weight_seen() > self.min_weight:
+                        if rule.drift_detector.detected_change() \
+                                and rule.get_weight_seen() > self.min_weight:
                             self.rule_set.pop(i)
                             continue
                     rule.learn_from_instance(X, y, weight, self)
-                    if rule.get_weight_seen() - rule.weight_seen_at_last_expand >= self.grace_period:
+                    if rule.get_weight_seen() - rule.weight_seen_at_last_expand >= \
+                            self.grace_period:
                         self._expand_rule(rule)
                         rule.weight_seen_at_last_expand = rule.get_weight_seen()
                     if self.ordered_rules:
@@ -532,16 +547,17 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
         if not rule_fired:
             self.default_rule.learn_from_instance(X, y, weight, self)
             if self.max_rules > len(self.rule_set):
-                if self.default_rule.get_weight_seen() - self.default_rule.weight_seen_at_last_expand >= \
-                        self.grace_period:
+                if self.default_rule.get_weight_seen() - \
+                        self.default_rule.weight_seen_at_last_expand >= self.grace_period:
                     self._create_rule()
 
     def _create_rule(self):
         """ Create a new rule from the default rule.
 
         If the default rule has enough statistics, possible expanding candidates are checked.
-        If the best candidate verifies the Hoeffding bound, a new rule is created if a one predicate.
-        The rule statistics are passed down to the new rule and the default rule is reset.
+        If the best candidate verifies the Hoeffding bound, a new rule is created
+        if a one predicate. The rule statistics are passed down to the new rule
+        and the default rule is reset.
 
         """
         if len(self.default_rule.observed_class_distribution) >= 2:
@@ -551,26 +567,35 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                 else:
                     expand_criterion = InfoGainExpandCriterion()
                 should_expand = False
-                best_expand_suggestions = self.default_rule.get_best_expand_suggestion(expand_criterion, None)
+                best_expand_suggestions = self.default_rule.get_best_expand_suggestion(
+                    expand_criterion, None)
                 best_expand_suggestions.sort(key=attrgetter('merit'))
 
                 if len(best_expand_suggestions) < 2:
                     should_expand = len(best_expand_suggestions) > 0
                 else:
-                    hoeffding_bound = self.compute_hoeffding_bound(expand_criterion.get_range_of_merit(
-                        self.default_rule.observed_class_distribution), self.expand_confidence,
+                    hoeffding_bound = self.compute_hoeffding_bound(
+                        expand_criterion.get_range_of_merit(
+                            self.default_rule.observed_class_distribution), self.expand_confidence,
                         self.default_rule.get_weight_seen())
                     best_suggestion = best_expand_suggestions[-1]
                     second_best_suggestion = best_expand_suggestions[-2]
 
-                    if ((best_suggestion.merit - second_best_suggestion.merit) > hoeffding_bound) or \
-                            (hoeffding_bound < self.tie_threshold):
+                    delta_suggestion = best_suggestion.merit - second_best_suggestion.merit
+                    if (delta_suggestion > hoeffding_bound) or (
+                            hoeffding_bound < self.tie_threshold):
                         should_expand = True
 
                 if should_expand:
                     best_suggestion = best_expand_suggestions[-1]
-                    new_pred = Predicate(best_suggestion.att_idx, best_suggestion.operator, best_suggestion.att_val)
-                    self.rule_set.append(self.new_rule(None, copy.deepcopy(self.drift_detector), None))
+                    new_pred = Predicate(
+                        best_suggestion.att_idx,
+                        best_suggestion.operator,
+                        best_suggestion.att_val)
+                    self.rule_set.append(
+                        self.new_rule(
+                            None, copy.deepcopy(
+                                self.drift_detector), None))
                     self.rule_set[-1].predicate_set.append(new_pred)
                     self.default_rule.restart()
                     if new_pred.operator in ["=", "<="]:
@@ -584,28 +609,41 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                         self.default_rule.observed_class_distribution = best_suggestion. \
                             resulting_class_distribution_from_split(0).copy()
                 else:
-                    self.default_rule.weight_seen_at_last_expand = self.default_rule.get_weight_seen()
+                    self.default_rule.weight_seen_at_last_expand = \
+                        self.default_rule.get_weight_seen()
             elif self.expand_criterion == _FOILGAIN:
                 expand_criterion = FoilGainExpandCriterion()
                 should_expand = False
                 for class_idx in self.default_rule.observed_class_distribution.keys():
-                    best_expand_suggestions = self.default_rule.get_best_expand_suggestion(expand_criterion, class_idx)
+                    best_expand_suggestions = self.default_rule.get_best_expand_suggestion(
+                        expand_criterion, class_idx)
                     best_expand_suggestions.sort(key=attrgetter('merit'))
                     if len(best_expand_suggestions) < 2:
                         should_expand = len(best_expand_suggestions) > 0
                     else:
-                        hoeffding_bound = self.compute_hoeffding_bound(expand_criterion.get_range_of_merit(
-                            self.default_rule.observed_class_distribution), self.expand_confidence,
+                        hoeffding_bound = self.compute_hoeffding_bound(
+                            expand_criterion.get_range_of_merit(
+                                self.default_rule.observed_class_distribution),
+                            self.expand_confidence,
                             self.default_rule.get_weight_seen())
                         best_suggestion = best_expand_suggestions[-1]
                         second_best_suggestion = best_expand_suggestions[-2]
-                        if ((best_suggestion.merit - second_best_suggestion.merit) > hoeffding_bound) or (
+                        delta_suggestion = best_suggestion.merit - second_best_suggestion.merit
+                        if (delta_suggestion > hoeffding_bound) or (
                                 hoeffding_bound < self.tie_threshold):
                             should_expand = True
                     if should_expand:
                         best_suggestion = best_expand_suggestions[-1]
-                        new_pred = Predicate(best_suggestion.att_idx, best_suggestion.operator, best_suggestion.att_val)
-                        self.rule_set.append(self.new_rule(None, copy.deepcopy(self.drift_detector), class_idx))
+                        new_pred = Predicate(
+                            best_suggestion.att_idx,
+                            best_suggestion.operator,
+                            best_suggestion.att_val)
+                        self.rule_set.append(
+                            self.new_rule(
+                                None,
+                                copy.deepcopy(
+                                    self.drift_detector),
+                                class_idx))
                         self.rule_set[-1].predicate_set.append(new_pred)
                         if new_pred.operator in ["=", "<="]:
                             self.rule_set[-1].observed_class_distribution = best_suggestion. \
@@ -616,7 +654,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                 if should_expand:
                     self.default_rule.restart()
                 else:
-                    self.default_rule.weight_seen_at_last_expand = self.default_rule.get_weight_seen()
+                    self.default_rule.weight_seen_at_last_expand = \
+                        self.default_rule.get_weight_seen()
         else:
             self.default_rule.weight_seen_at_last_expand = self.default_rule.get_weight_seen()
 
@@ -645,7 +684,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                 should_expand = len(best_expand_suggestions) > 0
             else:
                 hoeffding_bound = self.compute_hoeffding_bound(split_criterion.get_range_of_merit(
-                    rule.observed_class_distribution), self.expand_confidence, rule.get_weight_seen())
+                    rule.observed_class_distribution), self.expand_confidence,
+                    rule.get_weight_seen())
                 best_suggestion = best_expand_suggestions[-1]
                 second_best_suggestion = best_expand_suggestions[-2]
                 if ((best_suggestion.merit - second_best_suggestion.merit) > hoeffding_bound) or \
@@ -659,14 +699,16 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                         if best_expand_suggestions[i] is not None:
                             split_atts = [best_expand_suggestions[i].att_idx]
                             if len(split_atts) == 1:
-                                if best_suggestion.merit - best_expand_suggestions[i].merit > hoeffding_bound:
+                                if best_suggestion.merit - \
+                                        best_expand_suggestions[i].merit > hoeffding_bound:
                                     poor_atts.add(int(split_atts[0]))
                     # Scan 2 - remove good attributes from set
                     for i in range(len(best_expand_suggestions)):
                         if best_expand_suggestions[i] is not None:
                             split_atts = [best_expand_suggestions[i].att_idx]
                             if len(split_atts) == 1:
-                                if best_suggestion.merit - best_expand_suggestions[i].merit < hoeffding_bound:
+                                if best_suggestion.merit - \
+                                        best_expand_suggestions[i].merit < hoeffding_bound:
                                     try:
                                         poor_atts.remove(int(split_atts[0]))
                                     except KeyError:
@@ -676,7 +718,10 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
             if should_expand:
                 best_suggestion = best_expand_suggestions[-1]
-                new_pred = Predicate(best_suggestion.att_idx, best_suggestion.operator, best_suggestion.att_val)
+                new_pred = Predicate(
+                    best_suggestion.att_idx,
+                    best_suggestion.operator,
+                    best_suggestion.att_val)
                 add_pred = True
                 for pred in rule.predicate_set:
                     if (pred.operator == new_pred.operator) and (pred.att_idx == new_pred.att_idx):
@@ -711,40 +756,50 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                                     new_rule.class_idx = c
                                     split_criterion = FoilGainExpandCriterion()
                                     should_expand = False
-                                    best_expand_suggestions = new_rule.get_best_expand_suggestion(split_criterion, c)
+                                    best_expand_suggestions = new_rule.get_best_expand_suggestion(
+                                        split_criterion, c)
                                     best_expand_suggestions.sort(key=attrgetter('merit'))
                                     if len(best_expand_suggestions) < 2:
                                         should_expand = len(best_expand_suggestions) > 0
                                     else:
                                         hoeffding_bound = self.compute_hoeffding_bound(
                                             split_criterion.get_range_of_merit(
-                                                new_rule.observed_class_distribution), self.expand_confidence,
+                                                new_rule.observed_class_distribution),
+                                            self.expand_confidence,
                                             new_rule.get_weight_seen())
                                         best_suggestion = best_expand_suggestions[-1]
                                         second_best_suggestion = best_expand_suggestions[-2]
-                                        if ((best_suggestion.merit - second_best_suggestion.merit) > hoeffding_bound) \
+                                        delta_suggestion = best_suggestion.merit - second_best_suggestion.merit  # noqa: E501
+                                        if (delta_suggestion > hoeffding_bound) \
                                                 or (hoeffding_bound < self.tie_threshold):
                                             should_expand = True
 
-                                        if self.remove_poor_atts is not None and self.remove_poor_atts:
+                                        if self.remove_poor_atts is not None \
+                                                and self.remove_poor_atts:
                                             poor_atts = set()
                                             # Scan 1 - add any poor attribute to set
                                             for i in range(len(best_expand_suggestions)):
-                                                if best_expand_suggestions[i] is not None:
-                                                    split_atts = [best_expand_suggestions[i].att_idx]
+                                                best_exp_s = best_expand_suggestions[i]
+                                                if best_exp_s is not None:
+                                                    split_atts = [best_exp_s.att_idx]
                                                     if len(split_atts) == 1:
-                                                        if best_suggestion.merit - best_expand_suggestions[i].merit > \
+
+                                                        if best_suggestion.merit - \
+                                                            best_exp_s.merit > \
                                                                 hoeffding_bound:
                                                             poor_atts.add(int(split_atts[0]))
                                             # Scan 2 - remove good attributes from set
                                             for i in range(len(best_expand_suggestions)):
-                                                if best_expand_suggestions[i] is not None:
-                                                    split_atts = [best_expand_suggestions[i].att_idx]
+                                                best_exp_s = best_expand_suggestions[i]
+                                                if best_exp_s is not None:
+                                                    split_atts = [best_exp_s.att_idx]
                                                     if len(split_atts) == 1:
-                                                        if best_suggestion.merit - best_expand_suggestions[i].merit < \
+                                                        if best_suggestion.merit - \
+                                                                best_exp_s.merit < \
                                                                 hoeffding_bound:
                                                             try:
-                                                                poor_atts.remove(int(split_atts[0]))
+                                                                poor_atts.remove(
+                                                                    int(split_atts[0]))
                                                             except KeyError:
                                                                 pass
                                             for poor_att in poor_atts:
@@ -752,7 +807,8 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
                                     if should_expand:
                                         best_suggestion = best_expand_suggestions[-1]
-                                        new_pred = Predicate(best_suggestion.att_idx, best_suggestion.operator,
+                                        new_pred = Predicate(best_suggestion.att_idx,
+                                                             best_suggestion.operator,
                                                              best_suggestion.att_val)
                                         add_pred = True
                                         for pred in new_rule.predicate_set:
@@ -760,12 +816,10 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                                                     pred.att_idx == new_pred.att_idx):
                                                 if pred.operator == "<=":
                                                     pred.value = min(pred.value, new_pred.value)
-                                                    new_rule.observed_class_distribution = best_suggestion. \
-                                                        resulting_class_distribution_from_split(0).copy()
+                                                    new_rule.observed_class_distribution = best_suggestion.resulting_class_distribution_from_split(0).copy()  # noqa: E501
                                                 elif pred.operator == ">":
                                                     pred.value = max(pred.value, new_pred.value)
-                                                    new_rule.observed_class_distribution = best_suggestion. \
-                                                        resulting_class_distribution_from_split(1).copy()
+                                                    new_rule.observed_class_distribution = best_suggestion.resulting_class_distribution_from_split(1).copy()  # noqa: E501
                                                 new_rule._attribute_observers = {}
                                                 add_pred = False
                                                 break
@@ -774,11 +828,9 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
                                             new_rule._attribute_observers = {}
                                             new_rule.observed_class_distribution = {}
                                             if new_pred.operator in ["=", "<="]:
-                                                new_rule.observed_class_distribution = best_suggestion. \
-                                                    resulting_class_distribution_from_split(0).copy()
+                                                new_rule.observed_class_distribution = best_suggestion.resulting_class_distribution_from_split(0).copy()  # noqa: E501
                                             else:
-                                                new_rule.observed_class_distribution = best_suggestion. \
-                                                    resulting_class_distribution_from_split(1).copy()
+                                                new_rule.observed_class_distribution = best_suggestion.resulting_class_distribution_from_split(1).copy()  # noqa: E501
                                         self.rule_set.append(copy.deepcopy(new_rule))
 
     def predict(self, X):
@@ -888,16 +940,19 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
         description = ''
         for i, rule in enumerate(self.rule_set):
             class_idx = max(rule.observed_class_distribution.items(), key=itemgetter(1))[0]
-            description += 'Rule ' + str(i) + ' :' + str(rule.get_rule()) + '| class :' + str(class_idx) + '  ' + \
-                           str(rule.observed_class_distribution) + '\n'
-        class_idx = max(self.default_rule.observed_class_distribution.items(), key=itemgetter(1))[0]
-        description += 'Default Rule :' + str(self.default_rule.get_rule()) + '| class :' + str(class_idx) + '  ' + \
-                       str(self.default_rule.observed_class_distribution)
+            description += 'Rule ' + str(i) + ' :' + str(rule.get_rule()) + '| class :' + str(
+                class_idx) + '  ' + str(rule.observed_class_distribution) + '\n'
+        class_idx = max(
+            self.default_rule.observed_class_distribution.items(),
+            key=itemgetter(1))[0]
+        description += 'Default Rule :' + str(self.default_rule.get_rule()) + '| class :' + str(
+            class_idx) + '  ' + str(self.default_rule.observed_class_distribution)
         return description
 
     @staticmethod
     def compute_hoeffding_bound(range_val, confidence, n):
-        r""" Compute the Hoeffding bound, used to decide how many samples are necessary at each node.
+        r""" Compute the Hoeffding bound, used to decide how many samples are necessary at
+        each node.
 
         Notes
         -----
@@ -911,10 +966,11 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
         :math:`\epsilon`: Hoeffding bound.
 
-        :math:`R`: Range of a random variable. For a probability the range is 1, and for an information gain the range
-        is log *c*, where *c* is the number of classes.
+        :math:`R`: Range of a random variable. For a probability the range is 1,
+        and for an information gain the range is log *c*, where *c* is the number of classes.
 
-        :math:`\delta`: Confidence. 1 minus the desired probability of choosing the correct attribute at any given node.
+        :math:`\delta`: Confidence. 1 minus the desired probability of choosing the correct
+        attribute at any given node.
 
         :math:`n`: Number of samples.
 
@@ -1030,7 +1086,9 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
     def nominal_attributes(self, value):
         if value is None:
             self._nominal_attributes = []
-            print("No Nominal attributes have been defined, will consider all attributes as numerical")
+            print(
+                "No Nominal attributes have been defined, will consider "
+                "all attributes as numerical")
         else:
             self._nominal_attributes = value
 
@@ -1049,7 +1107,9 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
     @ordered_rules.setter
     def ordered_rules(self, value):
         if value and self.rule_prediction != _FIRSTHIT:
-            print("Only one rule from the ordered set can be covered, rule prediction is set to first hit")
+            print(
+                "Only one rule from the ordered set can be covered, "
+                "rule prediction is set to first hit")
             self.rule_prediction = _FIRSTHIT
             self._ordered_rules = True
         else:

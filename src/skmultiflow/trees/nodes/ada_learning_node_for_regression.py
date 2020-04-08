@@ -26,6 +26,7 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
+
     def __init__(self, initial_class_observations, perceptron_weight, random_state=None):
         super().__init__(initial_class_observations, perceptron_weight, random_state)
         self._estimation_error_weight = ADWIN()

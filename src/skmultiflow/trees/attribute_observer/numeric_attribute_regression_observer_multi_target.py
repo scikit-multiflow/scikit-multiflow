@@ -59,12 +59,10 @@ class NumericAttributeRegressionObserverMultiTarget(AttributeClassObserver):
             # Value was not yet added to the tree
             if is_right:
                 antecedent._right = \
-                    NumericAttributeRegressionObserverMultiTarget.\
-                    Node(att_val, target)
+                    NumericAttributeRegressionObserverMultiTarget.Node(att_val, target)
             else:
                 antecedent._left = \
-                    NumericAttributeRegressionObserverMultiTarget.\
-                    Node(att_val, target)
+                    NumericAttributeRegressionObserverMultiTarget.Node(att_val, target)
 
     def __init__(self):
         super().__init__()
@@ -75,7 +73,7 @@ class NumericAttributeRegressionObserverMultiTarget(AttributeClassObserver):
             return
         else:
             if self._root is None:
-                self._root = NumericAttributeRegressionObserverMultiTarget.\
+                self._root = NumericAttributeRegressionObserverMultiTarget. \
                     Node(att_val, class_val)
             else:
                 self._root.insert_value(att_val, class_val)

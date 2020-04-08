@@ -23,6 +23,7 @@ class RandomLearningNodeClassification(ActiveLearningNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
+
     def __init__(self, initial_class_observations, max_features, random_state=None):
         """ RandomLearningNodeClassification class constructor. """
         super().__init__(initial_class_observations)

@@ -15,6 +15,7 @@ class ActiveLearningNodeForRegressionMultiTarget(ActiveLearningNodeForRegression
         (key '0'), the sum of the targets values (key '1'), and the sum of the
         squared targets values (key '2').
     """
+
     def __init__(self, initial_class_observations):
         """ ActiveLearningNodeForRegressionMultiTarget class constructor. """
         super().__init__(initial_class_observations)

@@ -12,6 +12,7 @@ class AnyTimeLearningNodeNB(AnyTimeActiveLearningNode):
         Initial class observations
 
     """
+
     def __init__(self, initial_class_observations):
         """ AnyTimeLearningNodeNB class constructor. """
         super().__init__(initial_class_observations)

@@ -34,4 +34,5 @@ class InactiveLearningNode(LearningNode):
             self._observed_class_distribution[y] += weight
         except KeyError:
             self._observed_class_distribution[y] = weight
-            self._observed_class_distribution = dict(sorted(self._observed_class_distribution.items()))
+            self._observed_class_distribution = dict(
+                sorted(self._observed_class_distribution.items()))

@@ -27,6 +27,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
+
     def __init__(self, initial_class_observations, perceptron_weight=None,
                  random_state=None):
         """ SSTActiveLearningNode class constructor."""
@@ -69,8 +70,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
             learning_ratio = rht.learning_ratio_perceptron
         else:
             learning_ratio = rht.learning_ratio_perceptron / \
-                             (1 + self._observed_class_distribution[0] *
-                              rht.learning_ratio_decay)
+                (1 + self._observed_class_distribution[0] * rht.learning_ratio_decay)
 
         try:
             self._observed_class_distribution[1] += weight * y
@@ -114,8 +114,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
         normalized_target_value = rht.normalize_target_value(y)
 
         self.perceptron_weight[0] += learning_ratio * \
-            (normalized_target_value - normalized_base_pred)[:, None] @ \
-            normalized_sample[None, :]
+            (normalized_target_value - normalized_base_pred)[:, None] @ normalized_sample[None, :]
 
         # Add bias term
         normalized_base_pred = np.append(normalized_base_pred, 1.0)

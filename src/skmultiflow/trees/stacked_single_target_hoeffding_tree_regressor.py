@@ -15,7 +15,6 @@ from skmultiflow.trees.nodes import SSTActiveLearningNodeAdaptive
 from skmultiflow.trees.nodes import SSTInactiveLearningNode
 from skmultiflow.trees.nodes import SSTInactiveLearningNodeAdaptive
 
-
 _PERCEPTRON = 'perceptron'
 _ADAPTIVE = 'adaptive'
 
@@ -110,7 +109,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                          leaf_prediction=leaf_prediction,
                          nb_threshold=nb_threshold,
                          nominal_attributes=nominal_attributes)
-        self.split_criterion = 'icvr'   # intra cluster variance reduction
+        self.split_criterion = 'icvr'  # intra cluster variance reduction
         self.learning_ratio_perceptron = learning_ratio_perceptron
         self.learning_ratio_decay = learning_ratio_decay
         self.learning_ratio_const = learning_ratio_const
@@ -142,7 +141,9 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
         if leaf_prediction not in {_PERCEPTRON, _ADAPTIVE}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
+            print(
+                "Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction,
+                                                                                   _PERCEPTRON))
             self._leaf_prediction = _PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
@@ -347,7 +348,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
             Parent node's branch index.
         """
         split_criterion = IntraClusterVarianceReductionSplitCriterion()
-        best_split_suggestions = node.\
+        best_split_suggestions = node. \
             get_best_split_suggestions(split_criterion, self)
 
         best_split_suggestions.sort(key=attrgetter('merit'))
@@ -371,12 +372,12 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                     and not should_split:
                 poor_atts = set()
                 best_ratio = second_best_suggestion.merit \
-                    / best_suggestion.merit
+                             / best_suggestion.merit
 
                 # Add any poor attribute to set
                 for i in range(len(best_split_suggestions)):
                     if best_split_suggestions[i].split_test is not None:
-                        split_atts = best_split_suggestions[i].\
+                        split_atts = best_split_suggestions[i]. \
                             split_test.get_atts_test_depends_on()
                         if len(split_atts) == 1:
                             if best_split_suggestions[i].merit / \
@@ -400,13 +401,13 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                     if self.leaf_prediction == _PERCEPTRON:
                         new_child = self._new_learning_node(
                             split_decision.
-                            resulting_class_distribution_from_split(i),
+                                resulting_class_distribution_from_split(i),
                             node.perceptron_weight
                         )
                     elif self.leaf_prediction == _ADAPTIVE:
                         new_child = self._new_learning_node(
                             split_decision.
-                            resulting_class_distribution_from_split(i),
+                                resulting_class_distribution_from_split(i),
                             node.perceptron_weight
                         )
                         # Resets faded errors

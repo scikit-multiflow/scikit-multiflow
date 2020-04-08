@@ -29,7 +29,7 @@ class VarianceReductionSplitCriterion(SplitCriterion):
             SDR = self.compute_SD(pre_split_dist)
             for i in range(len(post_split_dist)):
                 Ni = post_split_dist[i][0]
-                SDR -= Ni/N * self.compute_SD(post_split_dist[i])
+                SDR -= Ni / N * self.compute_SD(post_split_dist[i])
         return SDR
 
     @staticmethod
@@ -39,7 +39,7 @@ class VarianceReductionSplitCriterion(SplitCriterion):
         sum_ = dist[1]
         sum_sq = dist[2]
 
-        var = (sum_sq - (sum_ * sum_)/N)/N
+        var = (sum_sq - (sum_ * sum_) / N) / N
         return np.sqrt(var) if var > 0.0 else 0.0
 
     @staticmethod

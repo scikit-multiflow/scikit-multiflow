@@ -35,8 +35,10 @@ class NumericAttributeClassObserverGaussian(AttributeClassObserver):
                 self._min_value_observed_per_class[class_val] = att_val
                 self._max_value_observed_per_class[class_val] = att_val
                 self._att_val_dist_per_class = dict(sorted(self._att_val_dist_per_class.items()))
-                self._max_value_observed_per_class = dict(sorted(self._max_value_observed_per_class.items()))
-                self._min_value_observed_per_class = dict(sorted(self._min_value_observed_per_class.items()))
+                self._max_value_observed_per_class = dict(
+                    sorted(self._max_value_observed_per_class.items()))
+                self._min_value_observed_per_class = dict(
+                    sorted(self._min_value_observed_per_class.items()))
 
             val_dist.add_observation(att_val, weight)
 
@@ -55,7 +57,8 @@ class NumericAttributeClassObserverGaussian(AttributeClassObserver):
             merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
             if best_suggestion is None or merit > best_suggestion.merit:
                 num_att_binary_test = NumericAttributeBinaryTest(att_idx, split_value, True)
-                best_suggestion = AttributeSplitSuggestion(num_att_binary_test, post_split_dist, merit)
+                best_suggestion = AttributeSplitSuggestion(num_att_binary_test, post_split_dist,
+                                                           merit)
         return best_suggestion
 
     def get_split_point_suggestions(self):
@@ -89,7 +92,8 @@ class NumericAttributeClassObserverGaussian(AttributeClassObserver):
             elif split_value >= self._max_value_observed_per_class[k]:
                 lhs_dist[k] = estimator.get_total_weight_observed()
             else:
-                weight_dist = estimator.estimated_weight_lessthan_equalto_greaterthan_value(split_value)
+                weight_dist = estimator.estimated_weight_lessthan_equalto_greaterthan_value(
+                    split_value)
                 lhs_dist[k] = weight_dist[0] + weight_dist[1]
                 rhs_dist[k] = weight_dist[2]
         return [lhs_dist, rhs_dist]

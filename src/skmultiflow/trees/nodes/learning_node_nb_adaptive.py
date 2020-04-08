@@ -37,7 +37,8 @@ class LearningNodeNBAdaptive(LearningNodeNB):
             # All classes equal, default to class 0
             if 0 == y:
                 self._mc_correct_weight += weight
-        elif max(self._observed_class_distribution, key=self._observed_class_distribution.get) == y:
+        elif max(self._observed_class_distribution,
+                 key=self._observed_class_distribution.get) == y:
             self._mc_correct_weight += weight
         nb_prediction = do_naive_bayes_prediction(
             X, self._observed_class_distribution, self._attribute_observers

@@ -27,6 +27,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
+
     def __init__(self, initial_class_observations, perceptron_node=None, random_state=None):
         """ ActiveLearningNodePerceptron class constructor."""
         super().__init__(initial_class_observations)
@@ -62,7 +63,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
         # These statistics are useful to calculate the mean and to calculate the variance reduction
 
         if self.perceptron_weight is None:
-            self.perceptron_weight = self.random_state.uniform(-1, 1, len(X)+1)
+            self.perceptron_weight = self.random_state.uniform(-1, 1, len(X) + 1)
 
         try:
             self._observed_class_distribution[0] += weight
@@ -80,7 +81,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
             learning_ratio = rht.learning_ratio_perceptron
         else:
             learning_ratio = rht.learning_ratio_perceptron / \
-                             (1 + self.samples_seen * rht.learning_ratio_decay)
+                (1 + self.samples_seen * rht.learning_ratio_decay)
 
         # Loop for compatibility with bagging methods
         for i in range(int(weight)):
@@ -115,7 +116,8 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
         normalized_pred = np.dot(self.perceptron_weight, normalized_sample)
         normalized_target_value = rht.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
-        self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * normalized_sample
+        self.perceptron_weight = self.perceptron_weight + learning_ratio * delta *\
+            normalized_sample
 
 
 def compute_sd(square_val: float, val: float, size: float):

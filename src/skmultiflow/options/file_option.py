@@ -3,29 +3,29 @@ from skmultiflow.options.base_option import Option
 
 class FileOption(Option):
     """ FileOption
-    
+
     This class keeps information about a file.
-    
+
     Parameters
     ----------
-    option_type: string 
+    option_type: string
         The type of file related to the option. Can be anything.
-        
-    option_name: string 
+
+    option_name: string
         The option identification. Can be anything.
-    
-    option_value: string 
+
+    option_value: string
         The complete path to the file.
-    
-    file_extension: string 
+
+    file_extension: string
         The type of extension.
-    
+
     is_out: bool
         Whether it's an output file or not.
-    
-    """
 
-    def __init__(self, option_type=None, option_name=None, option_value=None, file_extension=None, is_out=False):
+    """
+    def __init__(self, option_type=None, option_name=None, option_value=None, file_extension=None,
+                 is_out=False):
         super().__init__()
         self.option_name = option_name
         self.option_value = option_value

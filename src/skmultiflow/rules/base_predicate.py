@@ -95,8 +95,8 @@ class Predicate(BaseSKMObject):
         string
             the conjunction described by the predicate.
         """
-        return str("Att (" + str(self.att_idx) + ") " + str(self.operator) + " " +
-                   "%.3f" % round(self.value, 2))
+        return str("Att (" + str(self.att_idx) + ") " + str(self.operator) + " " + "%.3f" % round(
+            self.value, 2))
 
     def __str__(self):
         """ Print the predicate.
@@ -106,8 +106,8 @@ class Predicate(BaseSKMObject):
         string
             A string representing the predicate.
         """
-        return str("Att (" + str(self.att_idx) + ") " + str(self.operator) + " " +
-                   "%.3f" % round(self.value, 2))
+        return str("Att (" + str(self.att_idx) + ") " + str(self.operator) + " " + "%.3f" % round(
+            self.value, 2))
 
     def __eq__(self, other):
         """ Checks is too predicates are equal, meaning have same operator and value.

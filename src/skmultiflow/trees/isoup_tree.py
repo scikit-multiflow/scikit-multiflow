@@ -21,20 +21,24 @@ from skmultiflow.trees.nodes import InactiveLearningNodeAdaptiveMultiTarget
 
 import warnings
 
-
 _TARGET_MEAN = 'mean'
 _PERCEPTRON = 'perceptron'
 _ADAPTIVE = 'adaptive'
 
 
-def MultiTargetRegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
-                                       split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
-                                       stop_mem_management=False, remove_poor_atts=False, leaf_prediction='perceptron',
+def MultiTargetRegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=1000000,
+                                       grace_period=200,
+                                       split_confidence=0.0000001, tie_threshold=0.05,
+                                       binary_split=False,
+                                       stop_mem_management=False, remove_poor_atts=False,
+                                       leaf_prediction='perceptron',
                                        no_preprune=False, nb_threshold=0, nominal_attributes=None,
                                        learning_ratio_perceptron=0.02, learning_ratio_decay=0.001,
-                                       learning_ratio_const=True, random_state=None):     # pragma: no cover
-    warnings.warn("'MultiTargetRegressionHoeffdingTree' has been renamed to 'iSOUPTreeRegressor' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+                                       learning_ratio_const=True,
+                                       random_state=None):  # pragma: no cover
+    warnings.warn(
+        "'MultiTargetRegressionHoeffdingTree' has been renamed to 'iSOUPTreeRegressor' in v0.5.0.\n"
+        "The old name will be removed in v0.7.0", category=FutureWarning)
     return iSOUPTreeRegressor(max_byte_size=max_byte_size,
                               memory_estimate_period=memory_estimate_period,
                               grace_period=grace_period,
@@ -140,7 +144,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                          leaf_prediction=leaf_prediction,
                          nb_threshold=nb_threshold,
                          nominal_attributes=nominal_attributes)
-        self.split_criterion = 'icvr'   # intra cluster variance reduction
+        self.split_criterion = 'icvr'  # intra cluster variance reduction
         self.learning_ratio_perceptron = learning_ratio_perceptron
         self.learning_ratio_decay = learning_ratio_decay
         self.learning_ratio_const = learning_ratio_const
@@ -172,7 +176,9 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
         if leaf_prediction not in {_TARGET_MEAN, _PERCEPTRON, _ADAPTIVE}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, _PERCEPTRON))
+            print(
+                "Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction,
+                                                                                   _PERCEPTRON))
             self._leaf_prediction = _PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
@@ -186,7 +192,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
         if split_criterion == 'vr':
             # Corner case due to parent class initialization
             split_criterion = 'icvr'
-        if split_criterion != 'icvr':   # intra cluster variance reduction
+        if split_criterion != 'icvr':  # intra cluster variance reduction
             print("Invalid split_criterion option {}', will use default '{}'"
                   .format(split_criterion, 'icvr'))
             self._split_criterion = 'icvr'
@@ -436,13 +442,13 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.get_weight_seen()
 
-                weight_diff = weight_seen - active_learning_node.\
+                weight_diff = weight_seen - active_learning_node. \
                     get_weight_seen_at_last_split_evaluation()
                 if weight_diff >= self.grace_period:
                     self._attempt_to_split(active_learning_node,
                                            found_node.parent,
                                            found_node.parent_branch)
-                    active_learning_node.\
+                    active_learning_node. \
                         set_weight_seen_at_last_split_evaluation(weight_seen)
         # Split node encountered a previously unseen categorical value
         # (in a multiway test)
@@ -585,7 +591,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
         """
         split_criterion = IntraClusterVarianceReductionSplitCriterion()
 
-        best_split_suggestions = node.\
+        best_split_suggestions = node. \
             get_best_split_suggestions(split_criterion, self)
 
         best_split_suggestions.sort(key=attrgetter('merit'))
@@ -609,13 +615,13 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                     and not should_split:
                 poor_atts = set()
                 best_ratio = second_best_suggestion.merit \
-                    / best_suggestion.merit
+                             / best_suggestion.merit
 
                 # Add any poor attribute to set
                 # TODO reactivation procedure???
                 for i in range(len(best_split_suggestions)):
                     if best_split_suggestions[i].split_test is not None:
-                        split_atts = best_split_suggestions[i].\
+                        split_atts = best_split_suggestions[i]. \
                             split_test.get_atts_test_depends_on()
                         if len(split_atts) == 1:
                             if best_split_suggestions[i].merit / \
@@ -640,18 +646,18 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                     if self.leaf_prediction == _PERCEPTRON:
                         new_child = self._new_learning_node(
                             split_decision.
-                            resulting_class_distribution_from_split(i),
+                                resulting_class_distribution_from_split(i),
                             node.perceptron_weight
                         )
                     elif self.leaf_prediction == _TARGET_MEAN:
                         new_child = self._new_learning_node(
                             split_decision.
-                            resulting_class_distribution_from_split(i),
+                                resulting_class_distribution_from_split(i),
                             None)
                     elif self.leaf_prediction == _ADAPTIVE:
                         new_child = self._new_learning_node(
                             split_decision.
-                            resulting_class_distribution_from_split(i),
+                                resulting_class_distribution_from_split(i),
                             node.perceptron_weight
                         )
                         # Resets faded errors

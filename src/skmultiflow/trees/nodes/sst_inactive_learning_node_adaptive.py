@@ -27,6 +27,7 @@ class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
+
     def __init__(self, initial_class_observations, perceptron_weight=None,
                  random_state=None):
         """ SSTInactiveLearningNodeAdaptive class constructor."""
@@ -63,8 +64,7 @@ class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):
         normalized_target_value = rht.normalize_target_value(y)
 
         self.perceptron_weight[0] += learning_ratio * \
-            (normalized_target_value - normalized_base_pred)[:, None] @ \
-            normalized_sample[None, :]
+            (normalized_target_value - normalized_base_pred)[:, None] @ normalized_sample[None, :]
 
         # Add bias term
         normalized_base_pred = np.append(normalized_base_pred, 1.0)
@@ -80,10 +80,8 @@ class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):
         # The considered errors are normalized, since they are based on
         # mean centered and sd scaled values
         self.fMAE_M = 0.95 * self.fMAE_M + np.absolute(
-            normalized_target_value - rht.
-            normalize_target_value(self._observed_class_distribution[1] /
-                                    self._observed_class_distribution[0])
-        )
+            normalized_target_value - rht.normalize_target_value(
+                self._observed_class_distribution[1] / self._observed_class_distribution[0]))
 
         # Ignore added bias term in the comparison
         self.fMAE_P = 0.95 * self.fMAE_P + np.absolute(
