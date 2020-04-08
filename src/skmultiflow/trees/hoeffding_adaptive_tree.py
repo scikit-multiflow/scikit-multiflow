@@ -90,7 +90,7 @@ class HoeffdingAdaptiveTreeClassifier(HoeffdingTreeClassifier):
        If int, random_state is the seed used by the random number generator;
        If RandomState instance, random_state is the random number generator;
        If None, the random number generator is the RandomState instance used
-       by `np.random`. Used when bootstrap_sampling is True.
+       by `np.random`. Only used when ``bootstrap_sampling=True`` to direct the bootstrap sampling.
 
     Notes
     -----
