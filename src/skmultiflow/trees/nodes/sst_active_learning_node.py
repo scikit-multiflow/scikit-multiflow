@@ -1,4 +1,5 @@
 import numpy as np
+
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptronMultiTarget
 from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserverMultiTarget
 from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver

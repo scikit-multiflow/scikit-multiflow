@@ -1,4 +1,5 @@
 import numpy as np
+
 from skmultiflow.trees.nodes import InactiveLearningNodePerceptronMultiTarget
 from skmultiflow.utils import get_dimensions
 

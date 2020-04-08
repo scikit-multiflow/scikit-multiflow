@@ -1,5 +1,7 @@
-import numpy as np
 from copy import deepcopy
+
+import numpy as np
+
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserverMultiTarget
 from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
