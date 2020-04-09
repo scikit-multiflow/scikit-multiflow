@@ -7,7 +7,7 @@ from skmultiflow.trees import HoeffdingAdaptiveTreeRegressor
 from difflib import SequenceMatcher
 
 
-def test_hoeffding_tree_mean():
+def test_hoeffding_adaptive_tree_regressor_mean():
     stream = RegressionGenerator(n_samples=500, n_features=20, n_informative=15, random_state=1)
 
     learner = HoeffdingAdaptiveTreeRegressor(leaf_prediction='mean', random_state=1)
@@ -58,7 +58,7 @@ def test_hoeffding_tree_mean():
     assert type(learner.predict(X)) == np.ndarray
 
 
-def test_hoeffding_tree_perceptron():
+def test_hoeffding_adaptive_tree_regressor_perceptron():
     stream = RegressionGenerator(n_samples=500, n_features=20, n_informative=15, random_state=1)
 
     learner = HoeffdingAdaptiveTreeRegressor(leaf_prediction='perceptron', random_state=1)
