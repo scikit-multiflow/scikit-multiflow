@@ -2,6 +2,13 @@
 
 jobs:
 
+- job: PEP8
+    - setps:
+      - script: |
+          pythpn -m pip install flake8
+          python -m flake8 tests
+        displayName: 'Checking PEP8 style'
+
 - job: Linux
   
   strategy:
