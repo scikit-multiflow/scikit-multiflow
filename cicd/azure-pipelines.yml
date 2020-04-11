@@ -5,9 +5,11 @@ jobs:
 - job: PEP8
   steps:
     - script: |
-        python -m pip install flake8
-        python -m flake8 tests
+        python3 -m pip install flake8
+        python3 -m flake8 tests
       displayName: 'Checking PEP8 style'
+  pool:
+    vmImage: 'ubuntu-latest'
 
 - job: Linux
   
