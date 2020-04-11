@@ -6,7 +6,8 @@ jobs:
   steps:
     - script: |
         python3 -m pip install flake8
-        python3 -m flake8 tests
+        chmod +x ./dev/linter.sh
+        ./dev/linter.sh
       displayName: 'Checking PEP8 style'
   pool:
     vmImage: 'ubuntu-latest'
