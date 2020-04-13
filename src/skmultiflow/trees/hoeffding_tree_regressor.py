@@ -478,39 +478,6 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         """
         raise NotImplementedError
 
-    def enforce_tracker_limit(self):
-        """ Track the size of the tree and disable/enable nodes if required."""
-        byte_size = (self._active_leaf_byte_size_estimate + self._inactive_leaf_node_cnt *
-                     self._inactive_leaf_byte_size_estimate) * \
-            self._byte_size_estimate_overhead_fraction
-        if self._inactive_leaf_node_cnt > 0 or byte_size > self.max_byte_size:
-            if self.stop_mem_management:
-                self._growth_allowed = False
-                return
-        learning_nodes = self._find_learning_nodes()
-        learning_nodes.sort(key=lambda n: n.depth, reverse=True)
-        max_active = 0
-        while max_active < len(learning_nodes):
-            max_active += 1
-            estimated_model_size = ((max_active * self._active_leaf_byte_size_estimate +
-                                    (len(learning_nodes) - max_active) *
-                                    self._inactive_leaf_byte_size_estimate) *
-                                    self._byte_size_estimate_overhead_fraction)
-            if estimated_model_size > self.max_byte_size:
-                max_active -= 1
-                break
-        cutoff = len(learning_nodes) - max_active
-        for i in range(cutoff):
-            if isinstance(learning_nodes[i].node, ActiveLearningNode):
-                self._deactivate_learning_node(learning_nodes[i].node,
-                                               learning_nodes[i].parent,
-                                               learning_nodes[i].parent_branch)
-        for i in range(cutoff, len(learning_nodes)):
-            if isinstance(learning_nodes[i].node, InactiveLearningNode):
-                self._activate_learning_node(learning_nodes[i].node,
-                                             learning_nodes[i].parent,
-                                             learning_nodes[i].parent_branch)
-
     def _attempt_to_split(self, node, parent, parent_idx: int):
         """Attempt to split a node.
 
@@ -596,6 +563,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                     parent.set_child(parent_idx, new_split)
             # Manage memory
             self.enforce_tracker_limit()
+
+    def _sort_learning_nodes(self, learning_nodes):
+        """ Define strategy to sort learning nodes according to their likeliness of being split."""
+        learning_nodes.sort(key=lambda n: n.depth, reverse=True)
+        return learning_nodes
 
     def _activate_learning_node(self, to_activate: InactiveLearningNode, parent: SplitNode,
                                 parent_branch: int):

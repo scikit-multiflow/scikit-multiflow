@@ -724,17 +724,22 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                 # Manage memory
                 self.enforce_tracker_limit()
 
+    def _sort_learning_nodes(self, learning_nodes):
+        """ Define strategy to sort learning nodes according to their likeliness of being split."""
+        learning_nodes.sort(key=lambda n: n.node.calculate_promise())
+        return learning_nodes
+
     def enforce_tracker_limit(self):
         """ Track the size of the tree and disable/enable nodes if required."""
         byte_size = (self._active_leaf_byte_size_estimate
                      + self._inactive_leaf_node_cnt * self._inactive_leaf_byte_size_estimate) \
-                    * self._byte_size_estimate_overhead_fraction
+            * self._byte_size_estimate_overhead_fraction
         if self._inactive_leaf_node_cnt > 0 or byte_size > self.max_byte_size:
             if self.stop_mem_management:
                 self._growth_allowed = False
                 return
         learning_nodes = self._find_learning_nodes()
-        learning_nodes.sort(key=lambda n: n.node.calculate_promise())
+        learning_nodes = self._sort_learning_nodes(learning_nodes)
         max_active = 0
         while max_active < len(learning_nodes):
             max_active += 1
