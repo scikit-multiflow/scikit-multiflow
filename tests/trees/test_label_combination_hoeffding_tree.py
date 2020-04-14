@@ -132,7 +132,8 @@ def test_label_combination_hoeffding_tree_nba(test_path):
     assert info == expected_info
 
 
-def test_label_combination_hoeffding_tree_memory_management():
+def test_label_combination_hoeffding_tree_coverage():
+    # Cover memory management
     max_samples = 10000
     max_size_kb = 50
     stream = MultilabelGenerator(
