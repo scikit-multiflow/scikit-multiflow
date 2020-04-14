@@ -140,13 +140,6 @@ def test_hoeffding_tree_coverage():
 
     learner.reset()
 
-    # Cover nominal attribute observer
-    stream = RandomTreeGenerator(tree_random_state=1, sample_random_state=1, n_num_features=0,
-                                 n_categories_per_cat_feature=2)
-    X, y = stream.next_sample(1000)
-    learner = HoeffdingTreeClassifier(leaf_prediction='mc', nominal_attributes=[i for i in range(10)])
-    learner.partial_fit(X, y, classes=stream.target_values)
-
 
 def test_hoeffding_tree_model_information():
     stream = SEAGenerator(random_state=1, noise_percentage=0.05)
