@@ -118,23 +118,36 @@ def test_stacked_single_target_hoeffding_tree_regressor_adaptive(test_path):
 
 
 def test_hoeffding_tree_coverage(test_path):
-    # Cover nominal attribute observer
-    test_file = os.path.join(test_path, 'multi_target_regression_data.npz')
-    data = np.load(test_file)
-    X = data['X']
-    Y = data['Y']
+    max_samples = 1000
+    max_size_mb = 2
+
+    stream = RegressionGenerator(
+        n_samples=max_samples, n_features=10, n_informative=7, n_targets=3,
+        random_state=42
+    )
+    X, y = stream.next_sample(max_samples)
 
     # Will generate a warning concerning the invalid leaf prediction option
-    learner = StackedSingleTargetHoeffdingTreeRegressor(
-        leaf_prediction='mean',
-        nominal_attributes=[i for i in range(3)],
-        learning_ratio_const=False
+    tree = StackedSingleTargetHoeffdingTreeRegressor(
+        leaf_prediction='mean', grace_period=200,
+        memory_estimate_period=100, max_byte_size=max_size_mb*2**20
     )
 
     # Trying to predict without fitting
-    learner.predict(X[0])
+    tree.predict(X[0])
 
-    learner.partial_fit(X, Y)
+    tree.partial_fit(X, y)
+
+    # A tree without memory management enabled reaches over 3 MB in size
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
+
+    tree = StackedSingleTargetHoeffdingTreeRegressor(
+        leaf_prediction='adaptive', grace_period=200,
+        memory_estimate_period=100, max_byte_size=max_size_mb*2**20,
+        learning_ratio_const=False
+    )
+    tree.partial_fit(X, y)
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
 
 
 def test_stacked_single_target_hoeffding_tree_categorical_features(test_path):
@@ -188,34 +201,3 @@ def test_stacked_single_target_hoeffding_tree_categorical_features(test_path):
 
     learner.partial_fit(X, y)
     learner.predict([new_sample])
-
-
-def test_sst_ht_memory_management():
-    max_samples = 4000
-    max_size_mb = 5
-
-    # A tree without memory management enabled reaches over 7 MB in size
-    stream = RegressionGenerator(
-        n_samples=max_samples, n_features=10, n_informative=7, n_targets=3,
-        random_state=42
-    )
-    tree = StackedSingleTargetHoeffdingTreeRegressor(
-        leaf_prediction='perceptron', grace_period=200,
-        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
-    )
-
-    X, y = stream.next_sample(max_samples)
-    tree.partial_fit(X, y)
-
-    assert calculate_object_size(tree, 'MB') <= max_size_mb
-
-    stream.reset()
-
-    tree = StackedSingleTargetHoeffdingTreeRegressor(
-        leaf_prediction='adaptive', grace_period=200,
-        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
-    )
-
-    X, y = stream.next_sample(max_samples)
-    tree.partial_fit(X, y)
-    assert calculate_object_size(tree, 'MB') <= max_size_mb
