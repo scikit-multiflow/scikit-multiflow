@@ -114,23 +114,39 @@ def test_hoeffding_tree_regressor_perceptron():
     assert type(learner.predict(X)) == np.ndarray
 
 
-def test_hoeffding_tree_regressor_coverage(test_path):
-    # Cover nominal attribute observer
-    test_file = os.path.join(test_path, 'regression_data.npz')
-    data = np.load(test_file)
-    X = data['X']
-    y = data['y']
+def test_hoeffding_tree_regressor_coverage():
+    max_samples = 1000
+    max_size_mb = 2
+
+    stream = RegressionGenerator(
+        n_samples=max_samples, n_features=10, n_informative=7, n_targets=1,
+        random_state=42
+    )
+    X, y = stream.next_sample(max_samples)
+
+    # Cover memory management
+    tree = HoeffdingTreeRegressor(
+        leaf_prediction='mean', grace_period=100,
+        memory_estimate_period=100, max_byte_size=max_size_mb*2**20
+    )
+    tree.partial_fit(X, y)
+
+    # A tree without memory management enabled reaches over 3 MB in size
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
 
     # Typo in leaf prediction
-    learner = HoeffdingTreeRegressor(
-        leaf_prediction='percptron', nominal_attributes=[i for i in range(3)]
+    tree = HoeffdingTreeRegressor(
+        leaf_prediction='percptron', grace_period=100,
+        memory_estimate_period=100, max_byte_size=max_size_mb*2**20
     )
-    print(learner.split_criterion)
     # Invalid split_criterion
-    learner.split_criterion = 'VR'
-    learner.partial_fit(X, y)
+    tree.split_criterion = 'VR'
 
-    assert learner._estimator_type == 'regressor'
+    tree.partial_fit(X, y)
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
+
+    tree.reset()
+    assert tree._estimator_type == 'regressor'
 
 
 def test_hoeffding_tree_regressor_model_description():
@@ -185,33 +201,3 @@ def test_hoeffding_tree_regressor_categorical_features(test_path):
     assert SequenceMatcher(
         None, expected_description, learner.get_model_description()
     ).ratio() > 0.9
-
-
-def test_hoeffding_tree_regressor_memory_management():
-    max_samples = 4000
-    max_size_mb = 5
-
-    # A tree without memory management enabled reaches over 7 MB in size
-    stream = RegressionGenerator(
-        n_samples=max_samples, n_features=10, n_informative=7, n_targets=1,
-        random_state=42
-    )
-    tree = HoeffdingTreeRegressor(
-        leaf_prediction='mean', grace_period=200,
-        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
-    )
-
-    X, y = stream.next_sample(max_samples)
-    tree.partial_fit(X, y)
-    assert calculate_object_size(tree, 'MB') <= max_size_mb
-
-    stream.reset()
-
-    tree = HoeffdingTreeRegressor(
-        leaf_prediction='perceptron', grace_period=200,
-        memory_estimate_period=1000, max_byte_size=max_size_mb*2**20
-    )
-
-    X, y = stream.next_sample(max_samples)
-    tree.partial_fit(X, y)
-    assert calculate_object_size(tree, 'MB') <= max_size_mb

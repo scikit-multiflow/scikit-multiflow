@@ -117,7 +117,7 @@ def test_stacked_single_target_hoeffding_tree_regressor_adaptive(test_path):
     assert isinstance(learner.get_model_description(), type(''))
 
 
-def test_hoeffding_tree_coverage(test_path):
+def test_hoeffding_tree_coverage():
     max_samples = 1000
     max_size_mb = 2
 
