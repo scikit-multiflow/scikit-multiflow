@@ -1,9 +1,8 @@
 from copy import deepcopy
 import math
+import itertools
 
 import numpy as np
-
-from sklearn.preprocessing import normalize
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
@@ -374,15 +373,30 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
         if self.ensemble is None:
             self.init_ensemble(X)
 
-        y_proba_mean = None
-        for i in range(self.n_estimators):
-            y_proba_current = self.ensemble[i].predict_proba(X)
-            if y_proba_mean is None:
-                y_proba_mean = y_proba_current
+        r, _ = get_dimensions(X)
+        y_proba = []
+        for i in range(r):
+            votes = deepcopy(self.get_votes_for_instance(X[i]))
+            if votes == {}:
+                # Estimator is empty, all classes equal, default to zero
+                y_proba.append([0])
             else:
-                y_proba_mean = y_proba_mean + (y_proba_current - y_proba_mean) / (i + 1)
-
-        return normalize(y_proba_mean, norm='l1')
+                if sum(votes.values()) != 0:
+                    votes = normalize_values_in_dict(votes, inplace=False)
+                if self.classes is not None:
+                    votes_array = np.zeros(int(max(self.classes)) + 1)
+                else:
+                    votes_array = np.zeros(int(max(votes.keys())) + 1)
+                for key, value in votes.items():
+                    votes_array[int(key)] = value
+                y_proba.append(votes_array)
+        # Set result as np.array
+        if self.classes is not None:
+            y_proba = np.asarray(y_proba)
+        else:
+            # Fill missing values related to unobserved classes to ensure we get a 2D array
+            y_proba = np.asarray(list(itertools.zip_longest(*y_proba, fillvalue=0.0))).T
+        return y_proba
 
     def reset(self):
         """Reset ARF."""
@@ -589,9 +603,6 @@ class ARFBaseLearner(BaseSKMObject):
 
     def predict(self, X):
         return self.classifier.predict(X)
-
-    def predict_proba(self, X):
-        return self.classifier.predict_proba(X)
 
     def get_votes_for_instance(self, X):
         return self.classifier.get_votes_for_instance(X)
