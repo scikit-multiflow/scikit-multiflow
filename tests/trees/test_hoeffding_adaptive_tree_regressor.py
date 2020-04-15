@@ -48,7 +48,7 @@ def test_hoeffding_adaptive_tree_regressor_mean():
 
     expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, grace_period=200, leaf_prediction='mean', " \
                     "learning_ratio_const=True, learning_ratio_decay=0.001, learning_ratio_perceptron=0.02, " \
-                    "max_byte_size=33554432, memory_estimate_period=1000000, nb_threshold=0, no_preprune=False, " \
+                    "max_byte_size=33554432, memory_estimate_period=1000000, no_preprune=False, " \
                     "nominal_attributes=None, random_state=1, remove_poor_atts=False, split_confidence=1e-07, " \
                     "stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
@@ -105,7 +105,7 @@ def test_hoeffding_adaptive_tree_regressor_perceptron():
     expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, grace_period=200, " \
                     "leaf_prediction='perceptron', learning_ratio_const=True, learning_ratio_decay=0.001, " \
                     "learning_ratio_perceptron=0.02, max_byte_size=33554432, memory_estimate_period=1000000, " \
-                    "nb_threshold=0, no_preprune=False, nominal_attributes=None, random_state=1, " \
+                    "no_preprune=False, nominal_attributes=None, random_state=1, " \
                     "remove_poor_atts=False, split_confidence=1e-07, stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
