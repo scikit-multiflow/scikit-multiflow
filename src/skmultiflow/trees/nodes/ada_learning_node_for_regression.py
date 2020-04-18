@@ -2,7 +2,6 @@ from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection.adwin import ADWIN
-from skmultiflow.utils import check_random_state
 
 
 class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
@@ -24,11 +23,11 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
+
     def __init__(self, initial_class_observations, parent_node, random_state=None):
         super().__init__(initial_class_observations, parent_node, random_state)
         self._estimation_error_weight = ADWIN()
         self._error_change = False
-        self._random_state = check_random_state(random_state)
 
         # To normalize the observed errors in the [0, 1] range
         self._min_error = float('Inf')

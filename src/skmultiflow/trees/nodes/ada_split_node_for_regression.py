@@ -34,7 +34,7 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         self._estimation_error_weight = ADWIN()
         self._alternate_tree = None
         self.error_change = False
-        self._random_state = check_random_state(random_state)
+        self.random_state = check_random_state(random_state)
 
         # To normalize the observed errors in the [0, 1] range
         self._min_error = float('Inf')
