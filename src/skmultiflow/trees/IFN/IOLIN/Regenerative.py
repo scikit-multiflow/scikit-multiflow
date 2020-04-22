@@ -3,29 +3,16 @@ import pickle
 
 import numpy as np
 import pandas as pd
+from skml.IOLIN import OnlineNetwork
 from skml import IfnClassifier
-from skml import MetaLearning
 from skmultiflow.data import SEAGenerator
 
 
-class OnlineNetwork:
+class OnlineNetworkRegenerative(OnlineNetwork):
 
-
-    def __init__(self,
-                 classifier:IfnClassifier,
-                 path,
-                 number_of_classes=2,
-                 n_min=378,
-                 n_max=math.inf,
-                 alpha=0.99,
-                 Pe=0.5,
-                 init_add_count=10,
-                 inc_add_count=50,
-                 max_add_count=100,
-                 red_add_count=75,
-                 min_add_count=1,
-                 max_window=1000,
-                 data_stream_generator=SEAGenerator(random_state=1)):
+    def __init__(self, classifier: IfnClassifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
+                 Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,
+                 max_window=1000, data_stream_generator=SEAGenerator()):
 
         """
         Parameters
@@ -60,25 +47,12 @@ class OnlineNetwork:
             Stream generator for the stream data
         """
 
-        self.classifier = classifier
-        self.path = path
-        self.n_min = n_min
-        self.n_max = n_max
-        self.Pe = Pe
-        self.init_add_count = init_add_count
-        self.inc_add_count = inc_add_count
-        self.max_add_count = max_add_count
-        self.red_add_count = red_add_count
-        self.min_add_count = min_add_count
-        self.max_window = max_window
-        self.window = None
-        self.meta_learning = MetaLearning(alpha, number_of_classes)
-        self.data_stream_generator = data_stream_generator
-        self.data_stream_generator.prepare_for_use()
+        super().__init__(classifier, path, number_of_classes, n_min, n_max, alpha, Pe, init_add_count, inc_add_count,
+                         max_add_count, red_add_count, min_add_count, max_window, data_stream_generator)
 
-    def regenerate(self):
+    def generate(self):
         """ This function is an implementation to the regenerative algorithm as represented
-            by Prof. Mark Last in "https://content.iospress.com/articles/intelligent-data-analysis/ida00083".
+            by Prof. Mark Last, et al in "https://content.iospress.com/articles/intelligent-data-analysis/ida00083".
 
             This function obtain an IFN model for every window arriving in the stream,
             and validate the prediction on the next window, which represent the validation examples.
@@ -90,7 +64,6 @@ class OnlineNetwork:
 
         """
 
-        counter = 1
         self.window = self.meta_learning.calculate_Wint(self.Pe)
         i = self.n_min - self.window
         j = self.window
@@ -115,33 +88,32 @@ class OnlineNetwork:
             y_validation_samples = []
 
             while j < k:
-                X_validation_samples, y_validation_samples = self.data_stream_generator.next_sample()
+                X_validation, y_validation = self.data_stream_generator.next_sample()
+                X_validation_samples.append(X_validation[0])
+                y_validation_samples.append(y_validation[0])
                 j = j + 1
 
             j = k
+
             Eval = self.classifier.calculate_error_rate(X_validation_samples, y_validation_samples)
             max_diff = self.meta_learning.get_max_diff(Etr, Eval, add_count)
 
             if abs(Eval - Etr) < max_diff:  # concept is stable
-                print("++++++++++++++++")
-                print("model is stable")
-                print("++++++++++++++++")
                 add_count = min(add_count * (1 + (self.inc_add_count / 100)), self.max_add_count)
                 self.window = min(self.window + add_count, self.max_window)
-                self.meta_learning.window(self.window)
+                self.meta_learning.window = self.window
                 i = j - self.window
 
             else:  # concept drift detected
-                print("**********************")
-                print("concept drift detected")
-                print("**********************")
                 unique, counts = np.unique(np.array(y_batch), return_counts=True)
                 target_distribution = counts[0] / len(y_batch)
                 NI = len(self.classifier.network.root_node.first_layer.nodes)
-                self.window = self.meta_learning.calculate_new_window(NI,target_distribution,Etr)
+                self.window = self.meta_learning.calculate_new_window(NI, target_distribution, Etr)
                 i = j - self.window
                 add_count = max(add_count * (1 - (self.red_add_count / 100)), self.min_add_count)
 
-            path = self.path + "/" + str(counter)
+            path = self.path + "/" + str(self.counter)
             pickle.dump(self.classifier, open(path, "wb"))
-            counter = counter + 1
+            self.counter = self.counter + 1
+            X_batch.clear()
+            y_batch.clear()

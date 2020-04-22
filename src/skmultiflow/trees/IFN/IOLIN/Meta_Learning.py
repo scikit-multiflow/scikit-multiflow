@@ -16,14 +16,14 @@ class MetaLearning:
 
         """
         if 0 <= alpha < 1:
-            self._alpha = alpha
+            self.alpha = alpha
         else:
             raise ValueError("Enter a valid alpha between 0 to 1")
         if 1 < number_of_classes:
-            self._classes = number_of_classes
+            self.classes = number_of_classes
         else:
             raise ValueError("Enter number of classes bigger than 1")
-        self._window = 0
+        self.window = 0
 
     @property
     def classes(self):

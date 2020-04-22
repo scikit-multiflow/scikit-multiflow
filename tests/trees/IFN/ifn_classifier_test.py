@@ -1,14 +1,13 @@
 import pickle
 from sklearn.metrics import accuracy_score
-from skml import IfnClassifier
-from skml._dataProcessing import DataProcessor
-import pytest
+from src.skmultiflow.trees.IFN.ifn_Classifier import IfnClassifier
+from src.skmultiflow.trees.IFN._dataProcessing import DataProcessor
 import os
 import filecmp
 import numpy as np
 import shutil
 
-dataset_path = "datasets/dataset.csv"
+dataset_path = "datasets/credit.csv"
 test_size_percentage = 0.3
 alpha = 0.99
 test_tmp_folder = "tmp"
@@ -60,6 +59,7 @@ def test__model_pickle_const_dataset():
 
     assert filecmp.cmp('tmp/loaded_clf_network_structure.txt', 'tmp/clf_network_structure.txt') is True
     assert np.array_equal(y_pred, loaded_y_pred)
+    print(accuracy_score(y_test, y_pred))
     assert accuracy_score(y_test, y_pred) == accuracy_score(y_test, loaded_y_pred)
 
     _clean_test_env()
