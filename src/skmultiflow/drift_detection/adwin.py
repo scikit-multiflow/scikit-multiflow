@@ -32,7 +32,7 @@ class ADWIN(BaseDriftDetector):
     References
     ----------
     .. [1] Bifet, Albert, and Ricard Gavalda.
-       " Learning from time-changing data with adaptive windowing."
+       "Learning from time-changing data with adaptive windowing."
        In Proceedings of the 2007 SIAM international conference on data
        mining, pp. 443-448.
        Society for Industrial and Applied Mathematics, 2007.
@@ -59,6 +59,7 @@ class ADWIN(BaseDriftDetector):
     ...               + str(i))
     """
 
+    # This is arbitrary & has no impact on the behaviour of ADWIN.
     MAX_BUCKETS = 5
 
     def __init__(self, delta=.002):
@@ -224,9 +225,10 @@ class ADWIN(BaseDriftDetector):
             u1 = bucket_list.bucket_total[0] / n1
             u2 = bucket_list.bucket_total[1] / n2
             incremental_variance = n1 * n2 * (u1 - u2) * (u1 - u2) / (n1 + n2)
-            next_bucket_list.insert_bucket(bucket_list.bucket_total[0] + bucket_list.bucket_total[1],
-                                   bucket_list.bucket_variance[1]
-                                   + incremental_variance)
+            next_bucket_list.insert_bucket(bucket_list.bucket_total[0]
+                                           + bucket_list.bucket_total[1],
+                                           bucket_list.bucket_variance[1]
+                                           + incremental_variance)
             bucket_list.compress_bucket_bucket_list(2)
             i += 1
 
