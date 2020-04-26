@@ -310,7 +310,7 @@ class ADWIN(BaseDriftDetector):
                             should_exit = True
                             break
 
-                        abs_value = u0 / n0 - u1 / n1
+                        abs_value = np.abs(u0 / n0 - u1 / n1)
                         if ((n1 >= self.min_window_length)
                             and (n0 >= self.min_window_length)
                             and self._should_cut(n0, n1, u0, u1, v0, v1,
@@ -342,4 +342,4 @@ class ADWIN(BaseDriftDetector):
         m = ((1. / (n0 - self.min_window_length + 1))
              + (1. / (n1 - self.min_window_length + 1)))
         epsilon = np.sqrt(2 * m * v * dd) + 2. * dd * m / 3
-        return np.absolute(abs_value) > epsilon
+        return abs_value > epsilon
