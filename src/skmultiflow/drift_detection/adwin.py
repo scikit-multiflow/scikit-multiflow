@@ -61,17 +61,17 @@ class ADWIN(BaseDriftDetector):
 
     # This is arbitrary & has no impact on the behaviour of ADWIN.
     MAX_BUCKETS = 5
+    bucket = namedtuple('bucket', ['total', 'variance']) # type TODO find a better place
 
     def __init__(self, delta=.002):
-        """ ADWIN Init.
+        """ ADWIN init.
 
-        The sliding window is stored in `window` as a deque of
-        BucketList, each one keeping a list of buckets of the same
-        size.
+        The sliding window is stored in `window` as a deque of deque,
+        each one keeping a list of buckets of the same size.
         """
         super().__init__()
         self.delta = delta
-        self.window = deque([BucketList()])
+        self.window = deque(deque())
         self.total = 0
         self._variance = 0
         self.width = 0
@@ -155,7 +155,7 @@ class ADWIN(BaseDriftDetector):
         0: the learners prediction was wrong
         1: the learners prediction was correct
 
-        This function should be used at every new sample analysed.
+        This function should be called at every new sample analysed.
         """
         self.width += 1
         self._insert_element_bucket(0, value, self.window[0])
@@ -336,31 +336,3 @@ class ADWIN(BaseDriftDetector):
              + (1. / (n1 - self.min_window_length + 1)))
         epsilon = np.sqrt(2 * m * v * dd) + 2. * dd * m / 3
         return np.absolute(abs_value) > epsilon
-
-
-bucket = namedtuple('bucket', ['total', 'variance']) # type TODO find a better place
-class BucketList(object):
-    """ List of buckets of the same size.
-
-    A deque of BucketList is the main data structure used to store
-    the relevant statistics for the ADWIN algorithm for change
-    detection.
-    """
-
-    def __init__(self):
-        super().__init__()
-        self.buckets = deque()
-
-    def insert_bucket(self, value, variance):
-        self.buckets.append(bucket(value, variance))
-
-    def remove_bucket(self):
-        """ Remove a stale bucket. """
-        self.buckets.popleft()
-
-    def compress_bucket_list(self) -> bucket:
-        """ Remove the two oldest buckets, return their merger. """
-        b1 = self.buckets.popleft()
-        b2 = self.buckets.popleft()
-        merged_bucket = bucket(b1.value + b2.value, b1.variance + b2.variance)
-        return merged_bucket
