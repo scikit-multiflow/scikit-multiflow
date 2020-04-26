@@ -61,15 +61,18 @@ class ADWIN(BaseDriftDetector):
 
     # This is arbitrary & has no impact on the behaviour of ADWIN.
     MAX_BUCKETS = 5
-    Bucket = namedtuple('bucket', ['total', 'variance']) # type
+    Bucket = namedtuple('Bucket', ['total', 'variance']) # type
 
     def __init__(self, delta=.002):
         """ ADWIN init.
 
-        The sliding window is stored in `window` as a deque of deque,
-        each one keeping a list of buckets of the same size & of
-        type `bucket`. The oldest elements are the ones with the
-        highest index.
+        The main data structure is a window(bucket_list(Bucket))
+        implemented as:
+        deque(deque(namedtuple(Bucket, [total, variance])))
+        Each bucket list stores at most MAX_BUCKETS buckets, all of
+        which have the same size 2 ** index. Both the bucket lists &
+        buckets are stored from left to right: older elements have a
+        greater index.
         """
         super().__init__()
         self.delta = delta
