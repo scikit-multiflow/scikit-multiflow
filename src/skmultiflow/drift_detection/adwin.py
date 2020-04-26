@@ -110,6 +110,8 @@ class ADWIN(BaseDriftDetector):
         -------
         bool
             Whether or not a drift occurred.
+
+        Note: this method seems questionable. Do we need it?
         """
         return self.was_bucket_deleted
 
