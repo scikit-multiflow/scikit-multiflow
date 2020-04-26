@@ -158,7 +158,7 @@ class ADWIN(BaseDriftDetector):
         This function should be called at every new sample analysed.
         """
         self.width += 1
-        self._insert_element_bucket(0, value, self.window[0])
+        self._insert_element_bucket(value, 0, self.window[0])
 
         if self.width > 1:
             incremental_variance = ((self.width - 1)
@@ -174,7 +174,7 @@ class ADWIN(BaseDriftDetector):
         self.total += value
         self._compress_buckets()
 
-    def _insert_element_bucket(self, variance, value, bucket_list):
+    def _insert_element_bucket(self, value, variance, bucket_list):
         bucket_list.insert_bucket(value, variance)
 
         if len(self.window) > self.max_n_buckets:
