@@ -264,7 +264,7 @@ class ADWIN(BaseDriftDetector):
         Notes
         -----
         If change was detected, one should verify the new window size,
-        by reading the width property.
+        by reading the width attribute.
         """
         has_changed = False
         should_exit = False
