@@ -1,4 +1,4 @@
-from collections import deque
+from collections import deque, namedtuple
 import numpy as np
 
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
@@ -231,7 +231,7 @@ class ADWIN(BaseDriftDetector):
                                            + bucket_list.bucket_total[1],
                                            bucket_list.bucket_variance[1]
                                            + incremental_variance)
-            bucket_list.compress_bucket_bucket_list(2)
+            bucket_list.compress_bucket_list(2)
             i += 1
 
     def detected_change(self):
@@ -338,6 +338,7 @@ class ADWIN(BaseDriftDetector):
         return np.absolute(abs_value) > epsilon
 
 
+bucket = namedtuple('bucket', ['total', 'variance']) # type TODO find a better place
 class BucketList(object):
     """ List of buckets of the same size.
 
@@ -348,27 +349,18 @@ class BucketList(object):
 
     def __init__(self):
         super().__init__()
-        self.size = 0
-        self.bucket_total = np.zeros(ADWIN.MAX_BUCKETS + 1, dtype=float)
-        self.bucket_variance = np.zeros(ADWIN.MAX_BUCKETS + 1, dtype=float)
-
-    def _clear_bucket(self, index):
-        self.bucket_total[index] = 0
-        self.bucket_variance[index] = 0
+        self.buckets = deque()
 
     def insert_bucket(self, value, variance):
-        self.bucket_total[self.size] = value
-        self.bucket_variance[self.size] = variance
-        self.size += 1
+        self.buckets.append(bucket(value, variance))
 
     def remove_bucket(self):
-        self.compress_bucket_bucket_list(1)
+        """ Remove a stale bucket. """
+        self.buckets.popleft()
 
-    def compress_bucket_bucket_list(self, num_deleted=1):
-        for i in range(num_deleted, ADWIN.MAX_BUCKETS + 1):
-            self.bucket_total[i - num_deleted] = self.bucket_total[i]
-            self.bucket_variance[i - num_deleted] = self.bucket_variance[i]
-
-        self.bucket_total[-num_deleted:] = 0
-        self.bucket_variance[-num_deleted:] = 0
-        self.size -= num_deleted
+    def compress_bucket_list(self) -> bucket:
+        """ Remove the two oldest buckets, return their merger. """
+        b1 = self.buckets.popleft()
+        b2 = self.buckets.popleft()
+        merged_bucket = bucket(b1.value + b2.value, b1.variance + b2.variance)
+        return merged_bucket
