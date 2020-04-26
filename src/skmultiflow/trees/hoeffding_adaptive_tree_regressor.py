@@ -198,7 +198,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
 
         try:
             self.sum_of_attribute_values += weight * X
-            self.sum_of_attribute_squares = weight * X * X
+            self.sum_of_attribute_squares += weight * X * X
         except ValueError:
             
             self.sum_of_attribute_values = weight * X
