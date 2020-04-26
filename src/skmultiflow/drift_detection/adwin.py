@@ -249,8 +249,8 @@ class ADWIN(BaseDriftDetector):
         The general idea is to keep statistics from a window of
         variable size while detecting concept drift.
 
-        This function is responsible for analysing different cutting
-        points in the sliding window, to verify if there is a
+        This function runs every time the clock ticks & analyses the
+        cutting point between each bucket to verify if there is a
         significant change in concept.
 
         Returns
