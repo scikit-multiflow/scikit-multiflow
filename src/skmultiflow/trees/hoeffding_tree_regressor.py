@@ -458,7 +458,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                             predictions.append(0.0)
                             continue
                         normalized_sample = self.normalize_sample(X[i])
-                        normalized_prediction = np.dot(perceptron_weights, normalized_sample)
+                        normalized_prediction = perceptron_weights.dot(normalized_sample)
                         # De-normalize prediction
                         mean = self.sum_of_values / self.samples_seen
                         sd = compute_sd(self.sum_of_squares, self.sum_of_values, self.samples_seen)
