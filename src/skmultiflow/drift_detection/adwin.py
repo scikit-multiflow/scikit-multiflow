@@ -282,22 +282,23 @@ class ADWIN(BaseDriftDetector):
                 v1 = self._variance
                 n2 = u2 = 0
                 i = len(self.window) - 1
+                # Oldest
                 bucket_list = self.window[-1]
                 while (not should_exit) and (bucket_list is not None):
                     bucket_list = self.window[i]
-                    for k in range(bucket_list.size - 1):
+                    for k in range(len(bucket_list) - 1):
                         n2 = self.bucket_size(i)
-                        u2 = bucket_list.bucket_total[k]
+                        u2 = bucket_list[k].total
 
                         if n0 > 0:
-                            v0 += (bucket_list.bucket_variance[k]
+                            v0 += (bucket_list[k].variance
                                    + n0
                                      * n2
                                      * (u0/n0 - u2/n2)
                                      * (u0/n0 - u2/n2)
                                      / (n0 + n2))
                         if n1 > 0:
-                            v1 -= (bucket_list.bucket_variance[k]
+                            v1 -= (bucket_list.bucket[k].variance
                                    + n1
                                     * n2
                                     * (u1/n1 - u2/n2)
@@ -306,10 +307,10 @@ class ADWIN(BaseDriftDetector):
 
                         n0 += self.bucket_size(i)
                         n1 -= self.bucket_size(i)
-                        u0 += bucket_list.bucket_total[k]
-                        u1 -= bucket_list.bucket_total[k]
+                        u0 += bucket_list[k].total
+                        u1 -= bucket_list[k].total
 
-                        if (i == 0) and (k == bucket_list.size - 1):
+                        if (i == 0) and (k == len(bucket_list) - 1):
                             should_exit = True
                             break
 
