@@ -61,13 +61,15 @@ class ADWIN(BaseDriftDetector):
 
     # This is arbitrary & has no impact on the behaviour of ADWIN.
     MAX_BUCKETS = 5
-    bucket = namedtuple('bucket', ['total', 'variance']) # type TODO find a better place
+    Bucket = namedtuple('bucket', ['total', 'variance']) # type
 
     def __init__(self, delta=.002):
         """ ADWIN init.
 
         The sliding window is stored in `window` as a deque of deque,
-        each one keeping a list of buckets of the same size.
+        each one keeping a list of buckets of the same size & of
+        type `bucket`. The oldest elements are the ones with the
+        highest index.
         """
         super().__init__()
         self.delta = delta
@@ -158,7 +160,10 @@ class ADWIN(BaseDriftDetector):
         This function should be called at every new sample analysed.
         """
         self.width += 1
-        self._insert_element_bucket(value, 0, self.window[0])
+        # Insert the new data.
+        self.window[0].appendleft(Bucket(value, 0))
+        if len(self.window) > self.max_n_buckets:
+            self.max_n_buckets = len(self.window)
 
         if self.width > 1:
             incremental_variance = ((self.width - 1)
@@ -174,40 +179,36 @@ class ADWIN(BaseDriftDetector):
         self.total += value
         self._compress_buckets()
 
-    def _insert_element_bucket(self, value, variance, bucket_list):
-        bucket_list.insert_bucket(value, variance)
-
-        if len(self.window) > self.max_n_buckets:
-            self.max_n_buckets = len(self.window)
-
     @staticmethod
     def bucket_size(bucket_list_index):
         return 2 ** bucket_list_index
 
-    def delete_bucket_list(self):
-        """ Delete a BucketList from the bucket list.
+    def delete_bucket(self):
+        """ Delete a stale bucket from the window.
 
-        Delete the last BucketList and update the relevant statistics
+        Delete the oldest bucket and update the relevant statistics
         kept by ADWIN.
 
         Returns
         -------
         int
-            The bucket size from the updated bucket.
+            The bucket size from the deleted bucket.
         """
+        # Oldest bucket list.
         bucket_list = self.window[-1]
-        n1 = self.bucket_size(len(self.window))
+        n1 = self.bucket_size(len(self.window) - 1)
         self.width -= n1
-        self.total -= bucket_list.bucket_total[0]
-        u1 = bucket_list.bucket_total[0] / n1
-        incremental_variance = (bucket_list.bucket_variance[0]
-                                + n1
-                                  * self.width
+        # Oldest bucket.
+        bucket = bucket_list[-1]
+        self.total -= bucket.total
+        u1 = bucket.total / n1
+        incremental_variance = (bucket.variance
+                                + n1 * self.width
                                   * (u1 - self.total / self.width)
                                   * (u1 - self.total / self.width)
                                   / (n1 + self.width))
         self._variance -= incremental_variance
-        bucket_list.remove_bucket()
+        bucket_list.pop()
 
         if bucket_list.size == 0:
             self.window.pop()
@@ -215,24 +216,30 @@ class ADWIN(BaseDriftDetector):
         return n1
 
     def _compress_buckets(self):
-        i = 0
-        while i >= 0:
+        """ Compress the bucket lists to a max length of MAX_BUCKETS.
+        """
+        # We might add a bucket list whilst iterating on the window.
+        for i in range(len(self.window) + 1):
             bucket_list = self.window[i]
-            if bucket_list.size != self.MAX_BUCKETS + 1:
-                break
+            if len(bucket_list) != self.MAX_BUCKETS + 1:
+                return
             if i == len(self.window) - 1:
-                self.window.append(BucketList())
+                self.window.append(deque())
+            # Merge the two oldest buckets.
+            b1 = bucket_list[-2]
+            b2 = bucket_list[-1]
             next_bucket_list = self.window[i + 1]
             n1 = n2 = self.bucket_size(i)
-            u1 = bucket_list.bucket_total[0] / n1
-            u2 = bucket_list.bucket_total[1] / n2
+            u1 = b1.total / n1
+            u2 = b2.total / n2
             incremental_variance = n1 * n2 * (u1 - u2) * (u1 - u2) / (n1 + n2)
-            next_bucket_list.insert_bucket(bucket_list.bucket_total[0]
-                                           + bucket_list.bucket_total[1],
-                                           bucket_list.bucket_variance[1]
-                                           + incremental_variance)
-            bucket_list.compress_bucket_list(2)
-            i += 1
+            new_variance = b1.variance + incremental_variance
+            # Add the merged buckets to the next bucket list.
+            next_bucket_list.appendleft(Bucket(b1.total + b2.total,
+                                               new_variance))
+            # Remove the merged buckets.
+            bucket_list.pop()
+            bucket_list.pop()
 
     def detected_change(self):
         """ Detect concept change in a drifting data stream.
