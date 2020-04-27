@@ -12,8 +12,8 @@ class KSWIN(BaseDriftDetector):
         The alpha parameter is very sensitive, therefore should be set
         below 0.01.
 
-    w_size: float (default=100)
-        Size of stored samples in the sliding window
+    window_size: float (default=100)
+        Size of the sliding window
 
     stat_size: float (default=30)
         Size of the statistic window
@@ -26,9 +26,9 @@ class KSWIN(BaseDriftDetector):
     KSWIN (Kolmogorov-Smirnov Windowing) [1]_ is a concept change detection method based
     on the Kolmogorov-Smirnov (KS) statistical test. KS-test is a statistical test with
     no assumption of underlying data distribution. KSWIN can monitor data or performance
-    distributions. Note that testing is always dimensions-wise.
+    distributions. Note that the detector accepts one dimensional input as array.
 
-    KSWIN maintains a sliding window :math:`\Psi` of fixed size :math:`n` (w_size). The
+    KSWIN maintains a sliding window :math:`\Psi` of fixed size :math:`n` (window_size). The
     last :math:`r` (stat_size) samples of :math:`\Psi` are assumed to represent the last
     concept considered as :math:`R`. From the first :math:`n-r` samples of :math:`\Psi`,
     :math:`r` samples are uniformly drawn, representing an approximated last concept :math:`W`.
@@ -72,9 +72,9 @@ class KSWIN(BaseDriftDetector):
     >>>             detections.append(i)
     >>> print("Number of detections: "+str(len(detections)))
     """
-    def __init__(self, alpha=0.005, w_size=100, stat_size=30, data=None):
+    def __init__(self, alpha=0.005, window_size=100, stat_size=30, data=None):
         super().__init__()
-        self.w_size = w_size
+        self.window_size = window_size
         self.stat_size = stat_size
         self.alpha = alpha
         self.change_detected = False
@@ -83,14 +83,14 @@ class KSWIN(BaseDriftDetector):
         if self.alpha < 0 or self.alpha > 1:
             raise ValueError("Alpha must be between 0 and 1")
 
-        if self.w_size < 0:
-            raise ValueError("w_size must be greater than 0")
+        if self.window_size < 0:
+            raise ValueError("window_size must be greater than 0")
 
-        if self.w_size < self.stat_size:
-            raise ValueError("stat_size must be smaller than w_size")
+        if self.window_size < self.stat_size:
+            raise ValueError("stat_size must be smaller than window_size")
 
-        if type(data) != list or type(data) is None:
-            self.window = []
+        if type(data) != np.ndarray or type(data) is None:
+            self.window = np.array([])
         else:
             self.window = data
 
@@ -107,12 +107,12 @@ class KSWIN(BaseDriftDetector):
             New data sample the sliding window should add.
         """
         self.n += 1
-        currentLength = len(self.window)
-        if currentLength >= self.w_size:
-            self.window.pop(0)
+        currentLength = self.window.shape[0]
+        if currentLength >= self.window_size:
+            self.window = np.delete(self.window,0)
             rnd_window = np.random.choice(self.window[:-self.stat_size], self.stat_size)
 
-            (st, self.p_value) = stats.ks_2samp(rnd_window, self.window[-self.stat_size:])
+            (st, self.p_value) = stats.ks_2samp(rnd_window, self.window[-self.stat_size:],mode="exact")
 
             if self.p_value <= self.alpha and st > 0.1:
                 self.change_detected = True
@@ -122,7 +122,7 @@ class KSWIN(BaseDriftDetector):
         else: # Not enough samples in sliding window for a valid test
             self.change_detected = False
 
-        self.window.insert(currentLength, input_value)
+        self.window = np.concatenate([self.window,[input_value]])
 
     def detected_change(self):
         """ Get detected change
@@ -140,13 +140,6 @@ class KSWIN(BaseDriftDetector):
 
         Resets the change detector parameters.
         """
-        self.alpha = 0
-        self.window = []
+        self.p_value = 0
+        self.window = np.array([])
         self.change_detected = False
-
-    def get_info(self):
-        """ get info
-
-        Get current statistics value of KS test.
-        """
-        return "KSWIN Change: Current P-Value "+str(self.p_value)

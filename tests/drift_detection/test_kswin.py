@@ -1,7 +1,11 @@
-from skmultiflow.data.sea_generator import SEAGenerator
+from skmultiflow.data import SEAGenerator
+from skmultiflow.data import ConceptDriftStream
 from skmultiflow.drift_detection import KSWIN
+import numpy as np
+import pytest
+import os
 
-def test_kswin_change_detection():
+def test_kswin_initialization():
     """
     KSWIN Test
 
@@ -13,57 +17,61 @@ def test_kswin_change_detection():
     data must be list
 
     KSWIN window size initialisation test.
-    0 < stat_size <  w_size
+    0 < stat_size <  window_size
 
     KSWIN change detector size initialisation test.
     At least 1 false positive must arisie due to the sensitive alpha, when testing the standard
     Sea generator
     """
-    try:
+    with pytest.raises(ValueError):
         KSWIN(alpha=-0.1)
-    except ValueError:
-        assert True
-    else:
-        assert False
-    try:
+
+    with pytest.raises(ValueError):
         KSWIN(alpha=1.1)
-    except ValueError:
-        assert True
-    else:
-        assert False
 
     kswin = KSWIN(alpha=0.5)
     assert kswin.alpha == 0.5
 
 
     kswin = KSWIN(data="st")
-    assert isinstance(kswin.window, list)
+    assert isinstance(kswin.window, np.ndarray)
+
+
+    kswin = KSWIN(data=np.array([0.75,0.80,1,-1]))
+    assert isinstance(kswin.window, np.ndarray)
 
     try:
-        KSWIN(w_size=-10)
+        KSWIN(window_size=-10)
     except ValueError:
         assert True
     else:
         assert False
     try:
-        KSWIN(w_size=10, stat_size=30)
+        KSWIN(window_size=10, stat_size=30)
     except ValueError:
         assert True
     else:
         assert False
 
-    kswin = KSWIN(alpha=0.001)
-    stream = SEAGenerator(classification_function=2,\
-     random_state=112, balance_classes=False, noise_percentage=0.28)
+def test_kswin_functionality(test_path):
+    test_path = "tests/drift_detection/"
+    kswin = KSWIN(alpha=0.0001,window_size=200,stat_size=100)
+    test_file = os.path.join(test_path, 'drift_stream.npy')
+    data_stream = np.load(test_file)
+    expected_indices = [1045, 1145]
+    detected_indices = []
 
-    detections, mean = [], []
-
-    for i in range(1000):
-        data = stream.next_sample(10)
-        batch = data[0][0][0]
-        mean.append(batch)
-        kswin.add_element(batch)
+    for i in range(data_stream.size):
+        kswin.add_element(data_stream[i])
         if kswin.detected_change():
-            mean = []
-            detections.append(i)
-    assert len(detections) > 1
+            detected_indices.append(i)
+
+    assert detected_indices == expected_indices
+
+
+def test_kswin_reset():
+    kswin = KSWIN()
+    kswin.reset()
+    assert kswin.p_value == 0
+    assert kswin.window.shape[0] == 0
+    assert kswin.change_detected == False
