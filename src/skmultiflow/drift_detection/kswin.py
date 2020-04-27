@@ -18,7 +18,7 @@ class KSWIN(BaseDriftDetector):
     stat_size: float (default=30)
         Size of the statistic window
 
-    data: list (default=None,optional)
+    data: numpy.ndarray of shape (n_samples, 1) (default=None,optional)
         Already collected data to avoid cold start.
 
     Notes
