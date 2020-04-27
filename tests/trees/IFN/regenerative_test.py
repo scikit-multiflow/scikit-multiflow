@@ -1,7 +1,7 @@
 import os
 import shutil
-from src.skmultiflow.trees.IFN.IOLIN.Regenerative import OnlineNetworkRegenerative
-from src.skmultiflow.trees.IFN.ifn_Classifier import IfnClassifier
+from skmultiflow.trees.IFN.IOLIN import OnlineNetworkRegenerative
+from src.skmultiflow.trees.IFN import IfnClassifier
 
 alpha = 0.99
 test_tmp_folder = "tmpOLIN"

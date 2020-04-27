@@ -1,7 +1,7 @@
 import os
 import shutil
-from src.skmultiflow.trees.IFN.IOLIN.Basic_Incremental import BasicIncremental
-from src.skmultiflow.trees.IFN.ifn_Classifier import IfnClassifier
+from skmultiflow.trees.IFN import BasicIncremental
+from skmultiflow.trees.IFN import IfnClassifier
 
 alpha = 0.99
 test_tmp_folder = "tmpOLIN"

@@ -5,6 +5,7 @@ from . import attribute_observer
 from . import attribute_test
 from . import nodes
 from . import split_criterion
+from . import IFN
 from .hoeffding_tree import HoeffdingTreeClassifier
 from .hoeffding_adaptive_tree import HoeffdingAdaptiveTreeClassifier
 from .extremely_fast_decision_tree import ExtremelyFastDecisionTreeClassifier
@@ -28,4 +29,3 @@ __all__ = ["attribute_observer", "attribute_test", "nodes", "split_criterion",
            "HoeffdingTree", "HAT", "HATT", "LCHT", "RegressionHoeffdingTree",
            "RegressionHAT", "MultiTargetRegressionHoeffdingTree",
            "StackedSingleTargetHoeffdingTreeRegressor"]
-

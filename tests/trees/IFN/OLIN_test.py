@@ -2,8 +2,8 @@ import numpy as np
 
 from sklearn.utils import check_X_y
 
-from src.skmultiflow.trees.IFN._dataProcessing import DataProcessor
-from src.skmultiflow.trees.IFN._ifn_network import IfnNetwork, HiddenLayer, AttributeNode
+from skmultiflow.trees.IFN._dataProcessing import DataProcessor
+from skmultiflow.trees.IFN._ifn_network import IfnNetwork, HiddenLayer, AttributeNode
 from src.skmultiflow.trees.IFN.IOLIN.Basic_Incremental import BasicIncremental
 
 network = IfnNetwork()
@@ -167,4 +167,4 @@ def test_clone_network():
 
 test_eliminate_all_nodes_in_layer()
 test_eliminate_some_nodes_in_layer()
-test_clone_network()
+# test_clone_network()

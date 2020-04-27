@@ -1,7 +1,7 @@
 import os
 import shutil
-from src.skmultiflow.trees.IFN.IOLIN.pure_multiple_model import PureMultiple
-from src.skmultiflow.trees.IFN.ifn_Classifier import IfnClassifier
+from skmultiflow.trees.IFN.IOLIN import PureMultiple
+from skmultiflow.trees.IFN import IfnClassifier
 
 alpha = 0.99
 test_tmp_folder = "tmpPureMultiple"

@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from src.skmultiflow.trees.IFN.ifn_Classifier import IfnClassifier
-from src.skmultiflow.trees.IFN.IOLIN.OLIN import OnlineNetwork
+from skmultiflow.trees.IFN import IfnClassifier
+from skmultiflow.trees.IFN.IOLIN import OnlineNetwork
 from skmultiflow.data import SEAGenerator
 
 

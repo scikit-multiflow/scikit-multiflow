@@ -1,8 +1,8 @@
 import os
 import shutil
 
-from src.skmultiflow.trees.IFN.IOLIN.Multiple_Model import MultipleModel
-from src.skmultiflow.trees.IFN.ifn_Classifier import IfnClassifier
+from skmultiflow.trees.IFN.IOLIN import MultipleModel
+from skmultiflow.trees.IFN import IfnClassifier
 
 alpha = 0.99
 test_tmp_folder = "tmpMultipleModel"

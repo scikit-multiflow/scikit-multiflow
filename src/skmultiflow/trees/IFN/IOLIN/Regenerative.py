@@ -3,8 +3,8 @@ import pickle
 
 import numpy as np
 import pandas as pd
-from skml.IOLIN import OnlineNetwork
-from skml import IfnClassifier
+from skmultiflow.trees.IFN.IOLIN import OnlineNetwork
+from skmultiflow.trees.IFN import IfnClassifier
 from skmultiflow.data import SEAGenerator
 
 
