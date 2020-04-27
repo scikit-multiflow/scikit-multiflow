@@ -285,7 +285,7 @@ class EvaluateHoldout(StreamEvaluator):
                     else:
                         perform_test = (self.global_sample_count - self.test_size) % self.n_wait == 0
 
-                    if perform_test | (self.global_sample_count >= self.max_samples):
+                    if perform_test | (self.global_sample_count >= actual_max_samples):
 
                         if self.dynamic_test_set:
                             print('Separating {} holdout samples.'.format(self.test_size))
