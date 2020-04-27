@@ -7,7 +7,7 @@ from skmultiflow.trees import HoeffdingAdaptiveTreeRegressor
 from difflib import SequenceMatcher
 
 
-def test_hoeffding_tree():
+def test_hoeffding_adaptive_tree_regressor_mean():
     stream = RegressionGenerator(n_samples=500, n_features=20, n_informative=15, random_state=1)
 
     learner = HoeffdingAdaptiveTreeRegressor(leaf_prediction='mean', random_state=1)
@@ -48,7 +48,7 @@ def test_hoeffding_tree():
 
     expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, grace_period=200, leaf_prediction='mean', " \
                     "learning_ratio_const=True, learning_ratio_decay=0.001, learning_ratio_perceptron=0.02, " \
-                    "max_byte_size=33554432, memory_estimate_period=1000000, nb_threshold=0, no_preprune=False, " \
+                    "max_byte_size=33554432, memory_estimate_period=1000000, no_preprune=False, " \
                     "nominal_attributes=None, random_state=1, remove_poor_atts=False, split_confidence=1e-07, " \
                     "stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
@@ -58,7 +58,7 @@ def test_hoeffding_tree():
     assert type(learner.predict(X)) == np.ndarray
 
 
-def test_hoeffding_tree_perceptron():
+def test_hoeffding_adaptive_tree_regressor_perceptron():
     stream = RegressionGenerator(n_samples=500, n_features=20, n_informative=15, random_state=1)
 
     learner = HoeffdingAdaptiveTreeRegressor(leaf_prediction='perceptron', random_state=1)
@@ -78,33 +78,34 @@ def test_hoeffding_tree_perceptron():
         learner.partial_fit(X, y)
         cnt += 1
 
-    expected_predictions = array('d', [525.7553636732247, 352.8160300365902, 224.80744320456478,
-                                       193.72837054292074, 132.6059603765031, 117.06974933197759,
-                                       114.53342429855932, 89.37195405567235, 57.85335051891305,
-                                       60.00883955911155, 47.263185779784266, 25.17616431074491,
-                                       17.43259526890146, 47.33468996498019, 22.83975208548138,
-                                       -7.659282840823236, 8.564101665071064, 14.61585289361161,
-                                       11.560941733770441, 13.70120291865976, 1.1938438210799651,
-                                       19.01970713481836, 21.23459424444584, -5.667473522309328,
-                                       -5.203149619381393, 28.726275200889173, 41.03406433337882,
-                                       27.950322712127267, 21.267116786963925, 5.53344652490152,
-                                       6.753264259267268, -2.3288137435962213, -10.492766334689875,
-                                       -11.19641058176631, -20.134685945295644, -19.36581990084085,
-                                       -38.26894947177957, -34.90246284430353, -11.019543212232008,
-                                       -22.016714766708127, -18.710456277443544, -20.5568019328217,
-                                       -2.636583876625667, 24.787714491718187, 29.325261678088406,
-                                       45.31267371823666, -48.271054430207776, -59.7649172085901,
-                                       48.22724814037523])
+    expected_predictions = array('d', [-106.84237763060068, -10.965517384802226,
+                                       -180.90711470797237, -218.20896751607663, -96.4271589961865,
+                                       110.51551963099622, 108.34616947202511, 30.1720109214627,
+                                       57.92205878998479, 77.82418885914053, 49.972060923364765,
+                                       68.56117081695875, 15.996949915551697, -34.22744443808294,
+                                       -19.762696110319702, -28.447329394752995,
+                                       -50.62864370485592, -47.37357781048561, -99.82613515424342,
+                                       13.985531117918336, 41.41709671929987, -34.679807275938174,
+                                       62.75626094547859, 30.925078688018893, 12.130320819235365,
+                                       119.3648998377624, 82.96422756064737, -6.920397563039609,
+                                       -12.701774870569059, 24.883730398016034, -74.22855883237567,
+                                       -0.8012436194087567, -83.03683748750394, 46.737839617687854,
+                                       0.537404558240671, 48.53591837633138, -86.2259777783834,
+                                       -24.985514024179967, 6.396035456152859, -90.19454995571908,
+                                       32.05821807667601, -83.08553684151566, -28.32223999320023,
+                                       113.28916673506842, 68.10498750807977, 173.9146410394573,
+                                       -150.2067507947196, -74.10346402222962, 54.39153137687993])
     assert np.allclose(y_pred, expected_predictions)
 
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 152.12931270533377
+
+    expected_error = 115.78916175164417
     assert np.isclose(error, expected_error)
 
     expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, grace_period=200, " \
                     "leaf_prediction='perceptron', learning_ratio_const=True, learning_ratio_decay=0.001, " \
                     "learning_ratio_perceptron=0.02, max_byte_size=33554432, memory_estimate_period=1000000, " \
-                    "nb_threshold=0, no_preprune=False, nominal_attributes=None, random_state=1, " \
+                    "no_preprune=False, nominal_attributes=None, random_state=1, " \
                     "remove_poor_atts=False, split_confidence=1e-07, stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
@@ -167,3 +168,86 @@ def test_regression_hoeffding_adaptive_tree_categorical_features(test_path):
     assert SequenceMatcher(
         None, expected_description, learner.get_model_description()
     ).ratio() > 0.9
+
+
+def test_hoeffding_adaptive_tree_regressor_alternate_tree():
+    learner = HoeffdingAdaptiveTreeRegressor(
+        leaf_prediction='mean', grace_period=1000, random_state=7
+    )
+
+    np.random.seed(8)
+    max_samples = 7000
+    cnt = 0
+
+    p1 = False
+    p2 = False
+
+    while cnt < max_samples:
+        X = [np.random.uniform(low=-1, high=1, size=2)]
+
+        if cnt < 3000:
+            if X[0][0] <= 0 and X[0][1] > 0:
+                y = [np.random.normal(loc=-3, scale=1)]
+            elif X[0][0] > 0 and X[0][1] > 0:
+                y = [np.random.normal(loc=3, scale=1)]
+            elif X[0][0] <= 0 and X[0][1] <= 0:
+                y = [np.random.normal(loc=3, scale=1)]
+            else:
+                y = [np.random.normal(loc=-3, scale=1)]
+        elif cnt < 5000:
+            if not p1:
+                expected_info = "if Attribute 0 <= 0.7308480624289246:\n" \
+                    "  if Attribute 1 <= 0.020068273107131107:\n" \
+                    "    Leaf = Statistics {0: 900.0000, 1: 685.4441, 2: 9052.7232}\n" \
+                    "  if Attribute 1 > 0.020068273107131107:\n" \
+                    "    Leaf = Statistics {0: 1716.0000, 1: -284.7812, 2: 17014.5944}\n" \
+                    "if Attribute 0 > 0.7308480624289246:\n" \
+                    "  Leaf = Statistics {0: 384.0000, 1: -40.5676, 2: 3855.0453}\n"
+
+                assert expected_info == learner.get_model_description()
+                p1 = True
+
+            # Keep almost the same generation function
+            if X[0][0] <= 0 and X[0][1] > 0:
+                y = [np.random.normal(loc=-3, scale=1)]
+            elif X[0][0] > 0 and X[0][1] > 0:
+                y = [np.random.normal(loc=3, scale=1)]
+            elif X[0][0] <= 0 and X[0][1] <= 0:
+                y = [np.random.normal(loc=3, scale=1)]
+            else:
+                y = [np.random.normal(loc=-3, scale=1)]
+
+            # But shift the normal mean in a specific region
+            if X[0][0] <= 0.73:
+                y = [np.random.normal(loc=5, scale=0.1)]
+        elif cnt < 6000:
+            if not p2:
+                # Subtree swapped
+                expected_info = "if Attribute 0 <= 0.7308480624289246:\n" \
+                    "  if Attribute 0 <= 0.7210747610959465:\n" \
+                    "    Leaf = Statistics {0: 1447.0000, 1: 7229.8838, 2: 36138.9433}\n" \
+                    "  if Attribute 0 > 0.7210747610959465:\n" \
+                    "    Leaf = Statistics {0: 8.0000, 1: 30.5281, 2: 183.5354}\n" \
+                    "if Attribute 0 > 0.7308480624289246:\n" \
+                    "  Leaf = Statistics {0: 654.0000, 1: -24.9928, 2: 6519.0335}\n"
+
+                assert expected_info == learner.get_model_description()
+                p2 = True
+
+            # Change how y is generated: only x_1 matters now
+            if X[0][1] > 0:
+                y = [np.random.normal(loc=20, scale=3)]
+            else:
+                y = [np.random.normal(loc=-20, scale=3)]
+
+        learner.partial_fit(X, y)
+
+        cnt += 1
+
+    # Root node changed
+    expected_info = "if Attribute 1 <= -0.00015267114158334927:\n" \
+        "  Leaf = Statistics {0: 904.0000, 1: 1098.6423, 2: 332597.7050}\n" \
+        "if Attribute 1 > -0.00015267114158334927:\n" \
+        "  Leaf = Statistics {0: 905.0000, 1: 17227.8522, 2: 332000.7548}\n"
+
+    assert expected_info == learner.get_model_description()
