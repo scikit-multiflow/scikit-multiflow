@@ -43,8 +43,8 @@ class TimeManager(object):
         if self.queue.shape[0] - batch_size >= 0:
             # drop samples that were already used
             self.queue = self.queue.iloc[batch_size:]
-            # update indexes by sorting again
-            self._sort_queue()
+            # reset indexes
+            self.queue = self.queue.reset_index(drop=True)
         else:
             # drop all samples
             self.queue = self.queue.iloc[0:0]
