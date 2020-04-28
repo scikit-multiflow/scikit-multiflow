@@ -256,7 +256,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
             return self.model
 
-    def _update_classifiers(self, X, y):
+    def _update_classifiers(self, X, y, weight):
         # check if there are samples to update
         if len(X) > 0:
             # Train
@@ -266,12 +266,12 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                             self._task_type != constants.MULTI_TARGET_REGRESSION:
                         # Accounts for the moment of training beginning
                         self.running_time_measurements[i].compute_training_time_begin()
-                        self.model[i].partial_fit(X, y, self.stream.target_values)
+                        self.model[i].partial_fit(X, y, self.stream.target_values, sample_weight=weight)
                         # Accounts the ending of training
                         self.running_time_measurements[i].compute_training_time_end()
                     else:
                         self.running_time_measurements[i].compute_training_time_begin()
-                        self.model[i].partial_fit(X, y)
+                        self.model[i].partial_fit(X, y, sample_weight=weight)
                         self.running_time_measurements[i].compute_training_time_end()
 
                     # Update total running time
@@ -280,7 +280,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             else:
                 for i in range(self.n_models):
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X, y)
+                    self.model[i].partial_fit(X, y, sample_weight=weight)
                     self.running_time_measurements[i].compute_training_time_end()
                     self.running_time_measurements[i].update_time_measurements(self.batch_size)
             # TODO: check if updating samples_count here is right
@@ -351,21 +351,21 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             print('Pre-training on {} sample(s).'.format(self.pretrain_size))
 
             # get current batch
-            X, arrival_time, available_time, y, weight = current_batch = self.stream.next_sample(self.pretrain_size)
+            X, arrival_time, available_time, y, weight = self.stream.next_sample(self.pretrain_size)
 
             for i in range(self.n_models):
                 if self._task_type == constants.CLASSIFICATION:
                     # Training time computation
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, classes=self.stream.target_values)
+                    self.model[i].partial_fit(X=X, y=y, classes=self.stream.target_values, sample_weight=weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, classes=unique(self.stream.target_values))
+                    self.model[i].partial_fit(X=X, y=y, classes=unique(self.stream.target_values), sample_weight=weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 else:
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y)
+                    self.model[i].partial_fit(X=X, y=y, sample_weight=weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 self.running_time_measurements[i].update_time_measurements(self.pretrain_size)
             self.global_sample_count += self.pretrain_size
@@ -378,49 +378,49 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         while ((self.global_sample_count < self.actual_max_samples) & (
                 self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
-            try:
+            # try:
 
-                # get current batch
-                X, arrival_time, available_time, y_real, weight = self.stream.next_sample(self.batch_size)
+            # get current batch
+            X, arrival_time, available_time, y_real, weight = self.stream.next_sample(self.batch_size)
 
-                # update current timestamp
-                self.time_manager.update_timestamp(arrival_time[-1])
+            # update current timestamp
+            self.time_manager.update_timestamp(arrival_time[-1])
 
-                # get delayed samples to update model before predicting a new batch
-                X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.get_available_samples()
+            # get delayed samples to update model before predicting a new batch
+            X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.get_available_samples()
 
-                # transpose prediction matrix to model-sample again
-                y_pred_delayed = y_pred_delayed.T
+            # transpose prediction matrix to model-sample again
+            y_pred_delayed = y_pred_delayed.T
 
-                self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
+            self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
 
-                # before getting new samples, update classifiers with samples that are already available
-                self._update_classifiers(X_delayed, y_real_delayed)
+            # before getting new samples, update classifiers with samples that are already available
+            self._update_classifiers(X_delayed, y_real_delayed, weight)
 
-                # predict samples and get predictions
-                y_pred = self._predict_samples(X)
+            # predict samples and get predictions
+            y_pred = self._predict_samples(X)
 
-                # add current samples to delayed queue
-                self.time_manager.update_queue(X, arrival_time, available_time, y_real, y_pred)
+            # add current samples to delayed queue
+            self.time_manager.update_queue(X, y_real, y_pred, weight, arrival_time, available_time)
 
-                self._end_time = timer()
-            except BaseException as exc:
-                print(exc)
-                if exc is KeyboardInterrupt:
-                    self._update_metrics()
-                break
+            self._end_time = timer()
+            # except BaseException as exc:
+            #     print(exc)
+            #     if exc is KeyboardInterrupt:
+            #         self._update_metrics()
+            #     break
 
         # evaluate remaining samples in the delayed_queue
         # iterate over delay_queue while it has samples according to batch_size
         while self.time_manager.has_more_samples():
             # get current samples to process
-            X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.next_sample(self.batch_size)
+            X_delayed, y_real_delayed, y_pred_delayed, weight = self.time_manager.next_sample(self.batch_size)
             # transpose prediction matrix to model-sample again
             y_pred_delayed = y_pred_delayed.T
             # update metrics
             self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
             # update classifier with these samples for output models
-            self._update_classifiers(X_delayed, y_real_delayed)
+            self._update_classifiers(X_delayed, y_real_delayed, weight)
 
             self._end_time = timer()
 
