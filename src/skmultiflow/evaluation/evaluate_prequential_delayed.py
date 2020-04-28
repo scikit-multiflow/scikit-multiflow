@@ -378,37 +378,37 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         while ((self.global_sample_count < self.actual_max_samples) & (
                 self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
-            # try:
+            try:
 
-            # get current batch
-            X, arrival_time, available_time, y_real, weight = self.stream.next_sample(self.batch_size)
+                # get current batch
+                X, arrival_time, available_time, y_real, weight = self.stream.next_sample(self.batch_size)
 
-            # update current timestamp
-            self.time_manager.update_timestamp(arrival_time[-1])
+                # update current timestamp
+                self.time_manager.update_timestamp(arrival_time[-1])
 
-            # get delayed samples to update model before predicting a new batch
-            X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.get_available_samples()
+                # get delayed samples to update model before predicting a new batch
+                X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.get_available_samples()
 
-            # transpose prediction matrix to model-sample again
-            y_pred_delayed = y_pred_delayed.T
+                # transpose prediction matrix to model-sample again
+                y_pred_delayed = y_pred_delayed.T
 
-            self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
+                self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
 
-            # before getting new samples, update classifiers with samples that are already available
-            self._update_classifiers(X_delayed, y_real_delayed, weight)
+                # before getting new samples, update classifiers with samples that are already available
+                self._update_classifiers(X_delayed, y_real_delayed, weight)
 
-            # predict samples and get predictions
-            y_pred = self._predict_samples(X)
+                # predict samples and get predictions
+                y_pred = self._predict_samples(X)
 
-            # add current samples to delayed queue
-            self.time_manager.update_queue(X, y_real, y_pred, weight, arrival_time, available_time)
+                # add current samples to delayed queue
+                self.time_manager.update_queue(X, y_real, y_pred, weight, arrival_time, available_time)
 
-            self._end_time = timer()
-            # except BaseException as exc:
-            #     print(exc)
-            #     if exc is KeyboardInterrupt:
-            #         self._update_metrics()
-            #     break
+                self._end_time = timer()
+            except BaseException as exc:
+                print(exc)
+                if exc is KeyboardInterrupt:
+                    self._update_metrics()
+                break
 
         # evaluate remaining samples in the delayed_queue
         # iterate over delay_queue while it has samples according to batch_size
