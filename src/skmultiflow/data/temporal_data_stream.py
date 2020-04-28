@@ -127,26 +127,17 @@ class TemporalDataStream(DataStream):
             if self.n_targets < 2:
                 self.current_sample_y = self.current_sample_y.flatten()
 
-            # create base output
-            output = [self.current_sample_x, self.current_sample_time, self.current_sample_delay, self.current_sample_y]
-
             # check if sampe_weight is available
             if self.sample_weight is not None:
                 self.current_sample_weight = self.sample_weight[self.sample_idx - batch_size:self.sample_idx, :]
-                # add to output
-                output.append(self.current_sample_weight)
+            else:
+                self.current_sample_weight = None
 
         except IndexError:
             self.current_sample_x = None
             self.current_sample_y = None
             self.current_sample_time = None
             self.current_sample_delay = None
-
-            # create base output
-            output = [self.current_sample_x, self.current_sample_time, self.current_sample_delay, self.current_sample_y]
-            # check if sampe_weight is available
-            if self.sample_weight is not None:
-                self.current_sample_weight = None
-                output.append(self.current_sample_weight)
+            self.current_sample_weight = None
             
-        return output
+        return self.current_sample_x, self.current_sample_time, self.current_sample_delay, self.current_sample_y, self.current_sample_weight

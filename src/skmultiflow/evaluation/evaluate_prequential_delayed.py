@@ -351,14 +351,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             print('Pre-training on {} sample(s).'.format(self.pretrain_size))
 
             # get current batch
-            current_batch = self.stream.next_sample(self.pretrain_size)
-
-            # TODO: improve this solution for more optional parameters than just weight
-            # check if batch contains weight (change here if we include more informations in TemporalDataStream)
-            if len(current_batch) > 4:
-                X, arrival_time, available_time, y, weight = current_batch
-            else:
-                X, arrival_time, available_time, y = current_batch
+            X, arrival_time, available_time, y, weight = current_batch = self.stream.next_sample(self.pretrain_size)
 
             for i in range(self.n_models):
                 if self._task_type == constants.CLASSIFICATION:
@@ -377,7 +370,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 self.running_time_measurements[i].update_time_measurements(self.pretrain_size)
             self.global_sample_count += self.pretrain_size
             self.first_run = False
-            # initialize time_manager with last timestamp avaiable
+            # initialize time_manager with last timestamp available
             self.time_manager = TimeManager(arrival_time[-1])
 
         self.update_count = 0
