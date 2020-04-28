@@ -9,7 +9,7 @@ from numpy import unique
 
 from skmultiflow.evaluation.base_evaluator import StreamEvaluator
 from skmultiflow.utils import constants
-from skmultiflow.utils import TimeManager
+from skmultiflow.data import TimeManager
 
 
 class EvaluatePrequentialDelayed(StreamEvaluator):
