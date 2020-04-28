@@ -244,7 +244,7 @@ class ADWIN(BaseDriftDetector):
             bucket_list.pop()
             bucket_list.pop()
 
-    def detected_change(self):
+    def detected_change(self):  # TODO rename?
         """ Detect concept change in a drifting data stream.
 
         The ADWIN algorithm is described in Bifet and Gavaldà's
@@ -253,8 +253,10 @@ class ADWIN(BaseDriftDetector):
         variable size while detecting concept drift.
 
         This function runs every time the clock ticks & analyses the
-        cutting point between each bucket to verify if there is a
-        significant change in concept.
+        cutting point between each bucket, from the oldest to the
+        newest, to verify if there is a significant change in concept.
+        It drops the oldest bucket until the current window contains
+        only the latest concept.
 
         Returns
         -------
