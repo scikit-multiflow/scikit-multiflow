@@ -86,12 +86,9 @@ class ADWIN(BaseDriftDetector):
         self.time = 0
         self.total_width = 0
 
-        self.detect = 0
         self.n_detections = 0
-        self.detect_twice = 0
         self.clock = 32
 
-        self.was_bucket_deleted = False
         self.max_n_buckets = 0
         self.min_window_length = 5
         super().reset()
@@ -107,18 +104,6 @@ class ADWIN(BaseDriftDetector):
             self
         """
         self.__init__(delta=self.delta)
-
-    def get_change(self):
-        """ Get drift.
-
-        Returns
-        -------
-        bool
-            Whether or not a drift occurred.
-
-        Note: this method seems questionable. Do we need it?
-        """
-        return self.was_bucket_deleted
 
     def reset_change(self):
         self.was_bucket_deleted = False
@@ -164,7 +149,7 @@ class ADWIN(BaseDriftDetector):
         """
         self.width += 1
         # Insert the new data.
-        self.window[0].appendleft(Bucket(value, 0))
+        self.window[0].appendleft(self.Bucket(value, 0))
         if len(self.window) > self.max_n_buckets:
             self.max_n_buckets = len(self.window)
 
@@ -238,8 +223,8 @@ class ADWIN(BaseDriftDetector):
             incremental_variance = n1 * n2 * (u1 - u2) * (u1 - u2) / (n1 + n2)
             new_variance = b1.variance + incremental_variance
             # Add the merged buckets to the next bucket list.
-            next_bucket_list.appendleft(Bucket(b1.total + b2.total,
-                                               new_variance))
+            next_bucket_list.appendleft(self.Bucket(b1.total + b2.total,
+                                                    new_variance))
             # Remove the merged buckets.
             bucket_list.pop()
             bucket_list.pop()
@@ -273,82 +258,60 @@ class ADWIN(BaseDriftDetector):
         benefits from its proven guarantees.
         """
         has_changed = False
-        should_exit = False
-        was_bucket_deleted = False
         self.time += 1
-        if ((self.time % self.clock == 0)
-            and (self.width > self.min_window_longitude)):
-            should_reducewidth = True
-            while should_reducewidth:
-                should_reducewidth = False
-                should_exit = False
-                n0 = u0 = v0 = 0
-                n1 = self.width
-                u1 = self.total
-                v1 = self._variance
-                i = len(self.window) - 1
-                # Oldest
-                bucket_list = self.window[-1]
-                while (not should_exit) and (bucket_list is not None):
-                    bucket_list = self.window[i]
-                    for k in range(len(bucket_list) - 1):
-                        n2 = self.bucket_size(i)
-                        u2 = bucket_list[k].total
-
-                        if n0 > 0:
-                            v0 += (bucket_list[k].variance
-                                   + n0
-                                     * n2
-                                     * (u0/n0 - u2/n2)
-                                     * (u0/n0 - u2/n2)
-                                     / (n0 + n2))
-                        if n1 > 0:
-                            v1 -= (bucket_list.bucket[k].variance
-                                   + n1
-                                    * n2
-                                    * (u1/n1 - u2/n2)
-                                    * (u1/n1 - u2/n2)
-                                    / (n1 + n2))
-
-                        n0 += n2
-                        n1 -= n2
-                        u0 += u2
-                        u1 -= u2
-
-                        if (i == 0) and (k == len(bucket_list) - 1):
-                            should_exit = True
-                            break
-
-                        abs_value = np.abs(u0 / n0 - u1 / n1)
-                        if ((n1 >= self.min_window_length)
-                            and (n0 >= self.min_window_length)
-                            and self._should_cut(n0, n1, u0, u1, v0, v1,
-                                                 abs_value, self.delta)):
-                            was_bucket_deleted = True
-                            self.detect = self.time
-                            if self.detect == 0:
-                                self.detect = self.time
-                            elif self.detect_twice == 0:
-                                self.detect_twice = self.time
-
-                            should_reducewidth = True
-                            has_changed = True
-                            if self.width > 0:
-                                n0 -= self.delete_bucket_list()
-                                should_exit = True
-                                break
-                    i -= 1
-        self.total_width += self.width
-        if has_changed:
-            self.n_detections += 1
-        self.in_concept_change = has_changed
+        if (self.time % self.clock != 0
+            or self.width <= self.min_window_longitude):
+            self.total_width += self.width
+            self.in_concept_change = False
+            return False
+        # TODO Loop until everything passes
+        n0, u0, v0 = 0
+        n1 = self.width
+        u1 = self.total
+        v1 = self.variance
+        # Helper type, makes it easier to iterate on the window.
+        WinBucket = namedtuple('WinBucket', ['size', 'total', 'variance'])
+        # Flatten the bucket lists for convenience.
+        win = [WinBucket(self.bucket_size(self.window.index(bl)),
+                         b.total,
+                         b.variance)
+               for bl in self.window for b in bl]
+        # Order from the oldest to the newest.
+        win.reverse()
+        for bucket in win:
+                n2 = bucket.size
+                u2 = bucket.total
+                # Not at the fist end.
+                if n0 > 0:
+                    v0 += (bucket.variance + n0 * n2
+                                             * (u0/n0 - u2/n2)
+                                             * (u0/n0 - u2/n2)
+                                             / (n0 + n2))
+                # Not at the last end.
+                if n1 > 0:
+                    v1 += (bucket.variance + n1 * n2
+                                             * (u1/n1 - u2/n2)
+                                             * (u1/n1 - u2/n2)
+                                             / (n1 + n2))
+                n0 += bucket.size
+                n1 -= bucket.size
+                u0 += bucket.total
+                u1 -= bucket.total
+                diff = u0/n0 - u1/n1
+                params = (n0, n1, u0, u1, v0, v1, diff, self.delta)
+                if (n0 >= self.min_window_length
+                    and n1 >= self.min_window_length
+                    and self._should_cut(*params)):
+                    has_changed = True
+                    if self.width > 0:
+                        n0 -= self.delete_bucket_list()
         return has_changed
 
-    def _should_cut(self, n0, n1, u0, u1, v0, v1, abs_value, delta):
+    def _should_cut(self, n0, n1, u0, u1, v0, v1, diff, delta):
         n = self.width
         dd = np.log(2 * np.log(n) / delta)
         v = self.variance
         m = ((1. / (n0 - self.min_window_length + 1))
              + (1. / (n1 - self.min_window_length + 1)))
         epsilon = np.sqrt(2 * m * v * dd) + 2. * dd * m / 3
-        return abs_value > epsilon
+        return np.abs(diff) > epsilon
