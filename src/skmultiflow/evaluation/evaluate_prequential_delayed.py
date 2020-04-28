@@ -381,15 +381,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             try:
 
                 # get current batch
-                current_batch = self.stream.next_sample(self.batch_size)
-
-                # TODO: improve this solution for more optional parameters than just weight. Also, include weight in
-                #  the delayed_queue check if batch contains weight (change here if we include more informations in
-                #  TemporalDataStream)
-                if len(current_batch) > 4:
-                    X, arrival_time, available_time, y_real, weight = current_batch
-                else:
-                    X, arrival_time, available_time, y_real = current_batch
+                X, arrival_time, available_time, y_real, weight = self.stream.next_sample(self.batch_size)
 
                 # update current timestamp
                 self.time_manager.update_timestamp(arrival_time[-1])

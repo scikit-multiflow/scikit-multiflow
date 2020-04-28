@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+
 class TimeManager(object):
     """ TimeManager
 
@@ -41,7 +42,9 @@ class TimeManager(object):
         # check if has batch_size samples to be removed
         if self.queue.shape[0] - batch_size >= 0:
             # drop samples that were already used
-            self.queue = self.queue.drop(self.queue.index[[np.arange(batch_size)]])
+            self.queue = self.queue.iloc[batch_size:]
+            # update indexes by sorting again
+            self._sort_queue()
         else:
             # drop all samples
             self.queue = self.queue.iloc[0:0]
