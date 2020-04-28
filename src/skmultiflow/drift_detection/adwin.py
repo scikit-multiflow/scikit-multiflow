@@ -265,6 +265,10 @@ class ADWIN(BaseDriftDetector):
         -----
         If change was detected, one should verify the new window size,
         by reading the width attribute.
+        MOA's implementation doesn't exactly follow the paper, as it
+        only checks the cuts between buckets of the same size.  We
+        have chosen here to more closely match so paper so as to
+        benefits from its proven guarantees.
         """
         has_changed = False
         should_exit = False
@@ -280,7 +284,6 @@ class ADWIN(BaseDriftDetector):
                 n1 = self.width
                 u1 = self.total
                 v1 = self._variance
-                n2 = u2 = 0
                 i = len(self.window) - 1
                 # Oldest
                 bucket_list = self.window[-1]
@@ -305,10 +308,10 @@ class ADWIN(BaseDriftDetector):
                                     * (u1/n1 - u2/n2)
                                     / (n1 + n2))
 
-                        n0 += self.bucket_size(i)
-                        n1 -= self.bucket_size(i)
-                        u0 += bucket_list[k].total
-                        u1 -= bucket_list[k].total
+                        n0 += n2
+                        n1 -= n2
+                        u0 += u2
+                        u1 -= u2
 
                         if (i == 0) and (k == len(bucket_list) - 1):
                             should_exit = True
