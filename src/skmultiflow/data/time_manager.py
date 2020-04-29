@@ -18,6 +18,7 @@ class TimeManager(object):
     """
 
     _columns = ["X", "y_real", "y_pred", "weight", "arrival_time", "available_time"]
+    _sample_weight = True
 
     def __init__(self, timestamp):
         # get initial timestamp
@@ -88,6 +89,8 @@ class TimeManager(object):
     def update_queue(self, X, y_real, y_pred, weight, arrival_time, available_time):
         # check if weight is None to create a list
         if weight is None:
+            # set _sample_weight as False, indicating that there is no weight
+            self._sample_weight = False
             weight = np.full(X.shape[0], None)
         # create daraframe for current samples
         frame = pd.DataFrame(list(zip(X, y_real, y_pred, weight, arrival_time, available_time)),
@@ -138,8 +141,11 @@ class TimeManager(object):
         y_real = samples["y_real"]
         # get y_pred
         y_pred = samples["y_pred"]
-        # get weight
-        weight = samples["weight"]
+        # check if sample_weight are being used
+        if self._sample_weight:
+            weight = samples["weight"]
+        else:
+            weight = None
         # remove samples from queue
         self._cleanup_samples(batch_size)
         # return X, y_real, y_pred, and weight for the unqueued samples
