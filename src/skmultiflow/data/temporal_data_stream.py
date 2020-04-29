@@ -17,17 +17,18 @@ class TemporalDataStream(DataStream):
     data: np.ndarray or pd.DataFrame
         The features' columns and targets' columns or the feature columns
         only if they are passed separately.
-    time: np.ndarray(dtype=datetime64) or pd.Series (Default=None)
-        The timestamp column of each instance. If its a pd.Series, it will
-        be converted into a np.ndarray.
-    sample_weight: np.ndarray or pd.Series, optional (Default=None)
-        Sample weights.
-    sample_delay: np.ndarray(np.datetime64), pd.DataFrame, np.timedelta64 or int, optional (Default=np.timedelta64(0,"D"))
-        Samples delay in np.timedelta64 (the dateoffset difference between the event time
-        and when the label is available), np.ndarray(np.datetime64) with the timestamp that the sample
-        will be available or int with the delay in number of samples.
     y: np.ndarray or pd.DataFrame, optional (Default=None)
         The targets' columns.
+    time: np.ndarray(dtype=datetime64) or pd.Series (Default=None)
+        The timestamp column of each instance. If its a pd.Series, it will
+        be converted into a np.ndarray. If None, delay by number of samples
+        is considered and sample_delay must be int.
+    sample_weight: np.ndarray or pd.Series, optional (Default=None)
+        Sample weights.
+    sample_delay: np.ndarray(np.datetime64), pd.DataFrame, np.timedelta64 or int, optional (Default=0)
+        Samples delay in np.timedelta64 (the dateoffset difference between the event time
+        and when the label is available, e.g., np.timedelta64(1,"D") for a 1-day delay), np.ndarray(np.datetime64)
+        with the timestamp that the sample will be available or int with the delay in number of samples.
     target_idx: int, optional (default=-1)
         The column index from which the targets start.
 
@@ -54,14 +55,16 @@ class TemporalDataStream(DataStream):
 
     """
 
-    # includes time as datetime
-    def __init__(self, data, time=None, y=None, sample_weight=None, sample_delay=np.timedelta64(0, "D"), target_idx=-1,
+    def __init__(self, data, y=None, time=None, sample_weight=None, sample_delay=0, target_idx=-1,
                  n_targets=1, cat_features=None, name=None, ordered=True):
+        print(time, isinstance(sample_delay, int))
         # check if time is pandas dataframe or a numpy.ndarray
         if isinstance(time, pd.Series):
             self.time = pd.to_datetime(time).values
         elif isinstance(time, np.ndarray):
             self.time = np.array(time, dtype="datetime64")
+        elif time is None and not isinstance(sample_delay, int):
+            raise ValueError("'time' is None, expected int for 'sample_delay', but {} was passed".format(type(sample_delay)))
         elif time is None:
             self.time = None
         else:
@@ -78,8 +81,8 @@ class TemporalDataStream(DataStream):
             if self.time is not None:
                 warnings.warn("'time' is not going to be used because 'sample_delay' is int. Delay by number of samples"
                               "is applied. If you want to use time delay, use np.timedelta64 for 'sample_delay'.")
-            self.time = np.arange(0, self.time.shape[0])
-            self.sample_delay = np.arange(0 + sample_delay, self.time.shape[0] + sample_delay)
+            self.time = np.arange(0, data.shape[0])
+            self.sample_delay = np.arange(0 + sample_delay, data.shape[0] + sample_delay)
         else:
             raise ValueError(
                 "np.ndarray(np.datetime64), pd.Series, np.timedelta64 or int sample_delay object expected, and {} was passed".format(
