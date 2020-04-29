@@ -57,7 +57,6 @@ class TemporalDataStream(DataStream):
 
     def __init__(self, data, y=None, time=None, sample_weight=None, sample_delay=0, target_idx=-1,
                  n_targets=1, cat_features=None, name=None, ordered=True):
-        print(time, isinstance(sample_delay, int))
         # check if time is pandas dataframe or a numpy.ndarray
         if isinstance(time, pd.Series):
             self.time = pd.to_datetime(time).values
