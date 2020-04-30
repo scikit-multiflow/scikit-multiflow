@@ -55,8 +55,9 @@ class TemporalDataStream(DataStream):
         A string to id the data.
 
     ordered: bool, optional (default=True)
-        If True, consider that data, time and y are already ordered by timestamp.
-        Otherwise, the data is ordered based on `time` timestamps.
+        If True, consider that data, y, and time are already ordered by timestamp.
+        Otherwise, the data is ordered based on `time` timestamps (time cannot be
+        None).
 
     allow_nan: bool, optional (default=False)
         If True, allows NaN values in the data. Otherwise, an error is raised.
@@ -128,19 +129,22 @@ class TemporalDataStream(DataStream):
             self.sample_weight = sample_weight
         else:
             self.sample_weight = None
-        # if data is not ordered, order it
+        # if data is not ordered, order it by time
         if not ordered:
-            # order data based on self.time
-            data = data[np.argsort(self.time)]
-            # order y based on self.time
-            y = y[np.argsort(self.time)]
-            # order sample_weight if available
-            if self.sample_weight is not None:
-                self.sample_weight = self.sample_weight[np.argsort(self.time)]
-            # order sample_delay, check if not single delay
-            self.sample_delay = self.sample_delay[np.argsort(self.time)]
-            # order self.time
-            self.time.sort()
+            if time is not None:
+                # order data based on self.time
+                data = data[np.argsort(time)]
+                # order y based on time
+                y = y[np.argsort(time)]
+                # order sample_weight if available
+                if self.sample_weight is not None:
+                    self.sample_weight = self.sample_weight[np.argsort(time)]
+                # order sample_delay, check if not single delay
+                self.sample_delay = self.sample_delay[np.argsort(time)]
+                # order time
+                self.time.sort()
+            else:
+                raise TypeError("'time' is None, data cannot be ordered.")
         super().__init__(data, y, target_idx, n_targets, cat_features, name, allow_nan)
 
     def next_sample(self, batch_size=1):
