@@ -71,7 +71,7 @@ class EvaluateHoldout(StreamEvaluator):
         | 'average_mean_squared_error'
         | 'average_mean_absolute_error'
         | 'average_root_mean_square_error'
-        | **Experimental** (no plot generated)
+        | **General purpose** (no plot generated)
         | 'running_time'
         | 'model_size'
 
