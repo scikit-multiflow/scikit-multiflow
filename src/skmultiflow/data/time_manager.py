@@ -83,7 +83,7 @@ class TimeManager(object):
         # remove these samples from queue
         self.queue = self.queue[self.queue['available_time'] > self.timestamp]
         # return X, y_true and y_pred for the dequeued samples
-        return samples["X"], samples["y_true"], samples["y_pred"]
+        return samples["X"].values, samples["y_true"].values, samples["y_pred"].values
 
     def update_queue(self, X, y_true, y_pred, sample_weight, arrival_time, available_time):
         # check if weight is None to create a list

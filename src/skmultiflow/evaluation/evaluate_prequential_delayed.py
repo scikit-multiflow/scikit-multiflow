@@ -314,7 +314,6 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self.model[i].partial_fit(X, y, sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                     self.running_time_measurements[i].update_time_measurements(self.batch_size)
-            # TODO: check if updating samples_count here is right
             self.global_sample_count += len(X)  # self.batch_size
 
     def _update_metrics_delayed(self, y_true_delayed, y_pred_delayed):
@@ -347,8 +346,6 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 except TypeError:
                     raise TypeError("Unexpected prediction value from {}"
                                     .format(type(self.model[i]).__name__))
-            # TODO: check if updating samples_count here is right
-            # self.global_sample_count += self.batch_size
             # adapt prediction matrix to sample-model instead of model-sample by transposing it
             y_pred = np.array(prediction).T
             # return predictions
@@ -378,26 +375,26 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             print('Pre-training on {} sample(s).'.format(self.pretrain_size))
 
             # get current batch
-            X, arrival_time, available_time, y, sample_weight = self.stream.\
+            X, y_true, arrival_time, available_time, sample_weight = self.stream.\
                 next_sample(self.pretrain_size)
 
             for i in range(self.n_models):
                 if self._task_type == constants.CLASSIFICATION:
                     # Training time computation
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y,
+                    self.model[i].partial_fit(X=X, y=y_true,
                                               classes=self.stream.target_values,
                                               sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y,
+                    self.model[i].partial_fit(X=X, y=y_true,
                                               classes=unique(self.stream.target_values),
                                               sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 else:
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
+                    self.model[i].partial_fit(X=X, y=y_true, sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 self.running_time_measurements[i].update_time_measurements(self.pretrain_size)
             self.global_sample_count += self.pretrain_size
@@ -413,7 +410,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             try:
 
                 # get current batch
-                X, arrival_time, available_time, y_true, sample_weight = self.stream.\
+                X, y_true, arrival_time, available_time, sample_weight = self.stream.\
                     next_sample(self.batch_size)
 
                 # update current timestamp

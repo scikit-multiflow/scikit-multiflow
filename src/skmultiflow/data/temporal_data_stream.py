@@ -191,8 +191,8 @@ class TemporalDataStream(DataStream):
             self.current_sample_delay = None
             self.current_sample_weight = None
 
-        return self.current_sample_x,\
+        return self.current_sample_x, \
+               self.current_sample_y, \
                self.current_sample_time,\
                self.current_sample_delay,\
-               self.current_sample_y,\
                self.current_sample_weight
