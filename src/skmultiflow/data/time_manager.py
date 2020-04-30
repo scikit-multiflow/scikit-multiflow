@@ -5,31 +5,30 @@ import pandas as pd
 class TimeManager(object):
     """ TimeManager
 
-    Manage instances that are related to a timestamp and
-    a delay.
+    Manage instances that are related to a timestamp and a delay.
 
     Parameters
     ----------
-    timestamp: np.datetime64
+    timestamp: numpy.datetime64
         Current timestamp of the stream. This timestamp is always
         updated as the stream is processed to simulate when
         the labels will be available for each sample.
 
     """
 
-    _columns = ["X", "y_real", "y_pred", "weight", "arrival_time", "available_time"]
-    _sample_weight = True
+    _COLUMN_NAMES = ["X", "y_true", "y_pred", "sample_weight", "arrival_time", "available_time"]
+    _USE_SAMPLE_WEIGHT = True
 
     def __init__(self, timestamp):
         # get initial timestamp
         self.timestamp = timestamp
         # create dataframe to save time data
         # X = features
-        # y_real = real label
-        # y_pred = predicted label for each model being evaluated
+        # y_true = true label/target
+        # y_pred = predicted label/target for each model being evaluated
         # arrival_time = arrival timestamp of the sample
         # available_time = timestamp when the sample label will be available
-        self.queue = pd.DataFrame(columns=self._columns)
+        self.queue = pd.DataFrame(columns=self._COLUMN_NAMES)
         # transform queue into datetime if timestamps are not int
         if isinstance(self.timestamp, int):
             self.queue['arrival_time'] = pd.to_datetime(self.queue['arrival_time'])
@@ -75,7 +74,7 @@ class TimeManager(object):
         Returns
         -------
         tuple
-            A tuple containing the data, their real labels and predictions.
+            A tuple containing the data, their true labels and predictions.
 
         """
 
@@ -83,18 +82,19 @@ class TimeManager(object):
         samples = self.queue[self.queue['available_time'] <= self.timestamp]
         # remove these samples from queue
         self.queue = self.queue[self.queue['available_time'] > self.timestamp]
-        # return X, y_real and y_pred for the unqueued samples
-        return samples["X"], samples["y_real"], samples["y_pred"]
+        # return X, y_true and y_pred for the dequeued samples
+        return samples["X"], samples["y_true"], samples["y_pred"]
 
-    def update_queue(self, X, y_real, y_pred, weight, arrival_time, available_time):
+    def update_queue(self, X, y_true, y_pred, sample_weight, arrival_time, available_time):
         # check if weight is None to create a list
-        if weight is None:
+        if sample_weight is None:
             # set _sample_weight as False, indicating that there is no weight
-            self._sample_weight = False
-            weight = np.full(X.shape[0], None)
+            self._USE_SAMPLE_WEIGHT = False
+            sample_weight = np.full(X.shape[0], None)   # noqa
         # create daraframe for current samples
-        frame = pd.DataFrame(list(zip(X, y_real, y_pred, weight, arrival_time, available_time)),
-                             columns=self._columns)
+        frame = pd.DataFrame(list(zip(X, y_true, y_pred, sample_weight,
+                                      arrival_time, available_time)),
+                             columns=self._COLUMN_NAMES)
         # append new data to queue
         self.queue = self.queue.append(frame)
         # sort queue
@@ -137,16 +137,16 @@ class TimeManager(object):
             samples = self.queue
         # get X
         X = samples["X"]
-        # get y_real
-        y_real = samples["y_real"]
+        # get y_true
+        y_true = samples["y_true"]
         # get y_pred
         y_pred = samples["y_pred"]
         # check if sample_weight are being used
-        if self._sample_weight:
-            weight = samples["weight"]
+        if self._USE_SAMPLE_WEIGHT:
+            sample_weight = samples["weight"]
         else:
-            weight = None
+            sample_weight = None
         # remove samples from queue
         self._cleanup_samples(batch_size)
-        # return X, y_real, y_pred, and weight for the unqueued samples
-        return X, y_real, y_pred, weight
+        # return X, y_true, y_pred, and weight for the dequeued samples
+        return X, y_true, y_pred, sample_weight

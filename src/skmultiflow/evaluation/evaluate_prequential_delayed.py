@@ -2,7 +2,6 @@ import os
 import warnings
 import re
 import numpy as np
-import pandas as pd
 from timeit import default_timer as timer
 
 from numpy import unique
@@ -15,23 +14,24 @@ from skmultiflow.data import TimeManager
 class EvaluatePrequentialDelayed(StreamEvaluator):
     """ The prequential evaluation delayed method.
 
-    The prequential evaluation delayed is designed specifically for stream settings,
-    in the sense that each sample serves two purposes, and that samples are
-    analysed sequentially, in order of arrival, and are used to update the
-    model only when their label are available, given their timestamps (arrival
-     and available times)s.
+    The prequential evaluation delayed is designed specifically for stream
+    settings, in the sense that each sample serves two purposes, and that
+    samples are analysed sequentially, in order of arrival, and are used to
+    update the model only when their label are available, given their
+    timestamps (arrival and available times).
 
     This method consists of using each sample to test the model, which means
     to make a predictions, and then the same sample is used to train the model
     (partial fit) after its label is available after a certain delay.
-     This way the model is always tested on samples that it hasn't seen yet and
-     updated on samples that have their labels available.
+    This way the model is always tested on samples that it hasn't seen yet and
+    updated on samples that have their labels available.
 
     Parameters
     ----------
     n_wait: int (Default: 200)
-        The number of samples to process between each test. Also defines when to update the plot if `show_plot=True`.
-        Note that setting `n_wait` too small can significantly slow the evaluation process.
+        The number of samples to process between each test. Also defines when
+        to update the plot if ``show_plot=True``. Note that setting ``n_wait``
+        too small can significantly slow the evaluation process.
 
     max_samples: int (Default: 100000)
         The maximum number of samples to process during the evaluation.
@@ -40,14 +40,16 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         The number of samples to pass at a time to the model(s).
 
     pretrain_size: int (Default: 200)
-        The number of samples to use to train the model before starting the evaluation. Used to enforce a 'warm' start.
+        The number of samples to use to train the model before starting the
+        evaluation. Used to enforce a 'warm' start.
 
     max_time: float (Default: float("inf"))
         The maximum duration of the simulation (in seconds).
 
     metrics: list, optional (Default: ['accuracy', 'kappa'])
-        | The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots
-          and/or logged into the output file. Valid options are
+        | The list of metrics to track during the evaluation. Also defines the
+          metrics that will be displayed in plots and/or logged into the output
+          file. Valid options are:
         | **Classification**
         | 'accuracy'
         | 'kappa'
@@ -79,28 +81,32 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         File name to save the summary of the evaluation.
 
     show_plot: bool (Default: False)
-        If True, a plot will show the progress of the evaluation. Warning: Plotting can slow down the evaluation
-        process.
+        If True, a plot will show the progress of the evaluation.
+        Warning: Plotting can slow down the evaluation process.
 
     restart_stream: bool, optional (default: True)
         If True, the stream is restarted once the evaluation is complete.
 
     data_points_for_classification: bool(Default: False)
-        If True, the visualization used is a cloud of data points (only works for classification) and default
-        performance metrics are ignored. If specific metrics are required, then they *must* be explicitly set
+        If True, the visualization used is a cloud of data points (only works
+        for classification) and default performance metrics are ignored. If
+        specific metrics are required, then they *must* be explicitly set
         using the ``metrics`` attribute.
 
     Notes
     -----
-    1. This evaluator can process a single learner to track its performance; or multiple learners  at a time, to
-       compare different models on the same stream.
+    1. This evaluator can process a single learner to track its performance;
+       or multiple learners  at a time, to compare different models on the same
+       stream.
 
-    2. The metric 'true_vs_predicted' is intended to be informative only. It corresponds to evaluations at a specific
-       moment which might not represent the actual learner performance across all instances.
+    2. The metric 'true_vs_predicted' is intended to be informative only. It
+       corresponds to evaluations at a specific moment which might not
+       represent the actual learner performance across all instances.
 
-    3. The metrics `running_time` and `model_size ` are not plotted when the `show_plot` option is set. Only their
-       current value is displayed at the bottom of the figure. However, their values over the evaluation are written
-       into the resulting csv file if the `output_file` option is set.
+    3. The metrics `running_time` and `model_size ` are not plotted when the
+       `show_plot` option is set. Only their current value is displayed at the
+       bottom of the figure. However, their values over the evaluation are
+       written into the resulting csv file if the `output_file` option is set.
 
     Examples
     --------
@@ -201,7 +207,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 if isinstance(metrics, list):
                     self.metrics = metrics
                 else:
-                    raise ValueError("Attribute 'metrics' must be 'None' or 'list', passed {}".format(type(metrics)))
+                    raise TypeError("Attribute 'metrics' must be 'None' or 'list', passed {}".
+                                     format(type(metrics)))
 
         else:
             if metrics is None:
@@ -212,7 +219,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self.metrics = metrics
                     self.metrics.append(constants.DATA_POINTS)
                 else:
-                    raise ValueError("Attribute 'metrics' must be 'None' or 'list', passed {}".format(type(metrics)))
+                    raise TypeError("Attribute 'metrics' must be 'None' or 'list', passed {}".
+                                     format(type(metrics)))
 
         self.restart_stream = restart_stream
         self.n_sliding = n_wait
@@ -228,7 +236,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         stream: Stream
             The stream from which to draw the samples.
 
-        model: skmultiflow.core.BaseStreamModel or sklearn.base.BaseEstimator or list
+        model: skmultiflow.core.BaseSKMObject or sklearn.base.BaseEstimator or list
             The model or list of models to evaluate.
 
         model_names: list, optional (Default=None)
@@ -256,7 +264,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
             return self.model
 
-    def _update_classifiers(self, X, y, weight):
+    def _update_classifiers(self, X, y, sample_weight):
         # check if there are samples to update
         if len(X) > 0:
             # Train
@@ -266,12 +274,13 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                             self._task_type != constants.MULTI_TARGET_REGRESSION:
                         # Accounts for the moment of training beginning
                         self.running_time_measurements[i].compute_training_time_begin()
-                        self.model[i].partial_fit(X, y, self.stream.target_values, sample_weight=weight)
+                        self.model[i].partial_fit(X=X, y=y, classes=self.stream.target_values,
+                                                  sample_weight=sample_weight)
                         # Accounts the ending of training
                         self.running_time_measurements[i].compute_training_time_end()
                     else:
                         self.running_time_measurements[i].compute_training_time_begin()
-                        self.model[i].partial_fit(X, y, sample_weight=weight)
+                        self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
                         self.running_time_measurements[i].compute_training_time_end()
 
                     # Update total running time
@@ -280,19 +289,21 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             else:
                 for i in range(self.n_models):
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X, y, sample_weight=weight)
+                    self.model[i].partial_fit(X, y, sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                     self.running_time_measurements[i].update_time_measurements(self.batch_size)
             # TODO: check if updating samples_count here is right
             self.global_sample_count += len(X)  # self.batch_size
 
-    def _update_metrics_delayed(self, y_real_delayed, y_pred_delayed):
+    def _update_metrics_delayed(self, y_true_delayed, y_pred_delayed):
         # update metrics if y_pred_delayed has items
         if len(y_pred_delayed) > 0:
             for j in range(self.n_models):
                 for i in range(len(y_pred_delayed[0])):
-                    self.mean_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
-                    self.current_eval_measurements[j].add_result(y_real_delayed[i], y_pred_delayed[j][i])
+                    self.mean_eval_measurements[j].add_result(y_true_delayed[i],
+                                                              y_pred_delayed[j][i])
+                    self.current_eval_measurements[j].add_result(y_true_delayed[i],
+                                                                 y_pred_delayed[j][i])
             self._check_progress(self.actual_max_samples)
             if ((self.global_sample_count % self.n_wait) == 0 or
                     (self.global_sample_count >= self.max_samples) or
@@ -327,14 +338,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
         Returns
         -------
-        BaseClassifier extension or list of BaseClassifier extensions
+        BaseSKMObject extension or list of BaseClassifier extensions
             The trained classifiers.
-
-        Notes
-        -----
-        The classifier parameter should be an extension from the BaseClassifier. In
-        the future, when BaseRegressor is created, it could be an extension from that
-        class as well.
 
         """
         self._start_time = timer()
@@ -351,21 +356,26 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             print('Pre-training on {} sample(s).'.format(self.pretrain_size))
 
             # get current batch
-            X, arrival_time, available_time, y, weight = self.stream.next_sample(self.pretrain_size)
+            X, arrival_time, available_time, y, sample_weight = self.stream.\
+                next_sample(self.pretrain_size)
 
             for i in range(self.n_models):
                 if self._task_type == constants.CLASSIFICATION:
                     # Training time computation
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, classes=self.stream.target_values, sample_weight=weight)
+                    self.model[i].partial_fit(X=X, y=y,
+                                              classes=self.stream.target_values,
+                                              sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, classes=unique(self.stream.target_values), sample_weight=weight)
+                    self.model[i].partial_fit(X=X, y=y,
+                                              classes=unique(self.stream.target_values),
+                                              sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 else:
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, sample_weight=weight)
+                    self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
                     self.running_time_measurements[i].compute_training_time_end()
                 self.running_time_measurements[i].update_time_measurements(self.pretrain_size)
             self.global_sample_count += self.pretrain_size
@@ -381,27 +391,35 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             try:
 
                 # get current batch
-                X, arrival_time, available_time, y_real, weight = self.stream.next_sample(self.batch_size)
+                X, arrival_time, available_time, y_true, sample_weight = self.stream.\
+                    next_sample(self.batch_size)
 
                 # update current timestamp
                 self.time_manager.update_timestamp(arrival_time[-1])
 
                 # get delayed samples to update model before predicting a new batch
-                X_delayed, y_real_delayed, y_pred_delayed = self.time_manager.get_available_samples()
+                X_delayed, y_true_delayed, y_pred_delayed = self.time_manager.\
+                    get_available_samples()
 
                 # transpose prediction matrix to model-sample again
                 y_pred_delayed = y_pred_delayed.T
 
-                self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
+                self._update_metrics_delayed(y_true_delayed=y_true_delayed,
+                                             y_pred_delayed=y_pred_delayed)
 
-                # before getting new samples, update classifiers with samples that are already available
-                self._update_classifiers(X_delayed, y_real_delayed, weight)
+                # before getting new samples, update classifiers with samples
+                # that are already available
+                self._update_classifiers(X=X_delayed, y=y_true_delayed,
+                                         sample_weight=sample_weight)
 
                 # predict samples and get predictions
                 y_pred = self._predict_samples(X)
 
                 # add current samples to delayed queue
-                self.time_manager.update_queue(X, y_real, y_pred, weight, arrival_time, available_time)
+                self.time_manager.update_queue(X=X, y_true=y_true, y_pred=y_pred,
+                                               sample_weight=sample_weight,
+                                               arrival_time=arrival_time,
+                                               available_time=available_time)
 
                 self._end_time = timer()
             except BaseException as exc:
@@ -414,13 +432,14 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         # iterate over delay_queue while it has samples according to batch_size
         while self.time_manager.has_more_samples():
             # get current samples to process
-            X_delayed, y_real_delayed, y_pred_delayed, weight = self.time_manager.next_sample(self.batch_size)
+            X_delayed, y_true_delayed, y_pred_delayed, sample_weight = self.time_manager.\
+                next_sample(self.batch_size)
             # transpose prediction matrix to model-sample again
             y_pred_delayed = y_pred_delayed.T
             # update metrics
-            self._update_metrics_delayed(y_real_delayed, y_pred_delayed)
+            self._update_metrics_delayed(y_true_delayed, y_pred_delayed)
             # update classifier with these samples for output models
-            self._update_classifiers(X_delayed, y_real_delayed, weight)
+            self._update_classifiers(X_delayed, y_true_delayed, sample_weight)
 
             self._end_time = timer()
 
@@ -442,16 +461,17 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
         Parameters
         ----------
-        X: Numpy.ndarray of shape (n_samples, n_features)
-            The data upon which the algorithm will create its model.
+        X: numpy.ndarray of shape (n_samples, n_features)
+            The data upon which the estimators will be trained.
 
-        y: Array-like
-            An array-like containing the classification labels / target values for all samples in X.
+        y: numpy.ndarray of shape (, n_samples)
+            The classification labels / target values for all samples in X.
 
-        classes: list
-            Stores all the classes that may be encountered during the classification task. Not used for regressors.
+        classes: list, optional (default=None)
+            Stores all the classes that may be encountered during the
+            classification task. Not used for regressors.
 
-        sample_weight: Array-like
+        sample_weight: numpy.ndarray, optional (default=None)
             Samples weight. If not provided, uniform weights are assumed.
 
         Returns
@@ -464,9 +484,12 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             for i in range(self.n_models):
                 if self._task_type == constants.CLASSIFICATION or \
                         self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
-                    self.model[i].partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight)
+                    self.model[i].partial_fit(X=X, y=y,
+                                              classes=classes,
+                                              sample_weight=sample_weight)
                 else:
-                    self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
+                    self.model[i].partial_fit(X=X, y=y,
+                                              sample_weight=sample_weight)
             return self
         else:
             return self
@@ -476,7 +499,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
 
         Parameters
         ----------
-        X: Numpy.ndarray of shape (n_samples, n_features)
+        X: numpy.ndarray of shape (n_samples, n_features)
             All the samples we want to predict the label for.
 
         Returns
