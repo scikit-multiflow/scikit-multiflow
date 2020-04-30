@@ -1,5 +1,5 @@
 =================
-API Documentation
+API Reference
 =================
 
 This is the API documentation for ``scikit-multiflow``.
@@ -17,7 +17,7 @@ Core: :mod:`skmultiflow.core`
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    core.base.BaseEstimator
    core.BaseSKMObject
@@ -38,7 +38,7 @@ Data: :mod:`skmultiflow.data`
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    data.base_stream.Stream
    data.DataStream
@@ -51,7 +51,7 @@ Stream Generators
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    data.AGRAWALGenerator
    data.HyperplaneGenerator
@@ -83,7 +83,7 @@ Anomaly detection methods
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    anomaly_detection.HalfSpaceTrees
 
@@ -98,7 +98,7 @@ Bayes methods
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    bayes.NaiveBayes
 
@@ -113,11 +113,12 @@ Lazy learning methods
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    lazy.KNNClassifier
    lazy.KNNADWINClassifier
    lazy.SAMKNNClassifier
+   lazy.KNNRegressor
 
 Ensemble methods
 ----------------
@@ -130,7 +131,7 @@ Ensemble methods
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    meta.AccuracyWeightedEnsembleClassifier
    meta.AdaptiveRandomForestClassifier
@@ -142,7 +143,7 @@ Ensemble methods
    meta.DynamicWeightedMajorityClassifier
    meta.LearnPPNSEClassifier
    meta.LearnPPClassifier
-   meta.LeverageBaggingClassifier
+   meta.LeveragingBaggingClassifier
    meta.MultiOutputLearner
    meta.OnlineAdaC2Classifier
    meta.OnlineBoostingClassifier
@@ -165,7 +166,7 @@ Neural Networks
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    neural_networks.PerceptronMask
 
@@ -180,7 +181,7 @@ Prototype based methods
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
        prototype.RobustSoftLearningVectorQuantization
 
@@ -195,7 +196,7 @@ Rules based methods
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    rules.VeryFastDecisionRulesClassifier
 
@@ -210,7 +211,7 @@ Trees based methods
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    trees.HoeffdingTreeClassifier
    trees.HoeffdingAdaptiveTreeClassifier
@@ -233,11 +234,13 @@ Drift Detection: :mod:`skmultiflow.drift_detection`
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    drift_detection.ADWIN
    drift_detection.DDM
    drift_detection.EDDM
+   drift_detection.HDDM_A
+   drift_detection.HDDM_W
    drift_detection.PageHinkley
 
 Evaluation: :mod:`skmultiflow.evaluation`
@@ -251,7 +254,7 @@ Evaluation: :mod:`skmultiflow.evaluation`
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    evaluation.EvaluateHoldout
    evaluation.EvaluatePrequential
@@ -267,24 +270,15 @@ Transform: :mod:`skmultiflow.transform`
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    transform.MissingValuesCleaner
    transform.OneHotToCategorical
+   transform.WindowedMinmaxScaler
+   transform.WindowedStandardScaler
 
 Misc:
 =====
-
-Data structure
---------------
-
-.. currentmodule:: skmultiflow
-
-.. autosummary::
-   :nosignatures:
-   :toctree: _autosummary
-
-   lazy.KDTree
 
 Utilities
 ---------
@@ -293,6 +287,6 @@ Utilities
 
 .. autosummary::
    :nosignatures:
-   :toctree: _autosummary
+   :toctree: generated
 
    core.clone
