@@ -111,68 +111,90 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
     Examples
     --------
     >>> # The first example demonstrates how to evaluate one model
-    >>> from skmultiflow.data import SEAGenerator
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from skmultiflow.data import TemporalDataStream
     >>> from skmultiflow.trees import HoeffdingTreeClassifier
-    >>> from skmultiflow.evaluation import EvaluatePrequential
+    >>> from skmultiflow.evaluation import EvaluatePrequentialDelayed
     >>>
+    >>> # Columns used to get the data, label and time from iris_timestamp dataset
+    >>> DATA_COLUMNS = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
+    >>> LABEL_COLUMN = "label"
+    >>> TIME_COLUMN = "timestamp"
+    >>>
+    >>> # Read a csv with stream data
+    >>> data = pd.read_csv("../data/datasets/iris_timestamp.csv")
+    >>> # Convert time column to datetime
+    >>> data[TIME_COLUMN] = pd.to_datetime(data[TIME_COLUMN])
+    >>> # Sort data by time
+    >>> data = data.sort_values(by=TIME_COLUMN)
+    >>> # Get X, y and time
+    >>> X = data[DATA_COLUMNS].values
+    >>> y = data[LABEL_COLUMN].values
+    >>> time = data[TIME_COLUMN].values
+    >>>
+    >>>
+    >>> # Set a delay of 1 day
+    >>> delay_time = np.timedelta64(1, "D")
     >>> # Set the stream
-    >>> stream = SEAGenerator(random_state=1)
+    >>> stream = TemporalDataStream(X, y, time, sample_delay=delay_time, ordered=False)
     >>>
     >>> # Set the model
     >>> ht = HoeffdingTreeClassifier()
     >>>
     >>> # Set the evaluator
     >>>
-    >>> evaluator = EvaluatePrequential(max_samples=10000,
-    >>>                                 max_time=1000,
-    >>>                                 show_plot=True,
-    >>>                                 metrics=['accuracy', 'kappa'])
+    >>> evaluator = EvaluatePrequentialDelayed(batch_size=1,
+    >>>                                 pretrain_size=X.shape[0]//2,
+    >>>                                 max_samples=X.shape[0],
+    >>>                                 output_file='results_delay.csv',
+    >>>                                 metrics=['accuracy', 'recall', 'precision', 'f1', 'kappa'])
     >>>
     >>> # Run evaluation
     >>> evaluator.evaluate(stream=stream, model=ht, model_names=['HT'])
 
     >>> # The second example demonstrates how to compare two models
-    >>> from skmultiflow.data import SEAGenerator
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from skmultiflow.data import TemporalDataStream
     >>> from skmultiflow.trees import HoeffdingTreeClassifier
     >>> from skmultiflow.bayes import NaiveBayes
-    >>> from skmultiflow.evaluation import EvaluateHoldout
+    >>> from skmultiflow.evaluation import EvaluatePrequentialDelayed
     >>>
+    >>> # Columns used to get the data, label and time from iris_timestamp dataset
+    >>> DATA_COLUMNS = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
+    >>> LABEL_COLUMN = "label"
+    >>> TIME_COLUMN = "timestamp"
+    >>>
+    >>> # Read a csv with stream data
+    >>> data = pd.read_csv("../data/datasets/iris_timestamp.csv")
+    >>> # Convert time column to datetime
+    >>> data[TIME_COLUMN] = pd.to_datetime(data[TIME_COLUMN])
+    >>> # Sort data by time
+    >>> data = data.sort_values(by=TIME_COLUMN)
+    >>> # Get X, y and time
+    >>> X = data[DATA_COLUMNS].values
+    >>> y = data[LABEL_COLUMN].values
+    >>> time = data[TIME_COLUMN].values
+    >>>
+    >>>
+    >>> # Set a delay of 30 minutes
+    >>> delay_time = np.timedelta64(30, "m")
     >>> # Set the stream
-    >>> stream = SEAGenerator(random_state=1)
+    >>> stream = TemporalDataStream(X, y, time, sample_delay=delay_time, ordered=False)
     >>>
     >>> # Set the models
     >>> ht = HoeffdingTreeClassifier()
     >>> nb = NaiveBayes()
     >>>
-    >>> evaluator = EvaluatePrequential(max_samples=10000,
-    >>>                                 max_time=1000,
-    >>>                                 show_plot=True,
-    >>>                                 metrics=['accuracy', 'kappa'])
+    >>> evaluator = EvaluatePrequentialDelayed(batch_size=1,
+    >>>                                 pretrain_size=X.shape[0]//2,
+    >>>                                 max_samples=X.shape[0],
+    >>>                                 output_file='results_delay.csv',
+    >>>                                 metrics=['accuracy', 'recall', 'precision', 'f1', 'kappa'])
     >>>
     >>> # Run evaluation
     >>> evaluator.evaluate(stream=stream, model=[ht, nb], model_names=['HT', 'NB'])
-
-    >>> # The third example demonstrates how to evaluate one model
-    >>> # and visualize the predictions using data points.
-    >>> # Note: You can not in this case compare multiple models
-    >>> from skmultiflow.data import SEAGenerator
-    >>> from skmultiflow.trees import HoeffdingTreeClassifier
-    >>> from skmultiflow.evaluation import EvaluatePrequential
-    >>> # Set the stream
-    >>> stream = SEAGenerator(random_state=1)
-    >>> # Set the model
-    >>> ht = HoeffdingTreeClassifier()
-    >>> # Set the evaluator
-    >>> evaluator = EvaluatePrequential(max_samples=200,
-    >>>                                 n_wait=1,
-    >>>                                 pretrain_size=1,
-    >>>                                 max_time=1000,
-    >>>                                 show_plot=True,
-    >>>                                 metrics=['accuracy'],
-    >>>                                 data_points_for_classification=True)
-    >>>
-    >>> # Run evaluation
-    >>> evaluator.evaluate(stream=stream, model=ht, model_names=['HT'])
 
     """
 
