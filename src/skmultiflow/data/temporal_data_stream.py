@@ -79,12 +79,13 @@ class TemporalDataStream(DataStream):
                  n_targets=1,
                  cat_features=None,
                  name=None,
+                 allow_nan=False,
                  ordered=True):
         self.current_sample_time = None
         self.current_sample_delay = None
         self.current_sample_weight = None
         # Check if data is numpy.ndarray or pandas.DataFrame
-        if not isinstance(data, np.ndaray) and not isinstance(data, pd.DataFrame):
+        if not isinstance(data, np.ndarray) and not isinstance(data, pd.DataFrame):
             raise TypeError("Invalid 'data' type: {}. Valid types are np.ndarray or "
                             "pd.DataFrame".format(type(data)))
         # check if time is panda.Series or a numpy.ndarray
@@ -140,7 +141,7 @@ class TemporalDataStream(DataStream):
             self.sample_delay = self.sample_delay[np.argsort(self.time)]
             # order self.time
             self.time.sort()
-        super().__init__(data, y, target_idx, n_targets, cat_features, name)
+        super().__init__(data, y, target_idx, n_targets, cat_features, name, allow_nan)
 
     def next_sample(self, batch_size=1):
         """
