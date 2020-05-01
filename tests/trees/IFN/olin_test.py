@@ -2,9 +2,9 @@ import numpy as np
 
 from sklearn.utils import check_X_y
 
-from skmultiflow.trees.IFN._dataProcessing import DataProcessor
-from skmultiflow.trees.IFN._ifn_network import IfnNetwork, HiddenLayer, AttributeNode
-from src.skmultiflow.trees.IFN.IOLIN.Basic_Incremental import BasicIncremental
+from skmultiflow.trees.ifn._data_processing import DataProcessor
+from skmultiflow.trees.ifn._ifn_network import IfnNetwork, HiddenLayer, AttributeNode
+from skmultiflow.trees import BasicIncremental
 
 network = IfnNetwork()
 
