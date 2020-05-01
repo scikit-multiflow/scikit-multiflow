@@ -4,13 +4,13 @@ Original code and method by: Prof' Mark Last
 License: BSD 3 clause
 """
 import numpy as np
-from ._ifn_network_multi import IfnNetwork, HiddenLayer
+from skmultiflow.trees.ifn._ifn_network_multi import IfnNetwork, HiddenLayer
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 import math
 import collections
 import time
 import sys
-from .. import Utils as Utils
+from skmultiflow.trees.ifn import utils as Utils
 
 def _drop_records(X, y, attribute_index, value):
     """ Drop the samples in X which doesn't equal to value.

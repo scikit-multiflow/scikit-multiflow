@@ -4,9 +4,9 @@ import pickle
 import pandas as pd
 
 from skmultiflow.data import SEAGenerator
-from skmultiflow.trees.IFN import IfnClassifier
+from skmultiflow.trees import IfnClassifier
 
-from skmultiflow.trees.IFN.IOLIN import OnlineNetwork
+from skmultiflow.trees.ifn.olin import OnlineNetwork
 
 
 class BasicIncremental(OnlineNetwork):

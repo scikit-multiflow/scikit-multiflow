@@ -1,4 +1,4 @@
-from skmultiflow.trees.IFN.IOLIN import MetaLearning
+from skmultiflow.trees.ifn.meta_learning import MetaLearning
 
 alpha = 0.99
 number_of_classes = 2

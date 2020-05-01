@@ -6,10 +6,10 @@ import copy
 from abc import ABC, abstractmethod
 from skmultiflow.data import SEAGenerator
 from sklearn.utils.validation import check_X_y
-from skmultiflow.trees.IFN import IfnClassifier
-from skmultiflow.trees.IFN.IOLIN.Meta_Learning import MetaLearning
-import skmultiflow.trees.IFN.Utils as Utils
-from skmultiflow.trees.IFN._ifn_network import HiddenLayer
+from skmultiflow.trees import IfnClassifier
+from skmultiflow.trees.ifn.meta_learning import MetaLearning
+import skmultiflow.trees.ifn.utils as Utils
+from skmultiflow.trees.ifn._ifn_network import HiddenLayer
 
 
 class OnlineNetwork(ABC):
