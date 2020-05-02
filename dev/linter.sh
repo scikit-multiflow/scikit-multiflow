@@ -6,7 +6,7 @@
 # Usage: Execute from the root project this script (./dev/linter.sh)
 
 python3 -m flake8 \
-src/skmultiflow/anomaly_detection/ \
-src/skmultiflow/bayes/ \
-src/skmultiflow/core/ \
-src/skmultiflow/data
+  src/skmultiflow/anomaly_detection \
+  src/skmultiflow/bayes \
+  src/skmultiflow/core \
+  src/skmultiflow/data
