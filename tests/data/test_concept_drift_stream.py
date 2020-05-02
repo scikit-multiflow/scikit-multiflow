@@ -53,7 +53,7 @@ def test_concept_drift_stream(test_path):
 
     assert 'stream' == stream._estimator_type
 
-    expected_info = "ConceptDriftStream(alpha=0.0,\n" \
+    expected_info = "ConceptDriftStream(alpha=None,\n" \
                     "                   drift_stream=AGRAWALGenerator(balance_classes=False,\n" \
                     "                                                 classification_function=2,\n" \
                     "                                                 perturbation=0.0,\n" \

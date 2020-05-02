@@ -34,9 +34,10 @@ class ConceptDriftStream(Stream):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
 
-    alpha: float (optional, default: 0.0)
-        Angle of change to estimate the width of concept drift change. If set will override
-        the width parameter. Valid values are in the range (0.0, 90.0].
+    alpha: float (optional, default: None)
+        Angle of change to estimate the width of concept drift change. If set will override the width parameter.
+        Valid values are in the range (0.0, 90.0].
+        If alpha is None, this parameter will be ignored.
 
     position: int (default: 5000)
         Central position of concept drift change.
@@ -60,7 +61,7 @@ class ConceptDriftStream(Stream):
                  position=5000,
                  width=1000,
                  random_state=None,
-                 alpha=0.0):
+                 alpha=None):
         super(ConceptDriftStream, self).__init__()
 
         self.n_samples = stream.n_samples
@@ -77,9 +78,9 @@ class ConceptDriftStream(Stream):
         self.name = 'Drifting' + stream.name
 
         self.random_state = random_state
-        self._random_state = None  # This is the actual random_state object used internally
+        self._random_state = None   # This is the actual random_state object used internally
         self.alpha = alpha
-        if self.alpha != 0.0:
+        if self.alpha is not None:
             if 0 < self.alpha <= 90.0:
                 w = int(1 / np.tan(self.alpha * np.pi / 180))
                 self.width = w if w > 0 else 1
