@@ -155,7 +155,7 @@ class RandomRBFGenerator(Stream):
     def _generate_centroids(self):
         """ Generates centroids
 
-        Sequentially creates all the centroids, choosing at random a center
+        Sequentially creates all the centroids, choosing at random a center,
         a label, a standard deviation and a weight.
 
         """

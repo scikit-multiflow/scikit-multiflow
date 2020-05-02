@@ -104,10 +104,8 @@ class RandomTreeGenerator(Stream):
     """
 
     def __init__(self, tree_random_state=None, sample_random_state=None, n_classes=2,
-                 n_cat_features=5,
-                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=5,
-                 min_leaf_depth=3,
-                 fraction_leaves_per_level=0.15):
+                 n_cat_features=5, n_num_features=5, n_categories_per_cat_feature=5,
+                 max_tree_depth=5, min_leaf_depth=3, fraction_leaves_per_level=0.15):
         super().__init__()
 
         self.tree_random_state = tree_random_state
@@ -165,8 +163,7 @@ class RandomTreeGenerator(Stream):
                                                          tree_random_state)
 
     def _generate_random_tree_node(self, current_depth, nominal_att_candidates, min_numeric_value,
-                                   max_numeric_value,
-                                   random_state):
+                                   max_numeric_value, random_state):
         """
         Creates a node, choosing at random the splitting feature and the
         split value. Fill the features with random feature values, and then

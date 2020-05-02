@@ -10,7 +10,7 @@ class MIXEDGenerator(Stream):
     noise-free examples as described in Gama, João, et al [1]_.
 
     It has four relevant attributes, two boolean attributes :math:`v, w` and two numeric
-    attributes :math:`x, y` uniformly distributed from 0 to 1. The examples are labaled depending
+    attributes :math:`x, y` uniformly distributed from 0 to 1. The examples are labeled depending
     on the classification function chosen from below.
 
     * function 0:
