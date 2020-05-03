@@ -97,7 +97,7 @@ def find_split_position(value, positions):
     value: int or float
         A value of the chosen attribute upon the current layer in the network will be splited by.
 
-    positions: (An array_like object of length n)
+    positions: list
         List of the chosen split points which founded significant for the chosen attribute upon the current
         layer in the network will be splited by.
 
