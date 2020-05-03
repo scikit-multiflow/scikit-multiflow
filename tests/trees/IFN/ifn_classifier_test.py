@@ -8,6 +8,7 @@ import numpy as np
 import shutil
 
 dataset_path = "datasets/credit.csv"
+
 test_size_percentage = 0.3
 alpha = 0.99
 test_tmp_folder = "tmp"
@@ -41,6 +42,7 @@ def test_classifier_const_dataset():
 
 
 def test__model_pickle_const_dataset():
+    # try:
     _setup_test_env()
     clf = IfnClassifier(alpha)
     dp = DataProcessor()

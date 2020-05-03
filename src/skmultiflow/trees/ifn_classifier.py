@@ -62,16 +62,21 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             raise ValueError("Enter a valid alpha between 0 to 1")
         self.network = IfnNetwork()
 
-    def fit(self, X, y, sample_weight=None):
+    def fit(self, X, y, classes=None, sample_weight=None):
 
         """A reference implementation of a fitting function.
 
         Parameters
         ----------
-        X : {array-like, sparse matrix}, shape (n_samples, n_features)
-            The training input samples upon which the transforms/estimator will create their model.
-        y : array-like, shape = [n_samples]
-            The target values.
+        X: numpy.ndarray of shape (n_samples, n_features)
+            Instance attributes.
+        y: array_like
+            Classes (targets) for all samples in X.
+        classes: numpy.array
+            Contains the class values in the stream. If defined, will be used
+            to define the length of the arrays returned by `predict_proba`
+        sample_weight: float or array-like
+            Samples weight. If not provided, uniform weights are assumed.
 
         Returns
         -------
@@ -158,6 +163,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
             # Create new hidden layer of the maximal mutual information attribute and set the layer nodes
             insignificant_nodes = []
+            print(global_chosen_attribute)
             if current_layer is not None:
                 node_index = 0
                 for node in current_layer.get_nodes():
@@ -166,6 +172,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     if is_continuous:
                         if node in set(self.nodes_splitted_per_attribute[global_chosen_attribute]):
                             attributes_mi_per_node = 1
+                            print(self.split_points[global_chosen_attribute])
                         else:
                             attributes_mi_per_node = 0
                     else:
@@ -906,15 +913,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
     def calculate_error_rate(self, X, y):
 
-        X = check_array(X, accept_sparse=True)
-        correct = 0
-        for i in range(len(y)):
-            predicted_value = self.predict([X[i]])[0]
-            if predicted_value == y[i]:
-                correct += 1
-
-        error_rate = (len(y) - correct) / len(y)
-        return error_rate
+        return 1 - self.score(X=X, y=y, sample_weight=None)
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
         raise NotImplementedError()
