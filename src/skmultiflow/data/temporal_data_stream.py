@@ -132,17 +132,19 @@ class TemporalDataStream(DataStream):
         # if data is not ordered, order it by time
         if not ordered:
             if time is not None:
-                # order data based on self.time
+                # order data based on time
                 data = data[np.argsort(time)]
                 # order y based on time
                 y = y[np.argsort(time)]
                 # order sample_weight if available
                 if self.sample_weight is not None:
                     self.sample_weight = self.sample_weight[np.argsort(time)]
-                # order sample_delay, check if not single delay
-                self.sample_delay = self.sample_delay[np.argsort(time)]
-                # order time
-                self.time.sort()
+                # if delay is not by time, order time and delay
+                if not isinstance(sample_delay, int):
+                    # order sample_delay, check if not single delay
+                    self.sample_delay = self.sample_delay[np.argsort(time)]
+                    # order time
+                    self.time.sort()
             else:
                 raise TypeError("'time' is None, data cannot be ordered.")
         super().__init__(data, y, target_idx, n_targets, cat_features, name, allow_nan)
