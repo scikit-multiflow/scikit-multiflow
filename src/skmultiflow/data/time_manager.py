@@ -82,8 +82,12 @@ class TimeManager(object):
         samples = self.queue[self.queue['available_time'] <= self.timestamp]
         # remove these samples from queue
         self.queue = self.queue[self.queue['available_time'] > self.timestamp]
+        # get X, y_true and y_pred
+        X = np.array(samples["X"].values.tolist())
+        y_true = np.array(samples["y_true"].values.tolist())
+        y_pred = np.array(samples["y_pred"].values.tolist())
         # return X, y_true and y_pred for the dequeued samples
-        return samples["X"].values, samples["y_true"].values, samples["y_pred"].values
+        return X, y_true,  y_pred
 
     def update_queue(self, X, y_true, y_pred, sample_weight, arrival_time, available_time):
         # check if weight is None to create a list
@@ -130,20 +134,19 @@ class TimeManager(object):
             For general purposes the return can be treated as a numpy.ndarray.
 
         """
-
         if self.queue.shape[0] - batch_size >= 0:
             samples = self.queue[:batch_size]
         else:
             samples = self.queue
         # get X
-        X = samples["X"]
+        X = np.array(samples["X"].values.tolist())
         # get y_true
-        y_true = samples["y_true"]
+        y_true = np.array(samples["y_true"].values.tolist())
         # get y_pred
-        y_pred = samples["y_pred"]
+        y_pred = np.array(samples["y_pred"].values.tolist())
         # check if sample_weight are being used
         if self._USE_SAMPLE_WEIGHT:
-            sample_weight = samples["weight"]
+            sample_weight = np.array(samples["weight"].values.tolist())
         else:
             sample_weight = None
         # remove samples from queue

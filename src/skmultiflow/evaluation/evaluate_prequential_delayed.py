@@ -333,6 +333,24 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self._update_metrics()
                 self.update_count += 1
 
+    def _transform_model_predictions(self, predictions):
+        out = []
+        if len(predictions) > 0:
+            for j in range(predictions.shape[1]):
+                out.append(predictions[:, j])
+            out = np.asarray(out)
+        return out
+
+    def _transform_predictions_model(self, predictions):
+        out = []
+        if len(predictions) > 0:
+            for j in range(predictions.shape[1]):
+                l = []
+                for i in range(predictions.shape[0]):
+                    l.append(predictions[i,j])
+                out.append(l)
+        return out
+
     def _predict_samples(self, X):
         if X is not None:
             # Test
@@ -347,9 +365,10 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     raise TypeError("Unexpected prediction value from {}"
                                     .format(type(self.model[i]).__name__))
             # adapt prediction matrix to sample-model instead of model-sample by transposing it
-            y_pred = np.array(prediction).T
-            # return predictions
-            return y_pred
+            y_pred = np.asarray(prediction)
+            # transform
+            y_pred_T = self._transform_model_predictions(y_pred)
+            return y_pred_T
 
     @property
     def _train_and_test(self):
@@ -413,15 +432,20 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                 X, y_true, arrival_time, available_time, sample_weight = self.stream.\
                     next_sample(self.batch_size)
 
+                # print("Y_TRUE")
+                # print(y_true)
+
                 # update current timestamp
                 self.time_manager.update_timestamp(arrival_time[-1])
 
                 # get delayed samples to update model before predicting a new batch
                 X_delayed, y_true_delayed, y_pred_delayed = self.time_manager.\
                     get_available_samples()
+                # print("Y_TDEL")
+                # print(y_true_delayed)
 
                 # transpose prediction matrix to model-sample again
-                y_pred_delayed = y_pred_delayed.T
+                y_pred_delayed = self._transform_predictions_model(y_pred_delayed)
 
                 self._update_metrics_delayed(y_true_delayed=y_true_delayed,
                                              y_pred_delayed=y_pred_delayed)
@@ -454,7 +478,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             X_delayed, y_true_delayed, y_pred_delayed, sample_weight = self.time_manager.\
                 next_sample(self.batch_size)
             # transpose prediction matrix to model-sample again
-            y_pred_delayed = y_pred_delayed.T
+            y_pred_delayed = self._transform_predictions_model(y_pred_delayed)
             # update metrics
             self._update_metrics_delayed(y_true_delayed, y_pred_delayed)
             # update classifier with these samples for output models
