@@ -24,7 +24,7 @@ def test_evaluate_prequential_delayed_classifier(tmpdir, test_path):
     time = generate_random_dates(seed=1, samples=max_samples)
 
     # Setup temporal stream
-    stream = TemporalDataStream(X, y, time, ordered=False)
+    stream = TemporalDataStream(X, y, time, ordered=True)
 
     # Setup learner
     nominal_attr_idx = [x for x in range(15, len(data.feature_names))]
@@ -34,8 +34,8 @@ def test_evaluate_prequential_delayed_classifier(tmpdir, test_path):
     metrics = ['accuracy', 'kappa', 'kappa_t']
     output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
     evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
-                                    metrics=metrics,
-                                    output_file=output_file)
+                                           metrics=metrics,
+                                           output_file=output_file)
 
     # Evaluate
     result = evaluator.evaluate(stream=stream, model=[learner])
@@ -51,22 +51,22 @@ def test_evaluate_prequential_delayed_classifier(tmpdir, test_path):
     mean_performance, current_performance = evaluator.get_measurements(model_idx=0)
 
     # Simple test. Tests for metrics are placed in the corresponding test module.
-    expected_mean_accuracy = 0.421143
+    expected_mean_accuracy = 0.436250
     assert np.isclose(mean_performance.accuracy_score(), expected_mean_accuracy)
 
-    expected_mean_kappa = 0.215930
+    expected_mean_kappa = 0.231791
     assert np.isclose(mean_performance.kappa_score(), expected_mean_kappa)
 
-    expected_mean_kappa_t = 0.158690
+    expected_mean_kappa_t = 0.236886
     assert np.isclose(mean_performance.kappa_t_score(), expected_mean_kappa_t)
 
-    expected_current_accuracy = 0.410000
+    expected_current_accuracy = 0.430000
     assert np.isclose(current_performance.accuracy_score(), expected_current_accuracy)
 
-    expected_current_kappa = 0.205280
+    expected_current_kappa = 0.223909
     assert np.isclose(current_performance.kappa_score(), expected_current_kappa)
 
-    expected_current_kappa_t = 0.119402
+    expected_current_kappa_t = 0.240000
     assert np.isclose(current_performance.kappa_t_score(), expected_current_kappa_t)
 
     expected_info = "EvaluatePrequentialDelayed(batch_size=1, data_points_for_classification=False,\n" \
@@ -108,7 +108,7 @@ def test_evaluate_delayed_classification_coverage(tmpdir):
     evaluator.evaluate(stream=stream, model=learner)
     mean_performance, current_performance = evaluator.get_measurements(model_idx=0)
 
-    expected_current_accuracy = 0.7
+    expected_current_accuracy = 0.705
     assert np.isclose(current_performance.accuracy_score(), expected_current_accuracy)
 
 
@@ -134,8 +134,8 @@ def test_evaluate_delayed_regression_coverage(tmpdir):
     output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
     metrics = ['mean_square_error', 'mean_absolute_error']
     evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
-                                    metrics=metrics,
-                                    output_file=output_file)
+                                           metrics=metrics,
+                                           output_file=output_file)
 
     evaluator.evaluate(stream=stream, model=htr, model_names=['HTR'])
 
@@ -154,18 +154,18 @@ def test_evaluate_delayed_multi_target_classification_coverage(tmpdir):
     time = generate_random_dates(seed=1, samples=max_samples)
 
     # Setup temporal stream
-    stream = TemporalDataStream(X, y, time, ordered=False)
+    stream = TemporalDataStream(X, y, time, ordered=True)
 
     # Learner
     mol = MultiOutputLearner()
 
     output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
     metrics = ['hamming_score', 'hamming_loss', 'exact_match', 'j_index']
-    evaluator = EvaluatePrequential(max_samples=max_samples,
-                                    metrics=metrics,
-                                    output_file=output_file)
+    evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
+                                           metrics=metrics,
+                                           output_file=output_file)
 
-    evaluator.evaluate(stream=stream, model=[mol], model_names=['MOL'])
+    evaluator.evaluate(stream=stream, model=[mol], model_names=['MOL1'])
 
 
 def test_evaluate_multi_target_regression_coverage(tmpdir):
