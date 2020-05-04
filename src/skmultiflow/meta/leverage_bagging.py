@@ -244,7 +244,8 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
                     k = 1.0
                 elif pred[0] != y:
                     k = 1.0
-                elif self._random_state.rand() < (error / (1.0 - error)):
+                elif (error != 1.0 and
+                      self._random_state.rand() < (error / (1.0 - error))):
                     k = 1.0
                 else:
                     k = 0.0
@@ -281,17 +282,14 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
                     self.ensemble[i].partial_fit(X=np.asarray([X]), y=np.asarray([y_coded]),
                                                  classes=classes)
 
-            try:
-                pred = self.ensemble[i].predict(np.asarray([X]))
-                if pred is not None:
-                    add = 1 if (pred[0] == y_coded) else 0
-                    error = self.adwin_ensemble[i].estimation
-                    self.adwin_ensemble[i].add_element(add)
-                    if self.adwin_ensemble[i].detected_change():
-                        if self.adwin_ensemble[i].estimation > error:
-                            change_detected = True
-            except ValueError:
-                change_detected = False
+            pred = self.ensemble[i].predict(np.asarray([X]))
+            if pred is not None:
+                add = 0 if (pred[0] == y_coded) else 1
+                error = self.adwin_ensemble[i].estimation
+                self.adwin_ensemble[i].add_element(add)
+                if self.adwin_ensemble[i].detected_change():
+                    if self.adwin_ensemble[i].estimation > error:
+                        change_detected = True
 
         if change_detected:
             self.n_detected_changes += 1

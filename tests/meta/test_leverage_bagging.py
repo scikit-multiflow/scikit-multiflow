@@ -74,8 +74,8 @@ def test_leverage_bagging_me():
                                           random_state=112,
                                           leverage_algorithm='leveraging_bag_me')
 
-    y_expected = np.asarray([0, 0, 0, 0, 1, 0, 1, 0, 1, 0,
-                             1, 0, 0, 0, 1, 0, 1, 1, 1, 1,
+    y_expected = np.asarray([0, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+                             1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
                              1, 1, 1, 1, 0, 1, 0, 1, 1, 0,
                              0, 0, 1, 1, 1, 0, 1, 1, 0, 0,
                              1, 0, 0, 1, 0, 0, 0, 1, 1, 0], dtype=np.int)
