@@ -153,8 +153,7 @@ def test_temporal_data_stream_time_ordered(package_path):
     y = raw_data["class"].values
     time = generate_random_dates(1, X.shape[0])
 
-    with pytest.raises(ValueError):
-        stream = TemporalDataStream(X, y, time=time, ordered=True)
+    stream = TemporalDataStream(X, y, time=time, ordered=True)
 
 
 def test_temporal_data_stream_time_not_ordered(package_path):
