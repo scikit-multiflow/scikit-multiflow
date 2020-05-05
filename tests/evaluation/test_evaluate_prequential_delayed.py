@@ -168,44 +168,56 @@ def test_evaluate_delayed_multi_target_classification_coverage(tmpdir):
     evaluator.evaluate(stream=stream, model=[mol], model_names=['MOL1'])
 
 
-def test_evaluate_multi_target_regression_coverage(tmpdir):
+def test_evaluate_delayed_multi_target_regression_coverage(tmpdir):
     from skmultiflow.data import RegressionGenerator
     from skmultiflow.trees import iSOUPTreeRegressor
 
     max_samples = 1000
 
     # Stream
-    stream = RegressionGenerator(n_samples=max_samples, n_features=20,
+    data = RegressionGenerator(n_samples=max_samples, n_features=20,
                                  n_informative=15, random_state=1,
                                  n_targets=7)
+    # Get X and y
+    X, y = data.next_sample(max_samples)
+    time = generate_random_dates(seed=1, samples=max_samples)
+
+    # Setup temporal stream
+    stream = TemporalDataStream(X, y, time, ordered=False)
 
     # Learner
     mtrht = iSOUPTreeRegressor(leaf_prediction='adaptive')
 
-    output_file = os.path.join(str(tmpdir), "prequential_summary.csv")
+    output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
     metrics = ['average_mean_square_error', 'average_mean_absolute_error', 'average_root_mean_square_error']
-    evaluator = EvaluatePrequential(max_samples=max_samples,
+    evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
                                     metrics=metrics,
                                     output_file=output_file)
 
     evaluator.evaluate(stream=stream, model=mtrht, model_names=['MTRHT'])
 
 
-def test_evaluate_coverage(tmpdir):
+def test_evaluate_delayed_coverage(tmpdir):
     from skmultiflow.data import SEAGenerator
     from skmultiflow.bayes import NaiveBayes
 
     max_samples = 1000
 
     # Stream
-    stream = SEAGenerator(random_state =1)
+    data = SEAGenerator(random_state =1)
+    # Get X and y
+    X, y = data.next_sample(max_samples)
+    time = generate_random_dates(seed=1, samples=max_samples)
+
+    # Setup temporal stream
+    stream = TemporalDataStream(X, y, time, ordered=False)
 
     # Learner
     nb = NaiveBayes()
 
     output_file = os.path.join(str(tmpdir), "prequential_summary.csv")
     metrics = ['running_time', 'model_size']
-    evaluator = EvaluatePrequential(max_samples=max_samples,
+    evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
                                     metrics=metrics,
                                     data_points_for_classification=True,
                                     output_file=output_file)
