@@ -20,7 +20,8 @@ def test_OLIN():
     _setup_test_env()
     ifn = IfnClassifier(alpha)
     regenerative = OnlineNetworkRegenerative(ifn, test_tmp_folder, n_min=0, n_max=60, Pe=0.7)
-    regenerative.generate()
+    last_model = regenerative.generate()
+    assert last_model is not None
     _clean_test_env()
 
 

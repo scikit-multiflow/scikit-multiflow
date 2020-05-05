@@ -59,7 +59,6 @@ class PureMultiple(OnlineNetwork):
 
         """
 
-        counter = 1
         self.window = self.meta_learning.calculate_Wint(self.Pe)
         i = 0
         j = self.window
@@ -74,6 +73,7 @@ class PureMultiple(OnlineNetwork):
                 X_batch.append(X[0])
                 y_batch.append(y[0])
                 i = i + 1
+
             X_batch_df = pd.DataFrame(X_batch)
 
             if os.path.exists(self.path) and len(os.listdir(self.path)) > 0:
@@ -114,20 +114,20 @@ class PureMultiple(OnlineNetwork):
                 if abs(Eval - Etr) > max_diff:  # concept drift detected
                     chosen_classifier = IfnClassifier(self.alpha)
                     chosen_classifier.fit(X_batch_df, y_batch)
-                    path = self.path + "/" + str(counter)
+                    path = self.path + "/" + str(self.counter)
                     pickle.dump(self.classifier, open(path, "wb"))
-                    counter = counter + 1
+                    self.counter = self.counter + 1
 
             else:  # cold start
                 chosen_classifier = IfnClassifier(self.alpha)
                 chosen_classifier.fit(X_batch_df, y_batch)
-                path = self.path + "/" + str(counter) + ".pickle"
+                path = self.path + "/" + str(self.counter) + ".pickle"
                 pickle.dump(self.classifier, open(path, "wb"))
-                counter = counter + 1
+                self.counter = self.counter + 1
 
             j = j + self.window
             X_batch.clear()
             y_batch.clear()
 
-        last_model = pickle.load(open(self.path + "/" + str(counter - 1) + ".pickle", "rb"))
+        last_model = pickle.load(open(self.path + "/" + str(self.counter - 1) + ".pickle", "rb"))
         return last_model
