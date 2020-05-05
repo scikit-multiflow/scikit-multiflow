@@ -1,7 +1,8 @@
 import os
 import numpy as np
 import pandas as pd
-
+import datetime
+import random
 import pytest
 
 from skmultiflow.data.temporal_data_stream import TemporalDataStream
@@ -143,3 +144,68 @@ def test_check_data():
 
     with pytest.warns(UserWarning):
         TemporalDataStream(data=data, allow_nan=True)
+
+
+def test_temporal_data_stream_time_ordered(package_path):
+    test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_stream.csv')
+    raw_data = pd.read_csv(test_file)
+    X = raw_data[["attrib1", "attrib2", "attrib3"]].values
+    y = raw_data["class"].values
+    time = generate_random_dates(1, X.shape[0])
+
+    with pytest.raises(ValueError):
+        stream = TemporalDataStream(X, y, time=time, ordered=True)
+
+
+def test_temporal_data_stream_time_not_ordered(package_path):
+    test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_stream.csv')
+    raw_data = pd.read_csv(test_file)
+    X = raw_data[["attrib1", "attrib2", "attrib3"]].values
+    y = raw_data["class"].values
+    time = generate_random_dates(1, X.shape[0])
+
+    stream = TemporalDataStream(X, y, time=time, ordered=False)
+
+    # check if time is ordered
+    ordered = (np.diff(stream.time)>=0).all()
+    assert ordered == True
+
+
+def test_temporal_data_stream_time_with_delay(package_path):
+    test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_stream.csv')
+    raw_data = pd.read_csv(test_file)
+    X = raw_data[["attrib1", "attrib2", "attrib3"]].values
+    y = raw_data["class"].values
+    time = generate_random_dates(1, X.shape[0])
+    delay = generate_random_delays(seed=1, samples=time)
+
+    stream = TemporalDataStream(X, y, time=time, sample_delay=delay, ordered=False)
+
+
+def test_temporal_data_stream_time_with_weight(package_path):
+    test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_stream.csv')
+    raw_data = pd.read_csv(test_file)
+    X = raw_data[["attrib1", "attrib2", "attrib3"]].values
+    y = raw_data["class"].values
+    time = generate_random_dates(1, X.shape[0])
+    delay = generate_random_delays(seed=1, samples=time)
+    random.seed(1)
+    weight = np.array([random.random() for i in range(X.shape[0])])
+
+    stream = TemporalDataStream(X, y, time=time, sample_delay=delay, sample_weight=weight, ordered=False)
+
+
+def generate_random_dates(seed, samples):
+    start = datetime.datetime(2020, 4, 30)
+    end = datetime.datetime(2020, 7, 30)
+    random.seed(seed)
+    time = [random.random() * (end - start) + start for _ in range(samples)]
+    return np.array(time, dtype="datetime64")
+
+
+def generate_random_delays(seed, samples):
+    random.seed(seed)
+    delays = []
+    for d in samples:
+        delays.append(d + np.timedelta64(int(random.random() * 30),"D"))
+    return np.array(delays, dtype="datetime64")
