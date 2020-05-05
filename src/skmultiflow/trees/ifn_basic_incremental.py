@@ -35,7 +35,7 @@ class BasicIncremental(OnlineNetwork):
                 y_batch.append(y[0])
                 i = i + 1
 
-            if self.classifier.is_fitted: # the network already fitted at least one time before
+            if self.classifier.is_fitted:  # the network already fitted at least one time before
 
                 k = j + add_count
                 X_validation_samples = []
@@ -55,13 +55,16 @@ class BasicIncremental(OnlineNetwork):
                 self.classifier.fit(X_batch_df, y_batch)
                 j = j + self.window
                 # save the model
-                path = self.path + "/" + str(self.counter)
+                path = self.path + "/" + str(self.counter) + ".pickle"
                 pickle.dump(self.classifier, open(path, "wb"))
                 self.counter = self.counter + 1
 
             j = j + self.window
             X_batch.clear()
             y_batch.clear()
+
+        last_model = pickle.load(open(self.path + "/" + str(self.counter - 1) + ".pickle", "rb"))
+        return last_model
 
     def _incremental_IN(self,
                         training_window_X,
