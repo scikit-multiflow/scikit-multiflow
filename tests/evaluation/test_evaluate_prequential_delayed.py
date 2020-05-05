@@ -318,7 +318,7 @@ def test_evaluate_delayed_coverage(tmpdir):
     # Learner
     nb = NaiveBayes()
 
-    output_file = os.path.join(str(tmpdir), "prequential_summary.csv")
+    output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
     metrics = ['running_time', 'model_size']
     evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
                                     metrics=metrics,
