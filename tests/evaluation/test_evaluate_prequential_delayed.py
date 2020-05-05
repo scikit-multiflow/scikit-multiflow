@@ -342,7 +342,7 @@ def generate_random_dates(seed, samples):
     end = datetime.datetime(2020, 7, 30)
     random.seed(seed)
     time = [random.random() * (end - start) + start for _ in range(samples)]
-    return np.array(time)
+    return np.array(time, dtype="datetime64")
 
 
 def generate_random_delays(seed, samples):
