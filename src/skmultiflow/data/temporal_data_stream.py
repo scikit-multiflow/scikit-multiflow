@@ -162,10 +162,10 @@ class TemporalDataStream(DataStream):
         Returns
         -------
         tuple or tuple list
-            Returns the next batch_size instances (sample_x, sample_time,
-            sample_y, sample_weight (if available), sample_delay
-            (if available)). For general purposes the return can be treated as
-            a numpy.ndarray.
+            Returns the next batch_size instances (sample_x, sample_y,
+            sample_time, sample_delay (if available), sample_weight
+            (if available)). For general purposes the return can be
+            treated as a numpy.ndarray.
         """
         self.sample_idx += batch_size
 
@@ -197,4 +197,20 @@ class TemporalDataStream(DataStream):
                self.current_sample_y, \
                self.current_sample_time,\
                self.current_sample_delay,\
+               self.current_sample_weight
+
+    def last_sample(self):
+        """ Retrieves last `batch_size` samples in the stream.
+
+        Returns
+        -------
+        tuple or tuple list
+            A numpy.ndarray of shape (batch_size, n_features) and an array-like of shape
+            (batch_size, n_targets), representing the next batch_size samples.
+
+        """
+        return self.current_sample_x, \
+               self.current_sample_y, \
+               self.current_sample_time, \
+               self.current_sample_delay, \
                self.current_sample_weight
