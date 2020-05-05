@@ -5,7 +5,8 @@ import pandas as pd
 from skmultiflow.trees import IfnClassifier
 from skmultiflow.trees.ifn.olin import OnlineNetwork
 from skmultiflow.data import SEAGenerator
-
+from scipy import stats
+import numpy as np
 
 class PureMultiple(OnlineNetwork):
 
@@ -76,12 +77,22 @@ class PureMultiple(OnlineNetwork):
             X_batch_df = pd.DataFrame(X_batch)
 
             if os.path.exists(self.path) and len(os.listdir(self.path)) > 0:
+
                 classifier_files_names = os.listdir(self.path)
                 generated_classifiers = {}
+
+                unique, counts = np.unique(np.array(y_batch), return_counts=True)
+                target_distribution_current = counts[0] / len(y_batch)
+
+                # Entropy of target attribute on the current window
+                E_current = stats.entropy([target_distribution_current, 1 - target_distribution_current], base=2)
+
                 for classifier in classifier_files_names:
                     generated_clf = pickle.load(open(self.path + "/" + classifier, "rb"))
-                    generated_classifiers[classifier] = abs(generated_clf.calculate_error_rate(X_batch_df, y_batch) -
-                                                            classifier.calculate_error_rate(X_batch_df, y_batch))
+                    target_distribution_former = generated_clf.class_count[0][1] / len(y_batch)
+                    E_former = stats.entropy([target_distribution_former, 1 - target_distribution_former], base=2)
+                    generated_classifiers[classifier] = abs(E_current - E_former)
+
                 chosen_classifier_name = min(generated_classifiers, key=generated_classifiers.get)
                 chosen_classifier = pickle.load(open(self.path + "/" + chosen_classifier_name, "rb"))
 
