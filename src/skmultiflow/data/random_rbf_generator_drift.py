@@ -85,8 +85,7 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
     """
 
     def __init__(self, model_random_state=None, sample_random_state=None, n_classes=2,
-                 n_features=10, n_centroids=50,
-                 change_speed=0.0, num_drift_centroids=50):
+                 n_features=10, n_centroids=50, change_speed=0.0, num_drift_centroids=50):
         # Default values
         self.change_speed = change_speed
         self.num_drift_centroids = num_drift_centroids
