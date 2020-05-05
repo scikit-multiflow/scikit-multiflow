@@ -112,6 +112,109 @@ def test_evaluate_delayed_classification_coverage(tmpdir):
     assert np.isclose(current_performance.accuracy_score(), expected_current_accuracy)
 
 
+def test_evaluate_delayed_classification_single_sample_delay(tmpdir):
+    # Test using a delay by samples
+    data = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2, n_cat_features=2,
+                                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=6, min_leaf_depth=3,
+                                 fraction_leaves_per_level=0.15)
+    # Number of samples to use
+    max_samples = 1000
+
+    # Get X and y
+    X, y = data.next_sample(max_samples)
+    y = y.astype(int)
+    time = generate_random_dates(seed=1, samples=max_samples)
+
+    # Setup temporal stream
+    stream = TemporalDataStream(X, y, time, sample_delay=50, ordered=False)
+
+    # Setup learner
+    nominal_attr_idx = [x for x in range(15, len(data.feature_names))]
+    learner = HoeffdingTreeClassifier(nominal_attributes=nominal_attr_idx)
+
+    output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
+    metrics = ['accuracy', 'kappa', 'kappa_t', 'kappa_m', 'f1', 'precision', 'recall', 'gmean', 'true_vs_predicted']
+    evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
+                                    metrics=metrics,
+                                    output_file=output_file)
+
+    # Evaluate
+    evaluator.evaluate(stream=stream, model=learner)
+    mean_performance, current_performance = evaluator.get_measurements(model_idx=0)
+
+    expected_current_accuracy = 0.7
+    assert np.isclose(current_performance.accuracy_score(), expected_current_accuracy)
+
+
+def test_evaluate_delayed_classification_single_time_delay(tmpdir):
+    # Test using a single delay by time
+    data = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2, n_cat_features=2,
+                                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=6, min_leaf_depth=3,
+                                 fraction_leaves_per_level=0.15)
+    # Number of samples to use
+    max_samples = 1000
+
+    # Get X and y
+    X, y = data.next_sample(max_samples)
+    y = y.astype(int)
+    time = generate_random_dates(seed=1, samples=max_samples)
+
+    # Setup temporal stream
+    stream = TemporalDataStream(X, y, time, sample_delay=np.timedelta64(30,"D"), ordered=False)
+
+    # Setup learner
+    nominal_attr_idx = [x for x in range(15, len(data.feature_names))]
+    learner = HoeffdingTreeClassifier(nominal_attributes=nominal_attr_idx)
+
+    output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
+    metrics = ['accuracy', 'kappa', 'kappa_t', 'kappa_m', 'f1', 'precision', 'recall', 'gmean', 'true_vs_predicted']
+    evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
+                                    metrics=metrics,
+                                    output_file=output_file)
+
+    # Evaluate
+    evaluator.evaluate(stream=stream, model=learner)
+    mean_performance, current_performance = evaluator.get_measurements(model_idx=0)
+
+    expected_current_accuracy = 0.715
+    assert np.isclose(current_performance.accuracy_score(), expected_current_accuracy)
+
+
+def test_evaluate_delayed_classification_multiple_time_delay(tmpdir):
+    # Test using multiple delays by time
+    data = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2, n_cat_features=2,
+                                 n_num_features=5, n_categories_per_cat_feature=5, max_tree_depth=6, min_leaf_depth=3,
+                                 fraction_leaves_per_level=0.15)
+    # Number of samples to use
+    max_samples = 1000
+
+    # Get X and y
+    X, y = data.next_sample(max_samples)
+    y = y.astype(int)
+    time = generate_random_dates(seed=1, samples=max_samples)
+    delay = generate_random_delays(seed=1, samples=time)
+
+    # Setup temporal stream
+    stream = TemporalDataStream(X, y, time, sample_delay=delay, ordered=False)
+
+    # Setup learner
+    nominal_attr_idx = [x for x in range(15, len(data.feature_names))]
+    learner = HoeffdingTreeClassifier(nominal_attributes=nominal_attr_idx)
+
+    output_file = os.path.join(str(tmpdir), "prequential_delayed_summary.csv")
+    metrics = ['accuracy', 'kappa', 'kappa_t', 'kappa_m', 'f1', 'precision', 'recall', 'gmean', 'true_vs_predicted']
+    evaluator = EvaluatePrequentialDelayed(max_samples=max_samples,
+                                    metrics=metrics,
+                                    output_file=output_file)
+
+    # Evaluate
+    evaluator.evaluate(stream=stream, model=learner)
+    mean_performance, current_performance = evaluator.get_measurements(model_idx=0)
+
+    expected_current_accuracy = 0.715
+    assert np.isclose(current_performance.accuracy_score(), expected_current_accuracy)
+
+
 def test_evaluate_delayed_regression_coverage(tmpdir):
     # A simple coverage test. Tests for metrics are placed in the corresponding test module.
     from skmultiflow.data import RegressionGenerator
@@ -233,9 +336,18 @@ def compare_files(test, expected):
     filecmp.clear_cache()
     assert filecmp.cmp(test, expected) is True
 
+
 def generate_random_dates(seed, samples):
     start = datetime.datetime(2020, 4, 30)
     end = datetime.datetime(2020, 7, 30)
     random.seed(seed)
     time = [random.random() * (end - start) + start for _ in range(samples)]
     return np.array(time)
+
+
+def generate_random_delays(seed, samples):
+    random.seed(seed)
+    delays = []
+    for d in samples:
+        delays.append(d + np.timedelta64(int(random.random() * 30),"D"))
+    return np.array(delays, dtype="datetime64")
