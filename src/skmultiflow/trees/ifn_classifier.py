@@ -163,7 +163,6 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
             # Create new hidden layer of the maximal mutual information attribute and set the layer nodes
             insignificant_nodes = []
-            print(global_chosen_attribute)
             if current_layer is not None:
                 node_index = 0
                 for node in current_layer.get_nodes():
@@ -172,7 +171,6 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     if is_continuous:
                         if node in set(self.nodes_splitted_per_attribute[global_chosen_attribute]):
                             attributes_mi_per_node = 1
-                            print(self.split_points[global_chosen_attribute])
                         else:
                             attributes_mi_per_node = 0
                     else:

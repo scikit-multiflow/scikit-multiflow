@@ -80,6 +80,7 @@ class OnlineNetworkRegenerative(OnlineNetwork):
                 i = i + 1
 
             X_batch_df = pd.DataFrame(X_batch)
+
             self.classifier.fit(X_batch_df, y_batch)
             Etr = self.classifier.calculate_error_rate(X_batch, y_batch)
 
@@ -112,8 +113,11 @@ class OnlineNetworkRegenerative(OnlineNetwork):
                 i = j - self.window
                 add_count = max(add_count * (1 - (self.red_add_count / 100)), self.min_add_count)
 
-            path = self.path + "/" + str(self.counter)
+            path = self.path + "/" + str(self.counter) + ".pickle"
             pickle.dump(self.classifier, open(path, "wb"))
             self.counter = self.counter + 1
             X_batch.clear()
             y_batch.clear()
+
+        last_model = pickle.load(open(self.path + "/" + str(self.counter - 1) + ".pickle", "rb"))
+        return last_model
