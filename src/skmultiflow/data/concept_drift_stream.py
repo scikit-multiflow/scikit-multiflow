@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
@@ -80,6 +82,10 @@ class ConceptDriftStream(Stream):
         self.random_state = random_state
         self._random_state = None   # This is the actual random_state object used internally
         self.alpha = alpha
+        if self.alpha == 0:
+            warnings.warn("Default value for 'alpha' has changed from 0 to None. 'alpha=0' will "
+                          "throw an error from v0.7.0", category=FutureWarning)
+            self.alpha = None
         if self.alpha is not None:
             if 0 < self.alpha <= 90.0:
                 w = int(1 / np.tan(self.alpha * np.pi / 180))
