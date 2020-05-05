@@ -439,7 +439,7 @@ class OnlineNetwork(ABC):
         next_layer_nodes = []
         nodes_to_eliminate = []
 
-        if nodes is None or len(nodes) == 0 or layer is None:
+        if nodes is None or len(nodes) == 0 or layer is None or prev_layer is None:
             return
 
         curr_layer_nodes = layer.nodes

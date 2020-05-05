@@ -1,9 +1,10 @@
+import sys, traceback
 
 import numpy as np
 from ._ifn_network import AttributeNode
 
 
-def binary_search(array, left, right, value):
+def binary_search(array: list, left: int, right: int, value):
     """
 
     Parameters
@@ -23,10 +24,12 @@ def binary_search(array, left, right, value):
 
     Returns
     -------
-        The index of the value in the array.
+        The index of the value in the array or -1 if something went wrong
 
 
     """
+    if array is None or len(array) == 0 or left < 0 or len(array) <= right:
+        return -1
 
     # Check base case
     if right >= left:
@@ -47,14 +50,14 @@ def binary_search(array, left, right, value):
 
 
 def split_data_to_two_intervals(interval, T, min_value, max_value):
-    """ Splitting the given interval to two intervals.
+    """ Splitting the given interval to two intervals contains only the number between min_value and max_value.
         One interval contains all the data which is smaller than T (will be referred as left interval).
         while the second interval contain all the data which is equal or larger than T (will be referred as right
         interval)
 
     Parameters
     ----------
-    interval: {array-like, sparse matrix}, shape (n_samples, n_classes)
+    interval: {array-like, sparse matrix}, shape (1_sample, n_classes)
         Contains the data of one feature overall samples in the train set.
 
     T: int or float
@@ -73,6 +76,9 @@ def split_data_to_two_intervals(interval, T, min_value, max_value):
         An array_like object of length n_samples which contains the true class labels for all the samples in the
         interval.
     """
+    if interval is None:
+        raise ValueError("interval shouldn't be None")
+
     t_attribute_data = []
     new_y = []
 
@@ -89,7 +95,7 @@ def split_data_to_two_intervals(interval, T, min_value, max_value):
     return t_attribute_data, new_y
 
 
-def find_split_position(value, positions):
+def find_split_position(value, positions: list):
     """ Find the position of the given value between the list of given positions.
 
     Parameters
@@ -97,7 +103,7 @@ def find_split_position(value, positions):
     value: int or float
         A value of the chosen attribute upon the current layer in the network will be splited by.
 
-    positions: (An array_like object of length n)
+    positions: list
         List of the chosen split points which founded significant for the chosen attribute upon the current
         layer in the network will be splited by.
 
@@ -107,6 +113,7 @@ def find_split_position(value, positions):
         The position after discretization of the given value among the positions list.
 
     """
+
     # If value is smaller than the first split point
     if value < positions[0]:
         return 0
@@ -178,6 +185,10 @@ def drop_records(X, y, attribute_index, value):
     """
     new_x = []
     new_y = []
+
+    if len(X) != len(y):
+        raise ValueError("X and y should have the same number of rows")
+
     for i in range(len(y)):
         if X[i][attribute_index] == value:
             new_x.append(X[i])
@@ -214,6 +225,9 @@ def create_attribute_node(partial_X, partial_y, chosen_attribute_index, attribut
     -------
         A new AttributeNode object initial with the given parameters.
     """
+
+    if chosen_attribute_index < 0 or attribute_value <0 or curr_node_index < 0 or prev_node_index < 0:
+        raise ValueError("All parameters should be positives")
 
     # Drop records where their value in chosen_attribute isn't equal to attribute_value
     x_y_tuple = drop_records(X=partial_X,
@@ -280,7 +294,7 @@ def convert_numeric_values(chosen_split_points, chosen_attribute, partial_X):
                                                        positions=chosen_split_points)
 
 
-def calculate_second_best_attribute_of_last_layer(attributes_mi:dict):
+def calculate_second_best_attribute_of_last_layer(attributes_mi: dict):
     """ This function finds and return the attribute index of the second best conditional mutual information
         based on the given dictionary.
 

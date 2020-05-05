@@ -64,6 +64,9 @@ class MetaLearning:
             The size of the initial window.
         """
 
+        if Pe < 0:
+            raise ValueError("Pe shouldn't be negative")
+
         chi2_alpha = stats.chi2.ppf(self.alpha, self.classes - 1)
         entropy_Pe = stats.entropy([Pe, 1 - Pe], base=2)
 
@@ -85,16 +88,25 @@ class MetaLearning:
         ----------
         NI : int
            The number of values (or discretized intervals) for the first attribute in the info-fuzzy network.
+           This number should be bigger than one.
         T : float
             The distribution of the target class in the info-fuzzy network.
+            a number between 0 and 1.
         Etr : float
             The error rate of the training set.
+            a number between 0 and 1.
 
 
         Returns
         -------
             The size of the initial window.
         """
+        if NI < 2:
+            raise ValueError("Number of classes should be a least 2")
+        if T < 0 or T > 1:
+            raise ValueError("Target distribution should be between 0 and 1")
+        if Etr < 0 or Etr > 1:
+            raise ValueError("Error rate of the training set should be between 0 and 1")
 
         chi2_alpha = stats.chi2.ppf(self.alpha, (NI - 1) * (self.classes - 1))
         entropy_T = stats.entropy([T, 1 - T], base=2)
@@ -148,5 +160,11 @@ class MetaLearning:
         -------
             The maximum difference between the Etr and Eval.
         """
+        if Etr < 0 or Etr > 1:
+            raise ValueError("Error rate of the training set should be between 0 and 1")
+        if Eval < 0 or Eval > 1:
+            raise ValueError("Error rate of the validation set should be between 0 and 1")
+        if add_count < 1:
+            raise ValueError("The number of validation examples shouldn't by negative")
 
         return stats.norm.ppf(0.99) * self._calculate_var_diff(Etr, Eval, add_count)

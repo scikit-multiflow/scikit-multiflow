@@ -1,4 +1,7 @@
+import copy
+
 import numpy as np
+import pytest, os
 
 from sklearn.utils import check_X_y
 
@@ -105,15 +108,16 @@ def _setup_eliminate_nodes_test_env():
     return network
 
 
+def test_suite_eliminate_all_nodes_in_layer():
+    test_eliminate_all_nodes_in_layer()
+    test_eliminate_some_nodes_in_layer()
+    test_eliminate_nodes_with_invalid_input()
+
+
 def test_eliminate_all_nodes_in_layer():
     _setup_eliminate_nodes_test_env()
-    second_layer_nodes = network.root_node.first_layer.next_layer.nodes
-    nodes_to_remove = []
-    for node in second_layer_nodes:
-        if node.index == 3 or node.index == 5:
-            nodes_to_remove.append(node.index)
 
-    BasicIncremental.eliminate_nodes(nodes=set(nodes_to_remove),
+    BasicIncremental.eliminate_nodes(nodes={3, 5},
                                      layer=network.root_node.first_layer.next_layer.next_layer,
                                      prev_layer=network.root_node.first_layer.next_layer)
 
@@ -124,19 +128,14 @@ def test_eliminate_all_nodes_in_layer():
 
 def test_eliminate_some_nodes_in_layer():
     _setup_eliminate_nodes_test_env()
-    second_layer_nodes = network.root_node.first_layer.next_layer.nodes
     third_layer_nodes = network.root_node.first_layer.next_layer.next_layer.nodes
     nodes_to_remains = []
-    parents_nodes_to_remove = []
-    for node in second_layer_nodes:
-        if node.index == 3:
-            parents_nodes_to_remove.append(node.index)
 
     for node in third_layer_nodes:
         if node.index == 9 or node.index == 10:
             nodes_to_remains.append(node)
 
-    BasicIncremental.eliminate_nodes(nodes=set(parents_nodes_to_remove),
+    BasicIncremental.eliminate_nodes(nodes={3},
                                      layer=network.root_node.first_layer.next_layer.next_layer,
                                      prev_layer=network.root_node.first_layer.next_layer)
 
@@ -148,11 +147,35 @@ def test_eliminate_some_nodes_in_layer():
     assert np.array_equal(nodes_to_remains, third_layer_nodes)
 
 
+def test_eliminate_nodes_with_invalid_input():
+    _setup_eliminate_nodes_test_env()
+    prev_number_of_nodes = len(network.root_node.first_layer.next_layer.next_layer.nodes)
+    BasicIncremental.eliminate_nodes(nodes=set(),
+                                     layer=network.root_node.first_layer.next_layer.next_layer,
+                                     prev_layer=network.root_node.first_layer.next_layer)
+
+    assert prev_number_of_nodes == len(network.root_node.first_layer.next_layer.next_layer.nodes)
+
+    BasicIncremental.eliminate_nodes(nodes={3},
+                                     layer=network.root_node.first_layer.next_layer.next_layer,
+                                     prev_layer=None)
+
+    assert prev_number_of_nodes == len(network.root_node.first_layer.next_layer.next_layer.nodes)
+
+
+def test_suite_clone_network():
+    test_clone_network()
+    test_clone_network_invalid_input()
+
+
 def test_clone_network():
     _setup_eliminate_nodes_test_env()
     dp = DataProcessor()
-    x_train, x_test, y_train, y_test = dp.convert(csv_file_path="datasets/credit.csv",
-                                                  test_size=0.3)
+    # TODO change the file path
+    x_train, x_test, y_train, y_test = \
+        dp.convert(
+            csv_file_path="C:\\Users\איתן אביטן\PycharmProjects\scikit-multiflow\src\skmultiflow\data\datasets\elec.csv",
+            test_size=0.3)
 
     x_train, y_train = check_X_y(x_train, y_train, accept_sparse=True)
 
@@ -164,7 +187,16 @@ def test_clone_network():
     assert len(copy_network.root_node.first_layer.next_layer.nodes) == 4
 
 
+def test_clone_network_invalid_input():
+    with pytest.raises(AttributeError):
+        BasicIncremental.clone_network(network=network,
+                                       training_window_X=None,
+                                       training_window_y=[0, 1])
+        BasicIncremental.clone_network(network=None,
+                                       training_window_X=None,
+                                       training_window_y=[0, 1])
 
-test_eliminate_all_nodes_in_layer()
+
+test_suite_eliminate_all_nodes_in_layer()
 test_eliminate_some_nodes_in_layer()
-# test_clone_network()
+test_suite_clone_network()
