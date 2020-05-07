@@ -42,13 +42,13 @@ class AttributeNode(Node):
         self.partial_x = partial_x
         self.partial_y = partial_y
 
-
     def set_terminal(self):
         self.is_terminal = True
 
     def set_weight_probability_pair(self, weight_probability_pair):
         if self.is_terminal:
             self.weight_probability_pair = weight_probability_pair
+
 
 # layer contains attribute nodes
 class HiddenLayer:
@@ -84,7 +84,7 @@ class IfnNetwork:
                 self.target_layer[target_number].append(ClassNode(i))
 
     def create_network_structure_file(self):
-        f = open("network_structure.txt", "w+")
+        f = open("tmp_multi/network_structure.txt", "w+")
         f.write("Network Structure:" + "\n\n")
 
         curr_layer = self.root_node.first_layer

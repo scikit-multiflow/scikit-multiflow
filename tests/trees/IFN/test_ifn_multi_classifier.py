@@ -1,17 +1,18 @@
 import pickle
+import pandas as pd
 from sklearn.metrics import accuracy_score
 from skmultiflow.trees import IfnClassifierMulti
-from skmultiflow.trees.ifn._data_processing import DataProcessor
+from skmultiflow.trees.ifn._data_processing_multi import DataProcessor
+import pytest
 import os
 import filecmp
 import numpy as np
 import shutil
 
-dataset_path = "datasets/credit.csv"
-
+dataset_path = "Chess_multi.csv"
 test_size_percentage = 0.3
 alpha = 0.99
-test_tmp_folder = "tmp"
+test_tmp_folder = "tmp_multi"
 
 
 def _clean_test_env():
@@ -22,9 +23,9 @@ def _setup_test_env():
     os.mkdir(test_tmp_folder)
 
 
-def test_classifier_const_dataset():
+def test_classifier_const_dataset(multi_label=False):
     _setup_test_env()
-    clf = IfnClassifierMulti(alpha)
+    clf = IfnClassifierMulti(alpha, multi_label)
     dp = DataProcessor()
     x_train, x_test, y_train, y_test = dp.convert(dataset_path, test_size_percentage)
 
@@ -32,39 +33,38 @@ def test_classifier_const_dataset():
     clf.network.create_network_structure_file()
     y_pred = clf.predict(x_test)
 
-    expected_pred = np.array([1, 2, 3, 4, 5])  # maybe change to get from file
-
-    assert filecmp.cmp('tmp/network_structure.txt', 'expert_network_structure.txt') is True
-    assert np.array_equal(y_pred, expected_pred)
-    assert accuracy_score(y_test, y_pred) == accuracy_score(y_test, expected_pred)
+    assert isinstance(y_pred, pd.DataFrame)
+    assert accuracy_score(y_test, y_pred) > 0.2
 
     _clean_test_env()
 
 
-def test__model_pickle_const_dataset():
-    # try:
+def test__model_pickle_const_dataset(multi_label=False):
     _setup_test_env()
-    clf = IfnClassifierMulti(alpha)
+    clf = IfnClassifierMulti(alpha, multi_label)
     dp = DataProcessor()
     x_train, x_test, y_train, y_test = dp.convert(dataset_path, test_size_percentage)
 
     clf.fit(x_train, y_train)
-    pickle.dump(clf, open("tmp/clf.pickle", "wb"))
+    pickle.dump(clf, open("tmp_multi/clf.pickle", "wb"))
     clf.network.create_network_structure_file()
-    os.rename("tmp/network_structure.txt", "tmp/clf_network_structure.txt")
+    os.rename("tmp_multi/network_structure.txt", "tmp_multi/clf_network_structure.txt")
     y_pred = clf.predict(x_test)
 
-    loaded_clf = pickle.load(open("tmp/clf.pickle", "rb"))
+    loaded_clf = pickle.load(open("tmp_multi/clf.pickle", "rb"))
     loaded_clf.network.create_network_structure_file()
-    os.rename("tmp/network_structure.txt", "tmp/loaded_clf_network_structure.txt")
+    os.rename("tmp_multi/network_structure.txt", "tmp_multi/loaded_clf_network_structure.txt")
     loaded_y_pred = loaded_clf.predict(x_test)
 
-    assert filecmp.cmp('tmp/loaded_clf_network_structure.txt', 'tmp/clf_network_structure.txt') is True
+    assert filecmp.cmp('tmp_multi/loaded_clf_network_structure.txt', 'tmp_multi/clf_network_structure.txt') is True
     assert np.array_equal(y_pred, loaded_y_pred)
-    print(accuracy_score(y_test, y_pred))
+    print("accuracy:", accuracy_score(y_test, y_pred))
     assert accuracy_score(y_test, y_pred) == accuracy_score(y_test, loaded_y_pred)
 
     _clean_test_env()
 
 
+print("test multi_target:")
 test__model_pickle_const_dataset()
+print("test multi_label:")
+test__model_pickle_const_dataset(True)

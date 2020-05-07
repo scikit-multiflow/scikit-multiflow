@@ -5,14 +5,14 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from skmultiflow.trees import IfnClassifier
+from skmultiflow.trees import IfnClassifierMulti
 from skmultiflow.trees.ifn.olin import OnlineNetwork
 from skmultiflow.data import SEAGenerator
 
 
 class MultipleModel(OnlineNetwork):
 
-    def __init__(self, classifier: IfnClassifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
+    def __init__(self, classifier: IfnClassifierMulti, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
                  Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,
                  max_window=1000, data_stream_generator=SEAGenerator(random_state=1)):
 
@@ -155,7 +155,7 @@ class MultipleModel(OnlineNetwork):
                     self._update_current_network(training_window_X=X_batch,
                                                  training_window_y=y_batch)
 
-                # If concept drift is detected again with the chosen network Create
+                # If concept drift is detected again with the chosen network create
                 # completely new network using the Info-Fuzzy algorithm
                 else:
                     self.classifier.fit(X=X_batch_df_copy,

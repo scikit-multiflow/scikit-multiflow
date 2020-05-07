@@ -6,7 +6,7 @@ import copy
 from abc import ABC, abstractmethod
 from skmultiflow.data import SEAGenerator
 from sklearn.utils.validation import check_X_y
-from skmultiflow.trees import IfnClassifier
+from skmultiflow.trees import IfnClassifierMulti
 from skmultiflow.trees.ifn.meta_learning import MetaLearning
 import skmultiflow.trees.ifn.utils as Utils
 from skmultiflow.trees.ifn._ifn_network import HiddenLayer
@@ -15,7 +15,7 @@ from skmultiflow.trees.ifn._ifn_network import HiddenLayer
 class OnlineNetwork(ABC):
 
     def __init__(self,
-                 classifier: IfnClassifier,
+                 classifier: IfnClassifierMulti,
                  path,
                  number_of_classes=2,
                  n_min=378,
@@ -87,7 +87,7 @@ class OnlineNetwork(ABC):
         return self._classifier
 
     @classifier.setter
-    def classifier(self, value: IfnClassifier):
+    def classifier(self, value: IfnClassifierMulti):
         self._classifier = value
 
     @abstractmethod

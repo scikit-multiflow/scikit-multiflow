@@ -2,7 +2,7 @@ import math
 import pickle
 import os
 import pandas as pd
-from skmultiflow.trees import IfnClassifier
+from skmultiflow.trees import IfnClassifierMulti
 from skmultiflow.trees.ifn.olin import OnlineNetwork
 from skmultiflow.data import SEAGenerator
 from scipy import stats
@@ -10,7 +10,7 @@ import numpy as np
 
 class PureMultiple(OnlineNetwork):
 
-    def __init__(self, classifier: IfnClassifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
+    def __init__(self, classifier: IfnClassifierMulti, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
                  Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,
                  max_window=1000, data_stream_generator=SEAGenerator(random_state=1)):
 
@@ -112,14 +112,14 @@ class PureMultiple(OnlineNetwork):
                 max_diff = self.meta_learning.get_max_diff(Etr, Eval, add_count)
 
                 if abs(Eval - Etr) > max_diff:  # concept drift detected
-                    chosen_classifier = IfnClassifier(self.alpha)
+                    chosen_classifier = IfnClassifierMulti(self.alpha)
                     chosen_classifier.fit(X_batch_df, y_batch)
                     path = self.path + "/" + str(self.counter)
                     pickle.dump(self.classifier, open(path, "wb"))
                     self.counter = self.counter + 1
 
             else:  # cold start
-                chosen_classifier = IfnClassifier(self.alpha)
+                chosen_classifier = IfnClassifierMulti(self.alpha)
                 chosen_classifier.fit(X_batch_df, y_batch)
                 path = self.path + "/" + str(self.counter) + ".pickle"
                 pickle.dump(self.classifier, open(path, "wb"))

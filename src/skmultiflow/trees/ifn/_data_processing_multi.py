@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 
 
 class DataProcessor:
-    def convert(self, csv_file_path, test_size, target_number):
+    def convert(self, csv_file_path, test_size):
         """
 
         :param csv_file_path: path of the csv file

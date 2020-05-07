@@ -2,7 +2,7 @@ import os
 import shutil
 
 from skmultiflow.trees import MultipleModel
-from skmultiflow.trees import IfnClassifier
+from skmultiflow.trees import IfnClassifierMulti
 
 alpha = 0.99
 test_tmp_folder = "tmpMultipleModel"
@@ -19,7 +19,7 @@ def _clean_test_env():
 
 def test_pure_multiple():
     _setup_test_env()
-    ifn = IfnClassifier(alpha)
+    ifn = IfnClassifierMulti(alpha)
     multiple_model = MultipleModel(ifn, test_tmp_folder, n_min=0, n_max=200, Pe=0.7)
     chosen_model = multiple_model.generate()
     assert chosen_model is not None

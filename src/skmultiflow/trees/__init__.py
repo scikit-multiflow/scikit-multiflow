@@ -21,6 +21,7 @@ from .hoeffding_tree_regressor import RegressionHoeffdingTree   # remove in v0.7
 from .hoeffding_adaptive_tree_regressor import RegressionHAT   # remove in v0.7.0"
 from .isoup_tree import MultiTargetRegressionHoeffdingTree   # remove in v0.7.0"
 from .ifn_classifier import IfnClassifier
+from .ifn_classifier_multi import IfnClassifierMulti
 from .ifn_basic_incremental import BasicIncremental
 from .ifn_multiple_model import MultipleModel
 from .ifn_pure_multiple_model import PureMultiple
@@ -32,6 +33,6 @@ __all__ = ["attribute_observer", "attribute_test", "nodes", "split_criterion",
            "iSOUPTreeRegressor",
            "HoeffdingTree", "HAT", "HATT", "LCHT", "RegressionHoeffdingTree",
            "RegressionHAT", "MultiTargetRegressionHoeffdingTree",
-           "StackedSingleTargetHoeffdingTreeRegressor", "IfnClassifier",
+           "StackedSingleTargetHoeffdingTreeRegressor", "IfnClassifier","IfnClassifierMulti",
            "BasicIncremental", "MultipleModel", "PureMultiple",
            "OnlineNetworkRegenerative"]
