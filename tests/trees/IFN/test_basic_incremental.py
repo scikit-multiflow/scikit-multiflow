@@ -1,7 +1,7 @@
 import os
 import shutil
 from skmultiflow.trees import BasicIncremental
-from skmultiflow.trees import IfnClassifierMulti
+from skmultiflow.trees import IfnClassifier
 
 alpha = 0.99
 test_tmp_folder = "tmpOLIN"
@@ -18,7 +18,7 @@ def _clean_test_env():
 
 def test_OLIN():
     _setup_test_env()
-    ifn = IfnClassifierMulti(alpha)
+    ifn = IfnClassifier(alpha)
     basic_incremental = BasicIncremental(ifn, test_tmp_folder, n_min=0, n_max=200, Pe=0.7)
     last_model = basic_incremental.generate()
     assert last_model is not None

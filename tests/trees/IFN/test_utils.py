@@ -1,5 +1,3 @@
-from _ast import Index
-
 from skmultiflow.trees.ifn import utils
 import pytest
 import numpy as np

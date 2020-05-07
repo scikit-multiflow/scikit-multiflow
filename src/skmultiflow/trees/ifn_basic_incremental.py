@@ -4,14 +4,12 @@ import pickle
 import pandas as pd
 
 from skmultiflow.data import SEAGenerator
-from skmultiflow.trees import IfnClassifierMulti
-
 from skmultiflow.trees.ifn.olin import OnlineNetwork
 
 
 class BasicIncremental(OnlineNetwork):
 
-    def __init__(self, classifier: IfnClassifierMulti, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
+    def __init__(self, classifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
                  Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,
                  max_window=1000, data_stream_generator=SEAGenerator()):
 

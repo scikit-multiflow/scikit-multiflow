@@ -1,6 +1,6 @@
 import pickle
 from sklearn.metrics import accuracy_score
-from skmultiflow.trees import IfnClassifierMulti
+from skmultiflow.trees import IfnClassifier
 from skmultiflow.trees.ifn._data_processing import DataProcessor
 import os
 import filecmp
@@ -24,7 +24,7 @@ def _setup_test_env():
 
 def test_classifier_const_dataset():
     _setup_test_env()
-    clf = IfnClassifierMulti(alpha)
+    clf = IfnClassifier(alpha)
     dp = DataProcessor()
     x_train, x_test, y_train, y_test = dp.convert(dataset_path, test_size_percentage)
 
@@ -44,7 +44,7 @@ def test_classifier_const_dataset():
 def test__model_pickle_const_dataset():
     # try:
     _setup_test_env()
-    clf = IfnClassifierMulti(alpha)
+    clf = IfnClassifier(alpha)
     dp = DataProcessor()
     x_train, x_test, y_train, y_test = dp.convert(dataset_path, test_size_percentage)
 
