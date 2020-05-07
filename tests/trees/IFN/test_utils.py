@@ -1,6 +1,7 @@
 from skmultiflow.trees.ifn import utils
 import pytest
 import numpy as np
+from skmultiflow.trees.ifn._data_processing import DataProcessor
 
 
 def test_suite_binary_search():
