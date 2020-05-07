@@ -123,7 +123,8 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
     >>> TIME_COLUMN = "timestamp"
     >>>
     >>> # Read a csv with stream data
-    >>> data = pd.read_csv("../data/datasets/iris_timestamp.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/scikit-multiflow/streaming-datasets/"
+    >>>                    "master/iris_timestamp.csv")
     >>> # Convert time column to datetime
     >>> data[TIME_COLUMN] = pd.to_datetime(data[TIME_COLUMN])
     >>> # Sort data by time
