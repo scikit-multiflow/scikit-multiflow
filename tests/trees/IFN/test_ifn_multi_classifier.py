@@ -64,7 +64,5 @@ def test__model_pickle_const_dataset(multi_label=False):
     _clean_test_env()
 
 
-print("test multi_target:")
 test__model_pickle_const_dataset()
-print("test multi_label:")
 test__model_pickle_const_dataset(True)

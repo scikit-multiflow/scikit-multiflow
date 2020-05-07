@@ -49,7 +49,7 @@ def _drop_records(X, y, attribute_index, value):
     return np.array(new_x), np.array(new_y)
 
 
-class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
+class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
     """ A template estimator to be used as a reference implementation.
 
     For more information regarding how to build your own estimator, read more
@@ -69,6 +69,10 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
             self.alpha = alpha
             self.max_number_of_layers = max_number_of_layers
             self.total_records = 0
+            self.cmi_sec_best_att = 0
+            self.index_of_sec_best_att = 0
+            self.sec_att_split_points = None
+            self.class_count = None
             # Number of classes in the target
             self.num_of_classes = 0
             # Dictionary that contains the unique value for each attribute
@@ -76,13 +80,13 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
             # Dictionary that contains all the split points for each attribute
             self.split_points = {}
             # Dictionary that contains for each node and attribute all the split points founded significant
-            self.nodes_splited_per_attribute = {}
+            self.nodes_splitted_per_attribute = {}
             # Dictionary that contains for each numeric attribute it's data interval
             self.intervals_per_attribute = {}
             # array-like that contains for each group of split points the nodes founded significant and the
             # conditional mutual information.
             # Example: [[frozenset: {'1,7,10'}, list<AttributeNode>, float: conditional mutual information]..]
-            self.splited_nodes_by_split_points = []
+            self.splitted_nodes_by_split_points = []
             # multi label: True/False
             self.multi_label = multi_label
             # calculate the error
@@ -120,11 +124,11 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
         columns_type = utils.get_columns_type(X)
         self.y_cols = list(y.columns.values)
         X, y = check_X_y(X, y, accept_sparse=True, multi_output=True)
-        class_count = {}
+        self.class_count = {}
         for i in self.y_cols:
             self.total_records = np.size(y, 0)
             unique, counts = np.unique(np.array(y[:, self.y_cols.index(i)]), return_counts=True)
-            class_count[i] = np.asarray((unique, counts)).T
+            self.class_count[i] = np.asarray((unique, counts)).T
             if len(unique) > self.num_of_classes:
                 self.num_of_classes = len(unique)
             self.network.build_target_layer(unique, self.y_cols.index(i))
@@ -136,6 +140,7 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
         number_of_layers = 0
         curr_node_index = 1
         current_layer = None
+        last_layer_mi = {}
 
         # Define for each numeric attribute it's interval for the discretization procedure
         self.intervals_per_attribute = self._define_interval_for_numeric_feature(X, y, attributes_indexes, columns_type)
@@ -197,7 +202,7 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
                     # Check if the node is significant by the chosen attribute
                     # For both cases: continuous feature and categorical feature
                     if is_continuous:
-                        if node in set(self.nodes_splited_per_attribute[global_chosen_attribute]):
+                        if node in set(self.nodes_splitted_per_attribute[global_chosen_attribute]):
                             attributes_mi_per_node = 1
                         else:
                             attributes_mi_per_node = 0
@@ -253,7 +258,7 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
             # Set the un significant node as terminal nodes
             un_significant_nodes_set = list(set(un_significant_nodes))
             if len(un_significant_nodes_set) > 0:
-                self._set_terminal_nodes(un_significant_nodes_set, class_count)
+                self._set_terminal_nodes(un_significant_nodes_set, self.class_count)
 
             current_layer = next_layer
             number_of_layers += 1
@@ -262,17 +267,21 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
                                    attributes_cmi=attributes_mi,
                                    chosen_attribute_index=global_chosen_attribute,
                                    chosen_attribute=cols[global_chosen_attribute])
+
+            # overrides the value until the last iteration
+            self.last_layer_mi = attributes_mi[global_chosen_attribute]
+            last_layer_mi = attributes_mi.copy()
             layer = 'next'
 
             attributes_indexes.remove(global_chosen_attribute)
             self.split_points.clear()
-            self.nodes_splited_per_attribute.clear()
+            self.nodes_splitted_per_attribute.clear()
             significant_attributes_per_node.clear()
 
         # Network building is done
         # Set the remaining nodes as terminals
         if len(current_layer.get_nodes()) > 0:
-            self._set_terminal_nodes(nodes=current_layer.get_nodes(), class_count=class_count)
+            self._set_terminal_nodes(nodes=current_layer.get_nodes(), class_count=self.class_count)
 
         with open('output.txt', 'a') as f:
             f.write('Total nodes created:' + str(curr_node_index) + "\n")
@@ -284,6 +293,15 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
         print("Done. Network is fitted")
         self.training_error = self.calculate_error_rate(X=X, y=y)
         # print("the training error is " + str(self.training_error))
+        self.index_of_sec_best_att, self.cmi_sec_best_att = \
+            utils.calculate_second_best_attribute_of_last_layer(attributes_mi=last_layer_mi)
+
+        if self.index_of_sec_best_att != -1 and 'category' not in columns_type[self.index_of_sec_best_att]:
+            self.sec_att_split_points = self.split_points[self.index_of_sec_best_att]
+
+        self.split_points.clear()
+        self.nodes_splitted_per_attribute.clear()
+        significant_attributes_per_node.clear()
         return self
 
     def predict(self, X):
@@ -449,7 +467,7 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
                     splited_nodes = self._choose_split_numeric_attribute(attribute_index=attribute_index,
                                                                          attributes_mi=attributes_mi,
                                                                          nodes=nodes)
-                    self.nodes_splited_per_attribute[attribute_index] = splited_nodes
+                    self.nodes_splitted_per_attribute[attribute_index] = splited_nodes
                 else:
                     for node in nodes:
                         node_mi = self._choose_split_categorical_attribute(X=node.partial_x,
@@ -549,14 +567,14 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
                                  interval=self.intervals_per_attribute[attribute_index],
                                  nodes=nodes)
 
-            if bool(self.splited_nodes_by_split_points):
-                total_mi = [el[2] for el in self.splited_nodes_by_split_points]
+            if bool(self.splitted_nodes_by_split_points):
+                total_mi = [el[2] for el in self.splitted_nodes_by_split_points]
                 max_mi = max(total_mi)
                 max_mi_index = total_mi.index(max_mi)
-                self.split_points[attribute_index] = list(self.splited_nodes_by_split_points[max_mi_index][0])
+                self.split_points[attribute_index] = list(self.splitted_nodes_by_split_points[max_mi_index][0])
                 new_total_mi = max_mi
-                splited_nodes = list(self.splited_nodes_by_split_points[max_mi_index][1])
-                self.splited_nodes_by_split_points.clear()
+                splited_nodes = list(self.splitted_nodes_by_split_points[max_mi_index][1])
+                self.splitted_nodes_by_split_points.clear()
 
         if bool(self.split_points[attribute_index]):  # there are split points
             attributes_mi[attribute_index] = new_total_mi
@@ -709,7 +727,7 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
 
             if curr_previous_split_points is not None:
                 split_point_set = frozenset(curr_previous_split_points)
-                self.splited_nodes_by_split_points.append([split_point_set, splited_nodes, new_total_mi])
+                self.splitted_nodes_by_split_points.append([split_point_set, splited_nodes, new_total_mi])
                 curr_previous_split_points = frozenset(curr_previous_split_points)
 
             if bool(interval_smaller):
@@ -918,7 +936,7 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
 
         if layer is not None:
             # Get the nodes which should be splited by the chosen attribute
-            splited_nodes = set(self.nodes_splited_per_attribute[chosen_attribute])
+            splited_nodes = set(self.nodes_splitted_per_attribute[chosen_attribute])
             for node in layer.get_nodes():
                 if node in splited_nodes:
                     partial_x = node.partial_x
@@ -978,3 +996,4 @@ class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
 
         error_rate = (np.size(y, 0) * np.size(y, 1) - correct) / (np.size(y, 0) * np.size(y, 1))
         return error_rate
+

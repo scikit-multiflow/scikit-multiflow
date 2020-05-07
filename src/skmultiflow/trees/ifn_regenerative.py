@@ -3,12 +3,11 @@ import pickle
 
 import numpy as np
 import pandas as pd
-from skmultiflow.trees.ifn.olin import OnlineNetwork
-from skmultiflow.trees import IfnClassifier
 from skmultiflow.data import SEAGenerator
+from skmultiflow.trees.ifn.meta_learning import MetaLearning
 
 
-class OnlineNetworkRegenerative(OnlineNetwork):
+class OnlineNetworkRegenerative():
 
     def __init__(self, classifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
                  Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,
@@ -47,8 +46,24 @@ class OnlineNetworkRegenerative(OnlineNetwork):
             Stream generator for the stream data
         """
 
-        super().__init__(classifier, path, number_of_classes, n_min, n_max, alpha, Pe, init_add_count, inc_add_count,
-                         max_add_count, red_add_count, min_add_count, max_window, data_stream_generator)
+        self.classifier = classifier
+        self.path = path
+        self.number_of_classes = number_of_classes
+        self.n_min = n_min
+        self.n_max = n_max
+        self.alpha = alpha
+        self.Pe = Pe
+        self.init_add_count = init_add_count
+        self.inc_add_count = inc_add_count
+        self.max_add_count = max_add_count
+        self.red_add_count = red_add_count
+        self.min_add_count = min_add_count
+        self.max_window = max_window
+        self.window = None
+        self.meta_learning = MetaLearning(alpha, number_of_classes)
+        self.data_stream_generator = data_stream_generator
+        self.data_stream_generator.prepare_for_use()
+        self.counter = 1
 
     def generate(self):
         """ This function is an implementation to the regenerative algorithm as represented
@@ -79,6 +94,7 @@ class OnlineNetworkRegenerative(OnlineNetwork):
                 y_batch.append(y[0])
                 i = i + 1
 
+
             X_batch_df = pd.DataFrame(X_batch)
 
             self.classifier.fit(X_batch_df, y_batch)
@@ -104,6 +120,7 @@ class OnlineNetworkRegenerative(OnlineNetwork):
                 self.window = min(self.window + add_count, self.max_window)
                 self.meta_learning.window = self.window
                 i = j - self.window
+                j = j + self.window
 
             else:  # concept drift detected
                 unique, counts = np.unique(np.array(y_batch), return_counts=True)
@@ -111,6 +128,7 @@ class OnlineNetworkRegenerative(OnlineNetwork):
                 NI = len(self.classifier.network.root_node.first_layer.nodes)
                 self.window = self.meta_learning.calculate_new_window(NI, target_distribution, Etr)
                 i = j - self.window
+                j = j + self.window
                 add_count = max(add_count * (1 - (self.red_add_count / 100)), self.min_add_count)
 
             path = self.path + "/" + str(self.counter) + ".pickle"

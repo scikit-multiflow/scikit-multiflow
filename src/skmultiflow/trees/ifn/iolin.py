@@ -12,7 +12,7 @@ import skmultiflow.trees.ifn.utils as Utils
 from skmultiflow.trees.ifn._ifn_network import HiddenLayer
 
 
-class OnlineNetwork(ABC):
+class IncrementalOnlineNetwork(ABC):
 
     def __init__(self,
                  classifier,
@@ -136,9 +136,9 @@ class OnlineNetwork(ABC):
 
         """
 
-        copy_network = OnlineNetwork.clone_network(network=self.classifier.network,
-                                                   training_window_X=training_window_X,
-                                                   training_window_y=training_window_y)
+        copy_network = IncrementalOnlineNetwork.clone_network(network=self.classifier.network,
+                                                              training_window_X=training_window_X,
+                                                              training_window_y=training_window_y)
 
         curr_layer = copy_network.root_node.first_layer
         curr_layer_in_original_network = self.classifier.network.root_node.first_layer
@@ -161,9 +161,9 @@ class OnlineNetwork(ABC):
             self.classifier.set_terminal_nodes(nodes=un_significant_nodes,
                                                class_count=self.classifier.class_count)
 
-            OnlineNetwork.eliminate_nodes(nodes=set(un_significant_nodes_indexes),
-                                          layer=curr_layer_in_original_network.next_layer,
-                                          prev_layer=curr_layer_in_original_network)
+            IncrementalOnlineNetwork.eliminate_nodes(nodes=set(un_significant_nodes_indexes),
+                                                     layer=curr_layer_in_original_network.next_layer,
+                                                     prev_layer=curr_layer_in_original_network)
             curr_layer = curr_layer.next_layer
             curr_layer_in_original_network = curr_layer_in_original_network.next_layer
 
@@ -227,10 +227,11 @@ class OnlineNetwork(ABC):
         significant_nodes_indexes = []
         curr_layer = copy_network.root_node.first_layer
 
-        while curr_layer.next_layer.next_layer is not None:  # loop until last split
-            curr_layer = curr_layer.next_layer
-            if curr_layer.next_layer is None:
-                break
+        if curr_layer.next_layer is not None:
+            while curr_layer.next_layer.next_layer is not None:  # loop until last split
+                curr_layer = curr_layer.next_layer
+                if curr_layer.next_layer is None:
+                    break
 
         last_layer_nodes = curr_layer.nodes
 
@@ -454,9 +455,9 @@ class OnlineNetwork(ABC):
         if len(layer.nodes) == 0:
             prev_layer.next_layer = layer.next_layer
 
-        OnlineNetwork.eliminate_nodes(nodes=set(next_layer_nodes),
-                                      layer=layer.next_layer,
-                                      prev_layer=layer)
+        IncrementalOnlineNetwork.eliminate_nodes(nodes=set(next_layer_nodes),
+                                                 layer=layer.next_layer,
+                                                 prev_layer=layer)
 
     @staticmethod
     def clone_network(network, training_window_X, training_window_y):

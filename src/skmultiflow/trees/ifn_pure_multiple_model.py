@@ -2,13 +2,13 @@ import math
 import pickle
 import os
 import pandas as pd
-from skmultiflow.trees.ifn.olin import OnlineNetwork
+from skmultiflow.trees.ifn.iolin import IncrementalOnlineNetwork
 from skmultiflow.trees import IfnClassifier
 from skmultiflow.data import SEAGenerator
 from scipy import stats
 import numpy as np
 
-class PureMultiple(OnlineNetwork):
+class PureMultiple(IncrementalOnlineNetwork):
 
     def __init__(self, classifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
                  Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,
@@ -96,7 +96,8 @@ class PureMultiple(OnlineNetwork):
                 chosen_classifier_name = min(generated_classifiers, key=generated_classifiers.get)
                 chosen_classifier = pickle.load(open(self.path + "/" + chosen_classifier_name, "rb"))
 
-                Etr = generated_classifiers[chosen_classifier]
+                self.classifier = chosen_classifier
+                Etr = generated_classifiers[chosen_classifier_name]
 
                 k = j + add_count
                 X_validation_samples = []
@@ -112,15 +113,13 @@ class PureMultiple(OnlineNetwork):
                 max_diff = self.meta_learning.get_max_diff(Etr, Eval, add_count)
 
                 if abs(Eval - Etr) > max_diff:  # concept drift detected
-                    chosen_classifier = IfnClassifier(self.alpha)
-                    chosen_classifier.fit(X_batch_df, y_batch)
-                    path = self.path + "/" + str(self.counter)
+                    self.classifier.fit(X_batch_df, y_batch)
+                    path = self.path + "/" + str(self.counter) + ".pickle"
                     pickle.dump(self.classifier, open(path, "wb"))
                     self.counter = self.counter + 1
 
             else:  # cold start
-                chosen_classifier = IfnClassifier(self.alpha)
-                chosen_classifier.fit(X_batch_df, y_batch)
+                self.classifier.fit(X_batch_df, y_batch)
                 path = self.path + "/" + str(self.counter) + ".pickle"
                 pickle.dump(self.classifier, open(path, "wb"))
                 self.counter = self.counter + 1

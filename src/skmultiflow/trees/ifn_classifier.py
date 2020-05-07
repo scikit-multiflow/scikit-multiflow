@@ -142,7 +142,8 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             if global_chosen_attribute == -1:
                 if curr_node_index == 1:
                     print('No Nodes at the network. choose smaller alpha')
-                    sys.exit()
+                    return
+                    # sys.exit()
                 utils.write_details_to_file(layer_position=layer,
                                             attributes_cmi=attributes_mi,
                                             chosen_attribute_index=global_chosen_attribute,
@@ -422,8 +423,8 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             else:
                 if is_continuous:
                     splitted_nodes = self._choose_split_numeric_attribute(attribute_index=attribute_index,
-                                                                         attributes_mi=attributes_mi,
-                                                                         nodes=nodes)
+                                                                          attributes_mi=attributes_mi,
+                                                                          nodes=nodes)
                     self.nodes_splitted_per_attribute[attribute_index] = splitted_nodes
                 else:
                     for node in nodes:
@@ -911,7 +912,17 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
     def calculate_error_rate(self, X, y):
 
-        return 1 - self.score(X=X, y=y, sample_weight=None)
+        correct = 0
+        for i in range(len(y)):
+            predicted_value = self.predict([X[i]])[0]
+            # predicted_value = self.predict(X.iloc[[i]])[0]
+            if predicted_value == y[i]:
+                correct += 1
+
+        error_rate = (len(y) - correct) / len(y)
+        return error_rate
+
+        # return 1 - self.score(X=X, y=y, sample_weight=None)
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
         raise NotImplementedError()
