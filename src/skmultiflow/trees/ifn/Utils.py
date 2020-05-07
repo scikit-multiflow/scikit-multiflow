@@ -1,5 +1,3 @@
-import sys, traceback
-
 import numpy as np
 from ._ifn_network import AttributeNode
 
@@ -28,7 +26,7 @@ def binary_search(array: list, left: int, right: int, value):
 
 
     """
-    if array is None or len(array) == 0 or left < 0 or len(array) <= right:
+    if array is None or len(array) == 0 or left < 0 or len(array) < right:
         return -1
 
     # Check base case
@@ -307,11 +305,17 @@ def calculate_second_best_attribute_of_last_layer(attributes_mi: dict):
     -------
         The attribute index of the second best conditional mutual information
     """
+    if attributes_mi is None or not bool(attributes_mi):
+        return -1, 0
 
     attributes_mi_copy = attributes_mi.copy()
 
     index_of_max_cmi = max(attributes_mi_copy, key=attributes_mi.get)
     attributes_mi_copy.pop(index_of_max_cmi)
+
+    if not bool(attributes_mi_copy):
+        return -1, 0
+
     index_of_second_best = max(attributes_mi_copy, key=attributes_mi.get)
     sec_best_att_cmi = attributes_mi_copy[index_of_second_best]
 
