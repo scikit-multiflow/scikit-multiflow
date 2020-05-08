@@ -119,6 +119,8 @@ class MetaLearning:
             self.window = 0
         else:
             self.window = int(chi2_alpha / denominator)
+            if self.window <= 0:
+                self.window = 0
 
         return self.window
 
