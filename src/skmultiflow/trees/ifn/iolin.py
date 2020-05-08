@@ -422,6 +422,9 @@ class IncrementalOnlineNetwork(ABC):
         """
         training_window_X_df = pd.DataFrame(training_window_X)
         self.classifier = self.classifier.fit(training_window_X_df, training_window_y)
+        path = self.path + "/" + str(self.counter) + ".pickle"
+        pickle.dump(self.classifier, open(path, "wb"))
+        self.counter = self.counter + 1
 
     @staticmethod
     def eliminate_nodes(nodes, layer, prev_layer):

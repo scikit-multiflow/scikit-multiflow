@@ -16,6 +16,7 @@ class BasicIncremental(IncrementalOnlineNetwork):
         super().__init__(classifier, path, number_of_classes, n_min, n_max, alpha, Pe, init_add_count, inc_add_count,
                          max_add_count, red_add_count, min_add_count, max_window, data_stream_generator)
 
+
     def generate(self):
 
         self.window = self.meta_learning.calculate_Wint(self.Pe)
@@ -26,7 +27,6 @@ class BasicIncremental(IncrementalOnlineNetwork):
         y_batch = []
 
         while j < self.n_max:
-
             while i < j:
                 X, y = self.data_stream_generator.next_sample()
                 X_batch.append(X[0])
@@ -38,7 +38,6 @@ class BasicIncremental(IncrementalOnlineNetwork):
                 k = j + add_count
                 X_validation_samples = []
                 y_validation_samples = []
-
                 while j < k:
                     X_validation_sample, y_validation_sample = self.data_stream_generator.next_sample()
                     X_validation_samples.append(X_validation_sample[0])
@@ -49,13 +48,8 @@ class BasicIncremental(IncrementalOnlineNetwork):
                 i = j - self.window
 
             else:  # cold start
-                X_batch_df = pd.DataFrame(X_batch)
-                self.classifier.fit(X_batch_df, y_batch)
+                self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
                 j = j + self.window
-                # save the model
-                path = self.path + "/" + str(self.counter) + ".pickle"
-                pickle.dump(self.classifier, open(path, "wb"))
-                self.counter = self.counter + 1
 
             j = j + self.window
             X_batch.clear()
@@ -76,7 +70,6 @@ class BasicIncremental(IncrementalOnlineNetwork):
 
         Eval = self.classifier.calculate_error_rate(X=validation_window_X,
                                                     y=validation_window_y)
-
         max_diff = self.meta_learning.get_max_diff(Etr=Etr,
                                                    Eval=Eval,
                                                    add_count=add_count)

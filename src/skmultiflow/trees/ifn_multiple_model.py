@@ -76,15 +76,8 @@ class MultipleModel(IncrementalOnlineNetwork):
                 y_batch.append(y[0])
                 i = i + 1
 
-            X_batch_df = pd.DataFrame(X_batch)
-            X_batch_df_copy = X_batch_df.copy()
-
             if not self.classifier.is_fitted:  # cold start
-                self.classifier.fit(X=X_batch_df,
-                                    y=y_batch)
-                path = self.path + "/" + str(self.counter) + ".pickle"
-                pickle.dump(self.classifier, open(path, "wb"))
-                self.counter = self.counter + 1
+                self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
             k = j + add_count
             X_validation_samples = []
@@ -158,11 +151,7 @@ class MultipleModel(IncrementalOnlineNetwork):
                 # If concept drift is detected again with the chosen network create
                 # completely new network using the Info-Fuzzy algorithm
                 else:
-                    self.classifier.fit(X=X_batch_df_copy,
-                                        y=y_batch)
-                    path = self.path + "/" + str(self.counter) + ".pickle"
-                    pickle.dump(self.classifier, open(path, "wb"))
-                    self.counter = self.counter + 1
+                    self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
             j = j + self.window
             X_batch.clear()

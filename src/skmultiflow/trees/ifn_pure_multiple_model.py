@@ -8,6 +8,7 @@ from skmultiflow.data import SEAGenerator
 from scipy import stats
 import numpy as np
 
+
 class PureMultiple(IncrementalOnlineNetwork):
 
     def __init__(self, classifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
@@ -74,8 +75,6 @@ class PureMultiple(IncrementalOnlineNetwork):
                 y_batch.append(y[0])
                 i = i + 1
 
-            X_batch_df = pd.DataFrame(X_batch)
-
             if os.path.exists(self.path) and len(os.listdir(self.path)) > 0:
 
                 classifier_files_names = os.listdir(self.path)
@@ -113,16 +112,10 @@ class PureMultiple(IncrementalOnlineNetwork):
                 max_diff = self.meta_learning.get_max_diff(Etr, Eval, add_count)
 
                 if abs(Eval - Etr) > max_diff:  # concept drift detected
-                    self.classifier.fit(X_batch_df, y_batch)
-                    path = self.path + "/" + str(self.counter) + ".pickle"
-                    pickle.dump(self.classifier, open(path, "wb"))
-                    self.counter = self.counter + 1
+                    self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
             else:  # cold start
-                self.classifier.fit(X_batch_df, y_batch)
-                path = self.path + "/" + str(self.counter) + ".pickle"
-                pickle.dump(self.classifier, open(path, "wb"))
-                self.counter = self.counter + 1
+                self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
             j = j + self.window
             X_batch.clear()

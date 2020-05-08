@@ -80,30 +80,27 @@ class OnlineNetworkRegenerative():
         """
 
         self.window = self.meta_learning.calculate_Wint(self.Pe)
-        i = self.n_min - self.window
+        i = 0
         j = self.window
         add_count = self.init_add_count
         X_batch = []
         y_batch = []
 
         while j < self.n_max:
-
             while i < j:
                 X, y = self.data_stream_generator.next_sample()
                 X_batch.append(X[0])
                 y_batch.append(y[0])
                 i = i + 1
 
-
             X_batch_df = pd.DataFrame(X_batch)
-
+            if X_batch_df is None or X_batch_df.size == 0:
+                break
             self.classifier.fit(X_batch_df, y_batch)
             Etr = self.classifier.calculate_error_rate(X_batch, y_batch)
-
             k = j + add_count
             X_validation_samples = []
             y_validation_samples = []
-
             while j < k:
                 X_validation, y_validation = self.data_stream_generator.next_sample()
                 X_validation_samples.append(X_validation[0])
