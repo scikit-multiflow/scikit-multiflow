@@ -199,7 +199,8 @@ def test_leverage_bagging_coverage():
 
     # Reset ensemble
     estimator.reset()
-    assert estimator.ensemble
+    assert estimator.classes is None
+
 
 def run_prequential_supervised(stream, learner, max_samples, n_wait, y_expected=None):
     stream.restart()
