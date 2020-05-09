@@ -171,9 +171,7 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
             self.base_estimator.reset()
         self.actual_n_estimators = self.n_estimators
         self.ensemble = [cp.deepcopy(self.base_estimator) for _ in range(self.actual_n_estimators)]
-        self.adwin_ensemble = []
-        for i in range(self.actual_n_estimators):
-            self.adwin_ensemble.append(ADWIN(self.delta))
+        self.adwin_ensemble = [ADWIN(self.delta) for _ in range(self.actual_n_estimators)]
         self._random_state = check_random_state(self.random_state)
         self.n_detected_changes = 0
         self.classes = None
@@ -325,14 +323,6 @@ class LeveragingBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorM
                 condition = ((n_ones - n_zeros) * (n_ones - n_zeros) >
                              (self.actual_n_estimators % 2))
         self.init_matrix_codes = False
-
-    def __adjust_ensemble_size(self):
-        if len(self.classes) != len(self.ensemble):
-            if len(self.classes) > len(self.ensemble):
-                for i in range(len(self.ensemble), len(self.classes)):
-                    self.ensemble.append(cp.deepcopy(self.base_estimator))
-                    self.adwin_ensemble.append(ADWIN(self.delta))
-                    self.actual_n_estimators += 1
 
     def predict(self, X):
         """ Predict classes for the passed data.
