@@ -24,7 +24,7 @@ def demo():
 
     # Setup the file stream
     stream = FileStream("https://raw.githubusercontent.com/scikit-multiflow/streaming-datasets/"
-                        "master/", 0, 6)
+                        "master/music.csv", 0, 6)
 
     # Setup the classifier, by default it uses Logistic Regression
     # classifier = MultiOutputLearner()

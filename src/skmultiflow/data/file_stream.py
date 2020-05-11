@@ -40,7 +40,7 @@ class FileStream(Stream):
     >>> from skmultiflow.data.file_stream import FileStream
     >>> # Setup the stream
     >>> stream = FileStream("https://raw.githubusercontent.com/scikit-multiflow/"
-    ...                     "master/sea_stream.csv")
+    ...                     "streaming-datasets/master/sea_stream.csv")
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[0.080429, 8.397187, 7.074928]]), array([0]))
