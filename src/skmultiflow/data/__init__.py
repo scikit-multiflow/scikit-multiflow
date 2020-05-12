@@ -24,7 +24,8 @@ from .synth import make_logical
 from .waveform_generator import WaveformGenerator
 from .time_manager import TimeManager
 
-__all__ = ["DataStream", "TemporalDataStream", "FileStream", "AGRAWALGenerator", "ConceptDriftStream",
-           "HyperplaneGenerator", "LEDGenerator", "LEDGeneratorDrift", "MIXEDGenerator", "MultilabelGenerator",
-           "RandomRBFGenerator", "RandomRBFGeneratorDrift", "RandomTreeGenerator", "RegressionGenerator",
-           "SEAGenerator", "SineGenerator", "STAGGERGenerator", "make_logical", "WaveformGenerator", "TimeManager"]
+__all__ = ["DataStream", "TemporalDataStream", "FileStream", "AGRAWALGenerator",
+           "ConceptDriftStream", "HyperplaneGenerator", "LEDGenerator", "LEDGeneratorDrift",
+           "MIXEDGenerator", "MultilabelGenerator", "RandomRBFGenerator",
+           "RandomRBFGeneratorDrift", "RandomTreeGenerator", "RegressionGenerator", "SEAGenerator",
+           "SineGenerator", "STAGGERGenerator", "make_logical", "WaveformGenerator", "TimeManager"]
