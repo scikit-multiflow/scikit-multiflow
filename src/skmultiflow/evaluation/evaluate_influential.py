@@ -169,7 +169,7 @@ class EvaluateInfluential(StreamEvaluator):
                         for i in range(len(prediction[0])):
                             self.mean_eval_measurements[j].add_result(y[i], prediction[j][i])
                             self.current_eval_measurements[j].add_result(y[i], prediction[j][i])
-                            self.stream.update_weight(y[i], prediction[j][i])
+                            self.stream.receive_feedback(y[i], prediction[j][i])
                     self._check_progress(actual_max_samples)
 
                     # Train
