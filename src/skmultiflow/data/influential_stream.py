@@ -129,6 +129,7 @@ class InfluentialStream(Stream):
         return self.current_sample_x, self.current_sample_y.flatten()
 
     def update_weight(self, y_true, y_pred):
+        # TODO: add features (x), or add index of samples, change
         """This checks which stream was used last, and checks whether the
         prediction of the last sample was correct.
 
