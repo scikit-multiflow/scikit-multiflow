@@ -1,7 +1,8 @@
 import numpy as np
 from array import array
 import os
-from skmultiflow.data import ConceptDriftStream, SEAGenerator, HyperplaneGenerator, AGRAWALGenerator
+from skmultiflow.data import ConceptDriftStream, SEAGenerator, HyperplaneGenerator, \
+    AGRAWALGenerator
 from skmultiflow.trees import HoeffdingAdaptiveTreeClassifier
 
 
@@ -11,7 +12,7 @@ def test_hoeffding_adaptive_tree_mc(test_path):
                                                           noise_percentage=0.05),
                                 random_state=1, position=250, width=10)
 
-    learner = HoeffdingAdaptiveTreeClassifier(leaf_prediction='mc')
+    learner = HoeffdingAdaptiveTreeClassifier(leaf_prediction='mc', random_state=1)
 
     cnt = 0
     max_samples = 1000
@@ -41,9 +42,10 @@ def test_hoeffding_adaptive_tree_mc(test_path):
 
     expected_info = "HoeffdingAdaptiveTreeClassifier(binary_split=False, bootstrap_sampling=True, grace_period=200, " \
                     "leaf_prediction='mc', max_byte_size=33554432, memory_estimate_period=1000000, nb_threshold=0, " \
-                    "no_preprune=False, nominal_attributes=None, remove_poor_atts=False, split_confidence=1e-07, " \
-                    "split_criterion='info_gain', stop_mem_management=False, tie_threshold=0.05)"
+                    "no_preprune=False, nominal_attributes=None, random_state=1, remove_poor_atts=False, " \
+                    "split_confidence=1e-07, split_criterion='info_gain', stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
+
     assert info == expected_info
 
     expected_model_1 = 'Leaf = Class 1.0 | {0.0: 398.0, 1.0: 1000.0}\n'
@@ -66,7 +68,7 @@ def test_hoeffding_adaptive_tree_nb(test_path):
                                                           noise_percentage=0.05),
                                 random_state=1, position=250, width=10)
 
-    learner = HoeffdingAdaptiveTreeClassifier(leaf_prediction='nb')
+    learner = HoeffdingAdaptiveTreeClassifier(leaf_prediction='nb', random_state=1)
 
     cnt = 0
     max_samples = 1000
@@ -96,8 +98,8 @@ def test_hoeffding_adaptive_tree_nb(test_path):
 
     expected_info = "HoeffdingAdaptiveTreeClassifier(binary_split=False, bootstrap_sampling=True, grace_period=200, " \
                     "leaf_prediction='nb', max_byte_size=33554432, memory_estimate_period=1000000, nb_threshold=0, " \
-                    "no_preprune=False, nominal_attributes=None, remove_poor_atts=False, split_confidence=1e-07, " \
-                    "split_criterion='info_gain', stop_mem_management=False, tie_threshold=0.05)"
+                    "no_preprune=False, nominal_attributes=None, random_state=1, remove_poor_atts=False, " \
+                    "split_confidence=1e-07, split_criterion='info_gain', stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
 
@@ -108,7 +110,7 @@ def test_hoeffding_adaptive_tree_nb(test_path):
 def test_hoeffding_adaptive_tree_nba(test_path):
     stream = HyperplaneGenerator(mag_change=0.001, noise_percentage=0.1, random_state=2)
 
-    learner = HoeffdingAdaptiveTreeClassifier(leaf_prediction='nba')
+    learner = HoeffdingAdaptiveTreeClassifier(leaf_prediction='nba', random_state=1)
 
     cnt = 0
     max_samples = 5000
@@ -138,8 +140,8 @@ def test_hoeffding_adaptive_tree_nba(test_path):
 
     expected_info = "HoeffdingAdaptiveTreeClassifier(binary_split=False, bootstrap_sampling=True, grace_period=200, " \
                     "leaf_prediction='nba', max_byte_size=33554432, memory_estimate_period=1000000, nb_threshold=0, " \
-                    "no_preprune=False, nominal_attributes=None, remove_poor_atts=False, split_confidence=1e-07, " \
-                    "split_criterion='info_gain', stop_mem_management=False, tie_threshold=0.05)"
+                    "no_preprune=False, nominal_attributes=None, random_state=1, remove_poor_atts=False, " \
+                    "split_confidence=1e-07, split_criterion='info_gain', stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
 
@@ -155,7 +157,7 @@ def test_hoeffding_adaptive_tree_categorical_features(test_path):
     X, y = stream[:, :-1], stream[:, -1]
 
     nominal_attr_idx = np.arange(7).tolist()
-    learner = HoeffdingAdaptiveTreeClassifier(nominal_attributes=nominal_attr_idx)
+    learner = HoeffdingAdaptiveTreeClassifier(nominal_attributes=nominal_attr_idx, random_state=1)
 
     learner.partial_fit(X, y, classes=np.unique(y))
 
@@ -178,7 +180,7 @@ def test_hoeffding_adaptive_tree_categorical_features(test_path):
 def test_hoeffding_adaptive_tree_alternate_tree():
     stream = AGRAWALGenerator(random_state=7)
 
-    learner = HoeffdingAdaptiveTreeClassifier()
+    learner = HoeffdingAdaptiveTreeClassifier(random_state=1)
 
     cnt = 0
     change_point1 = 1500

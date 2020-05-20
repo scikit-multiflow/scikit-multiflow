@@ -1,6 +1,7 @@
 from sklearn.linear_model import SGDClassifier, SGDRegressor
 from sklearn.metrics import mean_absolute_error
 from sklearn import __version__ as sklearn_version
+from sklearn import set_config
 
 from skmultiflow.meta.multi_output_learner import MultiOutputLearner
 from skmultiflow.data import MultilabelGenerator, RegressionGenerator
@@ -12,6 +13,10 @@ import pytest
 
 from distutils.version import LooseVersion
 
+# Force sklearn to show only the parameters whose default value have been changed when
+# printing an estimator (backwards compatibility with versions prior to sklearn==0.23)
+set_config(print_changed_only=True)
+
 
 @pytest.mark.filterwarnings('ignore::UserWarning')
 def test_multi_output_learner_classifier():
@@ -22,7 +27,7 @@ def test_multi_output_learner_classifier():
                                  n_labels=4,
                                  random_state=112)
 
-    estimator = SGDClassifier(random_state=112, tol=1e-3, max_iter=10, loss='log')
+    estimator = SGDClassifier(random_state=112, max_iter=10, loss='log')
     classifier = MultiOutputLearner(base_estimator=estimator)
 
     X, y = stream.next_sample(150)
@@ -70,12 +75,8 @@ def test_multi_output_learner_classifier():
         performance = hamming_score(true_labels, predictions)
         assert np.isclose(performance, expected_performance)
 
-        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(alpha=0.0001, " \
-                        "average=False, class_weight=None, early_stopping=False, epsilon=0.1, " \
-                        "eta0=0.0, fit_intercept=True, l1_ratio=0.15, learning_rate='optimal', " \
-                        "loss='log', max_iter=10, n_iter=None, n_iter_no_change=5, n_jobs=None, " \
-                        "penalty='l2', power_t=0.5, random_state=112, shuffle=True, tol=0.001, " \
-                        "validation_fraction=0.1, verbose=0, warm_start=False))"
+        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(loss='log', " \
+                        "random_state=112))"
         info = " ".join([line.strip() for line in classifier.get_info().split()])
         assert info == expected_info
 
@@ -102,12 +103,9 @@ def test_multi_output_learner_classifier():
         performance = hamming_score(true_labels, predictions)
         assert np.isclose(performance, expected_performance)
 
-        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(alpha=0.0001, " \
-                        "average=False, class_weight=None, early_stopping=False, epsilon=0.1, " \
-                        "eta0=0.0, fit_intercept=True, l1_ratio=0.15, learning_rate='optimal', " \
-                        "loss='log', max_iter=10, n_iter_no_change=5, n_jobs=None, penalty='l2', "\
-                        "power_t=0.5, random_state=112, shuffle=True, tol=0.001, " \
-                        "validation_fraction=0.1, verbose=0, warm_start=False))"
+        expected_info = "MultiOutputLearner(base_estimator=SGDClassifier(loss='log', " \
+                        "max_iter=10, random_state=112))"
+
         info = " ".join([line.strip() for line in classifier.get_info().split()])
         assert info == expected_info
 

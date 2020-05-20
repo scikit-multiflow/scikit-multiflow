@@ -18,12 +18,11 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_class_observations, random_state=None):
         super().__init__(initial_class_observations)
         self._estimation_error_weight = ADWIN()
         self.error_change = False
-        self._randomSeed = 1
-        self._classifier_random = check_random_state(self._randomSeed)
+        self._random_state = check_random_state(random_state)
 
     # Override AdaNode
     def number_leaves(self):
@@ -50,7 +49,7 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
 
         if hat.bootstrap_sampling:
             # Perform bootstrap-sampling
-            k = self._classifier_random.poisson(1.0)
+            k = self._random_state.poisson(1.0)
             if k > 0:
                 weight = weight * k
 
@@ -84,30 +83,26 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
             self.set_weight_seen_at_last_split_evaluation(weight_seen)
 
     # Override LearningNodeNBAdaptive
-    def get_class_votes(self, X, hat):
+    def get_class_votes(self, X, ht):
         # dist = {}
-        prediction_option = hat.leaf_prediction
+        prediction_option = ht.leaf_prediction
         # MC
-        if prediction_option == hat._MAJORITY_CLASS:
+        if prediction_option == ht._MAJORITY_CLASS:
             dist = self.get_observed_class_distribution()
         # NB
-        elif prediction_option == hat._NAIVE_BAYES:
-            dist = do_naive_bayes_prediction(
-                X, self._observed_class_distribution, self._attribute_observers
-            )
+        elif prediction_option == ht._NAIVE_BAYES:
+            dist = do_naive_bayes_prediction(X, self._observed_class_distribution,
+                                             self._attribute_observers)
         # NBAdaptive (default)
         else:
             if self._mc_correct_weight > self._nb_correct_weight:
                 dist = self.get_observed_class_distribution()
             else:
-                dist = do_naive_bayes_prediction(
-                    X, self._observed_class_distribution,
-                    self._attribute_observers
-                )
+                dist = do_naive_bayes_prediction(X, self._observed_class_distribution,
+                                                 self._attribute_observers)
 
         dist_sum = sum(dist.values())  # sum all values in dictionary
-        normalization_factor = dist_sum * self.get_error_estimation() * \
-            self.get_error_estimation()
+        normalization_factor = dist_sum * self.get_error_estimation() * self.get_error_estimation()
 
         if normalization_factor > 0.0:
             dist = normalize_values_in_dict(dist, normalization_factor, inplace=False)

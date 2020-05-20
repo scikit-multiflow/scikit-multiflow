@@ -23,14 +23,18 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
+    random_state: int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
     """
-    def __init__(self, split_test, class_observations):
+    def __init__(self, split_test, class_observations, random_state=None):
         super().__init__(split_test, class_observations)
         self._estimation_error_weight = ADWIN()
         self._alternate_tree = None
         self.error_change = False
-        self._random_seed = 1
-        self._classifier_random = check_random_state(self._random_seed)
+        self.random_state = check_random_state(random_state)
 
         # To normalize the observed errors in the [0, 1] range
         self._min_error = float('Inf')
@@ -96,7 +100,8 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
                 fDelta = .05
                 fN = 1.0 / self._alternate_tree.get_error_width() + 1.0 / self.get_error_width()
 
-                bound = math.sqrt(2.0 * old_error_rate * (1.0 - old_error_rate) * math.log(2.0 / fDelta) * fN)
+                bound = math.sqrt(2.0 * old_error_rate * (1.0 - old_error_rate) *
+                                  math.log(2.0 / fDelta) * fN)
                 # To check, bound never less than (old_error_rate - alt_error_rate)
                 if bound < (old_error_rate - alt_error_rate):
                     rhat._active_leaf_node_cnt -= self.number_leaves()

@@ -222,13 +222,10 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
 
     @split_criterion.setter
     def split_criterion(self, split_criterion):
-        if split_criterion != self._GINI_SPLIT and split_criterion != self._INFO_GAIN_SPLIT \
-                and split_criterion != self._HELLINGER:
-            print(
-                "Invalid split_criterion option {}', will use default '{}'".format(
-                    split_criterion, self._INFO_GAIN_SPLIT
-                )
-            )
+        if split_criterion != self._GINI_SPLIT and split_criterion != self._INFO_GAIN_SPLIT and \
+                split_criterion != self._HELLINGER:
+            print("Invalid split_criterion option {}', will use default '{}'".
+                  format(split_criterion, self._INFO_GAIN_SPLIT))
             self._split_criterion = self._INFO_GAIN_SPLIT
         else:
             self._split_criterion = split_criterion
@@ -289,11 +286,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
     def leaf_prediction(self, leaf_prediction):
         if leaf_prediction != self._MAJORITY_CLASS and leaf_prediction != self._NAIVE_BAYES \
                 and leaf_prediction != self._NAIVE_BAYES_ADAPTIVE:
-            print(
-                "Invalid leaf_prediction option {}', will use default '{}'".format(
-                    leaf_prediction, self._NAIVE_BAYES_ADAPTIVE
-                )
-            )
+            print("Invalid leaf_prediction option {}', will use default '{}'".
+                  format(leaf_prediction, self._NAIVE_BAYES_ADAPTIVE))
             self._leaf_prediction = self._NAIVE_BAYES_ADAPTIVE
         else:
             self._leaf_prediction = leaf_prediction
@@ -394,8 +388,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             if sample_weight is None:
                 sample_weight = np.ones(row_cnt)
             if row_cnt != len(sample_weight):
-                raise ValueError('Inconsistent number of instances ({}) and weights ({}).'.format(row_cnt,
-                                                                                                  len(sample_weight)))
+                raise ValueError('Inconsistent number of instances ({}) and weights ({}).'.
+                                 format(row_cnt, len(sample_weight)))
             for i in range(row_cnt):
                 if sample_weight[i] != 0.0:
                     self._train_weight_seen_by_model += sample_weight[i]
@@ -569,16 +563,19 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             return self._tree_root.subtree_depth()
         return 0
 
-    def _new_learning_node(self, initial_class_observations=None):
+    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
         """ Create a new learning node. The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
-        if self._leaf_prediction == self._MAJORITY_CLASS:
-            return ActiveLearningNode(initial_class_observations)
-        elif self._leaf_prediction == self._NAIVE_BAYES:
-            return LearningNodeNB(initial_class_observations)
-        else:  # NAIVE BAYES ADAPTIVE (default)
-            return LearningNodeNBAdaptive(initial_class_observations)
+        if is_active_node:
+            if self._leaf_prediction == self._MAJORITY_CLASS:
+                return ActiveLearningNode(initial_class_observations)
+            elif self._leaf_prediction == self._NAIVE_BAYES:
+                return LearningNodeNB(initial_class_observations)
+            else:  # NAIVE BAYES ADAPTIVE (default)
+                return LearningNodeNBAdaptive(initial_class_observations)
+        else:
+            return InactiveLearningNode(initial_class_observations)
 
     def get_model_description(self):
         """ Walk the tree and return its structure in a buffer.
@@ -727,17 +724,22 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                 # Manage memory
                 self.enforce_tracker_limit()
 
+    def _sort_learning_nodes(self, learning_nodes):
+        """ Define strategy to sort learning nodes according to their likeliness of being split."""
+        learning_nodes.sort(key=lambda n: n.node.calculate_promise())
+        return learning_nodes
+
     def enforce_tracker_limit(self):
         """ Track the size of the tree and disable/enable nodes if required."""
         byte_size = (self._active_leaf_byte_size_estimate
                      + self._inactive_leaf_node_cnt * self._inactive_leaf_byte_size_estimate) \
-                    * self._byte_size_estimate_overhead_fraction
+            * self._byte_size_estimate_overhead_fraction
         if self._inactive_leaf_node_cnt > 0 or byte_size > self.max_byte_size:
             if self.stop_mem_management:
                 self._growth_allowed = False
                 return
         learning_nodes = self._find_learning_nodes()
-        learning_nodes.sort(key=lambda n: n.node.calculate_promise())
+        learning_nodes = self._sort_learning_nodes(learning_nodes)
         max_active = 0
         while max_active < len(learning_nodes):
             max_active += 1
@@ -802,7 +804,9 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             Parent node's branch index.
 
         """
-        new_leaf = InactiveLearningNode(to_deactivate.get_observed_class_distribution())
+        new_leaf = self._new_learning_node(
+            to_deactivate.get_observed_class_distribution(), is_active_node=False
+        )
         if parent is None:
             self._tree_root = new_leaf
         else:
@@ -840,10 +844,10 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             List of learning nodes in the tree.
         """
         found_list = []
-        self.__find_learning_nodes(self._tree_root, None, -1, found_list)
+        self.__find_learning_nodes(self._tree_root, None, -1, found_list, 0)
         return found_list
 
-    def __find_learning_nodes(self, node, parent, parent_branch, found):
+    def __find_learning_nodes(self, node, parent, parent_branch, found, depth):
         """ Find learning nodes in the tree from a given node.
 
         Parameters
@@ -854,6 +858,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             The node's parent.
         parent_branch: int
             Parent node's branch.
+        depth: int
+            The node's depth.
 
         Returns
         -------
@@ -862,11 +868,13 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         """
         if node is not None:
             if isinstance(node, LearningNode):
-                found.append(FoundNode(node, parent, parent_branch))
+                found.append(FoundNode(node, parent, parent_branch, depth))
             if isinstance(node, SplitNode):
                 split_node = node
                 for i in range(split_node.num_children()):
-                    self.__find_learning_nodes(split_node.get_child(i), split_node, i, found)
+                    self.__find_learning_nodes(
+                        split_node.get_child(i), split_node, i, found, depth + 1
+                    )
 
     def get_model_rules(self):
         """ Returns list of list describing the tree.
