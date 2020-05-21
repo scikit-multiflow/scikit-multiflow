@@ -225,7 +225,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
             # Set the un significant node as terminal nodes
             insignificant_nodes_set = list(set(insignificant_nodes))
-            self.set_terminal_nodes(insignificant_nodes_set, self.class_count)
+            self._set_terminal_nodes(insignificant_nodes_set, self.class_count)
 
             current_layer = next_layer
             number_of_layers += 1
@@ -247,8 +247,8 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
         # Network building is done
         # Set the remaining nodes as terminals
-        self.set_terminal_nodes(nodes=current_layer.get_nodes(),
-                                class_count=self.class_count)
+        self._set_terminal_nodes(nodes=current_layer.get_nodes(),
+                                 class_count=self.class_count)
 
         with open('output.txt', 'a') as f:
             f.write('Total nodes created:' + str(curr_node_index) + "\n")
@@ -269,6 +269,50 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         self.split_points.clear()
         self.nodes_splitted_per_attribute.clear()
         significant_attributes_per_node.clear()
+
+        return self
+
+    def partial_fit(self, X, y, classes=None, sample_weight=None):
+        """ Partially (incrementally) fit the model.
+
+        Parameters
+        ----------
+        X : numpy.ndarray of shape (n_samples, n_features)
+            The features to train the model.
+
+        y: numpy.ndarray of shape (n_samples)
+            An array-like with the labels of all samples in X.
+
+        classes: Not used (default=None)
+
+        sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
+            Samples weight. If not provided, uniform weights are assumed.
+
+        Returns
+        -------
+            self
+
+        """
+        N, D = X.shape
+
+        for n in range(N):
+            # For each instance ...
+            self.X_batch.append(X[n])
+            self.y_batch.append(y[n])
+            # self.sample_weight[self.i] = sample_weight[n] if sample_weight else 1.0
+            self.i = self.i + 1
+
+            if self.i == self.window_size:
+                # Train it
+                X_batch_df = pd.DataFrame(self.X_batch)
+                self.fit(X=X_batch_df, y=self.y_batch, classes=classes, sample_weight=sample_weight)
+                # Reset the window
+                self.i = 0
+                self.X_batch.clear()
+                self.y_batch.clear()
+
+        if not self.is_fitted:
+            print("There are not enough samples to build a network")
 
         return self
 
@@ -467,7 +511,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         attribute_data = list(X[:, attribute_index])
         self.unique_values_per_attribute[attribute_index] = np.unique(attribute_data)
 
-        mutual_info_score = self.calculate_conditional_mutual_information(attribute_data, y)
+        mutual_info_score = self._calculate_conditional_mutual_information(attribute_data, y)
         statistic = 2 * np.log(2) * self.total_records * mutual_info_score
         critical = stats.chi2.ppf(self.alpha, ((self.num_of_classes - 1) *
                                                ((len(self.unique_values_per_attribute[attribute_index])) - 1)))
@@ -538,7 +582,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
     def _discretization(self, attribute_index, interval, total_mi=0, nodes=None, prev_split_points=None):
         """ A recursive implementation of a discretization of the IFN algorithm according to the algorithm
-            published in -- TODO: *** ADD A LINK***
+            published in "Maimon, Oded, and Mark Last. "Knowledge discovery and data mining." Klewer Pub. Co (2001)."
 
 
         Parameters
@@ -720,12 +764,12 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             rel_num_of_classes = len(np.unique(np.array(y)))
             critical = stats.chi2.ppf(self.alpha, (rel_num_of_classes - 1))
 
-        t_mi = self.calculate_conditional_mutual_information(X=X, y=y)
+        t_mi = self._calculate_conditional_mutual_information(X=X, y=y)
         statistic = 2 * np.log(2) * self.total_records * t_mi
 
         return statistic, critical, t_mi
 
-    def calculate_conditional_mutual_information(self, X, y):
+    def _calculate_conditional_mutual_information(self, X, y):
         """ Calculate the conditional mutual information of the feature given in x.
 
         Parameters
@@ -890,7 +934,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                 record[chosen_attribute] = utils.find_split_position(value=record[chosen_attribute],
                                                                      positions=chosen_split_points)
 
-    def set_terminal_nodes(self, nodes, class_count):
+    def _set_terminal_nodes(self, nodes, class_count):
         """ Connecting the given nodes to the terminal nodes in the network.
 
         Parameters
@@ -912,17 +956,4 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
     def calculate_error_rate(self, X, y):
 
-        correct = 0
-        for i in range(len(y)):
-            predicted_value = self.predict([X[i]])[0]
-            # predicted_value = self.predict(X.iloc[[i]])[0]
-            if predicted_value == y[i]:
-                correct += 1
-
-        error_rate = (len(y) - correct) / len(y)
-        return error_rate
-
-        # return 1 - self.score(X=X, y=y, sample_weight=None)
-
-    def partial_fit(self, X, y, classes=None, sample_weight=None):
-        raise NotImplementedError()
+        return 1 - self.score(X=X, y=y, sample_weight=None)

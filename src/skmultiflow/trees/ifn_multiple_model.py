@@ -62,32 +62,19 @@ class MultipleModel(IncrementalOnlineNetwork):
         """
 
         self.window = self.meta_learning.calculate_Wint(self.Pe)
-        i = 0
+        self.classifier.window_size = self.window
         j = self.window
         add_count = self.init_add_count
-        X_batch = []
-        y_batch = []
 
         while j < self.n_max:
 
-            while i < j:
-                X, y = self.data_stream_generator.next_sample()
-                X_batch.append(X[0])
-                y_batch.append(y[0])
-                i = i + 1
+            X_batch, y_batch = self.data_stream_generator.next_sample(self.window)
 
             if not self.classifier.is_fitted:  # cold start
                 self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
-            k = j + add_count
-            X_validation_samples = []
-            y_validation_samples = []
-
-            while j < k:
-                X_validation_sample, y_validation_sample = self.data_stream_generator.next_sample()
-                X_validation_samples.append(X_validation_sample[0])
-                y_validation_samples.append(y_validation_sample[0])
-                j = j + 1
+            X_validation_samples, y_validation_samples = self.data_stream_generator.next_sample(add_count)
+            j = j + add_count
 
             Etr = self.classifier.calculate_error_rate(X=X_batch,
                                                        y=y_batch)
@@ -124,16 +111,8 @@ class MultipleModel(IncrementalOnlineNetwork):
                 self._new_split_process(training_window_X=X_batch)  # add new layer if possible
 
                 # test the new chosen network on a new validation window
-                k = j + add_count
-                i = k
-                X_validation_samples = []
-                y_validation_samples = []
-
-                while j < k:
-                    X_validation_sample, y_validation_sample = self.data_stream_generator.next_sample()
-                    X_validation_samples.append(X_validation_sample[0])
-                    y_validation_samples.append(y_validation_sample[0])
-                    j = j + 1
+                X_validation_samples, y_validation_samples = self.data_stream_generator.next_sample(add_count)
+                j = j + add_count
 
                 # error rate of the new chosen classifier on the new window
                 Etr = self.classifier.calculate_error_rate(X=X_batch,
@@ -154,8 +133,6 @@ class MultipleModel(IncrementalOnlineNetwork):
                     self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
             j = j + self.window
-            X_batch.clear()
-            y_batch.clear()
 
         last_model = pickle.load(open(self.path + "/" + str(self.counter - 1) + ".pickle", "rb"))
         return last_model

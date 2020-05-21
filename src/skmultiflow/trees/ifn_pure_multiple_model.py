@@ -61,19 +61,13 @@ class PureMultiple(IncrementalOnlineNetwork):
         """
 
         self.window = self.meta_learning.calculate_Wint(self.Pe)
-        i = 0
+        self.classifier.window_size = self.window
         j = self.window
         add_count = self.init_add_count
-        X_batch = []
-        y_batch = []
 
         while j < self.n_max:
 
-            while i < j:
-                X, y = self.data_stream_generator.next_sample()
-                X_batch.append(X[0])
-                y_batch.append(y[0])
-                i = i + 1
+            X_batch, y_batch = self.data_stream_generator.next_sample(self.window)
 
             if os.path.exists(self.path) and len(os.listdir(self.path)) > 0:
 
@@ -98,28 +92,19 @@ class PureMultiple(IncrementalOnlineNetwork):
                 self.classifier = chosen_classifier
                 Etr = generated_classifiers[chosen_classifier_name]
 
-                k = j + add_count
-                X_validation_samples = []
-                y_validation_samples = []
-
-                while j < k:
-                    X_validation_sample, y_validation_sample = self.data_stream_generator.next_sample()
-                    X_validation_samples.append(X_validation_sample[0])
-                    y_validation_samples.append(y_validation_sample[0])
-                    j = j + 1
+                X_validation_samples, y_validation_samples = self.data_stream_generator.next_sample(add_count)
+                j = j + add_count
 
                 Eval = self.classifier.calculate_error_rate(X_validation_samples, y_validation_samples)
                 max_diff = self.meta_learning.get_max_diff(Etr, Eval, add_count)
 
-                if abs(Eval - Etr) > max_diff:  # concept drift detected
+                if max_diff < abs(Eval - Etr):  # concept drift detected
                     self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
             else:  # cold start
                 self._induce_new_model(training_window_X=X_batch, training_window_y=y_batch)
 
             j = j + self.window
-            X_batch.clear()
-            y_batch.clear()
 
         last_model = pickle.load(open(self.path + "/" + str(self.counter - 1) + ".pickle", "rb"))
         return last_model

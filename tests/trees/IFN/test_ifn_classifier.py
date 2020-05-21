@@ -7,7 +7,7 @@ import filecmp
 import numpy as np
 import shutil
 
-dataset_path = "datasets/credit.csv"
+dataset_path = "C:\\Users\איתן אביטן\PycharmProjects\scikit-multiflow-IFN\skml\\tests\datasets/credit.csv"
 
 test_size_percentage = 0.3
 alpha = 0.99

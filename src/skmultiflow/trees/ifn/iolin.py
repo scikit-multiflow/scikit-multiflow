@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 import copy
+import pickle
 from abc import ABC, abstractmethod
 from skmultiflow.data import SEAGenerator
 from sklearn.utils.validation import check_X_y
@@ -158,8 +159,8 @@ class IncrementalOnlineNetwork(ABC):
                         un_significant_nodes_indexes.append(node.index)
                         un_significant_nodes.append(node)
 
-            self.classifier.set_terminal_nodes(nodes=un_significant_nodes,
-                                               class_count=self.classifier.class_count)
+            self.classifier._set_terminal_nodes(nodes=un_significant_nodes,
+                                                class_count=self.classifier.class_count)
 
             IncrementalOnlineNetwork.eliminate_nodes(nodes=set(un_significant_nodes_indexes),
                                                      layer=curr_layer_in_original_network.next_layer,
@@ -267,8 +268,8 @@ class IncrementalOnlineNetwork(ABC):
         attribute_data = list(X[:, index])
         unique_values = np.unique(attribute_data)
         conditional_mutual_information = \
-            self.classifier.calculate_conditional_mutual_information(X=attribute_data,
-                                                                     y=y)
+            self.classifier._calculate_conditional_mutual_information(X=attribute_data,
+                                                                      y=y)
 
         statistic = 2 * np.log(2) * len(y) * conditional_mutual_information
         critical = stats.chi2.ppf(self.alpha, ((self.number_of_classes - 1) * (len(unique_values) - 1)))
@@ -330,8 +331,8 @@ class IncrementalOnlineNetwork(ABC):
         curr_layer.next_layer = new_last_layer
 
         # set all the nodes to be terminals
-        self.classifier.set_terminal_nodes(nodes=terminal_nodes,
-                                           class_count=self.classifier.class_count)
+        self.classifier._set_terminal_nodes(nodes=terminal_nodes,
+                                            class_count=self.classifier.class_count)
 
     def _new_split_process(self, training_window_X):
 
@@ -406,8 +407,8 @@ class IncrementalOnlineNetwork(ABC):
                 new_layer.is_continuous = True
                 new_layer.split_points = self.classifier.split_points[global_chosen_attribute]
 
-            self.classifier.set_terminal_nodes(nodes=terminal_nodes,
-                                               class_count=self.classifier.class_count)
+            self.classifier._set_terminal_nodes(nodes=terminal_nodes,
+                                                class_count=self.classifier.class_count)
 
     def _induce_new_model(self, training_window_X, training_window_y):
         """ This method create a new network by calling fit method of IfnClassifier based on the training_window_X and
@@ -420,8 +421,8 @@ class IncrementalOnlineNetwork(ABC):
         training_window_y: array-like, shape = [n_samples]
             The target values of the new samples in the new window.
         """
-        training_window_X_df = pd.DataFrame(training_window_X)
-        self.classifier = self.classifier.fit(training_window_X_df, training_window_y)
+        # training_window_X_df = pd.DataFrame(training_window_X)
+        self.classifier = self.classifier.partial_fit(training_window_X, training_window_y)
         path = self.path + "/" + str(self.counter) + ".pickle"
         pickle.dump(self.classifier, open(path, "wb"))
         self.counter = self.counter + 1
@@ -486,7 +487,6 @@ class IncrementalOnlineNetwork(ABC):
 
         training_window_X_copy, training_window_y_copy = \
             check_X_y(training_window_X_copy, training_window_y_copy, accept_sparse=True)
-
 
         curr_layer = copy_network.root_node.first_layer
         is_first_layer = True

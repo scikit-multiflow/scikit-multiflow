@@ -17,8 +17,8 @@ class DataProcessor:
         """
         df = pd.read_csv(csv_file_path)
         df = self._data_processing(df)
-        y = df['target'].values
-        X = df.drop(['target'], axis=1)
+        y = df['Class'].values
+        X = df.drop(['Class'], axis=1)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
         return X_train, X_test, y_train, y_test
 

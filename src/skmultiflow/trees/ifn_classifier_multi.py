@@ -985,6 +985,7 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
         -------
             The error rate of train set.
         """
+
         X = check_array(X, accept_sparse=True)
         correct = 0
         for i in range(0, np.size(y, 0)):
