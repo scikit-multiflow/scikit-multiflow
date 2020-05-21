@@ -127,7 +127,6 @@ def test_adaptive_random_forests_nba():
     y_proba = []
     true_labels = []
     wait_samples = 100
-    correct_predictions = 0
 
     while cnt < max_samples:
         X, y = stream.next_sample()
@@ -139,7 +138,7 @@ def test_adaptive_random_forests_nba():
         learner.partial_fit(X, y)
         cnt += 1
 
-    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in y_proba]), \
+    assert np.alltrue([np.isclose(probabilities.sum(), 1) for probabilities in y_proba]), \
         "Probabilities should sum to 1."
 
     y_proba = np.asarray(y_proba).squeeze()
