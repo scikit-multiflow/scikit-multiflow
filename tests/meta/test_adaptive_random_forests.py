@@ -38,25 +38,25 @@ def test_adaptive_random_forests_mc():
                                 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0,
                                 1]
 
-    # Performance below does not need to be guaranteed. This check is set up so that anything that changes
-    # to predictions are caught in the unit test. This helps prevent accidental changes.
+    # Performance below does not need to be guaranteed.
+    # This check is set up so that anything that changes
+    # to predictions are caught in the unit test.
+    # This helps prevent accidental changes.
 
     assert type(learner.predict(X)) == np.ndarray
     assert np.alltrue(predictions == last_version_predictions)
 
-    expected_info = "AdaptiveRandomForestClassifier(binary_split=False, disable_weighted_vote=False,\n" \
-                    "                               drift_detection_method=ADWIN(delta=0.001),\n" \
-                    "                               grace_period=50, lambda_value=6,\n" \
-                    "                               leaf_prediction='mc', max_byte_size=33554432,\n" \
-                    "                               max_features=5, memory_estimate_period=2000000,\n" \
-                    "                               n_estimators=3, nb_threshold=0,\n" \
-                    "                               no_preprune=False, nominal_attributes=None,\n" \
-                    "                               performance_metric='acc', random_state=112,\n" \
-                    "                               remove_poor_atts=False, split_confidence=0.01,\n" \
-                    "                               split_criterion='info_gain',\n" \
-                    "                               stop_mem_management=False, tie_threshold=0.05,\n" \
-                    "                               warning_detection_method=ADWIN(delta=0.01))"
-    assert learner.get_info() == expected_info
+    expected_info = "AdaptiveRandomForestClassifier(binary_split=False, " \
+                    "disable_weighted_vote=False, drift_detection_method=ADWIN(delta=0.001), " \
+                    "grace_period=50, lambda_value=6, leaf_prediction='mc', " \
+                    "max_byte_size=33554432, max_features=5, memory_estimate_period=2000000, " \
+                    "n_estimators=3, nb_threshold=0, no_preprune=False, " \
+                    "nominal_attributes=None, performance_metric='acc', random_state=112, " \
+                    "remove_poor_atts=False, split_confidence=0.01, " \
+                    "split_criterion='info_gain', stop_mem_management=False, " \
+                    "tie_threshold=0.05, warning_detection_method=ADWIN(delta=0.01))"
+    info = " ".join([line.strip() for line in learner.get_info().split()])
+    assert info == expected_info
 
 
 def test_adaptive_random_forests_nb():
@@ -91,25 +91,25 @@ def test_adaptive_random_forests_nb():
                                 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0,
                                 1]
 
-    # Performance below does not need to be guaranteed. This check is set up so that anything that changes
-    # to predictions are caught in the unit test. This helps prevent accidental changes.
+    # Performance below does not need to be guaranteed.
+    # This check is set up so that anything that changes
+    # to predictions are caught in the unit test.
+    # This helps prevent accidental changes.
 
     assert type(learner.predict(X)) == np.ndarray
     assert np.alltrue(predictions == last_version_predictions)
 
-    expected_info = "AdaptiveRandomForestClassifier(binary_split=False, disable_weighted_vote=False,\n" \
-                    "                               drift_detection_method=ADWIN(delta=0.001),\n" \
-                    "                               grace_period=50, lambda_value=6,\n" \
-                    "                               leaf_prediction='nb', max_byte_size=33554432,\n" \
-                    "                               max_features=5, memory_estimate_period=2000000,\n" \
-                    "                               n_estimators=3, nb_threshold=0,\n" \
-                    "                               no_preprune=False, nominal_attributes=None,\n" \
-                    "                               performance_metric='acc', random_state=112,\n" \
-                    "                               remove_poor_atts=False, split_confidence=0.01,\n" \
-                    "                               split_criterion='info_gain',\n" \
-                    "                               stop_mem_management=False, tie_threshold=0.05,\n" \
-                    "                               warning_detection_method=ADWIN(delta=0.01))"
-    assert learner.get_info() == expected_info
+    expected_info = "AdaptiveRandomForestClassifier(binary_split=False, " \
+                    "disable_weighted_vote=False, drift_detection_method=ADWIN(delta=0.001), " \
+                    "grace_period=50, lambda_value=6, leaf_prediction='nb', " \
+                    "max_byte_size=33554432, max_features=5, memory_estimate_period=2000000, " \
+                    "n_estimators=3, nb_threshold=0, no_preprune=False, " \
+                    "nominal_attributes=None, performance_metric='acc', random_state=112, " \
+                    "remove_poor_atts=False, split_confidence=0.01, " \
+                    "split_criterion='info_gain', stop_mem_management=False, " \
+                    "tie_threshold=0.05, warning_detection_method=ADWIN(delta=0.01))"
+    info = " ".join([line.strip() for line in learner.get_info().split()])
+    assert info == expected_info
 
 
 def test_adaptive_random_forests_nba():
@@ -145,25 +145,25 @@ def test_adaptive_random_forests_nba():
                                 1, 1, 1, 1, 0, 1, 1, 1, 0, 1,
                                 0, 0, 0, 1, 1, 1, 0, 0, 0]
 
-    # Performance below does not need to be guaranteed. This check is set up so that anything that changes
-    # to predictions are caught in the unit test. This helps prevent accidental changes.
+    # Performance below does not need to be guaranteed.
+    # This check is set up so that anything that changes
+    # to predictions are caught in the unit test.
+    # This helps prevent accidental changes.
 
     assert type(learner.predict(X)) == np.ndarray
     assert np.alltrue(predictions == last_version_predictions)
 
-    expected_info = "AdaptiveRandomForestClassifier(binary_split=False, disable_weighted_vote=False,\n" \
-                    "                               drift_detection_method=ADWIN(delta=0.001),\n" \
-                    "                               grace_period=50, lambda_value=6,\n" \
-                    "                               leaf_prediction='nba', max_byte_size=33554432,\n" \
-                    "                               max_features=5, memory_estimate_period=2000000,\n" \
-                    "                               n_estimators=3, nb_threshold=0,\n" \
-                    "                               no_preprune=False, nominal_attributes=None,\n" \
-                    "                               performance_metric='acc', random_state=112,\n" \
-                    "                               remove_poor_atts=False, split_confidence=0.01,\n" \
-                    "                               split_criterion='info_gain',\n" \
-                    "                               stop_mem_management=False, tie_threshold=0.05,\n" \
-                    "                               warning_detection_method=ADWIN(delta=0.01))"
-    assert learner.get_info() == expected_info
+    expected_info = "AdaptiveRandomForestClassifier(binary_split=False, " \
+                    "disable_weighted_vote=False, drift_detection_method=ADWIN(delta=0.001), " \
+                    "grace_period=50, lambda_value=6, leaf_prediction='nba', " \
+                    "max_byte_size=33554432, max_features=5, memory_estimate_period=2000000, " \
+                    "n_estimators=3, nb_threshold=0, no_preprune=False, " \
+                    "nominal_attributes=None, performance_metric='acc', random_state=112, " \
+                    "remove_poor_atts=False, split_confidence=0.01, " \
+                    "split_criterion='info_gain', stop_mem_management=False, " \
+                    "tie_threshold=0.05, warning_detection_method=ADWIN(delta=0.01))"
+    info = " ".join([line.strip() for line in learner.get_info().split()])
+    assert info == expected_info
 
 
 def test_adaptive_random_forests_labels_given():
@@ -194,14 +194,18 @@ def test_adaptive_random_forests_labels_given():
         learner.partial_fit(X, y)
         cnt += 1
 
-    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in predictions]), "Probabilities should sum to 1."
+    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in predictions]),\
+        "Probabilities should sum to 1."
 
     class_probabilities = np.asarray(predictions).squeeze()
     assert class_probabilities.shape == (49, 2)
 
     predictions = class_probabilities.argmax(axis=1)
-    last_version_predictions = [1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0]
+    last_version_predictions = [1, 1, 0, 1, 1, 0, 0, 1, 0, 1,
+                                1, 1, 1, 0, 1, 0, 1, 1, 0, 1,
+                                1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
+                                1, 1, 1, 1, 0, 1, 1, 1, 0, 1,
+                                0, 0, 0, 1, 1, 1, 0, 0, 0]
 
     assert np.alltrue(predictions == last_version_predictions)
 
@@ -233,12 +237,12 @@ def test_adaptive_random_forests_batch_predict_proba():
         cnt += 1
 
     all_predictions = np.concatenate(predictions)
-    # all_true_labels = np.asarray(true_labels).flatten()
-    # correct_predictions = sum(np.equal(all_true_labels, all_predictions.argmax(axis=1)))
 
-    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in all_predictions]), "Probabilities should sum to 1."
+    assert np.alltrue([np.isclose(y_proba.sum(), 1) for y_proba in all_predictions]),\
+        "Probabilities should sum to 1."
     assert all_predictions.shape == (4 * 5, 2)
 
-    last_version_predictions = [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1]
+    last_version_predictions = [1, 0, 1, 1, 1, 1, 1, 0, 1, 1,
+                                1, 0, 1, 1, 1, 1, 0, 0, 1, 1]
     assert type(learner.predict_proba(X)) == np.ndarray
     assert np.alltrue(all_predictions.argmax(axis=1) == last_version_predictions)
