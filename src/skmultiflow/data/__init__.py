@@ -25,4 +25,4 @@ from .waveform_generator import WaveformGenerator
 __all__ = ["DataStream", "FileStream", "AGRAWALGenerator", "ConceptDriftStream", "HyperplaneGenerator", "LEDGenerator",
            "LEDGeneratorDrift", "MIXEDGenerator", "MultilabelGenerator", "RandomRBFGenerator",
            "RandomRBFGeneratorDrift", "RandomTreeGenerator", "RegressionGenerator", "SEAGenerator", "SineGenerator",
-           "STAGGERGenerator", "make_logical", "WaveformGenerator"]
+           "STAGGERGenerator", "make_logical", "WaveformGenerator", "influential_stream"]

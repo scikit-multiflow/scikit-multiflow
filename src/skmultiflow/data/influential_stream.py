@@ -11,7 +11,8 @@ class InfluentialStream(Stream):
                  random_state=None,
                  weight=None,
                  self_fulfilling=1.1,
-                 self_defeating=0.9):
+                 self_defeating=0.9,
+                 count=1):
         super(InfluentialStream, self).__init__()
 
         if streams is None:
@@ -35,6 +36,7 @@ class InfluentialStream(Stream):
         self.last_stream = None
         self.self_fulfilling = self_fulfilling
         self.self_defeating = self_defeating
+        self.count = count
 
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
@@ -138,6 +140,7 @@ class InfluentialStream(Stream):
          by a set value,
         if it is incorrectly classified, it is decreased by multiplying
          the weight with a set value."""
+
         for i in range(len(self.streams)):
             if self.last_stream == i:
                 if y_true == y_pred:

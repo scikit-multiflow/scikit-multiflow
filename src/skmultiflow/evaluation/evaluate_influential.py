@@ -113,7 +113,7 @@ class EvaluateInfluential(StreamEvaluator):
         """
         self._start_time = timer()
         self._end_time = timer()
-        print('Prequential Evaluation')
+        print('Influential Stream')
         print('Evaluating {} target(s).'.format(self.stream.n_targets))
 
         actual_max_samples = self.stream.n_remaining_samples()
@@ -146,10 +146,12 @@ class EvaluateInfluential(StreamEvaluator):
 
         update_count = 0
         print('Evaluating...')
+        print("n models = ", self.n_models)
         while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
             try:
                 X, y = self.stream.next_sample(self.batch_size)
+                # print("This is the next sample: ", X, y)
 
                 if X is not None and y is not None:
                     # Test
@@ -170,6 +172,7 @@ class EvaluateInfluential(StreamEvaluator):
                             self.mean_eval_measurements[j].add_result(y[i], prediction[j][i])
                             self.current_eval_measurements[j].add_result(y[i], prediction[j][i])
                             self.stream.receive_feedback(y[i], prediction[j][i])
+                            # self.stream.check_weight()
                     self._check_progress(actual_max_samples)
 
                     # Train

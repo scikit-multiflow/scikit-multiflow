@@ -3,9 +3,6 @@ from skmultiflow.evaluation import evaluate_influential
 from skmultiflow.trees import HoeffdingTreeClassifier
 
 
-
-
-
 def demo():
     """ _test_influential
 
@@ -21,10 +18,11 @@ def demo():
 
     # 3. Setup the evaluator
     evaluator = evaluate_influential.EvaluateInfluential(show_plot=True,
-                                    pretrain_size=200,
-                                    max_samples=20000,
-                                    metrics=['accuracy'],
-                                    data_points_for_classification=True)
+                                                         pretrain_size=200,
+                                                         max_samples=2000,
+                                                         batch_size=3,
+                                                         metrics=['accuracy'],
+                                                         data_points_for_classification=True)
 
     # 4. Run evaluation
     evaluator.evaluate(stream=stream, model=ht)
