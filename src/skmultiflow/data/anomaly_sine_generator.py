@@ -103,7 +103,6 @@ class AnomalySineGenerator(Stream):
         # Mark sample as anomalous
         self.y[anomalies_idx] = 1
 
-
     def next_sample(self, batch_size=1):
         """
         Get the next sample from the stream.
