@@ -4,6 +4,7 @@ import numpy as np
 from scipy import stats
 import copy
 import pickle
+import os
 from abc import ABC, abstractmethod
 from skmultiflow.data import SEAGenerator
 from sklearn.utils.validation import check_X_y
@@ -356,9 +357,9 @@ class IncrementalOnlineNetwork(ABC):
         remaining_attributes = list(remaining_attributes)
 
         global_chosen_attribute, attributes_mi, significant_attributes_per_node = \
-            self.classifier.choose_split_attribute(attributes_indexes=remaining_attributes,
-                                                   columns_type=columns_type,
-                                                   nodes=last_layer.get_nodes())
+            self.classifier._choose_split_attribute(attributes_indexes=remaining_attributes,
+                                                    columns_type=columns_type,
+                                                    nodes=last_layer.get_nodes())
 
         curr_node_index = max([node.index for node in last_layer.nodes]) + 1
         nodes_list = []
@@ -423,8 +424,9 @@ class IncrementalOnlineNetwork(ABC):
         """
         # training_window_X_df = pd.DataFrame(training_window_X)
         self.classifier = self.classifier.partial_fit(training_window_X, training_window_y)
-        path = self.path + "/" + str(self.counter) + ".pickle"
-        pickle.dump(self.classifier, open(path, "wb"))
+        path = str(self.counter) + ".pickle"
+        full_path = os.path.join(self.path, path)
+        pickle.dump(self.classifier, open(full_path, "wb"))
         self.counter = self.counter + 1
 
     @staticmethod

@@ -1,8 +1,7 @@
 import math
 import pickle
-
+import os
 import numpy as np
-import pandas as pd
 from skmultiflow.data import SEAGenerator
 from skmultiflow.trees.ifn.meta_learning import MetaLearning
 
@@ -114,9 +113,10 @@ class OnlineNetworkRegenerative():
                 j = j + self.window
                 add_count = max(add_count * (1 - (self.red_add_count / 100)), self.min_add_count)
 
-            path = self.path + "/" + str(self.counter) + ".pickle"
-            pickle.dump(self.classifier, open(path, "wb"))
+            full_path = os.path.join(self.path, str(self.counter))
+            pickle.dump(self.classifier, open(full_path + ".pickle", "wb"))
             self.counter = self.counter + 1
 
-        last_model = pickle.load(open(self.path + "/" + str(self.counter - 1) + ".pickle", "rb"))
+        full_path = os.path.join(self.path, str(self.counter - 1))
+        last_model = pickle.load(open(full_path + ".pickle", "rb"))
         return last_model

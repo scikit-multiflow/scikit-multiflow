@@ -97,7 +97,8 @@ class MultipleModel(IncrementalOnlineNetwork):
                 generated_classifiers = {}
 
                 for classifier in classifier_files_names:
-                    generated_clf = pickle.load(open(self.path + "/" + classifier, "rb"))
+                    full_path = os.path.join(self.path, classifier)
+                    generated_clf = pickle.load(open(full_path, "rb"))
                     # Entropy of target attribute on a former window
                     target_distribution_former = generated_clf.class_count[0][1] / len(y_batch)
                     E_former = stats.entropy([target_distribution_former, 1 - target_distribution_former], base=2)
@@ -105,7 +106,8 @@ class MultipleModel(IncrementalOnlineNetwork):
 
                 # Choose network with min |E_current(T)–E_former(T)|
                 chosen_classifier_name = min(generated_classifiers, key=generated_classifiers.get)
-                chosen_classifier = pickle.load(open(self.path + "/" + chosen_classifier_name, "rb"))
+                full_path = os.path.join(self.path, chosen_classifier_name)
+                chosen_classifier = pickle.load(open(full_path, "rb"))
 
                 self.classifier = chosen_classifier
                 self._new_split_process(training_window_X=X_batch)  # add new layer if possible
@@ -134,5 +136,6 @@ class MultipleModel(IncrementalOnlineNetwork):
 
             j = j + self.window
 
-        last_model = pickle.load(open(self.path + "/" + str(self.counter - 1) + ".pickle", "rb"))
+        full_path = os.path.join(self.path, str(self.counter - 1))
+        last_model = pickle.load(open(full_path + ".pickle", "rb"))
         return last_model

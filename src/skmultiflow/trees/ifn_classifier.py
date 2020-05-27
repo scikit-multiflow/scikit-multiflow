@@ -5,6 +5,7 @@ License: BSD 3 clause
 """
 import numpy as np
 from scipy import stats
+import pandas as pd
 
 import skmultiflow.trees.ifn.utils as utils
 from skmultiflow.core import BaseSKMObject, ClassifierMixin
@@ -33,10 +34,14 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         The maximum number of layers the network will have.
     """
 
-    def __init__(self, alpha=0.99, max_number_of_layers=math.inf):
+    def __init__(self, alpha=0.99, max_number_of_layers=math.inf, window_size=100):
         if 0 <= alpha < 1:
             self.alpha = alpha
             self.max_number_of_layers = max_number_of_layers
+            self.window_size = window_size
+            self.X_batch = []
+            self.y_batch = []
+            self.i = 0
             self.is_fitted = False
             self.training_error = 0
             self.cmi_sec_best_att = 0
@@ -82,6 +87,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         -------
             self
         """
+        self.is_fitted = False
         start = time.time()
         print('Building the network...')
 
@@ -127,16 +133,16 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             chosen_split_points = []
             if current_layer is not None:
                 global_chosen_attribute, attributes_mi, significant_attributes_per_node = \
-                    self.choose_split_attribute(attributes_indexes=attributes_indexes,
-                                                columns_type=columns_type,
-                                                nodes=current_layer.get_nodes())
+                    self._choose_split_attribute(attributes_indexes=attributes_indexes,
+                                                 columns_type=columns_type,
+                                                 nodes=current_layer.get_nodes())
             # first layer
             else:
                 global_chosen_attribute, attributes_mi, not_relevant = \
-                    self.choose_split_attribute(attributes_indexes=attributes_indexes,
-                                                columns_type=columns_type,
-                                                X=X,
-                                                y=y)
+                    self._choose_split_attribute(attributes_indexes=attributes_indexes,
+                                                 columns_type=columns_type,
+                                                 X=X,
+                                                 y=y)
 
             # there isn't an attribute to split the network by
             if global_chosen_attribute == -1:
@@ -294,6 +300,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
         """
         N, D = X.shape
+        isEnoughSamples = False
 
         for n in range(N):
             # For each instance ...
@@ -305,13 +312,13 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             if self.i == self.window_size:
                 # Train it
                 X_batch_df = pd.DataFrame(self.X_batch)
-                self.fit(X=X_batch_df, y=self.y_batch, classes=classes, sample_weight=sample_weight)
+                self.fit(X=X_batch_df, y=self.y_batch,classes=classes, sample_weight=sample_weight)
                 # Reset the window
                 self.i = 0
                 self.X_batch.clear()
                 self.y_batch.clear()
 
-        if not self.is_fitted:
+        if not isEnoughSamples:
             print("There are not enough samples to build a network")
 
         return self
@@ -415,7 +422,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
         return np.array(predicted)
 
-    def choose_split_attribute(self, attributes_indexes, columns_type, nodes=None, X=None, y=None):
+    def _choose_split_attribute(self, attributes_indexes, columns_type, nodes=None, X=None, y=None):
         """ Returns the most significant attribute upon all.
             The mose significant attribute is the one hold the higher conditional mutual information.
 
@@ -882,6 +889,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             is_continuous = 'category' not in columns_type[attribute_index]
             if is_continuous:
                 attribute_data = list(X[:, attribute_index])
+                attribute_data = [round(num, 2) for num in attribute_data]
                 self.unique_values_per_attribute[attribute_index] = np.unique(attribute_data)
                 data_class_array = list(zip(attribute_data, y))
                 data_class_array.sort(key=lambda tup: tup[0])
@@ -957,3 +965,4 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
     def calculate_error_rate(self, X, y):
 
         return 1 - self.score(X=X, y=y, sample_weight=None)
+
