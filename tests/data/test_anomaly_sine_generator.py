@@ -45,17 +45,17 @@ def test_anomaly_sine_generator(test_path):
     y_expected = data['y']
 
     X, y = stream.next_sample()
-    assert np.all(X[0] == X_expected[0])
-    assert np.all(y[0] == y_expected[0])
+    assert np.alltrue(np.isclose(X[0], X_expected[0]))
+    assert np.alltrue(np.isclose(y[0], y_expected[0]))
 
     X, y = stream.last_sample()
-    assert np.alltrue(X[0] == X_expected[0])
-    assert np.alltrue(y[0] == y_expected[0])
+    assert np.alltrue(np.isclose(X[0], X_expected[0]))
+    assert np.alltrue(np.isclose(y[0], y_expected[0]))
 
     stream.restart()
     X, y = stream.next_sample(100)
-    assert np.alltrue(X == X_expected)
-    assert np.alltrue(y == y_expected)
+    assert np.alltrue(np.isclose(X, X_expected))
+    assert np.alltrue(np.isclose(y, y_expected))
 
     assert stream.n_targets == np.array(y).ndim
 
