@@ -61,31 +61,30 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
     .. code-block:: python
 
        # Imports
-       from skmultiflow.data import SEAGenerator
+       from skmultiflow.data import AnomalySineGenerator
        from skmultiflow.anomaly_detection import HalfSpaceTrees
-
        # Setup a data stream
-       stream = SEAGenerator(random_state=1)
-
+       stream = AnomalySineGenerator(random_state=1, n_samples=1000, n_anomalies=250)
        # Setup Half-Space Trees estimator
        half_space_trees = HalfSpaceTrees(random_state=1)
-
        # Setup variables to control loop and track performance
+       max_samples = 1000
        n_samples = 0
-       correct_cnt = 0
-
+       true_positives = 0
+       detected_anomalies = 0
        # Train the estimator(s) with the samples provided by the data stream
        while n_samples < max_samples and stream.has_more_samples():
            X, y = stream.next_sample()
-           y_pred = half_space_trees.predict(X) # Error is thrown here
-           if y[0] == y_pred[0]:
-               correct_cnt += 1
+           y_pred = half_space_trees.predict(X)
+           if y[0] == 1:
+               true_positives += 1
+               if y_pred[0] == 1:
+                   detected_anomalies += 1
            half_space_trees = half_space_trees.partial_fit(X, y)
            n_samples += 1
-
-       # Display results
        print('{} samples analyzed.'.format(n_samples))
-       print('Half-Space Trees accuracy: {}'.format(correct_cnt / n_samples))
+       print('Half-Space Trees correctly detected {} out of {} anomalies'.
+             format(detected_anomalies, true_positives))
     """
 
     def __init__(self,
@@ -224,6 +223,9 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
             least one estimators has non-zero predictions. If no estimator can\
             predict probabilities, probabilities of 0 are returned.
         """
+        if not self.ensemble:
+            # The ensemble is empty, return default predictions (0., 0.)
+            return np.zeros((X.shape[0], 2))
         y_proba_mean = None
         max_score = self.window_size * pow(2.0, self.depth)
 
