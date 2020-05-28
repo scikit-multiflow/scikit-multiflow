@@ -110,7 +110,7 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
         self.random_state = random_state
         self._random_state = None
 
-    def partial_fit(self, X, y, classes=None, sample_weight=None):
+    def partial_fit(self, X, y=None, classes=None, sample_weight=None):
         """ Partially (incrementally) fit the model.
 
         Parameters
@@ -118,8 +118,8 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
         X : numpy.ndarray of shape (n_samples, n_features)
             The features to train the model.
 
-        y: numpy.ndarray of shape (n_samples)
-            An array-like with the class labels of all samples in X.
+        y: Not used
+            Kept in the signature for compatibility with parent class.
 
         classes: None
             Not used by this method.
@@ -141,11 +141,11 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
             self.build_trees()
 
         for i in range(row_cnt):
-            self._partial_fit(X[i], y[i])
+            self._partial_fit(X[i])
 
         return self
 
-    def _partial_fit(self, X, y):
+    def _partial_fit(self, X):
         """ Train the model on samples X and corresponding targets y.
 
         Private function where actual training is carried on.
@@ -154,9 +154,6 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
         ----------
         X: numpy.ndarray of shape (1, n_features)
             Instance attributes.
-
-        y: int
-            Class label for sample X.
 
         """
 

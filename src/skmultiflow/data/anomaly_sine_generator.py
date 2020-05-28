@@ -119,14 +119,14 @@ class AnomalySineGenerator(Stream):
             the batch_size samples that are requested.
 
         """
-        self.sample_idx += batch_size
-        try:
-            self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
-            self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx]
-            if self.n_targets < 2:
-                self.current_sample_y = self.current_sample_y.flatten()
+        if self.n_remaining_samples() < batch_size:
+            batch_size = self.n_remaining_samples()
 
-        except IndexError:
+        if batch_size > 0:
+            self.sample_idx += batch_size
+            self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
+            self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx].flatten()
+        else:
             self.current_sample_x = None
             self.current_sample_y = None
 
