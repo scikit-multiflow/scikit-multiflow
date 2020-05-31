@@ -310,6 +310,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             self.i = self.i + 1
 
             if self.i == self.window_size:
+                isEnoughSamples = True
                 # Train it
                 X_batch_df = pd.DataFrame(self.X_batch)
                 self.fit(X=X_batch_df, y=self.y_batch,classes=classes, sample_weight=sample_weight)
