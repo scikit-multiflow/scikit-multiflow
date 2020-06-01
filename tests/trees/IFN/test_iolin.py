@@ -5,8 +5,8 @@ import pytest, os
 
 from sklearn.utils import check_X_y
 
-from skmultiflow.trees.ifn._data_processing import DataProcessor
-from skmultiflow.trees.ifn._ifn_network import IfnNetwork, HiddenLayer, AttributeNode
+from skmultiflow.trees.ifn.data_processing import DataProcessor
+from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer, AttributeNode
 from skmultiflow.trees import BasicIncremental
 
 network = IfnNetwork()

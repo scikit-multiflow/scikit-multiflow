@@ -5,7 +5,7 @@ License: BSD 3 clause
 """
 import numpy as np
 import skmultiflow.trees.ifn.utils as utils
-from skmultiflow.trees.ifn._ifn_network_multi import IfnNetworkMulti, HiddenLayer
+from skmultiflow.trees.ifn.ifn_network_multi import IfnNetworkMulti, HiddenLayer
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from skmultiflow.core import BaseSKMObject, MultiOutputMixin
 

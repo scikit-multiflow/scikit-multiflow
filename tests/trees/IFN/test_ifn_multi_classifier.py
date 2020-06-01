@@ -1,7 +1,7 @@
 import pickle
 from sklearn.metrics import accuracy_score
 from skmultiflow.trees import IfnClassifierMulti
-from skmultiflow.trees.ifn._data_processing_multi import DataProcessorMulti
+from skmultiflow.trees.ifn.data_processing_multi import DataProcessorMulti
 import pytest
 import filecmp
 import numpy as np

@@ -9,7 +9,7 @@ import pandas as pd
 
 import skmultiflow.trees.ifn.utils as utils
 from skmultiflow.core import BaseSKMObject, ClassifierMixin
-from skmultiflow.trees.ifn._ifn_network import IfnNetwork, HiddenLayer
+from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer
 
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 

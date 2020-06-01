@@ -3,7 +3,7 @@ import pytest
 from sklearn.metrics import accuracy_score
 from skmultiflow.data import RandomTreeGenerator
 from skmultiflow.trees import IfnClassifier
-from skmultiflow.trees.ifn._data_processing import DataProcessor
+from skmultiflow.trees.ifn.data_processing import DataProcessor
 # import os
 import filecmp
 import numpy as np
