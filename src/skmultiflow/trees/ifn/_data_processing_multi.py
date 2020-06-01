@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-class DataProcessor:
+class DataProcessorMulti:
     def convert(self, csv_file_path, test_size):
         """
 

@@ -1,10 +1,8 @@
 import pickle
-import pandas as pd
 from sklearn.metrics import accuracy_score
 from skmultiflow.trees import IfnClassifierMulti
-from skmultiflow.trees.ifn._data_processing_multi import DataProcessor
+from skmultiflow.trees.ifn._data_processing_multi import DataProcessorMulti
 import pytest
-import os
 import filecmp
 import numpy as np
 
@@ -30,7 +28,7 @@ alpha = 0.99
 
 def test__model_pickle_const_dataset_multi_target(tmpdir):
     clf = IfnClassifierMulti(alpha, multi_label=False)
-    dp = DataProcessor()
+    dp = DataProcessorMulti()
     x_train, x_test, y_train, y_test = dp.convert(dataset_path, test_size_percentage)
 
     clf.fit(x_train, y_train)
@@ -53,7 +51,7 @@ def test__model_pickle_const_dataset_multi_target(tmpdir):
 
 def test__model_pickle_const_dataset_multi_label(tmpdir):
     clf = IfnClassifierMulti(alpha, multi_label=False)
-    dp = DataProcessor()
+    dp = DataProcessorMulti()
     x_train, x_test, y_train, y_test = dp.convert(dataset_path, test_size_percentage)
 
     clf.fit(x_train, y_train)

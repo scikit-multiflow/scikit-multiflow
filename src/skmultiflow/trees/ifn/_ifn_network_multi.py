@@ -72,7 +72,7 @@ class HiddenLayer:
         return self.nodes
 
 
-class IfnNetwork:
+class IfnNetworkMulti:
     def __init__(self):
         self.target_layer = {}
         self.root_node = RootNode()
