@@ -5,7 +5,6 @@ from . import attribute_observer
 from . import attribute_test
 from . import nodes
 from . import split_criterion
-# from . import ifn
 from .hoeffding_tree import HoeffdingTreeClassifier
 from .hoeffding_adaptive_tree import HoeffdingAdaptiveTreeClassifier
 from .extremely_fast_decision_tree import ExtremelyFastDecisionTreeClassifier
