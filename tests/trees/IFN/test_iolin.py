@@ -109,12 +109,6 @@ def _setup_eliminate_nodes_test_env():
     return network
 
 
-def test_suite_eliminate_all_nodes_in_layer():
-    test_eliminate_all_nodes_in_layer()
-    test_eliminate_some_nodes_in_layer()
-    test_eliminate_nodes_with_invalid_input()
-
-
 def test_eliminate_all_nodes_in_layer():
     _setup_eliminate_nodes_test_env()
 
@@ -162,11 +156,6 @@ def test_eliminate_nodes_with_invalid_input():
                                      prev_layer=None)
 
     assert prev_number_of_nodes == len(network.root_node.first_layer.next_layer.next_layer.nodes)
-
-
-def test_suite_clone_network():
-    test_clone_network()
-    test_clone_network_invalid_input()
 
 
 def test_clone_network():

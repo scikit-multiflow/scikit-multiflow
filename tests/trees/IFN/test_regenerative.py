@@ -8,4 +8,5 @@ def test_regenerative(tmpdir):
     dir = tmpdir.mkdir("tmpOLIN")
     ifn = IfnClassifier(alpha)
     regenerative = OnlineNetworkRegenerative(ifn, dir, n_min=0, n_max=1000, Pe=0.7)
-    regenerative.generate()
+    last_model = regenerative.generate()
+    assert last_model is not None
