@@ -10,6 +10,7 @@ from skmultiflow.trees.ifn._ifn_network import IfnNetwork, HiddenLayer, Attribut
 from skmultiflow.trees import BasicIncremental
 
 network = IfnNetwork()
+dataset_path = "src/skmultiflow/data/datasets/elec.csv"
 
 
 def _setup_eliminate_nodes_test_env():
@@ -174,7 +175,7 @@ def test_clone_network():
     # TODO change the file path
     x_train, x_test, y_train, y_test = \
         dp.convert(
-            csv_file_path="C:\\Users\איתן אביטן\PycharmProjects\scikit-multiflow\src\skmultiflow\data\datasets\elec.csv",
+            csv_file_path=dataset_path,
             test_size=0.3)
 
     x_train, y_train = check_X_y(x_train, y_train, accept_sparse=True)
@@ -195,8 +196,3 @@ def test_clone_network_invalid_input():
         BasicIncremental.clone_network(network=None,
                                        training_window_X=None,
                                        training_window_y=[0, 1])
-
-
-test_suite_eliminate_all_nodes_in_layer()
-test_eliminate_some_nodes_in_layer()
-test_suite_clone_network()

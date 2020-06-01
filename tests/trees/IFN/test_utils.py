@@ -236,13 +236,3 @@ def test_suite_get_column_type():
 
     with pytest.raises(AttributeError):
         utils.get_columns_type(X=None)
-
-
-test_suite_binary_search()
-test_suite_split_data_to_two_intervals()
-test_suite_find_split_position()
-test_suite_drop_records()
-test_suite_create_attribute_node()
-test_suite_convert_numeric_values()
-test_suite_calculate_second_best_attribute_of_last_layer()
-test_suite_get_column_type()

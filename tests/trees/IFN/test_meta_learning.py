@@ -46,8 +46,3 @@ def test_suite_max_diff():
         meta_learning.get_max_diff(Etr=0.9, Eval=2, add_count=10)
     with pytest.raises(ValueError):
         meta_learning.get_max_diff(Etr=0.9, Eval=0.8, add_count=-2)
-
-
-test_suite_calculate_initial_window_size()
-test_suite_calculate_window_size()
-test_suite_max_diff()

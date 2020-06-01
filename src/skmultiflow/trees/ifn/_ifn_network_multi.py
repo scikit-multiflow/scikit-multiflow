@@ -83,8 +83,8 @@ class IfnNetwork:
             for i in num_of_classes:
                 self.target_layer[target_number].append(ClassNode(i))
 
-    def create_network_structure_file(self):
-        f = open("tmp_multi/network_structure.txt", "w+")
+    def create_network_structure_file(self, path):
+        f = open(path, "w+")
         f.write("Network Structure:" + "\n\n")
 
         curr_layer = self.root_node.first_layer
