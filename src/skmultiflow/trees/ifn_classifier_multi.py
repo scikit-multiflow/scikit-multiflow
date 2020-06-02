@@ -147,12 +147,12 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
 
         significant_attributes_per_node = {}
 
-        with open("output.txt", "w+") as f:
-            f.write('Output data for dataset: \n\n')
-            f.write('Total instances: ' + str(self.total_records) + '\n')
-            f.write('Number of candidate input attributes is: ' + str(len(attributes_indexes)) + '\n')
-            f.write('Minimum confidence level is: ' + str(self.alpha) + '\n\n')
-            f.close()
+        # with open("output.txt", "w+") as f:
+        #     f.write('Output data for dataset: \n\n')
+        #     f.write('Total instances: ' + str(self.total_records) + '\n')
+        #     f.write('Number of candidate input attributes is: ' + str(len(attributes_indexes)) + '\n')
+        #     f.write('Minimum confidence level is: ' + str(self.alpha) + '\n\n')
+        #     f.close()
 
         # Build the network while:
         # 1. The maximum number of hidden layers is not exceeded
@@ -177,10 +177,10 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
                 if curr_node_index == 1:
                     print('No Nodes at the network. choose smaller alpha')
                     sys.exit()
-                utils.write_details_to_file(layer_position=layer,
-                                            attributes_cmi=attributes_mi,
-                                            chosen_attribute_index=global_chosen_attribute,
-                                            chosen_attribute=cols[global_chosen_attribute])
+                # utils.write_details_to_file(layer_position=layer,
+                #                             attributes_cmi=attributes_mi,
+                #                             chosen_attribute_index=global_chosen_attribute,
+                #                             chosen_attribute=cols[global_chosen_attribute])
                 break
 
             nodes_list = []
@@ -263,10 +263,10 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
             current_layer = next_layer
             number_of_layers += 1
 
-            utils.write_details_to_file(layer_position=layer,
-                                   attributes_cmi=attributes_mi,
-                                   chosen_attribute_index=global_chosen_attribute,
-                                   chosen_attribute=cols[global_chosen_attribute])
+            # utils.write_details_to_file(layer_position=layer,
+            #                        attributes_cmi=attributes_mi,
+            #                        chosen_attribute_index=global_chosen_attribute,
+            #                        chosen_attribute=cols[global_chosen_attribute])
 
             # overrides the value until the last iteration
             self.last_layer_mi = attributes_mi[global_chosen_attribute]
@@ -283,11 +283,11 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
         if len(current_layer.get_nodes()) > 0:
             self._set_terminal_nodes(nodes=current_layer.get_nodes(), class_count=self.class_count)
 
-        with open('output.txt', 'a') as f:
-            f.write('Total nodes created:' + str(curr_node_index) + "\n")
-            end = time.time()
-            f.write("Running time: " + str(round(end - start, 3)) + " Sec")
-            f.close()
+        # with open('output.txt', 'a') as f:
+        #     f.write('Total nodes created:' + str(curr_node_index) + "\n")
+        #     end = time.time()
+        #     f.write("Running time: " + str(round(end - start, 3)) + " Sec")
+        #     f.close()
 
         self.is_fitted_ = True
         print("Done. Network is fitted")

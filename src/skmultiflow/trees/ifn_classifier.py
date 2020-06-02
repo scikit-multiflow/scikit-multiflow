@@ -117,12 +117,12 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
         significant_attributes_per_node = {}
 
-        with open("output.txt", "w+") as f:
-            f.write('Output data for dataset: \n\n')
-            f.write('Total instances: ' + str(self.total_records) + '\n')
-            f.write('Number of candidate input attributes is: ' + str(len(attributes_indexes)) + '\n')
-            f.write('Minimum confidence level is: ' + str(self.alpha) + '\n\n')
-            f.close()
+        # with open("output.txt", "w+") as f:
+        #     f.write('Output data for dataset: \n\n')
+        #     f.write('Total instances: ' + str(self.total_records) + '\n')
+        #     f.write('Number of candidate input attributes is: ' + str(len(attributes_indexes)) + '\n')
+        #     f.write('Minimum confidence level is: ' + str(self.alpha) + '\n\n')
+        #     f.close()
 
         # Build the network while:
         # 1. The maximum number of hidden layers is not exceeded
@@ -148,10 +148,10 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     print('No Nodes at the network. choose smaller alpha')
                     return
                     # sys.exit()
-                utils.write_details_to_file(layer_position=layer,
-                                            attributes_cmi=attributes_mi,
-                                            chosen_attribute_index=global_chosen_attribute,
-                                            chosen_attribute=cols[global_chosen_attribute])
+                # utils.write_details_to_file(layer_position=layer,
+                #                             attributes_cmi=attributes_mi,
+                #                             chosen_attribute_index=global_chosen_attribute,
+                #                             chosen_attribute=cols[global_chosen_attribute])
 
                 break
 
@@ -234,10 +234,10 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             current_layer = next_layer
             number_of_layers += 1
 
-            utils.write_details_to_file(layer_position=layer,
-                                        attributes_cmi=attributes_mi,
-                                        chosen_attribute_index=global_chosen_attribute,
-                                        chosen_attribute=cols[global_chosen_attribute])
+            # utils.write_details_to_file(layer_position=layer,
+            #                             attributes_cmi=attributes_mi,
+            #                             chosen_attribute_index=global_chosen_attribute,
+            #                             chosen_attribute=cols[global_chosen_attribute])
 
             # overrides the value until the last iteration
             self.last_layer_mi = attributes_mi[global_chosen_attribute]
@@ -254,11 +254,11 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         self._set_terminal_nodes(nodes=current_layer.get_nodes(),
                                  class_count=self.class_count)
 
-        with open('output.txt', 'a') as f:
-            f.write('Total nodes created:' + str(curr_node_index) + "\n")
-            end = time.time()
-            f.write("Running time: " + str(round(end - start, 3)) + " Sec")
-            f.close()
+        # with open('output.txt', 'a') as f:
+        #     f.write('Total nodes created:' + str(curr_node_index) + "\n")
+        #     end = time.time()
+        #     f.write("Running time: " + str(round(end - start, 3)) + " Sec")
+        #     f.close()
 
         self.is_fitted = True
         print("Done. Network is fitted")
@@ -364,12 +364,12 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                             prev_node_index = chosen_node.index
                         break
 
-        index = 1
-        with open('predict.txt', 'w') as f:
-            for row in predicted:
-                f.write(str(index) + '. ' + str(row) + '\n')
-                index += 1
-            f.close()
+        # index = 1
+        # with open('predict.txt', 'w') as f:
+        #     for row in predicted:
+        #         f.write(str(index) + '. ' + str(row) + '\n')
+        #         index += 1
+        #     f.close()
 
         return np.array(predicted)
 
@@ -412,12 +412,12 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                             prev_node_index = chosen_node.index
                         break
 
-        index = 1
-        with open('tmp/predict.txt', 'w') as f:
-            for row in predicted:
-                f.write(str(index) + '. ' + str(row) + '\n')
-                index += 1
-            f.close()
+        # index = 1
+        # with open('tmp/predict.txt', 'w') as f:
+        #     for row in predicted:
+        #         f.write(str(index) + '. ' + str(row) + '\n')
+        #         index += 1
+        #     f.close()
 
         return np.array(predicted)
 
