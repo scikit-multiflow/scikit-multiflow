@@ -386,7 +386,7 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
                 y_proba.append([0])
             else:
                 if sum(votes.values()) != 0:
-                    votes = normalize_values_in_dict(votes, inplace=False)
+                    votes = normalize_values_in_dict(votes)
                 if self.classes is not None:
                     votes_array = np.zeros(int(max(self.classes)) + 1)
                 else:
