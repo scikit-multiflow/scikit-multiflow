@@ -22,7 +22,7 @@ from .hoeffding_adaptive_tree_regressor import RegressionHAT   # remove in v0.7.
 from .isoup_tree import MultiTargetRegressionHoeffdingTree   # remove in v0.7.0"
 from .ifn_classifier import IfnClassifier
 from .ifn_classifier_multi import IfnClassifierMulti
-from .ifn_basic_incremental import BasicIncrementa
+from .ifn_basic_incremental import BasicIncremental
 from .ifn_multiple_model import MultipleModel
 from .ifn_pure_multiple_model import PureMultiple
 from .ifn_regenerative import OnlineNetworkRegenerative
