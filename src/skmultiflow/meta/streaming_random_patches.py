@@ -1,6 +1,6 @@
 from copy import deepcopy
 from typing import List, Optional
-from _collections import deque
+from collections import deque
 
 import numpy as np
 
@@ -23,7 +23,7 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         (default=HoeffdingTreeClassifier)
         The base estimator.
 
-    n_estimators: int
+    n_estimators: int, (default=100)
         Number of members in the ensemble.
 
     subspace_mode: str, (default='percentage')
@@ -56,7 +56,7 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         Warning detection method.
 
     disable_weighted_vote: bool (default=False)
-        If True, uses weighted voting.
+        If True, disables weighted voting.
 
     disable_drift_detection: bool (default=False)
         If True, disables drift detection and background learner.
@@ -262,7 +262,7 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         A numpy.ndarray with all the predictions for the samples in X.
 
         """
-        n_samples, n_features = X.shape
+        n_samples, n_features = get_dimensions(X)
 
         if self.ensemble is None:
             self._init_ensemble(n_features=n_features)
@@ -575,7 +575,7 @@ class StreamingRandomPatchesBaseLearner:
 
     def reset(self, n_features: int, n_samples_seen: int, random_state: np.random):
         if not self.disable_background_learner and self._background_learner is not None:
-            self.base_estimator = deepcopy(self._background_learner.base_estimator)
+            self.base_estimator = self._background_learner.base_estimator
             self.drift_detection_method = self._background_learner.drift_detection_method
             self.warning_detection_method = self._background_learner.warning_detection_method
             self.performance_evaluator = self._background_learner.performance_evaluator

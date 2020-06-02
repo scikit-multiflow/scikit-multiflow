@@ -111,7 +111,7 @@ def run_prequential_supervised(stream, learner, max_samples, n_wait, y_expected=
         # Test every n samples
         if i % n_wait == 0:
             y_pred[j] = int(learner.predict(X)[0])
-            y_true[j] = (y[0])
+            y_true[j] = int(y[0])
             j += 1
         learner.partial_fit(X, y)
 
