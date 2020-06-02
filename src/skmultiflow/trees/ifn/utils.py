@@ -1,5 +1,5 @@
 import numpy as np
-from .ifn_network import AttributeNode
+from ._ifn_network import AttributeNode
 
 
 def binary_search(array: list, left: int, right: int, value):
