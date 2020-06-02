@@ -49,7 +49,7 @@ def _drop_records(X, y, attribute_index, value):
     return np.array(new_x), np.array(new_y)
 
 
-class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
+class IfnClassifierMulti(MultiOutputMixin, BaseSKMObject):
     """ A template estimator to be used as a reference implementation.
 
     For more information regarding how to build your own estimator, read more
@@ -233,11 +233,11 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
                 prev_node = 0
                 for i in self.unique_values_per_attribute[global_chosen_attribute]:
                     attribute_node = utils.create_attribute_node(partial_X=X,
-                                                            partial_y=y,
-                                                            chosen_attribute_index=global_chosen_attribute,
-                                                            attribute_value=i,
-                                                            curr_node_index=curr_node_index,
-                                                            prev_node_index=prev_node)
+                                                                 partial_y=y,
+                                                                 chosen_attribute_index=global_chosen_attribute,
+                                                                 attribute_value=i,
+                                                                 curr_node_index=curr_node_index,
+                                                                 prev_node_index=prev_node)
                     nodes_list.append(attribute_node)
                     curr_node_index += 1
 
@@ -304,6 +304,49 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
         significant_attributes_per_node.clear()
         return self
 
+    def partial_fit(self, X, y=None, classes=None, sample_weight=None):
+        """ Partially (incrementally) fit the model.
+
+        Parameters
+        ----------
+        X : numpy.ndarray of shape (n_samples, n_features)
+            The features to train the model.
+
+        y: {array-like, sparse matrix}, shape (n_samples, y_classes)
+            Contains the true class labels for all the samples in X.
+
+        classes: Not used (default=None)
+
+        sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
+            Samples weight. If not provided, uniform weights are assumed.
+
+        Returns
+        -------
+            self
+
+        """
+        N, D = X.shape
+
+        for n in range(N):
+            # For each instance ...
+            self.X_batch.append(X[n])
+            self.y_batch.append(y[n])
+            # self.sample_weight[self.i] = sample_weight[n] if sample_weight else 1.0
+            self.i = self.i + 1
+            if self.i == self.window_size:
+                # Train it
+                X_batch_df = pd.DataFrame(self.X_batch)
+                self.fit(X=X_batch_df, y=self.y_batch, classes=classes, sample_weight=sample_weight)
+                # Reset the window
+                self.i = 0
+                self.X_batch.clear()
+                self.y_batch.clear()
+
+        if not self.is_fitted_:
+            print("There are not enough samples to build a network")
+
+        return self
+
     def predict(self, X):
         """ A reference implementation of a predicting function.
 
@@ -329,7 +372,7 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
                 record_value = record[curr_layer.index]
                 if curr_layer.is_continuous:
                     record_value = utils.find_split_position(value=record_value,
-                                                        positions=curr_layer.split_points)
+                                                             positions=curr_layer.split_points)
                 for node in curr_layer.nodes:
                     if node.attribute_value == record_value and node.prev_node == prev_node_index:
                         chosen_node = node
@@ -391,7 +434,7 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
                 record_value = record[curr_layer.index]
                 if curr_layer.is_continuous is not False:
                     record_value = utils.find_split_position(value=record_value,
-                                                        positions=curr_layer.split_points)
+                                                             positions=curr_layer.split_points)
                 for node in curr_layer.nodes:
                     if node.attribute_value == record_value and node.prev_node == prev_node_index:
                         chosen_node = node
@@ -641,9 +684,9 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
             if T in self.split_points[attribute_index]: continue
             if nodes is None:
                 t_attribute_date, new_y = utils.split_data_to_two_intervals(interval=interval,
-                                                                       T=T,
-                                                                       min_value=min_value,
-                                                                       max_value=max_value)
+                                                                            T=T,
+                                                                            min_value=min_value,
+                                                                            max_value=max_value)
 
                 if len(np.unique(t_attribute_date)) != 2:
                     break
@@ -664,9 +707,9 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
                     data_class_array = list(zip(attribute_data, partial_y))
 
                     t_attribute_date, new_y = utils.split_data_to_two_intervals(interval=data_class_array,
-                                                                           T=T,
-                                                                           min_value=min_value,
-                                                                           max_value=max_value)
+                                                                                T=T,
+                                                                                min_value=min_value,
+                                                                                max_value=max_value)
 
                     if len(np.unique(t_attribute_date)) != 2:
                         how_many_nodes_exceeded += 1
@@ -943,13 +986,13 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
                     # convert each value in record[chosen_attribute] to a number between 0 and len(chosen_split_points)
                     for record in partial_x:
                         record[chosen_attribute] = utils.find_split_position(value=record[chosen_attribute],
-                                                                        positions=chosen_split_points)
+                                                                             positions=chosen_split_points)
         # First layer
         else:
             # Convert each value in record[chosen_attribute] to a number between 0 and len(chosen_split_points)
             for record in partial_X:
                 record[chosen_attribute] = utils.find_split_position(value=record[chosen_attribute],
-                                                                positions=chosen_split_points)
+                                                                     positions=chosen_split_points)
 
     def _set_terminal_nodes(self, nodes, class_count):
         """ Connecting the given nodes to the terminal nodes in the network.
@@ -997,4 +1040,3 @@ class IfnClassifierMulti(MultiOutputMixin,BaseSKMObject):
 
         error_rate = (np.size(y, 0) * np.size(y, 1) - correct) / (np.size(y, 0) * np.size(y, 1))
         return error_rate
-
