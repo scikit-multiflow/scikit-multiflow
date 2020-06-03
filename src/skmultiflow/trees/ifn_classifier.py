@@ -14,7 +14,6 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 import math
 import collections
 import time
-import sys
 
 
 class IfnClassifier(BaseSKMObject, ClassifierMixin):

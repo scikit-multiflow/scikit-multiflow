@@ -9,6 +9,7 @@ def configuration(parent_package="", top_path=None):
     config.add_subpackage('attribute_test')
     config.add_subpackage('nodes')
     config.add_subpackage('split_criterion')
+    config.add_subpackage('ifn')
 
     return config
 
