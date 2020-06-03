@@ -37,8 +37,8 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             self.alpha = alpha
             self.max_number_of_layers = max_number_of_layers
             self.window_size = window_size
-            self.X_batch = []
-            self.y_batch = []
+            self.X_batch = None
+            self.y_batch = None
             self.i = 0
             self.is_fitted = False
             self.training_error = 0
@@ -300,10 +300,17 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         N, D = X.shape
         isEnoughSamples = False
 
+        if self.i == 0:
+            # No models yet -- initialize
+            self.X_batch = np.zeros((self.window_size, D))
+            self.y_batch = np.zeros(self.window_size)
+            self.sample_weight = np.zeros(N)
+            self.i = 0
+
         for n in range(N):
             # For each instance ...
-            self.X_batch.append(X[n])
-            self.y_batch.append(y[n])
+            self.X_batch[self.i] = X[n]
+            self.y_batch[self.i] = y[n]
             # self.sample_weight[self.i] = sample_weight[n] if sample_weight else 1.0
             self.i = self.i + 1
 
@@ -314,8 +321,6 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                 self.fit(X=X_batch_df, y=self.y_batch,classes=classes, sample_weight=sample_weight)
                 # Reset the window
                 self.i = 0
-                self.X_batch.clear()
-                self.y_batch.clear()
 
         if not isEnoughSamples:
             print("There are not enough samples to build a network")

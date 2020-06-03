@@ -103,3 +103,5 @@ def test_partial_fit():
     assert np.alltrue(predictions == expected_predictions)
     assert np.isclose(expected_performance, performance)
     assert correct_predictions == expected_correct_predictions
+
+test_partial_fit()
