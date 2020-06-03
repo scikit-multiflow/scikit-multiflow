@@ -1,16 +1,17 @@
+import numpy as np
+
 from skmultiflow.data import SEAGenerator
 from skmultiflow.trees import OnlineNetworkRegenerative
-from src.skmultiflow.trees import IfnClassifier
-import numpy as np
+from skmultiflow.trees import IfnClassifier
 
 alpha = 0.99
 
 
 def test_regenerative(tmpdir):
-    dir = tmpdir.mkdir("tmpOLIN")
+    temp_dir = tmpdir.mkdir("tmpOLIN")
     ifn = IfnClassifier(alpha)
     stream_generator = SEAGenerator(random_state=23)
-    regenerative = OnlineNetworkRegenerative(ifn, dir, n_min=0, n_max=200, Pe=0.7,
+    regenerative = OnlineNetworkRegenerative(ifn, temp_dir, n_min=0, n_max=200, Pe=0.7,
                                              data_stream_generator=stream_generator)
     last_model = regenerative.generate()
 
