@@ -1,12 +1,14 @@
 import math
 import pickle
 import os
+
 import numpy as np
+
 from skmultiflow.data import SEAGenerator
 from skmultiflow.trees.ifn.meta_learning import MetaLearning
 
 
-class OnlineNetworkRegenerative():
+class OnlineNetworkRegenerative:
 
     def __init__(self, classifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
                  Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,

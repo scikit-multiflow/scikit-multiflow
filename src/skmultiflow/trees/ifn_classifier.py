@@ -4,12 +4,16 @@ Original code and method by: Prof' Mark Last
 License: BSD 3 clause
 """
 import numpy as np
-from scipy import stats
+
 import pandas as pd
-from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer
-import skmultiflow.trees.ifn.utils as utils
-from skmultiflow.core import BaseSKMObject, ClassifierMixin
+
+from scipy import stats
+
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
+
+from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer
+from skmultiflow.trees.ifn import utils
+from skmultiflow.core import BaseSKMObject, ClassifierMixin
 
 import math
 import collections

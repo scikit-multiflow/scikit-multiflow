@@ -3,18 +3,22 @@ Author: Mor Avitan, Itay Carmi and Omri Naor
 Original code and method by: Prof' Mark Last
 License: BSD 3 clause
 """
-import numpy as np
-import skmultiflow.trees.ifn.utils as utils
-from skmultiflow.trees.ifn.ifn_network_multi import IfnNetworkMulti, HiddenLayer
-from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
-from skmultiflow.core import BaseSKMObject, MultiOutputMixin
-
-from scipy import stats
 import math
 import collections
 import time
 import sys
+
 import pandas as pd
+
+import numpy as np
+
+from scipy import stats
+
+from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
+
+from skmultiflow.trees.ifn import utils
+from skmultiflow.trees.ifn.ifn_network_multi import IfnNetworkMulti, HiddenLayer
+from skmultiflow.core import BaseSKMObject, MultiOutputMixin
 
 
 def _drop_records(X, y, attribute_index, value):
