@@ -1,4 +1,5 @@
 import numpy as np
+
 from .ifn_network import AttributeNode
 
 

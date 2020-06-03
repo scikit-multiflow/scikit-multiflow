@@ -1,5 +1,3 @@
-import math
-
 # index of the layer
 class Node:
     def __init__(self, index):

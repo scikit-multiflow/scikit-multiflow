@@ -1,6 +1,4 @@
-import math
-from skmultiflow.trees.ifn.ifn_network import Node, RootNode, AttributeNode, HiddenLayer,\
-    IfnNetwork
+from skmultiflow.trees.ifn.ifn_network import Node, IfnNetwork
 
 
 # target node. index = 0/1

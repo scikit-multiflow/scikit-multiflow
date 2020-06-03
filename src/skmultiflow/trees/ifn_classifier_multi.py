@@ -17,7 +17,8 @@ from scipy import stats
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
 from skmultiflow.trees.ifn import utils
-from skmultiflow.trees.ifn.ifn_network_multi import IfnNetworkMulti, HiddenLayer
+from skmultiflow.trees.ifn.ifn_network_multi import IfnNetworkMulti
+from skmultiflow.trees.ifn.ifn_network import HiddenLayer
 from skmultiflow.core import BaseSKMObject, MultiOutputMixin
 
 
