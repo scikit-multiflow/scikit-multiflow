@@ -222,17 +222,17 @@ def test_suite_calculate_second_best_attribute_of_last_layer():
     assert mi == 0
 
 
-def test_suite_get_column_type():
-    path = "C:\\Users\איתן אביטן\PycharmProjects\scikit-multiflow-IFN\skml\\tests\datasets\Credit.csv"
-    dp = DataProcessor()
-    x_train, x_test, y_train, y_test = dp.convert(path, 0.3)
-
-    columns_type = utils.get_columns_type(X=x_train)
-
-    expected_columns_type = ['category', 'float64', 'float64', 'category', 'int64', 'category', 'float64', 'category',
-                             'category', 'int64', 'category', 'category', 'int64', 'int64']
-
-    assert np.array_equal(columns_type, expected_columns_type)
-
-    with pytest.raises(AttributeError):
-        utils.get_columns_type(X=None)
+# def test_suite_get_column_type():
+#     path = "C:\\Users\איתן אביטן\PycharmProjects\scikit-multiflow-IFN\skml\\tests\datasets\Credit.csv"
+#     dp = DataProcessor()
+#     x_train, x_test, y_train, y_test = dp.convert(path, 0.3)
+#
+#     columns_type = utils.get_columns_type(X=x_train)
+#
+#     expected_columns_type = ['category', 'float64', 'float64', 'category', 'int64', 'category', 'float64', 'category',
+#                              'category', 'int64', 'category', 'category', 'int64', 'int64']
+#
+#     assert np.array_equal(columns_type, expected_columns_type)
+#
+#     with pytest.raises(AttributeError):
+#         utils.get_columns_type(X=None)
