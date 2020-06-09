@@ -146,7 +146,6 @@ class EvaluateInfluential(StreamEvaluator):
 
         update_count = 0
         print('Evaluating...')
-        print("n models = ", self.n_models)
         while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
             try:
@@ -171,7 +170,7 @@ class EvaluateInfluential(StreamEvaluator):
                         for i in range(len(prediction[0])):
                             self.mean_eval_measurements[j].add_result(y[i], prediction[j][i])
                             self.current_eval_measurements[j].add_result(y[i], prediction[j][i])
-                            self.stream.receive_feedback(y[i], prediction[j][i])
+                            self.stream.receive_feedback(y[i], prediction[j][i], X[i])
                             # self.stream.check_weight()
                     self._check_progress(actual_max_samples)
 

@@ -130,7 +130,7 @@ class InfluentialStream(Stream):
 
         return self.current_sample_x, self.current_sample_y.flatten()
 
-    def receive_feedback(self, y_true, y_pred):
+    def receive_feedback(self, y_true, y_pred, x_features):
         # TODO: add features (x), or add index of samples, change
         """This checks which stream was used last, and checks whether the
         prediction of the last sample was correct.
