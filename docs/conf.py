@@ -14,8 +14,6 @@
 # serve to show the default.
 import os
 import sys
-import sphinx_rtd_theme
-from sklearn.externals.six import u
 from sphinx.domains.python import PythonDomain
 from skmultiflow._version import __version__ as skmultiflow_version
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -23,7 +21,7 @@ from skmultiflow._version import __version__ as skmultiflow_version
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 sys.path.insert(0, os.path.abspath('sphinxext'))
-from github_link import make_linkcode_resolve
+from github_link import make_linkcode_resolve   # noqa
 
 # Avoid ImportErrors from autodoc
 sys.path.insert(0, os.path.abspath('../src'))
@@ -40,19 +38,25 @@ sys.path.insert(0, os.path.abspath('../src'))
 # ones.
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
-              'sphinx.ext.todo',
-              'sphinx.ext.napoleon',
-              'sphinx.ext.githubpages',
+              'numpydoc',
+              # 'sphinx.ext.napoleon',
               'sphinx.ext.mathjax',
               'sphinx.ext.doctest',
               'sphinx.ext.intersphinx',
-              'sphinx.ext.linkcode']
+              'sphinx.ext.linkcode'
+              ]
 
-# Napoleon settings
-napoleon_include_init_with_doc = False
+# numpydoc
+numpydoc_attributes_as_param_list = False
+numpydoc_show_class_members = False
+numpydoc_show_inherited_class_members = False
+numpydoc_class_members_toctree = False
+numpydoc_xref_ignore = {'type', 'optional', 'default'}
 
 # autodoc options
-autodoc_default_options = {'members': True, 'inherited-members': True}
+autodoc_default_options = {'members': True,
+                           'inherited-members': True,
+                           }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -68,7 +72,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'scikit-multiflow'
-copyright = '2018 - 2019, scikit-multiflow developers (BSD License)'
+copyright = '2018 - 2020, scikit-multiflow developers (BSD License)'
 author = 'J. Montiel, J. Read, A. Bifet, T. Abdessalem'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -90,18 +94,14 @@ language = 'en'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', '_templates', 'Thumbs.db', '.DS_Store', 'tests/*', '*demos.rst']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'tests/*', '*demos.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
-# Custom style
-html_style = 'css/skmultiflow.css'
+# html_add_permalinks = ""
 
-# If true, `todo` and `todoList` produce output, else they produce nothing.
-# todo_include_todos = False
-
-autosummary_generate = True
+autosummary_generate = True   # = ["index"] to skip API
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -109,96 +109,64 @@ autosummary_generate = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'pydata_sphinx_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {'collapse_navigation': False,
-                      'navigation_depth': 3}
+html_theme_options = {
+    "github_url": "https://github.com/scikit-multiflow/scikit-multiflow",
+    "show_prev_next": False,
+    "external_links": [
+        {"name": "Webpage", "url": "https://scikit-multiflow.github.io/"},
+    ],
+    "use_edit_page_button": True,
+}
 
 # A list of ignored prefixes for module index sorting.
 modindex_common_prefix = ['skmultiflow.']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+# html_title = None
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
+# html_short_title = None
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "_static/images/skmultiflow-logo.png"
+html_logo = "_static/images/skmultiflow-logo-wide.svg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+# html_favicon = None
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-# Add any extra paths that contain custom files (such as robots.txt or
-# .htaccess) here, relative to this directory. These files are copied
-# directly to the root of the documentation.
-#html_extra_path = []
-# html_context = {
-#     'css_files': [
-#         '_static/theme_overrides.css',  # overrides for wide tables in RTD theme
-#         ],
-#     }
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
+# Additional css formatting
+html_css_files = [
+    'css/skmultiflow.css',
+]
+
 html_context = {
-  "display_github": True, # Add 'Edit on Github' link instead of 'View page source'
+  # "display_github": True,   # Add 'Edit on Github' link instead of 'View page source'
   "github_user": "scikit-multiflow",
   "github_repo": project,
   "github_version": "master",
-  "conf_py_path": "/docs/",
+  "doc_path": "docs/",
+  # "conf_py_path": "/docs/",
   "source_suffix": source_suffix,
 }
-
-# If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
-
-# Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
-
-# Additional templates that should be rendered to pages, maps page names to
-# template names.
-#html_additional_pages = {}
-
-# If false, no module index is generated.
-#html_domain_indices = True
-
-# If false, no index is generated.
-#html_use_index = True
-
-# If true, the index is split into individual pages for each letter.
-#html_split_index = False
-
-# If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = True
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 html_show_copyright = False
-
-# If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
-
-# This is the file name suffix for HTML files (e.g. ".xhtml").
-#html_file_suffix = None
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'scikit-multiflowdoc'
@@ -259,11 +227,9 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'scikit-multiflow', 'scikit-multiflow Documentation',
-     author, 'scikit-multiflow', 'A multi-output/multi-label and stream data framework.',
+     author, 'scikit-multiflow', 'A machine learning package for streaming data in Python.',
      'Miscellaneous'),
 ]
-
-
 
 # -- Options for Epub output ----------------------------------------------
 
@@ -297,6 +263,7 @@ class PatchedPythonDomain(PythonDomain):
 
 def setup(sphinx):
     sphinx.add_domain(PatchedPythonDomain, override=True)
+
 
 # The following is used by sphinx.ext.linkcode to provide links to github
 linkcode_resolve = make_linkcode_resolve('skmultiflow',
