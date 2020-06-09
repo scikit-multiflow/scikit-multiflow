@@ -37,6 +37,7 @@ class InfluentialStream(Stream):
         self.self_fulfilling = self_fulfilling
         self.self_defeating = self_defeating
         self.count = count
+        self.cache = []
 
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
@@ -131,22 +132,45 @@ class InfluentialStream(Stream):
         return self.current_sample_x, self.current_sample_y.flatten()
 
     def receive_feedback(self, y_true, y_pred, x_features):
-        # TODO: add features (x), or add index of samples, change
-        """This checks which stream was used last, and checks whether the
-        prediction of the last sample was correct.
+        """
+        If the true label is given in this function and
+        if the cache is empty or the instance matches the first item in the list
+        then apply the self_fulfilling weight to the stream if correctly classified
+        or apply the self_defeating weight to the stream if incorrectly classified
+        If the cache is not empty, this means we received feedback on the first instance in the cache.
+        After giving feedback, this instance can be removed.
+        If after this instance, an instance with three items (y_true, y_pred, and x_features) is the first
+        in the list, we can also give that instance feedback.
 
-        If the sample was correctly classified, the weight of the last
-        used stream can be increased by multiplying the weight
-         by a set value,
-        if it is incorrectly classified, it is decreased by multiplying
-         the weight with a set value."""
+        If a true label is given, but the cache is not empty and the instance does not match with the
+        first instance, add the instance to the end of the cache.
 
-        for i in range(len(self.streams)):
-            if self.last_stream == i:
-                if y_true == y_pred:
-                    self.weight[i] = self.weight[i] * self.self_fulfilling
-                else:
-                    self.weight[i] = self.weight[i] * self.self_defeating
+        If no true label is given, then add the instance in the end of the cache.
+        """
+        if y_true is not None:
+            if len(self.cache) == 0 or (y_pred == self.cache[0][0] and x_features == self.cache[0][1]):
+                for i in range(len(self.streams)):
+                    if self.last_stream == i:
+                        if y_true == y_pred:
+                            self.weight[i] = self.weight[i] * self.self_fulfilling
+                        else:
+                            self.weight[i] = self.weight[i] * self.self_defeating
+                if len(self.cache) != 0:
+                    self.cache.remove(self.cache[0])
+                    while len(self.cache[0]) == 3:
+                        for i in range(len(self.streams)):
+                            if self.last_stream == i:
+                                if y_true == y_pred:
+                                    self.weight[i] = self.weight[i] * self.self_fulfilling
+                                else:
+                                    self.weight[i] = self.weight[i] * self.self_defeating
+                        self.cache.remove(self.cache[0])
+            else:
+                wait_for_feedback = [y_pred, x_features, y_true]
+                self.cache.append(wait_for_feedback)
+        else:
+            no_label = [y_pred, x_features]
+            self.cache.append(no_label)
 
     def restart(self):
         self._random_state = check_random_state(self.random_state)
