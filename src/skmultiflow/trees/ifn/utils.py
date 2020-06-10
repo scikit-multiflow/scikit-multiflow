@@ -33,15 +33,19 @@ def binary_search(array: list, left: int, right: int, value):
     if right >= left:
         mid = int(left + (right - left) / 2)
         # If element is present at the middle itself
-        if array[mid] == value:
+        if (mid == 0 or value > array[mid - 1]) and array[mid] == value:
             return mid
         # If element is smaller than mid, then it can only
         # be present in left subarray
-        elif array[mid] > value:
-            return binary_search(array, left, mid - 1, value)
-        # Else the element can only be present in right subarray
-        else:
+        # elif array[mid] > value:
+        #     return binary_search(array, left, mid - 1, value)
+        # # Else the element can only be present in right subarray
+        # else:
+        #     return binary_search(array, mid + 1, right, value)
+        elif value > array[mid]:
             return binary_search(array, mid + 1, right, value)
+        else:
+            return binary_search(array, left, mid - 1,value)
     else:
         # Element is not present in the array
         return -1
@@ -232,13 +236,15 @@ def create_attribute_node(partial_X, partial_y, chosen_attribute_index, attribut
                              y=partial_y,
                              attribute_index=chosen_attribute_index,
                              value=attribute_value)
-    # Create a new AttributeNode
-    attributes_node = AttributeNode(index=curr_node_index,
-                                    attribute_value=attribute_value,
-                                    prev_node=prev_node_index,
-                                    layer=chosen_attribute_index,
-                                    partial_x=x_y_tuple[0],
-                                    partial_y=x_y_tuple[1])
+    # Create a new AttributeNode only is it has samples
+    attributes_node = None
+    if len(x_y_tuple[0]):
+        attributes_node = AttributeNode(index=curr_node_index,
+                                        attribute_value=attribute_value,
+                                        prev_node=prev_node_index,
+                                        layer=chosen_attribute_index,
+                                        partial_x=x_y_tuple[0],
+                                        partial_y=x_y_tuple[1])
     return attributes_node
 
 
@@ -255,13 +261,13 @@ def get_columns_type(X):
         An array_like object of length n contains in each position the type of the corresponding attribute in X.
 
     """
+
     columns_type = []
     for dt in X.columns:
-        if len(np.unique(X[dt])) > 10:
-            columns_type.append(str(X[dt].dtype))
-        else:
+        if len(np.unique(X[dt])) / len(X) < 0.03:
             columns_type.append("category")
-
+        else:
+            columns_type.append(str(X[dt].dtype))
     return columns_type
 
 

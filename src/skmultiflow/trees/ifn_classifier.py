@@ -95,7 +95,8 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         columns_type = utils.get_columns_type(X)
 
         X, y = check_X_y(X, y, accept_sparse=True)
-
+        X_copy = X.copy()
+        y_copy = y.copy()
         self.total_records = len(y)
         unique, counts = np.unique(np.array(y), return_counts=True)
         self.class_count = np.asarray((unique, counts)).T
@@ -263,7 +264,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         self.is_fitted = True
         print("Done. Network is fitted")
 
-        self.training_error = self.calculate_error_rate(X=X, y=y)
+        self.training_error = self.calculate_error_rate(X=X_copy, y=y_copy)
         self.index_of_sec_best_att, self.cmi_sec_best_att = \
             utils.calculate_second_best_attribute_of_last_layer(attributes_mi=last_layer_mi)
 
@@ -322,8 +323,9 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                 # Reset the window
                 self.i = 0
 
-        if not isEnoughSamples:
-            print("There are not enough samples to build a network")
+        # if not isEnoughSamples:
+            # TODO maybe change to return 0
+            # print("There are not enough samples to build a network")
 
         return self
 
@@ -352,8 +354,13 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                 if curr_layer.is_continuous:
                     record_value = utils.find_split_position(value=record_value,
                                                              positions=curr_layer.split_points)
-                for node in curr_layer.nodes:
-                    if node.attribute_value == record_value and node.prev_node == prev_node_index:
+
+                possible_nodes = [node for node in curr_layer.nodes if node.prev_node == prev_node_index]
+                iteration_number = 1
+                for node in possible_nodes:
+                    if node.attribute_value == record_value or \
+                            (iteration_number == len(possible_nodes) and node.attribute_value + 1 == record_value) or \
+                            (iteration_number == 1 and node.attribute_value - 1 == record_value):
                         chosen_node = node
                         if chosen_node.is_terminal:
                             max_weight = -math.inf
@@ -369,12 +376,14 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                             prev_node_index = chosen_node.index
                         break
 
-        # index = 1
-        # with open('predict.txt', 'w') as f:
-        #     for row in predicted:
-        #         f.write(str(index) + '. ' + str(row) + '\n')
-        #         index += 1
-        #     f.close()
+                    iteration_number += 1
+
+#        index = 1
+#       with open('predict.txt', 'w') as f:
+#            for row in predicted:
+#                f.write(str(index) + '. ' + str(row) + '\n')
+#                index += 1
+#            f.close()
 
         return np.array(predicted)
 
@@ -403,8 +412,12 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                 if curr_layer.is_continuous is not False:
                     record_value = utils.find_split_position(value=record_value,
                                                              positions=curr_layer.split_points)
-                for node in curr_layer.nodes:
-                    if node.attribute_value == record_value and node.prev_node == prev_node_index:
+                possible_nodes = [node for node in curr_layer.nodes if node.prev_node == prev_node_index]
+                iteration_number = 1
+                for node in possible_nodes:
+                    if node.attribute_value == record_value or \
+                            (iteration_number == len(possible_nodes) and node.attribute_value + 1 == record_value) or \
+                            (iteration_number == 1 and node.attribute_value - 1 == record_value):
                         chosen_node = node
                         if chosen_node.is_terminal:
                             found_terminal_node = True
@@ -417,12 +430,14 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                             prev_node_index = chosen_node.index
                         break
 
-        # index = 1
-        # with open('tmp/predict.txt', 'w') as f:
-        #     for row in predicted:
-        #         f.write(str(index) + '. ' + str(row) + '\n')
-        #         index += 1
-        #     f.close()
+                    iteration_number += 1
+
+#        index = 1
+#        with open('tmp/predict.txt', 'w') as f:
+#            for row in predicted:
+#                f.write(str(index) + '. ' + str(row) + '\n')
+#                index += 1
+#            f.close()
 
         return np.array(predicted)
 
@@ -567,21 +582,16 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         # first layer
         if nodes is None:
             new_total_mi = self._discretization(attribute_index=attribute_index,
-                                                total_mi=0,
-                                                interval=self.intervals_per_attribute[attribute_index])
+                                                interval=self.intervals_per_attribute[attribute_index], total_mi=[0])
+            new_total_mi = new_total_mi[0]
         else:
-            self._discretization(attribute_index=attribute_index,
-                                 total_mi=0,
-                                 interval=self.intervals_per_attribute[attribute_index],
-                                 nodes=nodes)
+            new_total_mi = self._discretization(attribute_index=attribute_index,
+                                                interval=self.intervals_per_attribute[attribute_index], total_mi=[0],
+                                                nodes=nodes)
+            new_total_mi = new_total_mi[0]
 
             if bool(self.splitted_nodes_by_split_points):
-                total_mi = [el[2] for el in self.splitted_nodes_by_split_points]
-                max_mi = max(total_mi)
-                max_mi_index = total_mi.index(max_mi)
-                self.split_points[attribute_index] = list(self.splitted_nodes_by_split_points[max_mi_index][0])
-                new_total_mi = max_mi
-                splitted_nodes = list(self.splitted_nodes_by_split_points[max_mi_index][1])
+                splitted_nodes = self.splitted_nodes_by_split_points.copy()
                 self.splitted_nodes_by_split_points.clear()
 
         if bool(self.split_points[attribute_index]):  # there are split points
@@ -591,7 +601,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
         return splitted_nodes
 
-    def _discretization(self, attribute_index, interval, total_mi=0, nodes=None, prev_split_points=None):
+    def _discretization(self, attribute_index, interval, total_mi=None, nodes=None, prev_split_points=None):
         """ A recursive implementation of a discretization of the IFN algorithm according to the algorithm
             published in "Maimon, Oded, and Mark Last. "Knowledge discovery and data mining." Klewer Pub. Co (2001)."
 
@@ -604,11 +614,11 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         interval: {array-like, sparse matrix}, shape (n_samples, n_classes)
             Contains the data of one feature overall samples in the train set.
 
-        total_mi: int (default 0)
+        total_mi: list of one element (default [0])
             The total conditional mutual information of the attribute being checked
             This variables is increasing at each recursive loop.
 
-        nodes: list, optional
+        splitted_nodes: list, optional
             list of nodes in the current layer of the network
 
         prev_split_points: frozenset, optional
@@ -617,8 +627,11 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         Returns
         -------
             The new total mutual information of the attribute being checked
+            :param nodes:
 
         """
+        if total_mi is None:
+            total_mi = [0]
         interval_values = [i[0] for i in interval]
         distinct_attribute_data = np.unique(interval_values)
 
@@ -634,7 +647,6 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         # save the olf total mutual information in case no split point will be founded
         new_total_mi = total_mi
         # Counter for the number of nodes we don't need to check anymore
-        how_many_nodes_exceeded = 0
 
         iterator = iter(distinct_attribute_data)
         next(iterator)
@@ -663,7 +675,6 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     # For each point save it's mutual information
                     split_point_mi_map[T] = t_mi
             else:
-                how_many_nodes_exceeded = 0
                 for node in nodes:
                     partial_X = node.partial_x
                     partial_y = node.partial_y
@@ -676,7 +687,6 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                                                                                 max_value=max_value)
 
                     if len(np.unique(t_attribute_date)) != 2:
-                        how_many_nodes_exceeded += 1
                         continue
 
                     statistic, critical, t_mi = self._calculate_statistic_and_critical_for_interval(X=t_attribute_date,
@@ -697,8 +707,6 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                             node_mi_per_threshold[node.index] = {}
                         node_mi_per_threshold[node.index][T] = 0
 
-            if nodes is not None and how_many_nodes_exceeded == len(nodes):
-                break
 
         if bool(split_point_mi_map):  # if not empty
             # Find the split point which maximize the mutual information
@@ -726,29 +734,18 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     if node.index in node_mi_per_threshold.keys() \
                             and split_point in node_mi_per_threshold[node.index].keys() \
                             and node_mi_per_threshold[node.index][split_point] > 0:
-                        splitted_nodes.append(node)
-            else:
-                splitted_nodes = None
+                        self.splitted_nodes_by_split_points.append(node)
+                self.splitted_nodes_by_split_points = list(set(self.splitted_nodes_by_split_points))
 
-            new_total_mi += split_point_mi_map[split_point]
 
-            if curr_previous_split_points is not None:
-                split_point_set = frozenset(curr_previous_split_points)
-                self.splitted_nodes_by_split_points.append([split_point_set, splitted_nodes, new_total_mi])
-                curr_previous_split_points = frozenset(curr_previous_split_points)
+            new_total_mi[0] += split_point_mi_map[split_point]
 
             if bool(interval_smaller):
-                self._discretization(attribute_index=attribute_index,
-                                     total_mi=new_total_mi,
-                                     interval=interval_smaller,
-                                     nodes=splitted_nodes,
-                                     prev_split_points=curr_previous_split_points)
+                self._discretization(attribute_index=attribute_index, interval=interval_smaller, total_mi=new_total_mi,
+                                     nodes=nodes, prev_split_points=curr_previous_split_points)
             if bool(interval_larger):
-                self._discretization(attribute_index=attribute_index,
-                                     total_mi=new_total_mi,
-                                     interval=interval_larger,
-                                     nodes=splitted_nodes,
-                                     prev_split_points=curr_previous_split_points)
+                self._discretization(attribute_index=attribute_index, interval=interval_larger, total_mi=new_total_mi,
+                                     nodes=nodes, prev_split_points=curr_previous_split_points)
         return new_total_mi
 
     def _calculate_statistic_and_critical_for_interval(self, X, y):
@@ -893,7 +890,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             is_continuous = 'category' not in columns_type[attribute_index]
             if is_continuous:
                 attribute_data = list(X[:, attribute_index])
-                attribute_data = [round(num, 2) for num in attribute_data]
+                # attribute_data = [round(num, 2) for num in attribute_data]
                 self.unique_values_per_attribute[attribute_index] = np.unique(attribute_data)
                 data_class_array = list(zip(attribute_data, y))
                 data_class_array.sort(key=lambda tup: tup[0])
