@@ -349,12 +349,16 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
                                        prototypes=prototypes)
 
     def predict(self, X):
-        """Predict class membership index for each input sample.
+        """
+        Predict class membership index for each input sample.
+
         This function does classification on an array of
         test vectors X.
+
         Parameters
         ----------
         X : array-like, shape = [n_samples, n_features]
+
         Returns
         -------
         C : array, shape = (n_samples)

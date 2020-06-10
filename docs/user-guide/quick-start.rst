@@ -5,15 +5,17 @@ Quick-Start Guide
 Train and test a stream classification model in ``scikit-multiflow``
 ====================================================================
 
-.. py:currentmodule:: skmultiflow.trees.hoeffding_tree
+.. py:currentmodule:: skmultiflow.trees
 
-In this example, we will use a data stream to train a :class:`HoeffdingTreeClassifier` and will measure its performance using prequential evaluation:
+In this example, we will use a data stream to train a :class:`HoeffdingTreeClassifier` and will
+measure its performance using prequential evaluation:
 
-.. py:currentmodule:: skmultiflow.data.waveform_generator
+.. py:currentmodule:: skmultiflow.data
 
 1. Create a stream
 
-   The :class:`WaveformGenerator` generates by default samples with 21 numeric attributes and 3 target_values, based on a random differentiation of some base waveforms:
+   The :class:`WaveformGenerator` generates by default samples with 21 numeric attributes and 3
+   target_values, based on a random differentiation of some base waveforms:
 
    .. code-block:: python
 
@@ -27,7 +29,7 @@ In this example, we will use a data stream to train a :class:`HoeffdingTreeClass
 
       ht = HoeffdingTreeClassifier()
 
-.. py:currentmodule:: skmultiflow.evaluation.evaluate_prequential
+.. py:currentmodule:: skmultiflow.evaluation
 
 3. Setup the evaluator, we will use the :class:`EvaluatePrequential` class.
 
@@ -44,7 +46,8 @@ In this example, we will use a data stream to train a :class:`HoeffdingTreeClass
 
 4. Run the evaluation
 
-   By calling ``evaluate()``, we pass control to the *evaluator*, which will perform the following sub-tasks:
+   By calling ``evaluate()``, we pass control to the *evaluator*, which will perform the following
+   sub-tasks:
 
    * Check if there are samples in the stream
    * Pass the next sample to the classifier:
@@ -84,6 +87,7 @@ In this example, we will use a data stream to train a :class:`HoeffdingTreeClass
 **Note:** Since we set `show_plot=True`, a new window will be created for the plot:
 
 .. image:: ../_static/images/example_classifier_plot.gif
+   :width: 700px
    :alt: classifier plot
    :align: center
 
@@ -91,11 +95,13 @@ In this example, we will use a data stream to train a :class:`HoeffdingTreeClass
 Load data from a file as a stream and save test results into a file.
 ====================================================================
 
-.. py:currentmodule:: skmultiflow.trees.hoeffding_tree
+.. py:currentmodule:: skmultiflow.trees
 
-There are cases where we want to use data stored in files. In this example we will train a :class:`HoeffdingTreeClassifier`, but this time we will read the data from a (csv) file and will write the results of the evaluation into a (csv) file.
+There are cases where we want to use data stored in files. In this example we will train a
+:class:`HoeffdingTreeClassifier`, but this time we will read the data from a (csv) file and will
+write the results of the evaluation into a (csv) file.
 
-.. py:currentmodule:: skmultiflow.data.file_stream
+.. py:currentmodule:: skmultiflow.data
 
 1. Load the data set as a stream
 
@@ -118,7 +124,7 @@ There are cases where we want to use data stored in files. In this example we wi
       ht = HoeffdingTreeClassifier()
 
 
-.. py:currentmodule:: skmultiflow.evaluation.evaluate_prequential
+.. py:currentmodule:: skmultiflow.evaluation
 
 3. Setup the evaluator, we will use the :class:`EvaluatePrequential` class.
 
@@ -131,11 +137,13 @@ There are cases where we want to use data stored in files. In this example we wi
 
    * ``pretrain_size=1000`` sets the number of samples passed in the first train call.
    * ``max_samples=100000`` sets the maximum number of samples to use.
-   * ``output_file='results.csv'`` indicates that the results should be stored into a file. In this case a file *results.csv* will be created in the current path.
+   * ``output_file='results.csv'`` indicates that the results should be stored into a file.
+     In this case a file *results.csv* will be created in the current path.
 
 4. Run the evaluation
 
-   By calling ``evaluate()``, we pass control to the *evaluator*, which will perform the following sub-tasks:
+   By calling ``evaluate()``, we pass control to the *evaluator*, which will perform the following
+   sub-tasks:
 
    * Check if there are samples in the stream
    * Pass the next sample to the classifier:

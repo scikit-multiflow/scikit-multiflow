@@ -5,11 +5,14 @@ Using Streams in scikit-multiflow
 Stream generators
 =================
 
-.. py:currentmodule:: skmultiflow.data.agrawal_generator
+.. py:currentmodule:: skmultiflow.data
 
-Stream generators are a cheap source of data, since data samples are generated on demand we can avoid storing data physically. There are multiple stream generators in ``scikit-multiflow`` and all of them work in a similar way.
+Stream generators are a cheap source of data, since data samples are generated on demand we can
+avoid storing data physically. There are multiple stream generators in ``scikit-multiflow`` and
+all of them work in a similar way.
 
-Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generators within ``scikit-multiflow``
+Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generators within
+``scikit-multiflow``
 
 
 1. Instantiate the Stream generator
@@ -20,7 +23,9 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 
 2. Get data from the stream
 
-   Use ``next_sample()`` to obtain data (samples) from any Stream object. The Stream will return ``n_samples`` using two arrays: ``X`` for features and ``y`` for classes (classification) or targets (regression).
+   Use ``next_sample()`` to obtain data (samples) from any Stream object. The Stream will return
+   ``n_samples`` using two arrays: ``X`` for features and ``y`` for classes (classification) or
+   targets (regression).
 
    .. code-block:: python
 
@@ -29,7 +34,8 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
       >>> (1, 9) (1,)
 
 
-   By default, ``next_sample()`` returns one sample, but we can pass an arbitrary number of samples as ``next_sample(n_samples)``. For example, to get 1000 samples:
+   By default, ``next_sample()`` returns one sample, but we can pass an arbitrary number of samples
+   as ``next_sample(n_samples)``. For example, to get 1000 samples:
 
    .. code-block:: python
 
@@ -42,7 +48,8 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 
 3. Check if the stream has more data
 
-   When working with streams, it is important to know if there is more data remaining. You can use ``has_more_samples()`` to query the Stream for this information.
+   When working with streams, it is important to know if there is more data remaining. You can use
+   ``has_more_samples()`` to query the Stream for this information.
 
   .. code-block:: python
 
@@ -60,7 +67,10 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 
 5: Save the data into a csv file [Optional]
 
-   There might be cases where we want to store the information obtained from a Stream generator. An easy way to do it is using ``numpy`` and ``pandas``. First, we concatenate the ``X`` and ``y`` arrays into a single ``np.array``. Then we create a ``DataFrame`` that is easy manipulate, for example if we want to name the features, pre-process the data, etc.
+   There might be cases where we want to store the information obtained from a Stream generator.
+   An easy way to do it is using ``numpy`` and ``pandas``. First, we concatenate the ``X`` and
+   ``y`` arrays into a single ``np.array``. Then we create a ``DataFrame`` that is easy manipulate,
+   for example if we want to name the features, pre-process the data, etc.
 
   .. code-block:: python
 
