@@ -31,22 +31,19 @@ sys.path.insert(0, os.path.abspath('../src'))
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = '1.0'
+needs_sphinx = '2.0.1'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.autosummary',
-              'numpydoc',
-              # 'sphinx.ext.napoleon',
+extensions = ['numpydoc',
               'sphinx.ext.mathjax',
               'sphinx.ext.doctest',
               'sphinx.ext.intersphinx',
               'sphinx.ext.linkcode'
               ]
 
-# numpydoc
+# numpydoc options
 numpydoc_attributes_as_param_list = False
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
@@ -57,9 +54,8 @@ numpydoc_xref_ignore = {'type', 'optional', 'default'}
 autodoc_default_options = {'members': True,
                            'inherited-members': True,
                            }
-
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+# templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:

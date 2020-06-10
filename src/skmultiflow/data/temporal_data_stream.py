@@ -155,17 +155,20 @@ class TemporalDataStream(DataStream):
 
         If there is enough instances to supply at least batch_size samples,
         those are returned. If there aren't a tuple of (None, None) is returned.
+
         Parameters
         ----------
         batch_size: int
             The number of instances to return.
+
         Returns
         -------
         tuple or tuple list
-            Returns the next batch_size instances (sample_x, sample_y,
-            sample_time, sample_delay (if available), sample_weight
+            Returns the next ``batch_size`` instances (``sample_x``, ``sample_y``,
+            ``sample_time``, ``sample_delay`` (if available), ``sample_weight``
             (if available)). For general purposes the return can be
             treated as a numpy.ndarray.
+
         """
         self.sample_idx += batch_size
 
