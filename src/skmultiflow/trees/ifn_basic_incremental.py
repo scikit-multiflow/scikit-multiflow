@@ -1,7 +1,6 @@
 import math
 import pickle
 import os
-import pandas as pd
 
 from skmultiflow.data import SEAGenerator
 from skmultiflow.trees.ifn.iolin import IncrementalOnlineNetwork

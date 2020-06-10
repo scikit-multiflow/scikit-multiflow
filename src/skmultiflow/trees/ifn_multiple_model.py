@@ -1,11 +1,11 @@
 import math
 import pickle
 import os
+
 import numpy as np
-import pandas as pd
+
 from scipy import stats
 
-from skmultiflow.trees import IfnClassifier
 from skmultiflow.trees.ifn.iolin import IncrementalOnlineNetwork
 from skmultiflow.data import SEAGenerator
 

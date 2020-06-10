@@ -14,7 +14,7 @@ alpha = 0.99
 # def test__model_pickle_const_dataset_multi_target(tmpdir):
 #     clf = IfnClassifierMulti(alpha, multi_label=False)
 #     dp = DataProcessorMulti()
-#     x_train, x_test, y_train, y_test = dp.convert(dataset_path, test_size_percentage)
+#     x_train, x_test, y_train, y_test = dp.convert(datase_path, test_size_percentage)
 #
 #     clf.fit(x_train, y_train)
 #     pickle_file = tmpdir.join("clf.pickle")

@@ -1,12 +1,13 @@
 import math
 import pickle
 import os
-import pandas as pd
-from skmultiflow.trees.ifn.iolin import IncrementalOnlineNetwork
-from skmultiflow.trees import IfnClassifier
-from skmultiflow.data import SEAGenerator
-from scipy import stats
+
 import numpy as np
+
+from scipy import stats
+
+from skmultiflow.trees.ifn.iolin import IncrementalOnlineNetwork
+from skmultiflow.data import SEAGenerator
 
 
 class PureMultiple(IncrementalOnlineNetwork):

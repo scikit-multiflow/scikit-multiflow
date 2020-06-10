@@ -4,17 +4,20 @@ Original code and method by: Prof' Mark Last
 License: BSD 3 clause
 """
 import numpy as np
-from scipy import stats
+
 import pandas as pd
-from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer
-import skmultiflow.trees.ifn.utils as utils
-from skmultiflow.core import BaseSKMObject, ClassifierMixin
+
+from scipy import stats
+
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
+
+from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer
+from skmultiflow.trees.ifn import ifn_utils
+from skmultiflow.core import BaseSKMObject, ClassifierMixin
 
 import math
 import collections
 import time
-import sys
 
 
 class IfnClassifier(BaseSKMObject, ClassifierMixin):
@@ -92,7 +95,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         cols = list(X.columns.values)
         cols = [str(i) for i in cols]
 
-        columns_type = utils.get_columns_type(X)
+        columns_type = ifn_utils.get_columns_type(X)
 
         X, y = check_X_y(X, y, accept_sparse=True)
         X_copy = X.copy()
@@ -190,12 +193,12 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                         unique_values = np.unique(attribute_data_in_node)
                         prev_node = node.index
                         for i in unique_values:
-                            attribute_node = utils.create_attribute_node(partial_X=partial_X,
-                                                                         partial_y=partial_y,
-                                                                         chosen_attribute_index=global_chosen_attribute,
-                                                                         attribute_value=i,
-                                                                         curr_node_index=curr_node_index,
-                                                                         prev_node_index=prev_node)
+                            attribute_node = ifn_utils.create_attribute_node(partial_X=partial_X,
+                                                                             partial_y=partial_y,
+                                                                             chosen_attribute_index=global_chosen_attribute,
+                                                                             attribute_value=i,
+                                                                             curr_node_index=curr_node_index,
+                                                                             prev_node_index=prev_node)
                             nodes_list.append(attribute_node)
                             curr_node_index += 1
                     # If the node isn't significant we will set it as terminal node later
@@ -205,12 +208,12 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             else:
                 prev_node = 0
                 for i in self.unique_values_per_attribute[global_chosen_attribute]:
-                    attribute_node = utils.create_attribute_node(partial_X=X,
-                                                                 partial_y=y,
-                                                                 chosen_attribute_index=global_chosen_attribute,
-                                                                 attribute_value=i,
-                                                                 curr_node_index=curr_node_index,
-                                                                 prev_node_index=prev_node)
+                    attribute_node = ifn_utils.create_attribute_node(partial_X=X,
+                                                                     partial_y=y,
+                                                                     chosen_attribute_index=global_chosen_attribute,
+                                                                     attribute_value=i,
+                                                                     curr_node_index=curr_node_index,
+                                                                     prev_node_index=prev_node)
                     nodes_list.append(attribute_node)
                     curr_node_index += 1
 
@@ -266,7 +269,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
         self.training_error = self.calculate_error_rate(X=X_copy, y=y_copy)
         self.index_of_sec_best_att, self.cmi_sec_best_att = \
-            utils.calculate_second_best_attribute_of_last_layer(attributes_mi=last_layer_mi)
+            ifn_utils.calculate_second_best_attribute_of_last_layer(attributes_mi=last_layer_mi)
 
         if self.index_of_sec_best_att != -1 and 'category' not in columns_type[self.index_of_sec_best_att]:
             self.sec_att_split_points = self.split_points[self.index_of_sec_best_att]
@@ -352,8 +355,8 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             while curr_layer is not None and not found_terminal_node:
                 record_value = record[curr_layer.index]
                 if curr_layer.is_continuous:
-                    record_value = utils.find_split_position(value=record_value,
-                                                             positions=curr_layer.split_points)
+                    record_value = ifn_utils.find_split_position(value=record_value,
+                                                                 positions=curr_layer.split_points)
 
                 possible_nodes = [node for node in curr_layer.nodes if node.prev_node == prev_node_index]
                 iteration_number = 1
@@ -410,8 +413,8 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
             while curr_layer is not None and not found_terminal_node:
                 record_value = record[curr_layer.index]
                 if curr_layer.is_continuous is not False:
-                    record_value = utils.find_split_position(value=record_value,
-                                                             positions=curr_layer.split_points)
+                    record_value = ifn_utils.find_split_position(value=record_value,
+                                                                 positions=curr_layer.split_points)
                 possible_nodes = [node for node in curr_layer.nodes if node.prev_node == prev_node_index]
                 iteration_number = 1
                 for node in possible_nodes:
@@ -659,10 +662,10 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         for T in iterator:
             if T in self.split_points[attribute_index]: continue
             if nodes is None:
-                t_attribute_date, new_y = utils.split_data_to_two_intervals(interval=interval,
-                                                                            T=T,
-                                                                            min_value=min_value,
-                                                                            max_value=max_value)
+                t_attribute_date, new_y = ifn_utils.split_data_to_two_intervals(interval=interval,
+                                                                                T=T,
+                                                                                min_value=min_value,
+                                                                                max_value=max_value)
 
                 if len(np.unique(t_attribute_date)) != 2:
                     break
@@ -681,10 +684,10 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     attribute_data = list(partial_X[:, attribute_index])
                     data_class_array = list(zip(attribute_data, partial_y))
 
-                    t_attribute_date, new_y = utils.split_data_to_two_intervals(interval=data_class_array,
-                                                                                T=T,
-                                                                                min_value=min_value,
-                                                                                max_value=max_value)
+                    t_attribute_date, new_y = ifn_utils.split_data_to_two_intervals(interval=data_class_array,
+                                                                                    T=T,
+                                                                                    min_value=min_value,
+                                                                                    max_value=max_value)
 
                     if len(np.unique(t_attribute_date)) != 2:
                         continue
@@ -721,7 +724,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
 
             # Find the split point index in the interval using binary search
             l = [e[0] for e in interval]
-            split_point_index = utils.binary_search(l, 0, len(l), split_point)
+            split_point_index = ifn_utils.binary_search(l, 0, len(l), split_point)
             # Split the interval into two intervals
             # smaller - includes all the elements where their value is smaller than split point
             interval_smaller = interval[0: split_point_index]
@@ -934,14 +937,14 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     partial_x = node.partial_x
                     # convert each value in record[chosen_attribute] to a number between 0 and len(chosen_split_points)
                     for record in partial_x:
-                        record[chosen_attribute] = utils.find_split_position(value=record[chosen_attribute],
-                                                                             positions=chosen_split_points)
+                        record[chosen_attribute] = ifn_utils.find_split_position(value=record[chosen_attribute],
+                                                                                 positions=chosen_split_points)
         # First layer
         else:
             # Convert each value in record[chosen_attribute] to a number between 0 and len(chosen_split_points)
             for record in partial_X:
-                record[chosen_attribute] = utils.find_split_position(value=record[chosen_attribute],
-                                                                     positions=chosen_split_points)
+                record[chosen_attribute] = ifn_utils.find_split_position(value=record[chosen_attribute],
+                                                                         positions=chosen_split_points)
 
     def _set_terminal_nodes(self, nodes, class_count):
         """ Connecting the given nodes to the terminal nodes in the network.
