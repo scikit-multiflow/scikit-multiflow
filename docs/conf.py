@@ -14,8 +14,8 @@
 # serve to show the default.
 import os
 import sys
-from sphinx.domains.python import PythonDomain
-from skmultiflow._version import __version__ as skmultiflow_version
+from sphinx.domains.python import PythonDomain   # noqa
+from skmultiflow._version import __version__ as skmultiflow_version    # noqa
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -36,15 +36,17 @@ needs_sphinx = '2.0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['numpydoc',
-              'sphinx.ext.mathjax',
-              'sphinx.ext.doctest',
+extensions = ["sphinx.ext.autodoc",
+              'numpydoc',
               'sphinx.ext.intersphinx',
-              'sphinx.ext.linkcode'
+              'sphinx.ext.linkcode',
+              'sphinx_copybutton'
               ]
 
-# numpydoc options
-numpydoc_attributes_as_param_list = False
+autosummary_generate = True   # = ["index"] to skip API
+
+# # # numpydoc options
+numpydoc_attributes_as_param_list = True
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
 numpydoc_class_members_toctree = False
@@ -54,8 +56,18 @@ numpydoc_xref_ignore = {'type', 'optional', 'default'}
 autodoc_default_options = {'members': True,
                            'inherited-members': True,
                            }
+autodoc_typehints = "none"
+
+# Skip __init__
+def autodoc_skip_member_handler(app, what, name, obj, skip, options):
+    if name == "__init__":
+        return True
+
+# sphinx_copybutton options
+copybutton_prompt_text = ">>> "
+
 # Add any paths that contain templates here, relative to this directory.
-# templates_path = ['_templates']
+templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -97,8 +109,6 @@ pygments_style = 'sphinx'
 
 # html_add_permalinks = ""
 
-autosummary_generate = True   # = ["index"] to skip API
-
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -116,7 +126,7 @@ html_theme_options = {
     "external_links": [
         {"name": "Webpage", "url": "https://scikit-multiflow.github.io/"},
     ],
-    "use_edit_page_button": True,
+    "use_edit_page_button": False,
 }
 
 # A list of ignored prefixes for module index sorting.
@@ -136,7 +146,7 @@ html_logo = "_static/images/skmultiflow-logo-wide.svg"
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = None
+html_favicon = "_static/images/skmultiflow-favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -259,6 +269,7 @@ class PatchedPythonDomain(PythonDomain):
 
 def setup(sphinx):
     sphinx.add_domain(PatchedPythonDomain, override=True)
+    sphinx.connect('autodoc-skip-member', autodoc_skip_member_handler)
 
 
 # The following is used by sphinx.ext.linkcode to provide links to github

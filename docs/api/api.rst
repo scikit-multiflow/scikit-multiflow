@@ -17,6 +17,7 @@ Core
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    core.base.BaseEstimator
@@ -38,6 +39,7 @@ Data
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    data.base_stream.Stream
@@ -53,6 +55,7 @@ Stream Generators
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    data.AGRAWALGenerator
@@ -84,6 +87,7 @@ Anomaly detection methods
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    anomaly_detection.HalfSpaceTrees
@@ -99,6 +103,7 @@ Bayes methods
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    bayes.NaiveBayes
@@ -114,6 +119,7 @@ Lazy learning methods
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    lazy.KNNClassifier
@@ -132,6 +138,7 @@ Ensemble methods
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    meta.AccuracyWeightedEnsembleClassifier
@@ -167,6 +174,7 @@ Neural Networks
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    neural_networks.PerceptronMask
@@ -182,6 +190,7 @@ Prototype based methods
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
        prototype.RobustSoftLearningVectorQuantization
@@ -197,6 +206,7 @@ Rules based methods
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    rules.VeryFastDecisionRulesClassifier
@@ -212,6 +222,7 @@ Trees based methods
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    trees.HoeffdingTreeClassifier
@@ -235,6 +246,7 @@ Drift Detection
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    drift_detection.ADWIN
@@ -256,6 +268,7 @@ Evaluation
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    evaluation.EvaluateHoldout
@@ -273,6 +286,7 @@ Transform
 
 .. autosummary::
    :nosignatures:
+   :template: class.rst
    :toctree: generated
 
    transform.MissingValuesCleaner

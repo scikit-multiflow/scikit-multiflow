@@ -19,7 +19,7 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 
    .. code-block:: python
 
-      generator = AGRAWALGenerator()
+      >>> generator = AGRAWALGenerator()
 
 2. Get data from the stream
 
@@ -29,9 +29,9 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 
    .. code-block:: python
 
-      X, y = generator.next_sample()
-      print(X.shape, y.shape)
-      >>> (1, 9) (1,)
+      >>> X, y = generator.next_sample()
+      >>> print(X.shape, y.shape)
+      (1, 9) (1,)
 
 
    By default, ``next_sample()`` returns one sample, but we can pass an arbitrary number of samples
@@ -39,9 +39,9 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 
    .. code-block:: python
 
-      X, y = generator.next_sample(1000)
-      print(X.shape, y.shape)
-      >>> (1000, 9) (1000,)
+      >>> X, y = generator.next_sample(1000)
+      >>> print(X.shape, y.shape)
+      (1000, 9) (1000,)
 
 .. py:currentmodule:: skmultiflow.evaluation.evaluate_prequential
 
@@ -51,10 +51,10 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
    When working with streams, it is important to know if there is more data remaining. You can use
    ``has_more_samples()`` to query the Stream for this information.
 
-  .. code-block:: python
+   .. code-block:: python
 
-      generator.has_more_samples()
-      >>> True
+      >>> generator.has_more_samples()
+      True
 
 4. Restart the stream
 
@@ -62,26 +62,26 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 
    .. code-block:: python
 
-      generator.restart()
+      >>> generator.restart()
 
 
-5: Save the data into a csv file [Optional]
+5. Save the data into a csv file [Optional]
 
    There might be cases where we want to store the information obtained from a Stream generator.
    An easy way to do it is using ``numpy`` and ``pandas``. First, we concatenate the ``X`` and
    ``y`` arrays into a single ``np.array``. Then we create a ``DataFrame`` that is easy manipulate,
    for example if we want to name the features, pre-process the data, etc.
 
-  .. code-block:: python
+   .. code-block:: python
 
-      df = pd.DataFrame(np.hstack((X,np.array([y]).T)))
+      >>> df = pd.DataFrame(np.hstack((X,np.array([y]).T)))
 
 
-  Finally, to write the data into a csv:
+   Finally, to write the data into a csv:
 
-  .. code-block:: python
+   .. code-block:: python
 
-      df.to_csv("file.csv")
+      >>> df.to_csv("file.csv")
 
 
 
@@ -90,28 +90,28 @@ Here, we will use the :class:`AGRAWALGenerator` to exemplify how to use generato
 .. code-block:: python
    :linenos:
 
-   from skmultiflow.data import AGRAWALGenerator
-   import pandas as pd
-   import numpy as np
-
-   # 1. Instantiate the stream generator
-   generator = AGRAWALGenerator()
-
-   # 2. Get data from the stream
-   X, y = generator.next_sample()
-   print(X.shape, y.shape)
-   >>> (1, 9) (1,)
-
-   X, y = generator.next_sample(1000)
-   print(X.shape, y.shape)
-   >>> (1000, 9) (1000,)
-
-   # 3. Check if the stream has more data
-   generator.has_more_samples()
-   >>> True
-
-   # 4. Restart the stream
-   generator.restart()
-
-   # 5. Save data into a csv file [Optional]
-   df = pd.DataFrame(np.hstack((X,np.array([y]).T)))
+   >>> from skmultiflow.data import AGRAWALGenerator
+   >>> import pandas as pd
+   >>> import numpy as np
+   >>>
+   >>> # 1. Instantiate the stream generator
+   >>> generator = AGRAWALGenerator()
+   >>>
+   >>> # 2. Get data from the stream
+   >>> X, y = generator.next_sample()
+   >>> print(X.shape, y.shape)
+   >>> >>> (1, 9) (1,)
+   >>>
+   >>> X, y = generator.next_sample(1000)
+   >>> print(X.shape, y.shape)
+   >>> >>> (1000, 9) (1000,)
+   >>>
+   >>> # 3. Check if the stream has more data
+   >>> generator.has_more_samples()
+   >>> >>> True
+   >>>
+   >>> # 4. Restart the stream
+   >>> generator.restart()
+   >>>
+   >>> # 5. Save data into a csv file [Optional]
+   >>> df = pd.DataFrame(np.hstack((X,np.array([y]).T)))
