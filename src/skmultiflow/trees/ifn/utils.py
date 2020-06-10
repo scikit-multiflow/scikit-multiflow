@@ -35,13 +35,6 @@ def binary_search(array: list, left: int, right: int, value):
         # If element is present at the middle itself
         if (mid == 0 or value > array[mid - 1]) and array[mid] == value:
             return mid
-        # If element is smaller than mid, then it can only
-        # be present in left subarray
-        # elif array[mid] > value:
-        #     return binary_search(array, left, mid - 1, value)
-        # # Else the element can only be present in right subarray
-        # else:
-        #     return binary_search(array, mid + 1, right, value)
         elif value > array[mid]:
             return binary_search(array, mid + 1, right, value)
         else:
