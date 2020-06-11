@@ -60,7 +60,7 @@ class HalfSpaceTrees(BaseSKMObject, ClassifierMixin):
     --------
     >>> # Imports
     >>> from skmultiflow.data import AnomalySineGenerator
-    >>>from skmultiflow.anomaly_detection import HalfSpaceTrees
+    >>> from skmultiflow.anomaly_detection import HalfSpaceTrees
     >>> # Setup a data stream
     >>> stream = AnomalySineGenerator(random_state=1, n_samples=1000, n_anomalies=250)
     >>> # Setup Half-Space Trees estimator
