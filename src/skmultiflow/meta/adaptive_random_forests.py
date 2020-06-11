@@ -1,16 +1,15 @@
 from copy import deepcopy
 import math
+import itertools
 
 import numpy as np
-
-from sklearn.preprocessing import normalize
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.trees.arf_hoeffding_tree import ARFHoeffdingTreeClassifier
 from skmultiflow.metrics import ClassificationPerformanceEvaluator
-from skmultiflow.utils import get_dimensions, normalize_values_in_dict,check_random_state,\
+from skmultiflow.utils import get_dimensions, normalize_values_in_dict, check_random_state,\
     check_weights
 
 import warnings
@@ -37,8 +36,8 @@ def AdaptiveRandomForest(n_estimators=10,
                          nb_threshold=0,
                          nominal_attributes=None,
                          random_state=None):     # pragma: no cover
-    warnings.warn("’AdaptiveRandomForest’ has been renamed to ‘AdaptiveRandomForestClassifier’"
-                  " in v0.5.0.\nThe old name will be removed in v0.7.0", category=FutureWarning)
+    warnings.warn("’AdaptiveRandomForest’ has been renamed to ‘AdaptiveRandomForestClassifier’ "
+                  "in v0.5.0.\nThe old name will be removed in v0.7.0", category=FutureWarning)
     return AdaptiveRandomForestClassifier(n_estimators=n_estimators,
                                           max_features=max_features,
                                           disable_weighted_vote=disable_weighted_vote,
@@ -219,8 +218,8 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
                  disable_weighted_vote=False,
                  lambda_value=6,
                  performance_metric='acc',
-                 drift_detection_method: BaseDriftDetector = ADWIN(0.001),
-                 warning_detection_method: BaseDriftDetector = ADWIN(0.01),
+                 drift_detection_method: BaseDriftDetector=ADWIN(0.001),
+                 warning_detection_method: BaseDriftDetector=ADWIN(0.01),
                  max_byte_size=33554432,
                  memory_estimate_period=2000000,
                  grace_period=50,
@@ -286,7 +285,7 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
         y: numpy.ndarray of shape (n_samples)
             An array-like with the class labels of all samples in X.
 
-        classes: list, numpy.ndarray, optional (default=None)
+        classes: numpy.ndarray, list, optional (default=None)
             Array with all possible/known class labels. This is an optional parameter, except
             for the first partial_fit call where it is compulsory.
 
@@ -378,15 +377,30 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
         if self.ensemble is None:
             self._init_ensemble(X)
 
-        y_proba_mean = None
-        for i in range(self.n_estimators):
-            y_proba_current = self.ensemble[i].predict_proba(X)
-            if y_proba_mean is None:
-                y_proba_mean = y_proba_current
+        r, _ = get_dimensions(X)
+        y_proba = []
+        for i in range(r):
+            votes = deepcopy(self.get_votes_for_instance(X[i]))
+            if votes == {}:
+                # Estimator is empty, all classes equal, default to zero
+                y_proba.append([0])
             else:
-                y_proba_mean = y_proba_mean + (y_proba_current - y_proba_mean) / (i + 1)
-
-        return normalize(y_proba_mean, norm='l1')
+                if sum(votes.values()) != 0:
+                    votes = normalize_values_in_dict(votes)
+                if self.classes is not None:
+                    votes_array = np.zeros(int(max(self.classes)) + 1)
+                else:
+                    votes_array = np.zeros(int(max(votes.keys())) + 1)
+                for key, value in votes.items():
+                    votes_array[int(key)] = value
+                y_proba.append(votes_array)
+        # Set result as np.array
+        if self.classes is not None:
+            y_proba = np.asarray(y_proba)
+        else:
+            # Fill missing values related to unobserved classes to ensure we get a 2D array
+            y_proba = np.asarray(list(itertools.zip_longest(*y_proba, fillvalue=0.0))).T
+        return y_proba
 
     def reset(self):
         """Reset ARF."""
@@ -583,8 +597,8 @@ class ARFBaseLearner(BaseSKMObject):
                                                              self.warning_detection_method,
                                                              True)
                     # Update the warning detection object for the current object
-                    # (this effectively resets changes made to the object while
-                    # it was still a background learner).
+                    # (this effectively resets changes made to the object while it
+                    # was still a background learner).
                     self.warning_detection.reset()
 
             # Update the drift detection
@@ -598,9 +612,6 @@ class ARFBaseLearner(BaseSKMObject):
 
     def predict(self, X):
         return self.classifier.predict(X)
-
-    def predict_proba(self, X):
-        return self.classifier.predict_proba(X)
 
     def get_votes_for_instance(self, X):
         return self.classifier.get_votes_for_instance(X)
