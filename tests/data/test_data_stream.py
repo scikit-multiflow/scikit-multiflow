@@ -2,17 +2,17 @@ import os
 import numpy as np
 import pandas as pd
 
-import pytest
+import pytest   # noqa
 
 from skmultiflow.data.data_stream import DataStream
 
 
-def test_data_stream(test_path, package_path):
-    test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_stream.csv')
+def test_data_stream(test_path):
+    test_file = os.path.join(test_path, 'sea_stream_file.csv')
     raw_data = pd.read_csv(test_file)
     stream = DataStream(raw_data, name='Test')
 
-    assert stream.n_remaining_samples() == 40000
+    assert stream.n_remaining_samples() == 40
 
     expected_names = ['attrib1', 'attrib2', 'attrib3']
     assert stream.feature_names == expected_names
@@ -65,8 +65,8 @@ def test_data_stream(test_path, package_path):
     assert stream.get_info() == expected_info
 
 
-def test_data_stream_X_y(test_path, package_path):
-    test_file = os.path.join(package_path, 'src/skmultiflow/data/datasets/sea_stream.csv')
+def test_data_stream_X_y(test_path):
+    test_file = os.path.join(test_path, 'sea_stream_file.csv')
     raw_data = pd.read_csv(test_file)
     y = raw_data.iloc[:, -1:]
     X = raw_data.iloc[:, :-1]
@@ -74,7 +74,7 @@ def test_data_stream_X_y(test_path, package_path):
 
     assert stream._Y_is_defined
 
-    assert stream.n_remaining_samples() == 40000
+    assert stream.n_remaining_samples() == 40
 
     expected_names = ['attrib1', 'attrib2', 'attrib3']
     assert stream.feature_names == expected_names
@@ -120,6 +120,15 @@ def test_data_stream_X_y(test_path, package_path):
     assert stream.n_targets == np.array(y).ndim
 
     assert stream.n_features == X.shape[1]
+
+    # Ensure that the regression case is also covered
+    y = raw_data.iloc[:, -1:]
+    X = raw_data.iloc[:, :-1]
+    y = y.astype('float64')
+    stream = DataStream(X, y, name='Test')
+
+    assert stream.task_type == 'regression'
+    assert stream.get_data_info() == 'Test: 1 target(s)'
 
 
 def test_check_data():
