@@ -38,6 +38,7 @@ needs_sphinx = '2.0.1'
 # ones.
 extensions = ["sphinx.ext.autodoc",
               'numpydoc',
+              'sphinx.ext.mathjax',
               'sphinx.ext.intersphinx',
               'sphinx.ext.linkcode',
               'sphinx_copybutton'
@@ -45,7 +46,7 @@ extensions = ["sphinx.ext.autodoc",
 
 autosummary_generate = True   # = ["index"] to skip API
 
-# # # numpydoc options
+# numpydoc options
 numpydoc_attributes_as_param_list = True
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
@@ -65,6 +66,10 @@ def autodoc_skip_member_handler(app, what, name, obj, skip, options):
 
 # sphinx_copybutton options
 copybutton_prompt_text = ">>> "
+
+# mathjax path
+mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/" \
+               "2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
