@@ -162,6 +162,7 @@ Ensemble methods
    meta.OzaBaggingClassifier
    meta.OzaBaggingADWINClassifier
    meta.RegressorChain
+   meta.StreamingRandomPatchesClassifier
 
 Neural Networks
 ---------------
