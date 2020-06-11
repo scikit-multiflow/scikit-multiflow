@@ -106,14 +106,13 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
     >>> import numpy as np
     >>>
     >>> # Setup a data stream
-    >>> stream = RegressionGenerator(random_state=1)
+    >>> stream = RegressionGenerator(random_state=1, n_samples=200)
     >>>
     >>> # Setup the Hoeffding Tree Regressor
     >>> ht_reg = HoeffdingTreeRegressor()
     >>>
     >>> # Auxiliary variables to control loop and track performance
     >>> n_samples = 0
-    >>> correct_cnt = 0
     >>> max_samples = 200
     >>> y_pred = np.zeros(max_samples)
     >>> y_true = np.zeros(max_samples)

@@ -84,7 +84,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
     >>> import numpy as np
     >>>
     >>> # Setup a data stream
-    >>> stream = RegressionGenerator(random_state=1)
+    >>> stream = RegressionGenerator(random_state=1, n_samples=200)
     >>> # Prepare stream for use
     >>>
     >>> # Setup the Hoeffding Adaptive Tree Regressor
@@ -92,7 +92,6 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
     >>>
     >>> # Auxiliary variables to control loop and track performance
     >>> n_samples = 0
-    >>> correct_cnt = 0
     >>> max_samples = 200
     >>> y_pred = np.zeros(max_samples)
     >>> y_true = np.zeros(max_samples)

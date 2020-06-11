@@ -487,10 +487,6 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
         if self.max_features > n:
             self.max_features = n
 
-    @staticmethod
-    def is_randomizable():
-        return True
-
 
 class ARFBaseLearner(BaseSKMObject):
     """ARF Base Learner class.

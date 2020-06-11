@@ -79,14 +79,13 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
     >>>
     >>> # Setup a data stream
     >>> n_targets = 3
-    >>> stream = RegressionGenerator(n_targets=n_targets, random_state=1)
+    >>> stream = RegressionGenerator(n_targets=n_targets, random_state=1, n_samples=200)
     >>>
     >>> # Setup the Stacked Single-target Hoeffding Tree Regressor
     >>> sst_ht = StackedSingleTargetHoeffdingTreeRegressor()
     >>>
     >>> # Auxiliary variables to control loop and track performance
     >>> n_samples = 0
-    >>> correct_cnt = 0
     >>> max_samples = 200
     >>> y_pred = np.zeros((max_samples, n_targets))
     >>> y_true = np.zeros((max_samples, n_targets))
