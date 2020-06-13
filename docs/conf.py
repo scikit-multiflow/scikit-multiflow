@@ -182,6 +182,8 @@ html_show_copyright = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'scikit-multiflowdoc'
 
+# The empty string is equivalent to '%b %d, %Y'.
+html_last_updated_fmt = ""
 
 # -- Options for LaTeX output ---------------------------------------------
 
