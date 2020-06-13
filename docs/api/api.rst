@@ -59,6 +59,7 @@ Stream Generators
    :toctree: generated
 
    data.AGRAWALGenerator
+   data.AnomalySineGenerator
    data.HyperplaneGenerator
    data.LEDGenerator
    data.LEDGeneratorDrift
