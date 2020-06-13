@@ -1,10 +1,8 @@
 .. currentmodule:: skmultiflow
 .. include:: _labels.rst
 
-Version 0.5.dev0
+Version 0.5.0
 ----------------
-
-**In development**
 
 - |Feature| Add :class:`drift_detection.HDDM_A`, a drift detection method based
   on the Hoeffding's bounds with moving average-test. Contributor:
@@ -14,6 +12,10 @@ Version 0.5.dev0
   on the Hoeffding's bounds with moving weighted-average-test. Contributor:
   `jiahy <https://github.com/jiahy0825>`_
   (`#161 <https://github.com/scikit-multiflow/scikit-multiflow/pull/161>`_).
+- |Feature| Add the Kolmogorov-Smirnov Windowing
+  (:class:`drift_detection.KSWIN`) concept drift detector. Contributor:
+  `ChristophRaab <https://github.com/ChristophRaab>`_
+  (`#234 <https://github.com/scikit-multiflow/scikit-multiflow/pull/234>`_).
 - |Feature| Add :class:`transform.WindowedMinmaxScaler`, a transformer to
   perform feature scaling. Transformation is performed considering samples in a
   sliding window.. Contributor: `jmrozanec <https://github.com/jmrozanec>`_
@@ -23,23 +25,52 @@ Version 0.5.dev0
   Transformation is performed considering samples in a sliding window.
   Contributor: `jmrozanec <https://github.com/jmrozanec>`_
   (`#184 <https://github.com/scikit-multiflow/scikit-multiflow/pull/184>`_).
+- |Feature| Add :class:`meta.AdaptiveRandomForestRegressor`. This
+  implementation is slightly different from the original algorithm. The
+  **Hoeffding Tree Regressor** is used as base learner, instead of the
+  **FIMT-DD**. It also adds a new strategy to monitor the incoming data and
+  check for concept drifts. For more information, see the notes in the
+  documentation of this method.
+- |Feature| Add the Streaming Random Patches ensemble method
+  (:class:`meta.StreamingRandomPatchesClassifier`).
 - |Feature| Add :class:`lazy.KNNRegressor`, a nearest-neighbor-based method
   for regression.
+- |Feature| Add support for delayed labels and evaluations. Add
+  :class:`data.TemporalDataStream` to handle temporal data in a stream.
+  Add :class:`evaluation.EvaluatePrequentialDelayed` evaluator. Contributor:
+  `fabriciojoc <https://github.com/fabriciojoc>`_
+  (`#222 <https://github.com/scikit-multiflow/scikit-multiflow/pull/222>`_).
+- |Feature| Add sine anomaly data generator
+  (:class:`data.AnomalySineGenerator`).
 - |Efficiency| Refactored classification performance evaluators, implemented
   in Cython for efficiency. Add support for multi-class precision, recall,
-  F1-score, and geometric mean.
+  F1-score, and geometric mean. New estimators are ~12x faster for binary data,
+  ~52x faster for multi-class data and ~11x faster for multi-label data.
+- |Efficiency| Enhance the strategy to deal with categorical attributes in
+  Hoeffding Trees. Previously, complexity was :math:`O(c)` per update, being
+  :math:`c` the number of categories. Now, by using hash structures,
+  complexity is :math:`O(1)`.
+- |Efficiency| Remove datasets files from the package. Data sets remain
+  available in a dedicated
+  `repository <https://github.com/scikit-multiflow/streaming-datasets>`_. This
+  results in file size reductions of ~35x for source distribution size and ~32x
+  for wheels.
 - |Enhancement| Add ``bootstrap_sampling`` option to the
   :class:`trees.HoeffdingAdaptiveTreeClassifier`.
-- |Enhancement| Improvements on data loading methods.
-   - Check data consistency
-   - Raise error if non-numeric data types are used
-   - Raise error if there are missing values
-   - Add option to disable missing values error
+- |Enhancement| Improvements on data loading methods: Check data consistency.
+  Raise error if non-numeric data types are used. Raise error if there are
+  missing values. Add option to disable missing values error.
 - |Enhancement| Enable the ``describe_subtree`` method in regression variants
   of the Hoeffding Tree for single-target and multi-target.
-- |Enhancement| Add usage example to documentation of multiple methods.
+- |Enhancement| Add example code to documentation of multiple methods.
+- |Enhancement| Streamlines the usage of attribute observers in tree-based
+  methods for regression. Add a new and improved observer that works with both
+  single-target and multi-target tasks. The enhanced
+  ``NumericAttributeRegressionObserver`` also adds support for instance
+  weighting.
 - |FIX| Fix index out of range for the classification functions in the
-  ``MIXEDGenerator``. Contributor: `ingako <https://github.com/ingako>`_.
+  :class:`data.MIXEDGenerator`. Contributor:
+  `ingako <https://github.com/ingako>`_.
 - |FIX| Fix bug in IntraClusterVarianceReduction split criterion.
 - |FIX| Fix bug in the ``predict_proba`` method of the
   :class:`meta.AdaptiveRandomForestClassifier` triggered when ``classes``
@@ -52,12 +83,35 @@ Version 0.5.dev0
 - |FIX| Add check for zero sum error to avoid division by zero error in
   :class:`bayes.NaiveBayes`. Contributor: `Fiona (fwille)
   <https://github.com/fwille>`_.
-- |FIX| Update :class:`meta.LearnPPNSEClassifier`
-   - Fix bug that resulted in an error when not all classes are observed by
-     any of the ensemble members
-   - Add an early stop mechanism when adding members of the ensemble if
-     classification error reaches zero, making the normalization step
-     ill-defined.
+- |FIX| Fix bug in :class:`meta.LearnPPNSEClassifier` that resulted in an error
+  when not all classes are observed by any of the ensemble members. Add an
+  early stop mechanism when adding members of the ensemble if classification
+  error reaches zero, making the normalization step ill-defined.
+- |FIX| Fix minor bug in the computation of the incremental variance in
+  :class:`drift_detection.ADWIN`. Bug had no significant impact on methods
+  relying on ADWIN to detect drift.
+- |FIX| Fix bug in methods that failed when ``predict`` was called before the
+  first ``partial_fit``/``fit``. Impacted methods are:
+  :class:`lazy.KNNClassifier`, :class:`meta.OnlineAdaC2Classifier`,
+  :class:`meta.OnlineBoostingClassifier`,
+  :class:`meta.OnlineUnderOverBaggingClassifier`,
+  :class:`meta.OnlineSMOTEBaggingClassifier`,
+  :class:`meta.OnlineCSB2Classifier` and
+  :class:`anomaly_detection.HalfSpaceTrees`.
+- |FIX| Fix tree growth and update in
+  :class:`trees.HoeffdingAdaptiveTreeClassifier` and
+  :class:`trees.HoeffdingAdaptiveTreeRegressor`. Bug was affecting the vote
+  aggregation in both methods.
+- |FIX| Fix bug in evaluators that resulted in a ``runtime_error`` when
+  ``model_size`` or ``running_time`` appear first in the ``metrics`` option.
+- |FIX| :class:`meta.LeveragingBaggingClassifier`. Fix bug that resulted in
+  unreachable code during initialization when ``enable_code_matrix`` is set.
+  Fix bug when ``enable_code_matrix`` options is set.
+- |FIX| Re-enable weighted vote in
+  :class:`meta.AdaptiveRandomForestClassifier`. This default behavior was
+  mistakenly suppressed. This bug impacted the variants of the algorithm that
+  use *majority class* and *naive bayes* leaf prediction mechanisms.
+- |FIX| Minor bug fixes and other improvements.
 - |API| rename ``weight`` to ``sample_weight`` in
   :class:`meta.OnlineRUSBoostClassifier` and
   :class:`rules.VeryFastDecisionRulesClassifier`. Contributor: `Ben Auffarth
@@ -66,6 +120,9 @@ Version 0.5.dev0
   :class:`data.base_stream.Stream` class. Now ``Stream`` objects are ready to
   use after instantiation. A ``prepare_for_use`` stub will be kept for 2 minor
   releases for backward compatibility and will be removed in v0.7.0.
+- |API| ``n_features`` is no longer a required parameter for
+  :class:`anomaly_detection.HalfSpaceTrees`. ``n_features`` is now obtained
+  from the data as it is passed for training.
 - |API| Enforce naming convention for learning methods. Old names will remain
   available for 2 minor releases for backward compatibility and will be
   removed in v0.7.0. Renamed methods are:
