@@ -149,21 +149,11 @@ class InfluentialStream(Stream):
         """
         if y_true is not None:
             if len(self.cache) == 0 or (y_pred == self.cache[0][0] and x_features == self.cache[0][1]):
-                for i in range(len(self.streams)):
-                    if self.last_stream == i:
-                        if y_true == y_pred:
-                            self.weight[i] = self.weight[i] * self.self_fulfilling
-                        else:
-                            self.weight[i] = self.weight[i] * self.self_defeating
+                self.receive_feedback_update(y_true, y_pred)
                 if len(self.cache) != 0:
                     self.cache.remove(self.cache[0])
                     while len(self.cache[0]) == 3:
-                        for i in range(len(self.streams)):
-                            if self.last_stream == i:
-                                if y_true == y_pred:
-                                    self.weight[i] = self.weight[i] * self.self_fulfilling
-                                else:
-                                    self.weight[i] = self.weight[i] * self.self_defeating
+                        self.receive_feedback_update(y_true, y_pred)
                         self.cache.remove(self.cache[0])
             else:
                 wait_for_feedback = [y_pred, x_features, y_true]
@@ -171,6 +161,14 @@ class InfluentialStream(Stream):
         else:
             no_label = [y_pred, x_features]
             self.cache.append(no_label)
+
+    def receive_feedback_update(self, y_true, y_pred):
+        for i in range(len(self.streams)):
+            if self.last_stream == i:
+                if y_true == y_pred:
+                    self.weight[i] = self.weight[i] * self.self_fulfilling
+                else:
+                    self.weight[i] = self.weight[i] * self.self_defeating
 
     def restart(self):
         self._random_state = check_random_state(self.random_state)

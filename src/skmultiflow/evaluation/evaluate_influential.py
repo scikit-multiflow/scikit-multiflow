@@ -1,10 +1,10 @@
 import os
 import warnings
 import re
+from math import floor
 from timeit import default_timer as timer
-
 from numpy import unique
-
+import operator
 from skmultiflow.evaluation.base_evaluator import StreamEvaluator
 from skmultiflow.utils import constants
 
@@ -13,8 +13,10 @@ class EvaluateInfluential(StreamEvaluator):
     def __init__(self,
                  n_wait=200,
                  max_samples=100000,
+                 time_windows=1,
                  batch_size=1,
                  pretrain_size=200,
+                 intervals=2,
                  max_time=float("inf"),
                  metrics=None,
                  output_file=None,
@@ -26,12 +28,16 @@ class EvaluateInfluential(StreamEvaluator):
         self._method = 'prequential'
         self.n_wait = n_wait
         self.max_samples = max_samples
+        self.time_windows = time_windows
+        self.intervals = intervals
         self.pretrain_size = pretrain_size
         self.batch_size = batch_size
         self.max_time = max_time
         self.output_file = output_file
         self.show_plot = show_plot
         self.data_points_for_classification = data_points_for_classification
+        self.window_size = self.max_samples / time_windows
+        self.distribution_table = []
 
         if not self.data_points_for_classification:
             if metrics is None:
@@ -120,6 +126,8 @@ class EvaluateInfluential(StreamEvaluator):
         if actual_max_samples == -1 or actual_max_samples > self.max_samples:
             actual_max_samples = self.max_samples
 
+        data_cache = []
+
         first_run = True
         if self.pretrain_size > 0:
             print('Pre-training on {} sample(s).'.format(self.pretrain_size))
@@ -145,13 +153,12 @@ class EvaluateInfluential(StreamEvaluator):
             first_run = False
 
         update_count = 0
+        window_count = 0
         print('Evaluating...')
         while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
             try:
                 X, y = self.stream.next_sample(self.batch_size)
-                # print("This is the next sample: ", X, y)
-
                 if X is not None and y is not None:
                     # Test
                     prediction = [[] for _ in range(self.n_models)]
@@ -171,14 +178,26 @@ class EvaluateInfluential(StreamEvaluator):
                             self.mean_eval_measurements[j].add_result(y[i], prediction[j][i])
                             self.current_eval_measurements[j].add_result(y[i], prediction[j][i])
                             self.stream.receive_feedback(y[i], prediction[j][i], X[i])
-                            # self.stream.check_weight()
+                            window_count += 1
+                            data_instance = [y[i], prediction[j][i], X[i]]
+                            data_cache.append(data_instance)
+                            if window_count == self.window_size:
+                                intervals = self.create_intervals(data_cache)
+                                self.distribution_table = [
+                                    [[[0] * 4 for _ in range(self.intervals)] for _ in range(self.stream.n_features)]
+                                    for _ in
+                                    range(self.time_windows)]
+                                self.count_update_first(data_cache, intervals, time_window=0)
+                            if window_count > self.window_size:
+                                time_window = floor(window_count / self.window_size)
+                                self.count_update(data_instance, intervals, time_window)
                     self._check_progress(actual_max_samples)
 
                     # Train
                     if first_run:
                         for i in range(self.n_models):
                             if self._task_type != constants.REGRESSION and \
-                               self._task_type != constants.MULTI_TARGET_REGRESSION:
+                                    self._task_type != constants.MULTI_TARGET_REGRESSION:
                                 # Accounts for the moment of training beginning
                                 self.running_time_measurements[i].compute_training_time_begin()
                                 self.model[i].partial_fit(X, y, self.stream.target_values)
@@ -226,6 +245,62 @@ class EvaluateInfluential(StreamEvaluator):
             self.stream.restart()
 
         return self.model
+
+    def create_intervals(self, data):
+        feature_data = [item[2] for item in data]
+        maximum = list(map(max, zip(*feature_data)))
+        minimum = list(map(min, zip(*feature_data)))
+        min_max = list(map(operator.sub, maximum, minimum))
+        interval_size = [feature / self.intervals for feature in min_max]
+        feature_intervals = [[0] * self.intervals for _ in range(self.stream.n_features)]
+        for feature in range(self.stream.n_features):
+            for interval in range(self.intervals):
+                feature_intervals[feature][interval] = minimum[feature] + (interval + 1) * interval_size[feature]
+        return feature_intervals
+
+    def count_update_first(self, data_cache, intervals, time_window):
+        # data_instance = [y[i], prediction[j][i], X[i]]
+        # order of distribution table = tn, fp, fn, tp
+        for data_instance in data_cache:
+            if data_instance[0] == 0 and data_instance[1] == 0:
+                # true negative
+                self.count_update_helper(data_instance, intervals, time_window, cf=0)
+            elif data_instance[0] == 0 and data_instance[1] == 1:
+                # false positive
+                self.count_update_helper(data_instance, intervals, time_window, cf=1)
+            elif data_instance[0] == 1 and data_instance[1] == 0:
+                # false negative
+                self.count_update_helper(data_instance, intervals, time_window, cf=2)
+            elif data_instance[0] == 1 and data_instance[1] == 1:
+                # true positive
+                self.count_update_helper(data_instance, intervals, time_window, cf=3)
+
+    def count_update(self, data_instance, intervals, time_window):
+        # data_instance = [y[i], prediction[j][i], X[i]]
+        # order of distribution table = tn, fp, fn, tp
+        if data_instance[0] == 0 and data_instance[1] == 0:
+            # true negative
+            self.count_update_helper(data_instance, intervals, time_window, cf=0)
+        elif data_instance[0] == 0 and data_instance[1] == 1:
+            # false positive
+            self.count_update_helper(data_instance, intervals, time_window, cf=1)
+        elif data_instance[0] == 1 and data_instance[1] == 0:
+            # false negative
+            self.count_update_helper(data_instance, intervals, time_window, cf=2)
+        elif data_instance[0] == 1 and data_instance[1] == 1:
+            # true positive
+            self.count_update_helper(data_instance, intervals, time_window, cf=3)
+
+    def count_update_helper(self, data_instance, intervals, time_window, cf):
+        for feature in range(self.stream.n_features):
+            check = 0
+            for interval in range(self.intervals):
+                if data_instance[2][feature] < intervals[feature][interval]:
+                    check = 1
+                    self.distribution_table[time_window][feature][interval][cf] += 1
+                    break
+            if check != 1:
+                self.distribution_table[time_window][feature][self.intervals - 1][cf] += 1
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
         """ Partially fit all the models on the given data.

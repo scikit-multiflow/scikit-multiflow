@@ -1,3 +1,5 @@
+import operator
+
 from skmultiflow.data import influential_stream
 from skmultiflow.evaluation import evaluate_influential
 from skmultiflow.trees import HoeffdingTreeClassifier
@@ -14,13 +16,25 @@ def demo():
     """
 
     stream = influential_stream.InfluentialStream(self_defeating=0.99, self_fulfilling=1.01)
+    '''data = stream.next_sample(2)
+    print("data ", data)
+    maximum = list(map(max, zip(*data[0])))
+    print("max: ", maximum)
+    minimum = list(map(min, zip(*data[0])))
+    print("min: ", minimum)
+    interval = list(map(operator.sub, maximum, minimum))
+    print(interval)
+    print(stream.n_features)'''
+
     ht = HoeffdingTreeClassifier()
 
     # 3. Setup the evaluator
     evaluator = evaluate_influential.EvaluateInfluential(show_plot=True,
                                                          pretrain_size=200,
-                                                         max_samples=2000,
-                                                         batch_size=3,
+                                                         max_samples=20000,
+                                                         batch_size=1,
+                                                         time_windows=2,
+                                                         intervals=4,
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=True)
 
