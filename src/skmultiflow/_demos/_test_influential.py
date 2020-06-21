@@ -16,15 +16,6 @@ def demo():
     """
 
     stream = influential_stream.InfluentialStream(self_defeating=0.99, self_fulfilling=1.01)
-    '''data = stream.next_sample(2)
-    print("data ", data)
-    maximum = list(map(max, zip(*data[0])))
-    print("max: ", maximum)
-    minimum = list(map(min, zip(*data[0])))
-    print("min: ", minimum)
-    interval = list(map(operator.sub, maximum, minimum))
-    print(interval)
-    print(stream.n_features)'''
 
     ht = HoeffdingTreeClassifier()
 

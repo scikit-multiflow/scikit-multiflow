@@ -3,7 +3,7 @@ import warnings
 import re
 from math import floor
 from timeit import default_timer as timer
-from numpy import unique
+import numpy as np
 import operator
 from skmultiflow.evaluation.base_evaluator import StreamEvaluator
 from skmultiflow.utils import constants
@@ -142,7 +142,7 @@ class EvaluateInfluential(StreamEvaluator):
                     self.running_time_measurements[i].compute_training_time_end()
                 elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
                     self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, classes=unique(self.stream.target_values))
+                    self.model[i].partial_fit(X=X, y=y, classes=np.unique(self.stream.target_values))
                     self.running_time_measurements[i].compute_training_time_end()
                 else:
                     self.running_time_measurements[i].compute_training_time_begin()
@@ -248,14 +248,9 @@ class EvaluateInfluential(StreamEvaluator):
 
     def create_intervals(self, data):
         feature_data = [item[2] for item in data]
-        maximum = list(map(max, zip(*feature_data)))
-        minimum = list(map(min, zip(*feature_data)))
-        min_max = list(map(operator.sub, maximum, minimum))
-        interval_size = [feature / self.intervals for feature in min_max]
-        feature_intervals = [[0] * self.intervals for _ in range(self.stream.n_features)]
-        for feature in range(self.stream.n_features):
-            for interval in range(self.intervals):
-                feature_intervals[feature][interval] = minimum[feature] + (interval + 1) * interval_size[feature]
+        percentile_steps = 100/self.intervals
+        percentile_values = list(np.arange(percentile_steps, 101, percentile_steps))
+        feature_intervals = list(map(lambda feature: np.percentile(feature, percentile_values), zip(*feature_data)))
         return feature_intervals
 
     def count_update_first(self, data_cache, intervals, time_window):
