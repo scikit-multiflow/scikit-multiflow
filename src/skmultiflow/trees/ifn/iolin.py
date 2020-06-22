@@ -14,7 +14,7 @@ from sklearn.utils.validation import check_X_y
 
 from skmultiflow.data import SEAGenerator
 from skmultiflow.trees.ifn.meta_learning import MetaLearning
-from skmultiflow.trees.ifn import ifn_utils
+from skmultiflow.trees.ifn import ifn_utils as utils
 from skmultiflow.trees.ifn.ifn_network import HiddenLayer
 
 
@@ -307,14 +307,14 @@ class IncrementalOnlineNetwork(ABC):
         for node in last_layer_nodes:
             if node.index in significant_nodes_indexes:
                 if is_continuous:
-                    ifn_utils.convert_numeric_values(chosen_split_points=self.classifier.sec_att_split_points,
+                    utils.convert_numeric_values(chosen_split_points=self.classifier.sec_att_split_points,
                                                      chosen_attribute=index_of_sec_best_att,
                                                      partial_X=node.partial_X)
 
                 unique_values = np.unique(list(node.partial_X[:, index_of_sec_best_att]))
 
                 for i in unique_values:  # create nodes for each unique value
-                    attribute_node = ifn_utils.create_attribute_node(partial_X=node.partial_X,
+                    attribute_node = utils.create_attribute_node(partial_X=node.partial_X,
                                                                      partial_y=node.partial_y,
                                                                      chosen_attribute_index=index_of_sec_best_att,
                                                                      attribute_value=i,
@@ -355,7 +355,7 @@ class IncrementalOnlineNetwork(ABC):
         chosen_attributes = set(chosen_attributes)
         attributes_indexes = list(range(0, len(training_window_X[0])))
 
-        columns_type = ifn_utils.get_columns_type(training_window_X_df)
+        columns_type = utils.get_columns_type(training_window_X_df)
 
         remaining_attributes = set(attributes_indexes) - set(chosen_attributes)
         remaining_attributes = list(remaining_attributes)
@@ -383,7 +383,7 @@ class IncrementalOnlineNetwork(ABC):
 
                 if attributes_mi_per_node > 0:
                     if is_continuous:
-                        ifn_utils.convert_numeric_values(
+                        utils.convert_numeric_values(
                             chosen_split_points=self.classifier.split_points[global_chosen_attribute],
                             chosen_attribute=global_chosen_attribute,
                             partial_X=node.partial_X)
@@ -393,7 +393,7 @@ class IncrementalOnlineNetwork(ABC):
                     unique_values = np.unique(attribute_data_in_node)
                     prev_node = node.index
                     for i in unique_values:
-                        attribute_node = ifn_utils.create_attribute_node(partial_X=partial_X,
+                        attribute_node = utils.create_attribute_node(partial_X=partial_X,
                                                                          partial_y=partial_y,
                                                                          chosen_attribute_index=global_chosen_attribute,
                                                                          attribute_value=i,
@@ -502,12 +502,12 @@ class IncrementalOnlineNetwork(ABC):
             for node in curr_layer.nodes:
                 if is_first_layer:
                     if curr_layer.is_continuous and not converted:
-                        ifn_utils.convert_numeric_values(chosen_split_points=curr_layer.split_points,
+                        utils.convert_numeric_values(chosen_split_points=curr_layer.split_points,
                                                          chosen_attribute=curr_layer.index,
                                                          partial_X=training_window_X_copy)
                         converted = True
 
-                    partial_X, partial_y = ifn_utils.drop_records(X=training_window_X_copy,
+                    partial_X, partial_y = utils.drop_records(X=training_window_X_copy,
                                                                   y=training_window_y_copy,
                                                                   attribute_index=curr_layer.index,
                                                                   value=node.attribute_value)
@@ -519,12 +519,12 @@ class IncrementalOnlineNetwork(ABC):
                     X = nodes_data[node.prev_node][0]
                     y = nodes_data[node.prev_node][1]
                     if curr_layer.is_continuous and not converted:
-                        ifn_utils.convert_numeric_values(chosen_split_points=curr_layer.split_points,
+                        utils.convert_numeric_values(chosen_split_points=curr_layer.split_points,
                                                          chosen_attribute=curr_layer.index,
                                                          partial_X=X)
                         converted = True
 
-                    partial_X, partial_y = ifn_utils.drop_records(X=X,
+                    partial_X, partial_y = utils.drop_records(X=X,
                                                                   y=y,
                                                                   attribute_index=curr_layer.index,
                                                                   value=node.attribute_value)

@@ -7,7 +7,7 @@ alpha = 0.99
 
 def test_pure_multiple(tmpdir):
     dir = tmpdir.mkdir("tmpPureMultiple")
-    ifn = IfnClassifier(alpha)
+    ifn = IfnClassifier(['float64', 'float64', 'float64'], alpha)
     stream_generator = SEAGenerator(random_state=23)
     pure_multiple = PureMultiple(ifn, dir, n_min=0, n_max=200, Pe=0.7, data_stream_generator=stream_generator)
     last_model = pure_multiple.generate()

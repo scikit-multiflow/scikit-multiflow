@@ -8,7 +8,7 @@ alpha = 0.99
 
 def test_regenerative(tmpdir):
     dir = tmpdir.mkdir("tmpOLIN")
-    ifn = IfnClassifier(alpha)
+    ifn = IfnClassifier(['float64', 'float64', 'float64'], alpha)
     stream_generator = SEAGenerator(random_state=23)
     regenerative = OnlineNetworkRegenerative(ifn, dir, n_min=0, n_max=300, Pe=0.7,
                                              data_stream_generator=stream_generator)

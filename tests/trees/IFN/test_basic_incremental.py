@@ -7,7 +7,7 @@ alpha = 0.99
 
 def test_basic_incremental(tmpdir):
     dir = tmpdir.mkdir("tmpBasicIncremental")
-    ifn = IfnClassifier(alpha)
+    ifn = IfnClassifier(['float64', 'float64', 'float64'], alpha)
     stream_generator = SEAGenerator(random_state=23)
     basic_incremental = BasicIncremental(ifn, dir, n_min=0, n_max=300, Pe=0.7, data_stream_generator=stream_generator)
     last_model = basic_incremental.generate()

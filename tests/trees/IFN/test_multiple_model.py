@@ -8,7 +8,7 @@ alpha = 0.99
 
 def test_multiple_model(tmpdir):
     dir = tmpdir.mkdir("tmpMultipleModel")
-    ifn = IfnClassifier(alpha)
+    ifn = IfnClassifier(['float64', 'float64', 'float64'], alpha)
     stream_generator = SEAGenerator(random_state=23)
     multiple_model = MultipleModel(ifn, dir, n_min=0, n_max=200, Pe=0.7, data_stream_generator=stream_generator)
     last_model = multiple_model.generate()
