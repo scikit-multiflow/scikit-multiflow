@@ -185,8 +185,7 @@ class EvaluateInfluential(StreamEvaluator):
                                 intervals = self.create_intervals(data_cache)
                                 self.distribution_table = [
                                     [[[0] * 4 for _ in range(self.intervals)] for _ in range(self.stream.n_features)]
-                                    for _ in
-                                    range(self.time_windows)]
+                                    for _ in range(self.time_windows)]
                                 self.count_update_first(data_cache, intervals, time_window=0)
                             if window_count > self.window_size:
                                 time_window = floor(window_count / self.window_size)
@@ -293,13 +292,13 @@ class EvaluateInfluential(StreamEvaluator):
 
     def count_update_helper(self, data_instance, intervals, time_window, cf):
         for feature in range(self.stream.n_features):
-            check = 0
+            check = False
             for interval in range(self.intervals):
                 if data_instance[2][feature] < intervals[feature][interval]:
                     check = 1
                     self.distribution_table[time_window][feature][interval][cf] += 1
                     break
-            if check != 1:
+            if not check:
                 self.distribution_table[time_window][feature][self.intervals - 1][cf] += 1
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):

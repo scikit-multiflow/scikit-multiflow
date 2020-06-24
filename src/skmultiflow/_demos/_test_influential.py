@@ -15,17 +15,17 @@ def demo():
     :return:
     """
 
-    stream = influential_stream.InfluentialStream(self_defeating=0.99, self_fulfilling=1.01)
+    stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1)
 
     ht = HoeffdingTreeClassifier()
 
     # 3. Setup the evaluator
-    evaluator = evaluate_influential.EvaluateInfluential(show_plot=True,
+    evaluator = evaluate_influential.EvaluateInfluential(show_plot=False,
                                                          pretrain_size=200,
                                                          max_samples=20000,
                                                          batch_size=1,
-                                                         time_windows=2,
-                                                         intervals=4,
+                                                         n_time_windows=4,
+                                                         n_intervals=4,
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=True)
 

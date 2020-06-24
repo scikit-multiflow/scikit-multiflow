@@ -13,10 +13,10 @@ class EvaluateInfluential(StreamEvaluator):
     def __init__(self,
                  n_wait=200,
                  max_samples=100000,
-                 time_windows=1,
+                 n_time_windows=1,
                  batch_size=1,
                  pretrain_size=200,
-                 intervals=2,
+                 n_intervals=2,
                  max_time=float("inf"),
                  metrics=None,
                  output_file=None,
@@ -25,19 +25,21 @@ class EvaluateInfluential(StreamEvaluator):
                  data_points_for_classification=False):
 
         super().__init__()
-        self._method = 'prequential'
+        self._method = 'Influential'
         self.n_wait = n_wait
         self.max_samples = max_samples
-        self.time_windows = time_windows
-        self.intervals = intervals
+        self.n_time_windows = n_time_windows
+        self.n_intervals = n_intervals
         self.pretrain_size = pretrain_size
         self.batch_size = batch_size
         self.max_time = max_time
         self.output_file = output_file
         self.show_plot = show_plot
         self.data_points_for_classification = data_points_for_classification
-        self.window_size = self.max_samples / time_windows
+        self.window_size = self.max_samples / self.n_time_windows - self.pretrain_size
         self.distribution_table = []
+        self.categorical_features = []
+        self.numerical_features = []
 
         if not self.data_points_for_classification:
             if metrics is None:
@@ -154,6 +156,7 @@ class EvaluateInfluential(StreamEvaluator):
 
         update_count = 0
         window_count = 0
+        interval_borders = []
         print('Evaluating...')
         while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
@@ -182,15 +185,15 @@ class EvaluateInfluential(StreamEvaluator):
                             data_instance = [y[i], prediction[j][i], X[i]]
                             data_cache.append(data_instance)
                             if window_count == self.window_size:
-                                intervals = self.create_intervals(data_cache)
-                                self.distribution_table = [
-                                    [[[0] * 4 for _ in range(self.intervals)] for _ in range(self.stream.n_features)]
-                                    for _ in
-                                    range(self.time_windows)]
-                                self.count_update_first(data_cache, intervals, time_window=0)
-                            if window_count > self.window_size:
-                                time_window = floor(window_count / self.window_size)
-                                self.count_update(data_instance, intervals, time_window)
+                                feature_data = [item[2] for item in data_cache]
+                                interval_borders = self.create_intervals(feature_data)
+                                self.init_table(feature_data, interval_borders)
+                                self.count_update(data_cache, interval_borders, time_window=0)
+                                data_cache = []
+                            if window_count > self.window_size and window_count % self.window_size == 0:
+                                time_window = int(window_count / self.window_size - 1)
+                                self.count_update(data_cache, interval_borders, time_window)
+                                data_cache = []
                     self._check_progress(actual_max_samples)
 
                     # Train
@@ -233,6 +236,10 @@ class EvaluateInfluential(StreamEvaluator):
                     self._update_metrics()
                 break
 
+        print("distribution table: ", self.distribution_table)
+        # self.distribution_table[0][0][0][0] = 5
+        # print("distribution table: ", self.distribution_table)
+
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
 
@@ -246,56 +253,72 @@ class EvaluateInfluential(StreamEvaluator):
 
         return self.model
 
-    def create_intervals(self, data):
-        feature_data = [item[2] for item in data]
-        percentile_steps = 100/self.intervals
+    def create_intervals(self, feature_data):
+        percentile_steps = 100 / self.n_intervals
         percentile_values = list(np.arange(percentile_steps, 101, percentile_steps))
-        feature_intervals = list(map(lambda feature: np.percentile(feature, percentile_values), zip(*feature_data)))
-        return feature_intervals
+        interval_borders = list(map(lambda feature: np.percentile(feature, percentile_values).tolist(),
+                                    zip(*feature_data)))
+        print("initial intervals percentiles: ", interval_borders)
+        return interval_borders
 
-    def count_update_first(self, data_cache, intervals, time_window):
+    def init_table(self, feature_data, interval_borders):
+        # get unique values per feature
+        unique_values_per_feature = list(map(set, zip(*feature_data)))
+        idx = 0
+        for x in unique_values_per_feature:
+            if len(x) < 25:
+                self.categorical_features.append(idx)
+            else:
+                self.numerical_features.append(idx)
+            idx += 1
+        # self.distribution_table = [[[[0] * 4] * self.n_intervals] * self.stream.n_features] * self.n_time_windows
+        self.distribution_table = [[[[0] * 4 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
+                                   for _ in range(self.n_time_windows)]
+        # remove intervals for categorical values:
+        for time in range(self.n_time_windows):
+            for categorical in self.categorical_features:
+                self.distribution_table[time][categorical] = [0, 0, 0, 0]
+                interval_borders[categorical] = [0, 0, 0, 0]
+        print("initialized distribution table: ", self.distribution_table)
+
+    def count_update(self, data_cache, interval_borders, time_window):
         # data_instance = [y[i], prediction[j][i], X[i]]
         # order of distribution table = tn, fp, fn, tp
         for data_instance in data_cache:
-            if data_instance[0] == 0 and data_instance[1] == 0:
+            true_label = data_instance[0]
+            prediction = data_instance[1]
+            if true_label == 0 and prediction == 0:
                 # true negative
-                self.count_update_helper(data_instance, intervals, time_window, cf=0)
-            elif data_instance[0] == 0 and data_instance[1] == 1:
+                cf = 0
+                self.count_update_helper(data_instance, interval_borders, time_window, cf)
+            elif true_label == 0 and prediction == 1:
                 # false positive
-                self.count_update_helper(data_instance, intervals, time_window, cf=1)
-            elif data_instance[0] == 1 and data_instance[1] == 0:
+                cf = 1
+                self.count_update_helper(data_instance, interval_borders, time_window, cf)
+            elif true_label == 1 and prediction == 0:
                 # false negative
-                self.count_update_helper(data_instance, intervals, time_window, cf=2)
-            elif data_instance[0] == 1 and data_instance[1] == 1:
+                cf = 2
+                self.count_update_helper(data_instance, interval_borders, time_window, cf)
+            elif true_label == 1 and prediction == 1:
                 # true positive
-                self.count_update_helper(data_instance, intervals, time_window, cf=3)
+                cf = 3
+                self.count_update_helper(data_instance, interval_borders, time_window, cf)
 
-    def count_update(self, data_instance, intervals, time_window):
-        # data_instance = [y[i], prediction[j][i], X[i]]
-        # order of distribution table = tn, fp, fn, tp
-        if data_instance[0] == 0 and data_instance[1] == 0:
-            # true negative
-            self.count_update_helper(data_instance, intervals, time_window, cf=0)
-        elif data_instance[0] == 0 and data_instance[1] == 1:
-            # false positive
-            self.count_update_helper(data_instance, intervals, time_window, cf=1)
-        elif data_instance[0] == 1 and data_instance[1] == 0:
-            # false negative
-            self.count_update_helper(data_instance, intervals, time_window, cf=2)
-        elif data_instance[0] == 1 and data_instance[1] == 1:
-            # true positive
-            self.count_update_helper(data_instance, intervals, time_window, cf=3)
-
-    def count_update_helper(self, data_instance, intervals, time_window, cf):
+    def count_update_helper(self, data_instance, interval_borders, time_window, cf):
         for feature in range(self.stream.n_features):
-            check = 0
-            for interval in range(self.intervals):
-                if data_instance[2][feature] < intervals[feature][interval]:
-                    check = 1
+            if feature in self.categorical_features:
+                self.distribution_table[time_window][feature][cf] += 1
+                # print("categorical value: ", self.distribution_table[time_window][feature][cf])
+                continue
+            check = False
+            for interval in range(self.n_intervals):
+                if data_instance[2][feature] < interval_borders[feature][interval]:
+                    # print(data_instance[2][feature], " < ", interval_borders[feature][interval])
+                    check = True
                     self.distribution_table[time_window][feature][interval][cf] += 1
                     break
-            if check != 1:
-                self.distribution_table[time_window][feature][self.intervals - 1][cf] += 1
+            if not check:
+                self.distribution_table[time_window][feature][self.n_intervals - 1][cf] += 1
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
         """ Partially fit all the models on the given data.
