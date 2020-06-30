@@ -37,8 +37,8 @@ class ConceptDriftStream(Stream):
         by `np.random`.
 
     alpha: float (optional, default: None)
-        Angle of change to estimate the width of concept drift change. If set will override the width parameter.
-        Valid values are in the range (0.0, 90.0].
+        Angle of change to estimate the width of concept drift change.
+        If set will override the width parameter. Valid values are in the range (0.0, 90.0].
         If alpha is None, this parameter will be ignored.
 
     position: int (default: 5000)
