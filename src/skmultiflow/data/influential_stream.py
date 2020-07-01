@@ -118,8 +118,8 @@ class InfluentialStream(Stream):
 
         for j in range(batch_size):
             self.sample_idx += 1
-            num_streams = list(range(len(self.streams)))
-            probability = random.choices(num_streams, self.weight)
+            n_streams = list(range(len(self.streams)))
+            probability = random.choices(n_streams, self.weight)
             used_stream = probability[0]
             for stream in range(len(self.weight)):
                 if stream == used_stream:

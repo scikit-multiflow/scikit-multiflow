@@ -24,7 +24,7 @@ def demo():
                                                          pretrain_size=200,
                                                          max_samples=20000,
                                                          batch_size=1,
-                                                         n_time_windows=4,
+                                                         n_time_windows=2,
                                                          n_intervals=4,
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=True)
