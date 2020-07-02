@@ -91,7 +91,7 @@ class KSWIN(BaseDriftDetector):
         if self.window_size < self.stat_size:
             raise ValueError("stat_size must be smaller than window_size")
 
-        if not isinstance(data, np.ndarray) or isinstance(data, None):
+        if not isinstance(data, np.ndarray) or data is None:
             self.window = np.array([])
         else:
             self.window = data
