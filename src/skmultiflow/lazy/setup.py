@@ -11,11 +11,17 @@ def configuration(parent_package="", top_path=None):
     if os.name == 'posix':
         libraries.append('m')
 
-    config.add_extension('libNearestNeighbor',
-                          sources=[os.path.join('src', 'libNearestNeighbors', 'nearestNeighbor.cpp')],
-                          include_dirs=[numpy.get_include()],
-                          libraries=libraries,
-                          language='c++')
+    config.add_extension(
+        'libNearestNeighbor',
+        sources=[
+            os.path.join(
+                'src',
+                'libNearestNeighbors',
+                'nearestNeighbor.cpp')],
+        include_dirs=[
+            numpy.get_include()],
+        libraries=libraries,
+        language='c++')
 
     return config
 
