@@ -231,7 +231,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self.metrics = metrics
                 else:
                     raise TypeError("Attribute 'metrics' must be 'None' or 'list', passed {}".
-                                     format(type(metrics)))
+                                    format(type(metrics)))
 
         else:
             if metrics is None:
@@ -243,7 +243,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
                     self.metrics.append(constants.DATA_POINTS)
                 else:
                     raise TypeError("Attribute 'metrics' must be 'None' or 'list', passed {}".
-                                     format(type(metrics)))
+                                    format(type(metrics)))
 
         self.restart_stream = restart_stream
         self.n_sliding = n_wait
@@ -348,7 +348,7 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
             for j in range(predictions.shape[1]):
                 l = []
                 for i in range(predictions.shape[0]):
-                    l.append(predictions[i,j])
+                    l.append(predictions[i, j])
                 out.append(l)
         return out
 

@@ -28,8 +28,9 @@ class EvaluatePrequential(StreamEvaluator):
     Parameters
     ----------
     n_wait: int (Default: 200)
-        The number of samples to process between each test. Also defines when to update the plot if `show_plot=True`.
-        Note that setting `n_wait` too small can significantly slow the evaluation process.
+        The number of samples to process between each test. Also defines when to update the plot
+        if `show_plot=True`. Note that setting `n_wait` too small can significantly slow
+        the evaluation process.
 
     max_samples: int (Default: 100000)
         The maximum number of samples to process during the evaluation.
@@ -38,14 +39,15 @@ class EvaluatePrequential(StreamEvaluator):
         The number of samples to pass at a time to the model(s).
 
     pretrain_size: int (Default: 200)
-        The number of samples to use to train the model before starting the evaluation. Used to enforce a 'warm' start.
+        The number of samples to use to train the model before starting the evaluation.
+        Used to enforce a 'warm' start.
 
     max_time: float (Default: float("inf"))
         The maximum duration of the simulation (in seconds).
 
     metrics: list, optional (Default: ['accuracy', 'kappa'])
-        | The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots
-          and/or logged into the output file. Valid options are
+        | The list of metrics to track during the evaluation. Also defines the metrics
+            that will be displayed in plots and/or logged into the output file. Valid options are
         | **Classification**
         | 'accuracy'
         | 'kappa'
@@ -77,28 +79,31 @@ class EvaluatePrequential(StreamEvaluator):
         File name to save the summary of the evaluation.
 
     show_plot: bool (Default: False)
-        If True, a plot will show the progress of the evaluation. Warning: Plotting can slow down the evaluation
-        process.
+        If True, a plot will show the progress of the evaluation. Warning: Plotting can slow down
+        the evaluation process.
+
 
     restart_stream: bool, optional (default: True)
         If True, the stream is restarted once the evaluation is complete.
 
     data_points_for_classification: bool(Default: False)
-        If True, the visualization used is a cloud of data points (only works for classification) and default
-        performance metrics are ignored. If specific metrics are required, then they *must* be explicitly set
-        using the ``metrics`` attribute.
+        If True, the visualization used is a cloud of data points (only works for classification)
+        and default performance metrics are ignored. If specific metrics are required,
+        then they *must* be explicitly set using the ``metrics`` attribute.
 
     Notes
     -----
-    1. This evaluator can process a single learner to track its performance; or multiple learners  at a time, to
-       compare different models on the same stream.
+    1. This evaluator can process a single learner to track its performance; or multiple learners
+        at a time, to compare different models on the same stream.
 
-    2. The metric 'true_vs_predicted' is intended to be informative only. It corresponds to evaluations at a specific
-       moment which might not represent the actual learner performance across all instances.
+    2. The metric 'true_vs_predicted' is intended to be informative only. It corresponds
+        to evaluations at a specific moment which might not represent
+        the actual learner performance across all instances.
 
-    3. The metrics `running_time` and `model_size ` are not plotted when the `show_plot` option is set. Only their
-       current value is displayed at the bottom of the figure. However, their values over the evaluation are written
-       into the resulting csv file if the `output_file` option is set.
+    3. The metrics `running_time` and `model_size ` are not plotted when the `show_plot` option
+        is set. Only their current value is displayed at the bottom of the figure.
+        However, their values over the evaluation are written into the resulting csv file
+        if the `output_file` option is set.
 
     Examples
     --------
@@ -199,7 +204,9 @@ class EvaluatePrequential(StreamEvaluator):
                 if isinstance(metrics, list):
                     self.metrics = metrics
                 else:
-                    raise ValueError("Attribute 'metrics' must be 'None' or 'list', passed {}".format(type(metrics)))
+                    raise ValueError(
+                        "Attribute 'metrics' must be 'None' or 'list', passed {}".format(
+                            type(metrics)))
 
         else:
             if metrics is None:
@@ -210,7 +217,9 @@ class EvaluatePrequential(StreamEvaluator):
                     self.metrics = metrics
                     self.metrics.append(constants.DATA_POINTS)
                 else:
-                    raise ValueError("Attribute 'metrics' must be 'None' or 'list', passed {}".format(type(metrics)))
+                    raise ValueError(
+                        "Attribute 'metrics' must be 'None' or 'list', passed {}".format(
+                            type(metrics)))
 
         self.restart_stream = restart_stream
         self.n_sliding = n_wait
@@ -304,7 +313,8 @@ class EvaluatePrequential(StreamEvaluator):
 
         update_count = 0
         print('Evaluating...')
-        while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
+        while ((self.global_sample_count < actual_max_samples)
+               & (self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
             try:
                 X, y = self.stream.next_sample(self.batch_size)
@@ -345,14 +355,16 @@ class EvaluatePrequential(StreamEvaluator):
                                 self.running_time_measurements[i].compute_training_time_end()
 
                             # Update total running time
-                            self.running_time_measurements[i].update_time_measurements(self.batch_size)
+                            self.running_time_measurements[i].update_time_measurements(
+                                self.batch_size)
                         first_run = False
                     else:
                         for i in range(self.n_models):
                             self.running_time_measurements[i].compute_training_time_begin()
                             self.model[i].partial_fit(X, y)
                             self.running_time_measurements[i].compute_training_time_end()
-                            self.running_time_measurements[i].update_time_measurements(self.batch_size)
+                            self.running_time_measurements[i].update_time_measurements(
+                                self.batch_size)
 
                     if ((self.global_sample_count % self.n_wait) == 0 or
                             (self.global_sample_count >= actual_max_samples) or
@@ -390,10 +402,12 @@ class EvaluatePrequential(StreamEvaluator):
             The data upon which the algorithm will create its model.
 
         y: Array-like
-            An array-like containing the classification labels / target values for all samples in X.
+            An array-like containing the classification labels / target values for
+            all samples in X.
 
         classes: list
-            Stores all the classes that may be encountered during the classification task. Not used for regressors.
+            Stores all the classes that may be encountered during the classification task.
+            Not used for regressors.
 
         sample_weight: Array-like
             Samples weight. If not provided, uniform weights are assumed.
@@ -408,7 +422,8 @@ class EvaluatePrequential(StreamEvaluator):
             for i in range(self.n_models):
                 if self._task_type == constants.CLASSIFICATION or \
                         self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
-                    self.model[i].partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight)
+                    self.model[i].partial_fit(
+                        X=X, y=y, classes=classes, sample_weight=sample_weight)
                 else:
                     self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
             return self

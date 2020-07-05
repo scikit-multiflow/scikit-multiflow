@@ -1,19 +1,21 @@
-import sys
 import io
+import sys
 from abc import ABCMeta, abstractmethod
 from timeit import default_timer as timer
 
+import skmultiflow.utils.constants as constants
 from skmultiflow.core import BaseSKMObject
 from skmultiflow.data.base_stream import Stream
-from .evaluation_data_buffer import EvaluationDataBuffer
-from skmultiflow.visualization.evaluation_visualizer import EvaluationVisualizer
-from skmultiflow.metrics import ClassificationPerformanceEvaluator, WindowClassificationPerformanceEvaluator, \
-    MultiLabelClassificationPerformanceEvaluator, WindowMultiLabelClassificationPerformanceEvaluator,\
-    RegressionMeasurements, WindowRegressionMeasurements,\
-    MultiTargetRegressionMeasurements, WindowMultiTargetRegressionMeasurements,\
+from skmultiflow.metrics import ClassificationPerformanceEvaluator, \
+    WindowClassificationPerformanceEvaluator, \
+    MultiLabelClassificationPerformanceEvaluator, \
+    WindowMultiLabelClassificationPerformanceEvaluator, \
+    RegressionMeasurements, WindowRegressionMeasurements, \
+    MultiTargetRegressionMeasurements, WindowMultiTargetRegressionMeasurements, \
     RunningTimeMeasurements
-import skmultiflow.utils.constants as constants
 from skmultiflow.utils import calculate_object_size
+from skmultiflow.visualization.evaluation_visualizer import EvaluationVisualizer
+from .evaluation_data_buffer import EvaluationDataBuffer
 
 
 class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
@@ -107,7 +109,8 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
             An array-like containing the class labels of all samples in X.
 
         classes: Array-like
-            A list containing all class labels of the classification problem. Not used for regressors.
+            A list containing all class labels of the classification problem
+            Not used for regressors.
 
         sample_weight: Array-like
             Samples weight. If not provided, uniform weights are assumed.
@@ -172,7 +175,9 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
             elif self.stream.n_targets > 1:
                 self._output_type = constants.MULTI_OUTPUT
             else:
-                raise ValueError('Unexpected number of outputs in stream: {}.'.format(self.stream.n_targets))
+                raise ValueError(
+                    'Unexpected number of outputs in stream: {}.'.format(
+                        self.stream.n_targets))
         else:
             raise ValueError('{} is not a valid stream type.'.format(self.stream))
 
@@ -209,18 +214,25 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
             elif evaluation_metrics.union(regression_metrics) == regression_metrics:
                 self._task_type = constants.REGRESSION
             else:
-                raise ValueError("Inconsistent metrics {} for {} stream.".format(self.metrics, self._output_type))
+                raise ValueError(
+                    "Inconsistent metrics {} for {} stream.".format(
+                        self.metrics, self._output_type))
         else:
-            multi_target_classification_metrics = set(constants.MULTI_TARGET_CLASSIFICATION_METRICS)
+            multi_target_classification_metrics = set(
+                constants.MULTI_TARGET_CLASSIFICATION_METRICS)
             multi_target_regression_metrics = set(constants.MULTI_TARGET_REGRESSION_METRICS)
             evaluation_metrics = set(self.metrics)
 
-            if evaluation_metrics.union(multi_target_classification_metrics) == multi_target_classification_metrics:
+            if evaluation_metrics.union(
+                    multi_target_classification_metrics) == multi_target_classification_metrics:
                 self._task_type = constants.MULTI_TARGET_CLASSIFICATION
-            elif evaluation_metrics.union(multi_target_regression_metrics) == multi_target_regression_metrics:
+            elif evaluation_metrics.union(
+                    multi_target_regression_metrics) == multi_target_regression_metrics:
                 self._task_type = constants.MULTI_TARGET_REGRESSION
             else:
-                raise ValueError("Inconsistent metrics {} for {} stream.".format(self.metrics, self._output_type))
+                raise ValueError(
+                    "Inconsistent metrics {} for {} stream.".format(
+                        self.metrics, self._output_type))
 
         self._valid_configuration = True
 
@@ -232,12 +244,15 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
         # Update progress
         try:
             if (current_sample % (total_samples // 20)) == 0:
-                self.update_progress_bar(current_sample, total_samples, 20, timer() - self._start_time)
+                self.update_progress_bar(current_sample, total_samples,
+                                         20, timer() - self._start_time)
             if self.global_sample_count >= total_samples:
-                self.update_progress_bar(current_sample, total_samples, 20, timer() - self._start_time)
+                self.update_progress_bar(current_sample, total_samples,
+                                         20, timer() - self._start_time)
                 print()
         except ZeroDivisionError:
-            raise ZeroDivisionError("The stream is too small to evaluate. The minimum size is 20 samples.")
+            raise ZeroDivisionError(
+                "The stream is too small to evaluate. The minimum size is 20 samples.")
 
     @staticmethod
     def update_progress_bar(curr, total, steps, time):
@@ -264,13 +279,16 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
         elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
             for i in range(self.n_models):
                 self.mean_eval_measurements.append(MultiLabelClassificationPerformanceEvaluator())
-                self.current_eval_measurements.append(WindowMultiLabelClassificationPerformanceEvaluator
-                                                      (window_size=self.n_sliding))
+                self.current_eval_measurements.append(
+                    WindowMultiLabelClassificationPerformanceEvaluator(
+                        window_size=self.n_sliding))
 
         elif self._task_type == constants.REGRESSION:
             for i in range(self.n_models):
                 self.mean_eval_measurements.append(RegressionMeasurements())
-                self.current_eval_measurements.append(WindowRegressionMeasurements(window_size=self.n_sliding))
+                self.current_eval_measurements.append(
+                    WindowRegressionMeasurements(
+                        window_size=self.n_sliding))
 
         elif self._task_type == constants.MULTI_TARGET_REGRESSION:
             for i in range(self.n_models):
@@ -368,18 +386,23 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
 
             elif metric == constants.AMSE:
                 for i in range(self.n_models):
-                    values[0].append(self.mean_eval_measurements[i].get_average_mean_square_error())
-                    values[1].append(self.current_eval_measurements[i].get_average_mean_square_error())
+                    values[0].append(
+                        self.mean_eval_measurements[i].get_average_mean_square_error())
+                    values[1].append(
+                        self.current_eval_measurements[i].get_average_mean_square_error())
 
             elif metric == constants.AMAE:
                 for i in range(self.n_models):
                     values[0].append(self.mean_eval_measurements[i].get_average_absolute_error())
-                    values[1].append(self.current_eval_measurements[i].get_average_absolute_error())
+                    values[1].append(
+                        self.current_eval_measurements[i].get_average_absolute_error())
 
             elif metric == constants.ARMSE:
                 for i in range(self.n_models):
-                    values[0].append(self.mean_eval_measurements[i].get_average_root_mean_square_error())
-                    values[1].append(self.current_eval_measurements[i].get_average_root_mean_square_error())
+                    values[0].append(
+                        self.mean_eval_measurements[i].get_average_root_mean_square_error())
+                    values[1].append(
+                        self.current_eval_measurements[i].get_average_root_mean_square_error())
 
             elif metric == constants.F1_SCORE:
                 for i in range(self.n_models):
@@ -416,7 +439,8 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
                 target_values = self.stream.target_values
                 features = {}  # Dictionary containing feature values, using index as key
 
-                y_pred, p = self.mean_eval_measurements[0].get_last()  # Only track one model (first) by default
+                # Only track one model (first) by default
+                y_pred, p = self.mean_eval_measurements[0].get_last()
 
                 X = self.stream.current_sample_x
                 idx_1 = 0  # TODO let the user choose the feature indices of interest
@@ -434,7 +458,8 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
                 for i in range(self.n_models):
                     values[0].append(self.running_time_measurements[i].get_current_training_time())
                     values[1].append(self.running_time_measurements[i].get_current_testing_time())
-                    values[2].append(self.running_time_measurements[i].get_current_total_running_time())
+                    values[2].append(
+                        self.running_time_measurements[i].get_current_total_running_time())
 
             elif metric == constants.MODEL_SIZE:
                 values = []
@@ -446,33 +471,63 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
 
             # Update buffer
             if metric == constants.TRUE_VS_PREDICTED:
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id=constants.Y_TRUE,
-                                              value=values[0])
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id=constants.Y_PRED,
-                                              value=values[1])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id=constants.Y_TRUE,
+                    value=values[0])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id=constants.Y_PRED,
+                    value=values[1])
             elif metric == constants.DATA_POINTS:
                 self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id='X',
                                               value=values[0])
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id='target_values',
-                                              value=values[1])
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id='predictions',
-                                              value=values[2])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id='target_values',
+                    value=values[1])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id='predictions',
+                    value=values[2])
             elif metric == constants.RUNNING_TIME:
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id='training_time',
-                                              value=values[0])
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id='testing_time',
-                                              value=values[1])
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id='total_running_time',
-                                              value=values[2])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id='training_time',
+                    value=values[0])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id='testing_time',
+                    value=values[1])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id='total_running_time',
+                    value=values[2])
             elif metric == constants.MODEL_SIZE:
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id='model_size',
-                                              value=values)
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id='model_size',
+                    value=values)
             else:
                 # Default case, 'mean' and 'current' performance
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id=constants.MEAN,
-                                              value=values[0])
-                self._data_buffer.update_data(sample_id=sample_id, metric_id=metric, data_id=constants.CURRENT,
-                                              value=values[1])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id=constants.MEAN,
+                    value=values[0])
+                self._data_buffer.update_data(
+                    sample_id=sample_id,
+                    metric_id=metric,
+                    data_id=constants.CURRENT,
+                    value=values[1])
 
         shift = 0
         if self._method == 'prequential':
@@ -490,41 +545,51 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
             with open(self.output_file, 'w+') as f:
                 f.write("# TEST CONFIGURATION BEGIN")
                 if hasattr(self.stream, 'get_info'):
-                    f.write("\n# {}".format(" ".join([line.strip() for line in self.stream.get_info().splitlines()])))
+                    f.write("\n# {}".format(" ".join([line.strip()
+                                                      for line in
+                                                      self.stream.get_info().splitlines()])))
                 for i in range(self.n_models):
                     if hasattr(self.model[i], 'get_info'):
-                        info = " ".join([line.strip() for line in self.model[i].get_info().splitlines()])
+                        info = " ".join([line.strip()
+                                         for line in self.model[i].get_info().splitlines()])
                         f.write("\n# [{}] {}".format(self.model_names[i], info))
-                f.write("\n# {}".format(" ".join([line.strip() for line in self.get_info().splitlines()])))
+                f.write("\n# {}".format(" ".join([line.strip()
+                                                  for line in self.get_info().splitlines()])))
                 f.write("\n# TEST CONFIGURATION END")
                 header = '\nid'
                 for metric in self.metrics:
                     if metric == constants.ACCURACY:
                         for i in range(self.n_models):
-                            header += ',mean_acc_[{0}],current_acc_[{0}]'.format(self.model_names[i])
+                            header += ',mean_acc_[{0}],current_acc_[{0}]'.format(
+                                self.model_names[i])
                     elif metric == constants.MSE:
                         for i in range(self.n_models):
-                            header += ',mean_mse_[{0}],current_mse_[{0}]'.format(self.model_names[i])
+                            header += ',mean_mse_[{0}],current_mse_[{0}]'.format(
+                                self.model_names[i])
                     elif metric == constants.MAE:
                         for i in range(self.n_models):
-                            header += ',mean_mae_[{0}],current_mae_[{0}]'.format(self.model_names[i])
+                            header += ',mean_mae_[{0}],current_mae_[{0}]'.format(
+                                self.model_names[i])
                     elif metric == constants.AMSE:
                         for i in range(self.n_models):
-                            header += ',mean_amse_[{0}],current_amse_[{0}]'.format(self.model_names[i])
+                            header += ',mean_amse_[{0}],current_amse_[{0}]'.format(
+                                self.model_names[i])
                     elif metric == constants.AMAE:
                         for i in range(self.n_models):
-                            header += ',mean_amae_[{0}],current_amae_[{0}]'.format(self.model_names[i])
+                            header += ',mean_amae_[{0}],current_amae_[{0}]'.format(
+                                self.model_names[i])
                     elif metric == constants.ARMSE:
                         for i in range(self.n_models):
-                            header += ',mean_armse_[{0}],current_armse_[{0}]'.format(self.model_names[i])
+                            header += ',mean_armse_[{0}],current_armse_[{0}]'.format(
+                                self.model_names[i])
                     elif metric == constants.TRUE_VS_PREDICTED:
                         header += ',true_value'
                         for i in range(self.n_models):
                             header += ',predicted_value_[{0}]'.format(self.model_names[i])
                     elif metric == constants.RUNNING_TIME:
                         for i in range(self.n_models):
-                            header += ',training_time_[{0}],testing_time_[{0}],total_running_time_[{0}]'.\
-                                format(self.model_names[i])
+                            header += ',training_time_[{0}],testing_time_[{0}],' \
+                                      'total_running_time_[{0}]'.format(self.model_names[i])
                     elif metric == constants.MODEL_SIZE:
                         for i in range(self.n_models):
                             header += ',model_size_[{0}]'.format(self.model_names[i])
@@ -532,7 +597,8 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
                         continue
                     else:
                         for i in range(self.n_models):
-                            header += ',mean_{0}_[{1}],current_{0}_[{1}]'.format(metric, self.model_names[i])
+                            header += ',mean_{0}_[{1}],current_{0}_[{1}]'.format(
+                                metric, self.model_names[i])
                 f.write(header)
 
     def _update_file(self):
@@ -541,8 +607,10 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
             line = str(self._data_buffer.sample_id)
             for metric in self.metrics:
                 if metric == constants.TRUE_VS_PREDICTED:
-                    true_value = self._data_buffer.get_data(metric_id=metric, data_id=constants.Y_TRUE)
-                    pred_values = self._data_buffer.get_data(metric_id=metric, data_id=constants.Y_PRED)
+                    true_value = self._data_buffer.get_data(
+                        metric_id=metric, data_id=constants.Y_TRUE)
+                    pred_values = self._data_buffer.get_data(
+                        metric_id=metric, data_id=constants.Y_PRED)
                     line += ',{:.6f}'.format(true_value)
                     for i in range(self.n_models):
                         line += ',{:.6f}'.format(pred_values[i])
@@ -551,11 +619,12 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
                                                                       data_id='training_time')
                     testing_time_values = self._data_buffer.get_data(metric_id=metric,
                                                                      data_id='testing_time')
-                    total_running_time_values = self._data_buffer.get_data(metric_id=metric,
-                                                                           data_id='total_running_time')
+                    total_running_time_values = self._data_buffer.get_data(
+                        metric_id=metric, data_id='total_running_time')
                     values = (training_time_values, testing_time_values, total_running_time_values)
                     for i in range(self.n_models):
-                        line += ',{:.6f},{:.6f},{:.6f}'.format(values[0][i], values[1][i], values[2][i])
+                        line += ',{:.6f},{:.6f},{:.6f}'.format(
+                            values[0][i], values[1][i], values[2][i])
                 elif metric == constants.MODEL_SIZE:
                     values = self._data_buffer.get_data(metric_id=metric, data_id='model_size')
                     for i in range(self.n_models):
@@ -563,16 +632,18 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
                 elif metric == constants.DATA_POINTS:
                     continue
                 else:
-                    mean_values = self._data_buffer.get_data(metric_id=metric, data_id=constants.MEAN)
-                    current_values = self._data_buffer.get_data(metric_id=metric, data_id=constants.CURRENT)
+                    mean_values = self._data_buffer.get_data(
+                        metric_id=metric, data_id=constants.MEAN)
+                    current_values = self._data_buffer.get_data(
+                        metric_id=metric, data_id=constants.CURRENT)
                     values = (mean_values, current_values)
                     for i in range(self.n_models):
                         line += ',{:.6f},{:.6f}'.format(values[0][i], values[1][i])
 
             line = '\n' + line
             if sys.getsizeof(line) + self._file_buffer_size > io.DEFAULT_BUFFER_SIZE:
-                # Appending the next line will make the buffer to exceed the system's default buffer size
-                # flush the content of the buffer
+                # Appending the next line will make the buffer to exceed the system's
+                # default buffer size flush the content of the buffer
                 self._flush_file_buffer()
             self._file_buffer += line
             self._file_buffer_size += sys.getsizeof(line)
@@ -607,80 +678,137 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
         print('Mean performance:')
         for i in range(self.n_models):
             if constants.ACCURACY in self.metrics:
-                print('{} - Accuracy     : {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.ACCURACY, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Accuracy     : {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.ACCURACY,
+                            data_id=constants.MEAN)[i]))
             if constants.KAPPA in self.metrics:
-                print('{} - Kappa        : {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.KAPPA, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Kappa        : {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.KAPPA,
+                            data_id=constants.MEAN)[i]))
             if constants.KAPPA_T in self.metrics:
-                print('{} - Kappa T      : {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.KAPPA_T, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Kappa T      : {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.KAPPA_T,
+                            data_id=constants.MEAN)[i]))
             if constants.KAPPA_M in self.metrics:
-                print('{} - Kappa M      : {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.KAPPA_M, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Kappa M      : {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.KAPPA_M,
+                            data_id=constants.MEAN)[i]))
             if constants.PRECISION in self.metrics:
-                print('{} - Precision: {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.PRECISION, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Precision: {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.PRECISION,
+                            data_id=constants.MEAN)[i]))
             if constants.RECALL in self.metrics:
-                print('{} - Recall: {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.RECALL, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Recall: {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.RECALL,
+                            data_id=constants.MEAN)[i]))
             if constants.F1_SCORE in self.metrics:
-                print('{} - F1 score: {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.F1_SCORE, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - F1 score: {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.F1_SCORE,
+                            data_id=constants.MEAN)[i]))
             if constants.HAMMING_SCORE in self.metrics:
-                print('{} - Hamming score: {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.HAMMING_SCORE, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Hamming score: {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.HAMMING_SCORE,
+                            data_id=constants.MEAN)[i]))
             if constants.HAMMING_LOSS in self.metrics:
-                print('{} - Hamming loss : {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.HAMMING_LOSS, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Hamming loss : {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.HAMMING_LOSS,
+                            data_id=constants.MEAN)[i]))
             if constants.EXACT_MATCH in self.metrics:
-                print('{} - Exact matches: {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.EXACT_MATCH, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Exact matches: {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.EXACT_MATCH,
+                            data_id=constants.MEAN)[i]))
             if constants.J_INDEX in self.metrics:
-                print('{} - Jaccard index: {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.J_INDEX, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - Jaccard index: {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.J_INDEX,
+                            data_id=constants.MEAN)[i]))
             if constants.MSE in self.metrics:
-                print('{} - MSE          : {:.4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.MSE, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - MSE          : {:.4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.MSE,
+                            data_id=constants.MEAN)[i]))
             if constants.MAE in self.metrics:
-                print('{} - MAE          : {:4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.MAE, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - MAE          : {:4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.MAE,
+                            data_id=constants.MEAN)[i]))
             if constants.AMSE in self.metrics:
-                print('{} - AMSE          : {:4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.AMSE, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - AMSE          : {:4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.AMSE,
+                            data_id=constants.MEAN)[i]))
             if constants.AMAE in self.metrics:
-                print('{} - AMAE          : {:4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.AMAE, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - AMAE          : {:4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.AMAE,
+                            data_id=constants.MEAN)[i]))
             if constants.ARMSE in self.metrics:
-                print('{} - ARMSE          : {:4f}'.format(
-                    self.model_names[i],
-                    self._data_buffer.get_data(metric_id=constants.ARMSE, data_id=constants.MEAN)[i]))
+                print(
+                    '{} - ARMSE          : {:4f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.ARMSE,
+                            data_id=constants.MEAN)[i]))
             if constants.RUNNING_TIME in self.metrics:
                 # Running time
-                print('{} - Training time (s)  : {:.2f}'.format(
-                    self.model_names[i], self._data_buffer.get_data(metric_id=constants.RUNNING_TIME,
-                                                                    data_id='training_time')[i]))
-                print('{} - Testing time  (s)  : {:.2f}'.format(
-                    self.model_names[i], self._data_buffer.get_data(metric_id=constants.RUNNING_TIME,
-                                                                    data_id='testing_time')[i]))
-                print('{} - Total time    (s)  : {:.2f}'.format(
-                    self.model_names[i], self._data_buffer.get_data(metric_id=constants.RUNNING_TIME,
-                                                                    data_id='total_running_time')[i]))
+                print(
+                    '{} - Training time (s)  : {:.2f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.RUNNING_TIME,
+                            data_id='training_time')[i]))
+                print(
+                    '{} - Testing time  (s)  : {:.2f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.RUNNING_TIME,
+                            data_id='testing_time')[i]))
+                print(
+                    '{} - Total time    (s)  : {:.2f}'.format(
+                        self.model_names[i],
+                        self._data_buffer.get_data(
+                            metric_id=constants.RUNNING_TIME,
+                            data_id='total_running_time')[i]))
             if constants.MODEL_SIZE in self.metrics:
                 print('{} - Size (kB)          : {:.4f}'.format(
                     self.model_names[i], self._data_buffer.get_data(metric_id=constants.MODEL_SIZE,
@@ -716,7 +844,8 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
             except IndexError:
                 print('Model index {} is invalid'.format(model_idx))
                 return None, None
-            return self.mean_eval_measurements[model_idx], self.current_eval_measurements[model_idx]
+            return self.mean_eval_measurements[model_idx], self.current_eval_measurements[
+                model_idx]
 
     def get_mean_measurements(self, model_idx=None):
         """ Get mean measurements from the evaluation.
