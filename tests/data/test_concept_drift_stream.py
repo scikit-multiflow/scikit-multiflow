@@ -1,5 +1,7 @@
 import os
 import numpy as np
+import pytest
+
 from skmultiflow.data import ConceptDriftStream
 
 
@@ -81,3 +83,10 @@ def test_concept_drift_stream_with_alpha(test_path):
                     "                                           perturbation=0.0, random_state=112),\n" \
                     "                   width=5729)"
     assert stream.get_info() == expected_info
+
+    with pytest.warns(FutureWarning) as actual_warning:
+        ConceptDriftStream(alpha=0, random_state=1, position=20)
+
+    assert actual_warning[0].message.args[0] == "Default value for 'alpha' has changed from 0 " \
+                                            "to None. 'alpha=0' will throw an error from v0.7.0"
+
