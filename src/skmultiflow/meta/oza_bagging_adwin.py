@@ -3,12 +3,14 @@ import copy as cp
 from skmultiflow.meta import OzaBaggingClassifier
 from skmultiflow.lazy import KNNADWINClassifier
 from skmultiflow.drift_detection import ADWIN
-from skmultiflow.utils.utils import *
 
 import warnings
 
+from skmultiflow.utils import get_dimensions
 
-def OzaBaggingAdwin(base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):     # pragma: no cover
+
+def OzaBaggingAdwin(base_estimator=KNNADWINClassifier(), n_estimators=10,
+                    random_state=None):  # pragma: no cover
     warnings.warn("'OzaBaggingAdwin' has been renamed to 'OzaBaggingADWINClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OzaBaggingADWINClassifier(base_estimator=base_estimator,
@@ -21,8 +23,9 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
-        Each member of the ensemble is an instance of the base estimator.
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator
+        (default=KNNADWINClassifier) Each member of the ensemble is
+        an instance of the base estimator.
 
     n_estimators: int (default=10)
         The size of the ensemble, in other words, how many classifiers to train.
@@ -31,7 +34,7 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
         If int, random_state is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used by `np.random`.
-    
+
     Raises
     ------
     ValueError: A ValueError is raised if the 'classes' parameter is
@@ -49,10 +52,10 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
 
     References
     ----------
-    .. [1] N. C. Oza, “Online Bagging and Boosting,” in 2005 IEEE International Conference on Systems,
-       Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.
+    .. [1] N. C. Oza, “Online Bagging and Boosting,” in 2005 IEEE International Conference
+        on Systems, Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.
 
-    
+
     Examples
     --------
     >>> # Imports
@@ -62,8 +65,8 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1, noise_percentage=6.7)
     >>> # Setting up the OzaBaggingADWINClassifier to work with KNN as base estimator
-    >>> clf = OzaBaggingADWINClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30),
-    ...                                 n_estimators=2)
+    >>> clf = OzaBaggingADWINClassifier(base_estimator=KNNClassifier(n_neighbors=8,
+    ...                          max_window_size=2000, leaf_size=30), n_estimators=2)
     >>> # Keeping track of sample count and correct prediction count
     >>> sample_count = 0
     >>> corrects = 0
@@ -78,13 +81,13 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
     ...         if y[0] == pred[0]:
     ...             corrects += 1
     ...     sample_count += 1
-    >>> 
+    >>>
     >>> # Displaying the results
     >>> print(str(sample_count) + ' samples analyzed.')
     2000 samples analyzed.
     >>> print('OzaBaggingADWINClassifier performance: ' + str(corrects / sample_count))
     OzaBaggingADWINClassifier performance: 0.9645
-    
+
     """
 
     def __init__(self, base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):
@@ -116,7 +119,8 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
             for the first partial_fit call where it is compulsory.
 
         sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
-            Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the base estimator.
+            Samples weight. If not provided, uniform weights are assumed. Usage varies depending
+            on the base estimator.
 
         Raises
         ------
@@ -157,8 +161,8 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
             if set(self.classes) == set(classes):
                 pass
             else:
-                raise ValueError(
-                    "The classes passed to the partial_fit function differ from those passed in an earlier moment.")
+                raise ValueError("The classes passed to the partial_fit function differ "
+                                 "from those passed in an earlier moment.")
 
         self.__adjust_ensemble_size()
         change_detected = False

@@ -1,8 +1,7 @@
-import numpy as np
-
 import copy
 
-from sklearn.linear_model import LogisticRegression, SGDClassifier
+import numpy as np
+from sklearn.linear_model import LogisticRegression
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiOutputMixin
 from skmultiflow.utils import check_random_state
@@ -13,8 +12,9 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=LogisticRegression)
-        Each member of the ensemble is an instance of the base estimator
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator
+        (default=LogisticRegression) Each member of the ensemble is
+        an instance of the base estimator
 
     order : str (default=None)
         `None` to use default order, 'random' for random order.
@@ -27,6 +27,7 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
     Examples
     --------
     >>> from skmultiflow.data import make_logical
+    >>> from sklearn.linear_model import SGDClassifier
     >>>
     >>> X, Y = make_logical(random_state=1)
     >>>
@@ -40,7 +41,8 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
     >>> print(cc.predict(X))
     >>>
     >>> print("RCC")
-    >>> cc = ClassifierChain(SGDClassifier(max_iter=100, loss='log', random_state=1), order='random', random_state=1)
+    >>> cc = ClassifierChain(SGDClassifier(max_iter=100, loss='log', random_state=1),
+    ...                                     order='random', random_state=1)
     >>> cc.fit(X, Y)
     >>> print(cc.predict(X))
     >>>
@@ -65,21 +67,23 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
 
     Notes
     -----
-    Classifier Chains [1]_ is a popular method for multi-label learning. It exploits correlation between labels
-    by incrementally building binary classifiers for each label.
+    Classifier Chains [1]_ is a popular method for multi-label learning. It exploits correlation
+    between labels by incrementally building binary classifiers for each label.
 
-    scikit-learn also includes 'ClassifierChain'. A difference is probabilistic extensions are included here.
+    scikit-learn also includes 'ClassifierChain'. A difference is probabilistic extensions
+    are included here.
 
 
     References
     ----------
-    .. [1] Read, Jesse, Bernhard Pfahringer, Geoff Holmes, and Eibe Frank. "Classifier chains for multi-label
-       classification." In Joint European Conference on Machine Learning and Knowledge Discovery in Databases,
-       pp. 254-269. Springer, Berlin, Heidelberg, 2009.
+    .. [1] Read, Jesse, Bernhard Pfahringer, Geoff Holmes, and Eibe Frank. "Classifier chains
+        for multi-label classification." In Joint European Conference on Machine Learning and
+        Knowledge Discovery in Databases, pp. 254-269. Springer, Berlin, Heidelberg, 2009.
 
     """
 
-    # TODO: much of this can be shared with Regressor Chains, probably should use a base class to inherit here.
+    # TODO: much of this can be shared with Regressor Chains, probably should
+    # use a base class to inherit here.
 
     def __init__(self, base_estimator=LogisticRegression(), order=None, random_state=None):
         super().__init__()
@@ -130,7 +134,7 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
 
         # Train
         self.ensemble = [copy.deepcopy(self.base_estimator) for _ in range(L)]
-        XY = np.zeros((N, D + L-1))
+        XY = np.zeros((N, D + L - 1))
         XY[:, 0:D] = X
         XY[:, D:] = y[:, 0:L - 1]
         for j in range(self.L):
@@ -169,7 +173,7 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
         # Set the chain order
         y = y[:, self.chain]
 
-        XY = np.zeros((N, D + L-1))
+        XY = np.zeros((N, D + L - 1))
         XY[:, 0:D] = X
         XY[:, D:] = y[:, 0:L - 1]
         for j in range(L):
@@ -194,7 +198,7 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
         Y = np.zeros((N, self.L))
         for j in range(self.L):
             if j > 0:
-                X = np.column_stack([X, Y[:, j-1]])
+                X = np.column_stack([X, Y[:, j - 1]])
             Y[:, j] = self.ensemble[j].predict(X)
 
         # Unset the chain order (back to default)
@@ -210,9 +214,10 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
 
         Returns
         -------
-        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the
-        same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents
-        the probability that the i-th sample of X belongs to a certain class-label.
+        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated
+        with the X entry of the same index. And where the list in index [i] contains
+        len(self.target_values) elements, each of which represents the probability that
+        the i-th sample of X belongs to a certain class-label.
 
         Notes
         -----
@@ -227,7 +232,7 @@ class ClassifierChain(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, MultiO
         Y = np.zeros((N, self.L))
         for j in range(self.L):
             if j > 0:
-                X = np.column_stack([X, Y[:, j-1]])
+                X = np.column_stack([X, Y[:, j - 1]])
             Y[:, j] = self.ensemble[j].predict_proba(X)[:, 1]
         return Y
 
@@ -263,10 +268,11 @@ def P(y, x, cc, payoff=np.prod):
     xy = np.zeros(D + L)
     xy[0:D] = x.copy()
     for j in range(L):
-        P_j = cc.ensemble[j].predict_proba(xy[0:D+j].reshape(1, -1))[0]  # e.g., [0.9, 0.1] wrt 0, 1
-        xy[D+j] = y[j]                                           # e.g., 1
+        P_j = cc.ensemble[j].predict_proba(
+            xy[0:D + j].reshape(1, -1))[0]  # e.g., [0.9, 0.1] wrt 0, 1
+        xy[D + j] = y[j]                                           # e.g., 1
         p[j] = P_j[y[j]]                                         # e.g., 0.1
-                                                                 # or, y[j] = 0 is predicted with probability p[j] = 0.9
+        # or, y[j] = 0 is predicted with probability p[j] = 0.9
     return payoff(p)
 
 
@@ -292,6 +298,7 @@ class ProbabilisticClassifierChain(ClassifierChain):
     Examples
     --------
     >>> from skmultiflow.data import make_logical
+    >>> from sklearn.linear_model import SGDClassifier
     >>>
     >>> X, Y = make_logical(random_state=1)
     >>>
@@ -332,7 +339,8 @@ class ProbabilisticClassifierChain(ClassifierChain):
 
         Notes
         -----
-        Explores all possible branches of the probability tree (i.e., all possible 2^L label combinations).
+        Explores all possible branches of the probability tree
+        (i.e., all possible 2^L label combinations).
         """
         N, D = X.shape
         Yp = np.zeros((N, self.L))
@@ -415,6 +423,7 @@ class MonteCarloClassifierChain(ProbabilisticClassifierChain):
      [0. 0. 0.]
      [1. 1. 0.]]
     """
+
     def __init__(self, base_estimator=LogisticRegression(), M=10, random_state=None):
         # Do M iterations, unless overridden by M at prediction time
         ClassifierChain.__init__(self, base_estimator, random_state=random_state)
@@ -439,7 +448,7 @@ class MonteCarloClassifierChain(ProbabilisticClassifierChain):
         for j in range(self.L):
             P_j = self.ensemble[j].predict_proba(xy[0:D + j].reshape(1, -1))[0]
             y_j = self._random_state.choice(2, 1, p=P_j)
-            xy[D+j] = y_j
+            xy[D + j] = y_j
             y[j] = y_j
             p[j] = P_j[y_j]
 
@@ -454,7 +463,8 @@ class MonteCarloClassifierChain(ProbabilisticClassifierChain):
             The set of data samples to predict the labels for.
 
         M: int (optional, default=None)
-            Number of sampling iterations. If None, M is set equal to the M value used for initialization
+            Number of sampling iterations. If None, M is set equal to the M value used for
+            initialization
 
         Returns
         -------
@@ -465,8 +475,8 @@ class MonteCarloClassifierChain(ProbabilisticClassifierChain):
         Quite similar to the `ProbabilisticClassifierChain.predict()` function.
 
         Depending on the implementation, `y_max`, `w_max` may be initially set to 0,
-        if we wish to rely solely on the sampling. Setting the `w_max` based on a naive CC prediction
-        gives a good baseline to work from.
+        if we wish to rely solely on the sampling. Setting the `w_max` based on
+        a naive CC prediction gives a good baseline to work from.
 
         """
         N, D = X.shape

@@ -1,14 +1,15 @@
 import copy as cp
+import warnings
+
+import numpy as np
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.lazy import KNNADWINClassifier
-from skmultiflow.utils.utils import *
-from skmultiflow.utils import check_random_state
-
-import warnings
+from skmultiflow.utils import check_random_state, get_dimensions
 
 
-def OzaBagging(base_estimator=KNNADWINClassifier(), n_estimators=10, random_state=None):     # pragma: no cover
+def OzaBagging(base_estimator=KNNADWINClassifier(), n_estimators=10,
+               random_state=None):  # pragma: no cover
     warnings.warn("'OzaBagging' has been renamed to 'OzaBaggingClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OzaBaggingClassifier(base_estimator=base_estimator,
@@ -21,8 +22,9 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
-        Each member of the ensemble is an instance of the base estimator.
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator
+        (default=KNNADWINClassifier) Each member of the ensemble is an instance of
+        the base estimator.
 
     n_estimators: int (default=10)
         The size of the ensemble, in other words, how many classifiers to train.
@@ -31,7 +33,7 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         If int, random_state is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used by `np.random`.
-    
+
     Raises
     ------
     ValueError: A ValueError is raised if the 'classes' parameter is
@@ -59,9 +61,9 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     References
     ----------
-    .. [1] N. C. Oza, “Online Bagging and Boosting,” in 2005 IEEE International Conference on Systems,
-       Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.
-    
+    .. [1] N. C. Oza, “Online Bagging and Boosting,” in 2005 IEEE International Conference
+        on Systems, Man and Cybernetics, 2005, vol. 3, no. 3, pp. 2340–2345.
+
     Examples
     --------
     >>> # Imports
@@ -71,7 +73,8 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1, noise_percentage=0.07)
     >>> # Setting up the OzaBagging classifier to work with KNN as base estimator
-    >>> clf = OzaBaggingClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30), n_estimators=2)
+    >>> clf = OzaBaggingClassifier(base_estimator=KNNClassifier(n_neighbors=8,
+    ...     max_window_size=2000, leaf_size=30), n_estimators=2)
     >>> # Keeping track of sample count and correct prediction count
     >>> sample_count = 0
     >>> corrects = 0
@@ -86,7 +89,7 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     ...         if y[0] == pred[0]:
     ...             corrects += 1
     ...     sample_count += 1
-    >>> 
+    >>>
     >>> # Displaying the results
     >>> print(str(sample_count) + ' samples analyzed.')
     2000 samples analyzed.
@@ -101,7 +104,7 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         self.ensemble = None
         self.actual_n_estimators = None
         self.classes = None
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.base_estimator = base_estimator
         self.n_estimators = n_estimators
         self.random_state = random_state
@@ -144,7 +147,7 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             A ValueError is raised if the 'classes' parameter is not passed in the first
             partial_fit call, or if they are passed in further calls but differ from
             the initial classes list passed.
-        
+
         Returns
         -------
         OzaBaggingClassifier
@@ -170,7 +173,8 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             if set(self.classes) == set(classes):
                 pass
             else:
-                raise ValueError("The classes passed to the partial_fit function differ from those passed earlier.")
+                raise ValueError("The classes passed to the partial_fit function"
+                                 "differ from those passed earlier.")
 
         self.__adjust_ensemble_size()
         r, _ = get_dimensions(X)
@@ -218,7 +222,7 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     def predict_proba(self, X):
         """ Estimates the probability of each sample in X belonging to each of the class-labels.
-        
+
         Parameters
         ----------
         X : numpy.ndarray of shape (n_samples, n_features)
@@ -226,10 +230,11 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
         Returns
         -------
-        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the
-        same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents
-        the probability that the i-th sample of X belongs to a certain class-label.
-        
+        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry
+        is associated with the X entry of the same index. And where the list in index [i] contains
+        len(self.target_values) elements, each of which represents the probability
+        that the i-th sample of X belongs to a certain class-label.
+
         Raises
         ------
         ValueError: A ValueError is raised if the number of classes in the base_estimator
@@ -242,7 +247,8 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             for i in range(self.actual_n_estimators):
                 partial_proba = self.ensemble[i].predict_proba(X)
                 if len(partial_proba[0]) > max(self.classes) + 1:
-                    raise ValueError("The number of classes in the base learner is larger than in the ensemble.")
+                    raise ValueError("The number of classes in the base learner "
+                                     "is larger than in the ensemble.")
 
                 if len(proba) < 1:
                     for n in range(r):

@@ -10,4 +10,7 @@ python3 -m flake8 \
   src/skmultiflow/bayes \
   src/skmultiflow/core \
   src/skmultiflow/data \
-  src/skmultiflow/drift_detection
+  src/skmultiflow/drift_detection \
+  src/skmultiflow/evaluation \
+  src/skmultiflow/lazy \
+  src/skmultiflow/meta

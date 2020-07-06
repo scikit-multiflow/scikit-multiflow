@@ -1,16 +1,16 @@
 import copy as cp
+import warnings
+
+import numpy as np
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.lazy import KNNADWINClassifier
-from skmultiflow.utils import check_random_state
-from skmultiflow.utils.utils import *
-
-import warnings
+from skmultiflow.utils import check_random_state, get_dimensions
 
 
-def OnlineCSB2(base_estimator=KNNADWINClassifier(), n_estimators=10, cost_positive=1, cost_negative=0.1,
-               drift_detection=True, random_state=None):     # pragma: no cover
+def OnlineCSB2(base_estimator=KNNADWINClassifier(), n_estimators=10, cost_positive=1,
+               cost_negative=0.1, drift_detection=True, random_state=None):  # pragma: no cover
     warnings.warn("'OnlineCSB2' has been renamed to 'OnlineCSB2Classifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return OnlineCSB2Classifier(base_estimator=base_estimator,
@@ -41,8 +41,9 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
-        Each member of the ensemble is an instance of the base estimator.
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator
+        (default=KNNADWINClassifier) Each member of the ensemble is
+        an instance of the base estimator.
 
     n_estimators: int, optional (default=10)
         The size of the ensemble, in other words, how many classifiers to train.
@@ -178,7 +179,8 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             for the first partial_fit call where it is compulsory.
 
         sample_weight: Array-like
-            Instance weight. If not provided, uniform weights are assumed. Usage varies depending on the base estimator.
+            Instance weight. If not provided, uniform weights are assumed. Usage varies
+            depending on the base estimator.
 
         Raises
         ------
@@ -204,7 +206,8 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             if set(self.classes) == set(classes):
                 pass
             else:
-                raise ValueError("The classes passed to the partial_fit function differ from those passed earlier.")
+                raise ValueError("The classes passed to the partial_fit function "
+                                 "differ from those passed earlier.")
 
         self.__adjust_ensemble_size()
         r, _ = get_dimensions(X)
@@ -221,7 +224,8 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                         self.epsilon[i] = self.lam_sw[i] / self.lam_sum[i]
                         self.werr[i] = (self.lam_fp[i] + self.lam_fn[i]) / self.lam_sum[i]
                         if self.epsilon[i] + self.werr[i] != 0 and self.epsilon[i] != 1:
-                            lam = self.epsilon[i] / ((1 - self.epsilon[i]) * (self.epsilon[i] + self.werr[i]))
+                            lam = self.epsilon[i] / ((1 - self.epsilon[i])
+                                                     * (self.epsilon[i] + self.werr[i]))
                     else:
                         if self.ensemble[i].predict([X[j]])[0] == 0 and y[j] == 1:
                             self.lam_fp[i] += self.cost_positive * lam
@@ -334,13 +338,15 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         if self.ensemble is None:
             return np.zeros((r, 1))
 
-        with warnings.catch_warnings():  # Context manager to catch errors raised by numpy as RuntimeWarning
+        # Context manager to catch errors raised by numpy as RuntimeWarning
+        with warnings.catch_warnings():
             warnings.filterwarnings('error')
             try:
                 for i in range(self.actual_n_estimators):
                     partial_proba = self.ensemble[i].predict_proba(X)
                     if len(partial_proba[0]) > max(self.classes) + 1:
-                        raise ValueError("The number of classes in the base learner is larger than in the ensemble.")
+                        raise ValueError("The number of classes in the base learner "
+                                         "is larger than in the ensemble.")
 
                     if len(proba) < 1:
                         for n in range(r):
@@ -349,7 +355,8 @@ class OnlineCSB2Classifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                     for n in range(r):
                         for l in range(len(partial_proba[n])):
                             try:
-                                proba[n][l] += np.log((1 - self.epsilon[i]) / self.epsilon[i]) * partial_proba[n][l]
+                                proba[n][l] += np.log((1 - self.epsilon[i]) /
+                                                      self.epsilon[i]) * partial_proba[n][l]
                             except IndexError:
                                 proba[n].append(partial_proba[n][l])
                             except RuntimeWarning:

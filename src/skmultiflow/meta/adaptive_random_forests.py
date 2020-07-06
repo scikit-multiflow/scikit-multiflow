@@ -217,8 +217,8 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
                  disable_weighted_vote=False,
                  lambda_value=6,
                  performance_metric='acc',
-                 drift_detection_method: BaseDriftDetector=ADWIN(0.001),
-                 warning_detection_method: BaseDriftDetector=ADWIN(0.01),
+                 drift_detection_method: BaseDriftDetector = ADWIN(0.001),
+                 warning_detection_method: BaseDriftDetector = ADWIN(0.01),
                  max_byte_size=33554432,
                  memory_estimate_period=2000000,
                  grace_period=50,
@@ -512,6 +512,7 @@ class ARFBaseLearner(BaseSKMObject):
     Contains analysis information, such as the numberOfDriftsDetected.
 
     """
+
     def __init__(self,
                  index_original,
                  classifier: ARFHoeffdingTreeClassifier,
