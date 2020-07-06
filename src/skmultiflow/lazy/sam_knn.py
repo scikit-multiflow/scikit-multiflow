@@ -222,7 +222,7 @@ class SAMKNNClassifier(BaseSKMObject, ClassifierMixin):
                     self._LTMSamples = np.vstack(
                         [self._LTMSamples, self._STMSamples[:numShifts, :]])
                     self._LTMLabels = np.append(self._LTMLabels,
-                                                self._STMLabel[:numShifts])
+                                                self._STMLabels[:numShifts])
                     self._LTMSamples, self._LTMLabels = self.cluster_down(
                         self._LTMSamples, self._LTMLabels)
                     self._STMSamples = np.delete(self._STMSamples, shiftRange, 0)
