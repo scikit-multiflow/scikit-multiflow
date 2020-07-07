@@ -2,15 +2,14 @@ import sys
 import os
 import platform
 import builtins
-import setuptools       # Used to access setuptools features and avoid warnings, do not remove
 from os import path
 
-from numpy.distutils.core import setup
+from distutils.command.sdist import sdist
 
-if sys.version_info[:2] < (3, 5):
-    raise RuntimeError("scikit-multiflow requires Python 3.5 or later. The current"
-                       " Python version is {} installed in {}}.".format(platform.python_version(), sys.executable))
-
+# Optional setuptools features
+# We need to import setuptools early, if we want setuptools features,
+# as it monkey-patches the 'setup' function
+import setuptools    # Actually used, do not remove
 
 # This is a bit (!) hackish: we are setting a global variable so that the
 # main skmultiflow __init__ can detect if it is being loaded by the setup
@@ -21,14 +20,16 @@ if sys.version_info[:2] < (3, 5):
 builtins.__SKMULTIFLOW_SETUP__ = True
 
 DIST_NAME = 'scikit-multiflow'
-DESCRIPTION = 'A machine learning framework for multi-output/multi-label and stream data.'
+DESCRIPTION = 'A machine learning package for streaming data in Python.'
 MAINTAINER = 'Jacob Montiel'
-MAINTAINER_EMAIL = ''
+MAINTAINER_EMAIL = 'jacob.montiel@waikato.ac.nz'
 URL = 'https://scikit-multiflow.github.io/'
-PROJECT_URLS = {'Travis CI': 'https://travis-ci.org/scikit-multiflow/scikit-multiflow',
-                'Documentation': 'https://scikit-multiflow.github.io/scikit-multiflow/',
-                'Source code': 'https://github.com/scikit-multiflow/scikit-multiflow',
-                }
+PROJECT_URLS = {
+    'Documentation': 'https://scikit-multiflow.github.io/scikit-multiflow/',
+    'Source code': 'https://github.com/scikit-multiflow/scikit-multiflow',
+    'Bug Tracker': 'https://github.com/scikit-multiflow/scikit-multiflow/issues',
+    'Azure Pipelines': 'https://dev.azure.com/scikit-multiflow/scikit-multiflow',
+}
 DOWNLOAD_URL = 'https://pypi.org/project/scikit-multiflow/#files'
 LICENSE = '3-Clause BSD'
 
@@ -36,7 +37,7 @@ LICENSE = '3-Clause BSD'
 ver_file = os.path.join('src/skmultiflow', '_version.py')
 with open(ver_file) as f:
     exec(f.read())
-VERSION = __version__
+VERSION = __version__  # noqa
 
 # read the contents of README file
 pkg_directory = path.abspath(path.dirname(__file__))
@@ -44,7 +45,7 @@ with open(path.join(pkg_directory, 'README.md'), encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 with open('requirements.txt') as fid:
-    INSTALL_REQUIRES = [l.strip() for l in fid.readlines() if l]
+    INSTALL_REQUIRES = [line.strip() for line in fid.readlines() if line]
 
 
 def configuration(parent_package='', top_path=None):
@@ -93,8 +94,6 @@ def setup_package():
                     long_description=LONG_DESCRIPTION,
                     long_description_content_type='text/markdown',
                     package_dir={'': 'src'},
-                    include_package_data=True,
-                    zip_safe=False,
                     install_requires=INSTALL_REQUIRES,
                     setup_requires=['pytest-runner'],
                     tests_require=['pytest'],
@@ -106,6 +105,7 @@ def setup_package():
                                  'Programming Language :: Python :: 3.5',
                                  'Programming Language :: Python :: 3.6',
                                  'Programming Language :: Python :: 3.7',
+                                 'Programming Language :: Python :: 3.8',
                                  "Topic :: Scientific/Engineering",
                                  "Topic :: Scientific/Engineering :: Artificial Intelligence",
                                  "Topic :: Software Development",
@@ -115,7 +115,17 @@ def setup_package():
                                  'Operating System :: MacOS',
                                  'Operating System :: Microsoft :: Windows'
                                  ],
-                    python_requires=">=3.5")
+                    python_requires=">=3.5",
+                    zip_safe=False,  # the package can run out of an .egg file
+                    include_package_data=True,
+                    cmdclass={'sdist': sdist})
+
+    if sys.version_info < (3, 5):
+        raise RuntimeError("scikit-multiflow requires Python 3.5 or later. "
+                           "The current Python version is {} installed in {}}.".
+                           format(platform.python_version(), sys.executable))
+
+    from numpy.distutils.core import setup
 
     metadata['configuration'] = configuration
 
@@ -124,4 +134,4 @@ def setup_package():
 
 if __name__ == "__main__":
     setup_package()
-    del builtins.__SKMULTIFLOW_SETUP__
+    del builtins.__SKMULTIFLOW_SETUP__   # noqa
