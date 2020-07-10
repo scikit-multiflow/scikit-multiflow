@@ -4,11 +4,11 @@ from skmultiflow.trees.split_criterion import GiniSplitCriterion
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
 from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import AnyTimeSplitNode
-from skmultiflow.trees.nodes import AnyTimeActiveLearningNode
-from skmultiflow.trees.nodes import AnyTimeInactiveLearningNode
-from skmultiflow.trees.nodes import AnyTimeLearningNodeNB
-from skmultiflow.trees.nodes import AnyTimeLearningNodeNBAdaptive
+from skmultiflow.trees.nodes import EFDTSplitNode
+from skmultiflow.trees.nodes import EFDTActiveLearningNode
+from skmultiflow.trees.nodes import EFDTInactiveLearningNode
+from skmultiflow.trees.nodes import EFDTActiveLearningNodeNB
+from skmultiflow.trees.nodes import EFDTActiveLearningNodeNBAdaptive
 from skmultiflow.utils import get_dimensions
 
 import warnings
@@ -121,18 +121,18 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
         if is_active_node:
             if self._leaf_prediction == self._MAJORITY_CLASS:
-                return AnyTimeActiveLearningNode(initial_class_observations)
+                return EFDTActiveLearningNode(initial_class_observations)
             elif self._leaf_prediction == self._NAIVE_BAYES:
-                return AnyTimeLearningNodeNB(initial_class_observations)
+                return EFDTActiveLearningNodeNB(initial_class_observations)
             else:  # NAIVE BAYES ADAPTIVE (default)
-                return AnyTimeLearningNodeNBAdaptive(initial_class_observations)
+                return EFDTActiveLearningNodeNBAdaptive(initial_class_observations)
         else:
-            return AnyTimeInactiveLearningNode(initial_class_observations)
+            return EFDTInactiveLearningNode(initial_class_observations)
 
     # Override new_split_node
     def new_split_node(self, split_test, class_observations, attribute_observers):
         """ Create a new split node."""
-        return AnyTimeSplitNode(split_test, class_observations, attribute_observers)
+        return EFDTSplitNode(split_test, class_observations, attribute_observers)
 
     # =================================================
     # == Extremely Fast Decision Tree implementation ==
@@ -266,9 +266,9 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
             Classes (targets) for all samples in X.
         weight: float or array-like
             Instance weight. If not provided, uniform weights are assumed.
-        node: AnyTimeSplitNode or AnyTimeActiveLearningNode
+        node: EFDTSplitNode or EFDTActiveLearningNode
             The node to process.
-        parent: AnyTimeSplitNode or AnyTimeActiveLearningNode
+        parent: EFDTSplitNode or EFDTActiveLearningNode
             The node's parent.
         branch_index: int or None
             Parent node's branch index.
@@ -276,9 +276,9 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
         """
 
         # skip learning node and update SplitNode because the learning node already learnt from instance.
-        if isinstance(node, AnyTimeSplitNode):
+        if isinstance(node, EFDTSplitNode):
 
-            # update AnyTimeSplitNode statics & attribute_observers
+            # update EFDTSplitNode statics & attribute_observers
             node.learn_from_instance(X, y, weight, self)
 
             # get old statics
@@ -305,7 +305,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                         # This possible if there is a problem with child_index, it returns float in case of
                         # nominal attribute
                         pass
-        elif self._growth_allowed and isinstance(node, AnyTimeActiveLearningNode):
+        elif self._growth_allowed and isinstance(node, EFDTActiveLearningNode):
             weight_seen = node.get_weight_seen()
             weight_diff = weight_seen - node.get_weight_seen_at_last_split_evaluation()
             if weight_diff >= self.grace_period:
@@ -347,7 +347,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
         if self._train_weight_seen_by_model % self.memory_estimate_period == 0:
             self.estimate_model_byte_size()
 
-    def _reevaluate_best_split(self, node: AnyTimeSplitNode, parent, branch_index):
+    def _reevaluate_best_split(self, node: EFDTSplitNode, parent, branch_index):
         """ Reevaluate the best split for a node.
 
         If the samples seen so far are not from the same class then:
@@ -368,9 +368,9 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
         Parameters
         ----------
-        node: AnyTimeSplitNode
+        node: EFDTSplitNode
             The node to reevaluate.
-        parent: AnyTimeSplitNode
+        parent: EFDTSplitNode
             The node's parent.
         branch_index: int
             Parent node's branch index.
@@ -417,7 +417,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
                 if x_null.merit - x_best.merit > hoeffding_bound:
 
-                    # Kill subtree & replace the AnyTimeSplitNode by AnyTimeActiveLearningNode
+                    # Kill subtree & replace the EFDTSplitNode by EFDTActiveLearningNode
 
                     best_split = self._kill_subtree(node)
 
@@ -493,9 +493,9 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
         Parameters
         ----------
-        node: AnyTimeActiveLearningNode
+        node: EFDTActiveLearningNode
             The node to reevaluate.
-        parent: AnyTimeSplitNode
+        parent: EFDTSplitNode
             The node's parent.
         branch_index: int
             Parent node's branch index.
@@ -555,17 +555,17 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                     # Manage memory
                     self.enforce_tracker_limit()
 
-    def _kill_subtree(self, node: AnyTimeSplitNode):
+    def _kill_subtree(self, node: EFDTSplitNode):
         """ Kill subtree that starts from node.
 
 
         Parameters
         ----------
-        node: AnyTimeActiveLearningNode
+        node: EFDTActiveLearningNode
             The node to reevaluate.
         Returns
         -------
-        AnyTimeActiveLearningNode
+        EFDTActiveLearningNode
             The new leaf.
         """
 

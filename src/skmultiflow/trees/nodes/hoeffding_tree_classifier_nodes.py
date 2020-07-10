@@ -218,6 +218,20 @@ class ActiveLearningNodeNB(ActiveLearningNode):
         else:
             return super().get_class_votes(X, ht)
 
+    def disable_attribute(self, att_index):
+        """ Disable an attribute observer.
+
+        Disabled in Nodes using Naive Bayes, since poor attributes are used in
+        Naive Bayes calculation.
+
+        Parameters
+        ----------
+        att_index: int
+            Attribute index.
+
+        """
+        pass
+
 
 class ActiveLearningNodeNBAdaptive(ActiveLearningNodeNB):
     """ Learning node that uses Adaptive Naive Bayes models.

@@ -13,15 +13,10 @@ from .hoeffding_tree_classifier_nodes import ActiveLearningNode, InactiveLearnin
 from .hoeffding_adaptive_tree_classifier_nodes import AdaSplitNode, AdaLearningNode
 from .arf_hoeffding_tree_classifier_nodes import RandomActiveLearningNode, \
     RandomActiveLearningNodeNB, RandomActiveLearningNodeNBAdaptive
-from .anytime_split_node import AnyTimeSplitNode
-from .anytime_active_learning_node import AnyTimeActiveLearningNode
-from .anytime_inactive_learning_node import AnyTimeInactiveLearningNode
-from .anytime_learning_node_nb import AnyTimeLearningNodeNB
-from .anytime_learning_node_nb_adaptive import AnyTimeLearningNodeNBAdaptive
-from .lc_active_learning_node import LCActiveLearningNode
-from .lc_inactive_learning_node import LCInactiveLearningNode
-from .lc_learning_node_nb import LCLearningNodeNB
-from .lc_learning_node_nba import LCLearningNodeNBA
+from .extremely_fast_decision_tree_classifier_nodes import EFDTSplitNode, EFDTActiveLearningNode, \
+    EFDTInactiveLearningNode, EFDTActiveLearningNodeNB, EFDTActiveLearningNodeNBAdaptive
+from .lc_hoeffding_tree_classifier_nodes import LCActiveLearningNode, LCInactiveLearningNode, \
+    LCLearningNodeNB, LCLearningNodeNBA
 from .active_learning_node_for_regression import ActiveLearningNodeForRegression
 from .active_learning_node_perceptron import ActiveLearningNodePerceptron
 from .inactive_learning_node_for_regression import InactiveLearningNodeForRegression
@@ -47,8 +42,8 @@ __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode
            "InactiveLearningNode", "ActiveLearningNodeNB", "ActiveLearningNodeNBAdaptive",
            "RandomActiveLearningNode", "RandomActiveLearningNodeNB",
            "RandomActiveLearningNodeNBAdaptive", "AdaNode", "AdaSplitNode", "AdaLearningNode",
-           "AnyTimeSplitNode", "AnyTimeActiveLearningNode", "AnyTimeInactiveLearningNode",
-           "AnyTimeLearningNodeNB", "AnyTimeLearningNodeNBAdaptive",
+           "EFDTSplitNode", "EFDTActiveLearningNode", "EFDTInactiveLearningNode",
+           "EFDTActiveLearningNodeNB", "EFDTActiveLearningNodeNBAdaptive",
            "LCActiveLearningNode", "LCInactiveLearningNode", "LCLearningNodeNB",
            "LCLearningNodeNBA", "ActiveLearningNodeForRegression", "ActiveLearningNodePerceptron",
            "InactiveLearningNodeForRegression", "InactiveLearningNodePerceptron",
