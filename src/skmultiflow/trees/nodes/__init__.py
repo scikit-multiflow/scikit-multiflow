@@ -11,9 +11,8 @@ from .learning_node import LearningNode
 from .hoeffding_tree_classifier_nodes import ActiveLearningNode, InactiveLearningNode, \
     ActiveLearningNodeNB, ActiveLearningNodeNBAdaptive
 from .hoeffding_adaptive_tree_classifier_nodes import AdaSplitNode, AdaLearningNode
-from .random_learning_node_classification import RandomLearningNodeClassification
-from .random_learning_node_nb import RandomLearningNodeNB
-from .random_learning_node_nb_adaptive import RandomLearningNodeNBAdaptive
+from .arf_hoeffding_tree_classifier_nodes import RandomActiveLearningNode, \
+    RandomActiveLearningNodeNB, RandomActiveLearningNodeNBAdaptive
 from .anytime_split_node import AnyTimeSplitNode
 from .anytime_active_learning_node import AnyTimeActiveLearningNode
 from .anytime_inactive_learning_node import AnyTimeInactiveLearningNode
@@ -46,8 +45,8 @@ from .sst_inactive_learning_node_adaptive import SSTInactiveLearningNodeAdaptive
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode",
            "InactiveLearningNode", "ActiveLearningNodeNB", "ActiveLearningNodeNBAdaptive",
-           "RandomLearningNodeClassification", "RandomLearningNodeNB",
-           "RandomLearningNodeNBAdaptive", "AdaNode", "AdaSplitNode", "AdaLearningNode",
+           "RandomActiveLearningNode", "RandomActiveLearningNodeNB",
+           "RandomActiveLearningNodeNBAdaptive", "AdaNode", "AdaSplitNode", "AdaLearningNode",
            "AnyTimeSplitNode", "AnyTimeActiveLearningNode", "AnyTimeInactiveLearningNode",
            "AnyTimeLearningNodeNB", "AnyTimeLearningNodeNBAdaptive",
            "LCActiveLearningNode", "LCInactiveLearningNode", "LCLearningNodeNB",
