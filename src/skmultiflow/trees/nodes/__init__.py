@@ -7,10 +7,8 @@ from .found_node import FoundNode
 from .node import Node
 from .split_node import SplitNode
 from .learning_node import LearningNode
-from .active_learning_node import ActiveLearningNode
-from .inactive_learning_node import InactiveLearningNode
-from .learning_node_nb import LearningNodeNB
-from .learning_node_nb_adaptive import LearningNodeNBAdaptive
+from .hoeffding_tree_classifier_nodes import ActiveLearningNode, InactiveLearningNode, \
+    LearningNodeNB, LearningNodeNBAdaptive
 from .random_learning_node_classification import RandomLearningNodeClassification
 from .random_learning_node_nb import RandomLearningNodeNB
 from .random_learning_node_nb_adaptive import RandomLearningNodeNBAdaptive
