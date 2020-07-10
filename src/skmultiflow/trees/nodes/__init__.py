@@ -17,10 +17,8 @@ from .extremely_fast_decision_tree_classifier_nodes import EFDTSplitNode, EFDTAc
     EFDTInactiveLearningNode, EFDTActiveLearningNodeNB, EFDTActiveLearningNodeNBAdaptive
 from .lc_hoeffding_tree_classifier_nodes import LCActiveLearningNode, LCInactiveLearningNode, \
     LCLearningNodeNB, LCLearningNodeNBA
-from .active_learning_node_for_regression import ActiveLearningNodeForRegression
-from .active_learning_node_perceptron import ActiveLearningNodePerceptron
-from .inactive_learning_node_for_regression import InactiveLearningNodeForRegression
-from .inactive_learning_node_perceptron import InactiveLearningNodePerceptron
+from .hoeffding_tree_regressor_nodes import ActiveLearningNodeForRegression, \
+    ActiveLearningNodePerceptron, InactiveLearningNodeForRegression, InactiveLearningNodePerceptron
 from .random_learning_node_for_regression import RandomLearningNodeForRegression
 from .random_learning_node_perceptron import RandomLearningNodePerceptron
 from .ada_split_node_for_regression import AdaSplitNodeForRegression

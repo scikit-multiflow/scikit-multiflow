@@ -14,7 +14,7 @@ from skmultiflow.trees.nodes import ActiveLearningNodeForRegression
 from skmultiflow.trees.nodes import InactiveLearningNodeForRegression
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.nodes import InactiveLearningNodePerceptron
-from skmultiflow.trees.nodes.active_learning_node_perceptron import compute_sd
+from skmultiflow.trees.nodes.hoeffding_tree_regressor_nodes import compute_sd
 
 import warnings
 
