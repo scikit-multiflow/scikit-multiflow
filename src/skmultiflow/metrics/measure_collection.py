@@ -1,6 +1,7 @@
 import numpy as np
 
-from skmultiflow.utils.data_structures import FastBuffer, FastComplexBuffer, ConfusionMatrix, MOLConfusionMatrix
+from skmultiflow.utils.data_structures import FastBuffer, FastComplexBuffer, ConfusionMatrix, \
+    MOLConfusionMatrix
 from skmultiflow.utils import check_weights
 
 from timeit import default_timer as timer
@@ -39,8 +40,8 @@ class ClassificationMeasurements(object):
     """
 
     def __init__(self, targets=None, dtype=np.int64):
-        warnings.warn("'{}' will be removed in v0.7. Use 'ClassificationPerformanceEvaluator' instead.".
-                      format(type(self).__name__), category=FutureWarning)
+        warnings.warn("'{}' will be removed in v0.7. Use 'ClassificationPerformanceEvaluator' "
+                      "instead.".format(type(self).__name__), category=FutureWarning)
         super().__init__()
         if targets is not None:
             self.n_targets = len(targets)
@@ -258,7 +259,7 @@ class ClassificationMeasurements(object):
             return 0.0
         else:
             tn = self.confusion_matrix.value_at(negative_idx, negative_idx)
-            fp = self.confusion_matrix.value_at(negative_idx, 1-negative_idx)
+            fp = self.confusion_matrix.value_at(negative_idx, 1 - negative_idx)
             if tn + fp == 0:
                 specificity = 0
             else:
@@ -295,7 +296,7 @@ class ClassificationMeasurements(object):
             return 0.0
         else:
             tp = self.confusion_matrix.value_at(positive_idx, positive_idx)
-            fp = self.confusion_matrix.value_at(1-positive_idx, positive_idx)
+            fp = self.confusion_matrix.value_at(1 - positive_idx, positive_idx)
             if tp + fp == 0:
                 return 0.0
             else:
@@ -314,7 +315,7 @@ class ClassificationMeasurements(object):
             return 0.0
         else:
             tp = self.confusion_matrix.value_at(positive_idx, positive_idx)
-            fn = self.confusion_matrix.value_at(positive_idx, 1-positive_idx)
+            fn = self.confusion_matrix.value_at(positive_idx, 1 - positive_idx)
             if tp + fn == 0:
                 return 0.0
             else:
@@ -373,8 +374,9 @@ class WindowClassificationMeasurements(object):
     """
 
     def __init__(self, targets=None, dtype=np.int64, window_size=200):
-        warnings.warn("'{}' will be removed in v0.7. Use 'WindowClassificationPerformanceEvaluator' instead.".
-                      format(type(self).__name__), category=FutureWarning)
+        warnings.warn("'{}' will be removed in v0.7. Use "
+                      "'WindowClassificationPerformanceEvaluator' instead.".format(
+                          type(self).__name__), category=FutureWarning)
         super().__init__()
         if targets is not None:
             self.n_targets = len(targets)
@@ -739,8 +741,9 @@ class MultiTargetClassificationMeasurements(object):
     """
 
     def __init__(self, targets=None, dtype=np.int64):
-        warnings.warn("'{}' will be removed in v0.7. Use 'MultiLabelClassificationPerformanceEvaluator' instead.".
-                      format(type(self).__name__), category=FutureWarning)
+        warnings.warn("'{}' will be removed in v0.7. Use "
+                      "'MultiLabelClassificationPerformanceEvaluator' instead.".format(
+                          type(self).__name__), category=FutureWarning)
         super().__init__()
         if targets is not None:
             self.n_targets = len(targets)
@@ -837,7 +840,8 @@ class MultiTargetClassificationMeasurements(object):
 
         """
         try:
-            return self.confusion_matrix.get_sum_main_diagonal() / (self.sample_count * self.n_targets)
+            return self.confusion_matrix.get_sum_main_diagonal() / (
+                self.sample_count * self.n_targets)
         except ZeroDivisionError:
             return 0.0
 
@@ -922,8 +926,11 @@ class WindowMultiTargetClassificationMeasurements(object):
     """
 
     def __init__(self, targets=None, dtype=np.int64, window_size=200):
-        warnings.warn("'{}' will be removed in v0.7. Use 'WindowMultiLabelClassificationPerformanceEvaluator' instead.".
-                      format(type(self).__name__), category=FutureWarning)
+        warnings.warn(
+            "'{}' will be removed in v0.7. Use "
+            "'WindowMultiLabelClassificationPerformanceEvaluator' instead.".format(
+                type(self).__name__),
+            category=FutureWarning)
         super().__init__()
         if targets is not None:
             self.n_targets = len(targets)
@@ -1194,7 +1201,8 @@ class WindowRegressionMeasurements(object):
 
         old_square = self.total_square_error_correction.add_element(
             np.array([-1 * ((y_true - y_pred) * (y_true - y_pred))]))
-        old_average = self.average_error_correction.add_element(np.array([-1 * (np.absolute(y_true - y_pred))]))
+        old_average = self.average_error_correction.add_element(
+            np.array([-1 * (np.absolute(y_true - y_pred))]))
 
         if (old_square is not None) and (old_average is not None):
             self.total_square_error += old_square[0]
@@ -1351,10 +1359,10 @@ class MultiTargetRegressionMeasurements(object):
 
     def get_info(self):
         return 'MultiTargetRegressionMeasurements: sample_count: ' + \
-                str(self._sample_count) + ' - average_mean_square_error: ' + \
-                str(self.get_average_mean_square_error()) + ' - average_mean_absolute_error: ' + \
-                str(self.get_average_absolute_error()) + ' - average_root_mean_square_error: ' + \
-                str(self.get_average_root_mean_square_error())
+               str(self._sample_count) + ' - average_mean_square_error: ' + \
+               str(self.get_average_mean_square_error()) + ' - average_mean_absolute_error: ' + \
+               str(self.get_average_absolute_error()) + ' - average_root_mean_square_error: ' + \
+               str(self.get_average_root_mean_square_error())
 
 
 class WindowMultiTargetRegressionMeasurements(object):
@@ -1480,10 +1488,10 @@ class WindowMultiTargetRegressionMeasurements(object):
 
     def get_info(self):
         return 'MultiTargetRegressionMeasurements: sample_count: ' + \
-                str(self._sample_count) + ' - average_mean_square_error: ' + \
-                str(self.get_average_mean_square_error()) + ' - average_mean_absolute_error: ' + \
-                str(self.get_average_absolute_error()) + ' - average_root_mean_square_error: ' + \
-                str(self.get_average_root_mean_square_error())
+               str(self._sample_count) + ' - average_mean_square_error: ' + \
+               str(self.get_average_mean_square_error()) + ' - average_mean_absolute_error: ' + \
+               str(self.get_average_absolute_error()) + ' - average_root_mean_square_error: ' + \
+               str(self.get_average_root_mean_square_error())
 
 
 class RunningTimeMeasurements(object):
@@ -1565,12 +1573,12 @@ class RunningTimeMeasurements(object):
 
     def get_info(self):
         return 'RunningTimeMeasurements: sample_count: ' + \
-                str(self._sample_count) + ' - Total running time: ' + \
-                str(self.get_current_total_running_time()) + \
-                ' - training_time: ' + \
-                str(self.get_current_training_time()) + \
-                ' - testing_time: ' + \
-                str(self.get_current_testing_time())
+               str(self._sample_count) + ' - Total running time: ' + \
+               str(self.get_current_total_running_time()) + \
+               ' - training_time: ' + \
+               str(self.get_current_training_time()) + \
+               ' - testing_time: ' + \
+               str(self.get_current_testing_time())
 
 
 def hamming_score(true_labels, predicts):

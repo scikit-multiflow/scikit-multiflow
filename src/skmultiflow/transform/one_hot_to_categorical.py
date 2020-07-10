@@ -6,16 +6,16 @@ from skmultiflow.utils.utils import get_dimensions
 
 class OneHotToCategorical(StreamTransform):
     """ Transform one-hot encoded data into categorical feature(s).
-    
-    Receives a features matrix, with some binary features (one-hot), and transform them into single categorical
-    feature.
-    
+
+    Receives a features matrix, with some binary features (one-hot), and transform them
+    into single categorical feature.
+
     Parameters
     ----------
     categorical_list: list of lists
         Each inner list contains all the attribute indexes that are associated with
         the same categorical feature.
-    
+
     """
 
     def __init__(self, categorical_list):
@@ -24,20 +24,20 @@ class OneHotToCategorical(StreamTransform):
 
     def transform(self, X):
         """ transform
-        
-        Transform one hot features in the X matrix into int coded 
+
+        Transform one hot features in the X matrix into int coded
         categorical features.
-        
+
         Parameters
         ----------
         X: numpy.ndarray of shape (n_samples, n_features)
             The sample or set of samples that should be transformed.
-         
+
         Returns
         -------
         numpy.ndarray
             The transformed data.
-        
+
         """
         r, c = get_dimensions(X)
 
@@ -52,7 +52,7 @@ class OneHotToCategorical(StreamTransform):
         return ret
 
     def _transform(self, X, new_size):
-        ret = np.zeros((1,new_size), dtype=X.dtype)
+        ret = np.zeros((1, new_size), dtype=X.dtype)
         list_index = 0
         i = 0
         new_i = 0
@@ -61,7 +61,7 @@ class OneHotToCategorical(StreamTransform):
                 c = 0
                 found = False
                 for j in range(len(self.categorical_list[list_index])):
-                    if X[i+j] == 1:
+                    if X[i + j] == 1:
                         found = True
                     if not found:
                         c += 1

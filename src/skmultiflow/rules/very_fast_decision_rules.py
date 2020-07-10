@@ -28,7 +28,7 @@ _DDM = 'ddm'
 
 import warnings
 
-
+# flake8: noqa
 def VFDR(expand_confidence=0.0000001, ordered_rules=True, grace_period=200, tie_threshold=0.05,
          rule_prediction='first_hit', nominal_attributes=None, max_rules=1000, nb_threshold=0, nb_prediction=True,
          drift_detector=None, expand_criterion='info_gain', remove_poor_atts=False, min_weight=100):  # pragma: no cover

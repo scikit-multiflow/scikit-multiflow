@@ -1,25 +1,25 @@
 def clean_header(base_file, new_file=None, ignore_char='#'):
     """ clean_header
-    
+
     Cleans a file header based on an ignore char passed as parameter.
     It removes the entire line that is followed by the ignore char.
-    
-    If the new_file parameter is not passed, the cleaned content is 
-    going to be put in a file of the same name as the base file, but 
+
+    If the new_file parameter is not passed, the cleaned content is
+    going to be put in a file of the same name as the base file, but
     concatenated with the string '_no_header'.
-    
+
     Parameters
     ----------
     base_file: string
         The file to be cleaned.
-    
+
     new_file: string, optional
-        If given, this specifies the name of the new file, where 
+        If given, this specifies the name of the new file, where
         the changed content is going to be put.
-    
+
     ignore_char: char
         The char that marks the beginning of a header/comment line.
-         
+
     """
     # Find the new_file name
     if new_file is not None:
@@ -46,28 +46,28 @@ def clean_header(base_file, new_file=None, ignore_char='#'):
 
 class RemoveHeader(object):
     """ RemoveHeader
-        
-    Class whose sole purpose is to remove the header from any file, and save 
+
+    Class whose sole purpose is to remove the header from any file, and save
     the changes to a new file.
-    
+
     Parameters
     ----------
-    base_file: string 
+    base_file: string
         The file to be cleaned.
-        
-    new_file: string, optional 
-        If given, this specifies the name of the new file, where 
+
+    new_file: string, optional
+        If given, this specifies the name of the new file, where
         the changed content is going to be put.
-        
+
     ignore_char: char
         The char that marks the beginning of a header/comment line.
-    
+
     Notes
     -----
-    If the new_file parameter is not passed, the cleaned content is 
-    going to be put in a file of the same name as the base file, but 
+    If the new_file parameter is not passed, the cleaned content is
+    going to be put in a file of the same name as the base file, but
     concatenated with the string '_no_header'.
-    
+
     """
 
     def __init__(self, base_file, new_file=None, ignore_char='#'):

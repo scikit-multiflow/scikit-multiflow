@@ -39,8 +39,8 @@ def check_weights(weight, expand_length=1):
         If weight is a list or np.ndarray, returns it
         Otherwise raise ValueError.
     expand_length : int, optional (default=1)
-        If the value passed is larger than 1 and weight is a single value, then the weight is replicated n times inside
-        an np.array. If weight is not a single value, raises an error
+        If the value passed is larger than 1 and weight is a single value, then the weight is
+        replicated n times inside an np.array. If weight is not a single value, raises an error
 
     """
     if isinstance(weight, (int, float, np.integer, np.float)):
@@ -51,7 +51,13 @@ def check_weights(weight, expand_length=1):
             if expand_length == 1:
                 return weight
     if isinstance(weight, np.ndarray):
-        if weight.size > 1 and all(isinstance(x, (int, float, np.integer, np.float)) for x in weight):
+        if weight.size > 1 and all(
+            isinstance(
+                x,
+                (int,
+                 float,
+                 np.integer,
+                 np.float)) for x in weight):
             if expand_length == 1:
                 return weight
         elif weight.size == 1 and isinstance(weight[0], (int, float, np.integer, np.float)):

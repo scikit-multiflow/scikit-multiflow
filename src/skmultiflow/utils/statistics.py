@@ -7,8 +7,8 @@ MAXLOG = 7.09782712893383996732E2
 def normal_probability(a):
     """ normal_probability
 
-    Returns the area under the Normal (Gaussian) Probability Density Function, integrated from minus infinity to
-    :math:`x` (assumes mean is zero, variance is one).
+    Returns the area under the Normal (Gaussian) Probability Density Function, integrated from
+    minus infinity to :math:`x` (assumes mean is zero, variance is one).
     Computation is via the functions errorFunction and errorFunctionComplement.
 
     Parameters
@@ -22,7 +22,7 @@ def normal_probability(a):
     """
     x = a * SQRTH
     z = np.abs(x)
-    
+
     if z < SQRTH:
         y = 0.5 + 0.5 * error_function(x)
     else:

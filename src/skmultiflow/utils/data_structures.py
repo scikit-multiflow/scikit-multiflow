@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 from skmultiflow.utils import get_dimensions
 
@@ -159,7 +158,8 @@ class FastBuffer(object):
         return self.buffer
 
     def get_info(self):
-        return 'FastBuffer: max_size: ' + str(self.max_size) + ' - current_size: ' + str(self.current_size)
+        return 'FastBuffer: max_size: ' + \
+            str(self.max_size) + ' - current_size: ' + str(self.current_size)
 
 
 class FastComplexBuffer(object):
@@ -677,7 +677,8 @@ class MOLConfusionMatrix(object):
             return False
         else:
             m, n, p = self.confusion_matrix.shape
-            if (target < m) and (target >= 0) and (true < n) and (true >= 0) and (pred < p) and (pred >= 0):
+            if (target < m) and (target >= 0) and (true < n) and (
+                    true >= 0) and (pred < p) and (pred >= 0):
                 return self._update(target, true, pred, weight)
             else:
                 if (true > 1) or (true < 0) or (pred > 1) or (pred < 0):
@@ -715,7 +716,8 @@ class MOLConfusionMatrix(object):
         if true is None or pred is None or target is None:
             return False
         m, n, p = self.confusion_matrix.shape
-        if (target <= m) and (target >= 0) and (true <= n) and (true >= 0) and (pred >= 0) and (pred <= p):
+        if (target <= m) and (target >= 0) and (true <= n) and (
+                true >= 0) and (pred >= 0) and (pred <= p):
             return self._remove(target, true, pred)
         else:
             return False

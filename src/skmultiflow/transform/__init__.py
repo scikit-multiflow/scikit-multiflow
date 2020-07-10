@@ -7,4 +7,8 @@ from .missing_values_cleaner import MissingValuesCleaner
 from .windowed_minmax_scaler import WindowedMinmaxScaler
 from .windowed_standard_scaler import WindowedStandardScaler
 
-__all__ = ["OneHotToCategorical", "MissingValuesCleaner", "WindowedMinmaxScaler", "WindowedStandardScaler"]
+__all__ = [
+    "OneHotToCategorical",
+    "MissingValuesCleaner",
+    "WindowedMinmaxScaler",
+    "WindowedStandardScaler"]

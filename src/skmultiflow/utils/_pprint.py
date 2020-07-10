@@ -75,6 +75,7 @@ from . import is_scalar_nan
 
 class KeyValTuple(tuple):
     """Dummy class for correctly rendering key-value tuples from dicts."""
+
     def __repr__(self):
         # needed for _dispatch[tuple.__repr__] not to be overridden
         return super().__repr__()

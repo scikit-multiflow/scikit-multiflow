@@ -10,45 +10,45 @@ from skmultiflow.utils import FastBuffer, constants
 class EvaluationVisualizer(BaseListener):
     """ This class is responsible for maintaining and updating the plot modules
     for the evaluators in scikit-multiflow.
-    
+
     It uses `matplotlib.pyplot` modules to create the main plot, which
-    depending on the options passed to it as parameter, will create multiple 
+    depending on the options passed to it as parameter, will create multiple
     subplots to better display all requested metrics.
-    
+
     The plots are dynamically updated depending on frame counts amd time elapsed
     since last update. This strategy account for fast and slow methods.
-    
+
     Line objects are used to describe performance measurements.
-    
+
     It supports multiple models per subplot as a way of comparing the performance
     of different learning algorithms.
-    
+
     Parameters
     ----------
     n_wait: int
         The number of samples tracked in the sliding window for current performance.
-    
+
     dataset_name: string (Default: 'Unnamed graph')
         The title of the plot. Algorithmically it's not important.
-    
+
     metrics: list
         A list containing all the metrics to plot.
-    
+
     n_models: int
         The number of models to compare.
-    
+
     Raises
     ------
-    ValueError: A ValueError can be raised for a series of reasons. If no plots 
-    are passed as parameter to the constructor a ValueError is raised. If the wrong 
+    ValueError: A ValueError can be raised for a series of reasons. If no plots
+    are passed as parameter to the constructor a ValueError is raised. If the wrong
     type of parameter is passed to on_new_train_step the same error is raised.
-    
+
     Notes
     -----
     Using more than 3 plot types at a time is not recommended, as it can
     significantly slow down the evaluation time. For the same reason comparing
     more than 3 learners at a time is not recommended.
-    
+
     """
 
     def __init__(self, task_type, n_wait, dataset_name, metrics, n_models, model_names, data_dict):
@@ -72,8 +72,11 @@ class EvaluationVisualizer(BaseListener):
         if task_type is None or task_type == constants.UNDEFINED:
             raise ValueError('Task type for visualizer object is undefined.')
         else:
-            if task_type in [constants.CLASSIFICATION, constants.REGRESSION, constants.MULTI_TARGET_CLASSIFICATION,
-                             constants.MULTI_TARGET_REGRESSION]:
+            if task_type in [
+                    constants.CLASSIFICATION,
+                    constants.REGRESSION,
+                    constants.MULTI_TARGET_CLASSIFICATION,
+                    constants.MULTI_TARGET_REGRESSION]:
                 self.task_type = task_type
             else:
                 raise ValueError('Invalid task type: {}'.format(task_type))
@@ -83,8 +86,9 @@ class EvaluationVisualizer(BaseListener):
         else:
             if isinstance(model_names, list):
                 if len(model_names) != n_models:
-                    raise ValueError("Number of model names {} does not match the number of models {}.".
-                                     format(len(model_names), n_models))
+                    raise ValueError(
+                        "Number of model names {} does not match the number of models {}.".format(
+                            len(model_names), n_models))
                 else:
                     self.model_names = model_names
             else:
@@ -106,10 +110,10 @@ class EvaluationVisualizer(BaseListener):
 
     def on_new_train_step(self, sample_id, data_buffer):
         """ This is the listener main function, which gives it the ability to
-        'listen' for the caller. Whenever the EvaluationVisualiser should 
+        'listen' for the caller. Whenever the EvaluationVisualiser should
         be aware of some new data, the caller will invoke this function,
         passing the new data buffer.
-        
+
         Parameters
         ----------
         sample_id: int
@@ -117,11 +121,11 @@ class EvaluationVisualizer(BaseListener):
 
         data_buffer: EvaluationDataBuffer
             A buffer containing evaluation data for a single training / visualization step.
-            
+
         Raises
         ------
         ValueError: If an exception is raised during the draw operation.
-         
+
         """
 
         try:
@@ -129,12 +133,14 @@ class EvaluationVisualizer(BaseListener):
             self._clear_annotations()
             self._update_plots(sample_id, data_buffer)
 
-            # To mitigate re-drawing overhead for fast models use frame counter (default = 5 frames).
+            # To mitigate re-drawing overhead for fast models use frame counter
+            # (default = 5 frames).
             # To avoid slow refresh rate in slow models use a time limit (default = 1 sec).
             if (self._frame_cnt == 5) or (current_time - self._last_draw_timestamp > 1):
-                plt.subplots_adjust(right=0.72, bottom=0.22)  # Adjust subplots to include metrics annotations
+                # Adjust subplots to include metrics annotations
+                plt.subplots_adjust(right=0.72, bottom=0.22)
                 if get_backend() == 'nbAgg':
-                    self.fig.canvas.draw()    # Force draw in'notebook' backend
+                    self.fig.canvas.draw()  # Force draw in'notebook' backend
                 plt.pause(1e-9)
                 self._frame_cnt = 0
                 self._last_draw_timestamp = current_time
@@ -147,14 +153,14 @@ class EvaluationVisualizer(BaseListener):
     def __configure(self):
         """  This function will verify which subplots should be create. Initializing
         all relevant objects to keep track of the plotting points.
-        
-        Basic structures needed to keep track of plot values (for each subplot) 
+
+        Basic structures needed to keep track of plot values (for each subplot)
         are: lists of values and matplot line objects.
-        
-        The __configure function will also initialize each subplot with the 
+
+        The __configure function will also initialize each subplot with the
         correct name and setup the axis.
-        
-        The subplot size will self adjust to each screen size, so that data can 
+
+        The subplot size will self adjust to each screen size, so that data can
         be better viewed in different contexts.
 
         """
@@ -180,8 +186,12 @@ class EvaluationVisualizer(BaseListener):
         plt.ion()
         self.fig = plt.figure(figsize=(9, 5))
         self.fig.suptitle(self.dataset_name)
-        plot_metrics = [m for m in self.metrics if m not in [constants.RUNNING_TIME, constants.MODEL_SIZE]]
-        base = 11 + len(plot_metrics) * 100  # 3-digit integer describing the position of the subplot.
+        plot_metrics = [
+            m for m in self.metrics if m not in [
+                constants.RUNNING_TIME,
+                constants.MODEL_SIZE]]
+        # 3-digit integer describing the position of the subplot.
+        base = 11 + len(plot_metrics) * 100
         self.fig.canvas.set_window_title('scikit-multiflow')
 
         # Subplots handler
@@ -203,13 +213,13 @@ class EvaluationVisualizer(BaseListener):
                         line_style = '--'
                         line_obj = plot_tracker.line_objs
                         if self.task_type == constants.CLASSIFICATION:
-                            line_obj[data_id], = plot_tracker.sub_plot_obj.step(self._sample_ids,
-                                                                                plot_tracker.data[data_id],
-                                                                                label=label, linestyle=line_style)
+                            line_obj[data_id], = plot_tracker.sub_plot_obj.step(
+                                self._sample_ids, plot_tracker.data[data_id], label=label,
+                                linestyle=line_style)
                         else:
-                            line_obj[data_id], = plot_tracker.sub_plot_obj.plot(self._sample_ids,
-                                                                                plot_tracker.data[data_id],
-                                                                                label=label, linestyle=line_style)
+                            line_obj[data_id], = plot_tracker.sub_plot_obj.plot(
+                                self._sample_ids, plot_tracker.data[data_id], label=label,
+                                linestyle=line_style)
                         handle.append(line_obj[data_id])
                     else:
                         # Predicted data
@@ -220,13 +230,13 @@ class EvaluationVisualizer(BaseListener):
                             label = 'Predicted {}'.format(self.model_names[i])
                             line_style = '--'
                             if self.task_type == constants.CLASSIFICATION:
-                                line_obj[i], = plot_tracker.sub_plot_obj.step(self._sample_ids,
-                                                                              plot_tracker.data[data_id][i],
-                                                                              label=label, linestyle=line_style)
+                                line_obj[i], = plot_tracker.sub_plot_obj.step(
+                                    self._sample_ids, plot_tracker.data[data_id][i], label=label,
+                                    linestyle=line_style)
                             else:
-                                line_obj[i], = plot_tracker.sub_plot_obj.plot(self._sample_ids,
-                                                                              plot_tracker.data[data_id][i],
-                                                                              label=label, linestyle=line_style)
+                                line_obj[i], = plot_tracker.sub_plot_obj.plot(
+                                    self._sample_ids, plot_tracker.data[data_id][i], label=label,
+                                    linestyle=line_style)
                             handle.append(line_obj[i])
                 plot_tracker.sub_plot_obj.legend(handles=handle, loc=2, bbox_to_anchor=(1.01, 1.))
                 plot_tracker.sub_plot_obj.set_title('True vs Predicted')
@@ -254,23 +264,22 @@ class EvaluationVisualizer(BaseListener):
             else:
                 # Default case, 'mean' and 'current' performance
                 handle = []
-                sorted_data_ids = data_ids.copy()
-                sorted_data_ids.sort()    # For better usage of the color cycle, start with 'current' data
+                sorted_data_ids = sorted(data_ids.copy())
                 for data_id in sorted_data_ids:
                     plot_tracker.data[data_id] = [[] for _ in range(self.n_models)]
                     plot_tracker.line_objs[data_id] = [None for _ in range(self.n_models)]
                     line_obj = plot_tracker.line_objs[data_id]
                     for i in range(self.n_models):
                         if data_id == constants.CURRENT:
-                            label = '{}  (current, {} samples)'.format(self.model_names[i], self.n_wait)
+                            label = '{}  (current, {} samples)'.format(
+                                self.model_names[i], self.n_wait)
                             line_style = '-'
                         else:
                             label = '{} (mean)'.format(self.model_names[i])
                             line_style = ':'
-                        line_obj[i], = plot_tracker.sub_plot_obj.plot(self._sample_ids,
-                                                                      plot_tracker.data[data_id][i],
-                                                                      label=label,
-                                                                      linestyle=line_style)
+                        line_obj[i], = plot_tracker.sub_plot_obj.plot(
+                            self._sample_ids, plot_tracker.data[data_id][i], label=label,
+                            linestyle=line_style)
                         handle.append(line_obj[i])
                 self._set_fig_legend(handle)
 
@@ -341,7 +350,9 @@ class EvaluationVisualizer(BaseListener):
 
     def _set_fig_legend(self, handles=None):
         if not self._is_legend_set:
-            self.fig.legend(handles=handles, ncol=2, bbox_to_anchor=(0.98, 0.04), loc="lower right")
+            self.fig.legend(
+                handles=handles, ncol=2, bbox_to_anchor=(
+                    0.98, 0.04), loc="lower right")
             self._is_legend_set = True
 
     def _update_plots(self, sample_id, data_buffer):
@@ -357,26 +368,32 @@ class EvaluationVisualizer(BaseListener):
             if metric_id == constants.TRUE_VS_PREDICTED:
                 # Process true values
                 data_id = constants.Y_TRUE
-                plot_tracker.data[data_id].append(data_buffer.get_data(metric_id=metric_id, data_id=data_id))
-                plot_tracker.line_objs[data_id].set_data(self._sample_ids, plot_tracker.data[data_id])
+                plot_tracker.data[data_id].append(
+                    data_buffer.get_data(
+                        metric_id=metric_id,
+                        data_id=data_id))
+                plot_tracker.line_objs[data_id].set_data(
+                    self._sample_ids, plot_tracker.data[data_id])
                 # Process predicted values
                 data_id = constants.Y_PRED
                 data = data_buffer.get_data(metric_id=metric_id, data_id=data_id)
                 for i in range(self.n_models):
                     plot_tracker.data[data_id][i].append(data[i])
-                    plot_tracker.line_objs[data_id][i].set_data(self._sample_ids, plot_tracker.data[data_id][i])
-                    y_min = min([plot_tracker.data[data_id][i][-1], plot_tracker.data[constants.Y_TRUE][-1], y_min])
-                    y_max = max([plot_tracker.data[data_id][i][-1], plot_tracker.data[constants.Y_TRUE][-1], y_max])
+                    plot_tracker.line_objs[data_id][i].set_data(
+                        self._sample_ids, plot_tracker.data[data_id][i])
+                    y_min = min([plot_tracker.data[data_id][i][-1],
+                                 plot_tracker.data[constants.Y_TRUE][-1], y_min])
+                    y_max = max([plot_tracker.data[data_id][i][-1],
+                                 plot_tracker.data[constants.Y_TRUE][-1], y_max])
             elif metric_id == constants.DATA_POINTS:
                 update_xy_limits = False
                 # Process features
                 data_id = 'X'
                 features_dict = data_buffer.get_data(metric_id=metric_id, data_id=data_id)
-                feature_indices = list(features_dict.keys())
-                feature_indices.sort()
+                feature_indices = sorted(features_dict.keys())
                 # Store tuple of feature values into the buffer, sorted by index
                 plot_tracker.data[data_id].add_element([[features_dict[feature_indices[0]],
-                                                        features_dict[feature_indices[1]]]])
+                                                         features_dict[feature_indices[1]]]])
 
                 plot_tracker.sub_plot_obj.set_xlabel('Feature {}'.format(feature_indices[0]))
                 plot_tracker.sub_plot_obj.set_ylabel('Feature {}'.format(feature_indices[1]))
@@ -387,14 +404,17 @@ class EvaluationVisualizer(BaseListener):
 
                 # Process target values
                 data_id = 'target_values'
-                plot_tracker.data[data_id] = data_buffer.get_data(metric_id=metric_id, data_id=data_id)
+                plot_tracker.data[data_id] = data_buffer.get_data(
+                    metric_id=metric_id, data_id=data_id)
                 if not plot_tracker.data['clusters_initialized']:
                     for j in range(len(plot_tracker.data[data_id])):
-                        plot_tracker.data['clusters'].append(FastBuffer(plot_tracker.data['buffer_size']))
+                        plot_tracker.data['clusters'].append(
+                            FastBuffer(plot_tracker.data['buffer_size']))
 
                 # Process predictions
                 data_id = 'predictions'
-                plot_tracker.data[data_id].add_element([data_buffer.get_data(metric_id=metric_id, data_id=data_id)])
+                plot_tracker.data[data_id].add_element(
+                    [data_buffer.get_data(metric_id=metric_id, data_id=data_id)])
 
                 for k, cluster in enumerate(plot_tracker.data['clusters']):
                     if plot_tracker.data[data_id].get_queue()[-1] == k:
@@ -402,7 +422,8 @@ class EvaluationVisualizer(BaseListener):
                         # TODO confirm buffer update inside the loop
                     if cluster.get_queue():
                         temp = cluster.get_queue()
-                        plot_tracker.sub_plot_obj.scatter(*zip(*temp), label="Class {k}".format(k=k))
+                        plot_tracker.sub_plot_obj.scatter(
+                            *zip(*temp), label="Class {k}".format(k=k))
                 plot_tracker.sub_plot_obj.legend(loc=2, bbox_to_anchor=(1.01, 1.))
             elif metric_id == constants.RUNNING_TIME:
                 # Only the current time measurement must be saved
@@ -426,7 +447,8 @@ class EvaluationVisualizer(BaseListener):
                     data = data_buffer.get_data(metric_id=metric_id, data_id=data_id)
                     for i in range(self.n_models):
                         plot_tracker.data[data_id][i].append(data[i])
-                        plot_tracker.line_objs[data_id][i].set_data(self._sample_ids, plot_tracker.data[data_id][i])
+                        plot_tracker.line_objs[data_id][i].set_data(
+                            self._sample_ids, plot_tracker.data[data_id][i])
                 # Process data
                 for i in range(self.n_models):
                     # Update annotations
@@ -437,13 +459,18 @@ class EvaluationVisualizer(BaseListener):
                     if metric_id in [constants.KAPPA_T, constants.KAPPA_M]:
                         y_min = min([plot_tracker.data[constants.MEAN][i][-1],
                                      plot_tracker.data[constants.CURRENT][i][-1], y_min])
-                    if metric_id in [constants.MSE, constants.MAE, constants.AMSE, constants.AMAE, constants.ARMSE]:
+                    if metric_id in [
+                            constants.MSE,
+                            constants.MAE,
+                            constants.AMSE,
+                            constants.AMAE,
+                            constants.ARMSE]:
                         y_min = -1
                         y_max = max([plot_tracker.data[constants.MEAN][i][-1],
                                      plot_tracker.data[constants.CURRENT][i][-1], y_max])
                         pad = 0.5 * y_max  # Padding bellow and above thresholds
             if update_xy_limits:
-                plot_tracker.sub_plot_obj.set_ylim((y_min-pad, y_max+pad))
+                plot_tracker.sub_plot_obj.set_ylim((y_min - pad, y_max + pad))
                 plot_tracker.sub_plot_obj.set_xlim(0, self._sample_ids[-1])
         if constants.RUNNING_TIME in self.metrics or \
                 constants.MODEL_SIZE in self.metrics:
@@ -465,34 +492,47 @@ class EvaluationVisualizer(BaseListener):
                                                            xy=xy_pos, xycoords='axes fraction'))
         self._text_annotations.append(subplot.annotate('{: <10.10s}'.format(model_name[:6]),
                                                        xy=xy_pos, xycoords='axes fraction',
-                                                       xytext=(0, -shift_y), textcoords='offset points'))
-        self._text_annotations.append(subplot.annotate('{: ^16.4f}  {: ^16.4f}'.format(mean_value, current_value),
-                                                       xy=xy_pos, xycoords='axes fraction',
-                                                       xytext=(50, -shift_y), textcoords='offset points'))
+                                                       xytext=(0, -shift_y),
+                                                       textcoords='offset points'))
+        self._text_annotations.append(
+            subplot.annotate(
+                '{: ^16.4f}  {: ^16.4f}'.format(
+                    mean_value, current_value), xy=xy_pos, xycoords='axes fraction', xytext=(
+                    50, -shift_y), textcoords='offset points'))
 
     def _update_time_and_memory_annotations(self, memory_time):
         text_header = '{: <12s}'.format('Model')
         if constants.RUNNING_TIME in self.metrics:
-            text_header += ' | {: ^16s} | {: ^16s} | {: ^16s}'.\
-                      format('Train (s)', 'Predict (s)', 'Total (s)')
+            text_header += ' | {: ^16s} | {: ^16s} | {: ^16s}'. \
+                format('Train (s)', 'Predict (s)', 'Total (s)')
         if constants.MODEL_SIZE in self.metrics:
             text_header += ' | {: ^16}'.format('Mem (kB)')
 
         last_plot = self.fig.get_axes()[-1]
         x0, y0, width, height = last_plot.get_position().bounds
         annotation_xy = (.1, .1)
-        self._text_annotations.append(self.fig.text(s=text_header, x=annotation_xy[0], y=annotation_xy[1]))
+        self._text_annotations.append(
+            self.fig.text(
+                s=text_header,
+                x=annotation_xy[0],
+                y=annotation_xy[1]))
 
         for i, m_name in enumerate(self.model_names):
             text_info = '{: <15s}'.format(m_name[:6])
             if constants.RUNNING_TIME in self.metrics:
-                text_info += '{: ^19.2f}  {: ^19.2f}  {: ^19.2f}  '.format(memory_time['training_time'][i],
-                                                                           memory_time['testing_time'][i],
-                                                                           memory_time['total_running_time'][i])
+                text_info += '{: ^19.2f}  {: ^19.2f}  {: ^19.2f}  '.format(
+                    memory_time['training_time'][i],
+                    memory_time['testing_time'][i],
+                    memory_time['total_running_time'][i])
             if constants.MODEL_SIZE in self.metrics:
                 text_info += '{: ^19.2f}'.format(memory_time['model_size'][i])
             shift_y = .03 * (i + 1)  # y axis shift for plot annotations
-            self._text_annotations.append(self.fig.text(s=text_info, x=annotation_xy[0], y=annotation_xy[1] - shift_y))
+            self._text_annotations.append(
+                self.fig.text(
+                    s=text_info,
+                    x=annotation_xy[0],
+                    y=annotation_xy[1] -
+                    shift_y))
 
     @staticmethod
     def hold():
@@ -504,6 +544,7 @@ class PlotDataTracker(object):
     Data buffers and line objects are accessible via the corresponding data_id.
 
     """
+
     def __init__(self, data_ids: list):
         self.data_ids = None
         self.data = {}
