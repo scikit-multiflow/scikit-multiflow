@@ -41,7 +41,8 @@ class ActiveLearningNode(LearningNode):
             self._observed_class_distribution[y] += weight
         except KeyError:
             self._observed_class_distribution[y] = weight
-            self._observed_class_distribution = dict(sorted(self._observed_class_distribution.items()))
+            self._observed_class_distribution = dict(
+                sorted(self._observed_class_distribution.items()))
 
         for i in range(len(X)):
             try:
@@ -142,17 +143,6 @@ class ActiveLearningNode(LearningNode):
         """
         return self._attribute_observers
 
-    def set_attribute_observers(self, attribute_observers):
-        """ set attribute observers.
-
-        Parameters
-        ----------
-        attribute_observers: dict (attribute id, attribute observer object)
-            new attribute observers.
-
-        """
-        self._attribute_observers = attribute_observers
-
 
 class InactiveLearningNode(LearningNode):
     """ Inactive learning node that does not grow.
@@ -187,9 +177,11 @@ class InactiveLearningNode(LearningNode):
             self._observed_class_distribution[y] += weight
         except KeyError:
             self._observed_class_distribution[y] = weight
-            self._observed_class_distribution = dict(sorted(self._observed_class_distribution.items()))
+            self._observed_class_distribution = dict(
+                sorted(self._observed_class_distribution.items()))
 
-class LearningNodeNB(ActiveLearningNode):
+
+class ActiveLearningNodeNB(ActiveLearningNode):
     """ Learning node that uses Naive Bayes models.
 
     Parameters
@@ -226,22 +218,8 @@ class LearningNodeNB(ActiveLearningNode):
         else:
             return super().get_class_votes(X, ht)
 
-    def disable_attribute(self, att_index):
-        """ Disable an attribute observer.
 
-        Disabled in Nodes using Naive Bayes, since poor attributes are used in
-        Naive Bayes calculation.
-
-        Parameters
-        ----------
-        att_index: int
-            Attribute index.
-
-        """
-        pass
-
-
-class LearningNodeNBAdaptive(LearningNodeNB):
+class ActiveLearningNodeNBAdaptive(ActiveLearningNodeNB):
     """ Learning node that uses Adaptive Naive Bayes models.
 
     Parameters
@@ -276,13 +254,15 @@ class LearningNodeNBAdaptive(LearningNodeNB):
             # All classes equal, default to class 0
             if 0 == y:
                 self._mc_correct_weight += weight
-        elif max(self._observed_class_distribution, key=self._observed_class_distribution.get) == y:
+        elif max(self._observed_class_distribution,
+                 key=self._observed_class_distribution.get) == y:
             self._mc_correct_weight += weight
         nb_prediction = do_naive_bayes_prediction(
             X, self._observed_class_distribution, self._attribute_observers
         )
         if max(nb_prediction, key=nb_prediction.get) == y:
             self._nb_correct_weight += weight
+
         super().learn_from_instance(X, y, weight, ht)
 
     def get_class_votes(self, X, ht):

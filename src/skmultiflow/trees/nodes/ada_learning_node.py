@@ -2,13 +2,13 @@ from skmultiflow.drift_detection import ADWIN
 from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.utils import check_random_state
 from skmultiflow.trees.nodes import FoundNode
-from skmultiflow.trees.nodes import LearningNodeNBAdaptive
+from skmultiflow.trees.nodes import ActiveLearningNodeNBAdaptive
 from skmultiflow.trees.nodes import AdaNode
 
 from skmultiflow.utils import get_max_value_key, normalize_values_in_dict
 
 
-class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
+class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
     """ Learning node for Hoeffding Adaptive Tree that uses Adaptive Naive
     Bayes models.
 

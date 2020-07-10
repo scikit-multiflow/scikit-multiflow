@@ -14,13 +14,13 @@ from skmultiflow.trees.split_criterion import HellingerDistanceCriterion
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 
 from skmultiflow.trees.nodes import Node
-from skmultiflow.trees.nodes import ActiveLearningNode
-from skmultiflow.trees.nodes import InactiveLearningNode
-from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import LearningNodeNB
-from skmultiflow.trees.nodes import LearningNodeNBAdaptive
-from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import FoundNode
+from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import LearningNode
+from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import ActiveLearningNodeNB
+from skmultiflow.trees.nodes import ActiveLearningNodeNBAdaptive
+from skmultiflow.trees.nodes import InactiveLearningNode
 
 from skmultiflow.rules.base_rule import Rule
 
@@ -569,9 +569,9 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             if self._leaf_prediction == self._MAJORITY_CLASS:
                 return ActiveLearningNode(initial_class_observations)
             elif self._leaf_prediction == self._NAIVE_BAYES:
-                return LearningNodeNB(initial_class_observations)
+                return ActiveLearningNodeNB(initial_class_observations)
             else:  # NAIVE BAYES ADAPTIVE (default)
-                return LearningNodeNBAdaptive(initial_class_observations)
+                return ActiveLearningNodeNBAdaptive(initial_class_observations)
         else:
             return InactiveLearningNode(initial_class_observations)
 

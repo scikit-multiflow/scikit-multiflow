@@ -8,7 +8,7 @@ from .node import Node
 from .split_node import SplitNode
 from .learning_node import LearningNode
 from .hoeffding_tree_classifier_nodes import ActiveLearningNode, InactiveLearningNode, \
-    LearningNodeNB, LearningNodeNBAdaptive
+    ActiveLearningNodeNB, ActiveLearningNodeNBAdaptive
 from .random_learning_node_classification import RandomLearningNodeClassification
 from .random_learning_node_nb import RandomLearningNodeNB
 from .random_learning_node_nb_adaptive import RandomLearningNodeNBAdaptive
@@ -46,7 +46,7 @@ from .sst_inactive_learning_node_adaptive import SSTInactiveLearningNodeAdaptive
 
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode",
-           "InactiveLearningNode", "LearningNodeNB", "LearningNodeNBAdaptive",
+           "InactiveLearningNode", "ActiveLearningNodeNB", "ActiveLearningNodeNBAdaptive",
            "RandomLearningNodeClassification", "RandomLearningNodeNB",
            "RandomLearningNodeNBAdaptive", "AdaNode", "AdaSplitNode", "AdaLearningNode",
            "AnyTimeSplitNode", "AnyTimeActiveLearningNode", "AnyTimeInactiveLearningNode",
