@@ -5,16 +5,15 @@ implementations for the hoeffding trees.
 
 from .found_node import FoundNode
 from .node import Node
+from .ada_node import AdaNode
 from .split_node import SplitNode
 from .learning_node import LearningNode
 from .hoeffding_tree_classifier_nodes import ActiveLearningNode, InactiveLearningNode, \
     ActiveLearningNodeNB, ActiveLearningNodeNBAdaptive
+from .hoeffding_adaptive_tree_classifier_nodes import AdaSplitNode, AdaLearningNode
 from .random_learning_node_classification import RandomLearningNodeClassification
 from .random_learning_node_nb import RandomLearningNodeNB
 from .random_learning_node_nb_adaptive import RandomLearningNodeNBAdaptive
-from .ada_node import AdaNode
-from .ada_split_node import AdaSplitNode
-from .ada_learning_node import AdaLearningNode
 from .anytime_split_node import AnyTimeSplitNode
 from .anytime_active_learning_node import AnyTimeActiveLearningNode
 from .anytime_inactive_learning_node import AnyTimeInactiveLearningNode
