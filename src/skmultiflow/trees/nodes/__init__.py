@@ -21,8 +21,8 @@ from .hoeffding_tree_regressor_nodes import ActiveLearningNodeForRegression, \
     ActiveLearningNodePerceptron, InactiveLearningNodeForRegression, InactiveLearningNodePerceptron
 from .random_learning_node_for_regression import RandomLearningNodeForRegression
 from .random_learning_node_perceptron import RandomLearningNodePerceptron
-from .ada_split_node_for_regression import AdaSplitNodeForRegression
-from .ada_learning_node_for_regression import AdaLearningNodeForRegression
+from .hoeffding_adaptive_tree_regressor_nodes import AdaSplitNodeForRegression, \
+    AdaLearningNodeForRegression
 from .active_learning_node_for_regression_multi_target import \
     ActiveLearningNodeForRegressionMultiTarget
 from .active_learning_node_perceptron_multi_target import ActiveLearningNodePerceptronMultiTarget
