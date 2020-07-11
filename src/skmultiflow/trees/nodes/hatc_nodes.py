@@ -18,12 +18,12 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations, random_state=None):
-        super().__init__(initial_class_observations)
+    def __init__(self, initial_stats, random_state=None):
+        super().__init__(initial_stats)
         self._estimation_error_weight = ADWIN()
         self.error_change = False
         self._random_state = check_random_state(random_state)
@@ -128,11 +128,11 @@ class AdaSplitNode(SplitNode, AdaNode):
     ----------
     split_test: skmultiflow.split_test.InstanceConditionalTest
         Split test.
-    class_observations: dict (class_value, weight) or None
+    stats: dict (class_value, weight) or None
         Class observations
     """
-    def __init__(self, split_test, class_observations, random_state=None):
-        super().__init__(split_test, class_observations)
+    def __init__(self, split_test, stats, random_state=None):
+        super().__init__(split_test, stats)
         self._estimation_error_weight = ADWIN()
         self._alternate_tree = None
         self.error_change = False

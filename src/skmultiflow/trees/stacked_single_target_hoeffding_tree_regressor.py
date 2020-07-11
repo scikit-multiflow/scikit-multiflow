@@ -1,11 +1,8 @@
-from operator import attrgetter
-
 import numpy as np
 
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees import iSOUPTreeRegressor
 from skmultiflow.utils import get_dimensions
-from skmultiflow.trees.split_criterion import IntraClusterVarianceReductionSplitCriterion
 
 from skmultiflow.trees.nodes import LearningNode
 from skmultiflow.trees.nodes import SSTActiveLearningNode

@@ -10,14 +10,14 @@ class SplitNode(Node):
     ----------
     split_test: InstanceConditionalTest
         Split test.
-    class_observations: dict (class_value, weight) or None
+    stats: dict (class_value, weight) or None
         Class observations
 
     """
 
-    def __init__(self, split_test, class_observations):
+    def __init__(self, split_test, stats):
         """ SplitNode class constructor."""
-        super().__init__(class_observations)
+        super().__init__(stats)
         self._split_test = split_test
         # Dict of tuples (branch, child)
         self._children = {}

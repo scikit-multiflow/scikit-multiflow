@@ -19,7 +19,7 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
     ----------
     split_test: skmultiflow.split_test.InstanceConditionalTest
         Split test.
-    class_observations: dict
+    stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
@@ -30,8 +30,8 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, split_test, class_observations, random_state=None):
-        super().__init__(split_test, class_observations)
+    def __init__(self, split_test, stats, random_state=None):
+        super().__init__(split_test, stats)
         self._estimation_error_weight = ADWIN()
         self._alternate_tree = None
         self.error_change = False
@@ -214,7 +214,7 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
@@ -228,8 +228,8 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         by `np.random`.
     """
 
-    def __init__(self, initial_class_observations, parent_node, random_state=None):
-        super().__init__(initial_class_observations, parent_node, random_state)
+    def __init__(self, initial_stats, parent_node, random_state=None):
+        super().__init__(initial_stats, parent_node, random_state)
         self._estimation_error_weight = ADWIN()
         self._error_change = False
 

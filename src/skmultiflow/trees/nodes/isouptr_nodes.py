@@ -16,7 +16,7 @@ class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the targets values (key '1'), and the sum of the
@@ -29,10 +29,10 @@ class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """ActiveLearningNodePerceptronMultiTarget class constructor."""
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
         if parent_node is None:
             self.perceptron_weight = None
         else:
@@ -152,7 +152,7 @@ class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the targets values (key '1'), and the sum of the
@@ -165,10 +165,10 @@ class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """ InactiveLearningNodeForRegression class constructor."""
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
         if parent_node is None:
             self.perceptron_weight = None
@@ -265,7 +265,7 @@ class ActiveLearningNodeAdaptiveMultiTarget(ActiveLearningNodePerceptronMultiTar
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the targets values (key '1'), and the sum of the
@@ -278,10 +278,10 @@ class ActiveLearningNodeAdaptiveMultiTarget(ActiveLearningNodePerceptronMultiTar
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """ActiveLearningNodeAdaptiveMultiTarget class constructor."""
-        super().__init__(initial_class_observations, parent_node,
+        super().__init__(initial_stats, parent_node,
                          random_state)
 
         # Faded errors for the perceptron and mean predictors
@@ -333,7 +333,7 @@ class InactiveLearningNodeAdaptiveMultiTarget(InactiveLearningNodePerceptronMult
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
@@ -346,10 +346,10 @@ class InactiveLearningNodeAdaptiveMultiTarget(InactiveLearningNodePerceptronMult
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """InactiveLearningNodeAdaptiveMultiTarget class constructor."""
-        super().__init__(initial_class_observations, parent_node,
+        super().__init__(initial_stats, parent_node,
                          random_state)
 
         # Faded errors for the perceptron and mean predictors

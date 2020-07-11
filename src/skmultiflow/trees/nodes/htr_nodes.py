@@ -18,15 +18,15 @@ class ActiveLearningNodeForRegression(ActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ ActiveLearningNodeForRegression class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     def learn_from_instance(self, X, y, weight, ht):
         """Update the node with the provided instance.
@@ -107,15 +107,15 @@ class InactiveLearningNodeForRegression(InactiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ InactiveLearningNodeForRegression class constructor."""
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     def learn_from_instance(self, X, y, weight, ht):
         """Update the node with the provided instance.
@@ -148,7 +148,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient statistics
         to perform online variance calculation. They refer to the number of
         observations (key '0'), the sum of the target values (key '1'), and
@@ -161,9 +161,9 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None, random_state=None):
+    def __init__(self, initial_stats, parent_node=None, random_state=None):
         """ ActiveLearningNodePerceptron class constructor."""
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
         self.set_weight_seen_at_last_split_evaluation(self.get_weight_seen())
         self.random_state = check_random_state(random_state)
         self.samples_seen = 0
@@ -261,7 +261,7 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient statistics
         to perform online variance calculation. They refer to the number of
         observations (key '0'), the sum of the target values (key '1'), and
@@ -274,9 +274,9 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, perceptron_node=None, random_state=None):
+    def __init__(self, initial_stats, perceptron_node=None, random_state=None):
         """ InactiveLearningNodePerceptron class constructor."""
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
         self.random_state = check_random_state(random_state)
         self.samples_seen = 0
         if perceptron_node is None:

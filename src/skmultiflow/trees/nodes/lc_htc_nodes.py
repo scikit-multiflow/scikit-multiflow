@@ -11,12 +11,12 @@ class LCActiveLearningNode(ActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
-        super().__init__(initial_class_observations)
+    def __init__(self, initial_stats):
+        super().__init__(initial_stats)
 
     def learn_from_instance(self, X, y, weight, ht):
 
@@ -46,13 +46,13 @@ class LCInactiveLearningNode(InactiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations=None):
+    def __init__(self, initial_stats=None):
         """ LCInactiveLearningNode class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     def learn_from_instance(self, X, y, weight, ht):
 
@@ -70,13 +70,13 @@ class LCLearningNodeNB(LCActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ LCLearningNodeNB class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     def get_class_votes(self, X, ht):
         """Get the votes per class for a given instance.
@@ -122,13 +122,13 @@ class LCLearningNodeNBA(LCLearningNodeNB):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """LCLearningNodeNBA class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
         self._mc_correct_weight = 0.0
         self._nb_correct_weight = 0.0
 

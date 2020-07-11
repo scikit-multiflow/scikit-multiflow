@@ -16,15 +16,15 @@ class EFDTSplitNode(SplitNode):
     ----------
     split_test: InstanceConditionalTest
         Split test.
-    class_observations: dict (class_value, weight) or None
+    stats: dict (class_value, weight) or None
         Class observations
     attribute_observers : dict (attribute id, AttributeClassObserver)
         Attribute Observers
     """
 
-    def __init__(self, split_test, class_observations, attribute_observers):
+    def __init__(self, split_test, stats, attribute_observers):
         """ AnyTimeSplitNode class constructor."""
-        super().__init__(split_test, class_observations)
+        super().__init__(split_test, stats)
         self._attribute_observers = attribute_observers
         self._weight_seen_at_last_split_reevaluation = 0
 
@@ -201,14 +201,14 @@ class EFDTActiveLearningNode(ActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
 
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ AnyTimeActiveLearningNode class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     # Override
     def get_best_split_suggestions(self, criterion, ht):
@@ -282,14 +282,14 @@ class EFDTInactiveLearningNode(InactiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
 
-    def __init__(self, initial_class_observations=None):
+    def __init__(self, initial_stats=None):
         """ InactiveLearningNode class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     # Override
     def get_best_split_suggestions(self, criterion, ht):
@@ -363,13 +363,13 @@ class EFDTActiveLearningNodeNB(EFDTActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ AnyTimeLearningNodeNB class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     def get_class_votes(self, X, ht):
         """ Get the votes per class for a given instance.
@@ -415,13 +415,13 @@ class EFDTActiveLearningNodeNBAdaptive(EFDTActiveLearningNodeNB):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ AnyTimeLearningNodeNBAdaptive class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
         self._mc_correct_weight = 0.0
         self._nb_correct_weight = 0.0
 

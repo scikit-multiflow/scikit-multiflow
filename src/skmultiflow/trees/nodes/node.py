@@ -8,16 +8,16 @@ class Node(metaclass=ABCMeta):
 
     Parameters
     ----------
-    class_observations: dict (class_value, weight) or None
+    stats: dict (class_value, weight) or None
         Class observations.
 
     """
 
-    def __init__(self, class_observations=None):
+    def __init__(self, stats=None):
         """ Node class constructor. """
-        if class_observations is None:
-            class_observations = {}  # Dictionary (class_value, weight)
-        self._stats = class_observations
+        if stats is None:
+            stats = {}  # Dictionary (class_value, weight)
+        self._stats = stats
 
     @staticmethod
     def is_leaf():

@@ -13,7 +13,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         A dictionary containing the set of sufficient statistics to be
         stored by the leaf node. It contains the following elements:
         - 0: the sum of elements seen so far;
@@ -27,10 +27,10 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """ SSTActiveLearningNode class constructor."""
-        super().__init__(initial_class_observations, parent_node,
+        super().__init__(initial_stats, parent_node,
                          random_state)
 
     def learn_from_instance(self, X, y, weight, rht):
@@ -164,7 +164,7 @@ class SSTInactiveLearningNode(InactiveLearningNodePerceptronMultiTarget):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         A dictionary containing the set of sufficient statistics to be
         stored by the leaf node. It contains the following elements:
         - 0: the sum of elements seen so far;
@@ -178,10 +178,10 @@ class SSTInactiveLearningNode(InactiveLearningNodePerceptronMultiTarget):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """ SSTInactiveLearningNode class constructor."""
-        super().__init__(initial_class_observations, parent_node,
+        super().__init__(initial_stats, parent_node,
                          random_state)
 
     def learn_from_instance(self, X, y, weight, rht):
@@ -273,7 +273,7 @@ class SSTActiveLearningNodeAdaptive(SSTActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         A dictionary containing the set of sufficient statistics to be
         stored by the leaf node. It contains the following elements:
         - 0: the sum of elements seen so far;
@@ -287,10 +287,10 @@ class SSTActiveLearningNodeAdaptive(SSTActiveLearningNode):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """ SSTActiveLearningNodeAdaptive class constructor. """
-        super().__init__(initial_class_observations, parent_node,
+        super().__init__(initial_stats, parent_node,
                          random_state)
 
         # Faded adaptive errors
@@ -361,7 +361,7 @@ class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         A dictionary containing the set of sufficient statistics to be
         stored by the leaf node. It contains the following elements:
         - 0: the sum of elements seen so far;
@@ -375,11 +375,11 @@ class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_class_observations, parent_node=None,
+    def __init__(self, initial_stats, parent_node=None,
                  random_state=None):
         """ SSTInactiveLearningNodeAdaptive class constructor."""
 
-        super().__init__(initial_class_observations, parent_node,
+        super().__init__(initial_stats, parent_node,
                          random_state)
 
         # Faded adaptive errors

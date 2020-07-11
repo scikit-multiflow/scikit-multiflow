@@ -11,14 +11,14 @@ class ActiveLearningNode(LearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
 
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ ActiveLearningNode class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
         self._weight_seen_at_last_split_evaluation = self.get_weight_seen()
         self._attribute_observers = {}
 
@@ -149,14 +149,14 @@ class InactiveLearningNode(LearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
 
-    def __init__(self, initial_class_observations=None):
+    def __init__(self, initial_stats=None):
         """ InactiveLearningNode class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     def learn_from_instance(self, X, y, weight, ht):
         """ Update the node with the provided instance.
@@ -186,14 +186,14 @@ class ActiveLearningNodeNB(ActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
 
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ LearningNodeNB class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
     def get_class_votes(self, X, ht):
         """ Get the votes per class for a given instance.
@@ -238,14 +238,14 @@ class ActiveLearningNodeNBAdaptive(ActiveLearningNodeNB):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations
 
     """
 
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_stats):
         """ LearningNodeNBAdaptive class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
         self._mc_correct_weight = 0.0
         self._nb_correct_weight = 0.0
 

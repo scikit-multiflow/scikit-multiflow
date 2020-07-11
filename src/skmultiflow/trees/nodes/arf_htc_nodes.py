@@ -13,7 +13,7 @@ class RandomActiveLearningNode(ActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations.
 
     max_features: int
@@ -25,9 +25,9 @@ class RandomActiveLearningNode(ActiveLearningNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, max_features, random_state=None):
+    def __init__(self, initial_stats, max_features, random_state=None):
         """ RandomLearningNodeClassification class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
         self.max_features = max_features
         self.list_attributes = np.array([])
@@ -80,7 +80,7 @@ class RandomActiveLearningNodeNB(RandomActiveLearningNode):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations.
 
     max_features: int
@@ -93,9 +93,9 @@ class RandomActiveLearningNodeNB(RandomActiveLearningNode):
         by `np.random`.
     """
 
-    def __init__(self, initial_class_observations, max_features, random_state):
+    def __init__(self, initial_stats, max_features, random_state):
         """ LearningNodeNB class constructor. """
-        super().__init__(initial_class_observations, max_features, random_state)
+        super().__init__(initial_stats, max_features, random_state)
 
     def get_class_votes(self, X, ht):
         """Get the votes per class for a given instance.
@@ -126,7 +126,7 @@ class RandomActiveLearningNodeNBAdaptive(RandomActiveLearningNodeNB):
 
     Parameters
     ----------
-    initial_class_observations: dict (class_value, weight) or None
+    initial_stats: dict (class_value, weight) or None
         Initial class observations.
 
     max_features: int
@@ -138,9 +138,9 @@ class RandomActiveLearningNodeNBAdaptive(RandomActiveLearningNodeNB):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, max_features, random_state):
+    def __init__(self, initial_stats, max_features, random_state):
         """LearningNodeNBAdaptive class constructor. """
-        super().__init__(initial_class_observations, max_features, random_state)
+        super().__init__(initial_stats, max_features, random_state)
         self._mc_correct_weight = 0.0
         self._nb_correct_weight = 0.0
 

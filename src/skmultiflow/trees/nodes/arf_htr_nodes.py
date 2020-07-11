@@ -14,7 +14,7 @@ class RandomLearningNodeForRegression(ActiveLearningNodeForRegression):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient to perform
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
@@ -27,9 +27,9 @@ class RandomLearningNodeForRegression(ActiveLearningNodeForRegression):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, max_features, random_state=None):
+    def __init__(self, initial_stats, max_features, random_state=None):
         """ ActiveLearningNodeForRegression class constructor. """
-        super().__init__(initial_class_observations)
+        super().__init__(initial_stats)
 
         self.max_features = max_features
         self.list_attributes = np.array([])
@@ -85,7 +85,7 @@ class RandomLearningNodePerceptron(ActiveLearningNodePerceptron):
 
     Parameters
     ----------
-    initial_class_observations: dict
+    initial_stats: dict
         In regression tasks this dictionary carries the sufficient statistics
         to perform online variance calculation. They refer to the number of
         observations (key '0'), the sum of the target values (key '1'), and
@@ -101,9 +101,9 @@ class RandomLearningNodePerceptron(ActiveLearningNodePerceptron):
         by `np.random`.
     """
 
-    def __init__(self, initial_class_observations, max_features, parent_node=None,
+    def __init__(self, initial_stats, max_features, parent_node=None,
                  random_state=None):
-        super().__init__(initial_class_observations, parent_node, random_state)
+        super().__init__(initial_stats, parent_node, random_state)
         self.max_features = max_features
         self.list_attributes = np.array([])
 
