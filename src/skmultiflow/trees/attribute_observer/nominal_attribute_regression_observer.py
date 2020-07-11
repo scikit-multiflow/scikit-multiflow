@@ -1,10 +1,10 @@
-from skmultiflow.trees.attribute_observer import AttributeClassObserver
+from skmultiflow.trees.attribute_observer import AttributeObserver
 from skmultiflow.trees.attribute_test import NominalAttributeBinaryTest
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 
 
-class NominalAttributeRegressionObserver(AttributeClassObserver):
+class NominalAttributeRegressionObserver(AttributeObserver):
     """ Class for observing the data distribution for a nominal attribute for
     regression.
     """
@@ -13,7 +13,7 @@ class NominalAttributeRegressionObserver(AttributeClassObserver):
         super().__init__()
         self._statistics = {}
 
-    def observe_attribute_class(self, att_val, target, weight=1.0):
+    def update(self, att_val, target, weight=1.0):
         if att_val is None or weight is None:
             return
         else:

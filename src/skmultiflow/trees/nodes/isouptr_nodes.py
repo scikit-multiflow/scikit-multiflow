@@ -93,7 +93,7 @@ class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
                 else:
                     obs = NumericAttributeRegressionObserver()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(x, y, weight)
+            obs.update(x, y, weight)
 
     def update_weights(self, X, y, learning_ratio, rht):
         """Update the perceptron weights

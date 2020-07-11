@@ -61,7 +61,7 @@ class ActiveLearningNodeForRegression(ActiveLearningNode):
                 else:
                     obs = NumericAttributeRegressionObserver()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], y, weight)
+            obs.update(X[i], y, weight)
 
     def get_weight_seen(self):
         """Calculate the total weight seen by the node.
@@ -229,7 +229,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
                 else:
                     obs = NumericAttributeRegressionObserver()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], y, weight)
+            obs.update(X[i], y, weight)
 
     def update_weights(self, X, y, learning_ratio, rht):
         """

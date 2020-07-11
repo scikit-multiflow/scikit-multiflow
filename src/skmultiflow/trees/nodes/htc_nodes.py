@@ -53,7 +53,7 @@ class ActiveLearningNode(LearningNode):
                 else:
                     obs = NumericAttributeClassObserverGaussian()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], int(y), weight)
+            obs.update(X[i], int(y), weight)
 
     def get_weight_seen(self):
         """ Calculate the total weight seen by the node.

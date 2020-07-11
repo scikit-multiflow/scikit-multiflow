@@ -1,10 +1,10 @@
 from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 from skmultiflow.trees.attribute_test import NominalAttributeBinaryTest
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
-from skmultiflow.trees.attribute_observer import AttributeClassObserver
+from skmultiflow.trees.attribute_observer import AttributeObserver
 
 
-class NominalAttributeClassObserver(AttributeClassObserver):
+class NominalAttributeClassObserver(AttributeObserver):
     """ Class for observing the class data distribution for a nominal attribute.
     This observer monitors the class distribution of a given attribute.
     Used in naive Bayes and decision trees to monitor data statistics on leaves.
@@ -17,7 +17,7 @@ class NominalAttributeClassObserver(AttributeClassObserver):
         self._missing_weight_observed = 0.0
         self._att_val_dist_per_class = {}
 
-    def observe_attribute_class(self, att_val, class_val, weight):
+    def update(self, att_val, class_val, weight):
         if att_val is None:
             self._missing_weight_observed += weight
         else:

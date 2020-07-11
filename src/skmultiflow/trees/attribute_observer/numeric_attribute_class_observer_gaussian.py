@@ -1,12 +1,12 @@
 import numpy as np
-from skmultiflow.trees.attribute_observer import AttributeClassObserver
+from skmultiflow.trees.attribute_observer import AttributeObserver
 from skmultiflow.trees.gaussian_estimator import GaussianEstimator
 from skmultiflow.trees.attribute_test import NumericAttributeBinaryTest
 from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 from sortedcontainers.sortedlist import SortedList
 
 
-class NumericAttributeClassObserverGaussian(AttributeClassObserver):
+class NumericAttributeClassObserverGaussian(AttributeObserver):
     """ Class for observing the class data distribution for a numeric attribute
     using gaussian estimators.
 
@@ -19,7 +19,7 @@ class NumericAttributeClassObserverGaussian(AttributeClassObserver):
         self._att_val_dist_per_class = {}
         self.num_bin_options = 10  # The number of bins, default 10
 
-    def observe_attribute_class(self, att_val, class_val, weight):
+    def update(self, att_val, class_val, weight):
         if att_val is None:
             return
         else:

@@ -1,10 +1,10 @@
 import numpy as np
-from skmultiflow.trees.attribute_observer import AttributeClassObserver
+from skmultiflow.trees.attribute_observer import AttributeObserver
 from skmultiflow.trees.attribute_test import NumericAttributeBinaryTest
 from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 
 
-class NumericAttributeRegressionObserver(AttributeClassObserver):
+class NumericAttributeRegressionObserver(AttributeObserver):
     """iSoup-Tree's Extended Binary Search Tree (E-BST)
 
     This class implements the Extended Binary Search Tree (E-BST)
@@ -70,7 +70,7 @@ class NumericAttributeRegressionObserver(AttributeClassObserver):
         super().__init__()
         self._root = None
 
-    def observe_attribute_class(self, att_val, class_val, weight):
+    def update(self, att_val, class_val, weight):
         if att_val is None:
             return
         else:

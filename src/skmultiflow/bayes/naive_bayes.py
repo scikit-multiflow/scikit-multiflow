@@ -125,7 +125,7 @@ class NaiveBayes(BaseSKMObject, ClassifierMixin):
                 else:
                     obs = NumericAttributeClassObserverGaussian()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], int(y), weight)
+            obs.update(X[i], int(y), weight)
 
     def predict(self, X):
         """ Predict classes for the passed data.

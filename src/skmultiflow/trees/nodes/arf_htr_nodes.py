@@ -71,7 +71,7 @@ class RandomLearningNodeForRegression(ActiveLearningNodeForRegression):
                 else:
                     obs = NumericAttributeRegressionObserver()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], y, weight)
+            obs.update(X[i], y, weight)
 
     def _sample_features(self, n_features):
         return self.random_state.choice(
@@ -166,7 +166,7 @@ class RandomLearningNodePerceptron(ActiveLearningNodePerceptron):
                 else:
                     obs = NumericAttributeRegressionObserver()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], y, weight)
+            obs.update(X[i], y, weight)
 
     def _sample_features(self, n_features):
         return self.random_state.choice(

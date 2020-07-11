@@ -67,7 +67,7 @@ class RandomActiveLearningNode(ActiveLearningNode):
                 else:
                     obs = NumericAttributeClassObserverGaussian()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], int(y), weight)
+            obs.update(X[i], int(y), weight)
 
     def _sample_features(self, n_features):
         return self.random_state.choice(

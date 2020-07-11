@@ -38,7 +38,7 @@ class LCActiveLearningNode(ActiveLearningNode):
                 else:
                     obs = NumericAttributeClassObserverGaussian()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], int(y), weight)
+            obs.update(X[i], int(y), weight)
 
 
 class LCInactiveLearningNode(InactiveLearningNode):

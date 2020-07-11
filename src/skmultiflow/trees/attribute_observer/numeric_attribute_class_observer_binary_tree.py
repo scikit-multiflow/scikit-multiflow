@@ -1,10 +1,10 @@
-from skmultiflow.trees.attribute_observer import AttributeClassObserver
+from skmultiflow.trees.attribute_observer import AttributeObserver
 from skmultiflow.trees.attribute_test import NumericAttributeBinaryTest
 from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
 from collections import Counter
 
 
-class NumericAttributeClassObserverBinaryTree(AttributeClassObserver):
+class NumericAttributeClassObserverBinaryTree(AttributeObserver):
     """ Class for observing the class data distribution for a numeric attribute
     using a binary tree. Used in Naive Bayes and decision trees to monitor data
     statistics on leaves.
@@ -48,7 +48,7 @@ class NumericAttributeClassObserverBinaryTree(AttributeClassObserver):
         super().__init__()
         self._root = None
 
-    def observe_attribute_class(self, att_val, class_val, weight):
+    def update(self, att_val, class_val, weight):
         if att_val is None:
             return
         else:

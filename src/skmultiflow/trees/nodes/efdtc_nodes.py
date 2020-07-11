@@ -18,7 +18,7 @@ class EFDTSplitNode(SplitNode):
         Split test.
     stats: dict (class_value, weight) or None
         Class observations
-    attribute_observers : dict (attribute id, AttributeClassObserver)
+    attribute_observers : dict (attribute id, AttributeObserver)
         Attribute Observers
     """
 
@@ -134,7 +134,7 @@ class EFDTSplitNode(SplitNode):
                 else:
                     obs = NumericAttributeClassObserverGaussian()
                 self._attribute_observers[i] = obs
-            obs.observe_attribute_class(X[i], int(y), weight)
+            obs.update(X[i], int(y), weight)
 
     def get_weight_seen(self):
         """ Calculate the total weight seen by the node.
@@ -152,7 +152,7 @@ class EFDTSplitNode(SplitNode):
 
         Returns
         -------
-        dict (attribute id, AttributeClassObserver)
+        dict (attribute id, AttributeObserver)
             Attribute observers of this node.
 
         """

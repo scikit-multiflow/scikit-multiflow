@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AttributeClassObserver(metaclass=ABCMeta):
+class AttributeObserver(metaclass=ABCMeta):
     """Abstract class for observing the class data distribution for an attribute.
     This observer monitors the class distribution of a given attribute.
 
@@ -17,7 +17,7 @@ class AttributeClassObserver(metaclass=ABCMeta):
         super().__init__()
 
     @abstractmethod
-    def observe_attribute_class(self, att_val, class_val, weight):
+    def update(self, att_val, class_val, weight):
         """Update statistics of this observer given an attribute value, a class
         and the weight of the instance observed.
 
