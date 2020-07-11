@@ -12,7 +12,7 @@ from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import LearningNode
 from skmultiflow.trees.nodes import ActiveLearningNode
 
-from skmultiflow.trees.nodes import ActiveLearningNodeForRegressionMultiTarget
+from skmultiflow.trees.nodes import ActiveLearningNodeForRegression
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptronMultiTarget
 from skmultiflow.trees.nodes import ActiveLearningNodeAdaptiveMultiTarget
 from skmultiflow.trees.nodes import InactiveLearningNodeForRegression
@@ -297,7 +297,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
 
         if is_active_node:
             if self.leaf_prediction == self._TARGET_MEAN:
-                return ActiveLearningNodeForRegressionMultiTarget(
+                return ActiveLearningNodeForRegression(
                     initial_class_observations
                 )
             elif self.leaf_prediction == self._PERCEPTRON:

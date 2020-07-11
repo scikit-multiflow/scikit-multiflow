@@ -21,13 +21,9 @@ from .htr_nodes import ActiveLearningNodeForRegression, ActiveLearningNodePercep
     InactiveLearningNodeForRegression, InactiveLearningNodePerceptron
 from .arf_htr_nodes import RandomLearningNodeForRegression, RandomLearningNodePerceptron
 from .hatr_nodes import AdaSplitNodeForRegression, AdaLearningNodeForRegression
-from .active_learning_node_for_regression_multi_target import \
-    ActiveLearningNodeForRegressionMultiTarget
-from .active_learning_node_perceptron_multi_target import ActiveLearningNodePerceptronMultiTarget
-from .active_learning_node_adaptive_multi_target import ActiveLearningNodeAdaptiveMultiTarget
-from .inactive_learning_node_perceptron_multi_target import \
-    InactiveLearningNodePerceptronMultiTarget
-from .inactive_learning_node_adaptive_multi_target import InactiveLearningNodeAdaptiveMultiTarget
+from .isouptr_nodes import ActiveLearningNodePerceptronMultiTarget, \
+    ActiveLearningNodeAdaptiveMultiTarget, InactiveLearningNodePerceptronMultiTarget, \
+    InactiveLearningNodeAdaptiveMultiTarget
 from .sst_active_learning_node import SSTActiveLearningNode
 from .sst_active_learning_node_adaptive import SSTActiveLearningNodeAdaptive
 from .sst_inactive_learning_node import SSTInactiveLearningNode
