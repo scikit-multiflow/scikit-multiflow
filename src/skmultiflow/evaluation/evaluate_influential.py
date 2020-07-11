@@ -193,7 +193,6 @@ class EvaluateInfluential(StreamEvaluator):
                                 feature_data = [item[2] for item in data_cache]
                                 interval_borders = self.create_intervals(feature_data)
                                 self.init_table(feature_data, interval_borders)
-                                print("before count update")
                                 self.count_update(data_cache, interval_borders, time_window=0)
                                 data_cache = []
                             if window_count > self.window_size and window_count % self.window_size == 0:
@@ -244,9 +243,10 @@ class EvaluateInfluential(StreamEvaluator):
                     self._update_metrics()
                 break
 
-        print("distribution table: ", self.distribution_table)
-        # self.distribution_table[0][0][0][0] = 5
         # print("distribution table: ", self.distribution_table)
+        print("distribution table # time windows: ", len(self.distribution_table))
+        print("dis # features", len(self.distribution_table[1]))
+        print("dis # of intervals", len(self.distribution_table[1][1]))
 
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
@@ -273,26 +273,24 @@ class EvaluateInfluential(StreamEvaluator):
         for categorical in self.categorical_features:
             interval_borders[categorical] = categorical_values_per_feature[idx]
             idx += 1
-        print("initial intervals percentiles: ", interval_borders)
+        # print("initial intervals percentiles: ", interval_borders)
         return interval_borders
 
     def init_table(self, feature_data, interval_borders):
         values_per_feature = list(zip(*feature_data))
-        print("values per feature: ", values_per_feature)
+        # print("values per feature: ", values_per_feature)
         unique_values_per_feature = list(map(set, values_per_feature))
         unique_values_per_feature = list(map(list, unique_values_per_feature))
-        print("unique_values_per_feature ", unique_values_per_feature)
+        # print("unique_values_per_feature ", unique_values_per_feature)
         values_per_categorical_feature = self.get_categorical_features(values_per_feature)
         self.distribution_table = [[[[0] * 4 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
                                    for _ in range(self.n_time_windows)]
-        print("in init table before for loop")
-
         # remove intervals for categorical values:
         for time in range(self.n_time_windows):
             for categorical in self.categorical_features:
                 self.distribution_table[time][categorical] = [[0] * 4 for _ in
                                                               range(len(unique_values_per_feature[categorical]))]
-        print("initialized distribution table: ", self.distribution_table)
+        # print("initialized distribution table: ", self.distribution_table)
 
     def get_categorical_features(self, values_per_feature):
         mode_per_feature = list(map(mode, values_per_feature))
@@ -318,8 +316,8 @@ class EvaluateInfluential(StreamEvaluator):
 
         categories = [unique_values_per_feature[i] for i in self.categorical_features]
         categories = list(map(list, categories))
-        print("Categorical features are: ", self.categorical_features)
-        print("categories are: ", categories)
+        # print("Categorical features are: ", self.categorical_features)
+        # print("categories are: ", categories)
         return categories
 
     def count_update(self, data_cache, interval_borders, time_window):

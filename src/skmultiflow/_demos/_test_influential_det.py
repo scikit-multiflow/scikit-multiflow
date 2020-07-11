@@ -3,19 +3,14 @@ import operator
 from skmultiflow.data import influential_stream
 from skmultiflow.evaluation import evaluate_influential
 from skmultiflow.trees import HoeffdingTreeClassifier
+from skmultiflow.data import file_stream
+import numpy as np
 
 
 def demo():
-    """ _test_influential
-
-    This demo tests if the streams are correctly created and
-    if the classifier chooses a new sample based on the weights
-    of the streams.
-
-    :return:
-    """
-
-    stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1)
+    filedStream = file_stream.FileStream("/Users/tinekejelsma/Downloads/agr_a.csv")
+    filedStream.name = "Agrawal - dataset"
+    stream = influential_stream.InfluentialStream(streams=[filedStream], self_defeating=1, self_fulfilling=1)
 
     ht = HoeffdingTreeClassifier()
 
@@ -26,7 +21,7 @@ def demo():
                                                          batch_size=1,
                                                          n_time_windows=2,
                                                          n_intervals=4,
-                                                         metrics=['accuracy'],
+                                                         metrics=['accuracy', 'kappa', 'data_points'],
                                                          data_points_for_classification=False)
 
     # 4. Run evaluation
