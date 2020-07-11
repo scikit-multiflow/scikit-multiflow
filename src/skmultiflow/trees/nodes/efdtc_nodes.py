@@ -43,7 +43,7 @@ class EFDTSplitNode(SplitNode):
 
         """
 
-        pre_split_dist = self._observed_class_distribution
+        pre_split_dist = self._stats
         null_split = AttributeSplitSuggestion(
             None, [{}], criterion.get_merit_of_split(pre_split_dist, [pre_split_dist])
         )
@@ -68,7 +68,7 @@ class EFDTSplitNode(SplitNode):
         """
 
         best_suggestions = []
-        pre_split_dist = self._observed_class_distribution
+        pre_split_dist = self._stats
 
         for i, obs in self._attribute_observers.items():
             best_suggestion = obs.get_best_evaluated_split_suggestion(
@@ -121,9 +121,9 @@ class EFDTSplitNode(SplitNode):
         """
         # Update attribute_observers
         try:
-            self._observed_class_distribution[y] += weight
+            self._stats[y] += weight
         except KeyError:
-            self._observed_class_distribution[y] = weight
+            self._stats[y] = weight
 
         for i in range(len(X)):
             try:
@@ -145,7 +145,7 @@ class EFDTSplitNode(SplitNode):
             Total weight seen.
 
         """
-        return sum(self._observed_class_distribution.values())
+        return sum(self._stats.values())
 
     def get_attribute_observers(self):
         """ Get attribute observers at this node.
@@ -172,7 +172,7 @@ class EFDTSplitNode(SplitNode):
     def update_weight_seen_at_last_split_reevaluation(self):
         """ Update weight seen at the last split in the reevaluation. """
         self._weight_seen_at_last_split_reevaluation = sum(
-            self._observed_class_distribution.values()
+            self._stats.values()
         )
 
     def count_nodes(self):
@@ -229,7 +229,7 @@ class EFDTActiveLearningNode(ActiveLearningNode):
 
         """
         best_suggestions = []
-        pre_split_dist = self._observed_class_distribution
+        pre_split_dist = self._stats
 
         for i, obs in self._attribute_observers.items():
             best_suggestion = obs.get_best_evaluated_split_suggestion(
@@ -256,7 +256,7 @@ class EFDTActiveLearningNode(ActiveLearningNode):
 
         """
 
-        pre_split_dist = self._observed_class_distribution
+        pre_split_dist = self._stats
 
         null_split = AttributeSplitSuggestion(
             None, [{}], criterion.get_merit_of_split(pre_split_dist, [pre_split_dist])
@@ -310,7 +310,7 @@ class EFDTInactiveLearningNode(InactiveLearningNode):
 
         """
         best_suggestions = []
-        pre_split_dist = self._observed_class_distribution
+        pre_split_dist = self._stats
 
         for i, obs in self._attribute_observers.items():
             best_suggestion = obs.get_best_evaluated_split_suggestion(
@@ -337,7 +337,7 @@ class EFDTInactiveLearningNode(InactiveLearningNode):
 
         """
 
-        pre_split_dist = self._observed_class_distribution
+        pre_split_dist = self._stats
 
         null_split = AttributeSplitSuggestion(
             None, [{}], criterion.get_merit_of_split(pre_split_dist, [pre_split_dist]))
@@ -389,7 +389,7 @@ class EFDTActiveLearningNodeNB(EFDTActiveLearningNode):
         """
         if self.get_weight_seen() >= ht.nb_threshold:
             return do_naive_bayes_prediction(
-                X, self._observed_class_distribution, self._attribute_observers
+                X, self._stats, self._attribute_observers
             )
         else:
             return super().get_class_votes(X, ht)
@@ -440,15 +440,15 @@ class EFDTActiveLearningNodeNBAdaptive(EFDTActiveLearningNodeNB):
             The Hoeffding Tree to update.
 
         """
-        if self._observed_class_distribution == {}:
+        if self._stats == {}:
             # All classes equal, default to class 0
             if 0 == y:
                 self._mc_correct_weight += weight
-        elif max(self._observed_class_distribution,
-                 key=self._observed_class_distribution.get) == y:
+        elif max(self._stats,
+                 key=self._stats.get) == y:
             self._mc_correct_weight += weight
         nb_prediction = do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )
         if max(nb_prediction, key=nb_prediction.get) == y:
             self._nb_correct_weight += weight
@@ -472,7 +472,7 @@ class EFDTActiveLearningNodeNBAdaptive(EFDTActiveLearningNodeNB):
 
         """
         if self._mc_correct_weight > self._nb_correct_weight:
-            return self._observed_class_distribution
+            return self._stats
         return do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )

@@ -17,7 +17,7 @@ class Node(metaclass=ABCMeta):
         """ Node class constructor. """
         if class_observations is None:
             class_observations = {}  # Dictionary (class_value, weight)
-        self._observed_class_distribution = class_observations
+        self._stats = class_observations
 
     @staticmethod
     def is_leaf():
@@ -50,7 +50,7 @@ class Node(metaclass=ABCMeta):
         """
         return FoundNode(self, parent, parent_branch)
 
-    def get_observed_class_distribution(self):
+    def get_stats(self):
         """ Get the current observed class distribution at the node.
 
         Returns
@@ -59,9 +59,9 @@ class Node(metaclass=ABCMeta):
             Class distribution at the node.
 
         """
-        return self._observed_class_distribution
+        return self._stats
 
-    def set_observed_class_distribution(self, observed_class_distribution):
+    def set_stats(self, observed_class_distribution):
         """ Set the observed class distribution at the node.
 
         Parameters
@@ -70,7 +70,7 @@ class Node(metaclass=ABCMeta):
             Class distribution at the node.
 
         """
-        self._observed_class_distribution = observed_class_distribution
+        self._stats = observed_class_distribution
 
     def get_class_votes(self, X, ht):
         """ Get the votes per class for a given instance.
@@ -88,7 +88,7 @@ class Node(metaclass=ABCMeta):
             Class votes for the given instance.
 
         """
-        return self._observed_class_distribution
+        return self._stats
 
     def observed_class_distribution_is_pure(self):
         """ Check if observed class distribution is pure, i.e. if all samples
@@ -101,7 +101,7 @@ class Node(metaclass=ABCMeta):
 
         """
         count = 0
-        for _, weight in self._observed_class_distribution.items():
+        for _, weight in self._stats.items():
             if weight != 0:
                 count += 1
                 if count == 2:  # No need to count beyond this point
@@ -129,9 +129,9 @@ class Node(metaclass=ABCMeta):
             given class than the other classes.
 
         """
-        total_seen = sum(self._observed_class_distribution.values())
+        total_seen = sum(self._stats.values())
         if total_seen > 0:
-            return total_seen - max(self._observed_class_distribution.values())
+            return total_seen - max(self._stats.values())
         else:
             return 0
 
@@ -152,15 +152,15 @@ class Node(metaclass=ABCMeta):
 
         if ht._estimator_type == 'classifier':
             class_val = max(
-                self._observed_class_distribution,
-                key=self._observed_class_distribution.get
+                self._stats,
+                key=self._stats.get
             )
             buffer[0] += 'Class {} | {}\n'.format(
-                class_val, self._observed_class_distribution
+                class_val, self._stats
             )
         else:
             text = '{'
-            for i, (k, v) in enumerate(self._observed_class_distribution.items()):
+            for i, (k, v) in enumerate(self._stats.items()):
                 # Multi-target regression case
                 if hasattr(v, 'shape') and len(v.shape) > 0:
                     text += '{}: ['.format(k)
@@ -168,7 +168,7 @@ class Node(metaclass=ABCMeta):
                     text += ']'
                 else:  # Single-target regression
                     text += '{}: {:.4f}'.format(k, v)
-                text += ', ' if i < len(self._observed_class_distribution) - 1 else ''
+                text += ', ' if i < len(self._stats) - 1 else ''
             text += '}'
             buffer[0] += 'Statistics {}\n'.format(text)  # Regression problems
 

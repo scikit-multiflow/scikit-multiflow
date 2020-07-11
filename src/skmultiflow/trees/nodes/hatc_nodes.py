@@ -92,17 +92,17 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
         prediction_option = ht.leaf_prediction
         # MC
         if prediction_option == ht._MAJORITY_CLASS:
-            dist = self.get_observed_class_distribution()
+            dist = self.get_stats()
         # NB
         elif prediction_option == ht._NAIVE_BAYES:
-            dist = do_naive_bayes_prediction(X, self._observed_class_distribution,
+            dist = do_naive_bayes_prediction(X, self._stats,
                                              self._attribute_observers)
         # NBAdaptive (default)
         else:
             if self._mc_correct_weight > self._nb_correct_weight:
-                dist = self.get_observed_class_distribution()
+                dist = self.get_stats()
             else:
-                dist = do_naive_bayes_prediction(X, self._observed_class_distribution,
+                dist = do_naive_bayes_prediction(X, self._stats,
                                                  self._attribute_observers)
 
         dist_sum = sum(dist.values())  # sum all values in dictionary
@@ -274,9 +274,9 @@ class AdaSplitNode(SplitNode, AdaNode):
             found_nodes = []
         if update_splitter_counts:
             try:
-                self._observed_class_distribution[y] += weight  # Dictionary (class_value, weight)
+                self._stats[y] += weight  # Dictionary (class_value, weight)
             except KeyError:
-                self._observed_class_distribution[y] = weight
+                self._stats[y] = weight
         child_index = self.instance_child_index(X)
         if child_index >= 0:
             child = self.get_child(child_index)

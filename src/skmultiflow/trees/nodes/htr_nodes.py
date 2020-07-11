@@ -44,13 +44,13 @@ class ActiveLearningNodeForRegression(ActiveLearningNode):
 
         """
         try:
-            self._observed_class_distribution[0] += weight
-            self._observed_class_distribution[1] += y * weight
-            self._observed_class_distribution[2] += y * y * weight
+            self._stats[0] += weight
+            self._stats[1] += y * weight
+            self._stats[2] += y * y * weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
-            self._observed_class_distribution[1] = y * weight
-            self._observed_class_distribution[2] = y * y * weight
+            self._stats[0] = weight
+            self._stats[1] = y * weight
+            self._stats[2] = y * y * weight
 
         for i in range(len(X)):
             try:
@@ -72,10 +72,10 @@ class ActiveLearningNodeForRegression(ActiveLearningNode):
             Total weight seen.
 
         """
-        if self._observed_class_distribution == {}:
+        if self._stats == {}:
             return 0
         else:
-            return self._observed_class_distribution[0]
+            return self._stats[0]
 
     def manage_memory(self, criterion, last_check_ratio, last_check_sdr, last_check_e):
         """ Trigger Attribute Observers' memory management routines.
@@ -98,7 +98,7 @@ class ActiveLearningNodeForRegression(ActiveLearningNode):
             if isinstance(obs, NumericAttributeRegressionObserver):
                 obs.remove_bad_splits(criterion=criterion, last_check_ratio=last_check_ratio,
                                       last_check_sdr=last_check_sdr, last_check_e=last_check_e,
-                                      pre_split_dist=self._observed_class_distribution)
+                                      pre_split_dist=self._stats)
 
 
 class InactiveLearningNodeForRegression(InactiveLearningNode):
@@ -133,13 +133,13 @@ class InactiveLearningNodeForRegression(InactiveLearningNode):
 
         """
         try:
-            self._observed_class_distribution[0] += weight
-            self._observed_class_distribution[1] += y * weight
-            self._observed_class_distribution[2] += y * y * weight
+            self._stats[0] += weight
+            self._stats[1] += y * weight
+            self._stats[2] += y * y * weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
-            self._observed_class_distribution[1] = y * weight
-            self._observed_class_distribution[2] = y * y * weight
+            self._stats[0] = weight
+            self._stats[1] = y * weight
+            self._stats[2] = y * y * weight
 
 
 class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
@@ -189,7 +189,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
 
         """
 
-        # In regression, the self._observed_class_distribution dictionary keeps three statistics:
+        # In regression, the self._stats dictionary keeps three statistics:
         # [0] sum of sample seen by the node
         # [1] sum of target values
         # [2] sum of squared target values
@@ -199,16 +199,16 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
             self.perceptron_weight = self.random_state.uniform(-1, 1, len(X)+1)
 
         try:
-            self._observed_class_distribution[0] += weight
-            self._observed_class_distribution[1] += y * weight
-            self._observed_class_distribution[2] += y * y * weight
+            self._stats[0] += weight
+            self._stats[1] += y * weight
+            self._stats[2] += y * y * weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
-            self._observed_class_distribution[1] = y * weight
-            self._observed_class_distribution[2] = y * y * weight
+            self._stats[0] = weight
+            self._stats[1] = y * weight
+            self._stats[2] = y * y * weight
 
         # Update perceptron
-        self.samples_seen = self._observed_class_distribution[0]
+        self.samples_seen = self._stats[0]
 
         if rht.learning_ratio_const:
             learning_ratio = rht.learning_ratio_perceptron
@@ -304,16 +304,16 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
             self.perceptron_weight = self.random_state.uniform(-1, 1, len(X) + 1)
 
         try:
-            self._observed_class_distribution[0] += weight
-            self._observed_class_distribution[1] += y * weight
-            self._observed_class_distribution[2] += y * y * weight
+            self._stats[0] += weight
+            self._stats[1] += y * weight
+            self._stats[2] += y * y * weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
-            self._observed_class_distribution[1] = y * weight
-            self._observed_class_distribution[2] = y * y * weight
+            self._stats[0] = weight
+            self._stats[1] = y * weight
+            self._stats[2] = y * y * weight
 
         # Update perceptron
-        self.samples_seen = self._observed_class_distribution[0]
+        self.samples_seen = self._stats[0]
 
         if rht.learning_ratio_const:
             learning_ratio = rht.learning_ratio_perceptron

@@ -48,11 +48,11 @@ class RandomActiveLearningNode(ActiveLearningNode):
             Hoeffding Tree to update.
         """
         try:
-            self._observed_class_distribution[y] += weight
+            self._stats[y] += weight
         except KeyError:
-            self._observed_class_distribution[y] = weight
-            self._observed_class_distribution = dict(
-                sorted(self._observed_class_distribution.items())
+            self._stats[y] = weight
+            self._stats = dict(
+                sorted(self._stats.items())
             )
 
         if self.list_attributes.size == 0:
@@ -115,7 +115,7 @@ class RandomActiveLearningNodeNB(RandomActiveLearningNode):
         """
         if self.get_weight_seen() >= ht.nb_threshold:
             return do_naive_bayes_prediction(
-                X, self._observed_class_distribution, self._attribute_observers
+                X, self._stats, self._attribute_observers
             )
         else:
             return super().get_class_votes(X, ht)
@@ -159,15 +159,15 @@ class RandomActiveLearningNodeNBAdaptive(RandomActiveLearningNodeNB):
             The Hoeffding Tree to update.
 
         """
-        if self._observed_class_distribution == {}:
+        if self._stats == {}:
             # All classes equal, default to class 0
             if 0 == y:
                 self._mc_correct_weight += weight
-        elif max(self._observed_class_distribution,
-                 key=self._observed_class_distribution.get) == y:
+        elif max(self._stats,
+                 key=self._stats.get) == y:
             self._mc_correct_weight += weight
         nb_prediction = do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )
         if max(nb_prediction, key=nb_prediction.get) == y:
             self._nb_correct_weight += weight
@@ -190,7 +190,7 @@ class RandomActiveLearningNodeNBAdaptive(RandomActiveLearningNodeNB):
 
         """
         if self._mc_correct_weight > self._nb_correct_weight:
-            return self._observed_class_distribution
+            return self._stats
         return do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )

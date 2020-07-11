@@ -25,9 +25,9 @@ class LCActiveLearningNode(ActiveLearningNode):
             y = int(y, 2)
 
         try:
-            self._observed_class_distribution[y] += weight
+            self._stats[y] += weight
         except KeyError:
-            self._observed_class_distribution[y] = weight
+            self._stats[y] = weight
 
         for i in range(len(X)):
             try:
@@ -59,9 +59,9 @@ class LCInactiveLearningNode(InactiveLearningNode):
         i = ''.join(str(e) for e in y)
         i = int(i, 2)
         try:
-            self._observed_class_distribution[i] += weight
+            self._stats[i] += weight
         except KeyError:
-            self._observed_class_distribution[i] = weight
+            self._stats[i] = weight
 
 
 class LCLearningNodeNB(LCActiveLearningNode):
@@ -96,7 +96,7 @@ class LCLearningNodeNB(LCActiveLearningNode):
         """
         if self.get_weight_seen() >= ht.nb_threshold:
             return do_naive_bayes_prediction(
-                X, self._observed_class_distribution, self._attribute_observers
+                X, self._stats, self._attribute_observers
             )
         else:
             return super().get_class_votes(X, ht)
@@ -151,15 +151,15 @@ class LCLearningNodeNBA(LCLearningNodeNB):
         y = ''.join(str(e) for e in y)
         y = int(y, 2)
 
-        if self._observed_class_distribution == {}:
+        if self._stats == {}:
             # All target_values equal, default to class 0
             if 0 == y:
                 self._mc_correct_weight += weight
-        elif max(self._observed_class_distribution,
-                 key=self._observed_class_distribution.get) == y:
+        elif max(self._stats,
+                 key=self._stats.get) == y:
             self._mc_correct_weight += weight
         nb_prediction = do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )
         if max(nb_prediction, key=nb_prediction.get) == y:
             self._nb_correct_weight += weight
@@ -183,7 +183,7 @@ class LCLearningNodeNBA(LCLearningNodeNB):
 
         """
         if self._mc_correct_weight > self._nb_correct_weight:
-            return self._observed_class_distribution
+            return self._stats
         return do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )

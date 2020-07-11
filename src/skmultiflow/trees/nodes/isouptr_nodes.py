@@ -62,23 +62,23 @@ class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
             self.normalize_perceptron_weights()
 
         try:
-            self._observed_class_distribution[0] += weight
+            self._stats[0] += weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
+            self._stats[0] = weight
 
         if rht.learning_ratio_const:
             learning_ratio = rht.learning_ratio_perceptron
         else:
             learning_ratio = rht.learning_ratio_perceptron / \
-                             (1 + self._observed_class_distribution[0] *
+                             (1 + self._stats[0] *
                               rht.learning_ratio_decay)
 
         try:
-            self._observed_class_distribution[1] += weight * y
-            self._observed_class_distribution[2] += weight * y * y
+            self._stats[1] += weight * y
+            self._stats[2] += weight * y * y
         except KeyError:
-            self._observed_class_distribution[1] = weight * y
-            self._observed_class_distribution[2] = weight * y * y
+            self._stats[1] = weight * y
+            self._stats[2] = weight * y * y
 
         for i in range(int(weight)):
             self.update_weights(X, y, learning_ratio, rht)
@@ -140,10 +140,10 @@ class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
         float
             Total weight seen.
         """
-        if self._observed_class_distribution == {}:
+        if self._stats == {}:
             return 0
         else:
-            return self._observed_class_distribution[0]
+            return self._stats[0]
 
 
 class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):
@@ -201,23 +201,23 @@ class InactiveLearningNodePerceptronMultiTarget(InactiveLearningNodePerceptron):
             self.normalize_perceptron_weights()
 
         try:
-            self._observed_class_distribution[0] += weight
+            self._stats[0] += weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
+            self._stats[0] = weight
 
         if rht.learning_ratio_const:
             learning_ratio = rht.learning_ratio_perceptron
         else:
             learning_ratio = rht.learning_ratio_perceptron / \
-                            (1 + self._observed_class_distribution[0] *
+                            (1 + self._stats[0] *
                              rht.learning_ratio_decay)
 
         try:
-            self._observed_class_distribution[1] += weight * y
-            self._observed_class_distribution[2] += weight * y * y
+            self._stats[1] += weight * y
+            self._stats[2] += weight * y * y
         except KeyError:
-            self._observed_class_distribution[1] = weight * y
-            self._observed_class_distribution[2] = weight * y * y
+            self._stats[1] = weight * y
+            self._stats[2] = weight * y * y
 
         for i in range(int(weight)):
             self.update_weights(X, y, learning_ratio, rht)
@@ -322,8 +322,8 @@ class ActiveLearningNodeAdaptiveMultiTarget(ActiveLearningNodePerceptronMultiTar
 
         self.fMAE_M = 0.95 * self.fMAE_M + np.abs(
             normalized_target_value - rht.
-            normalize_target_value(self._observed_class_distribution[1] /
-                                   self._observed_class_distribution[0])
+            normalize_target_value(self._stats[1] /
+                                   self._stats[0])
         )
 
 
@@ -389,6 +389,6 @@ class InactiveLearningNodeAdaptiveMultiTarget(InactiveLearningNodePerceptronMult
 
         self.fMAE_M = 0.95 * self.fMAE_M + np.abs(
             normalized_target_value - rht.
-            normalize_target_value(self._observed_class_distribution[1] /
-                                   self._observed_class_distribution[0])
+            normalize_target_value(self._stats[1] /
+                                   self._stats[0])
         )

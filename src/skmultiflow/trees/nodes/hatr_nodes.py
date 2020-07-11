@@ -171,15 +171,15 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
 
             try:
 
-                self._observed_class_distribution[0] += weight
-                self._observed_class_distribution[1] += y * weight
-                self._observed_class_distribution[2] += y * y * weight
+                self._stats[0] += weight
+                self._stats[1] += y * weight
+                self._stats[2] += y * y * weight
 
             except KeyError:
 
-                self._observed_class_distribution[0] = weight
-                self._observed_class_distribution[1] = y * weight
-                self._observed_class_distribution[2] = y * y * weight
+                self._stats[0] = weight
+                self._stats[1] = y * weight
+                self._stats[2] = y * y * weight
 
         child_index = self.instance_child_index(X)
         if child_index >= 0:

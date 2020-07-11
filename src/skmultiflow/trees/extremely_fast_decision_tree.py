@@ -412,7 +412,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
                 #  Compute Hoeffding bound
                 hoeffding_bound = self.compute_hoeffding_bound(
-                    split_criterion.get_range_of_merit(node.get_observed_class_distribution()), self.split_confidence,
+                    split_criterion.get_range_of_merit(node.get_stats()), self.split_confidence,
                     node.get_weight_seen())
 
                 if x_null.merit - x_best.merit > hoeffding_bound:
@@ -443,7 +443,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
                     # Create a new branch
                     new_split = self.new_split_node(x_best.split_test,
-                                                    node.get_observed_class_distribution(),
+                                                    node.get_stats(),
                                                     node.get_attribute_observers())
                     # Update weights in new_split
                     new_split.update_weight_seen_at_last_split_reevaluation()
@@ -526,14 +526,14 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                     x_null.merit = 0.0
 
                 hoeffding_bound = self.compute_hoeffding_bound(
-                    split_criterion.get_range_of_merit(node.get_observed_class_distribution()), self.split_confidence,
+                    split_criterion.get_range_of_merit(node.get_stats()), self.split_confidence,
                     node.get_weight_seen())
 
                 if x_best.merit - x_null.merit > hoeffding_bound or hoeffding_bound < self.tie_threshold:
 
                     # Split
                     new_split = self.new_split_node(x_best.split_test,
-                                                    node.get_observed_class_distribution(),
+                                                    node.get_stats(),
                                                     node.get_attribute_observers())
 
                     # update weights in
@@ -571,7 +571,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
 
         leaf = self._new_learning_node()
 
-        leaf.set_observed_class_distribution(node.get_observed_class_distribution())
+        leaf.set_stats(node.get_stats())
         leaf.set_attribute_observers(node.get_attribute_observers())
 
         return leaf

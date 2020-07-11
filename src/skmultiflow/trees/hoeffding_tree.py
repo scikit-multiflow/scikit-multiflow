@@ -676,7 +676,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                 should_split = len(best_split_suggestions) > 0
             else:
                 hoeffding_bound = self.compute_hoeffding_bound(split_criterion.get_range_of_merit(
-                    node.get_observed_class_distribution()), self.split_confidence, node.get_weight_seen())
+                    node.get_stats()), self.split_confidence, node.get_weight_seen())
                 best_suggestion = best_split_suggestions[-1]
                 second_best_suggestion = best_split_suggestions[-2]
                 if (best_suggestion.merit - second_best_suggestion.merit > hoeffding_bound
@@ -707,7 +707,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                     self._deactivate_learning_node(node, parent, parent_idx)
                 else:
                     new_split = self.new_split_node(split_decision.split_test,
-                                                    node.get_observed_class_distribution())
+                                                    node.get_stats())
 
                     for i in range(split_decision.num_splits()):
                         new_child = self._new_learning_node(split_decision.resulting_class_distribution_from_split(i))
@@ -803,7 +803,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
 
         """
         new_leaf = self._new_learning_node(
-            to_deactivate.get_observed_class_distribution(), is_active_node=False
+            to_deactivate.get_stats(), is_active_node=False
         )
         if parent is None:
             self._tree_root = new_leaf
@@ -825,7 +825,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             Parent node's branch index.
 
         """
-        new_leaf = self._new_learning_node(to_activate.get_observed_class_distribution())
+        new_leaf = self._new_learning_node(to_activate.get_stats())
         if parent is None:
             self._tree_root = new_leaf
         else:
@@ -893,8 +893,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                     r.predicate_set.append(predicate)
                     recurse(child, r, ht)
             else:
-                cur_rule.observed_class_distribution = node.get_observed_class_distribution().copy()
-                cur_rule.class_idx = max(node.get_observed_class_distribution().items(), key=itemgetter(1))[0]
+                cur_rule.observed_class_distribution = node.get_stats().copy()
+                cur_rule.class_idx = max(node.get_stats().items(), key=itemgetter(1))[0]
                 rules.append(cur_rule)
 
         rule = Rule()

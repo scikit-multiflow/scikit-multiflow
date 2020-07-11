@@ -504,7 +504,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             should_split = len(best_split_suggestions) > 0
         else:
             hoeffding_bound = self.compute_hoeffding_bound(
-                split_criterion.get_range_of_merit(node.get_observed_class_distribution()),
+                split_criterion.get_range_of_merit(node.get_stats()),
                                                    self.split_confidence, node.get_weight_seen()
             )
             best_suggestion = best_split_suggestions[-1]
@@ -542,7 +542,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 self._deactivate_learning_node(node, parent, parent_idx)
             else:
                 new_split = self.new_split_node(split_decision.split_test,
-                                                node.get_observed_class_distribution())
+                                                node.get_stats())
                 for i in range(split_decision.num_splits()):
                     new_child = self._new_learning_node(
                         split_decision.resulting_class_distribution_from_split(i), node
@@ -584,7 +584,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         """
         new_leaf = self._new_learning_node(
-            to_activate.get_observed_class_distribution(), to_activate
+            to_activate.get_stats(), to_activate
         )
         if parent is None:
             self._tree_root = new_leaf
@@ -608,7 +608,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         """
         new_leaf = self._new_learning_node(
-            to_deactivate.get_observed_class_distribution(), to_deactivate, is_active_node=False
+            to_deactivate.get_stats(), to_deactivate, is_active_node=False
         )
 
         if parent is None:

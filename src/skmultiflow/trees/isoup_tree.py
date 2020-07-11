@@ -651,7 +651,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
         else:
             hoeffding_bound = self.compute_hoeffding_bound(
                 split_criterion.get_range_of_merit(
-                    node.get_observed_class_distribution()
+                    node.get_stats()
                 ), self.split_confidence, node.get_weight_seen())
             best_suggestion = best_split_suggestions[-1]
             second_best_suggestion = best_split_suggestions[-2]
@@ -690,7 +690,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             else:
                 new_split = self.new_split_node(
                     split_decision.split_test,
-                    node.get_observed_class_distribution()
+                    node.get_stats()
                 )
                 for i in range(split_decision.num_splits()):
                     new_child = self._new_learning_node(

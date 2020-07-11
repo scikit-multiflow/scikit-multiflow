@@ -51,13 +51,13 @@ class RandomLearningNodeForRegression(ActiveLearningNodeForRegression):
 
         """
         try:
-            self._observed_class_distribution[0] += weight
-            self._observed_class_distribution[1] += y * weight
-            self._observed_class_distribution[2] += y * y * weight
+            self._stats[0] += weight
+            self._stats[1] += y * weight
+            self._stats[2] += y * y * weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
-            self._observed_class_distribution[1] = y * weight
-            self._observed_class_distribution[2] = y * y * weight
+            self._stats[0] = weight
+            self._stats[1] = y * weight
+            self._stats[2] = y * y * weight
 
         if self.list_attributes.size == 0:
             self.list_attributes = self._sample_features(get_dimensions(X)[1])
@@ -123,7 +123,7 @@ class RandomLearningNodePerceptron(ActiveLearningNodePerceptron):
 
         """
 
-        # In regression, the self._observed_class_distribution dictionary keeps three statistics:
+        # In regression, the self._stats dictionary keeps three statistics:
         # [0] sum of sample seen by the node
         # [1] sum of target values
         # [2] sum of squared target values
@@ -133,16 +133,16 @@ class RandomLearningNodePerceptron(ActiveLearningNodePerceptron):
             self.perceptron_weight = self.random_state.uniform(-1, 1, len(X)+1)
 
         try:
-            self._observed_class_distribution[0] += weight
-            self._observed_class_distribution[1] += y * weight
-            self._observed_class_distribution[2] += y * y * weight
+            self._stats[0] += weight
+            self._stats[1] += y * weight
+            self._stats[2] += y * y * weight
         except KeyError:
-            self._observed_class_distribution[0] = weight
-            self._observed_class_distribution[1] = y * weight
-            self._observed_class_distribution[2] = y * y * weight
+            self._stats[0] = weight
+            self._stats[1] = y * weight
+            self._stats[2] = y * y * weight
 
         # Update perceptron
-        self.samples_seen = self._observed_class_distribution[0]
+        self.samples_seen = self._stats[0]
 
         if rht.learning_ratio_const:
             learning_ratio = rht.learning_ratio_perceptron

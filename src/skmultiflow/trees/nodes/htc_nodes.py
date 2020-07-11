@@ -38,11 +38,11 @@ class ActiveLearningNode(LearningNode):
 
         """
         try:
-            self._observed_class_distribution[y] += weight
+            self._stats[y] += weight
         except KeyError:
-            self._observed_class_distribution[y] = weight
-            self._observed_class_distribution = dict(
-                sorted(self._observed_class_distribution.items()))
+            self._stats[y] = weight
+            self._stats = dict(
+                sorted(self._stats.items()))
 
         for i in range(len(X)):
             try:
@@ -64,7 +64,7 @@ class ActiveLearningNode(LearningNode):
             Total weight seen.
 
         """
-        return sum(self._observed_class_distribution.values())
+        return sum(self._stats.values())
 
     def get_weight_seen_at_last_split_evaluation(self):
         """ Retrieve the weight seen at last split evaluation.
@@ -105,7 +105,7 @@ class ActiveLearningNode(LearningNode):
 
         """
         best_suggestions = []
-        pre_split_dist = self._observed_class_distribution
+        pre_split_dist = self._stats
         if not ht.no_preprune:
             # Add null split as an option
             null_split = AttributeSplitSuggestion(
@@ -174,11 +174,11 @@ class InactiveLearningNode(LearningNode):
 
         """
         try:
-            self._observed_class_distribution[y] += weight
+            self._stats[y] += weight
         except KeyError:
-            self._observed_class_distribution[y] = weight
-            self._observed_class_distribution = dict(
-                sorted(self._observed_class_distribution.items()))
+            self._stats[y] = weight
+            self._stats = dict(
+                sorted(self._stats.items()))
 
 
 class ActiveLearningNodeNB(ActiveLearningNode):
@@ -213,7 +213,7 @@ class ActiveLearningNodeNB(ActiveLearningNode):
         """
         if self.get_weight_seen() >= ht.nb_threshold:
             return do_naive_bayes_prediction(
-                X, self._observed_class_distribution, self._attribute_observers
+                X, self._stats, self._attribute_observers
             )
         else:
             return super().get_class_votes(X, ht)
@@ -264,15 +264,15 @@ class ActiveLearningNodeNBAdaptive(ActiveLearningNodeNB):
             The Hoeffding Tree to update.
 
         """
-        if self._observed_class_distribution == {}:
+        if self._stats == {}:
             # All classes equal, default to class 0
             if 0 == y:
                 self._mc_correct_weight += weight
-        elif max(self._observed_class_distribution,
-                 key=self._observed_class_distribution.get) == y:
+        elif max(self._stats,
+                 key=self._stats.get) == y:
             self._mc_correct_weight += weight
         nb_prediction = do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )
         if max(nb_prediction, key=nb_prediction.get) == y:
             self._nb_correct_weight += weight
@@ -296,7 +296,7 @@ class ActiveLearningNodeNBAdaptive(ActiveLearningNodeNB):
 
         """
         if self._mc_correct_weight > self._nb_correct_weight:
-            return self._observed_class_distribution
+            return self._stats
         return do_naive_bayes_prediction(
-            X, self._observed_class_distribution, self._attribute_observers
+            X, self._stats, self._attribute_observers
         )
