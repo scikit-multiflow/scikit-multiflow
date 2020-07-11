@@ -24,10 +24,8 @@ from .hatr_nodes import AdaSplitNodeForRegression, AdaLearningNodeForRegression
 from .isouptr_nodes import ActiveLearningNodePerceptronMultiTarget, \
     ActiveLearningNodeAdaptiveMultiTarget, InactiveLearningNodePerceptronMultiTarget, \
     InactiveLearningNodeAdaptiveMultiTarget
-from .sst_active_learning_node import SSTActiveLearningNode
-from .sst_active_learning_node_adaptive import SSTActiveLearningNodeAdaptive
-from .sst_inactive_learning_node import SSTInactiveLearningNode
-from .sst_inactive_learning_node_adaptive import SSTInactiveLearningNodeAdaptive
+from .sst_htr_nodes import SSTActiveLearningNode, SSTActiveLearningNodeAdaptive, \
+    SSTInactiveLearningNode, SSTInactiveLearningNodeAdaptive
 
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLearningNode",
