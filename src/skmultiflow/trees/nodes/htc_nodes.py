@@ -1,8 +1,8 @@
-from skmultiflow.trees.nodes import LearningNodeMixin, ActiveLeafMixin, InactiveLeafMixin
+from skmultiflow.trees.nodes import LearningNode, ActiveLeaf, InactiveLeaf
 from skmultiflow.bayes import do_naive_bayes_prediction
 
 
-class LearningNodeMC(LearningNodeMixin):
+class LearningNodeMC(LearningNode):
     def update_stats(self, y, weight):
         try:
             self.stats[y] += weight
@@ -93,7 +93,7 @@ class LearningNodeNBA(LearningNodeMC):
         )
 
 
-class ActiveLearningNodeMC(LearningNodeMC, ActiveLeafMixin):
+class ActiveLearningNodeMC(LearningNodeMC, ActiveLeaf):
     """ Learning node that supports growth.
 
     Parameters
@@ -108,7 +108,7 @@ class ActiveLearningNodeMC(LearningNodeMC, ActiveLeafMixin):
         self.last_split_attempt_at = self.total_weight
 
 
-class InactiveLearningNodeMC(LearningNodeMC, InactiveLeafMixin):
+class InactiveLearningNodeMC(LearningNodeMC, InactiveLeaf):
     """ Inactive learning node that does not grow.
 
     Parameters
@@ -122,7 +122,7 @@ class InactiveLearningNodeMC(LearningNodeMC, InactiveLeafMixin):
         super().__init__(initial_stats)
 
 
-class ActiveLearningNodeNB(LearningNodeNB, ActiveLeafMixin):
+class ActiveLearningNodeNB(LearningNodeNB, ActiveLeaf):
     """ Learning node that uses Naive Bayes models.
 
     Parameters
@@ -150,7 +150,7 @@ class ActiveLearningNodeNB(LearningNodeNB, ActiveLeafMixin):
         pass
 
 
-class ActiveLearningNodeNBA(LearningNodeNBA, ActiveLeafMixin):
+class ActiveLearningNodeNBA(LearningNodeNBA, ActiveLeaf):
     """ Learning node that uses Adaptive Naive Bayes models.
 
     Parameters

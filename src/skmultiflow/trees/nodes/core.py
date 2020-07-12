@@ -1,8 +1,8 @@
 from abc import ABCMeta, abstractmethod
 import textwrap
 
-from skmultiflow.trees import AttributeSplitSuggestion
 from skmultiflow.trees.attribute_observer import AttributeObserverNull
+from skmultiflow.trees.attribute_test import AttributeSplitSuggestion
 
 
 class FoundNode(object):

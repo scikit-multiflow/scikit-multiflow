@@ -2,7 +2,7 @@ import numpy as np
 from skmultiflow.trees.attribute_observer import AttributeObserver
 from skmultiflow.trees.gaussian_estimator import GaussianEstimator
 from skmultiflow.trees.attribute_test import NumericAttributeBinaryTest
-from skmultiflow.trees.attribute_split_suggestion import AttributeSplitSuggestion
+from skmultiflow.trees.attribute_test import AttributeSplitSuggestion
 from sortedcontainers.sortedlist import SortedList
 
 
