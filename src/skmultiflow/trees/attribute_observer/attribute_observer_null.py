@@ -1,7 +1,7 @@
 from skmultiflow.trees.attribute_observer import AttributeObserver
 
 
-class AttributeClassObserverNull(AttributeObserver):
+class AttributeObserverNull(AttributeObserver):
     """ Class for observing the class data distribution for a null attribute.
     This method is used to disable the observation for an attribute.
     Used in decision trees to monitor data statistics on leaves.
