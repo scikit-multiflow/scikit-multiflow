@@ -136,7 +136,7 @@ class EFDTSplitNode(SplitNode):
                 self._attribute_observers[i] = obs
             obs.update(X[i], int(y), weight)
 
-    def get_weight_seen(self):
+    def total_weight(self):
         """ Calculate the total weight seen by the node.
 
         Returns
@@ -387,7 +387,7 @@ class EFDTActiveLearningNodeNB(EFDTActiveLearningNode):
             Class votes for the given instance.
 
         """
-        if self.get_weight_seen() >= ht.nb_threshold:
+        if self.total_weight >= ht.nb_threshold:
             return do_naive_bayes_prediction(
                 X, self._stats, self._attribute_observers
             )

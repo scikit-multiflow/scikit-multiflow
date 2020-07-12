@@ -10,7 +10,7 @@ from skmultiflow.rules.hellinger_distance_criterion import HellingerDistanceCrit
 from skmultiflow.rules.info_gain_rule_criterion import InfoGainExpandCriterion
 from skmultiflow.rules.nominal_attribute_class_observer import NominalAttributeClassObserver
 from skmultiflow.rules.numeric_attribute_class_observer import GaussianNumericAttributeClassObserver
-from skmultiflow.trees.attribute_observer import AttributeClassObserverNull
+from skmultiflow.trees.attribute_observer import AttributeObserverNull
 from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, \
     calculate_object_size
@@ -298,7 +298,7 @@ class VeryFastDecisionRulesClassifier(BaseSKMObject, ClassifierMixin):
 
             """
             if att_idx in self._attribute_observers:
-                self._attribute_observers[att_idx] = AttributeClassObserverNull()
+                self._attribute_observers[att_idx] = AttributeObserverNull()
 
         def restart(self):
             """ Restarts the rule with initial values"""

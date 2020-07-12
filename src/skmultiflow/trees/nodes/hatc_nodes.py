@@ -80,11 +80,11 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
         super().learn_from_instance(X, y, weight, hat)
 
         # call ActiveLearningNode
-        weight_seen = self.get_weight_seen()
+        weight_seen = self.total_weight
 
-        if weight_seen - self.get_weight_seen_at_last_split_evaluation() >= hat.grace_period:
+        if weight_seen - self.last_split_attempt_at >= hat.grace_period:
             hat._attempt_to_split(self, parent, parent_branch)
-            self.set_weight_seen_at_last_split_evaluation(weight_seen)
+            self.last_split_attempt_at = weight_seen
 
     # Override LearningNodeNBAdaptive
     def get_class_votes(self, X, ht):
@@ -92,7 +92,7 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
         prediction_option = ht.leaf_prediction
         # MC
         if prediction_option == ht._MAJORITY_CLASS:
-            dist = self.get_stats()
+            dist = self.stats
         # NB
         elif prediction_option == ht._NAIVE_BAYES:
             dist = do_naive_bayes_prediction(X, self._stats,
@@ -100,7 +100,7 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
         # NBAdaptive (default)
         else:
             if self._mc_correct_weight > self._nb_correct_weight:
-                dist = self.get_stats()
+                dist = self.stats
             else:
                 dist = do_naive_bayes_prediction(X, self._stats,
                                                  self._attribute_observers)

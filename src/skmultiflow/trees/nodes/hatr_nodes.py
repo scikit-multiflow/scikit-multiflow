@@ -279,11 +279,11 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
             self._error_change = False
 
         # call ActiveLearningNode
-        weight_seen = self.get_weight_seen()
+        weight_seen = self.total_weight
 
-        if weight_seen - self.get_weight_seen_at_last_split_evaluation() >= rhat.grace_period:
+        if weight_seen - self.last_split_attempt_at >= rhat.grace_period:
             rhat._attempt_to_split(self, parent, parent_branch)
-            self.set_weight_seen_at_last_split_evaluation(weight_seen)
+            self.last_split_attempt_at = weight_seen
 
     # Override AdaNode, New for option votes
     def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,

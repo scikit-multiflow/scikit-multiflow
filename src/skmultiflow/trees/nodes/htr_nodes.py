@@ -63,7 +63,7 @@ class ActiveLearningNodeForRegression(ActiveLearningNode):
                 self._attribute_observers[i] = obs
             obs.update(X[i], y, weight)
 
-    def get_weight_seen(self):
+    def total_weight(self):
         """Calculate the total weight seen by the node.
 
         Returns
@@ -164,7 +164,7 @@ class ActiveLearningNodePerceptron(ActiveLearningNodeForRegression):
     def __init__(self, initial_stats, parent_node=None, random_state=None):
         """ ActiveLearningNodePerceptron class constructor."""
         super().__init__(initial_stats)
-        self.set_weight_seen_at_last_split_evaluation(self.get_weight_seen())
+        self.last_split_attempt_at = self.total_weight
         self.random_state = check_random_state(random_state)
         self.samples_seen = 0
         if parent_node is None:

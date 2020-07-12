@@ -1,0 +1,574 @@
+from abc import ABCMeta, abstractmethod
+import textwrap
+
+from skmultiflow.trees import AttributeSplitSuggestion
+from skmultiflow.trees.attribute_observer import AttributeObserverNull
+
+
+class FoundNode(object):
+    """ Base class for tree nodes.
+
+    Parameters
+    ----------
+    node: SplitNode or LearningNode
+        The node object.
+    parent: SplitNode or None
+        The node's parent.
+    parent_branch: int
+        The parent node's branch.
+    depth: int
+        Depth of the tree where the node is located.
+
+    """
+
+    def __init__(self, node=None, parent=None, parent_branch=None, depth=None):
+        """ FoundNode class constructor. """
+        self.node = node
+        self.parent = parent
+        self.parent_branch = parent_branch
+        self.depth = depth
+
+
+class Node(metaclass=ABCMeta):
+    """ Base class for nodes in a Hoeffding Tree.
+
+    Parameters
+    ----------
+    stats: dict (class_value, weight) or None
+        Class observations.
+
+    """
+
+    def __init__(self, stats=None):
+        self._stats = stats if stats is not None else {}
+
+    @staticmethod
+    def is_leaf():
+        """ Determine if the node is a leaf.
+
+        Returns
+        -------
+        True if leaf, False otherwise
+
+        """
+        return True
+
+    def filter_instance_to_leaf(self, X, parent, parent_branch):
+        """ Traverse down the tree to locate the corresponding leaf for an instance.
+
+        Parameters
+        ----------
+        X: numpy.ndarray of shape (n_samples, n_features)
+           Data instances.
+        parent: skmultiflow.trees.nodes.Node or None
+            Parent node.
+        parent_branch: Int
+            Parent branch index
+
+        Returns
+        -------
+        FoundNode
+            The corresponding leaf.
+
+        """
+        return FoundNode(self, parent, parent_branch)
+
+    @property
+    def stats(self):
+        """ Get the current observed class distribution at the node.
+
+        Returns
+        -------
+        dict (class_value, weight)
+            Class distribution at the node.
+
+        """
+        return self._stats
+
+    @stats.setter
+    def stats(self, stats):
+        """ Set the observed class distribution at the node.
+
+        Parameters
+        -------
+        dict (class_value, weight)
+            Class distribution at the node.
+
+        """
+        self._stats = stats
+
+    def get_class_votes(self, X, ht):
+        """ Get the votes per class for a given instance.
+
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+           Data instances.
+        ht: HoeffdingTreeClassifier
+            The Hoeffding Tree.
+
+        Returns
+        -------
+        dict (class_value, weight)
+            Class votes for the given instance.
+
+        """
+        return self._stats
+
+    def observed_class_distribution_is_pure(self):
+        """ Check if observed class distribution is pure, i.e. if all samples
+        belong to the same class.
+
+        Returns
+        -------
+        boolean
+            True if observed number of classes is less than 2, False otherwise.
+
+        """
+        count = 0
+        for _, weight in self._stats.items():
+            if weight != 0:
+                count += 1
+                if count == 2:  # No need to count beyond this point
+                    break
+        return count < 2
+
+    def subtree_depth(self):
+        """ Calculate the depth of the subtree from this node.
+
+        Returns
+        -------
+        int
+            Subtree depth, 0 if the node is a leaf.
+
+        """
+        return 0
+
+    def calculate_promise(self):
+        """ Calculate node's promise.
+
+        Returns
+        -------
+        int
+            A small value indicates that the node has seen more samples of a
+            given class than the other classes.
+
+        """
+        total_seen = sum(self._stats.values())
+        if total_seen > 0:
+            return total_seen - max(self._stats.values())
+        else:
+            return 0
+
+    def describe_subtree(self, ht, buffer, indent=0):
+        """ Walk the tree and write its structure to a buffer string.
+
+        Parameters
+        ----------
+        ht: HoeffdingTreeClassifier
+            The tree to describe.
+        buffer: string
+            The string buffer where the tree's structure will be stored
+        indent: int
+            Indentation level (number of white spaces for current node.)
+
+        """
+        buffer[0] += textwrap.indent('Leaf = ', ' ' * indent)
+
+        if ht._estimator_type == 'classifier':
+            class_val = max(
+                self._stats,
+                key=self._stats.get
+            )
+            buffer[0] += 'Class {} | {}\n'.format(
+                class_val, self._stats
+            )
+        else:
+            text = '{'
+            for i, (k, v) in enumerate(self._stats.items()):
+                # Multi-target regression case
+                if hasattr(v, 'shape') and len(v.shape) > 0:
+                    text += '{}: ['.format(k)
+                    text += ', '.join(['{:.4f}'.format(e) for e in v.tolist()])
+                    text += ']'
+                else:  # Single-target regression
+                    text += '{}: {:.4f}'.format(k, v)
+                text += ', ' if i < len(self._stats) - 1 else ''
+            text += '}'
+            buffer[0] += 'Statistics {}\n'.format(text)  # Regression problems
+
+    # TODO
+    def get_description(self):
+        pass
+
+
+class LearningNodeMixin(Node):
+    """ Mixin for Learning Nodes in a Hoeffding Tree. """
+
+    # Parameters
+    # ----------
+    # initial_stats: dict (class_value, weight) or None
+    #     Initial class observations
+    #
+    # """
+    # # TODO: check this portion -> perhaps activate it and remove (continue below)
+    # def __init__(self, initial_stats=None):
+    #     """ LearningNode class constructor. """
+    #     super().__init__(initial_stats)
+    #     # TODO: This part from the active nodes
+    #     self.last_split_attempt_at = self.total_weight
+
+    @abstractmethod
+    def update_stats(y, weight):
+        pass
+
+    def learn_one(self, X, y, *, weight=1.0, tree=None):
+        """Update the node with the provided instance.
+
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: int
+            Instance class.
+        weight: float
+            Instance weight.
+        tree:
+            Hoeffding Tree to update.
+
+        """
+        self.update_stats(y, weight)
+        self.update_attribute_observers(X, y, weight, tree)
+
+    @abstractmethod
+    def predict_one(self, X, *, tree=None):
+        pass
+
+    @property
+    @abstractmethod
+    def total_weight(self):
+        """ Calculate the total weight seen by the node.
+
+        Returns
+        -------
+        float
+            Total weight seen.
+
+        """
+        pass
+
+    @property
+    def last_split_attempt_at(self):
+        """ Retrieve the weight seen at last split evaluation.
+
+        Returns
+        -------
+        float
+            Weight seen at last split evaluation.
+
+        """
+        try:
+            return self._last_split_attempt_at
+        except NameError:
+            self._last_split_attempt_at = None
+            return self._last_split_attempt_at
+
+    @last_split_attempt_at.setter
+    def last_split_attempt_at(self, weight):
+        """ Set the weight seen at last split evaluation.
+
+        Parameters
+        ----------
+        weight: float
+            Weight seen at last split evaluation.
+
+        """
+        self._last_split_attempt_at = weight
+
+
+class SplitNode(Node):
+    """ Node that splits the data in a Hoeffding Tree.
+
+    Parameters
+    ----------
+    split_test: InstanceConditionalTest
+        Split test.
+    stats: dict (class_value, weight) or None
+        Class observations
+
+    """
+
+    def __init__(self, split_test, stats):
+        """ SplitNode class constructor."""
+        super().__init__(stats)
+        self._split_test = split_test
+        # Dict of tuples (branch, child)
+        self._children = {}
+
+    def num_children(self):
+        """ Count the number of children for a node."""
+        return len(self._children)
+
+    def get_split_test(self):
+        """ Retrieve the split test of this node.
+
+        Returns
+        -------
+        InstanceConditionalTest
+            Split test.
+
+        """
+
+        return self._split_test
+
+    def set_child(self, index, node):
+        """ Set node as child.
+
+        Parameters
+        ----------
+        index: int
+            Branch index where the node will be inserted.
+
+        node: skmultiflow.trees.nodes.Node
+            The node to insert.
+
+        """
+        if (self._split_test.max_branches() >= 0) and (index >= self._split_test.max_branches()):
+            raise IndexError
+        self._children[index] = node
+
+    def get_child(self, index):
+        """ Retrieve a node's child given its branch index.
+
+        Parameters
+        ----------
+        index: int
+            Node's branch index.
+
+        Returns
+        -------
+        skmultiflow.trees.nodes.Node or None
+            Child node.
+
+        """
+        if index in self._children:
+            return self._children[index]
+        else:
+            return None
+
+    def instance_child_index(self, X):
+        """ Get the branch index for a given instance at the current node.
+
+        Returns
+        -------
+        int
+            Branch index, -1 if unknown.
+
+        """
+        return self._split_test.branch_for_instance(X)
+
+    @staticmethod
+    def is_leaf():
+        """ Determine if the node is a leaf.
+
+        Returns
+        -------
+        boolean
+            True if node is a leaf, False otherwise
+
+        """
+        return False
+
+    def filter_instance_to_leaf(self, X, parent, parent_branch):
+        """ Traverse down the tree to locate the corresponding leaf for an instance.
+
+        Parameters
+        ----------
+        X: numpy.ndarray of shape (n_samples, n_features)
+           Data instances.
+        parent: skmultiflow.trees.nodes.Node
+            Parent node.
+        parent_branch: int
+            Parent branch index.
+
+        Returns
+        -------
+        FoundNode
+            Leaf node for the instance.
+
+        """
+        child_index = self.instance_child_index(X)
+        if child_index >= 0:
+            child = self.get_child(child_index)
+            if child is not None:
+                return child.filter_instance_to_leaf(X, self, child_index)
+            else:
+                return FoundNode(None, self, child_index)
+        else:
+            return FoundNode(self, parent, parent_branch)
+
+    def subtree_depth(self):
+        """ Calculate the depth of the subtree from this node.
+
+        Returns
+        -------
+        int
+            Subtree depth, 0 if node is a leaf.
+        """
+        max_child_depth = 0
+        for child in self._children.values():
+            if child is not None:
+                depth = child.subtree_depth()
+                if depth > max_child_depth:
+                    max_child_depth = depth
+        return max_child_depth + 1
+
+    def describe_subtree(self, ht, buffer, indent=0):
+        """ Walk the tree and write its structure to a buffer string.
+
+        Parameters
+        ----------
+        ht: HoeffdingTreeClassifier
+            The tree to describe.
+        buffer: string
+            The buffer where the tree's structure will be stored.
+        indent: int
+            Indentation level (number of white spaces for current node).
+
+        """
+        for branch_idx in range(self.num_children()):
+            child = self.get_child(branch_idx)
+            if child is not None:
+                buffer[0] += textwrap.indent('if ', ' ' * indent)
+                buffer[0] += self._split_test.describe_condition_for_branch(branch_idx)
+                buffer[0] += ':\n'
+                child.describe_subtree(ht, buffer, indent + 2)
+
+    def get_predicate(self, branch):
+
+        return self._split_test.branch_rule(branch)
+
+
+class ActiveLeafMixin(ABCMeta):
+    @abstractmethod
+    def get_nominal_attribute_observer(self):
+        pass
+
+    @abstractmethod
+    def get_numeric_attribute_observer(self):
+        pass
+
+    @property
+    def attribute_observers(self):
+        try:
+            return self._attribute_observers
+        except NameError:
+            self._attribute_observers = {}
+            return self._attribute_observers
+
+    @attribute_observers.setter
+    def attribute_observers(self, attr_obs):
+        self._attribute_observers = attr_obs
+
+    def update_attribute_observers(self, X, y, weight, tree):
+        for idx, x in enumerate(X):
+            try:
+                obs = self.attribute_observers[idx]
+            except KeyError:
+                if tree.nominal_attributes is not None \
+                        and idx in tree.nominal_attributes:
+                    obs = self.get_nominal_attribute_observer()
+                else:
+                    obs = self.get_numerical_attribute_observer()
+                self.attribute_observers[idx] = obs
+            obs.update(x, y, weight)
+
+    def get_best_split_suggestions(self, criterion, tree):
+        """ Find possible split candidates.
+
+        Parameters
+        ----------
+        criterion: SplitCriterion
+            The splitting criterion to be used.
+        tree:
+            Hoeffding Tree.
+
+        Returns
+        -------
+        list
+            Split candidates.
+
+        """
+        best_suggestions = []
+        pre_split_dist = self._stats
+        if not tree.no_preprune:
+            # Add null split as an option
+            null_split = AttributeSplitSuggestion(
+                None, [{}], criterion.get_merit_of_split(pre_split_dist, [pre_split_dist])
+            )
+            best_suggestions.append(null_split)
+        for i, obs in self.attribute_observers.items():
+            best_suggestion = obs.get_best_evaluated_split_suggestion(
+                criterion, pre_split_dist, i, tree.binary_split
+            )
+            if best_suggestion is not None:
+                best_suggestions.append(best_suggestion)
+        return best_suggestions
+
+    def disable_attribute(self, att_idx):
+        """ Disable an attribute observer.
+
+        Parameters
+        ----------
+        att_idx: int
+            Attribute index.
+
+        """
+        if att_idx in self.attribute_observers:
+            self.attribute_observers[att_idx] = AttributeObserverNull()
+
+
+class InactiveLeafMixin:
+    def get_nominal_attribute_observer(self):
+        return None
+
+    def get_numeric_attribute_observer(self):
+        return None
+
+    def update_attribute_observers(X, y, weight, tree):
+        # An inactive learning nodes does nothing here
+        # We use this mixin as a dummy class
+        pass
+
+
+class AdaNode(metaclass=ABCMeta):
+    """ Abstract Class to create a New Node for the HoeffdingAdaptiveTreeClassifier """
+
+    @abstractmethod
+    def number_leaves(self):
+        pass
+
+    @abstractmethod
+    def get_error_estimation(self):
+        pass
+
+    @abstractmethod
+    def get_error_width(self):
+        pass
+
+    @abstractmethod
+    def is_null_error(self):
+        pass
+
+    @abstractmethod
+    def kill_tree_children(self, hat):
+        pass
+
+    @abstractmethod
+    def learn_from_instance(self, X, y, weight, hat, parent, parent_branch):
+        pass
+
+    @abstractmethod
+    def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,
+                                  update_splitter_counts, found_nodes=None):
+        pass

@@ -144,7 +144,7 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
     def _predict_meta(self, X):
         return self.perceptron_weight[1] @ X
 
-    def get_weight_seen(self):
+    def total_weight(self):
         """Calculate the total weight seen by the node.
 
         Returns

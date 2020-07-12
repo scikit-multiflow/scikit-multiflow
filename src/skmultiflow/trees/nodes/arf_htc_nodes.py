@@ -113,7 +113,7 @@ class RandomActiveLearningNodeNB(RandomActiveLearningNode):
             Class votes for the given instance.
 
         """
-        if self.get_weight_seen() >= ht.nb_threshold:
+        if self.total_weight >= ht.nb_threshold:
             return do_naive_bayes_prediction(
                 X, self._stats, self._attribute_observers
             )

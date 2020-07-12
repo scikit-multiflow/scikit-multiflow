@@ -132,7 +132,7 @@ class ActiveLearningNodePerceptronMultiTarget(ActiveLearningNodePerceptron):
     def predict(self, X):
         return np.matmul(self.perceptron_weight, X)
 
-    def get_weight_seen(self):
+    def total_weight(self):
         """Calculate the total weight seen by the node.
 
         Returns
