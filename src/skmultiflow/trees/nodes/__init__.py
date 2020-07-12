@@ -3,8 +3,7 @@ The :mod:`skmultiflow.trees.nodes` module includes learning and split node
 implementations for the hoeffding trees.
 """
 
-from .core import FoundNode, Node, SplitNode, LearningNodeMixin, ActiveLeafMixin, \
-    InactiveLeafMixin, AdaNode
+from .core import FoundNode, Node, SplitNode, LearningNode, ActiveLeaf, InactiveLeaf, AdaNode
 from .htc_nodes import ActiveLearningNodeMC, InactiveLearningNodeMC, ActiveLearningNodeNB, \
     ActiveLearningNodeNBA
 from .hatc_nodes import AdaSplitNode, AdaLearningNode  # TODO: verify name
@@ -27,10 +26,9 @@ from .sst_htr_nodes import SSTActiveLearningNode, SSTActiveLearningNodeAdaptive,
     SSTInactiveLearningNode, SSTInactiveLearningNodeAdaptive
 
 
-__all__ = ["FoundNode", "Node", "LearningNodeMixin", "ActiveLeafMixin", "InactiveLeafMixin",
-           "SplitNode", "ActiveLearningNodeMC", "InactiveLearningNodeMC",
-           "ActiveLearningNodeNB", "ActiveLearningNodeNBA",
-           "RandomActiveLearningNodeMC", "RandomActiveLearningNodeNB",
+__all__ = ["FoundNode", "Node", "LearningNode", "ActiveLeaf", "InactiveLeaf", "SplitNode",
+           "ActiveLearningNodeMC", "InactiveLearningNodeMC", "ActiveLearningNodeNB",
+           "ActiveLearningNodeNBA", "RandomActiveLearningNodeMC", "RandomActiveLearningNodeNB",
            "RandomActiveLearningNodeNBA", "AdaNode", "AdaSplitNode", "AdaLearningNode",
            "EFDTSplitNode", "EFDTActiveLearningNodeMC", "EFDTInactiveLearningNodeMC",
            "EFDTActiveLearningNodeNB", "EFDTActiveLearningNodeNBA",

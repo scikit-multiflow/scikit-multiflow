@@ -202,7 +202,7 @@ class Node(metaclass=ABCMeta):
         pass
 
 
-class LearningNodeMixin(Node):
+class LearningNode(Node):
     """ Mixin for Learning Nodes in a Hoeffding Tree. """
 
     # Parameters
@@ -449,7 +449,7 @@ class SplitNode(Node):
         return self._split_test.branch_rule(branch)
 
 
-class ActiveLeafMixin(ABCMeta):
+class ActiveLeaf(ABCMeta):
     @abstractmethod
     def get_nominal_attribute_observer(self):
         pass
@@ -528,7 +528,7 @@ class ActiveLeafMixin(ABCMeta):
             self.attribute_observers[att_idx] = AttributeObserverNull()
 
 
-class InactiveLeafMixin:
+class InactiveLeaf:
     def get_nominal_attribute_observer(self):
         return None
 

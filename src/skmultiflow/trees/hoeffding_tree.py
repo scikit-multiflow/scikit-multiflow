@@ -16,11 +16,12 @@ from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 from skmultiflow.trees.nodes import Node
 from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import SplitNode
+from skmultiflow.trees.nodes import ActiveLeaf, InactiveLeaf
 from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import ActiveLearningNodeMC
 from skmultiflow.trees.nodes import ActiveLearningNodeNB
-from skmultiflow.trees.nodes import ActiveLearningNodeNBAdaptive
-from skmultiflow.trees.nodes import InactiveLearningNode
+from skmultiflow.trees.nodes import ActiveLearningNodeNBA
+from skmultiflow.trees.nodes import InactiveLearningNodeMC
 
 from skmultiflow.rules.base_rule import Rule
 
@@ -422,7 +423,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
             learning_node.learn_from_instance(X, y, sample_weight, self)
-            if self._growth_allowed and isinstance(learning_node, ActiveLearningNode):
+            if self._growth_allowed and isinstance(learning_node, ActiveLeaf):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.total_weight
                 weight_diff = weight_seen - active_learning_node.last_split_attempt_at
@@ -567,13 +568,13 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             initial_class_observations = {}
         if is_active_node:
             if self._leaf_prediction == self._MAJORITY_CLASS:
-                return ActiveLearningNode(initial_class_observations)
+                return ActiveLearningNodeMC(initial_class_observations)
             elif self._leaf_prediction == self._NAIVE_BAYES:
                 return ActiveLearningNodeNB(initial_class_observations)
             else:  # NAIVE BAYES ADAPTIVE (default)
-                return ActiveLearningNodeNBAdaptive(initial_class_observations)
+                return ActiveLearningNodeNBA(initial_class_observations)
         else:
-            return InactiveLearningNode(initial_class_observations)
+            return InactiveLearningNodeMC(initial_class_observations)
 
     def get_model_description(self):
         """ Walk the tree and return its structure in a buffer.
@@ -636,7 +637,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         """ Create a new split node."""
         return SplitNode(split_test, class_observations)
 
-    def _attempt_to_split(self, node: ActiveLearningNode, parent: SplitNode, parent_idx: int):
+    def _attempt_to_split(self, node: ActiveLeaf, parent: SplitNode, parent_idx: int):
         """ Attempt to split a node.
 
         If the samples seen so far are not from the same class then:
@@ -748,12 +749,12 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                 break
         cutoff = len(learning_nodes) - max_active
         for i in range(cutoff):
-            if isinstance(learning_nodes[i].node, ActiveLearningNode):
+            if isinstance(learning_nodes[i].node, ActiveLeaf):
                 self._deactivate_learning_node(learning_nodes[i].node,
                                                learning_nodes[i].parent,
                                                learning_nodes[i].parent_branch)
         for i in range(cutoff, len(learning_nodes)):
-            if isinstance(learning_nodes[i].node, InactiveLearningNode):
+            if isinstance(learning_nodes[i].node, InactiveLeaf):
                 self._activate_learning_node(learning_nodes[i].node,
                                              learning_nodes[i].parent,
                                              learning_nodes[i].parent_branch)
@@ -765,7 +766,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         total_active_size = 0
         total_inactive_size = 0
         for found_node in learning_nodes:
-            if isinstance(found_node.node, ActiveLearningNode):
+            if isinstance(found_node.node, ActiveLeaf):
                 total_active_size += calculate_object_size(found_node.node)
             else:
                 total_inactive_size += calculate_object_size(found_node.node)
@@ -784,12 +785,12 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         """ Deactivate all leaves. """
         learning_nodes = self._find_learning_nodes()
         for i in range(len(learning_nodes)):
-            if isinstance(learning_nodes[i], ActiveLearningNode):
+            if isinstance(learning_nodes[i], ActiveLeaf):
                 self._deactivate_learning_node(learning_nodes[i].node,
                                                learning_nodes[i].parent,
                                                learning_nodes[i].parent_branch)
 
-    def _deactivate_learning_node(self, to_deactivate: ActiveLearningNode, parent: SplitNode, parent_branch: int):
+    def _deactivate_learning_node(self, to_deactivate: ActiveLeaf, parent: SplitNode, parent_branch: int):
         """ Deactivate a learning node.
 
         Parameters
@@ -812,7 +813,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         self._active_leaf_node_cnt -= 1
         self._inactive_leaf_node_cnt += 1
 
-    def _activate_learning_node(self, to_activate: InactiveLearningNode, parent: SplitNode, parent_branch: int):
+    def _activate_learning_node(self, to_activate: InactiveLeaf, parent: SplitNode, parent_branch: int):
         """ Activate a learning node.
 
         Parameters
