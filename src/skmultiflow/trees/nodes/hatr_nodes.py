@@ -3,16 +3,15 @@ import math
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 
 from skmultiflow.trees.nodes import FoundNode
-from skmultiflow.trees.nodes import SplitNode
-from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import AdaSplitNode
+from skmultiflow.trees.nodes import ActiveLeaf
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
-from skmultiflow.trees.nodes import InactiveLearningNode
+from skmultiflow.trees.nodes import InactiveLeaf
 from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection.adwin import ADWIN
-from skmultiflow.utils import check_random_state
 
 
-class AdaSplitNodeForRegression(SplitNode, AdaNode):
+class AdaSplitNodeRegressor(AdaSplitNode):
     """ Node that splits the data in a Regression Hoeffding Adaptive Tree.
 
     Parameters
@@ -31,47 +30,19 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         by `np.random`.
     """
     def __init__(self, split_test, stats, random_state=None):
-        super().__init__(split_test, stats)
-        self._estimation_error_weight = ADWIN()
-        self._alternate_tree = None
-        self.error_change = False
-        self.random_state = check_random_state(random_state)
+        super().__init__(split_test, stats, random_state)
 
         # To normalize the observed errors in the [0, 1] range
         self._min_error = float('Inf')
         self._max_error = float('-Inf')
 
-    # Override AdaNode
-    def number_leaves(self):
-        num_of_leaves = 0
-        for child in self._children.values():
-            if child is not None:
-                num_of_leaves += child.number_leaves()
-
-        return num_of_leaves
-
-    # Override AdaNode
-    def get_error_estimation(self):
-        return self._estimation_error_weight.estimation
-
-    # Override AdaNode
-    def get_error_width(self):
-        w = 0.0
-        if not self.is_null_error():
-            w = self._estimation_error_weight.width
-
-        return w
-
-    # Override AdaNode
-    def is_null_error(self):
-        return self._estimation_error_weight is None
-
-    # Override AdaNode
-    def learn_from_instance(self, X, y, weight, rhat, parent, parent_branch):
+    # Override AdaSplitNode
+    def learn_one(self, X, y, weight, tree, parent, parent_branch):
         normalized_error = 0.0
 
-        if self.filter_instance_to_leaf(X, parent, parent_branch).node is not None:
-            y_pred = rhat.predict([X])[0]
+        leaf = self.filter_instance_to_leaf(X, parent, parent_branch).node
+        if leaf is not None:
+            y_pred = leaf.predict_one(X)
             normalized_error = self.get_normalized_error(y, y_pred)
         if self._estimation_error_weight is None:
             self._estimation_error_weight = ADWIN()
@@ -89,13 +60,13 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
 
         # Check condition to build a new alternate tree
         if self.error_change:
-            self._alternate_tree = rhat._new_learning_node()
-            rhat.alternate_trees_cnt += 1
+            self._alternate_tree = tree._new_learning_node()
+            tree.alternate_trees_cnt += 1
 
         # Condition to replace alternate tree
         elif self._alternate_tree is not None and not self._alternate_tree.is_null_error():
-            if self.get_error_width() > rhat._ERROR_WIDTH_THRESHOLD \
-                    and self._alternate_tree.get_error_width() > rhat._ERROR_WIDTH_THRESHOLD:
+            if self.get_error_width() > tree._ERROR_WIDTH_THRESHOLD \
+                    and self._alternate_tree.get_error_width() > tree._ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
                 alt_error_rate = self._alternate_tree.get_error_estimation()
                 fDelta = .05
@@ -105,62 +76,43 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
                                   math.log(2.0 / fDelta) * fN)
                 # To check, bound never less than (old_error_rate - alt_error_rate)
                 if bound < (old_error_rate - alt_error_rate):
-                    rhat._active_leaf_node_cnt -= self.number_leaves()
-                    rhat._active_leaf_node_cnt += self._alternate_tree.number_leaves()
-                    self.kill_tree_children(rhat)
+                    tree._active_leaf_node_cnt -= self.number_leaves()
+                    tree._active_leaf_node_cnt += self._alternate_tree.number_leaves()
+                    self.kill_tree_children(tree)
 
                     if parent is not None:
                         parent.set_child(parent_branch, self._alternate_tree)
                     else:
-                        rhat._tree_root = rhat._tree_root._alternate_tree
-                    rhat.switch_alternate_trees_cnt += 1
+                        tree._tree_root = tree._tree_root._alternate_tree
+                    tree.switch_alternate_trees_cnt += 1
                 elif bound < alt_error_rate - old_error_rate:
-                    if isinstance(self._alternate_tree, ActiveLearningNode):
+                    if isinstance(self._alternate_tree, ActiveLeaf):
                         self._alternate_tree = None
-                    elif isinstance(self._alternate_tree, InactiveLearningNode):
+                    elif isinstance(self._alternate_tree, InactiveLeaf):
                         self._alternate_tree = None
                     else:
-                        self._alternate_tree.kill_tree_children(rhat)
-                    rhat.pruned_alternate_trees_cnt += 1  # hat.pruned_alternate_trees_cnt to check
+                        self._alternate_tree.kill_tree_children(tree)
+                    tree.pruned_alternate_trees_cnt += 1  # hat.pruned_alternate_trees_cnt to check
 
         # Learn_From_Instance alternate Tree and Child nodes
         if self._alternate_tree is not None:
-            self._alternate_tree.learn_from_instance(X, y, weight, rhat, parent, parent_branch)
+            self._alternate_tree.learn_one(X, y, weight, tree, parent, parent_branch)
         child_branch = self.instance_child_index(X)
         child = self.get_child(child_branch)
         if child is not None:
-            child.learn_from_instance(X, y, weight, rhat, self, child_branch)
-        # Instance contains a categorical value previously unseen by the split
-        # node
+            child.learn_one(X, y, weight, tree, parent=self, parent_branch=child_branch)
+        # Instance contains a categorical value previously unseen by the split node
         elif isinstance(self.get_split_test(), NominalAttributeMultiwayTest) and \
                 self.get_split_test().branch_for_instance(X) < 0:
             # Creates a new learning node to encompass the new observed feature
             # value
-            leaf_node = rhat._new_learning_node()
+            leaf_node = tree._new_learning_node()
             branch_id = self.get_split_test().add_new_branch(
                 X[self.get_split_test().get_atts_test_depends_on()[0]]
             )
             self.set_child(branch_id, leaf_node)
-            rhat._active_leaf_node_cnt += 1
-            leaf_node.learn_from_instance(X, y, weight, rhat, parent, parent_branch)
-
-    # Override AdaNode
-    def kill_tree_children(self, rhat):
-        for child in self._children.values():
-            if child is not None:
-                # Delete alternate tree if it exists
-                if isinstance(child, SplitNode) and child._alternate_tree is not None:
-                    rhat.pruned_alternate_trees_cnt += 1
-                # Recursive delete of SplitNodes
-                if isinstance(child, SplitNode):
-                    child.kill_tree_children(rhat)
-
-                if isinstance(child, ActiveLearningNode):
-                    child = None
-                    rhat._active_leaf_node_cnt -= 1
-                elif isinstance(child, InactiveLearningNode):
-                    child = None
-                    rhat._inactive_leaf_node_cnt -= 1
+            tree._active_leaf_node_cnt += 1
+            leaf_node.learn_one(X, y, weight, tree, parent, parent_branch)
 
     # override AdaNode
     def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,
@@ -168,15 +120,11 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
         if found_nodes is None:
             found_nodes = []
         if update_splitter_counts:
-
             try:
-
                 self._stats[0] += weight
                 self._stats[1] += y * weight
                 self._stats[2] += y * y * weight
-
             except KeyError:
-
                 self._stats[0] = weight
                 self._stats[1] = y * weight
                 self._stats[2] = y * y * weight
@@ -208,7 +156,7 @@ class AdaSplitNodeForRegression(SplitNode, AdaNode):
             return 0.0
 
 
-class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
+class AdaActiveLearningNodeRegressor(ActiveLearningNodePerceptron, AdaNode):
     """ Learning Node of the Regression Hoeffding Adaptive Tree that always use
     a linear perceptron model to provide responses.
 
@@ -257,12 +205,15 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         pass
 
     # Override AdaNode
-    def learn_from_instance(self, X, y, weight, rhat, parent, parent_branch):
-
-        super().learn_from_instance(X, y, weight, rhat)
-
-        y_pred = rhat.predict([X])[0]
+    def learn_one(self, X, y, weight, tree, parent, parent_branch):
+        y_pred = self.predict_one(X, tree=tree)
         normalized_error = self.get_normalized_error(y, y_pred)
+
+        if tree.bootstrap_sampling:
+            # Perform bootstrap-sampling
+            k = self._random_state.poisson(1.0)
+            if k > 0:
+                weight = weight * k
 
         if self._estimation_error_weight is None:
             self._estimation_error_weight = ADWIN()
@@ -270,7 +221,6 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         old_error = self.get_error_estimation()
 
         # Add element to Adwin
-
         self._estimation_error_weight.add_element(normalized_error)
         # Detect change with Adwin
         self._error_change = self._estimation_error_weight.detected_change()
@@ -278,12 +228,22 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         if self._error_change and old_error > self.get_error_estimation():
             self._error_change = False
 
+        super().learn_one(X, y, weight=weight, tree=tree)
+
         # call ActiveLearningNode
         weight_seen = self.total_weight
 
-        if weight_seen - self.last_split_attempt_at >= rhat.grace_period:
-            rhat._attempt_to_split(self, parent, parent_branch)
+        if weight_seen - self.last_split_attempt_at >= tree.grace_period:
+            tree._attempt_to_split(self, parent, parent_branch)
             self.last_split_attempt_at = weight_seen
+
+    def predict_one(self, X, *, tree=None):
+        prediction_option = tree.leaf_prediction
+        if prediction_option == tree._TARGET_MEAN:
+            return self._stats[1] / self._stats[0] if len(self._stats) > 0 and self._stats[0] > 0 \
+                else 0.0
+        else:
+            return super().predict_one(X, tree=tree)
 
     # Override AdaNode, New for option votes
     def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,

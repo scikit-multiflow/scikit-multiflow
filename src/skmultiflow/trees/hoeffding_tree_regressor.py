@@ -9,9 +9,9 @@ from skmultiflow.trees.split_criterion import VarianceReductionSplitCriterion
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import ActiveLearningNode, InactiveLearningNode
-from skmultiflow.trees.nodes import ActiveLearningNodeForRegression
-from skmultiflow.trees.nodes import InactiveLearningNodeForRegression
+from skmultiflow.trees.nodes import ActiveLeaf, InactiveLeaf
+from skmultiflow.trees.nodes import ActiveLearningNodeMean
+from skmultiflow.trees.nodes import InactiveLearningNodeMean
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.nodes import InactiveLearningNodePerceptron
 from skmultiflow.trees.nodes.htr_nodes import compute_sd
@@ -19,14 +19,15 @@ from skmultiflow.trees.nodes.htr_nodes import compute_sd
 import warnings
 
 
-def RegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
-                            split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
-                            stop_mem_management=False, remove_poor_atts=False, leaf_prediction="perceptron",
-                            no_preprune=False, nb_threshold=0, nominal_attributes=None, learning_ratio_perceptron=0.02,
+def RegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=1000000,
+                            grace_period=200, split_confidence=0.0000001, tie_threshold=0.05,
+                            binary_split=False, stop_mem_management=False, remove_poor_atts=False,
+                            leaf_prediction="perceptron", no_preprune=False, nb_threshold=0,
+                            nominal_attributes=None, learning_ratio_perceptron=0.02,
                             learning_ratio_decay=0.001, learning_ratio_const=True,
                             random_state=None):     # pragma: no cover
-    warnings.warn("'.RegressionHoeffdingTree' has been renamed to 'HoeffdingTreeRegressor' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    warnings.warn("'.RegressionHoeffdingTree' has been renamed to 'HoeffdingTreeRegressor' in "
+                  "v0.5.0.\nThe old name will be removed in v0.7.0", category=FutureWarning)
     return HoeffdingTreeRegressor(max_byte_size=max_byte_size,
                                   memory_estimate_period=memory_estimate_period,
                                   grace_period=grace_period,
@@ -271,24 +272,24 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 return float(y - mean) / (3 * sd)
         return 0.0
 
-    def _new_learning_node(self, initial_class_observations=None, parent_node=None,
+    def _new_learning_node(self, initial_stats=None, parent_node=None,
                            is_active_node=True):
         """Create a new learning node. The type of learning node depends on the tree
         configuration."""
-        if initial_class_observations is None:
-            initial_class_observations = {}
+        if initial_stats is None:
+            initial_stats = {}
 
         if is_active_node:
             if self.leaf_prediction == self._TARGET_MEAN:
-                return ActiveLearningNodeForRegression(initial_class_observations)
+                return ActiveLearningNodeMean(initial_stats)
             elif self.leaf_prediction == self._PERCEPTRON:
-                return ActiveLearningNodePerceptron(initial_class_observations, parent_node,
+                return ActiveLearningNodePerceptron(initial_stats, parent_node,
                                                     random_state=self.random_state)
         else:
             if self.leaf_prediction == self._TARGET_MEAN:
-                return InactiveLearningNodeForRegression(initial_class_observations)
+                return InactiveLearningNodeMean(initial_stats)
             elif self.leaf_prediction == self._PERCEPTRON:
-                return InactiveLearningNodePerceptron(initial_class_observations, parent_node,
+                return InactiveLearningNodePerceptron(initial_stats, parent_node,
                                                       random_state=self.random_state)
 
     def get_weights_for_instance(self, X):
@@ -396,12 +397,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
-            learning_node.learn_from_instance(X, y, sample_weight, self)
-            if self._growth_allowed and isinstance(learning_node, ActiveLearningNode):
+            learning_node.learn_one(X, y, weight=sample_weight, tree=self)
+            if self._growth_allowed and isinstance(learning_node, ActiveLeaf):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.total_weight
-                weight_diff = weight_seen - active_learning_node.\
-                    last_split_attempt_at
+                weight_diff = weight_seen - active_learning_node.last_split_attempt_at
                 if weight_diff >= self.grace_period:
                     self._attempt_to_split(active_learning_node, found_node.parent,
                                            found_node.parent_branch)
@@ -417,7 +417,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             )
             current.set_child(branch_id, leaf_node)
             self._active_leaf_node_cnt += 1
-            leaf_node.learn_from_instance(X, y, sample_weight, self)
+            leaf_node.learn_one(X, y, weight=sample_weight, tree=self)
         if self._train_weight_seen_by_model % self.memory_estimate_period == 0:
             self.estimate_model_byte_size()
 
@@ -439,29 +439,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         if self.samples_seen > 0:
             r, _ = get_dimensions(X)
             for i in range(r):
-                if self.leaf_prediction == self._TARGET_MEAN:
-                    votes = self.get_votes_for_instance(X[i])   # Gets observed data statistics
-                    if votes == {}:
-                        # Tree is empty, all target_values equal, default to zero
-                        predictions.append(0)
-                    else:
-                        number_of_samples_seen = votes[0]
-                        sum_of_values = votes[1]
-                        predictions.append(sum_of_values / number_of_samples_seen)
-                elif self.leaf_prediction == self._PERCEPTRON:
-                    if self.samples_seen > 1:
-                        perceptron_weights = self.get_weights_for_instance(X[i])
-                        if perceptron_weights is None:
-                            predictions.append(0.0)
-                            continue
-                        normalized_sample = self.normalize_sample(X[i])
-                        normalized_prediction = perceptron_weights.dot(normalized_sample)
-                        # De-normalize prediction
-                        mean = self.sum_of_values / self.samples_seen
-                        sd = compute_sd(self.sum_of_squares, self.sum_of_values, self.samples_seen)
-                        predictions.append(normalized_prediction * sd * 3 + mean)
-                    else:
-                        predictions.append(0.0)
+                predictions.append(self._tree_root.filter_instance_to_leaf(X, None, -1).node.
+                                   predict_one(X[i], tree=self))
         else:
             # Model is empty
             predictions.append(0.0)
@@ -488,7 +467,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         Parameters
         ----------
-        node: ActiveLearningNode
+        node: ActiveLeaf
             The node to evaluate.
         parent: SplitNode
             The node's parent.
@@ -504,9 +483,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             should_split = len(best_split_suggestions) > 0
         else:
             hoeffding_bound = self.compute_hoeffding_bound(
-                split_criterion.get_range_of_merit(node.stats),
-                                                   self.split_confidence, node.total_weight
-            )
+                split_criterion.get_range_of_merit(node.stats), self.split_confidence,
+                node.total_weight)
             best_suggestion = best_split_suggestions[-1]
             second_best_suggestion = best_split_suggestions[-2]
             if best_suggestion.merit > 0.0 and \
@@ -541,8 +519,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 # Preprune - null wins
                 self._deactivate_learning_node(node, parent, parent_idx)
             else:
-                new_split = self._new_split_node(split_decision.split_test,
-                                                node.stats)
+                new_split = self._new_split_node(split_decision.split_test, node.stats)
                 for i in range(split_decision.num_splits()):
                     new_child = self._new_learning_node(
                         split_decision.resulting_stats_from_split(i), node
@@ -569,13 +546,13 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         learning_nodes.sort(key=lambda n: n.depth, reverse=True)
         return learning_nodes
 
-    def _activate_learning_node(self, to_activate: InactiveLearningNode, parent: SplitNode,
+    def _activate_learning_node(self, to_activate: InactiveLeaf, parent: SplitNode,
                                 parent_branch: int):
         """ Activate a learning node.
 
         Parameters
         ----------
-        to_activate: InactiveLearningNode
+        to_activate: InactiveLeaf
             The node to activate.
         parent: SplitNode
             The node's parent.
@@ -593,13 +570,13 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         self._active_leaf_node_cnt += 1
         self._inactive_leaf_node_cnt -= 1
 
-    def _deactivate_learning_node(self, to_deactivate: ActiveLearningNode,
+    def _deactivate_learning_node(self, to_deactivate: ActiveLeaf,
                                   parent: SplitNode, parent_branch: int):
         """Deactivate a learning node.
 
         Parameters
         ----------
-        to_deactivate: ActiveLearningNode
+        to_deactivate: ActiveLeaf
             The node to deactivate.
         parent: SplitNode
             The node's parent.

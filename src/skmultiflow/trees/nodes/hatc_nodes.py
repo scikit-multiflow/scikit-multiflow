@@ -47,7 +47,7 @@ class AdaLearningNode(ActiveLearningNodeNBA, AdaNode):
         pass
 
     # Override AdaNode
-    def learn_one(self, X, y, *, weight, tree, parent, parent_branch):
+    def learn_one(self, X, y, weight, tree, parent, parent_branch):
         true_class = y
 
         if tree.bootstrap_sampling:
@@ -87,7 +87,6 @@ class AdaLearningNode(ActiveLearningNodeNBA, AdaNode):
 
     # Override LearningNodeNBAdaptive
     def predict_one(self, X, *, tree=None):
-        # dist = {}
         prediction_option = tree.leaf_prediction
         # MC
         if prediction_option == tree._MAJORITY_CLASS:
@@ -221,13 +220,11 @@ class AdaSplitNode(SplitNode, AdaNode):
 
         # Learn_From_Instance alternate Tree and Child nodes
         if self._alternate_tree is not None:
-            self._alternate_tree.learn_one(X, y, weight=weight, tree=tree, parent=parent,
-                                           parent_branch=parent_branch)
+            self._alternate_tree.learn_one(X, y, weight, tree, parent, parent_branch)
         child_branch = self.instance_child_index(X)
         child = self.get_child(child_branch)
         if child is not None:
-            child.learn_one(X, y, weight=weight, tree=tree, parent=self,
-                            parent_branch=child_branch)
+            child.learn_one(X, y, weight, tree, parent=self, parent_branch=child_branch)
         # Instance contains a categorical value previously unseen by the split
         # node
         elif isinstance(self.get_split_test(), NominalAttributeMultiwayTest) and \
@@ -240,27 +237,26 @@ class AdaSplitNode(SplitNode, AdaNode):
             )
             self.set_child(branch_id, leaf_node)
             tree._active_leaf_node_cnt += 1
-            leaf_node.learn_one(X, y, weight=weight, tree=tree, parent=parent,
-                                parent_branch=parent_branch)
+            leaf_node.learn_one(X, y, weight, tree, parent, parent_branch)
 
     # Override AdaNode
-    def kill_tree_children(self, hat):
+    def kill_tree_children(self, tree):
         for child in self._children.values():
             if child is not None:
                 # Delete alternate tree if it exists
                 if isinstance(child, SplitNode) and child._alternate_tree is not None:
-                    child._alternate_tree.kill_tree_children(hat)
-                    hat.pruned_alternate_trees_cnt += 1
+                    child._alternate_tree.kill_tree_children(tree)
+                    tree.pruned_alternate_trees_cnt += 1
                 # Recursive delete of SplitNodes
                 if isinstance(child, SplitNode):
-                    child.kill_tree_children(hat)
+                    child.kill_tree_children(tree)
 
                 if isinstance(child, ActiveLeaf):
                     child = None
-                    hat._active_leaf_node_cnt -= 1
+                    tree._active_leaf_node_cnt -= 1
                 elif isinstance(child, InactiveLeaf):
                     child = None
-                    hat._inactive_leaf_node_cnt -= 1
+                    tree._inactive_leaf_node_cnt -= 1
 
     # override AdaNode
     def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,

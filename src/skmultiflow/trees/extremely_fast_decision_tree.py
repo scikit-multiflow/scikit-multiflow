@@ -6,7 +6,7 @@ from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
 from skmultiflow.trees.nodes import ActiveLeaf, SplitNode
 from skmultiflow.trees.nodes import EFDTSplitNode
 from skmultiflow.trees.nodes import EFDTActiveLearningNodeMC
-from skmultiflow.trees.nodes import EFDTInactiveLearningNode
+from skmultiflow.trees.nodes import EFDTInactiveLearningNodeMC
 from skmultiflow.trees.nodes import EFDTActiveLearningNodeNB
 from skmultiflow.trees.nodes import EFDTActiveLearningNodeNBA
 from skmultiflow.utils import get_dimensions
@@ -132,7 +132,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                 return EFDTActiveLearningNodeNBA(initial_class_observations)
         else:
             # TODO: review it
-            return EFDTInactiveLearningNode(initial_class_observations)
+            return EFDTInactiveLearningNodeMC(initial_class_observations)
 
     # Override _new_split_node
     def _new_split_node(self, split_test, class_observations, attribute_observers):

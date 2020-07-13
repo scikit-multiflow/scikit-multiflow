@@ -1,14 +1,22 @@
 import numpy as np
 
-from skmultiflow.trees.nodes import ActiveLearningNodeForRegression
-from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
+from skmultiflow.trees.nodes import LearningNodeMean, LearningNodePerceptron
+from skmultiflow.trees.nodes import RandomActiveLeafClass
 from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
 from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserver
 
-from skmultiflow.utils import check_random_state, get_dimensions
+from skmultiflow.utils import check_random_state
 
 
-class RandomLearningNodeForRegression(ActiveLearningNodeForRegression):
+class RandomActiveLeafRegressor(RandomActiveLeafClass):
+    def get_nominal_attribute_observer(self):
+        return NominalAttributeRegressionObserver()
+
+    def get_numeric_attribute_observer(self):
+        return NumericAttributeRegressionObserver
+
+
+class RandomActiveLearningNodeMean(LearningNodeMean, RandomActiveLeafRegressor):
     """ Learning Node for regression tasks that always use the average target
     value as response.
 
@@ -33,53 +41,11 @@ class RandomLearningNodeForRegression(ActiveLearningNodeForRegression):
 
         self.max_features = max_features
         self.list_attributes = np.array([])
-        self.random_state = check_random_state(random_state)
-
-    def learn_from_instance(self, X, y, weight, rht):
-        """Update the node with the provided instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: float
-            Instance target value.
-        weight: float
-            Instance weight.
-        ht: HoeffdingTreeRegressor
-            Hoeffding Tree to update.
-
-        """
-        try:
-            self._stats[0] += weight
-            self._stats[1] += y * weight
-            self._stats[2] += y * y * weight
-        except KeyError:
-            self._stats[0] = weight
-            self._stats[1] = y * weight
-            self._stats[2] = y * y * weight
-
-        if self.list_attributes.size == 0:
-            self.list_attributes = self._sample_features(get_dimensions(X)[1])
-
-        for i in self.list_attributes:
-            try:
-                obs = self._attribute_observers[i]
-            except KeyError:
-                if rht.nominal_attributes is not None and i in rht.nominal_attributes:
-                    obs = NominalAttributeRegressionObserver()
-                else:
-                    obs = NumericAttributeRegressionObserver()
-                self._attribute_observers[i] = obs
-            obs.update(X[i], y, weight)
-
-    def _sample_features(self, n_features):
-        return self.random_state.choice(
-            n_features, size=self.max_features, replace=False
-        )
+        self.random_state = random_state
+        self._random_state = check_random_state(self.random_state)
 
 
-class RandomLearningNodePerceptron(ActiveLearningNodePerceptron):
+class RandomActiveLearningNodePerceptron(LearningNodePerceptron, RandomActiveLeafRegressor):
     """ Learning Node for regression tasks that always use a linear perceptron
     model to provide responses.
 
@@ -106,69 +72,3 @@ class RandomLearningNodePerceptron(ActiveLearningNodePerceptron):
         super().__init__(initial_stats, parent_node, random_state)
         self.max_features = max_features
         self.list_attributes = np.array([])
-
-    def learn_from_instance(self, X, y, weight, rht):
-        """Update the node with the provided instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: float
-            Instance target value.
-        weight: float
-            Instance weight.
-        rht: HoeffdingTreeRegressor
-            Regression Hoeffding Tree to update.
-
-        """
-
-        # In regression, the self._stats dictionary keeps three statistics:
-        # [0] sum of sample seen by the node
-        # [1] sum of target values
-        # [2] sum of squared target values
-        # These statistics are useful to calculate the mean and to calculate the variance reduction
-
-        if self.perceptron_weight is None:
-            self.perceptron_weight = self.random_state.uniform(-1, 1, len(X)+1)
-
-        try:
-            self._stats[0] += weight
-            self._stats[1] += y * weight
-            self._stats[2] += y * y * weight
-        except KeyError:
-            self._stats[0] = weight
-            self._stats[1] = y * weight
-            self._stats[2] = y * y * weight
-
-        # Update perceptron
-        self.samples_seen = self._stats[0]
-
-        if rht.learning_ratio_const:
-            learning_ratio = rht.learning_ratio_perceptron
-        else:
-            learning_ratio = rht.learning_ratio_perceptron / \
-                             (1 + self.samples_seen * rht.learning_ratio_decay)
-
-        # Loop for compatibility with bagging methods
-        for i in range(int(weight)):
-            self.update_weights(X, y, learning_ratio, rht)
-
-        if self.list_attributes.size == 0:
-            self.list_attributes = self._sample_features(get_dimensions(X)[1])
-
-        for i in self.list_attributes:
-            try:
-                obs = self._attribute_observers[i]
-            except KeyError:
-                if rht.nominal_attributes is not None and i in rht.nominal_attributes:
-                    obs = NominalAttributeRegressionObserver()
-                else:
-                    obs = NumericAttributeRegressionObserver()
-                self._attribute_observers[i] = obs
-            obs.update(X[i], y, weight)
-
-    def _sample_features(self, n_features):
-        return self.random_state.choice(
-            n_features, size=self.max_features, replace=False
-        )

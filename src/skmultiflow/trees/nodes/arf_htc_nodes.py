@@ -3,7 +3,7 @@ import numpy as np
 from skmultiflow.trees.nodes import ActiveLeafClass, LearningNodeMC, LearningNodeNB, \
     LearningNodeNBA
 
-from skmultiflow.utils import get_dimensions
+from skmultiflow.utils import get_dimensions, check_random_state
 
 
 class RandomActiveLeafClass(ActiveLeafClass):
@@ -28,7 +28,7 @@ class RandomActiveLeafClass(ActiveLeafClass):
             obs.update(X[idx], y, weight)
 
     def _sample_features(self, n_features):
-        return self.random_state.choice(
+        return self._random_state.choice(
             n_features, size=self.max_features, replace=False
         )
 
@@ -56,6 +56,7 @@ class RandomActiveLearningNodeMC(LearningNodeMC, RandomActiveLeafClass):
         self.max_features = max_features
         self.list_attributes = np.array([])
         self.random_state = random_state
+        self._random_state = check_random_state(self.random_state)
 
 
 class RandomActiveLearningNodeNB(LearningNodeNB, RandomActiveLeafClass):
@@ -82,6 +83,7 @@ class RandomActiveLearningNodeNB(LearningNodeNB, RandomActiveLeafClass):
         self.max_features = max_features
         self.list_attributes = np.array([])
         self.random_state = random_state
+        self._random_state = check_random_state(self.random_state)
 
 
 class RandomActiveLearningNodeNBA(LearningNodeNBA, RandomActiveLeafClass):
@@ -107,3 +109,4 @@ class RandomActiveLearningNodeNBA(LearningNodeNBA, RandomActiveLeafClass):
         self.max_features = max_features
         self.list_attributes = np.array([])
         self.random_state = random_state
+        self._random_state = check_random_state(self.random_state)

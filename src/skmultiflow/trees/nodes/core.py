@@ -202,88 +202,6 @@ class Node(metaclass=ABCMeta):
         pass
 
 
-class LearningNode(Node):
-    """ Mixin for Learning Nodes in a Hoeffding Tree.
-
-    Parameters
-    ----------
-    initial_stats: dict (class_value, weight) or None
-        Initial class observations
-
-    """
-    def __init__(self, initial_stats):
-        """ ActiveLearningNode class constructor. """
-        super().__init__(initial_stats)
-        self.last_split_attempt_at = self.total_weight
-
-    @abstractmethod
-    def update_stats(y, weight):
-        pass
-
-    def learn_one(self, X, y, *, weight=1.0, tree=None):
-        """Update the node with the provided instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: int
-            Instance class.
-        weight: float
-            Instance weight.
-        tree:
-            Hoeffding Tree to update.
-
-        """
-        self.update_stats(y, weight)
-        self.update_attribute_observers(X, y, weight, tree)
-
-    @abstractmethod
-    def predict_one(self, X, *, tree=None):
-        pass
-
-    @property
-    @abstractmethod
-    def total_weight(self):
-        """ Calculate the total weight seen by the node.
-
-        Returns
-        -------
-        float
-            Total weight seen.
-
-        """
-        pass
-
-    @property
-    def last_split_attempt_at(self):
-        """ Retrieve the weight seen at last split evaluation.
-
-        Returns
-        -------
-        float
-            Weight seen at last split evaluation.
-
-        """
-        try:
-            return self._last_split_attempt_at
-        except NameError:
-            self._last_split_attempt_at = None
-            return self._last_split_attempt_at
-
-    @last_split_attempt_at.setter
-    def last_split_attempt_at(self, weight):
-        """ Set the weight seen at last split evaluation.
-
-        Parameters
-        ----------
-        weight: float
-            Weight seen at last split evaluation.
-
-        """
-        self._last_split_attempt_at = weight
-
-
 class SplitNode(Node):
     """ Node that splits the data in a Hoeffding Tree.
 
@@ -447,6 +365,87 @@ class SplitNode(Node):
         return self._split_test.branch_rule(branch)
 
 
+class LearningNode(Node, ABCMeta):
+    """ Base Learning Node to be used in Hoeffding Trees.
+
+    Parameters
+    ----------
+    initial_stats: dict (class_value, weight) or None
+        Initial stats (they differ in classification and regression tasks).
+    """
+    def __init__(self, initial_stats):
+        """ ActiveLearningNode class constructor. """
+        super().__init__(initial_stats)
+        self.last_split_attempt_at = self.total_weight
+
+    @abstractmethod
+    def update_stats(self, y, weight):
+        pass
+
+    def learn_one(self, X, y, *, weight=1.0, tree=None):
+        """Update the node with the provided instance.
+
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: int
+            Instance class.
+        weight: float
+            Instance weight.
+        tree:
+            Hoeffding Tree to update.
+
+        """
+        self.update_stats(y, weight)
+        self.update_attribute_observers(X, y, weight, tree)
+
+    @abstractmethod
+    def predict_one(self, X, *, tree=None):
+        pass
+
+    @property
+    @abstractmethod
+    def total_weight(self):
+        """ Calculate the total weight seen by the node.
+
+        Returns
+        -------
+        float
+            Total weight seen.
+
+        """
+        pass
+
+    @property
+    def last_split_attempt_at(self):
+        """ Retrieve the weight seen at last split evaluation.
+
+        Returns
+        -------
+        float
+            Weight seen at last split evaluation.
+
+        """
+        try:
+            return self._last_split_attempt_at
+        except NameError:
+            self._last_split_attempt_at = None
+            return self._last_split_attempt_at
+
+    @last_split_attempt_at.setter
+    def last_split_attempt_at(self, weight):
+        """ Set the weight seen at last split evaluation.
+
+        Parameters
+        ----------
+        weight: float
+            Weight seen at last split evaluation.
+
+        """
+        self._last_split_attempt_at = weight
+
+
 class ActiveLeaf(ABCMeta):
     @abstractmethod
     def get_nominal_attribute_observer(self):
@@ -473,8 +472,7 @@ class ActiveLeaf(ABCMeta):
             try:
                 obs = self.attribute_observers[idx]
             except KeyError:
-                if tree.nominal_attributes is not None \
-                        and idx in tree.nominal_attributes:
+                if tree.nominal_attributes is not None and idx in tree.nominal_attributes:
                     obs = self.get_nominal_attribute_observer()
                 else:
                     obs = self.get_numeric_attribute_observer()
@@ -563,7 +561,7 @@ class AdaNode(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def learn_one(self, X, y, *, weight, tree, parent, parent_branch):
+    def learn_one(self, X, y, weight, tree, parent, parent_branch):
         pass
 
     @abstractmethod

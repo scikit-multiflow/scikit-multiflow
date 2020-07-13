@@ -3,10 +3,10 @@ from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.utils import get_dimensions
 
-from skmultiflow.trees.nodes import LCActiveLearningNode
-from skmultiflow.trees.nodes import LCInactiveLearningNode
-from skmultiflow.trees.nodes import LCLearningNodeNB
-from skmultiflow.trees.nodes import LCLearningNodeNBA
+from skmultiflow.trees.nodes import LCActiveLearningNodeMC
+from skmultiflow.trees.nodes import LCInactiveLearningNodeMC
+from skmultiflow.trees.nodes import LCActiveLearningNodeNB
+from skmultiflow.trees.nodes import LCActiveLearningNodeNBA
 
 import warnings
 
@@ -212,13 +212,13 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
 
         if is_active_node:
             if self._leaf_prediction == self._MAJORITY_CLASS:
-                return LCActiveLearningNode(initial_class_observations)
+                return LCActiveLearningNodeMC(initial_class_observations)
             elif self._leaf_prediction == self._NAIVE_BAYES:
-                return LCLearningNodeNB(initial_class_observations)
+                return LCActiveLearningNodeNB(initial_class_observations)
             else:  # NAIVE BAYES ADAPTIVE (default)
-                return LCLearningNodeNBA(initial_class_observations)
+                return LCActiveLearningNodeNBA(initial_class_observations)
         else:
-            return LCInactiveLearningNode(initial_class_observations)
+            return LCInactiveLearningNodeMC(initial_class_observations)
 
     @staticmethod
     def _more_tags():
