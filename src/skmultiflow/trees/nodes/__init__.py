@@ -4,11 +4,11 @@ implementations for the hoeffding trees.
 """
 
 from .core import FoundNode, Node, SplitNode, LearningNode, ActiveLeaf, InactiveLeaf, AdaNode
-from .htc_nodes import ActiveLearningNodeMC, InactiveLearningNodeMC, ActiveLearningNodeNB, \
-    ActiveLearningNodeNBA
+from .htc_nodes import ActiveLeafClass, LearningNodeMC, LearningNodeNB, LearningNodeNBA, \
+    ActiveLearningNodeMC, InactiveLearningNodeMC, ActiveLearningNodeNB, ActiveLearningNodeNBA
 from .hatc_nodes import AdaSplitNode, AdaLearningNode  # TODO: verify name
-from .arf_htc_nodes import RandomActiveLearningNodeMC, RandomActiveLearningNodeNB, \
-    RandomActiveLearningNodeNBA
+from .arf_htc_nodes import RandomActiveLeafClass, RandomActiveLearningNodeMC, \
+    RandomActiveLearningNodeNB, RandomActiveLearningNodeNBA
 from .efdtc_nodes import EFDTSplitNode, EFDTActiveLearningNodeMC, EFDTInactiveLearningNodeMC, \
     EFDTActiveLearningNodeNB, EFDTActiveLearningNodeNBA
 from .lc_htc_nodes import LCActiveLearningNodeMC, LCInactiveLearningNodeMC, \
@@ -26,12 +26,13 @@ from .sst_htr_nodes import SSTActiveLearningNode, SSTActiveLearningNodeAdaptive,
     SSTInactiveLearningNode, SSTInactiveLearningNodeAdaptive
 
 
-__all__ = ["FoundNode", "Node", "LearningNode", "ActiveLeaf", "InactiveLeaf", "SplitNode",
+__all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLeaf", "InactiveLeaf",
+           "AdaNode", "ActiveLeafClass", "LearningNodeMC", "LearningNodeNB", "LearningNodeNBA",
            "ActiveLearningNodeMC", "InactiveLearningNodeMC", "ActiveLearningNodeNB",
-           "ActiveLearningNodeNBA", "RandomActiveLearningNodeMC", "RandomActiveLearningNodeNB",
-           "RandomActiveLearningNodeNBA", "AdaNode", "AdaSplitNode", "AdaLearningNode",
-           "EFDTSplitNode", "EFDTActiveLearningNodeMC", "EFDTInactiveLearningNodeMC",
-           "EFDTActiveLearningNodeNB", "EFDTActiveLearningNodeNBA",
+           "ActiveLearningNodeNBA", "RandomActiveLeafClass", "RandomActiveLearningNodeMC",
+           "RandomActiveLearningNodeNB", "RandomActiveLearningNodeNBA", "AdaSplitNode",
+           "AdaLearningNode", "EFDTActiveLeaf", "EFDTSplitNode", "EFDTActiveLearningNodeMC",
+           "EFDTInactiveLearningNodeMC", "EFDTActiveLearningNodeNB", "EFDTActiveLearningNodeNBA",
            "LCActiveLearningNodeMC", "LCInactiveLearningNodeMC", "LCActiveLearningNodeNB",
            "LCActiveLearningNodeNBA", "ActiveLearningNodeForRegression",
            "ActiveLearningNodePerceptron", "InactiveLearningNodeForRegression",

@@ -541,11 +541,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 # Preprune - null wins
                 self._deactivate_learning_node(node, parent, parent_idx)
             else:
-                new_split = self.new_split_node(split_decision.split_test,
+                new_split = self._new_split_node(split_decision.split_test,
                                                 node.stats)
                 for i in range(split_decision.num_splits()):
                     new_child = self._new_learning_node(
-                        split_decision.resulting_class_distribution_from_split(i), node
+                        split_decision.resulting_stats_from_split(i), node
                     )
                     new_split.set_child(i, new_child)
                 self._active_leaf_node_cnt -= 1

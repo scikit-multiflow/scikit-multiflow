@@ -11,12 +11,13 @@ from skmultiflow.trees.nodes import LCLearningNodeNBA
 import warnings
 
 
-def LCHT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200, split_criterion='info_gain',
-         split_confidence=0.0000001, tie_threshold=0.05, binary_split=False, stop_mem_management=False,
-         remove_poor_atts=False, no_preprune=False, leaf_prediction='nba', nb_threshold=0, nominal_attributes=None,
+def LCHT(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
+         split_criterion='info_gain', split_confidence=0.0000001, tie_threshold=0.05,
+         binary_split=False, stop_mem_management=False, remove_poor_atts=False, no_preprune=False,
+         leaf_prediction='nba', nb_threshold=0, nominal_attributes=None,
          n_labels=None):     # pragma: no cover
-    warnings.warn("'LCHT' has been renamed to 'LabelCombinationHoeffdingTreeClassifier' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    warnings.warn("'LCHT' has been renamed to 'LabelCombinationHoeffdingTreeClassifier' in"
+                  "v0.5.0.\nThe old name will be removed in v0.7.0", category=FutureWarning)
     return LabelCombinationHoeffdingTreeClassifier(max_byte_size=max_byte_size,
                                                    memory_estimate_period=memory_estimate_period,
                                                    grace_period=grace_period,
@@ -159,8 +160,8 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
         self._n_labels = n_labels
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
-        """ Incrementally trains the model. Train samples (instances) are composed of X attributes and their
-            corresponding targets y.
+        """ Incrementally trains the model. Train samples (instances) are composed of X attributes
+        and their corresponding targets y.
 
         Parameters
         ----------

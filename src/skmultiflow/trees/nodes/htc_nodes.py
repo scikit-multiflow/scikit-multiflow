@@ -1,5 +1,15 @@
 from skmultiflow.trees.nodes import LearningNode, ActiveLeaf, InactiveLeaf
+from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver, \
+    NumericAttributeClassObserverGaussian
 from skmultiflow.bayes import do_naive_bayes_prediction
+
+
+class ActiveLeafClass(ActiveLeaf):
+    def get_nominal_attribute_observer(self):
+        return NominalAttributeClassObserver()
+
+    def get_numeric_attribute_observer(self):
+        return NumericAttributeClassObserverGaussian()
 
 
 class LearningNodeMC(LearningNode):
@@ -41,6 +51,11 @@ class LearningNodeNB(LearningNodeMC):
 
 
 class LearningNodeNBA(LearningNodeMC):
+    def __init__(self, initial_stats):
+        super().__init__(initial_stats)
+        self._mc_correct_weight = 0.0
+        self._nb_correct_weight = 0.0
+
     def learn_one(self, X, y, *, weight=1.0, tree=None):
         """ Update the node with the provided instance.
 
@@ -93,7 +108,7 @@ class LearningNodeNBA(LearningNodeMC):
         )
 
 
-class ActiveLearningNodeMC(LearningNodeMC, ActiveLeaf):
+class ActiveLearningNodeMC(LearningNodeMC, ActiveLeafClass):
     """ Learning node that supports growth.
 
     Parameters
@@ -105,7 +120,6 @@ class ActiveLearningNodeMC(LearningNodeMC, ActiveLeaf):
     def __init__(self, initial_stats):
         """ ActiveLearningNode class constructor. """
         super().__init__(initial_stats)
-        self.last_split_attempt_at = self.total_weight
 
 
 class InactiveLearningNodeMC(LearningNodeMC, InactiveLeaf):
@@ -122,7 +136,7 @@ class InactiveLearningNodeMC(LearningNodeMC, InactiveLeaf):
         super().__init__(initial_stats)
 
 
-class ActiveLearningNodeNB(LearningNodeNB, ActiveLeaf):
+class ActiveLearningNodeNB(LearningNodeNB, ActiveLeafClass):
     """ Learning node that uses Naive Bayes models.
 
     Parameters
@@ -134,7 +148,6 @@ class ActiveLearningNodeNB(LearningNodeNB, ActiveLeaf):
     def __init__(self, initial_stats):
         """ LearningNodeNB class constructor. """
         super().__init__(initial_stats)
-        self.last_split_attempt_at = self.total_weight
 
     def disable_attribute(self, att_index):
         """ Disable an attribute observer.
@@ -150,7 +163,7 @@ class ActiveLearningNodeNB(LearningNodeNB, ActiveLeaf):
         pass
 
 
-class ActiveLearningNodeNBA(LearningNodeNBA, ActiveLeaf):
+class ActiveLearningNodeNBA(LearningNodeNBA, ActiveLeafClass):
     """ Learning node that uses Adaptive Naive Bayes models.
 
     Parameters
@@ -162,9 +175,6 @@ class ActiveLearningNodeNBA(LearningNodeNBA, ActiveLeaf):
     def __init__(self, initial_stats):
         """ LearningNodeNBAdaptive class constructor. """
         super().__init__(initial_stats)
-        self.last_split_attempt_at = self.total_weight
-        self._mc_correct_weight = 0.0
-        self._nb_correct_weight = 0.0
 
     def disable_attribute(self, att_index):
         """ Disable an attribute observer.

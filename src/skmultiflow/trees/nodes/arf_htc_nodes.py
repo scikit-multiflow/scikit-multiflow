@@ -1,14 +1,39 @@
 import numpy as np
 
-from skmultiflow.trees.nodes import ActiveLearningNode
-from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
-from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
+from skmultiflow.trees.nodes import ActiveLeafClass, LearningNodeMC, LearningNodeNB, \
+    LearningNodeNBA
 
-from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.utils import get_dimensions
 
 
-class RandomActiveLearningNode(ActiveLearningNode):
+class RandomActiveLeafClass(ActiveLeafClass):
+    """ Random Active Leaf
+
+    A Random Active Leaf (used in ARF implementations) just changes the way how the nodes update
+    the attribute observers (by using subsets of features).
+    """
+    def update_attribute_observers(self, X, y, weight, tree):
+        if self.list_attributes.size == 0:
+            self.list_attributes = self._sample_features(get_dimensions(X)[1])
+
+        for idx in self.list_attributes:
+            try:
+                obs = self.attribute_observers[idx]
+            except KeyError:
+                if tree.nominal_attributes is not None and idx in tree.nominal_attributes:
+                    obs = self.get_nominal_attribute_observer()
+                else:
+                    obs = self.get_numeric_attribute_observer()
+                self.attribute_observers[idx] = obs
+            obs.update(X[idx], y, weight)
+
+    def _sample_features(self, n_features):
+        return self.random_state.choice(
+            n_features, size=self.max_features, replace=False
+        )
+
+
+class RandomActiveLearningNodeMC(LearningNodeMC, RandomActiveLeafClass):
     """ARF learning node class.
 
     Parameters
@@ -28,54 +53,12 @@ class RandomActiveLearningNode(ActiveLearningNode):
     def __init__(self, initial_stats, max_features, random_state=None):
         """ RandomLearningNodeClassification class constructor. """
         super().__init__(initial_stats)
-
         self.max_features = max_features
         self.list_attributes = np.array([])
         self.random_state = random_state
 
-    def learn_from_instance(self, X, y, weight, ht):
-        """Update the node with the provided instance.
 
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: int
-            Instance class.
-        weight: float
-            Instance weight.
-        ht: HoeffdingTreeClassifier
-            Hoeffding Tree to update.
-        """
-        try:
-            self._stats[y] += weight
-        except KeyError:
-            self._stats[y] = weight
-            self._stats = dict(
-                sorted(self._stats.items())
-            )
-
-        if self.list_attributes.size == 0:
-            self.list_attributes = self._sample_features(get_dimensions(X)[1])
-
-        for i in self.list_attributes:
-            try:
-                obs = self._attribute_observers[i]
-            except KeyError:
-                if ht.nominal_attributes is not None and i in ht.nominal_attributes:
-                    obs = NominalAttributeClassObserver()
-                else:
-                    obs = NumericAttributeClassObserverGaussian()
-                self._attribute_observers[i] = obs
-            obs.update(X[i], int(y), weight)
-
-    def _sample_features(self, n_features):
-        return self.random_state.choice(
-            n_features, size=self.max_features, replace=False
-        )
-
-
-class RandomActiveLearningNodeNB(RandomActiveLearningNode):
+class RandomActiveLearningNodeNB(LearningNodeNB, RandomActiveLeafClass):
     """ARF Naive Bayes learning node class.
 
     Parameters
@@ -95,33 +78,13 @@ class RandomActiveLearningNodeNB(RandomActiveLearningNode):
 
     def __init__(self, initial_stats, max_features, random_state):
         """ LearningNodeNB class constructor. """
-        super().__init__(initial_stats, max_features, random_state)
-
-    def get_class_votes(self, X, ht):
-        """Get the votes per class for a given instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes.
-        ht: HoeffdingTreeClassifier
-            Hoeffding Tree.
-
-        Returns
-        -------
-        dict (class_value, weight)
-            Class votes for the given instance.
-
-        """
-        if self.total_weight >= ht.nb_threshold:
-            return do_naive_bayes_prediction(
-                X, self._stats, self._attribute_observers
-            )
-        else:
-            return super().get_class_votes(X, ht)
+        super().__init__(initial_stats)
+        self.max_features = max_features
+        self.list_attributes = np.array([])
+        self.random_state = random_state
 
 
-class RandomActiveLearningNodeNBAdaptive(RandomActiveLearningNodeNB):
+class RandomActiveLearningNodeNBA(LearningNodeNBA, RandomActiveLeafClass):
     """Naive Bayes Adaptive learning node class.
 
     Parameters
@@ -140,57 +103,7 @@ class RandomActiveLearningNodeNBAdaptive(RandomActiveLearningNodeNB):
     """
     def __init__(self, initial_stats, max_features, random_state):
         """LearningNodeNBAdaptive class constructor. """
-        super().__init__(initial_stats, max_features, random_state)
-        self._mc_correct_weight = 0.0
-        self._nb_correct_weight = 0.0
-
-    def learn_from_instance(self, X, y, weight, ht):
-        """Update the node with the provided instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: int
-            Instance class.
-        weight: float
-            The instance's weight.
-        ht: HoeffdingTreeClassifier
-            The Hoeffding Tree to update.
-
-        """
-        if self._stats == {}:
-            # All classes equal, default to class 0
-            if 0 == y:
-                self._mc_correct_weight += weight
-        elif max(self._stats,
-                 key=self._stats.get) == y:
-            self._mc_correct_weight += weight
-        nb_prediction = do_naive_bayes_prediction(
-            X, self._stats, self._attribute_observers
-        )
-        if max(nb_prediction, key=nb_prediction.get) == y:
-            self._nb_correct_weight += weight
-        super().learn_from_instance(X, y, weight, ht)
-
-    def get_class_votes(self, X, ht):
-        """Get the votes per class for a given instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes.
-        ht: HoeffdingTreeClassifier
-            Hoeffding Tree.
-
-        Returns
-        -------
-        dict (class_value, weight)
-            Class votes for the given instance.
-
-        """
-        if self._mc_correct_weight > self._nb_correct_weight:
-            return self._stats
-        return do_naive_bayes_prediction(
-            X, self._stats, self._attribute_observers
-        )
+        super().__init__(initial_stats)
+        self.max_features = max_features
+        self.list_attributes = np.array([])
+        self.random_state = random_state

@@ -4,15 +4,14 @@ from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import SplitNode
-from skmultiflow.trees.nodes import ActiveLearningNode
-from skmultiflow.trees.nodes import ActiveLearningNodeNBAdaptive
-from skmultiflow.trees.nodes import InactiveLearningNode
+from skmultiflow.trees.nodes import ActiveLeaf, InactiveLeaf
+from skmultiflow.trees.nodes import ActiveLearningNodeNBA
 from skmultiflow.trees.nodes import AdaNode
 
 from skmultiflow.utils import check_random_state, get_max_value_key, normalize_values_in_dict
 
 
-class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
+class AdaLearningNode(ActiveLearningNodeNBA, AdaNode):
     """ Learning node for Hoeffding Adaptive Tree that uses Adaptive Naive
     Bayes models.
 
@@ -48,18 +47,18 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
         pass
 
     # Override AdaNode
-    def learn_from_instance(self, X, y, weight, hat, parent, parent_branch):
+    def learn_one(self, X, y, *, weight, tree, parent, parent_branch):
         true_class = y
 
-        if hat.bootstrap_sampling:
+        if tree.bootstrap_sampling:
             # Perform bootstrap-sampling
             k = self._random_state.poisson(1.0)
             if k > 0:
                 weight = weight * k
 
-        class_prediction = get_max_value_key(self.get_class_votes(X, hat))
+        class_prediction = get_max_value_key(self.predict_one(X, tree=tree))
 
-        bl_correct = (true_class == class_prediction)
+        is_correct = (true_class == class_prediction)
 
         if self._estimation_error_weight is None:
             self._estimation_error_weight = ADWIN()
@@ -67,7 +66,7 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
         old_error = self.get_error_estimation()
 
         # Add element to Adwin
-        add = 0.0 if bl_correct else 1.0
+        add = 0.0 if is_correct else 1.0
 
         self._estimation_error_weight.add_element(add)
         # Detect change with Adwin
@@ -77,33 +76,28 @@ class AdaLearningNode(ActiveLearningNodeNBAdaptive, AdaNode):
             self.error_change = False
 
         # Update statistics
-        super().learn_from_instance(X, y, weight, hat)
+        super().learn_from_instance(X, y, weight=weight, tree=tree)
 
         # call ActiveLearningNode
         weight_seen = self.total_weight
 
-        if weight_seen - self.last_split_attempt_at >= hat.grace_period:
-            hat._attempt_to_split(self, parent, parent_branch)
+        if weight_seen - self.last_split_attempt_at >= tree.grace_period:
+            tree._attempt_to_split(self, parent, parent_branch)
             self.last_split_attempt_at = weight_seen
 
     # Override LearningNodeNBAdaptive
-    def get_class_votes(self, X, ht):
+    def predict_one(self, X, *, tree=None):
         # dist = {}
-        prediction_option = ht.leaf_prediction
+        prediction_option = tree.leaf_prediction
         # MC
-        if prediction_option == ht._MAJORITY_CLASS:
+        if prediction_option == tree._MAJORITY_CLASS:
             dist = self.stats
         # NB
-        elif prediction_option == ht._NAIVE_BAYES:
-            dist = do_naive_bayes_prediction(X, self._stats,
-                                             self._attribute_observers)
+        elif prediction_option == tree._NAIVE_BAYES:
+            dist = do_naive_bayes_prediction(X, self._stats, self._attribute_observers)
         # NBAdaptive (default)
         else:
-            if self._mc_correct_weight > self._nb_correct_weight:
-                dist = self.stats
-            else:
-                dist = do_naive_bayes_prediction(X, self._stats,
-                                                 self._attribute_observers)
+            dist = super().predict_one(X, tree=tree)
 
         dist_sum = sum(dist.values())  # sum all values in dictionary
         normalization_factor = dist_sum * self.get_error_estimation() * self.get_error_estimation()
@@ -165,15 +159,15 @@ class AdaSplitNode(SplitNode, AdaNode):
         return self._estimation_error_weight is None
 
     # Override AdaNode
-    def learn_from_instance(self, X, y, weight, hat, parent, parent_branch):
+    def learn_one(self, X, y, *, weight, tree, parent, parent_branch):
         true_class = y
         class_prediction = 0
 
         leaf = self.filter_instance_to_leaf(X, parent, parent_branch)
         if leaf.node is not None:
-            class_prediction = get_max_value_key(leaf.node.get_class_votes(X, hat))
+            class_prediction = get_max_value_key(leaf.node.predict_one(X, tree=tree))
 
-        bl_correct = (true_class == class_prediction)
+        is_correct = (true_class == class_prediction)
 
         if self._estimation_error_weight is None:
             self._estimation_error_weight = ADWIN()
@@ -181,7 +175,7 @@ class AdaSplitNode(SplitNode, AdaNode):
         old_error = self.get_error_estimation()
 
         # Add element to ADWIN
-        add = 0.0 if bl_correct else 1.0
+        add = 0.0 if is_correct else 1.0
 
         self._estimation_error_weight.add_element(add)
         # Detect change with ADWIN
@@ -192,13 +186,13 @@ class AdaSplitNode(SplitNode, AdaNode):
 
         # Check condition to build a new alternate tree
         if self.error_change:
-            self._alternate_tree = hat._new_learning_node()
-            hat.alternate_trees_cnt += 1
+            self._alternate_tree = tree._new_learning_node()
+            tree.alternate_trees_cnt += 1
 
         # Condition to replace alternate tree
         elif self._alternate_tree is not None and not self._alternate_tree.is_null_error():
-            if self.get_error_width() > hat._ERROR_WIDTH_THRESHOLD \
-                    and self._alternate_tree.get_error_width() > hat._ERROR_WIDTH_THRESHOLD:
+            if self.get_error_width() > tree._ERROR_WIDTH_THRESHOLD \
+                    and self._alternate_tree.get_error_width() > tree._ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
                 alt_error_rate = self._alternate_tree.get_error_estimation()
                 fDelta = .05
@@ -208,45 +202,46 @@ class AdaSplitNode(SplitNode, AdaNode):
                                   math.log(2.0 / fDelta) * fN)
                 # To check, bound never less than (old_error_rate - alt_error_rate)
                 if bound < (old_error_rate - alt_error_rate):
-                    hat._active_leaf_node_cnt -= self.number_leaves()
-                    hat._active_leaf_node_cnt += self._alternate_tree.number_leaves()
-                    self.kill_tree_children(hat)
+                    tree._active_leaf_node_cnt -= self.number_leaves()
+                    tree._active_leaf_node_cnt += self._alternate_tree.number_leaves()
+                    self.kill_tree_children(tree)
 
                     if parent is not None:
                         parent.set_child(parent_branch, self._alternate_tree)
                     else:
                         # Switch tree root
-                        hat._tree_root = hat._tree_root._alternate_tree
-                    hat.switch_alternate_trees_cnt += 1
+                        tree._tree_root = tree._tree_root._alternate_tree
+                    tree.switch_alternate_trees_cnt += 1
                 elif bound < alt_error_rate - old_error_rate:
-                    if isinstance(self._alternate_tree, ActiveLearningNode):
-                        self._alternate_tree = None
-                    elif isinstance(self._alternate_tree, InactiveLearningNode):
-                        self._alternate_tree = None
+                    if isinstance(self._alternate_tree, SplitNode):
+                        self._alternate_tree.kill_tree_children(tree)
                     else:
-                        self._alternate_tree.kill_tree_children(hat)
-                    hat.pruned_alternate_trees_cnt += 1  # hat.pruned_alternate_trees_cnt to check
+                        self._alternate_tree = None
+                    tree.pruned_alternate_trees_cnt += 1  # hat.pruned_alternate_trees_cnt to check
 
         # Learn_From_Instance alternate Tree and Child nodes
         if self._alternate_tree is not None:
-            self._alternate_tree.learn_from_instance(X, y, weight, hat, parent, parent_branch)
+            self._alternate_tree.learn_one(X, y, weight=weight, tree=tree, parent=parent,
+                                           parent_branch=parent_branch)
         child_branch = self.instance_child_index(X)
         child = self.get_child(child_branch)
         if child is not None:
-            child.learn_from_instance(X, y, weight, hat, self, child_branch)
+            child.learn_one(X, y, weight=weight, tree=tree, parent=self,
+                            parent_branch=child_branch)
         # Instance contains a categorical value previously unseen by the split
         # node
         elif isinstance(self.get_split_test(), NominalAttributeMultiwayTest) and \
                 self.get_split_test().branch_for_instance(X) < 0:
             # Creates a new learning node to encompass the new observed feature
             # value
-            leaf_node = hat._new_learning_node()
+            leaf_node = tree._new_learning_node()
             branch_id = self.get_split_test().add_new_branch(
                 X[self.get_split_test().get_atts_test_depends_on()[0]]
             )
             self.set_child(branch_id, leaf_node)
-            hat._active_leaf_node_cnt += 1
-            leaf_node.learn_from_instance(X, y, weight, hat, parent, parent_branch)
+            tree._active_leaf_node_cnt += 1
+            leaf_node.learn_one(X, y, weight=weight, tree=tree, parent=parent,
+                                parent_branch=parent_branch)
 
     # Override AdaNode
     def kill_tree_children(self, hat):
@@ -260,10 +255,10 @@ class AdaSplitNode(SplitNode, AdaNode):
                 if isinstance(child, SplitNode):
                     child.kill_tree_children(hat)
 
-                if isinstance(child, ActiveLearningNode):
+                if isinstance(child, ActiveLeaf):
                     child = None
                     hat._active_leaf_node_cnt -= 1
-                elif isinstance(child, InactiveLearningNode):
+                elif isinstance(child, InactiveLeaf):
                     child = None
                     hat._inactive_leaf_node_cnt -= 1
 
@@ -274,9 +269,9 @@ class AdaSplitNode(SplitNode, AdaNode):
             found_nodes = []
         if update_splitter_counts:
             try:
-                self._stats[y] += weight  # Dictionary (class_value, weight)
+                self.stats[y] += weight  # Dictionary (class_value, weight)
             except KeyError:
-                self._stats[y] = weight
+                self.stats[y] = weight
         child_index = self.instance_child_index(X)
         if child_index >= 0:
             child = self.get_child(child_index)

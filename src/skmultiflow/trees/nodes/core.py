@@ -203,20 +203,18 @@ class Node(metaclass=ABCMeta):
 
 
 class LearningNode(Node):
-    """ Mixin for Learning Nodes in a Hoeffding Tree. """
+    """ Mixin for Learning Nodes in a Hoeffding Tree.
 
-    # Parameters
-    # ----------
-    # initial_stats: dict (class_value, weight) or None
-    #     Initial class observations
-    #
-    # """
-    # # TODO: check this portion -> perhaps activate it and remove (continue below)
-    # def __init__(self, initial_stats=None):
-    #     """ LearningNode class constructor. """
-    #     super().__init__(initial_stats)
-    #     # TODO: This part from the active nodes
-    #     self.last_split_attempt_at = self.total_weight
+    Parameters
+    ----------
+    initial_stats: dict (class_value, weight) or None
+        Initial class observations
+
+    """
+    def __init__(self, initial_stats):
+        """ ActiveLearningNode class constructor. """
+        super().__init__(initial_stats)
+        self.last_split_attempt_at = self.total_weight
 
     @abstractmethod
     def update_stats(y, weight):
@@ -479,7 +477,7 @@ class ActiveLeaf(ABCMeta):
                         and idx in tree.nominal_attributes:
                     obs = self.get_nominal_attribute_observer()
                 else:
-                    obs = self.get_numerical_attribute_observer()
+                    obs = self.get_numeric_attribute_observer()
                 self.attribute_observers[idx] = obs
             obs.update(x, y, weight)
 
@@ -537,7 +535,7 @@ class InactiveLeaf:
 
     def update_attribute_observers(X, y, weight, tree):
         # An inactive learning nodes does nothing here
-        # We use this mixin as a dummy class
+        # We use it as a dummy class
         pass
 
 
@@ -565,7 +563,7 @@ class AdaNode(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def learn_from_instance(self, X, y, weight, hat, parent, parent_branch):
+    def learn_one(self, X, y, *, weight, tree, parent, parent_branch):
         pass
 
     @abstractmethod
