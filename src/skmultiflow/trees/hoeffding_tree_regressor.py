@@ -292,31 +292,6 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 return InactiveLearningNodePerceptron(initial_stats, parent_node,
                                                       random_state=self.random_state)
 
-    def get_weights_for_instance(self, X):
-        """ Get the perceptron weights for a single instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes.
-
-        Returns
-        -------
-        np.array(n_features)
-            Array with the perceptron weights for a specific instance
-        """
-        if self._tree_root is not None:
-            found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
-            leaf_node = found_node.node
-            if leaf_node is None:
-                leaf_node = found_node.parent
-            if isinstance(leaf_node, LearningNode):
-                return leaf_node.perceptron_weight
-            else:
-                return None
-        else:
-            return None
-
     def partial_fit(self, X, y, sample_weight=None):
         """Incrementally trains the model.
 
@@ -440,10 +415,10 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             r, _ = get_dimensions(X)
             for i in range(r):
                 node = self._tree_root.filter_instance_to_leaf(X, None, -1).node
-                if isinstance(node, SplitNode):
-                    predictions.append(node.stats[1] / node.stats[0])
-                else:
+                if isinstance(node, LearningNode):
                     predictions.append(node.predict_one(X[i], tree=self))
+                else:
+                    predictions.append(node.stats[1] / node.stats[0])
         else:
             # Model is empty
             predictions.append(0.0)
@@ -525,8 +500,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 new_split = self._new_split_node(split_decision.split_test, node.stats)
                 for i in range(split_decision.num_splits()):
                     new_child = self._new_learning_node(
-                        split_decision.resulting_stats_from_split(i), node
-                    )
+                        split_decision.resulting_stats_from_split(i), node)
                     new_split.set_child(i, new_child)
                 self._active_leaf_node_cnt -= 1
                 self._decision_node_cnt += 1

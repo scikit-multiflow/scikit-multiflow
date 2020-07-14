@@ -424,8 +424,8 @@ class LearningNode(Node, metaclass=ABCMeta):
         """
         try:
             return self._last_split_attempt_at
-        except NameError:
-            self._last_split_attempt_at = None
+        except AttributeError:
+            self._last_split_attempt_at = None      # noqa
             return self._last_split_attempt_at
 
     @last_split_attempt_at.setter
