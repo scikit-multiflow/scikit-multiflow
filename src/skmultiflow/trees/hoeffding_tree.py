@@ -373,7 +373,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             leaf_node = found_node.node
             if leaf_node is None:
                 leaf_node = found_node.parent
-            return leaf_node.get_class_votes(X, self)
+            return leaf_node.predict_one(X, tree=self) if not isinstance(leaf_node, SplitNode) \
+                else leaf_node.stats
         else:
             return {}
 

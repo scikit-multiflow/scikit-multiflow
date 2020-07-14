@@ -39,7 +39,7 @@ class AdaNode(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def learn_one(self, X, y, *, weight, tree, parent, parent_branch):
+    def learn_one(self, X, y, weight, tree, parent, parent_branch):
         pass
 
     @abstractmethod
@@ -127,13 +127,13 @@ class AdaLearningNode(ActiveLearningNodeNBA, AdaNode):
             dist = self.stats
         # NB
         elif prediction_option == tree._NAIVE_BAYES:
-            dist = do_naive_bayes_prediction(X, self._stats, self._attribute_observers)
+            dist = do_naive_bayes_prediction(X, self.stats, self.attribute_observers)
         # NBAdaptive (default)
         else:
             dist = super().predict_one(X, tree=tree)
 
         dist_sum = sum(dist.values())  # sum all values in dictionary
-        normalization_factor = dist_sum * self.error_estimation() * self.error_estimation()
+        normalization_factor = dist_sum * self.error_estimation * self.error_estimation
 
         if normalization_factor > 0.0:
             dist = normalize_values_in_dict(dist, normalization_factor, inplace=False)
@@ -171,7 +171,7 @@ class AdaSplitNode(SplitNode, AdaNode):
         num_of_leaves = 0
         for child in self._children.values():
             if child is not None:
-                num_of_leaves += child.n_leaves()
+                num_of_leaves += child.n_leaves
 
         return num_of_leaves
 
@@ -190,7 +190,7 @@ class AdaSplitNode(SplitNode, AdaNode):
     def error_is_null(self):
         return self._adwin is None
 
-    def learn_one(self, X, y, *, weight, tree, parent, parent_branch):
+    def learn_one(self, X, y, weight, tree, parent, parent_branch):
         true_class = y
         class_prediction = 0
 
@@ -222,7 +222,7 @@ class AdaSplitNode(SplitNode, AdaNode):
 
         # Condition to replace alternate tree
         elif self._alternate_tree is not None and not self._alternate_tree.error_is_null():
-            if self.error_width() > tree._ERROR_WIDTH_THRESHOLD \
+            if self.error_width > tree._ERROR_WIDTH_THRESHOLD \
                     and self._alternate_tree.error_width > tree._ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.error_estimation
                 alt_error_rate = self._alternate_tree.error_estimation
@@ -234,7 +234,7 @@ class AdaSplitNode(SplitNode, AdaNode):
                 # To check, bound never less than (old_error_rate - alt_error_rate)
                 if bound < (old_error_rate - alt_error_rate):
                     tree._active_leaf_node_cnt -= self.n_leaves
-                    tree._active_leaf_node_cnt += self._alternate_tree.n_leaves()
+                    tree._active_leaf_node_cnt += self._alternate_tree.n_leaves
                     self.kill_tree_children(tree)
 
                     if parent is not None:
@@ -270,6 +270,9 @@ class AdaSplitNode(SplitNode, AdaNode):
             self.set_child(branch_id, leaf_node)
             tree._active_leaf_node_cnt += 1
             leaf_node.learn_one(X, y, weight, tree, parent, parent_branch)
+
+    def predict_one(self, X, *, tree=None):
+        return self.stats
 
     # Override AdaNode
     def kill_tree_children(self, tree):
