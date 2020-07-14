@@ -160,7 +160,7 @@ def test_hoeffding_tree_model_information():
         'Byte size estimate overhead': 1.0
     }
 
-    observed_info = learner.get_model_measurements
+    observed_info = learner.model_measurements
     for k in expected_info:
         assert k in observed_info
         assert expected_info[k] == observed_info[k]

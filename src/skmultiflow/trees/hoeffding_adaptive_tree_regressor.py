@@ -225,7 +225,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
                                                   update_splitter_counts, nodes)
         return nodes
 
-    def get_votes_for_instance(self, X):
+    def _get_votes_for_instance(self, X):
         result = {}
         if self._tree_root is not None:
             if isinstance(self._tree_root, InactiveLeaf):

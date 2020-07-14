@@ -182,9 +182,9 @@ class HoeffdingAdaptiveTreeClassifier(HoeffdingTreeClassifier):
             self._tree_root = self._new_learning_node()
             self._active_leaf_node_cnt = 1
         if isinstance(self._tree_root, InactiveLeaf):
-            self._tree_root.learn_from_instance(X, y, sample_weight, self)
+            self._tree_root.learn_one(X, y, sample_weight, self)
         else:
-            self._tree_root.learn_from_instance(X, y, sample_weight, self, None, -1)
+            self._tree_root.learn_one(X, y, sample_weight, self, None, -1)
 
     def filter_instance_to_leaves(self, X, y, weight, split_parent, parent_branch,
                                   update_splitter_counts):
@@ -194,7 +194,7 @@ class HoeffdingAdaptiveTreeClassifier(HoeffdingTreeClassifier):
         return nodes
 
     # Override HoeffdingTreeClassifier
-    def get_votes_for_instance(self, X):
+    def _get_votes_for_instance(self, X):
         result = {}
         if self._tree_root is not None:
             if isinstance(self._tree_root, InactiveLeaf):

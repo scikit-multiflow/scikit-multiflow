@@ -9,11 +9,13 @@ from skmultiflow.utils import check_random_state
 
 
 class RandomActiveLeafRegressor(RandomActiveLeafClass):
-    def get_nominal_attribute_observer(self):
+    @staticmethod
+    def new_nominal_attribute_observer():
         return NominalAttributeRegressionObserver()
 
-    def get_numeric_attribute_observer(self):
-        return NumericAttributeRegressionObserver
+    @staticmethod
+    def new_numeric_attribute_observer():
+        return NumericAttributeRegressionObserver()
 
 
 class RandomActiveLearningNodeMean(LearningNodeMean, RandomActiveLeafRegressor):

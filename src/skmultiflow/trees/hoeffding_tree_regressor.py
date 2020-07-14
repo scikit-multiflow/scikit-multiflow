@@ -14,7 +14,7 @@ from skmultiflow.trees.nodes import ActiveLearningNodeMean
 from skmultiflow.trees.nodes import InactiveLearningNodeMean
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.nodes import InactiveLearningNodePerceptron
-from skmultiflow.trees.nodes.htr_nodes import compute_sd
+from skmultiflow.trees.nodes._htr_nodes import compute_sd
 
 import warnings
 
@@ -231,8 +231,8 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         """
         normalized_sample = []
         for i in range(len(X)):
-            if (self._nominal_attributes is None or (self._nominal_attributes is not None and
-                                                     i not in self._nominal_attributes)) and \
+            if (self.nominal_attributes is None or (self.nominal_attributes is not None and
+                                                    i not in self.nominal_attributes)) and \
                     self.samples_seen > 1:
                 mean = self.sum_of_attribute_values[i] / self.samples_seen
                 sd = compute_sd(self.sum_of_attribute_squares[i], self.sum_of_attribute_values[i],
@@ -241,7 +241,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                     normalized_sample.append(float(X[i] - mean) / (3 * sd))
                 else:
                     normalized_sample.append(0.0)
-            elif self._nominal_attributes is not None and i in self._nominal_attributes:
+            elif self.nominal_attributes is not None and i in self.nominal_attributes:
                 normalized_sample.append(X[i])  # keep nominal inputs unaltered
             else:
                 normalized_sample.append(0.0)
@@ -419,7 +419,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             self._active_leaf_node_cnt += 1
             leaf_node.learn_one(X, y, weight=sample_weight, tree=self)
         if self._train_weight_seen_by_model % self.memory_estimate_period == 0:
-            self.estimate_model_byte_size()
+            self._estimate_model_byte_size()
 
     def predict(self, X):
         """Predicts the target value using mean class or the perceptron.
@@ -482,7 +482,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         if len(best_split_suggestions) < 2:
             should_split = len(best_split_suggestions) > 0
         else:
-            hoeffding_bound = self.compute_hoeffding_bound(
+            hoeffding_bound = self._hoeffding_bound(
                 split_criterion.get_range_of_merit(node.stats), self.split_confidence,
                 node.total_weight)
             best_suggestion = best_split_suggestions[-1]
@@ -491,7 +491,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                     (second_best_suggestion.merit / best_suggestion.merit < 1 - hoeffding_bound
                         or hoeffding_bound < self.tie_threshold):
                 should_split = True
-            if self.remove_poor_atts is not None and self.remove_poor_atts:
+            if self.remove_poor_atts:
                 poor_atts = set()
                 # Scan 1 - add any poor attribute to set
                 for i in range(len(best_split_suggestions)):
@@ -533,7 +533,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 else:
                     parent.set_child(parent_idx, new_split)
             # Manage memory
-            self.enforce_tracker_limit()
+            self._enforce_tracker_limit()
         elif len(best_split_suggestions) >= 2 and best_split_suggestions[-1].merit > 0 and \
                 best_split_suggestions[-2].merit > 0:
             last_check_ratio = best_split_suggestions[-2].merit / best_split_suggestions[-1].merit

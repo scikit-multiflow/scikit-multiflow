@@ -484,7 +484,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
 
         if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
-            learning_node.learn_from_instance(X, y, sample_weight, self)
+            learning_node.learn_one(X, y, weight=sample_weight, tree=self)
 
             if self._growth_allowed and \
                     isinstance(learning_node, ActiveLearningNode):
@@ -510,10 +510,10 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             )
             current.set_child(branch_id, leaf_node)
             self._active_leaf_node_cnt += 1
-            leaf_node.learn_from_instance(X, y, sample_weight, self)
+            leaf_node.learn_one(X, y, weight=sample_weight, tree=self)
 
         if self._train_weight_seen_by_model % self.memory_estimate_period == 0:
-            self.estimate_model_byte_size()
+            self._estimate_model_byte_size()
 
     def predict(self, X):
         """Predicts the target value using mean class or the perceptron.
@@ -538,7 +538,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             return np.zeros((r, 1))
         for i in range(r):
             if self.leaf_prediction == self._TARGET_MEAN:
-                votes = self.get_votes_for_instance(X[i]).copy()
+                votes = self._get_votes_for_instance(X[i]).copy()
                 # Tree is not empty, otherwise, all target_values are set
                 # equally, default to zero
                 if votes != {}:
@@ -551,7 +551,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                     if perceptron_weights is None:
                         # Instance was sorted to a non-learning node: use
                         # mean prediction
-                        votes = self.get_votes_for_instance(X[i]).copy()
+                        votes = self._get_votes_for_instance(X[i]).copy()
                         number_of_examples_seen = votes[0]
                         sum_of_values = votes[1]
                         predictions[i] = sum_of_values / number_of_examples_seen
@@ -574,7 +574,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             elif self.leaf_prediction == self._ADAPTIVE:
                 if self.examples_seen > 1:
                     # Mean predictor
-                    votes = self.get_votes_for_instance(X[i]).copy()
+                    votes = self._get_votes_for_instance(X[i]).copy()
                     number_of_examples_seen = votes[0]
                     sum_of_values = votes[1]
                     pred_M = sum_of_values / number_of_examples_seen
@@ -649,7 +649,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
         if len(best_split_suggestions) < 2:
             should_split = len(best_split_suggestions) > 0
         else:
-            hoeffding_bound = self.compute_hoeffding_bound(
+            hoeffding_bound = self._hoeffding_bound(
                 split_criterion.get_range_of_merit(
                     node.stats
                 ), self.split_confidence, node.total_weight)
@@ -661,8 +661,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                      1 - hoeffding_bound or hoeffding_bound <
                      self.tie_threshold):
                 should_split = True
-            if self.remove_poor_atts is not None and self.remove_poor_atts \
-                    and not should_split:
+            if self.remove_poor_atts and not should_split:
                 poor_atts = set()
                 best_ratio = second_best_suggestion.merit \
                     / best_suggestion.merit
@@ -707,7 +706,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                 else:
                     parent.set_child(parent_idx, new_split)
             # Manage memory
-            self.enforce_tracker_limit()
+            self._enforce_tracker_limit()
         elif len(best_split_suggestions) >= 2 and best_split_suggestions[-1].merit > 0 and \
                 best_split_suggestions[-2].merit > 0:
             last_check_ratio = best_split_suggestions[-2].merit / best_split_suggestions[-1].merit

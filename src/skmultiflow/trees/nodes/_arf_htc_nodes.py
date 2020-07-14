@@ -1,7 +1,9 @@
 import numpy as np
 
-from skmultiflow.trees.nodes import ActiveLeafClass, LearningNodeMC, LearningNodeNB, \
-    LearningNodeNBA
+from skmultiflow.trees.nodes import ActiveLeafClass
+from skmultiflow.trees.nodes import LearningNodeMC
+from skmultiflow.trees.nodes import LearningNodeNB
+from skmultiflow.trees.nodes import LearningNodeNBA
 
 from skmultiflow.utils import get_dimensions, check_random_state
 
@@ -21,9 +23,9 @@ class RandomActiveLeafClass(ActiveLeafClass):
                 obs = self.attribute_observers[idx]
             except KeyError:
                 if tree.nominal_attributes is not None and idx in tree.nominal_attributes:
-                    obs = self.get_nominal_attribute_observer()
+                    obs = self.new_nominal_attribute_observer()
                 else:
-                    obs = self.get_numeric_attribute_observer()
+                    obs = self.new_numeric_attribute_observer()
                 self.attribute_observers[idx] = obs
             obs.update(X[idx], y, weight)
 

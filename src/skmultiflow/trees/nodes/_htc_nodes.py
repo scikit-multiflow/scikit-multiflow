@@ -1,14 +1,16 @@
 from skmultiflow.trees.nodes import LearningNode, ActiveLeaf, InactiveLeaf
-from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver, \
-    NumericAttributeClassObserverGaussian
+from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
+from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
 from skmultiflow.bayes import do_naive_bayes_prediction
 
 
 class ActiveLeafClass(ActiveLeaf):
-    def get_nominal_attribute_observer(self):
+    @staticmethod
+    def new_nominal_attribute_observer():
         return NominalAttributeClassObserver()
 
-    def get_numeric_attribute_observer(self):
+    @staticmethod
+    def new_numeric_attribute_observer():
         return NumericAttributeClassObserverGaussian()
 
 
@@ -43,9 +45,7 @@ class LearningNodeMC(LearningNode):
 class LearningNodeNB(LearningNodeMC):
     def predict_one(self, X, *, tree=None):
         if self.total_weight >= tree.nb_threshold:
-            return do_naive_bayes_prediction(
-                X, self.stats, self.attribute_observers
-            )
+            return do_naive_bayes_prediction(X, self.stats, self.attribute_observers)
         else:
             return self.stats
 
@@ -77,13 +77,11 @@ class LearningNodeNBA(LearningNodeMC):
                 self._mc_correct_weight += weight
         elif max(self.stats, key=self.stats.get) == y:
             self._mc_correct_weight += weight
-        nb_prediction = do_naive_bayes_prediction(
-            X, self.stats, self.attribute_observers
-        )
+        nb_prediction = do_naive_bayes_prediction(X, self.stats, self.attribute_observers)
         if max(nb_prediction, key=nb_prediction.get) == y:
             self._nb_correct_weight += weight
 
-        super().learn_from_instance(X, y, weight, tree)
+        super().learn_one(X, y, weight=weight, tree=tree)
 
     def predict_one(self, X, *, tree=None):
         """ Get the votes per class for a given instance.
@@ -103,9 +101,7 @@ class LearningNodeNBA(LearningNodeMC):
         """
         if self._mc_correct_weight > self._nb_correct_weight:
             return self.stats
-        return do_naive_bayes_prediction(
-            X, self.stats, self.attribute_observers
-        )
+        return do_naive_bayes_prediction(X, self.stats, self.attribute_observers)
 
 
 class ActiveLearningNodeMC(LearningNodeMC, ActiveLeafClass):

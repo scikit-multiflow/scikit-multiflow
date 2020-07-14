@@ -14,10 +14,12 @@ from skmultiflow.utils import check_random_state
 
 
 class ActiveLeafRegressor(ActiveLeaf):
-    def get_nominal_attribute_observer(self):
+    @staticmethod
+    def new_nominal_attribute_observer():
         return NominalAttributeRegressionObserver()
 
-    def get_numeric_attribute_observer(self):
+    @staticmethod
+    def new_numeric_attribute_observer():
         return NumericAttributeRegressionObserver()
 
     def manage_memory(self, criterion, last_check_ratio, last_check_sdr, last_check_e):
@@ -81,14 +83,14 @@ class LearningNodePerceptron(LearningNodeMean):
         self.random_state = random_state
         self._random_state = check_random_state(self.random_state)
         if parent_node is None:
-            self.perceptron_weight = None
+            self.perceptron_weights = None
         else:
-            self.perceptron_weight = deepcopy(parent_node.perceptron_weight)
+            self.perceptron_weights = deepcopy(parent_node.perceptron_weights)
 
     def learn_one(self, X, y, *, weight=1.0, tree=None):
         super().learn_one(X, y, weight=weight, tree=tree)
-        if self.perceptron_weight is None:
-            self.perceptron_weight = self._random_state.uniform(-1, 1, len(X)+1)
+        if self.perceptron_weights is None:
+            self.perceptron_weights = self._random_state.uniform(-1, 1, len(X) + 1)
 
         if tree.learning_ratio_const:
             learning_ratio = tree.learning_ratio_perceptron
@@ -122,17 +124,17 @@ class LearningNodePerceptron(LearningNodeMean):
             Instance target value.
         learning_ratio: float
             perceptron learning ratio
-        rht: HoeffdingTreeRegressor
+        tree: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
         """
         normalized_sample = tree.normalize_sample(X)
-        normalized_pred = np.dot(self.perceptron_weight, normalized_sample)
+        normalized_pred = np.dot(self.perceptron_weights, normalized_sample)
         normalized_target_value = tree.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
-        self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * \
-            normalized_sample
+        self.perceptron_weights = self.perceptron_weights + learning_ratio * delta * \
+                                  normalized_sample
         # Normalize perceptron weights
-        self.perceptron_weight = self.perceptron_weight / np.sum(np.abs(self.perceptron_weight))
+        self.perceptron_weights = self.perceptron_weights / np.sum(np.abs(self.perceptron_weights))
 
 
 class ActiveLearningNodeMean(LearningNodeMean, ActiveLeafRegressor):
@@ -204,7 +206,7 @@ class InactiveLearningNodePerceptron(LearningNodePerceptron, InactiveLeaf):
         to perform online variance calculation. They refer to the number of
         observations (key '0'), the sum of the target values (key '1'), and
         the sum of the squared target values (key '2').
-    perceptron_node: ActiveLearningNodePerceptron (default=None)
+    parent_node: ActiveLearningNodePerceptron (default=None)
         A node containing statistics about observed data.
     random_state: int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;

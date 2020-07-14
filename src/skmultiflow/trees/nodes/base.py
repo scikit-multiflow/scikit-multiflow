@@ -197,10 +197,6 @@ class Node(metaclass=ABCMeta):
             text += '}'
             buffer[0] += 'Statistics {}\n'.format(text)  # Regression problems
 
-    # TODO
-    def get_description(self):
-        pass
-
 
 class SplitNode(Node):
     """ Node that splits the data in a Hoeffding Tree.
@@ -365,7 +361,7 @@ class SplitNode(Node):
         return self._split_test.branch_rule(branch)
 
 
-class LearningNode(Node, ABCMeta):
+class LearningNode(Node, metaclass=ABCMeta):
     """ Base Learning Node to be used in Hoeffding Trees.
 
     Parameters
@@ -446,13 +442,15 @@ class LearningNode(Node, ABCMeta):
         self._last_split_attempt_at = weight
 
 
-class ActiveLeaf(ABCMeta):
+class ActiveLeaf(metaclass=ABCMeta):
+    @staticmethod
     @abstractmethod
-    def get_nominal_attribute_observer(self):
+    def new_nominal_attribute_observer():
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_numeric_attribute_observer(self):
+    def new_numeric_attribute_observer():
         pass
 
     @property
@@ -460,12 +458,12 @@ class ActiveLeaf(ABCMeta):
         try:
             return self._attribute_observers
         except NameError:
-            self._attribute_observers = {}
+            self._attribute_observers = {}         # noqa
             return self._attribute_observers
 
     @attribute_observers.setter
     def attribute_observers(self, attr_obs):
-        self._attribute_observers = attr_obs
+        self._attribute_observers = attr_obs       # noqa
 
     def update_attribute_observers(self, X, y, weight, tree):
         for idx, x in enumerate(X):
@@ -473,9 +471,9 @@ class ActiveLeaf(ABCMeta):
                 obs = self.attribute_observers[idx]
             except KeyError:
                 if tree.nominal_attributes is not None and idx in tree.nominal_attributes:
-                    obs = self.get_nominal_attribute_observer()
+                    obs = self.new_nominal_attribute_observer()
                 else:
-                    obs = self.get_numeric_attribute_observer()
+                    obs = self.new_numeric_attribute_observer()
                 self.attribute_observers[idx] = obs
             obs.update(x, y, weight)
 
@@ -525,46 +523,15 @@ class ActiveLeaf(ABCMeta):
 
 
 class InactiveLeaf:
-    def get_nominal_attribute_observer(self):
+    @staticmethod
+    def new_nominal_attribute_observer():
         return None
 
-    def get_numeric_attribute_observer(self):
+    @staticmethod
+    def new_numeric_attribute_observer():
         return None
 
     def update_attribute_observers(X, y, weight, tree):
         # An inactive learning nodes does nothing here
         # We use it as a dummy class
-        pass
-
-
-class AdaNode(metaclass=ABCMeta):
-    """ Abstract Class to create a New Node for the HoeffdingAdaptiveTreeClassifier """
-
-    @abstractmethod
-    def number_leaves(self):
-        pass
-
-    @abstractmethod
-    def get_error_estimation(self):
-        pass
-
-    @abstractmethod
-    def get_error_width(self):
-        pass
-
-    @abstractmethod
-    def is_null_error(self):
-        pass
-
-    @abstractmethod
-    def kill_tree_children(self, hat):
-        pass
-
-    @abstractmethod
-    def learn_one(self, X, y, weight, tree, parent, parent_branch):
-        pass
-
-    @abstractmethod
-    def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,
-                                  update_splitter_counts, found_nodes=None):
         pass

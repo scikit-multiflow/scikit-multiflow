@@ -273,7 +273,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                     if perceptron_weights is None:
                         # Instance was sorted to a non-learning node: use
                         # mean prediction
-                        votes = self.get_votes_for_instance(X[i]).copy()
+                        votes = self._get_votes_for_instance(X[i]).copy()
                         number_of_examples_seen = votes[0]
                         sum_of_values = votes[1]
                         predictions[i] = sum_of_values / number_of_examples_seen
@@ -300,7 +300,7 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
             elif self.leaf_prediction == self._ADAPTIVE:
                 if self.examples_seen > 1:
                     # Mean predictor
-                    votes = self.get_votes_for_instance(X[i]).copy()
+                    votes = self._get_votes_for_instance(X[i]).copy()
                     number_of_examples_seen = votes[0]
                     sum_of_values = votes[1]
                     pred_M = sum_of_values / number_of_examples_seen
