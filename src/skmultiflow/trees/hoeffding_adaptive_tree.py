@@ -206,7 +206,7 @@ class HoeffdingAdaptiveTreeClassifier(HoeffdingTreeClassifier):
                     leaf_node = fn.node
                     if leaf_node is None:
                         leaf_node = fn.parent
-                    dist = leaf_node.get_class_votes(X, self)
+                    dist = leaf_node.predict_one(X, tree=self)
                     # add elements to dictionary
                     result = add_dict_values(result, dist, inplace=True)
         return result
