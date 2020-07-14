@@ -14,7 +14,7 @@ def RegressionHAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_
                   split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
                   stop_mem_management=False, remove_poor_atts=False, leaf_prediction="perceptron",
                   no_preprune=False, nominal_attributes=None, learning_ratio_perceptron=0.02,
-                  learning_ratio_decay=0.001, learning_ratio_const=True,
+                  learning_ratio_decay=0.001, learning_ratio_const=True, bootstrap_sampling=False,
                   random_state=None):     # pragma: no cover
     warnings.warn("'RegressionHAT' has been renamed to 'HoeffdingAdaptiveTreeRegressor' in"
                   "v0.5.0.\nThe old name will be removed in v0.7.0", category=FutureWarning)
@@ -32,6 +32,7 @@ def RegressionHAT(max_byte_size=33554432, memory_estimate_period=1000000, grace_
                                           learning_ratio_perceptron=learning_ratio_perceptron,
                                           learning_ratio_decay=learning_ratio_decay,
                                           learning_ratio_const=learning_ratio_const,
+                                          bootstrap_sampling=bootstrap_sampling,
                                           random_state=random_state)
 
 
@@ -72,6 +73,8 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
         Decay multiplier for the learning rate of the perceptron
     learning_ratio_const: Bool
         If False the learning ratio will decay with the number of examples seen
+    bootstrap_sampling: bool, optional (default=False)
+        If True, perform bootstrap sampling in the leaf nodes.
     random_state: int, RandomState instance or None, optional (default=None)
        If int, random_state is the seed used by the random number generator;
        If RandomState instance, random_state is the random number generator;
@@ -132,6 +135,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
                  learning_ratio_perceptron=0.02,
                  learning_ratio_decay=0.001,
                  learning_ratio_const=True,
+                 bootstrap_sampling=False,
                  random_state=None):
 
         super().__init__(max_byte_size=max_byte_size,
@@ -149,6 +153,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
                          learning_ratio_const=learning_ratio_const,
                          leaf_prediction=leaf_prediction,
                          random_state=random_state)
+        self.bootstrap_sampling = bootstrap_sampling
         self.alternate_trees_cnt = 0
         self.switch_alternate_trees_cnt = 0
         self.pruned_alternate_trees_cnt = 0

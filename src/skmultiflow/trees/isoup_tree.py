@@ -517,7 +517,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
 
             if isinstance(node, SplitNode):
                 # If not leaf, use mean as response
-                predictions[i, :] = node.stats[1] / node.stats[0]
+                predictions[i, :] = node.stats[1] / node.stats[0] if len(node.stats) > 0 else 0.0
                 continue
             predictions[i, :] = node.predict_one(X[i], tree=self)
 

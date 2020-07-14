@@ -45,13 +45,13 @@ class LearningNodePerceptronMultiTarget(LearningNodePerceptron):
 
     def predict_one(self, X, *, tree=None):
         if self.perceptron_weights is None or tree.examples_seen <= 1:
-            return self.stats[1] / self.stats[0] if self.stats[0] > 0 else 0.0
+            return self.stats[1] / self.stats[0] if len(self.stats) > 0 else 0.0
 
-        X_norm = self.normalize_sample(X)
+        X_norm = tree.normalize_sample(X)
         Y_pred = np.matmul(self.perceptron_weights, X_norm)
         mean = tree.sum_of_values / tree.examples_seen
-        variance = ((self.sum_of_squares - (self.sum_of_values * self.sum_of_values)
-                    / self.examples_seen) / (self.examples_seen - 1))
+        variance = ((tree.sum_of_squares - (tree.sum_of_values * tree.sum_of_values)
+                    / tree.examples_seen) / (tree.examples_seen - 1))
         sd = np.sqrt(variance, out=np.zeros_like(variance), where=variance >= 0.0)
         # Samples are normalized using just one sd, as proposed in the iSoup-Tree method
         return Y_pred * sd + mean
@@ -97,17 +97,17 @@ class LearningNodeAdaptiveMultiTarget(LearningNodePerceptronMultiTarget):
 
     def predict_one(self, X, *, tree=None):
         # Mean predictor
-        pred_M = self.stats[1] / self.stats[0] if self.stats[0] > 0 else 0.0
+        pred_M = self.stats[1] / self.stats[0] if len(self.stats) > 0 else 0.0
         if self.perceptron_weights is None or tree.examples_seen <= 1:
             return pred_M
         else:
             predictions = np.zeros(self.perceptron_weights.shape[0])
             # Perceptron
-            X_norm = self.normalize_sample(X)
+            X_norm = tree.normalize_sample(X)
             normalized_prediction = np.matmul(self.perceptron_weights, X_norm)
             mean = tree.sum_of_values / tree.examples_seen
-            variance = ((self.sum_of_squares - (self.sum_of_values * self.sum_of_values)
-                        / self.examples_seen) / (self.examples_seen - 1))
+            variance = ((tree.sum_of_squares - (tree.sum_of_values * tree.sum_of_values)
+                        / tree.examples_seen) / (tree.examples_seen - 1))
             sd = np.sqrt(variance, out=np.zeros_like(variance), where=variance >= 0.0)
 
             pred_P = normalized_prediction * sd + mean
@@ -139,7 +139,7 @@ class LearningNodeAdaptiveMultiTarget(LearningNodePerceptronMultiTarget):
 
         Y_norm = tree.normalize_target_value(y)
 
-        self.perceptron_weight += learning_ratio * np.matmul(
+        self.perceptron_weights += learning_ratio * np.matmul(
             (Y_norm - Y_pred)[:, None], X_norm[None, :])
 
         self._normalize_perceptron_weights()
@@ -149,8 +149,9 @@ class LearningNodeAdaptiveMultiTarget(LearningNodePerceptronMultiTarget):
         # mean centered and std scaled values
         self.fMAE_P = 0.95 * self.fMAE_P + np.abs(Y_norm - Y_pred)
 
+        pred_mean = self.stats[1] / self.stats[0] if len(self.stats) > 0 else np.zeros_like(y)
         self.fMAE_M = 0.95 * self.fMAE_M + np.abs(
-            Y_norm - tree.normalize_target_value(self.stats[1] / self.stats[0]))
+            Y_norm - tree.normalize_target_value(pred_mean))
 
 
 class ActiveLearningNodePerceptronMultiTarget(LearningNodePerceptronMultiTarget,

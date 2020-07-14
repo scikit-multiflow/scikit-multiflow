@@ -42,8 +42,8 @@ class AdaSplitNodeRegressor(AdaSplitNode):
 
         leaf = self.filter_instance_to_leaf(X, parent, parent_branch).node
         if leaf is not None:
-            y_pred = leaf.predict_one(X)
-            normalized_error = get_normalized_error(y, y_pred, self._min_error, self._max_error)
+            y_pred = leaf.predict_one(X, tree=tree)
+            normalized_error = get_normalized_error(y, y_pred, self)
         if self._adwin is None:
             self._adwin = ADWIN()
 
@@ -113,6 +113,9 @@ class AdaSplitNodeRegressor(AdaSplitNode):
             self.set_child(branch_id, leaf_node)
             tree._active_leaf_node_cnt += 1
             leaf_node.learn_one(X, y, weight, tree, parent, parent_branch)
+
+    def predict_one(self, X, *, tree=None):
+        return self.stats[1] / self.stats[0] if len(self.stats) > 0 else 0.0
 
     # override AdaNode
     def filter_instance_to_leaves(self, X, y, weight, parent, parent_branch,
@@ -192,7 +195,7 @@ class AdaActiveLearningNodeRegressor(ActiveLearningNodePerceptron, AdaNode):
 
     def learn_one(self, X, y, weight, tree, parent, parent_branch):
         y_pred = self.predict_one(X, tree=tree)
-        normalized_error = get_normalized_error(y, y_pred, self._min_error, self._max_error)
+        normalized_error = get_normalized_error(y, y_pred, self)
 
         if tree.bootstrap_sampling:
             # Perform bootstrap-sampling
@@ -203,14 +206,14 @@ class AdaActiveLearningNodeRegressor(ActiveLearningNodePerceptron, AdaNode):
         if self._adwin is None:
             self._adwin = ADWIN()
 
-        old_error = self.error_estimation()
+        old_error = self.error_estimation
 
         # Add element to Adwin
         self._adwin.add_element(normalized_error)
         # Detect change with Adwin
         self._error_change = self._adwin.detected_change()
 
-        if self._error_change and old_error > self.error_estimation():
+        if self._error_change and old_error > self.error_estimation:
             self._error_change = False
 
         super().learn_one(X, y, weight=weight, tree=tree)
@@ -238,16 +241,16 @@ class AdaActiveLearningNodeRegressor(ActiveLearningNodePerceptron, AdaNode):
         found_nodes.append(FoundNode(self, parent, parent_branch))
 
 
-def get_normalized_error(y_true, y_pred, min_error: float, max_error: float):
+def get_normalized_error(y_true, y_pred, node):
     abs_error = abs(y_true - y_pred)
 
     # Incremental maintenance of the normalization ranges
-    if abs_error < min_error:
-        min_error = abs_error
-    if abs_error > max_error:
-        max_error = abs_error
+    if abs_error < node._min_error:
+        node._min_error = abs_error
+    if abs_error > node._max_error:
+        node._max_error = abs_error
 
-    if min_error != max_error:
-        return (abs_error - min_error) / (max_error - min_error)
+    if node._min_error != node._max_error:
+        return (abs_error - node._min_error) / (node._max_error - node._min_error)
     else:
         return 0.0

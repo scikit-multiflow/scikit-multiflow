@@ -61,8 +61,7 @@ class LearningNodeMean(LearningNode):
             self._stats[2] = y * y * weight
 
     def predict_one(self, X, *, tree=None):
-        return self._stats[1] / self._stats[0] if len(self._stats) > 0 and self._stats[0] > 0 \
-            else 0.0
+        return self._stats[1] / self._stats[0] if len(self._stats) > 0 else 0.0
 
     @property
     def total_weight(self):
