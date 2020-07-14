@@ -1,13 +1,213 @@
 import numpy as np
 
-from skmultiflow.trees.nodes import ActiveLearningNodePerceptronMultiTarget
-from skmultiflow.trees.nodes import InactiveLearningNodePerceptronMultiTarget
-from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserver
-from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
+from skmultiflow.trees.nodes import LearningNodePerceptronMultiTarget
+from skmultiflow.trees.nodes import ActiveLeafRegressor
+from skmultiflow.trees.nodes import InactiveLeaf
 from skmultiflow.utils import get_dimensions
 
 
-class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
+class SSTLearningNode(LearningNodePerceptronMultiTarget):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
+        super().__init__(initial_stats, parent_node, random_state)
+
+    def learn_one(self, X, y, *, sample_weight=None, tree=None):
+        """Update the node with the provided instance.
+
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: numpy.ndarray of length equal to the number of targets.
+            Instance targets.
+        weight: float
+            Instance weight.
+        tree: HoeffdingTreeRegressor
+            Regression Hoeffding Tree to update.
+        """
+        self.update_stats(y, sample_weight)
+        self.update_attribute_observers(X, y, sample_weight, tree)
+
+        if self.perceptron_weights is None:
+            self.perceptron_weights = {}
+            # Creates matrix of perceptron random weights
+            _, rows = get_dimensions(y)
+            _, cols = get_dimensions(X)
+
+            self.perceptron_weights[0] = self._random_state.uniform(-1.0, 1.0, (rows, cols + 1))
+            # Cascade Stacking
+            self.perceptron_weights[1] = self._random_state.uniform(-1.0, 1.0, (rows, rows + 1))
+            self._normalize_perceptron_weights()
+
+        if tree.learning_ratio_const:
+            learning_ratio = tree.learning_ratio_perceptron
+        else:
+            learning_ratio = (tree.learning_ratio_perceptron / (1 + self._stats[0]
+                              * tree.learning_ratio_decay))
+
+        for i in range(int(sample_weight)):
+            self._update_weights(X, y, learning_ratio, tree)
+
+    def predict_one(self, X, *, tree=None):
+        if self.perceptron_weights is None:
+            return self.stats[1] / self.stats[0] if len(self.stats) > 0 else np.zeros(
+                tree._n_targets, dtype=np.float64)
+
+        X_norm = tree.normalize_sample(X)
+        Y_pred_base = self._predict_one_base(X_norm)
+        Y_pred_meta = self._predict_one_meta(np.append(Y_pred_base, 1.0))
+        mean = tree.sum_of_values / tree.examples_seen
+        variance = ((tree.sum_of_squares - (tree.sum_of_values * tree.sum_of_values)
+                    / tree.examples_seen) / (tree.examples_seen - 1))
+        sd = np.sqrt(variance, out=np.zeros_like(variance), where=variance >= 0.0)
+        # Samples are normalized using just one std, as proposed in the iSoup-Tree method
+        return Y_pred_meta * sd + mean
+
+    def _update_weights(self, X, y, learning_ratio, tree):
+        """Update the perceptron weights
+
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: numpy.ndarray of length equal to the number of targets.
+            Targets values.
+        learning_ratio: float
+            perceptron learning ratio
+        tree: HoeffdingTreeRegressor
+            Regression Hoeffding Tree to update.
+        """
+        X_norm = tree.normalize_sample(X)
+        Y_pred_base = self._predict_one_base(X_norm)
+
+        Y_norm = tree.normalize_target_value(y)
+
+        self.perceptron_weight[0] += learning_ratio * (Y_norm - Y_pred_base)[:, None] \
+            @ X_norm[None, :]
+
+        # Add bias term
+        Y_pred_base = np.append(Y_pred_base, 1.0)
+        Y_pred_meta = self._predict_one_meta(Y_pred_base)
+
+        self.perceptron_weight[1] += learning_ratio * (Y_norm - Y_pred_meta)[:, None] \
+            @ Y_pred_base[None, :]
+
+        self._normalize_perceptron_weights()
+
+    # Normalize both levels
+    def _normalize_perceptron_weights(self):
+        """ Normalizes both levels of perceptron weights."""
+        n_targets = self.perceptron_weights[0].shape[0]
+        # Normalize perceptron weights
+        for i in range(n_targets):
+            sum_w_0 = np.sum(np.absolute(self.perceptron_weights[0][i, :]))
+            self.perceptron_weights[0][i, :] /= sum_w_0
+            sum_w_1 = np.sum(np.absolute(self.perceptron_weights[1][i, :]))
+            self.perceptron_weights[1][i, :] /= sum_w_1
+
+    def _predict_one_base(self, X):
+        return self.perceptron_weights[0] @ X
+
+    def _predict_one_meta(self, X):
+        return self.perceptron_weights[1] @ X
+
+
+class SSTLearningNodeAdaptive(SSTLearningNode):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
+        super().__init__(initial_stats, parent_node, random_state)
+
+        # Faded adaptive errors
+        self.fMAE_M = 0.0
+        self.fMAE_P = 0.0
+        # Stacked Perceptron
+        self.fMAE_SP = 0.0
+
+    def predict_one(self, X, *, tree=None):
+        predictions = self.stats[1] / self.stats[0] if len(self.stats) > 0 else np.zeros(
+            tree._n_targets, dtype=np.float64)
+
+        if self.perceptron_weights is None:
+            return predictions
+
+        X_norm = self.normalize_sample(X)
+
+        # Standard perceptron
+        Y_pred_base = self._predict_one_base(X_norm)
+        # Stacked perceptron
+        Y_pred_meta = self._predict_one_meta(np.append(Y_pred_base, 1.0))
+
+        mean = tree.sum_of_values / tree.examples_seen
+        variance = ((tree.sum_of_squares - (tree.sum_of_values * tree.sum_of_values)
+                    / tree.examples_seen) / (tree.examples_seen - 1))
+        sd = np.sqrt(variance, out=np.zeros_like(variance), where=variance >= 0.0)
+
+        pred_P = Y_pred_base * sd + mean
+        pred_SP = Y_pred_meta * sd + mean
+
+        # Selects, for each target, the best current performer
+        for j in range(tree._n_targets):
+            b_pred = np.argmin([self.fMAE_M[j], self.fMAE_P[j], self.fMAE_SP[j]])
+
+            if b_pred == 0:
+                # If all the expected errors are the same,
+                # use the standard perceptron
+                if self.fMAE_M[j] == self.fMAE_P[j] == self.fMAE_SP[j]:
+                    predictions[j] = pred_P[j]
+            else:
+                if b_pred == 1:
+                    # Use the stacked perceptron if its expected error is the same than the error
+                    # for the standard perceptron
+                    if self.fMAE_P[j] == self.fMAE_SP[j]:
+                        predictions[j] = pred_SP[j]
+                    else:
+                        predictions[j] = pred_P[j]
+                else:
+                    predictions[j] = pred_SP[j]
+        return predictions
+
+    def _update_weights(self, X, y, learning_ratio, tree):
+        """Update the perceptron weights
+
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Instance attributes for updating the node.
+        y: numpy.ndarray of length equal to the number of targets.
+            Targets values.
+        learning_ratio: float
+            perceptron learning ratio
+        tree: HoeffdingTreeRegressor
+            Regression Hoeffding Tree to update.
+        """
+        X_norm = tree.normalize_sample(X)
+        Y_pred_base = self._predict_one_base(X_norm)
+
+        Y_norm = tree.normalize_target_value(y)
+
+        self.perceptron_weight[0] += learning_ratio * (Y_norm - Y_pred_base)[:, None] \
+            @ X_norm[None, :]
+
+        # Add bias term
+        Y_pred_base = np.append(Y_pred_base, 1.0)
+        Y_pred_meta = self._predict_one_meta(Y_pred_base)
+
+        self.perceptron_weight[1] += learning_ratio * (Y_norm - Y_pred_meta)[:, None] \
+            @ Y_pred_base[None, :]
+
+        self._normalize_perceptron_weights()
+
+        # Update faded errors for the predictors
+        # The considered errors are normalized, since they are based on mean centered and std
+        # scaled values
+        self.fMAE_M = (0.95 * self.fMAE_M + np.absolute(Y_norm - tree.normalize_target_value(
+            self._stats[1] / self._stats[0])))
+
+        # Ignore added bias term in the comparison
+        self.fMAE_P = 0.95 * self.fMAE_P + np.absolute(Y_norm - Y_pred_base[:-1])
+
+        self.fMAE_SP = 0.95 * self.fMAE_SP + np.absolute(Y_norm - Y_pred_meta)
+
+
+class SSTActiveLearningNode(SSTLearningNode, ActiveLeafRegressor):
     """ Learning Node for SST-HT that always use stacked perceptrons to provide
     targets responses.
 
@@ -27,138 +227,12 @@ class SSTActiveLearningNode(ActiveLearningNodePerceptronMultiTarget):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_stats, parent_node=None,
-                 random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         """ SSTActiveLearningNode class constructor."""
-        super().__init__(initial_stats, parent_node,
-                         random_state)
-
-    def learn_from_instance(self, X, y, weight, rht):
-        """Update the node with the provided instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: numpy.ndarray of length equal to the number of targets.
-            Instance targets.
-        weight: float
-            Instance weight.
-        rht: HoeffdingTreeRegressor
-            Regression Hoeffding Tree to update.
-        """
-        if self.perceptron_weight is None:
-            self.perceptron_weight = {}
-            # Creates matrix of perceptron random weights
-            _, rows = get_dimensions(y)
-            _, cols = get_dimensions(X)
-
-            self.perceptron_weight[0] = \
-                self.random_state.uniform(-1.0, 1.0, (rows, cols + 1))
-            # Cascade Stacking
-            self.perceptron_weight[1] = \
-                self.random_state.uniform(-1.0, 1.0, (rows, rows + 1))
-            self.normalize_perceptron_weights()
-
-        try:
-            self._stats[0] += weight
-        except KeyError:
-            self._stats[0] = weight
-
-        if rht.learning_ratio_const:
-            learning_ratio = rht.learning_ratio_perceptron
-        else:
-            learning_ratio = rht.learning_ratio_perceptron / \
-                             (1 + self._stats[0] *
-                              rht.learning_ratio_decay)
-
-        try:
-            self._stats[1] += weight * y
-            self._stats[2] += weight * y * y
-        except KeyError:
-            self._stats[1] = weight * y
-            self._stats[2] = weight * y * y
-
-        for i in range(int(weight)):
-            self.update_weights(X, y, learning_ratio, rht)
-
-        for i, x in enumerate(X):
-            try:
-                obs = self._attribute_observers[i]
-            except KeyError:
-                # Creates targets observers, if not already defined
-                if rht.nominal_attributes is not None and i in rht.nominal_attributes:
-                    obs = NominalAttributeRegressionObserver()
-                else:
-                    obs = NumericAttributeRegressionObserver()
-                self._attribute_observers[i] = obs
-            obs.update(x, y, weight)
-
-    def update_weights(self, X, y, learning_ratio, rht):
-        """Update the perceptron weights
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: numpy.ndarray of length equal to the number of targets.
-            Targets values.
-        learning_ratio: float
-            perceptron learning ratio
-        rht: HoeffdingTreeRegressor
-            Regression Hoeffding Tree to update.
-        """
-        normalized_sample = rht.normalize_sample(X)
-        normalized_base_pred = self._predict_base(normalized_sample)
-
-        normalized_target_value = rht.normalize_target_value(y)
-
-        self.perceptron_weight[0] += learning_ratio * \
-            (normalized_target_value - normalized_base_pred)[:, None] @ \
-            normalized_sample[None, :]
-
-        # Add bias term
-        normalized_base_pred = np.append(normalized_base_pred, 1.0)
-        normalized_meta_pred = self._predict_meta(normalized_base_pred)
-
-        self.perceptron_weight[1] += learning_ratio * \
-            (normalized_target_value - normalized_meta_pred)[:, None] @ \
-            normalized_base_pred[None, :]
-
-        self.normalize_perceptron_weights()
-
-    # Normalize both levels
-    def normalize_perceptron_weights(self):
-        """ Normalizes both levels of perceptron weights."""
-        n_targets = self.perceptron_weight[0].shape[0]
-        # Normalize perceptron weights
-        for i in range(n_targets):
-            sum_w_0 = np.sum(np.absolute(self.perceptron_weight[0][i, :]))
-            self.perceptron_weight[0][i, :] /= sum_w_0
-            sum_w_1 = np.sum(np.absolute(self.perceptron_weight[1][i, :]))
-            self.perceptron_weight[1][i, :] /= sum_w_1
-
-    def _predict_base(self, X):
-        return self.perceptron_weight[0] @ X
-
-    def _predict_meta(self, X):
-        return self.perceptron_weight[1] @ X
-
-    def total_weight(self):
-        """Calculate the total weight seen by the node.
-
-        Returns
-        -------
-        float
-            Total weight seen.
-        """
-        if self._stats == {}:
-            return 0
-        else:
-            return self._stats[0]
+        super().__init__(initial_stats, parent_node, random_state)
 
 
-class SSTInactiveLearningNode(InactiveLearningNodePerceptronMultiTarget):
+class SSTInactiveLearningNode(SSTLearningNode, InactiveLeaf):
     """ Inactive Learning Node for SST-HT that always use stacked perceptrons to
     provide targets responses.
 
@@ -178,96 +252,12 @@ class SSTInactiveLearningNode(InactiveLearningNodePerceptronMultiTarget):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_stats, parent_node=None,
-                 random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         """ SSTInactiveLearningNode class constructor."""
-        super().__init__(initial_stats, parent_node,
-                         random_state)
-
-    def learn_from_instance(self, X, y, weight, rht):
-        """Update the node with the provided instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: numpy.ndarray of length equal to the number of targets.
-            Instance targets.
-        weight: float
-            Instance weight.
-        rht: HoeffdingTreeRegressor
-            Regression Hoeffding Tree to update.
-        """
-        self._stats[0] += weight
-
-        if rht.learning_ratio_const:
-            learning_ratio = rht.learning_ratio_perceptron
-        else:
-            learning_ratio = rht.learning_ratio_perceptron / \
-                            (1 + self._stats[0] *
-                             rht.learning_ratio_decay)
-
-        self._stats[1] += weight * y
-        self._stats[2] += weight * y * y
-
-        for i in range(int(weight)):
-            self.update_weights(X, y, learning_ratio, rht)
-
-    def update_weights(self, X, y, learning_ratio, rht):
-        """Update the perceptron weights
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: numpy.ndarray of length equal to the number of targets.
-            Targets values.
-        learning_ratio: float
-            perceptron learning ratio
-        rht: HoeffdingTreeRegressor
-            Regression Hoeffding Tree to update.
-        """
-        normalized_sample = rht.normalize_sample(X)
-        normalized_base_pred = self._predict_base(normalized_sample)
-
-        _, n_features = get_dimensions(X)
-        _, n_targets = get_dimensions(y)
-
-        normalized_target_value = rht.normalize_target_value(y)
-
-        self.perceptron_weight[0] += learning_ratio * \
-            (normalized_target_value - normalized_base_pred)[:, None] @ \
-            normalized_sample[None, :]
-
-        # Add bias term
-        normalized_base_pred = np.append(normalized_base_pred, 1.0)
-
-        normalized_meta_pred = self._predict_meta(normalized_base_pred)
-
-        self.perceptron_weight[1] += learning_ratio * \
-            (normalized_target_value - normalized_meta_pred)[:, None] @ \
-            normalized_base_pred[None, :]
-
-        self.normalize_perceptron_weights()
-
-    # Normalize both levels
-    def normalize_perceptron_weights(self):
-        n_targets = self.perceptron_weight[0].shape[0]
-        # Normalize perceptron weights
-        for i in range(n_targets):
-            sum_w_0 = np.sum(np.absolute(self.perceptron_weight[0][i, :]))
-            self.perceptron_weight[0][i, :] /= sum_w_0
-            sum_w_1 = np.sum(np.absolute(self.perceptron_weight[1][i, :]))
-            self.perceptron_weight[1][i, :] /= sum_w_1
-
-    def _predict_base(self, X):
-        return self.perceptron_weight[0] @ X
-
-    def _predict_meta(self, X):
-        return self.perceptron_weight[1] @ X
+        super().__init__(initial_stats, parent_node, random_state)
 
 
-class SSTActiveLearningNodeAdaptive(SSTActiveLearningNode):
+class SSTActiveLearningNodeAdaptive(SSTLearningNodeAdaptive, ActiveLeafRegressor):
     """ Multi-target regression learning node for SST-HT that keeps track of
     mean, perceptron, and stacked perceptrons predictors for each target.
 
@@ -287,74 +277,12 @@ class SSTActiveLearningNodeAdaptive(SSTActiveLearningNode):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_stats, parent_node=None,
-                 random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         """ SSTActiveLearningNodeAdaptive class constructor. """
-        super().__init__(initial_stats, parent_node,
-                         random_state)
-
-        # Faded adaptive errors
-        self.fMAE_M = 0.0
-        self.fMAE_P = 0.0
-        # Stacked Perceptron
-        self.fMAE_SP = 0.0
-
-    def update_weights(self, X, y, learning_ratio, rht):
-        """Update the perceptron weights
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: numpy.ndarray of length equal to the number of targets.
-            Targets values.
-        learning_ratio: float
-            perceptron learning ratio
-        rht: HoeffdingTreeRegressor
-            Regression Hoeffding Tree to update.
-        """
-        normalized_sample = rht.normalize_sample(X)
-        normalized_base_pred = self._predict_base(normalized_sample)
-
-        _, n_features = get_dimensions(X)
-        _, n_targets = get_dimensions(y)
-
-        normalized_target_value = rht.normalize_target_value(y)
-
-        self.perceptron_weight[0] += learning_ratio * \
-            (normalized_target_value - normalized_base_pred)[:, None] @ \
-            normalized_sample[None, :]
-
-        # Add bias term
-        normalized_base_pred = np.append(normalized_base_pred, 1.0)
-        normalized_meta_pred = self._predict_meta(normalized_base_pred)
-
-        self.perceptron_weight[1] += learning_ratio * \
-            (normalized_target_value - normalized_meta_pred)[:, None] @ \
-            normalized_base_pred[None, :]
-
-        self.normalize_perceptron_weights()
-
-        # Update faded errors for the predictors
-        # The considered errors are normalized, since they are based on
-        # mean centered and sd scaled values
-        self.fMAE_M = 0.95 * self.fMAE_M + np.absolute(
-            normalized_target_value - rht.
-            normalize_target_value(self._stats[1] /
-                                   self._stats[0])
-        )
-
-        # Ignore added bias term in the comparison
-        self.fMAE_P = 0.95 * self.fMAE_P + np.absolute(
-            normalized_target_value - normalized_base_pred[:-1]
-        )
-
-        self.fMAE_SP = 0.95 * self.fMAE_SP + np.absolute(
-            normalized_target_value - normalized_meta_pred
-        )
+        super().__init__(initial_stats, parent_node, random_state)
 
 
-class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):
+class SSTInactiveLearningNodeAdaptive(SSTLearningNodeAdaptive, InactiveLeaf):
     """ Inactive Multi-target regression learning node for SST-HT that keeps
     track of mean, perceptron, and stacked perceptrons predictors for each
     target.
@@ -375,69 +303,6 @@ class SSTInactiveLearningNodeAdaptive(SSTInactiveLearningNode):
         random number generator; If `None`, the random number generator
         is the current `RandomState` instance used by `np.random`.
     """
-    def __init__(self, initial_stats, parent_node=None,
-                 random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         """ SSTInactiveLearningNodeAdaptive class constructor."""
-
-        super().__init__(initial_stats, parent_node,
-                         random_state)
-
-        # Faded adaptive errors
-        self.fMAE_M = 0.0
-        self.fMAE_P = 0.0
-        # Stacked Perceptron
-        self.fMAE_SP = 0.0
-
-    def update_weights(self, X, y, learning_ratio, rht):
-        """Update the perceptron weights
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: numpy.ndarray of length equal to the number of targets.
-            Targets values.
-        learning_ratio: float
-            perceptron learning ratio
-        rht: HoeffdingTreeRegressor
-            Regression Hoeffding Tree to update.
-        """
-        normalized_sample = rht.normalize_sample(X)
-        normalized_base_pred = self._predict_base(normalized_sample)
-
-        _, n_features = get_dimensions(X)
-        _, n_targets = get_dimensions(y)
-
-        normalized_target_value = rht.normalize_target_value(y)
-
-        self.perceptron_weight[0] += learning_ratio * \
-            (normalized_target_value - normalized_base_pred)[:, None] @ \
-            normalized_sample[None, :]
-
-        # Add bias term
-        normalized_base_pred = np.append(normalized_base_pred, 1.0)
-        normalized_meta_pred = self._predict_meta(normalized_base_pred)
-
-        self.perceptron_weight[1] += learning_ratio * \
-            (normalized_target_value - normalized_meta_pred)[:, None] @ \
-            normalized_base_pred[None, :]
-
-        self.normalize_perceptron_weights()
-
-        # Update faded errors for the predictors
-        # The considered errors are normalized, since they are based on
-        # mean centered and sd scaled values
-        self.fMAE_M = 0.95 * self.fMAE_M + np.absolute(
-            normalized_target_value - rht.
-            normalize_target_value(self._stats[1] /
-                                   self._stats[0])
-        )
-
-        # Ignore added bias term in the comparison
-        self.fMAE_P = 0.95 * self.fMAE_P + np.absolute(
-            normalized_target_value - normalized_base_pred[:-1]
-        )
-
-        self.fMAE_SP = 0.95 * self.fMAE_SP + np.absolute(
-            normalized_target_value - normalized_meta_pred
-        )
+        super().__init__(initial_stats, parent_node, random_state)

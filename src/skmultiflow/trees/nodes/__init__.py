@@ -54,15 +54,18 @@ from ._hatr_nodes import AdaActiveLearningNodeRegressor
 from ._arf_htr_nodes import RandomActiveLeafRegressor
 from ._arf_htr_nodes import RandomActiveLearningNodeMean
 from ._arf_htr_nodes import RandomActiveLearningNodePerceptron
-
-
-# TODO continue from here
+from ._isouptr_nodes import LearningNodePerceptronMultiTarget
+from ._isouptr_nodes import LearningNodeAdaptiveMultiTarget
 from ._isouptr_nodes import ActiveLearningNodePerceptronMultiTarget
 from ._isouptr_nodes import ActiveLearningNodeAdaptiveMultiTarget
 from ._isouptr_nodes import InactiveLearningNodePerceptronMultiTarget
 from ._isouptr_nodes import InactiveLearningNodeAdaptiveMultiTarget
-from ._sst_htr_nodes import SSTActiveLearningNode, SSTActiveLearningNodeAdaptive, \
-    SSTInactiveLearningNode, SSTInactiveLearningNodeAdaptive
+from ._sst_htr_nodes import SSTLearningNode
+from ._sst_htr_nodes import SSTLearningNodeAdaptive
+from ._sst_htr_nodes import SSTActiveLearningNode
+from ._sst_htr_nodes import SSTInactiveLearningNode
+from ._sst_htr_nodes import SSTActiveLearningNodeAdaptive
+from ._sst_htr_nodes import SSTInactiveLearningNodeAdaptive
 
 
 __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLeaf", "InactiveLeaf",
@@ -78,8 +81,9 @@ __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLeaf", "Inac
            "InactiveLearningNodeMean", "InactiveLearningNodePerceptron",
            "RandomActiveLeafRegressor", "RandomActiveLearningNodeMean",
            "RandomActiveLearningNodePerceptron", "AdaSplitNodeRegressor",
-           "AdaActiveLearningNodeRegressor", "ActiveLearningNodeForRegressionMultiTarget",
-           "ActiveLearningNodePerceptronMultiTarget", "ActiveLearningNodeAdaptiveMultiTarget",
-           "InactiveLearningNodePerceptronMultiTarget", "InactiveLearningNodeAdaptiveMultiTarget",
+           "AdaActiveLearningNodeRegressor", "LearningNodePerceptronMultiTarget",
+           "LearningNodeAdaptiveMultiTarget",  "ActiveLearningNodePerceptronMultiTarget",
+           "ActiveLearningNodeAdaptiveMultiTarget", "InactiveLearningNodePerceptronMultiTarget",
+           "InactiveLearningNodeAdaptiveMultiTarget", "SSTLearningNode", "SSTLearningNodeAdaptive",
            "SSTActiveLearningNode", "SSTActiveLearningNodeAdaptive", "SSTInactiveLearningNode",
            "SSTInactiveLearningNodeAdaptive"]

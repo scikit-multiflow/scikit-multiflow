@@ -26,6 +26,9 @@ class LearningNodePerceptronMultiTarget(LearningNodePerceptron):
         tree: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
         """
+        self.update_stats(y, weight)
+        self.update_attribute_observers(X, y, weight, tree)
+
         if self.perceptron_weights is None:
             # Creates matrix of perceptron random weights
             _, rows = get_dimensions(y)
