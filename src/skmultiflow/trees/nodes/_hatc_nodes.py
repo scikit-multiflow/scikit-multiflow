@@ -15,18 +15,18 @@ from skmultiflow.utils import check_random_state, get_max_value_key, normalize_v
 class AdaNode(metaclass=ABCMeta):
     """ Abstract Class to create a New Node for the Hoeffding Adaptive Tree classifier """
 
-    @abstractmethod
     @property
+    @abstractmethod
     def n_leaves(self):
         pass
 
-    @abstractmethod
     @property
+    @abstractmethod
     def error_estimation(self):
         pass
 
-    @abstractmethod
     @property
+    @abstractmethod
     def error_width(self):
         pass
 
@@ -59,7 +59,7 @@ class AdaLearningNode(ActiveLearningNodeNBA, AdaNode):
         Initial class observations
 
     """
-    def __init__(self, initial_stats, random_state=None):
+    def __init__(self, initial_stats=None, random_state=None):
         super().__init__(initial_stats)
         self._adwin = ADWIN()
         self.error_change = False
@@ -158,7 +158,7 @@ class AdaSplitNode(SplitNode, AdaNode):
     stats: dict (class_value, weight) or None
         Class observations
     """
-    def __init__(self, split_test, stats, random_state=None):
+    def __init__(self, split_test, stats=None, random_state=None):
         super().__init__(split_test, stats)
         self._adwin = ADWIN()
         self._alternate_tree = None

@@ -37,7 +37,7 @@ class RandomActiveLearningNodeMean(LearningNodeMean, RandomActiveLeafRegressor):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_stats, max_features, random_state=None):
+    def __init__(self, initial_stats=None, max_features=1, random_state=None):
         """ ActiveLearningNodeForRegression class constructor. """
         super().__init__(initial_stats)
 
@@ -69,7 +69,7 @@ class RandomActiveLearningNodePerceptron(LearningNodePerceptron, RandomActiveLea
         by `np.random`.
     """
 
-    def __init__(self, initial_stats, max_features, parent_node=None,
+    def __init__(self, initial_stats=None, max_features=1, parent_node=None,
                  random_state=None):
         super().__init__(initial_stats, parent_node, random_state)
         self.max_features = max_features

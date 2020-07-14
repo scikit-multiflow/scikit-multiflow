@@ -52,7 +52,7 @@ class RandomActiveLearningNodeMC(LearningNodeMC, RandomActiveLeafClass):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_stats, max_features, random_state=None):
+    def __init__(self, initial_stats=None, max_features=1, random_state=None):
         """ RandomLearningNodeClassification class constructor. """
         super().__init__(initial_stats)
         self.max_features = max_features
@@ -79,7 +79,7 @@ class RandomActiveLearningNodeNB(LearningNodeNB, RandomActiveLeafClass):
         by `np.random`.
     """
 
-    def __init__(self, initial_stats, max_features, random_state):
+    def __init__(self, initial_stats=None, max_features=1, random_state=None):
         """ LearningNodeNB class constructor. """
         super().__init__(initial_stats)
         self.max_features = max_features
@@ -105,7 +105,7 @@ class RandomActiveLearningNodeNBA(LearningNodeNBA, RandomActiveLeafClass):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_stats, max_features, random_state):
+    def __init__(self, initial_stats=None, max_features=1, random_state=None):
         """LearningNodeNBAdaptive class constructor. """
         super().__init__(initial_stats)
         self.max_features = max_features

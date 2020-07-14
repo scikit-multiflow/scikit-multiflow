@@ -1,9 +1,9 @@
 from skmultiflow.utils import check_random_state
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
-from skmultiflow.trees.nodes import RandomActiveLearningNode
+from skmultiflow.trees.nodes import RandomActiveLearningNodeMC
 from skmultiflow.trees.nodes import RandomActiveLearningNodeNB
-from skmultiflow.trees.nodes import RandomActiveLearningNodeNBAdaptive
-from skmultiflow.trees.nodes import InactiveLearningNode
+from skmultiflow.trees.nodes import RandomActiveLearningNodeNBA
+from skmultiflow.trees.nodes import InactiveLearningNodeMC
 
 
 class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
@@ -117,7 +117,7 @@ class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
         if is_active_node:
             # MAJORITY CLASS
             if self._leaf_prediction == self._MAJORITY_CLASS:
-                return RandomActiveLearningNode(
+                return RandomActiveLearningNodeMC(
                     initial_class_observations, self.max_features,
                     random_state=self._random_state
                 )
@@ -129,12 +129,12 @@ class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
                 )
             # NAIVE BAYES ADAPTIVE
             else:
-                return RandomActiveLearningNodeNBAdaptive(
+                return RandomActiveLearningNodeNBA(
                     initial_class_observations, self.max_features,
                     random_state=self._random_state
                 )
         else:
-            return InactiveLearningNode(initial_class_observations)
+            return InactiveLearningNodeMC(initial_class_observations)
 
     def reset(self):
         super().reset()

@@ -439,8 +439,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         if self.samples_seen > 0:
             r, _ = get_dimensions(X)
             for i in range(r):
-                predictions.append(self._tree_root.filter_instance_to_leaf(X, None, -1).node.
-                                   predict_one(X[i], tree=self))
+                node = self._tree_root.filter_instance_to_leaf(X, None, -1).node
+                if isinstance(node, SplitNode):
+                    predictions.append(node.stats[1] / node.stats[0])
+                else:
+                    predictions.append(node.predict_one(X[i], tree=self))
         else:
             # Model is empty
             predictions.append(0.0)

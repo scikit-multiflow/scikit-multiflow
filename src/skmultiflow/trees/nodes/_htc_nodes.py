@@ -39,7 +39,7 @@ class LearningNodeMC(LearningNode):
             Total weight seen.
 
         """
-        return sum(self._stats.values())
+        return sum(self.stats.values())
 
 
 class LearningNodeNB(LearningNodeMC):
@@ -51,7 +51,7 @@ class LearningNodeNB(LearningNodeMC):
 
 
 class LearningNodeNBA(LearningNodeMC):
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         super().__init__(initial_stats)
         self._mc_correct_weight = 0.0
         self._nb_correct_weight = 0.0
@@ -113,7 +113,7 @@ class ActiveLearningNodeMC(LearningNodeMC, ActiveLeafClass):
         Initial class observations
     """
 
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ ActiveLearningNode class constructor. """
         super().__init__(initial_stats)
 
@@ -141,7 +141,7 @@ class ActiveLearningNodeNB(LearningNodeNB, ActiveLeafClass):
         Initial class observations
     """
 
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ LearningNodeNB class constructor. """
         super().__init__(initial_stats)
 
@@ -168,7 +168,7 @@ class ActiveLearningNodeNBA(LearningNodeNBA, ActiveLeafClass):
         Initial class observations
     """
 
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ LearningNodeNBAdaptive class constructor. """
         super().__init__(initial_stats)
 

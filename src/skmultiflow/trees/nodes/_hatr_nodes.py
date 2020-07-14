@@ -29,7 +29,7 @@ class AdaSplitNodeRegressor(AdaSplitNode):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, split_test, stats, random_state=None):
+    def __init__(self, split_test, stats=None, random_state=None):
         super().__init__(split_test, stats, random_state)
 
         # To normalize the observed errors in the [0, 1] range
@@ -163,7 +163,7 @@ class AdaActiveLearningNodeRegressor(ActiveLearningNodePerceptron, AdaNode):
         by `np.random`.
     """
 
-    def __init__(self, initial_stats, parent_node, random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         super().__init__(initial_stats, parent_node, random_state)
         self._adwin = ADWIN()
         self._error_change = False

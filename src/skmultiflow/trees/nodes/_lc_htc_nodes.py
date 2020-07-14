@@ -16,7 +16,7 @@ class LCActiveLearningNodeMC(ActiveLearningNodeMC):
         Initial class observations
 
     """
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         super().__init__(initial_stats)
 
     def learn_one(self, X, y, *, weight=1.0, tree=None):
@@ -52,7 +52,7 @@ class LCActiveLearningNodeNB(ActiveLearningNodeNB):
         Initial class observations
 
     """
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ LCLearningNodeNB class constructor. """
         super().__init__(initial_stats)
 
@@ -71,7 +71,7 @@ class LCActiveLearningNodeNBA(ActiveLearningNodeNBA):
         Initial class observations
 
     """
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """LCLearningNodeNBA class constructor. """
         super().__init__(initial_stats)
 

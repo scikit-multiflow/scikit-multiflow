@@ -40,6 +40,7 @@ from ._lc_htc_nodes import LCInactiveLearningNodeMC
 from ._lc_htc_nodes import LCActiveLearningNodeNB
 from ._lc_htc_nodes import LCActiveLearningNodeNBA
 # Hoeffding Tree regressor nodes
+from ._htr_nodes import ActiveLeafRegressor
 from ._htr_nodes import LearningNodeMean
 from ._htr_nodes import LearningNodePerceptron
 from ._htr_nodes import ActiveLearningNodeMean
@@ -56,9 +57,10 @@ from ._arf_htr_nodes import RandomActiveLearningNodePerceptron
 
 
 # TODO continue from here
-from ._isouptr_nodes import ActiveLearningNodePerceptronMultiTarget, \
-    ActiveLearningNodeAdaptiveMultiTarget, InactiveLearningNodePerceptronMultiTarget, \
-    InactiveLearningNodeAdaptiveMultiTarget
+from ._isouptr_nodes import ActiveLearningNodePerceptronMultiTarget
+from ._isouptr_nodes import ActiveLearningNodeAdaptiveMultiTarget
+from ._isouptr_nodes import InactiveLearningNodePerceptronMultiTarget
+from ._isouptr_nodes import InactiveLearningNodeAdaptiveMultiTarget
 from ._sst_htr_nodes import SSTActiveLearningNode, SSTActiveLearningNodeAdaptive, \
     SSTInactiveLearningNode, SSTInactiveLearningNodeAdaptive
 
@@ -71,13 +73,13 @@ __all__ = ["FoundNode", "Node", "SplitNode", "LearningNode", "ActiveLeaf", "Inac
            "AdaLearningNode", "EFDTActiveLeaf", "EFDTSplitNode", "EFDTActiveLearningNodeMC",
            "EFDTInactiveLearningNodeMC", "EFDTActiveLearningNodeNB", "EFDTActiveLearningNodeNBA",
            "LCActiveLearningNodeMC", "LCInactiveLearningNodeMC", "LCActiveLearningNodeNB",
-           "LCActiveLearningNodeNBA", "LearningNodeMean", "LearningNodePerceptron",
-           "ActiveLearningNodeMean", "ActiveLearningNodePerceptron", "InactiveLearningNodeMean",
-           "InactiveLearningNodePerceptron", "RandomActiveLeafRegressor",
-           "RandomActiveLearningNodeMean", "RandomActiveLearningNodePerceptron",
-           "AdaSplitNodeRegressor", "AdaActiveLearningNodeRegressor",
-           "ActiveLearningNodeForRegressionMultiTarget", "ActiveLearningNodePerceptronMultiTarget",
-           "ActiveLearningNodeAdaptiveMultiTarget", "InactiveLearningNodePerceptronMultiTarget",
-           "InactiveLearningNodeAdaptiveMultiTarget", "SSTActiveLearningNode",
-           "SSTActiveLearningNodeAdaptive", "SSTInactiveLearningNode",
+           "LCActiveLearningNodeNBA", "ActiveLeafRegressor", "LearningNodeMean",
+           "LearningNodePerceptron", "ActiveLearningNodeMean", "ActiveLearningNodePerceptron",
+           "InactiveLearningNodeMean", "InactiveLearningNodePerceptron",
+           "RandomActiveLeafRegressor", "RandomActiveLearningNodeMean",
+           "RandomActiveLearningNodePerceptron", "AdaSplitNodeRegressor",
+           "AdaActiveLearningNodeRegressor", "ActiveLearningNodeForRegressionMultiTarget",
+           "ActiveLearningNodePerceptronMultiTarget", "ActiveLearningNodeAdaptiveMultiTarget",
+           "InactiveLearningNodePerceptronMultiTarget", "InactiveLearningNodeAdaptiveMultiTarget",
+           "SSTActiveLearningNode", "SSTActiveLearningNodeAdaptive", "SSTInactiveLearningNode",
            "SSTInactiveLearningNodeAdaptive"]

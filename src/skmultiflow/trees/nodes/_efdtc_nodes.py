@@ -166,7 +166,7 @@ class EFDTActiveLearningNodeMC(LearningNodeMC, EFDTActiveLeaf):
 
     """
 
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ AnyTimeActiveLearningNode class constructor. """
         super().__init__(initial_stats)
 
@@ -209,7 +209,7 @@ class EFDTActiveLearningNodeNB(LearningNodeNB, EFDTActiveLeaf):
         Initial class observations
 
     """
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ EFDTActiveLearningNodeNB class constructor. """
         super().__init__(initial_stats)
 
@@ -238,7 +238,7 @@ class EFDTActiveLearningNodeNBA(LearningNodeNBA, EFDTActiveLeaf):
         Initial class observations
 
     """
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ AnyTimeLearningNodeNBAdaptive class constructor. """
         super().__init__(initial_stats)
 

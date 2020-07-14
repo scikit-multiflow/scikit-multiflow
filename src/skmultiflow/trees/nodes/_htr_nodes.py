@@ -47,7 +47,7 @@ class ActiveLeafRegressor(ActiveLeaf):
 
 
 class LearningNodeMean(LearningNode):
-    def __init__(initial_stats):
+    def __init__(self, initial_stats=None):
         super().__init__(initial_stats)
 
     def update_stats(self, y, weight):
@@ -78,7 +78,7 @@ class LearningNodeMean(LearningNode):
 
 
 class LearningNodePerceptron(LearningNodeMean):
-    def __init__(self, initial_stats, parent_node=None, random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         super().__init__(initial_stats)
         self.random_state = random_state
         self._random_state = check_random_state(self.random_state)
@@ -106,7 +106,7 @@ class LearningNodePerceptron(LearningNodeMean):
         if self.perceptron_weights is None or tree.samples_seen <= 1:
             return super().predict_one(X)
 
-        X_norm = self.normalize_sample(X)
+        X_norm = tree.normalize_sample(X)
         y_norm = self.perceptron_weights.dot(X_norm)
         # De-normalize prediction
         mean = tree.sum_of_values / tree.samples_seen
@@ -132,7 +132,7 @@ class LearningNodePerceptron(LearningNodeMean):
         normalized_target_value = tree.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
         self.perceptron_weights = self.perceptron_weights + learning_ratio * delta * \
-                                  normalized_sample
+            normalized_sample
         # Normalize perceptron weights
         self.perceptron_weights = self.perceptron_weights / np.sum(np.abs(self.perceptron_weights))
 
@@ -149,7 +149,7 @@ class ActiveLearningNodeMean(LearningNodeMean, ActiveLeafRegressor):
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
     """
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ ActiveLearningNodeForRegression class constructor. """
         super().__init__(initial_stats)
 
@@ -166,7 +166,7 @@ class InactiveLearningNodeMean(LearningNodeMean, InactiveLeaf):
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
     """
-    def __init__(self, initial_stats):
+    def __init__(self, initial_stats=None):
         """ InactiveLearningNodeForRegression class constructor."""
         super().__init__(initial_stats)
 
@@ -190,7 +190,7 @@ class ActiveLearningNodePerceptron(LearningNodePerceptron, ActiveLeafRegressor):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_stats, parent_node=None, random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         """ ActiveLearningNodePerceptron class constructor."""
         super().__init__(initial_stats, parent_node, random_state)
 
@@ -214,7 +214,7 @@ class InactiveLearningNodePerceptron(LearningNodePerceptron, InactiveLeaf):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_stats, parent_node=None, random_state=None):
+    def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         """ InactiveLearningNodePerceptron class constructor."""
         super().__init__(initial_stats, parent_node, random_state)
 

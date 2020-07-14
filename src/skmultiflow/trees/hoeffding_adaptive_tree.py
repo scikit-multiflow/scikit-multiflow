@@ -182,7 +182,7 @@ class HoeffdingAdaptiveTreeClassifier(HoeffdingTreeClassifier):
             self._tree_root = self._new_learning_node()
             self._active_leaf_node_cnt = 1
         if isinstance(self._tree_root, InactiveLeaf):
-            self._tree_root.learn_one(X, y, sample_weight, self)
+            self._tree_root.learn_one(X, y, weight=sample_weight, tree=self)
         else:
             self._tree_root.learn_one(X, y, sample_weight, self, None, -1)
 

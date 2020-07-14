@@ -329,7 +329,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             self._active_leaf_node_cnt += 1
         if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
-            learning_node.learn_one(X, y, sample_weight, self)
+            learning_node.learn_one(X, y, weight=sample_weight, tree=self)
             if self._growth_allowed and isinstance(learning_node, ActiveLeaf):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.total_weight

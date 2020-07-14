@@ -10,26 +10,29 @@ from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 
 from skmultiflow.trees.nodes import SplitNode
 from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import ActiveLearningNode
+from skmultiflow.trees.nodes import ActiveLeaf
 
-from skmultiflow.trees.nodes import ActiveLearningNodeForRegression
+from skmultiflow.trees.nodes import ActiveLearningNodeMean
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptronMultiTarget
 from skmultiflow.trees.nodes import ActiveLearningNodeAdaptiveMultiTarget
-from skmultiflow.trees.nodes import InactiveLearningNodeForRegression
+from skmultiflow.trees.nodes import InactiveLearningNodeMean
 from skmultiflow.trees.nodes import InactiveLearningNodePerceptronMultiTarget
 from skmultiflow.trees.nodes import InactiveLearningNodeAdaptiveMultiTarget
 
 import warnings
 
 
-def MultiTargetRegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=1000000, grace_period=200,
-                                       split_confidence=0.0000001, tie_threshold=0.05, binary_split=False,
-                                       stop_mem_management=False, remove_poor_atts=False, leaf_prediction='perceptron',
-                                       no_preprune=False, nb_threshold=0, nominal_attributes=None,
+def MultiTargetRegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_period=1000000,
+                                       grace_period=200, split_confidence=0.0000001,
+                                       tie_threshold=0.05, binary_split=False,
+                                       stop_mem_management=False, remove_poor_atts=False,
+                                       leaf_prediction='perceptron', no_preprune=False,
+                                       nb_threshold=0, nominal_attributes=None,
                                        learning_ratio_perceptron=0.02, learning_ratio_decay=0.001,
-                                       learning_ratio_const=True, random_state=None):     # pragma: no cover
-    warnings.warn("'MultiTargetRegressionHoeffdingTree' has been renamed to 'iSOUPTreeRegressor' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+                                       learning_ratio_const=True,
+                                       random_state=None):     # pragma: no cover
+    warnings.warn("'MultiTargetRegressionHoeffdingTree' has been renamed to 'iSOUPTreeRegressor'"
+                  "in v0.5.0.\nThe old name will be removed in v0.7.0", category=FutureWarning)
     return iSOUPTreeRegressor(max_byte_size=max_byte_size,
                               memory_estimate_period=memory_estimate_period,
                               grace_period=grace_period,
@@ -51,7 +54,8 @@ def MultiTargetRegressionHoeffdingTree(max_byte_size=33554432, memory_estimate_p
 class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
     """ Incremental Structured Output Prediction Tree (iSOUP-Tree) for multi-target regression.
 
-    This is an implementation of the iSOUP-Tree proposed by A. Osojnik, P. Panov, and S. Džeroski [1]_.
+    This is an implementation of the iSOUP-Tree proposed by A. Osojnik, P. Panov, and
+    S. Džeroski [1]_.
 
     Parameters
     ----------
@@ -98,8 +102,8 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
 
     References
     ----------
-    .. [1] Aljaž Osojnik, Panče Panov, and Sašo Džeroski. "Tree-based methods for online multi-target regression."
-       Journal of Intelligent Information Systems 50.2 (2018): 315-339.
+    .. [1] Aljaž Osojnik, Panče Panov, and Sašo Džeroski. "Tree-based methods for online
+        multi-target regression." Journal of Intelligent Information Systems 50.2 (2018): 315-339.
 
     Examples
     --------
@@ -201,7 +205,8 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
     @leaf_prediction.setter
     def leaf_prediction(self, leaf_prediction):
         if leaf_prediction not in {self._TARGET_MEAN, self._PERCEPTRON, self._ADAPTIVE}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".format(leaf_prediction, self._PERCEPTRON))
+            print("Invalid leaf_prediction option {}', will use default '{}'".format(
+                leaf_prediction, self._PERCEPTRON))
             self._leaf_prediction = self._PERCEPTRON
         else:
             self._leaf_prediction = leaf_prediction
@@ -240,13 +245,11 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             return np.zeros((c + 1), dtype=np.float64)
 
         mean = self.sum_of_attribute_values / self.examples_seen
-        variance = (self.sum_of_attribute_squares -
-                    (self.sum_of_attribute_values *
-                     self.sum_of_attribute_values) /
-                    self.examples_seen) / (self.examples_seen - 1)
+        variance = ((self.sum_of_attribute_squares - (self.sum_of_attribute_values *
+                     self.sum_of_attribute_values) / self.examples_seen)
+                    / (self.examples_seen - 1))
 
-        sd = np.sqrt(variance, out=np.zeros_like(variance),
-                     where=variance >= 0.0)
+        sd = np.sqrt(variance, out=np.zeros_like(variance), where=variance >= 0.0)
 
         normalized_sample = np.zeros(X.shape[0] + 1, dtype=np.float64)
         np.divide(X - mean, sd, where=sd != 0, out=normalized_sample[:-1])
@@ -274,121 +277,102 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             return np.zeros_like(y, dtype=np.float64)
 
         mean = self.sum_of_values / self.examples_seen
-        variance = (self.sum_of_squares -
-                    (self.sum_of_values *
-                     self.sum_of_values) /
-                    self.examples_seen) / (self.examples_seen - 1)
+        variance = ((self.sum_of_squares - (self.sum_of_values * self.sum_of_values)
+                    / self.examples_seen) / (self.examples_seen - 1))
 
-        sd = np.sqrt(variance, out=np.zeros_like(variance),
-                     where=variance >= 0.0)
+        sd = np.sqrt(variance, out=np.zeros_like(variance), where=variance >= 0.0)
 
         normalized_targets = np.divide(y - mean, sd, where=sd != 0,
                                        out=np.zeros_like(y, dtype=np.float64))
 
         return normalized_targets
 
-    def _new_learning_node(self, initial_class_observations=None, parent_node=None,
+    def _new_learning_node(self, initial_stats=None, parent_node=None,
                            is_active_node=True):
         """Create a new learning node. The type of learning node depends on
         the tree configuration.
         """
-        if initial_class_observations is None:
-            initial_class_observations = {}
+        if initial_stats is None:
+            initial_stats = {}
 
         if is_active_node:
             if self.leaf_prediction == self._TARGET_MEAN:
-                return ActiveLearningNodeForRegression(
-                    initial_class_observations
-                )
+                return ActiveLearningNodeMean(initial_stats)
             elif self.leaf_prediction == self._PERCEPTRON:
                 return ActiveLearningNodePerceptronMultiTarget(
-                    initial_class_observations,
-                    parent_node,
-                    random_state=self.random_state
-                )
+                    initial_stats, parent_node, random_state=self.random_state)
             elif self.leaf_prediction == self._ADAPTIVE:
                 new_node = ActiveLearningNodeAdaptiveMultiTarget(
-                    initial_class_observations,
-                    parent_node,
-                    random_state=self.random_state
-                )
+                    initial_stats, parent_node, random_state=self.random_state)
                 # Resets faded errors
                 new_node.fMAE_M = np.zeros(self._n_targets, dtype=np.float64)
                 new_node.fMAE_P = np.zeros(self._n_targets, dtype=np.float64)
                 return new_node
         else:
             if self.leaf_prediction == self._TARGET_MEAN:
-                return InactiveLearningNodeForRegression(
-                    initial_class_observations
-                )
+                return InactiveLearningNodeMean(initial_stats)
             elif self.leaf_prediction == self._PERCEPTRON:
                 return InactiveLearningNodePerceptronMultiTarget(
-                    initial_class_observations,
-                    parent_node,
-                    random_state=parent_node.random_state
-                )
+                    initial_stats, parent_node, random_state=parent_node.random_state)
             elif self.leaf_prediction == self._ADAPTIVE:
                 new_node = InactiveLearningNodeAdaptiveMultiTarget(
-                    initial_class_observations,
-                    parent_node,
-                    random_state=parent_node.random_state
-                )
+                    initial_stats, parent_node, random_state=parent_node.random_state)
                 new_node.fMAE_M = parent_node.fMAE_M
                 new_node.fMAE_P = parent_node.fMAE_P
                 return new_node
 
-    def _get_predictors_faded_error(self, X):
-        """Get the faded error of the leaf corresponding to the instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes.
-
-        Returns
-        -------
-        dict (predictor, fmae)
-        """
-        fmaes = {}
-        if self._tree_root is not None:
-            found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
-            leaf_node = found_node.node
-            if leaf_node is None:
-                leaf_node = found_node.parent
-            if isinstance(leaf_node, LearningNode):
-                fmaes['mean'] = leaf_node.fMAE_M
-                fmaes['perceptron'] = leaf_node.fMAE_P
-            else:
-                # If the found node is not a learning node, give preference to
-                # the mean predictor
-                fmaes['mean'] = np.zeros(self._n_targets)
-                fmaes['perceptron'] = np.full(self._n_targets, np.Inf)
-
-        return fmaes
-
-    def get_weights_for_instance(self, X):
-        """Get class votes for a single instance.
-
-        Parameters
-        ----------
-        X: numpy.ndarray of length equal to the number of features.
-            Instance attributes.
-
-        Returns
-        -------
-        dict (class_value, weight)
-        """
-        if self._tree_root is not None:
-            found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
-            leaf_node = found_node.node
-            if leaf_node is None:
-                leaf_node = found_node.parent
-            if isinstance(leaf_node, LearningNode):
-                return leaf_node.perceptron_weight
-            else:
-                return None
-        else:  # TODO Verify
-            return []
+    # def _get_predictors_faded_error(self, X):
+    #     """Get the faded error of the leaf corresponding to the instance.
+    #
+    #     Parameters
+    #     ----------
+    #     X: numpy.ndarray of length equal to the number of features.
+    #         Instance attributes.
+    #
+    #     Returns
+    #     -------
+    #     dict (predictor, fmae)
+    #     """
+    #     fmaes = {}
+    #     if self._tree_root is not None:
+    #         found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
+    #         leaf_node = found_node.node
+    #         if leaf_node is None:
+    #             leaf_node = found_node.parent
+    #         if isinstance(leaf_node, LearningNode):
+    #             fmaes['mean'] = leaf_node.fMAE_M
+    #             fmaes['perceptron'] = leaf_node.fMAE_P
+    #         else:
+    #             # If the found node is not a learning node, give preference to
+    #             # the mean predictor
+    #             fmaes['mean'] = np.zeros(self._n_targets)
+    #             fmaes['perceptron'] = np.full(self._n_targets, np.Inf)
+    #
+    #     return fmaes
+    #
+    # def get_weights_for_instance(self, X):
+    #     """Get class votes for a single instance.
+    #
+    #     Parameters
+    #     ----------
+    #     X: numpy.ndarray of length equal to the number of features.
+    #         Instance attributes.
+    #
+    #     Returns
+    #     -------
+    #     dict (class_value, weight)
+    #     """
+    #     if self._tree_root is not None:
+    #         found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
+    #         leaf_node = found_node.node
+    #         if leaf_node is None:
+    #             leaf_node = found_node.parent
+    #         if isinstance(leaf_node, LearningNode):
+    #             return leaf_node.perceptron_weight
+    #         else:
+    #             return None
+    #     else:  # TODO Verify
+    #         return []
 
     def partial_fit(self, X, y, sample_weight=None):
         """Incrementally trains the model. Train samples (instances) are
@@ -430,11 +414,8 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             if sample_weight is None:
                 sample_weight = np.ones(row_cnt)
             if row_cnt != len(sample_weight):
-                raise ValueError(
-                    'Inconsistent number of instances ({}) and weights ({}).'.format(
-                        row_cnt, len(sample_weight)
-                    )
-                )
+                raise ValueError('Inconsistent number of instances ({}) and weights ({}).'.
+                                 format(row_cnt, len(sample_weight)))
             for i in range(row_cnt):
                 if sample_weight[i] != 0.0:
                     self._train_weight_seen_by_model += sample_weight[i]
@@ -486,19 +467,15 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             learning_node = leaf_node
             learning_node.learn_one(X, y, weight=sample_weight, tree=self)
 
-            if self._growth_allowed and \
-                    isinstance(learning_node, ActiveLearningNode):
+            if self._growth_allowed and isinstance(learning_node, ActiveLeaf):
                 active_learning_node = learning_node
                 weight_seen = active_learning_node.total_weight
 
-                weight_diff = weight_seen - active_learning_node.\
-                    last_split_attempt_at
+                weight_diff = weight_seen - active_learning_node.last_split_attempt_at
                 if weight_diff >= self.grace_period:
-                    self._attempt_to_split(active_learning_node,
-                                           found_node.parent,
+                    self._attempt_to_split(active_learning_node, found_node.parent,
                                            found_node.parent_branch)
-                    active_learning_node.\
-                        last_split_attempt_at = weight_seen
+                    active_learning_node.last_split_attempt_at = weight_seen
         # Split node encountered a previously unseen categorical value
         # (in a multiway test)
         elif isinstance(leaf_node, SplitNode) and \
@@ -506,8 +483,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             current = found_node.node
             leaf_node = self._new_learning_node()
             branch_id = current.get_split_test().add_new_branch(
-                X[current.get_split_test().get_atts_test_depends_on()[0]]
-            )
+                X[current.get_split_test().get_atts_test_depends_on()[0]])
             current.set_child(branch_id, leaf_node)
             self._active_leaf_node_cnt += 1
             leaf_node.learn_one(X, y, weight=sample_weight, tree=self)
@@ -537,76 +513,14 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                           "Predictions will default to a column array filled with zeros.")
             return np.zeros((r, 1))
         for i in range(r):
-            if self.leaf_prediction == self._TARGET_MEAN:
-                votes = self._get_votes_for_instance(X[i]).copy()
-                # Tree is not empty, otherwise, all target_values are set
-                # equally, default to zero
-                if votes != {}:
-                    number_of_examples_seen = votes[0]
-                    sum_of_values = votes[1]
-                    predictions[i] = sum_of_values / number_of_examples_seen
-            elif self.leaf_prediction == self._PERCEPTRON:
-                if self.examples_seen > 1:
-                    perceptron_weights = self.get_weights_for_instance(X[i])
-                    if perceptron_weights is None:
-                        # Instance was sorted to a non-learning node: use
-                        # mean prediction
-                        votes = self._get_votes_for_instance(X[i]).copy()
-                        number_of_examples_seen = votes[0]
-                        sum_of_values = votes[1]
-                        predictions[i] = sum_of_values / number_of_examples_seen
-                        continue
+            node = self._tree_root.filter_instance_to_leaf(X, None, -1).node
 
-                    normalized_sample = self.normalize_sample(X[i])
-                    normalized_prediction = \
-                        np.matmul(perceptron_weights,
-                                  normalized_sample)
-                    mean = self.sum_of_values / self.examples_seen
-                    variance = (self.sum_of_squares -
-                                (self.sum_of_values *
-                                 self.sum_of_values) /
-                                self.examples_seen) / (self.examples_seen - 1)
-                    sd = np.sqrt(variance, out=np.zeros_like(variance),
-                                 where=variance >= 0.0)
-                    # Samples are normalized using just one sd, as proposed in
-                    # the iSoup-Tree method
-                    predictions[i] = normalized_prediction * sd + mean
-            elif self.leaf_prediction == self._ADAPTIVE:
-                if self.examples_seen > 1:
-                    # Mean predictor
-                    votes = self._get_votes_for_instance(X[i]).copy()
-                    number_of_examples_seen = votes[0]
-                    sum_of_values = votes[1]
-                    pred_M = sum_of_values / number_of_examples_seen
+            if isinstance(node, SplitNode):
+                # If not leaf, use mean as response
+                predictions[i, :] = node.stats[1] / node.stats[0]
+                continue
+            predictions[i, :] = node.predict_one(X[i], tree=self)
 
-                    # Perceptron
-                    perceptron_weights = self.get_weights_for_instance(X[i])
-                    if perceptron_weights is None:
-                        # Instance was sorted to a non-learning node: use
-                        # mean prediction
-                        predictions[i] = pred_M
-                        continue
-                    else:
-                        normalized_sample = self.normalize_sample(X[i])
-                        normalized_prediction = \
-                            np.matmul(perceptron_weights,
-                                      normalized_sample)
-                        mean = self.sum_of_values / self.examples_seen
-                        variance = (self.sum_of_squares -
-                                    (self.sum_of_values *
-                                     self.sum_of_values) /
-                                    self.examples_seen) / (self.examples_seen - 1)
-                        sd = np.sqrt(variance, out=np.zeros_like(variance),
-                                     where=variance >= 0.0)
-
-                        pred_P = normalized_prediction * sd + mean
-                    fmae = self._get_predictors_faded_error(X[i])
-
-                    for j in range(self._n_targets):
-                        if fmae['perceptron'][j] <= fmae['mean'][j]:
-                            predictions[i, j] = pred_P[j]
-                        else:
-                            predictions[i, j] = pred_M[j]
         return predictions
 
     def predict_proba(self, X):

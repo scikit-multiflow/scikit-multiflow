@@ -357,7 +357,6 @@ class SplitNode(Node):
                 child.describe_subtree(ht, buffer, indent + 2)
 
     def get_predicate(self, branch):
-
         return self._split_test.branch_rule(branch)
 
 
@@ -457,7 +456,7 @@ class ActiveLeaf(metaclass=ABCMeta):
     def attribute_observers(self):
         try:
             return self._attribute_observers
-        except NameError:
+        except AttributeError:
             self._attribute_observers = {}         # noqa
             return self._attribute_observers
 
@@ -531,7 +530,7 @@ class InactiveLeaf:
     def new_numeric_attribute_observer():
         return None
 
-    def update_attribute_observers(X, y, weight, tree):
+    def update_attribute_observers(self, X, y, weight, tree):
         # An inactive learning nodes does nothing here
         # We use it as a dummy class
         pass
