@@ -27,7 +27,8 @@ class EvaluateInfluential(StreamEvaluator):
                  output_file=None,
                  show_plot=False,
                  restart_stream=True,
-                 data_points_for_classification=False):
+                 data_points_for_classification=False,
+                 track_weight=False):
 
         super().__init__()
         self._method = 'Influential'
@@ -45,6 +46,8 @@ class EvaluateInfluential(StreamEvaluator):
         self.distribution_table = []
         self.categorical_features = []
         self.numerical_features = []
+        self.track_weight = track_weight
+        self.weight_tracker = []
 
         if not self.data_points_for_classification:
             if metrics is None:
@@ -103,6 +106,8 @@ class EvaluateInfluential(StreamEvaluator):
             self._init_file()
 
             self.model = self._train_and_test()
+            if self.track_weight:
+                self.weight_tracker = [self.stream.weight]
 
             if self.show_plot:
                 self.visualizer.hold()
@@ -201,6 +206,8 @@ class EvaluateInfluential(StreamEvaluator):
                                 time_window = int(window_count / self.window_size - 1)
                                 self.count_update(data_cache, interval_borders, time_window)
                                 data_cache = []
+                            if self.track_weight:
+                                self.weight_tracker.append(self.stream.weight)
                     self._check_progress(actual_max_samples)
 
                     # Train
@@ -243,11 +250,7 @@ class EvaluateInfluential(StreamEvaluator):
                     self._update_metrics()
                 break
 
-        # print("distribution table: ", self.distribution_table)
-        print("distribution table # time windows: ", len(self.distribution_table))
-        print("dis # features", len(self.distribution_table[1]))
-        print("dis # of intervals", len(self.distribution_table[1][1]))
-
+        print("weights list: ", self.weight_tracker)
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
 

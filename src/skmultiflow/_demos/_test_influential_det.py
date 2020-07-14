@@ -1,10 +1,7 @@
-import operator
-
 from skmultiflow.data import influential_stream
 from skmultiflow.evaluation import evaluate_influential
 from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.data import file_stream
-import numpy as np
 
 
 def demo():
@@ -23,6 +20,8 @@ def demo():
                                                          n_intervals=4,
                                                          metrics=['accuracy', 'kappa', 'data_points'],
                                                          data_points_for_classification=False)
+
+    print("weights: ", stream.weight)
 
     # 4. Run evaluation
     evaluator.evaluate(stream=stream, model=ht)

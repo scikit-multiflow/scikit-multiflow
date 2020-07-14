@@ -15,7 +15,7 @@ def demo():
     :return:
     """
 
-    stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1)
+    stream = influential_stream.InfluentialStream(self_defeating=0.9999, self_fulfilling=1.0001)
 
     ht = HoeffdingTreeClassifier()
 
@@ -27,7 +27,8 @@ def demo():
                                                          n_time_windows=2,
                                                          n_intervals=4,
                                                          metrics=['accuracy'],
-                                                         data_points_for_classification=False)
+                                                         data_points_for_classification=False,
+                                                         track_weight=True)
 
     # 4. Run evaluation
     evaluator.evaluate(stream=stream, model=ht)
