@@ -31,10 +31,8 @@ class AdaSplitNodeRegressor(AdaSplitNode):
     """
     def __init__(self, split_test, stats=None, random_state=None):
         super().__init__(split_test, stats, random_state)
-
-        # To normalize the observed errors in the [0, 1] range
-        self._min_error = float('Inf')
-        self._max_error = float('-Inf')
+        # Normalization of info monitored by drift detectors (using Welford's algorithm)
+        self._n = 0
 
     # Override AdaSplitNode
     def learn_one(self, X, y, weight, tree, parent, parent_branch):
@@ -171,9 +169,8 @@ class AdaActiveLearningNodeRegressor(ActiveLearningNodePerceptron, AdaNode):
         self._adwin = ADWIN()
         self._error_change = False
 
-        # To normalize the observed errors in the [0, 1] range
-        self._min_error = float('Inf')
-        self._max_error = float('-Inf')
+        # Normalization of info monitored by drift detectors (using Welford's algorithm)
+        self._n = 0
 
     @property
     def n_leaves(self):
@@ -242,15 +239,31 @@ class AdaActiveLearningNodeRegressor(ActiveLearningNodePerceptron, AdaNode):
 
 
 def get_normalized_error(y_true, y_pred, node):
-    abs_error = abs(y_true - y_pred)
+    drift_input = abs(y_true - y_pred)
 
-    # Incremental maintenance of the normalization ranges
-    if abs_error < node._min_error:
-        node._min_error = abs_error
-    if abs_error > node._max_error:
-        node._max_error = abs_error
+    node._n += 1
+    # Welford's algorithm update step
+    if node._n == 1:
+        node._pM = node._M = drift_input
+        node._pS = 0
 
-    if node._min_error != node._max_error:
-        return (abs_error - node._min_error) / (node._max_error - node._min_error)
-    else:
         return 0.0
+    else:
+        node._M = node._pM + (drift_input - node._pM) / node._n
+        node._S = node._pS + (drift_input - node._pM) * (drift_input - node._M)
+
+        # Save previously calculated values for the next iteration
+        node._pM = node._M
+        node._pS = node._S
+
+        sd = math.sqrt(node._S / (node._n - 1))
+
+        # Apply z-score normalization to drift input
+        norm_input = (drift_input - node._M) / sd if sd > 0 else 0.0
+
+        # Data with zero mean and unit variance -> (empirical rule) 99.73% of the values lie
+        # between [mean - 3*sd, mean + 3*sd] (in a normal distribution). We assume this range
+        # for the normalized data.
+        # Hence, the values are assumed to be between [-3, 3] (as std=1) and we can apply the
+        # min-max norm to cope with ADWIN's requirements
+        return (norm_input + 3) / 6

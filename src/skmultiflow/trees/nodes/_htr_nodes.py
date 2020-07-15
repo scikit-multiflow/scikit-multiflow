@@ -88,6 +88,7 @@ class LearningNodePerceptron(LearningNodeMean):
 
     def learn_one(self, X, y, *, weight=1.0, tree=None):
         super().learn_one(X, y, weight=weight, tree=tree)
+
         if self.perceptron_weights is None:
             self.perceptron_weights = self._random_state.uniform(-1, 1, len(X) + 1)
 
@@ -95,14 +96,14 @@ class LearningNodePerceptron(LearningNodeMean):
             learning_ratio = tree.learning_ratio_perceptron
         else:
             learning_ratio = (tree.learning_ratio_perceptron
-                              / (1 + self._stats[0] * tree.learning_ratio_decay))
+                              / (1 + self.stats[0] * tree.learning_ratio_decay))
 
         # Loop for compatibility with bagging methods
         for i in range(int(weight)):
             self._update_weights(X, y, learning_ratio, tree)
 
     def predict_one(self, X, *, tree=None):
-        if self.perceptron_weights is None or tree.samples_seen <= 1:
+        if self.perceptron_weights is None:
             return super().predict_one(X)
 
         X_norm = tree.normalize_sample(X)

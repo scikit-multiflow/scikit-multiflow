@@ -414,9 +414,11 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             r, _ = get_dimensions(X)
             for i in range(r):
                 node = self._tree_root.filter_instance_to_leaf(X[i], None, -1).node
-                if isinstance(node, LearningNode):
+                if node.is_leaf():
                     predictions.append(node.predict_one(X[i], tree=self))
                 else:
+                    # The instance sorting ended up in a Split Node, since no branch was found
+                    # for some of the instance's features. Use the mean prediction in this case
                     predictions.append(node.stats[1] / node.stats[0])
         else:
             # Model is empty
