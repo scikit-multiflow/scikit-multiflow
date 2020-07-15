@@ -17,6 +17,29 @@ class RandomActiveLeafRegressor(RandomActiveLeafClass):
     def new_numeric_attribute_observer():
         return NumericAttributeRegressionObserver()
 
+    def manage_memory(self, criterion, last_check_ratio, last_check_sdr, last_check_e):
+        """ Trigger Attribute Observers' memory management routines.
+
+        Currently, only `NumericAttributeRegressionObserver` has support to this feature.
+
+        Parameters
+        ----------
+            criterion: SplitCriterion
+                Split criterion
+            last_check_ratio: float
+                The ratio between the second best candidate's merit and the merit of the best
+                split candidate.
+            last_check_sdr: float
+                The best candidate's split merit.
+            last_check_e: float
+                Hoeffding bound value calculated in the last split attempt.
+        """
+        for obs in self.attribute_observers.values():
+            if isinstance(obs, NumericAttributeRegressionObserver):
+                obs.remove_bad_splits(criterion=criterion, last_check_ratio=last_check_ratio,
+                                      last_check_sdr=last_check_sdr, last_check_e=last_check_e,
+                                      pre_split_dist=self._stats)
+
 
 class RandomActiveLearningNodeMean(LearningNodeMean, RandomActiveLeafRegressor):
     """ Learning Node for regression tasks that always use the average target

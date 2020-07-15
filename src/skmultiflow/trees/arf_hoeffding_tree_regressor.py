@@ -86,8 +86,7 @@ class ARFHoeffdingTreeRegressor(HoeffdingTreeRegressor):
                          nominal_attributes=nominal_attributes,
                          learning_ratio_perceptron=learning_ratio_perceptron,
                          learning_ratio_decay=learning_ratio_decay,
-                         learning_ratio_const=learning_ratio_const,
-                         )
+                         learning_ratio_const=learning_ratio_const)
 
         self.max_features = max_features
         self.random_state = random_state

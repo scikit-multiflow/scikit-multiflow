@@ -410,7 +410,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         """
         predictions = []
-        if self.samples_seen > 0:
+        if self.samples_seen > 0 and self._tree_root is not None:
             r, _ = get_dimensions(X)
             for i in range(r):
                 node = self._tree_root.filter_instance_to_leaf(X[i], None, -1).node
