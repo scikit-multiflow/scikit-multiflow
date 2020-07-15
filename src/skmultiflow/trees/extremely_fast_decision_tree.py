@@ -116,14 +116,14 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
     """
 
     # Override _new_learning_node
-    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
+    def _new_learning_node(self, initial_class_observations=None, is_active=True):
         """ Create a new learning node.
 
         The type of learning node depends on the tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
 
-        if is_active_node:
+        if is_active:
             if self._leaf_prediction == self._MAJORITY_CLASS:
                 return EFDTActiveLearningNodeMC(initial_class_observations)
             elif self._leaf_prediction == self._NAIVE_BAYES:
@@ -398,7 +398,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                 id_best = x_best.split_test.get_atts_test_depends_on()[0]
 
                 # x_current is the current attribute used in this SplitNode
-                id_current = node.get_split_test().get_atts_test_depends_on()[0]
+                id_current = node.split_test.get_atts_test_depends_on()[0]
                 x_current = node.find_attribute(id_current, best_split_suggestions)
 
                 # Get x_null

@@ -30,7 +30,7 @@ class ActiveLeafRegressor(ActiveLeaf):
         Parameters
         ----------
             criterion: SplitCriterion
-                HoeffdingTreeRegressor's split criterion
+                Split criterion
             last_check_ratio: float
                 The ratio between the second best candidate's merit and the merit of the best
                 split candidate.
@@ -94,8 +94,8 @@ class LearningNodePerceptron(LearningNodeMean):
         if tree.learning_ratio_const:
             learning_ratio = tree.learning_ratio_perceptron
         else:
-            learning_ratio = tree.learning_ratio_perceptron / (1 + self._stats[0]
-                                                               * tree.learning_ratio_decay)
+            learning_ratio = (tree.learning_ratio_perceptron
+                              / (1 + self._stats[0] * tree.learning_ratio_decay))
 
         # Loop for compatibility with bagging methods
         for i in range(int(weight)):
@@ -130,8 +130,8 @@ class LearningNodePerceptron(LearningNodeMean):
         normalized_pred = np.dot(self.perceptron_weights, normalized_sample)
         normalized_target_value = tree.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
-        self.perceptron_weights = self.perceptron_weights + learning_ratio * delta * \
-            normalized_sample
+        self.perceptron_weights = (self.perceptron_weights
+                                   + learning_ratio * delta * normalized_sample)
         # Normalize perceptron weights
         self.perceptron_weights = self.perceptron_weights / np.sum(np.abs(self.perceptron_weights))
 
@@ -149,7 +149,6 @@ class ActiveLearningNodeMean(LearningNodeMean, ActiveLeafRegressor):
         squared target values (key '2').
     """
     def __init__(self, initial_stats=None):
-        """ ActiveLearningNodeForRegression class constructor. """
         super().__init__(initial_stats)
 
 
@@ -166,7 +165,6 @@ class InactiveLearningNodeMean(LearningNodeMean, InactiveLeaf):
         squared target values (key '2').
     """
     def __init__(self, initial_stats=None):
-        """ InactiveLearningNodeForRegression class constructor."""
         super().__init__(initial_stats)
 
 
@@ -190,7 +188,6 @@ class ActiveLearningNodePerceptron(LearningNodePerceptron, ActiveLeafRegressor):
         by `np.random`.
     """
     def __init__(self, initial_stats=None, parent_node=None, random_state=None):
-        """ ActiveLearningNodePerceptron class constructor."""
         super().__init__(initial_stats, parent_node, random_state)
 
 
@@ -214,7 +211,6 @@ class InactiveLearningNodePerceptron(LearningNodePerceptron, InactiveLeaf):
         by `np.random`.
     """
     def __init__(self, initial_stats=None, parent_node=None, random_state=None):
-        """ InactiveLearningNodePerceptron class constructor."""
         super().__init__(initial_stats, parent_node, random_state)
 
 

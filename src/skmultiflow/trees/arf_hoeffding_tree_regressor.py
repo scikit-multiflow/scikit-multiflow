@@ -94,7 +94,7 @@ class ARFHoeffdingTreeRegressor(HoeffdingTreeRegressor):
         self._random_state = check_random_state(self.random_state)
 
     def _new_learning_node(self, initial_stats=None, parent_node=None,
-                           is_active_node=True):
+                           is_active=True):
         """Create a new learning node. The type of learning node depends on the tree
         configuration."""
         if initial_stats is None:
@@ -102,7 +102,7 @@ class ARFHoeffdingTreeRegressor(HoeffdingTreeRegressor):
 
         # Generate a random seed for the new learning node
         random_state = self._random_state.randint(0, 4294967295, dtype='u8')
-        if is_active_node:
+        if is_active:
             if self.leaf_prediction == self._TARGET_MEAN:
                 return RandomActiveLearningNodeMean(
                     initial_stats, max_features=self.max_features, random_state=random_state)

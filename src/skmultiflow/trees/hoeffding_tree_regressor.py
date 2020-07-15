@@ -272,14 +272,13 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                 return float(y - mean) / (3 * sd)
         return 0.0
 
-    def _new_learning_node(self, initial_stats=None, parent_node=None,
-                           is_active_node=True):
+    def _new_learning_node(self, initial_stats=None, parent_node=None, is_active=True):
         """Create a new learning node. The type of learning node depends on the tree
         configuration."""
         if initial_stats is None:
             initial_stats = {}
 
-        if is_active_node:
+        if is_active:
             if self.leaf_prediction == self._TARGET_MEAN:
                 return ActiveLearningNodeMean(initial_stats)
             elif self.leaf_prediction == self._PERCEPTRON:
@@ -293,7 +292,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                                                       random_state=self.random_state)
 
     def partial_fit(self, X, y, sample_weight=None):
-        """Incrementally trains the model.
+        """ Incrementally trains the model.
 
         Train samples (instances) are composed of X attributes and their corresponding targets y.
 
@@ -382,13 +381,13 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
                                            found_node.parent_branch)
                     active_learning_node.last_split_attempt_at = weight_seen
         # Split node encountered a previously unseen categorical value
-        # (in a multiway test)
+        # (in a multi-way test)
         elif isinstance(leaf_node, SplitNode) and \
-                isinstance(leaf_node.get_split_test(), NominalAttributeMultiwayTest):
+                isinstance(leaf_node.split_test, NominalAttributeMultiwayTest):
             current = found_node.node
             leaf_node = self._new_learning_node()
-            branch_id = current.get_split_test().add_new_branch(
-                X[current.get_split_test().get_atts_test_depends_on()[0]]
+            branch_id = current.split_test.add_new_branch(
+                X[current.split_test.get_atts_test_depends_on()[0]]
             )
             current.set_child(branch_id, leaf_node)
             self._active_leaf_node_cnt += 1
@@ -414,7 +413,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
         if self.samples_seen > 0:
             r, _ = get_dimensions(X)
             for i in range(r):
-                node = self._tree_root.filter_instance_to_leaf(X, None, -1).node
+                node = self._tree_root.filter_instance_to_leaf(X[i], None, -1).node
                 if isinstance(node, LearningNode):
                     predictions.append(node.predict_one(X[i], tree=self))
                 else:
@@ -445,7 +444,7 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
 
         Parameters
         ----------
-        node: ActiveLeaf
+        node:
             The node to evaluate.
         parent: SplitNode
             The node's parent.
@@ -561,9 +560,9 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             Parent node's branch index.
 
         """
-        new_leaf = self._new_learning_node(
-            to_deactivate.stats, to_deactivate, is_active_node=False
-        )
+        new_leaf = self._new_learning_node(to_deactivate.stats,
+                                           to_deactivate,
+                                           is_active=False)
 
         if parent is None:
             self._tree_root = new_leaf

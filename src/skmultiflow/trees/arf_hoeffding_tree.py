@@ -108,13 +108,13 @@ class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
         self.random_state = random_state
         self._random_state = check_random_state(self.random_state)
 
-    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
+    def _new_learning_node(self, initial_class_observations=None, is_active=True):
         """Create a new learning node. The type of learning node depends on the
         tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
 
-        if is_active_node:
+        if is_active:
             # MAJORITY CLASS
             if self._leaf_prediction == self._MAJORITY_CLASS:
                 return RandomActiveLearningNodeMC(

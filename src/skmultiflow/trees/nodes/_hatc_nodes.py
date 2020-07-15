@@ -112,7 +112,6 @@ class AdaLearningNode(ActiveLearningNodeNBA, AdaNode):
         # Update statistics
         super().learn_one(X, y, weight=weight, tree=tree)
 
-        # call ActiveLearningNode
         weight_seen = self.total_weight
 
         if weight_seen - self.last_split_attempt_at >= tree.grace_period:
@@ -259,13 +258,13 @@ class AdaSplitNode(SplitNode, AdaNode):
             child.learn_one(X, y, weight, tree, parent=self, parent_branch=child_branch)
         # Instance contains a categorical value previously unseen by the split
         # node
-        elif isinstance(self.get_split_test(), NominalAttributeMultiwayTest) and \
-                self.get_split_test().branch_for_instance(X) < 0:
+        elif isinstance(self.split_test, NominalAttributeMultiwayTest) and \
+                self.split_test.branch_for_instance(X) < 0:
             # Creates a new learning node to encompass the new observed feature
             # value
             leaf_node = tree._new_learning_node()
-            branch_id = self.get_split_test().add_new_branch(
-                X[self.get_split_test().get_atts_test_depends_on()[0]]
+            branch_id = self.split_test.add_new_branch(
+                X[self.split_test.get_atts_test_depends_on()[0]]
             )
             self.set_child(branch_id, leaf_node)
             tree._active_leaf_node_cnt += 1

@@ -204,13 +204,13 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
 
         return np.array(predictions)
 
-    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
+    def _new_learning_node(self, initial_class_observations=None, is_active=True):
         """Create a new learning node. The type of learning node depends on the tree
         configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
 
-        if is_active_node:
+        if is_active:
             if self._leaf_prediction == self._MAJORITY_CLASS:
                 return LCActiveLearningNodeMC(initial_class_observations)
             elif self._leaf_prediction == self._NAIVE_BAYES:

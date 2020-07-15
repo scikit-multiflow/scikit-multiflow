@@ -341,12 +341,12 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         # Split node encountered a previously unseen categorical value
         # (in a multi-way test)
         elif isinstance(leaf_node, SplitNode) and \
-                isinstance(leaf_node.get_split_test(), NominalAttributeMultiwayTest):
+                isinstance(leaf_node.split_test, NominalAttributeMultiwayTest):
             # Creates a new branch to the new categorical value
             current = found_node.node
             leaf_node = self._new_learning_node()
-            branch_id = current.get_split_test().add_new_branch(
-                X[current.get_split_test().get_atts_test_depends_on()[0]]
+            branch_id = current.split_test.add_new_branch(
+                X[current.split_test.get_atts_test_depends_on()[0]]
             )
             current.set_child(branch_id, leaf_node)
             self._active_leaf_node_cnt += 1
@@ -472,14 +472,14 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             return self._tree_root.subtree_depth()
         return 0
 
-    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
+    def _new_learning_node(self, initial_class_observations=None, is_active=True):
         """ Create a new learning node.
 
         The type of learning node depends on the tree configuration.
         """
         if initial_class_observations is None:
             initial_class_observations = {}
-        if is_active_node:
+        if is_active:
             if self._leaf_prediction == self._MAJORITY_CLASS:
                 return ActiveLearningNodeMC(initial_class_observations)
             elif self._leaf_prediction == self._NAIVE_BAYES:
@@ -552,7 +552,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         """ Create a new split node."""
         return SplitNode(split_test, class_observations)
 
-    def _attempt_to_split(self, node: ActiveLeaf, parent: SplitNode, parent_idx: int):
+    def _attempt_to_split(self, node, parent: SplitNode, parent_idx: int):
         """ Attempt to split a node.
 
         If the samples seen so far are not from the same class then:
@@ -568,7 +568,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
 
         Parameters
         ----------
-        node: ActiveLearningNode
+        node:
             The node to evaluate.
         parent: SplitNode
             The node's parent.
@@ -726,7 +726,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
 
         """
         new_leaf = self._new_learning_node(
-            to_deactivate.stats, is_active_node=False
+            to_deactivate.stats, is_active=False
         )
         if parent is None:
             self._tree_root = new_leaf
@@ -793,7 +793,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                 found.append(FoundNode(node, parent, parent_branch, depth))
             if isinstance(node, SplitNode):
                 split_node = node
-                for i in range(split_node.num_children()):
+                for i in range(split_node.n_children):
                     self.__find_learning_nodes(
                         split_node.get_child(i), split_node, i, found, depth + 1
                     )

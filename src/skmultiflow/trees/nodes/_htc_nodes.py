@@ -41,6 +41,24 @@ class LearningNodeMC(LearningNode):
         """
         return sum(self.stats.values())
 
+    def observed_class_distribution_is_pure(self):
+        """ Check if observed class distribution is pure, i.e. if all samples
+        belong to the same class.
+
+        Returns
+        -------
+        boolean
+            True if observed number of classes is less than 2, False otherwise.
+
+        """
+        count = 0
+        for _, weight in self._stats.items():
+            if weight != 0:
+                count += 1
+                if count == 2:  # No need to count beyond this point
+                    break
+        return count < 2
+
 
 class LearningNodeNB(LearningNodeMC):
     def predict_one(self, X, *, tree=None):
@@ -114,7 +132,6 @@ class ActiveLearningNodeMC(LearningNodeMC, ActiveLeafClass):
     """
 
     def __init__(self, initial_stats=None):
-        """ ActiveLearningNode class constructor. """
         super().__init__(initial_stats)
 
 
@@ -128,7 +145,6 @@ class InactiveLearningNodeMC(LearningNodeMC, InactiveLeaf):
     """
 
     def __init__(self, initial_stats=None):
-        """ InactiveLearningNode class constructor. """
         super().__init__(initial_stats)
 
 
@@ -142,7 +158,6 @@ class ActiveLearningNodeNB(LearningNodeNB, ActiveLeafClass):
     """
 
     def __init__(self, initial_stats=None):
-        """ LearningNodeNB class constructor. """
         super().__init__(initial_stats)
 
     def disable_attribute(self, att_index):
@@ -169,7 +184,6 @@ class ActiveLearningNodeNBA(LearningNodeNBA, ActiveLeafClass):
     """
 
     def __init__(self, initial_stats=None):
-        """ LearningNodeNBAdaptive class constructor. """
         super().__init__(initial_stats)
 
     def disable_attribute(self, att_index):

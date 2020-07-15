@@ -22,7 +22,6 @@ class FoundNode(object):
     """
 
     def __init__(self, node=None, parent=None, parent_branch=None, depth=None):
-        """ FoundNode class constructor. """
         self.node = node
         self.parent = parent
         self.parent_branch = parent_branch
@@ -30,17 +29,17 @@ class FoundNode(object):
 
 
 class Node(metaclass=ABCMeta):
-    """ Base class for nodes in a Hoeffding Tree.
+    """ Base class for nodes in a tree.
 
     Parameters
     ----------
-    stats: dict (class_value, weight) or None
-        Class observations.
+    stats: dict or None
+        Statistics kept by the node.
 
     """
 
     def __init__(self, stats=None):
-        self._stats = stats if stats is not None else {}
+        self.stats = stats
 
     @staticmethod
     def is_leaf():
@@ -48,7 +47,8 @@ class Node(metaclass=ABCMeta):
 
         Returns
         -------
-        True if leaf, False otherwise
+        bool
+            True if leaf, False otherwise
 
         """
         return True
@@ -75,63 +75,34 @@ class Node(metaclass=ABCMeta):
 
     @property
     def stats(self):
-        """ Get the current observed class distribution at the node.
-
-        Returns
-        -------
-        dict (class_value, weight)
-            Class distribution at the node.
-
+        """ Statistics observed by the node.
         """
         return self._stats
 
     @stats.setter
     def stats(self, stats):
-        """ Set the observed class distribution at the node.
-
-        Parameters
-        -------
-        dict (class_value, weight)
-            Class distribution at the node.
+        """ Set the statistics at the node.
 
         """
-        self._stats = stats
+        self._stats = stats if stats is not None else {}
 
-    def get_class_votes(self, X, ht):
+    def get_class_votes(self, X, tree):
         """ Get the votes per class for a given instance.
 
         Parameters
         ----------
         X: numpy.ndarray of length equal to the number of features.
            Data instances.
-        ht: HoeffdingTreeClassifier
-            The Hoeffding Tree.
+        tree: HoeffdingTreeClassifier
+            The tree object.
 
         Returns
         -------
-        dict (class_value, weight)
+        dict
             Class votes for the given instance.
 
         """
         return self._stats
-
-    def observed_class_distribution_is_pure(self):
-        """ Check if observed class distribution is pure, i.e. if all samples
-        belong to the same class.
-
-        Returns
-        -------
-        boolean
-            True if observed number of classes is less than 2, False otherwise.
-
-        """
-        count = 0
-        for _, weight in self._stats.items():
-            if weight != 0:
-                count += 1
-                if count == 2:  # No need to count beyond this point
-                    break
-        return count < 2
 
     def subtree_depth(self):
         """ Calculate the depth of the subtree from this node.
@@ -160,12 +131,12 @@ class Node(metaclass=ABCMeta):
         else:
             return 0
 
-    def describe_subtree(self, ht, buffer, indent=0):
+    def describe_subtree(self, tree, buffer, indent=0):
         """ Walk the tree and write its structure to a buffer string.
 
         Parameters
         ----------
-        ht: HoeffdingTreeClassifier
+        tree: HoeffdingTreeClassifier
             The tree to describe.
         buffer: string
             The string buffer where the tree's structure will be stored
@@ -175,7 +146,7 @@ class Node(metaclass=ABCMeta):
         """
         buffer[0] += textwrap.indent('Leaf = ', ' ' * indent)
 
-        if ht._estimator_type == 'classifier':
+        if tree._estimator_type == 'classifier':
             class_val = max(
                 self._stats,
                 key=self._stats.get
@@ -199,7 +170,7 @@ class Node(metaclass=ABCMeta):
 
 
 class SplitNode(Node):
-    """ Node that splits the data in a Hoeffding Tree.
+    """ Node that splits the data in a tree.
 
     Parameters
     ----------
@@ -211,18 +182,19 @@ class SplitNode(Node):
     """
 
     def __init__(self, split_test, stats):
-        """ SplitNode class constructor."""
         super().__init__(stats)
         self._split_test = split_test
         # Dict of tuples (branch, child)
         self._children = {}
 
-    def num_children(self):
+    @property
+    def n_children(self):
         """ Count the number of children for a node."""
         return len(self._children)
 
-    def get_split_test(self):
-        """ Retrieve the split test of this node.
+    @property
+    def split_test(self):
+        """ The split test of this node.
 
         Returns
         -------
@@ -335,12 +307,12 @@ class SplitNode(Node):
                     max_child_depth = depth
         return max_child_depth + 1
 
-    def describe_subtree(self, ht, buffer, indent=0):
+    def describe_subtree(self, tree, buffer, indent=0):
         """ Walk the tree and write its structure to a buffer string.
 
         Parameters
         ----------
-        ht: HoeffdingTreeClassifier
+        tree: HoeffdingTreeClassifier
             The tree to describe.
         buffer: string
             The buffer where the tree's structure will be stored.
@@ -348,13 +320,13 @@ class SplitNode(Node):
             Indentation level (number of white spaces for current node).
 
         """
-        for branch_idx in range(self.num_children()):
+        for branch_idx in range(self.n_children):
             child = self.get_child(branch_idx)
             if child is not None:
                 buffer[0] += textwrap.indent('if ', ' ' * indent)
                 buffer[0] += self._split_test.describe_condition_for_branch(branch_idx)
                 buffer[0] += ':\n'
-                child.describe_subtree(ht, buffer, indent + 2)
+                child.describe_subtree(tree, buffer, indent + 2)
 
     def get_predicate(self, branch):
         return self._split_test.branch_rule(branch)
@@ -369,7 +341,6 @@ class LearningNode(Node, metaclass=ABCMeta):
         Initial stats (they differ in classification and regression tasks).
     """
     def __init__(self, initial_stats):
-        """ ActiveLearningNode class constructor. """
         super().__init__(initial_stats)
         self.last_split_attempt_at = self.total_weight
 
@@ -378,18 +349,18 @@ class LearningNode(Node, metaclass=ABCMeta):
         pass
 
     def learn_one(self, X, y, *, weight=1.0, tree=None):
-        """Update the node with the provided instance.
+        """Update the node with the provided sample.
 
         Parameters
         ----------
         X: numpy.ndarray of length equal to the number of features.
-            Instance attributes for updating the node.
-        y: int
-            Instance class.
+            Sample attributes for updating the node.
+        y: int or float
+            Target value.
         weight: float
-            Instance weight.
+            Sample weight.
         tree:
-            Hoeffding Tree to update.
+            Tree to update.
 
         """
         self.update_stats(y, weight)
@@ -414,7 +385,7 @@ class LearningNode(Node, metaclass=ABCMeta):
 
     @property
     def last_split_attempt_at(self):
-        """ Retrieve the weight seen at last split evaluation.
+        """ The weight seen at last split evaluation.
 
         Returns
         -------

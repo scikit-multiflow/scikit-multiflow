@@ -172,7 +172,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
             self._leaf_prediction = leaf_prediction
 
     def _new_learning_node(self, initial_stats=None, parent_node=None,
-                           is_active_node=True):
+                           is_active=True):
         """Create a new learning node.
 
         The type of learning node depends on the tree configuration.
@@ -180,7 +180,7 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
         if initial_stats is None:
             initial_stats = {}
 
-        if is_active_node:
+        if is_active:
             return AdaActiveLearningNodeRegressor(initial_stats, parent_node,
                                                   random_state=self.random_state)
         else:

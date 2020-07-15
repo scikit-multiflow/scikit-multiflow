@@ -288,14 +288,14 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
         return normalized_targets
 
     def _new_learning_node(self, initial_stats=None, parent_node=None,
-                           is_active_node=True):
+                           is_active=True):
         """Create a new learning node. The type of learning node depends on
         the tree configuration.
         """
         if initial_stats is None:
             initial_stats = {}
 
-        if is_active_node:
+        if is_active:
             if self.leaf_prediction == self._TARGET_MEAN:
                 return ActiveLearningNodeMean(initial_stats)
             elif self.leaf_prediction == self._PERCEPTRON:
@@ -479,11 +479,11 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
         # Split node encountered a previously unseen categorical value
         # (in a multiway test)
         elif isinstance(leaf_node, SplitNode) and \
-                isinstance(leaf_node.get_split_test(), NominalAttributeMultiwayTest):
+                isinstance(leaf_node.split_test, NominalAttributeMultiwayTest):
             current = found_node.node
             leaf_node = self._new_learning_node()
-            branch_id = current.get_split_test().add_new_branch(
-                X[current.get_split_test().get_atts_test_depends_on()[0]])
+            branch_id = current.split_test.add_new_branch(
+                X[current.split_test.get_atts_test_depends_on()[0]])
             current.set_child(branch_id, leaf_node)
             self._active_leaf_node_cnt += 1
             leaf_node.learn_one(X, y, weight=sample_weight, tree=self)
@@ -513,7 +513,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                           "Predictions will default to a column array filled with zeros.")
             return np.zeros((r, 1))
         for i in range(r):
-            node = self._tree_root.filter_instance_to_leaf(X, None, -1).node
+            node = self._tree_root.filter_instance_to_leaf(X[i], None, -1).node
 
             if isinstance(node, SplitNode):
                 # If not leaf, use mean as response

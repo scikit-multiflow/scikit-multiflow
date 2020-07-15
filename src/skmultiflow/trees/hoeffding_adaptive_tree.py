@@ -212,8 +212,8 @@ class HoeffdingAdaptiveTreeClassifier(HoeffdingTreeClassifier):
         return result
 
     # Override HoeffdingTreeClassifier
-    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
-        if is_active_node:
+    def _new_learning_node(self, initial_class_observations=None, is_active=True):
+        if is_active:
             return AdaLearningNode(initial_class_observations, self.random_state)
         else:
             return InactiveLearningNodeMC(initial_class_observations)

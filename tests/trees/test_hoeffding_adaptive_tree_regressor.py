@@ -46,11 +46,12 @@ def test_hoeffding_adaptive_tree_regressor_mean():
     expected_error = 143.11351404083086
     assert np.isclose(error, expected_error)
 
-    expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, grace_period=200, leaf_prediction='mean', " \
-                    "learning_ratio_const=True, learning_ratio_decay=0.001, learning_ratio_perceptron=0.02, " \
+    expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, bootstrap_sampling=False, " \
+                    "grace_period=200, leaf_prediction='mean', learning_ratio_const=True, " \
+                    "learning_ratio_decay=0.001, learning_ratio_perceptron=0.02, " \
                     "max_byte_size=33554432, memory_estimate_period=1000000, no_preprune=False, " \
-                    "nominal_attributes=None, random_state=1, remove_poor_atts=False, split_confidence=1e-07, " \
-                    "stop_mem_management=False, tie_threshold=0.05)"
+                    "nominal_attributes=None, random_state=1, remove_poor_atts=False, " \
+                    "split_confidence=1e-07, stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
 
@@ -103,11 +104,13 @@ def test_hoeffding_adaptive_tree_regressor_perceptron():
     expected_error = 126.11208652969131
     assert np.isclose(error, expected_error)
 
-    expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, grace_period=200, " \
-                    "leaf_prediction='perceptron', learning_ratio_const=True, learning_ratio_decay=0.001, " \
-                    "learning_ratio_perceptron=0.02, max_byte_size=33554432, memory_estimate_period=1000000, " \
-                    "no_preprune=False, nominal_attributes=None, random_state=1, " \
-                    "remove_poor_atts=False, split_confidence=1e-07, stop_mem_management=False, tie_threshold=0.05)"
+    expected_info = "HoeffdingAdaptiveTreeRegressor(binary_split=False, " \
+                    "bootstrap_sampling=False, grace_period=200, leaf_prediction='perceptron', " \
+                    "learning_ratio_const=True, learning_ratio_decay=0.001, " \
+                    "learning_ratio_perceptron=0.02, max_byte_size=33554432, " \
+                    "memory_estimate_period=1000000, no_preprune=False, " \
+                    "nominal_attributes=None, random_state=1, remove_poor_atts=False, " \
+                    "split_confidence=1e-07, stop_mem_management=False, tie_threshold=0.05)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
 
@@ -204,8 +207,8 @@ def test_hoeffding_adaptive_tree_regressor_alternate_tree():
                     "    Leaf = Statistics {0: 1716.0000, 1: -284.7812, 2: 17014.5944}\n" \
                     "if Attribute 0 > 0.7308480624289246:\n" \
                     "  Leaf = Statistics {0: 384.0000, 1: -40.5676, 2: 3855.0453}\n"
-
-                assert expected_info == learner.get_model_description()
+                model_description = learner.get_model_description()
+                assert expected_info == model_description
                 p1 = True
 
             # Keep almost the same generation function

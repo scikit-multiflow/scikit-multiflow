@@ -148,7 +148,7 @@ class EFDTSplitNode(SplitNode, LearningNodeMC, EFDTActiveLeaf):
 
         count = np.array([1, 0])
         # get children
-        for branch_idx in range(self.num_children()):
+        for branch_idx in range(self.n_children):
             child = self.get_child(branch_idx)
             if child is not None:
                 count += child.count_nodes()
