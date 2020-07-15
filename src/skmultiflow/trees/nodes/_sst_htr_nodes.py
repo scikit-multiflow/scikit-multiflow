@@ -10,7 +10,7 @@ class SSTLearningNode(LearningNodePerceptronMultiTarget):
     def __init__(self, initial_stats=None, parent_node=None, random_state=None):
         super().__init__(initial_stats, parent_node, random_state)
 
-    def learn_one(self, X, y, *, sample_weight=None, tree=None):
+    def learn_one(self, X, y, *, weight=None, tree=None):
         """Update the node with the provided instance.
 
         Parameters
@@ -24,8 +24,8 @@ class SSTLearningNode(LearningNodePerceptronMultiTarget):
         tree: HoeffdingTreeRegressor
             Regression Hoeffding Tree to update.
         """
-        self.update_stats(y, sample_weight)
-        self.update_attribute_observers(X, y, sample_weight, tree)
+        self.update_stats(y, weight)
+        self.update_attribute_observers(X, y, weight, tree)
 
         if self.perceptron_weights is None:
             self.perceptron_weights = {}
@@ -44,7 +44,7 @@ class SSTLearningNode(LearningNodePerceptronMultiTarget):
             learning_ratio = (tree.learning_ratio_perceptron / (1 + self._stats[0]
                               * tree.learning_ratio_decay))
 
-        for i in range(int(sample_weight)):
+        for i in range(int(weight)):
             self._update_weights(X, y, learning_ratio, tree)
 
     def predict_one(self, X, *, tree=None):
@@ -81,14 +81,14 @@ class SSTLearningNode(LearningNodePerceptronMultiTarget):
 
         Y_norm = tree.normalize_target_value(y)
 
-        self.perceptron_weight[0] += learning_ratio * (Y_norm - Y_pred_base)[:, None] \
+        self.perceptron_weights[0] += learning_ratio * (Y_norm - Y_pred_base)[:, None] \
             @ X_norm[None, :]
 
         # Add bias term
         Y_pred_base = np.append(Y_pred_base, 1.0)
         Y_pred_meta = self._predict_one_meta(Y_pred_base)
 
-        self.perceptron_weight[1] += learning_ratio * (Y_norm - Y_pred_meta)[:, None] \
+        self.perceptron_weights[1] += learning_ratio * (Y_norm - Y_pred_meta)[:, None] \
             @ Y_pred_base[None, :]
 
         self._normalize_perceptron_weights()
@@ -128,7 +128,7 @@ class SSTLearningNodeAdaptive(SSTLearningNode):
         if self.perceptron_weights is None:
             return predictions
 
-        X_norm = self.normalize_sample(X)
+        X_norm = tree.normalize_sample(X)
 
         # Standard perceptron
         Y_pred_base = self._predict_one_base(X_norm)
@@ -183,14 +183,14 @@ class SSTLearningNodeAdaptive(SSTLearningNode):
 
         Y_norm = tree.normalize_target_value(y)
 
-        self.perceptron_weight[0] += learning_ratio * (Y_norm - Y_pred_base)[:, None] \
+        self.perceptron_weights[0] += learning_ratio * (Y_norm - Y_pred_base)[:, None] \
             @ X_norm[None, :]
 
         # Add bias term
         Y_pred_base = np.append(Y_pred_base, 1.0)
         Y_pred_meta = self._predict_one_meta(Y_pred_base)
 
-        self.perceptron_weight[1] += learning_ratio * (Y_norm - Y_pred_meta)[:, None] \
+        self.perceptron_weights[1] += learning_ratio * (Y_norm - Y_pred_meta)[:, None] \
             @ Y_pred_base[None, :]
 
         self._normalize_perceptron_weights()
