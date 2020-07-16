@@ -158,19 +158,6 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
         self.switch_alternate_trees_cnt = 0
         self.pruned_alternate_trees_cnt = 0
 
-    @property
-    def leaf_prediction(self):
-        return self._leaf_prediction
-
-    @leaf_prediction.setter
-    def leaf_prediction(self, leaf_prediction):
-        if leaf_prediction not in {self._TARGET_MEAN, self._PERCEPTRON}:
-            print("Invalid leaf_prediction option {}', will use default '{}'".
-                  format(leaf_prediction, self._PERCEPTRON))
-            self._leaf_prediction = self._PERCEPTRON
-        else:
-            self._leaf_prediction = leaf_prediction
-
     def _new_learning_node(self, initial_stats=None, parent_node=None,
                            is_active=True):
         """Create a new learning node.

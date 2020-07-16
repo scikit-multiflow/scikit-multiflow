@@ -98,11 +98,11 @@ class AdaSplitNodeRegressor(AdaSplitNode):
             self._alternate_tree.learn_one(X, y, weight, tree, parent, parent_branch)
         child_branch = self.instance_child_index(X)
         child = self.get_child(child_branch)
+
         if child is not None:
             child.learn_one(X, y, weight, tree, parent=self, parent_branch=child_branch)
         # Instance contains a categorical value previously unseen by the split node
-        elif isinstance(self.split_test, NominalAttributeMultiwayTest) and \
-                self.split_test.branch_for_instance(X) < 0:
+        else:
             # Creates a new learning node to encompass the new observed feature
             # value
             leaf_node = tree._new_learning_node()

@@ -124,10 +124,11 @@ def test_regression_hoeffding_adaptive_tree_categorical_features(test_path):
     data_path = os.path.join(test_path, 'ht_categorical_features_testcase.npy')
     stream = np.load(data_path)
     # Removes the last column (used only in the multi-target regression case)
-    stream = stream[1000:, :-1]
+    stream = stream[1500:, :-1]
     X, y = stream[:, :-1], stream[:, -1]
+    X = X[:, :-1]
 
-    nominal_attr_idx = np.arange(8)
+    nominal_attr_idx = np.arange(7)
     # Typo in leaf prediction
     learner = HoeffdingAdaptiveTreeRegressor(
         nominal_attributes=nominal_attr_idx,
@@ -136,38 +137,27 @@ def test_regression_hoeffding_adaptive_tree_categorical_features(test_path):
 
     learner.partial_fit(X, y)
 
-    expected_description = "if Attribute 1 = -1.0:\n" \
-                           "  if Attribute 0 = -15.0:\n" \
-                           "    Leaf = Statistics {0: 66.0000, 1: -164.9262, 2: 412.7679}\n" \
-                           "  if Attribute 0 = 0.0:\n" \
-                           "    Leaf = Statistics {0: 71.0000, 1: -70.3639, 2: 70.3179}\n" \
-                           "  if Attribute 0 = 1.0:\n" \
-                           "    Leaf = Statistics {0: 83.0000, 1: 0.9178, 2: 0.8395}\n" \
-                           "  if Attribute 0 = 2.0:\n" \
-                           "    Leaf = Statistics {0: 74.0000, 1: 73.6454, 2: 73.8353}\n" \
-                           "  if Attribute 0 = 3.0:\n" \
-                           "    Leaf = Statistics {0: 59.0000, 1: 75.2899, 2: 96.4856}\n" \
-                           "  if Attribute 0 = -30.0:\n" \
-                           "    Leaf = Statistics {0: 13.0000, 1: -40.6367, 2: 127.1607}\n" \
-                           "if Attribute 1 = 0.0:\n" \
-                           "  if Attribute 0 = -15.0:\n" \
-                           "    Leaf = Statistics {0: 64.0000, 1: -158.0874, 2: 391.2359}\n" \
-                           "  if Attribute 0 = 0.0:\n" \
-                           "    Leaf = Statistics {0: 72.0000, 1: -0.4503, 2: 0.8424}\n" \
-                           "  if Attribute 0 = 1.0:\n" \
-                           "    Leaf = Statistics {0: 67.0000, 1: 68.0365, 2: 69.6664}\n" \
-                           "  if Attribute 0 = 2.0:\n" \
-                           "    Leaf = Statistics {0: 60.0000, 1: 77.7032, 2: 101.3210}\n" \
-                           "  if Attribute 0 = 3.0:\n" \
-                           "    Leaf = Statistics {0: 54.0000, 1: 77.4519, 2: 111.7702}\n" \
-                           "  if Attribute 0 = -30.0:\n" \
-                           "    Leaf = Statistics {0: 27.0000, 1: -83.8745, 2: 260.8891}\n" \
-                           "if Attribute 1 = 1.0:\n" \
-                           "  Leaf = Statistics {0: 412.0000, 1: 180.7178, 2: 1143.9712}\n" \
-                           "if Attribute 1 = 2.0:\n" \
-                           "  Leaf = Statistics {0: 384.0000, 1: 268.3498, 2: 1193.4180}\n" \
-                           "if Attribute 1 = 3.0:\n" \
-                           "  Leaf = Statistics {0: 418.0000, 1: 289.5005, 2: 1450.7667}\n"
+    expected_description = "if Attribute 0 = -15.0:\n" \
+        "  if Attribute 1 = -1.0:\n" \
+        "    Leaf = Statistics {0: 37.0000, 1: -92.4231, 2: 231.1636}\n" \
+        "  if Attribute 1 = 0.0:\n" \
+        "    Leaf = Statistics {0: 38.0000, 1: -94.0931, 2: 233.4825}\n" \
+        "  if Attribute 1 = 1.0:\n" \
+        "    Leaf = Statistics {0: 55.0000, 1: -131.1069, 2: 312.9920}\n" \
+        "  if Attribute 1 = 2.0:\n" \
+        "    Leaf = Statistics {0: 38.0000, 1: -90.3821, 2: 215.5215}\n" \
+        "  if Attribute 1 = 3.0:\n" \
+        "    Leaf = Statistics {0: 54.0000, 1: -124.1223, 2: 285.7867}\n" \
+        "if Attribute 0 = 0.0:\n" \
+        "  Leaf = Statistics {0: 123.0000, 1: 60.9178, 2: 132.5396}\n" \
+        "if Attribute 0 = 1.0:\n" \
+        "  Leaf = Statistics {0: 124.0000, 1: 134.7770, 2: 184.4009}\n" \
+        "if Attribute 0 = 2.0:\n" \
+        "  Leaf = Statistics {0: 104.0000, 1: 145.5842, 2: 212.8880}\n" \
+        "if Attribute 0 = 3.0:\n" \
+        "  Leaf = Statistics {0: 118.0000, 1: 186.4441, 2: 300.6575}\n" \
+        "if Attribute 0 = -30.0:\n" \
+        "  Leaf = Statistics {0: 88.0000, 1: -269.7967, 2: 828.2289}\n"
 
     assert SequenceMatcher(
         None, expected_description, learner.get_model_description()
