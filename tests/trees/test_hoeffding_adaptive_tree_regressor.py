@@ -222,18 +222,18 @@ def test_hoeffding_adaptive_tree_regressor_alternate_tree():
                 y = [np.random.normal(loc=-3, scale=1)]
 
             # But shift the normal mean in a specific region
-            if X[0][0] <= 0.73:
+            if X[0][0] <= 0.3:
                 y = [np.random.normal(loc=5, scale=0.1)]
         elif cnt < 6000:
             if not p2:
                 # Subtree swapped
                 expected_info = "if Attribute 0 <= 0.7308480624289246:\n" \
-                    "  if Attribute 0 <= 0.7210747610959465:\n" \
-                    "    Leaf = Statistics {0: 1447.0000, 1: 7229.8838, 2: 36138.9433}\n" \
-                    "  if Attribute 0 > 0.7210747610959465:\n" \
-                    "    Leaf = Statistics {0: 8.0000, 1: 30.5281, 2: 183.5354}\n" \
+                    "  if Attribute 0 <= 0.2979778083105622:\n" \
+                    "    Leaf = Statistics {0: 1108.0000, 1: 5539.5153, 2: 27706.8525}\n" \
+                    "  if Attribute 0 > 0.2979778083105622:\n" \
+                    "    Leaf = Statistics {0: 342.0000, 1: 48.2119, 2: 3518.3529}\n" \
                     "if Attribute 0 > 0.7308480624289246:\n" \
-                    "  Leaf = Statistics {0: 654.0000, 1: -24.9928, 2: 6519.0335}\n"
+                    "  Leaf = Statistics {0: 659.0000, 1: -28.8180, 2: 6546.5087}\n"
 
                 assert expected_info == learner.get_model_description()
                 p2 = True
@@ -249,9 +249,9 @@ def test_hoeffding_adaptive_tree_regressor_alternate_tree():
         cnt += 1
 
     # Root node changed
-    expected_info = "if Attribute 1 <= -0.00015267114158334927:\n" \
-        "  Leaf = Statistics {0: 904.0000, 1: 1098.6423, 2: 332597.7050}\n" \
-        "if Attribute 1 > -0.00015267114158334927:\n" \
-        "  Leaf = Statistics {0: 905.0000, 1: 17227.8522, 2: 332000.7548}\n"
+    expected_info = "if Attribute 1 <= 0.02469103490619995:\n" \
+        "  Leaf = Statistics {0: 941.0000, 1: -18769.1383, 2: 378390.2088}\n" \
+        "if Attribute 1 > 0.02469103490619995:\n" \
+        "  Leaf = Statistics {0: 900.0000, 1: -2030.2098, 2: 355715.9719}\n"
 
     assert expected_info == learner.get_model_description()
