@@ -15,10 +15,10 @@ class RandomActiveLeafClass(ActiveLeafClass):
     the attribute observers (by using subsets of features).
     """
     def update_attribute_observers(self, X, y, weight, tree):
-        if self.list_attributes.size == 0:
-            self.list_attributes = self._sample_features(get_dimensions(X)[1])
+        if self.feature_indices.size == 0:
+            self.feature_indices = self._sample_features(get_dimensions(X)[1])
 
-        for idx in self.list_attributes:
+        for idx in self.feature_indices:
             try:
                 obs = self.attribute_observers[idx]
             except KeyError:
@@ -52,11 +52,11 @@ class RandomActiveLearningNodeMC(LearningNodeMC, RandomActiveLeafClass):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_stats=None, max_features=1, random_state=None):
+    def __init__(self, initial_stats=None, max_features=2, random_state=None):
         """ RandomLearningNodeClassification class constructor. """
         super().__init__(initial_stats)
         self.max_features = max_features
-        self.list_attributes = np.array([])
+        self.feature_indices = np.array([])
         self.random_state = random_state
         self._random_state = check_random_state(self.random_state)
 
@@ -79,11 +79,11 @@ class RandomActiveLearningNodeNB(LearningNodeNB, RandomActiveLeafClass):
         by `np.random`.
     """
 
-    def __init__(self, initial_stats=None, max_features=1, random_state=None):
+    def __init__(self, initial_stats=None, max_features=2, random_state=None):
         """ LearningNodeNB class constructor. """
         super().__init__(initial_stats)
         self.max_features = max_features
-        self.list_attributes = np.array([])
+        self.feature_indices = np.array([])
         self.random_state = random_state
         self._random_state = check_random_state(self.random_state)
 
@@ -105,10 +105,10 @@ class RandomActiveLearningNodeNBA(LearningNodeNBA, RandomActiveLeafClass):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_stats=None, max_features=1, random_state=None):
+    def __init__(self, initial_stats=None, max_features=2, random_state=None):
         """LearningNodeNBAdaptive class constructor. """
         super().__init__(initial_stats)
         self.max_features = max_features
-        self.list_attributes = np.array([])
+        self.feature_indices = np.array([])
         self.random_state = random_state
         self._random_state = check_random_state(self.random_state)
