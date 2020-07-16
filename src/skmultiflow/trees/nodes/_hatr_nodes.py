@@ -70,8 +70,9 @@ class AdaSplitNodeRegressor(AdaSplitNode):
                 fDelta = .05
                 fN = 1.0 / self._alternate_tree.error_width + 1.0 / self.error_width
 
-                bound = math.sqrt(2.0 * old_error_rate * (1.0 - old_error_rate) *
-                                  math.log(2.0 / fDelta) * fN)
+                sq_term = 2.0 * old_error_rate * (1.0 - old_error_rate) * math.log(2.0 / fDelta) \
+                    * fN
+                bound = math.sqrt(sq_term) if sq_term > 0 else 0.0
                 # To check, bound never less than (old_error_rate - alt_error_rate)
                 if bound < (old_error_rate - alt_error_rate):
                     tree._active_leaf_node_cnt -= self.n_leaves
