@@ -73,7 +73,7 @@ class AdaSplitNodeRegressor(AdaSplitNode):
                 sq_term = 2.0 * old_error_rate * (1.0 - old_error_rate) * math.log(2.0 / fDelta) \
                     * fN
                 bound = math.sqrt(sq_term) if sq_term > 0 else 0.0
-                # To check, bound never less than (old_error_rate - alt_error_rate)
+
                 if bound < (old_error_rate - alt_error_rate):
                     tree._active_leaf_node_cnt -= self.n_leaves
                     tree._active_leaf_node_cnt += self._alternate_tree.n_leaves
@@ -114,6 +114,8 @@ class AdaSplitNodeRegressor(AdaSplitNode):
             leaf_node.learn_one(X, y, weight, tree, parent, parent_branch)
 
     def predict_one(self, X, *, tree=None):
+        # Called in case an emerging categorical feature has no path down the split node to be
+        # sorted
         return self.stats[1] / self.stats[0] if len(self.stats) > 0 else 0.0
 
     # override AdaNode
