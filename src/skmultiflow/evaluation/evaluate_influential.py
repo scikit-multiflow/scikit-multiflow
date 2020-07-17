@@ -82,7 +82,7 @@ class EvaluateInfluential(StreamEvaluator):
         Parameters
         ----------
         stream: Stream
-            The stream from which to draw the samples.
+            The stream from which to draw the samples.x
 
         model: skmultiflow.core.BaseStreamModel or sklearn.base.BaseEstimator or list
             The model or list of models to evaluate.
