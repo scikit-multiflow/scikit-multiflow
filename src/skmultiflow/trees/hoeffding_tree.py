@@ -685,6 +685,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         total_active_size = 0
         total_inactive_size = 0
         for found_node in learning_nodes:
+            if not found_node.node.is_leaf():  # Safety check for non-trivial tree structures
+                continue
             if isinstance(found_node.node, ActiveLeaf):
                 total_active_size += calculate_object_size(found_node.node)
             else:
