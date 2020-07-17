@@ -130,10 +130,9 @@ def test_regression_hoeffding_adaptive_tree_categorical_features(test_path):
 
     nominal_attr_idx = np.arange(7)
     # Typo in leaf prediction
-    learner = HoeffdingAdaptiveTreeRegressor(
-        nominal_attributes=nominal_attr_idx,
-        leaf_prediction='percptron'
-    )
+    learner = HoeffdingAdaptiveTreeRegressor(nominal_attributes=nominal_attr_idx,
+                                             leaf_prediction='percptron',
+                                             random_state=1)
 
     learner.partial_fit(X, y)
 
