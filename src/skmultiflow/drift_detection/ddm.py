@@ -69,11 +69,11 @@ class DDM(BaseDriftDetector):
     >>> for i in range(2000):
     ...     ddm.add_element(data_stream[i])
     ...     if ddm.detected_warning_zone():
-    ...         print("Warning zone has been detected in data: {} - of index: {}"
-    ...                 .format(data_stream[i],i))
+    ...         print("Warning zone has been detected in data: {} "
+    ...               "- of index: {}".format(data_stream[i],i))
     ...     if ddm.detected_change():
-    ...         print("Change has been detected in data: {} - of index: {}"
-    ...                 .format(data_stream[i],i))
+    ...         print("Change has been detected in data: {} "
+    ...               "- of index: {}".format(data_stream[i],i))
 
     """
 

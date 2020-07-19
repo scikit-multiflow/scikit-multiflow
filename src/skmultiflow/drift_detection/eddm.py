@@ -55,11 +55,11 @@ class EDDM(BaseDriftDetector):
     >>> for i in range(2000):
     ...     eddm.add_element(data_stream[i])
     ...     if eddm.detected_warning_zone():
-    ...         print("Warning zone has been detected in data: {} - of index: {}"
-    ...                 .format(data_stream[i], i))
+    ...         print("Warning zone has been detected in data: {}"
+    ...               " - of index: {}".format(data_stream[i], i))
     ...     if eddm.detected_change():
-    ...         print("Change has been detected in data: {} - of index: {}"
-    ...                 .format(data_stream[i], i))
+    ...         print("Change has been detected in data: {}"
+    ...               " - of index: {}".format(data_stream[i], i))
     """
     FDDM_OUTCONTROL = 0.9
     FDDM_WARNING = 0.95

@@ -113,7 +113,7 @@ class HDDM_W(BaseDriftDetector):
             self.total.independent_bounded_condition_sum = 1
         else:
             self.total.EWMA_estimator = self.lambda_option * \
-                prediction + aux_decay_rate * self.total.EWMA_estimator
+                                        prediction + aux_decay_rate * self.total.EWMA_estimator
             self.total.independent_bounded_condition_sum = \
                 self.lambda_option * self.lambda_option \
                 + aux_decay_rate * aux_decay_rate * self.total.independent_bounded_condition_sum
@@ -139,8 +139,9 @@ class HDDM_W(BaseDriftDetector):
     def _detect_mean_increment(self, sample1, sample2, confidence):
         if sample1.EWMA_estimator < 0 or sample2.EWMA_estimator < 0:
             return False
-        sum = sample1.independent_bounded_condition_sum + sample2.independent_bounded_condition_sum
-        bound = sqrt((sum) * log(1 / confidence) / 2)
+        ibc_sum = sample1.independent_bounded_condition_sum \
+            + sample2.independent_bounded_condition_sum
+        bound = sqrt(ibc_sum * log(1 / confidence) / 2)
         return sample2.EWMA_estimator - sample1.EWMA_estimator > bound
 
     def _monitor_mean_incr(self, confidence):
@@ -173,8 +174,8 @@ class HDDM_W(BaseDriftDetector):
                 self.sample2_incr_monitor.independent_bounded_condition_sum = 1
             else:
                 self.sample2_incr_monitor.EWMA_estimator = self.lambda_option * \
-                    value + aux_decay * \
-                    self.sample2_incr_monitor.EWMA_estimator
+                                                           value + aux_decay * \
+                                                           self.sample2_incr_monitor.EWMA_estimator
                 self.sample2_incr_monitor.independent_bounded_condition_sum = \
                     self.lambda_option * self.lambda_option + \
                     aux_decay * aux_decay * \
