@@ -12,7 +12,7 @@ def demo():
     ht = HoeffdingTreeClassifier()
 
     # 3. Setup the evaluator
-    evaluator = evaluate_influential.EvaluateInfluential(show_plot=True,
+    evaluator = evaluate_influential.EvaluateInfluential(show_plot=False,
                                                          pretrain_size=200,
                                                          max_samples=20000,
                                                          batch_size=1,

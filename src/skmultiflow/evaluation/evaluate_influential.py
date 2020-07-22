@@ -8,7 +8,10 @@ import operator
 from skmultiflow.evaluation.base_evaluator import StreamEvaluator
 from skmultiflow.utils import constants
 from statistics import mode
-
+from sklearn.neighbors import KernelDensity
+import matplotlib.pyplot as plt
+from sklearn import preprocessing
+from scipy.stats import ranksums
 
 def remove_values_from_list(the_list, val):
     return [value for value in the_list if value != val]
@@ -253,6 +256,7 @@ class EvaluateInfluential(StreamEvaluator):
         print("weights list: ", self.weight_tracker)
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
+        self.evaluate_density()
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
             self.evaluation_summary()
@@ -263,6 +267,32 @@ class EvaluateInfluential(StreamEvaluator):
             self.stream.restart()
 
         return self.model
+
+    def evaluate_density(self):
+        # table = tn, fp, fn, tp
+        for nfeature in range(self.stream.n_features):
+            # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
+            # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc
+            t0 = preprocessing.normalize(list(zip(*self.distribution_table[0][nfeature])))
+            t1 = preprocessing.normalize(list(zip(*self.distribution_table[1][nfeature])))
+            t0t1_list = []
+            # this for loop adds the density of the same piece from t0 and t1 together
+            for i in range(4):
+                t0t1_list.append(list(zip(t1[i], t0[i])))
+            temp_list = []
+            diff_list = []
+
+            # this subtracts the density in t0 from the density of t1
+            for item in t0t1_list:
+                for x, y in item:
+                    temp_list.append(x - y)
+                diff_list.append([temp_list])
+                temp_list = []
+
+            # diff_list[2] is false negative and [3] is true positive
+            print(ranksums(diff_list[2], diff_list[3]))
+            # [0] is true negative and [1] is false positive
+            print(ranksums(diff_list[0], diff_list[1]))
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
