@@ -10,4 +10,12 @@ python3 -m flake8 \
   src/skmultiflow/bayes \
   src/skmultiflow/core \
   src/skmultiflow/data \
-  src/skmultiflow/drift_detection
+  src/skmultiflow/drift_detection \
+  src/skmultiflow/metrics \
+  src/skmultiflow/neural_networks \
+  src/skmultiflow/options \
+  src/skmultiflow/prototype \
+  src/skmultiflow/rules/ \
+  src/skmultiflow/transform \
+  src/skmultiflow/utils \
+  src/skmultiflow/visualization

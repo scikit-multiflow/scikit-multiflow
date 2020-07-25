@@ -45,8 +45,8 @@ class WindowedMinmaxScaler(StreamTransform):
                 value = X[i][j]
                 min_val = self._get_min(j)
                 max_val = self._get_max(j)
-                if((max_val-min_val)==0):
-                    transformed=0
+                if((max_val - min_val) == 0):
+                    transformed = 0
                 else:
                     X_std = (value - min_val) / (max_val - min_val)
                     transformed = X_std * (max_val - min_val) + min_val

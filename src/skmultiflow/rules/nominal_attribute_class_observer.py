@@ -30,7 +30,8 @@ class NominalAttributeClassObserver(AttributeClassObserver):
                 self._att_val_dist_per_class[class_val][att_val] += weight
             except KeyError:
                 self._att_val_dist_per_class[class_val][att_val] = weight
-                self._att_val_dist_per_class[class_val] = dict(sorted(self._att_val_dist_per_class[class_val].items()))
+                self._att_val_dist_per_class[class_val] = dict(
+                    sorted(self._att_val_dist_per_class[class_val].items()))
         self._total_weight_observed += weight
 
     def probability_of_attribute_value_given_class(self, att_val, class_val):
@@ -40,9 +41,15 @@ class NominalAttributeClassObserver(AttributeClassObserver):
             return (value + 1.0) / (sum(obs.values()) + len(obs))
         return 0.0
 
-    def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, class_idx=None):
+    def get_best_evaluated_split_suggestion(
+            self,
+            criterion,
+            pre_split_dist,
+            att_idx,
+            class_idx=None):
         best_suggestion = None
-        att_values = set([att_val for class_val in self._att_val_dist_per_class.values() for att_val in class_val])
+        att_values = set([att_val for class_val in self._att_val_dist_per_class.values()
+                          for att_val in class_val])
         for att_val in att_values:
             post_split_dist = self.get_class_dist_from_binary_split(att_val)
             if class_idx is not None:
@@ -53,7 +60,8 @@ class NominalAttributeClassObserver(AttributeClassObserver):
                     symbol = "="
                 else:
                     symbol = "!="
-                best_suggestion = AttributeExpandSuggestion(att_idx, att_val, symbol, post_split_dist, merit)
+                best_suggestion = AttributeExpandSuggestion(
+                    att_idx, att_val, symbol, post_split_dist, merit)
         return best_suggestion
 
     def get_class_dist_from_multiway_split(self):

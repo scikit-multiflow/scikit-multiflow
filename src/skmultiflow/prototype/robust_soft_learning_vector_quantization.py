@@ -22,7 +22,8 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
         means. Class label must be placed as last entry of each prototype.
 
         | Example for one prototype per class on a binary classification problem:
-        | `initial_prototypes = [[2.59922826, 2.57368134, 4.92501, 0], [6.05801971, 6.01383352, 5.02135783, 1]]`
+        | `initial_prototypes = [[2.59922826, 2.57368134, 4.92501, 0],
+        |                        [6.05801971, 6.01383352, 5.02135783, 1]]`
     sigma : float, optional (default=1.0)
         Variance of the distribution.
     random_state : int, RandomState instance or None, optional (default=None)
@@ -156,8 +157,8 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
         self.squared_mean_gradient[j] = (self.gamma
                                          * self.squared_mean_gradient[j]
                                          + (1 - self.gamma)
-                                            * gradient
-                                            * gradient)
+                                         * gradient
+                                         * gradient)
 
         # Compute update/step
         step = (np.sqrt((self.squared_mean_step[j] + self.epsilon)
@@ -325,7 +326,7 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
                     eucl_dis = euclidean_distances(xi.reshape(1, xi.size),
                                                    prototypes[j]
                                                    .reshape(1, prototypes[j]
-                                                   .size))
+                                                            .size))
                     if eucl_dis < best_euclid_corr:
                         best_euclid_corr = eucl_dis
                         corr_index = j
@@ -333,7 +334,7 @@ class RobustSoftLearningVectorQuantization(ClassifierMixin, BaseSKMObject):
                     eucl_dis = euclidean_distances(xi.reshape(1, xi.size),
                                                    prototypes[j]
                                                    .reshape(1, prototypes[j]
-                                                   .size))
+                                                            .size))
                     if eucl_dis < best_euclid_incorr:
                         best_euclid_incorr = eucl_dis
                         incorr_index = j
