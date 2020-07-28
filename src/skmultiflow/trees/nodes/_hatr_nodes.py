@@ -1,7 +1,5 @@
 import math
 
-from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
-
 from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import AdaSplitNode
 from skmultiflow.trees.nodes import ActiveLeaf
