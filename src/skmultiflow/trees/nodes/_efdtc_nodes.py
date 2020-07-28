@@ -75,7 +75,7 @@ class EFDTActiveLeaf(ActiveLeafClass):
         return np.array([0, 1])
 
 
-class EFDTSplitNode(SplitNode, LearningNodeMC, EFDTActiveLeaf):
+class EFDTSplitNode(SplitNode, EFDTActiveLeaf):
     """ Node that splits the data in a Hoeffding Anytime Tree.
 
     Parameters
@@ -94,6 +94,32 @@ class EFDTSplitNode(SplitNode, LearningNodeMC, EFDTActiveLeaf):
         # TODO verify
         self.attribute_observers = attribute_observers
         self._weight_seen_at_last_split_reevaluation = 0
+
+    def update_stats(self, y, weight):
+        try:
+            self.stats[y] += weight
+        except KeyError:
+            self.stats[y] = weight
+            self.stats = dict(sorted(self.stats.items()))
+
+    def learn_one(self, X, y, *, weight=1.0, tree=None):
+        """Update the node with the provided sample.
+
+        Parameters
+        ----------
+        X: numpy.ndarray of length equal to the number of features.
+            Sample attributes for updating the node.
+        y: int or float
+            Target value.
+        weight: float
+            Sample weight.
+        tree:
+            Tree to update.
+
+        """
+        y = int(y)
+        self.update_stats(y, weight)
+        self.update_attribute_observers(X, y, weight, tree)
 
     @staticmethod
     def find_attribute(id_att, split_suggestions):
@@ -154,6 +180,37 @@ class EFDTSplitNode(SplitNode, LearningNodeMC, EFDTActiveLeaf):
                 count += child.count_nodes()
 
         return count
+
+    @property
+    def total_weight(self):
+        """ Calculate the total weight seen by the node.
+
+        Returns
+        -------
+        float
+            Total weight seen.
+
+        """
+        return sum(self.stats.values())
+
+    def observed_class_distribution_is_pure(self):
+        """ Check if observed class distribution is pure, i.e. if all samples
+        belong to the same class.
+
+        Returns
+        -------
+        boolean
+            True if observed number of classes is less than 2, False otherwise.
+
+        """
+        count = 0
+        for _, weight in self._stats.items():
+            if weight != 0:
+                count += 1
+                if count == 2:  # No need to count beyond this point
+                    break
+        return count < 2
+
 
 
 class EFDTActiveLearningNodeMC(LearningNodeMC, EFDTActiveLeaf):

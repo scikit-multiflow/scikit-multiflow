@@ -3,7 +3,8 @@ import numpy as np
 from skmultiflow.trees.split_criterion import GiniSplitCriterion
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
-from skmultiflow.trees.nodes import ActiveLeaf, SplitNode
+from skmultiflow.trees.nodes import ActiveLeaf
+from skmultiflow.trees.nodes import LearningNode
 from skmultiflow.trees.nodes import EFDTSplitNode
 from skmultiflow.trees.nodes import EFDTActiveLearningNodeMC
 from skmultiflow.trees.nodes import EFDTInactiveLearningNodeMC
@@ -340,7 +341,7 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
             found_node.parent.set_child(found_node.parent_branch, leaf_node)
             self._active_leaf_node_cnt += 1
 
-        if not isinstance(leaf_node, SplitNode):
+        if isinstance(leaf_node, LearningNode):
             learning_node = leaf_node
             learning_node.learn_one(X, y, weight=weight, tree=self)
 
