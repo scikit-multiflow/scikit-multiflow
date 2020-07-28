@@ -5,6 +5,7 @@ from skmultiflow.evaluation import evaluate_influential
 from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.bayes import naive_bayes
 from skmultiflow.core import Pipeline
+from prettytable import PrettyTable
 
 
 def demo():
@@ -16,9 +17,31 @@ def demo():
 
     :return:
     """
+    equal = PrettyTable()
+    equal.field_names = ["Run", "Feature number", "pos/neg influence", "pvalue"]
+    for i in range(10):
+        stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1)
+        evaluating(stream, i, equal)
 
-    stream = influential_stream.InfluentialStream(self_defeating=0.9999, self_fulfilling=1.0001)
+    print(equal)
 
+    fulfilling = PrettyTable()
+    fulfilling.field_names = ["Run", "Feature number", "pos/neg influence", "pvalue"]
+    for i in range(10):
+        stream = influential_stream.InfluentialStream(self_defeating=0.5, self_fulfilling=2)
+        evaluating(stream, i, fulfilling)
+
+    print(fulfilling)
+
+    defeating = PrettyTable()
+    defeating.field_names = ["Run", "Feature number", "pos/neg influence", "pvalue"]
+    for i in range(10):
+        stream = influential_stream.InfluentialStream(self_defeating=1.5, self_fulfilling=0.5)
+        evaluating(stream, i, defeating)
+    print(defeating)
+
+
+def evaluating(stream, run, x):
     classifier = naive_bayes.NaiveBayes()
     # classifier = PerceptronMask()
     # classifier = HoeffdingTreeClassifier()
@@ -30,7 +53,7 @@ def demo():
                                                          max_samples=20000,
                                                          batch_size=1,
                                                          n_time_windows=2,
-                                                         n_intervals=3,
+                                                         n_intervals=4,
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=False,
                                                          track_weight=False)
@@ -39,6 +62,9 @@ def demo():
 
     # 4. Run evaluation
     evaluator.evaluate(stream=stream, model=pipe)
+    for result in evaluator.table_result:
+        result.insert(0, run)
+        x.add_row(result)
 
 
 if __name__ == '__main__':

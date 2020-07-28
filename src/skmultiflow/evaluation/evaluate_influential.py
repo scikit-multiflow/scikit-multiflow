@@ -51,6 +51,7 @@ class EvaluateInfluential(StreamEvaluator):
         self.numerical_features = []
         self.track_weight = track_weight
         self.weight_tracker = []
+        self.table_result = []
 
         if not self.data_points_for_classification:
             if metrics is None:
@@ -258,6 +259,9 @@ class EvaluateInfluential(StreamEvaluator):
         self._flush_file_buffer()
         self.evaluate_density()
 
+        if self.track_weight:
+            print(self.stream.weight)
+
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
             self.evaluation_summary()
         else:
@@ -299,18 +303,24 @@ class EvaluateInfluential(StreamEvaluator):
 
             # diff_list[2] is false negative and [3] is true positive
             if diff_list[2][0] is not None and diff_list[3][0] is not None:
-                diff_list[2] = preprocessing.normalize([diff_list[2]])
-                diff_list[3] = preprocessing.normalize([diff_list[3]])
-                print(ranksums(diff_list[2], diff_list[3]))
+                # diff_list[2] = preprocessing.normalize([diff_list[2]])
+                # diff_list[3] = preprocessing.normalize([diff_list[3]])
+                result = ranksums(diff_list[2], diff_list[3])
+                self.table_result.append([nfeature, 'FNTP', result.pvalue])
             else:
-                print("too little samples")
+                self.table_result.append([nfeature, 'FNTP', "<10"])
             # [0] is true negative and [1] is false positive
             if diff_list[0][0] is not None and diff_list[1][0] is not None:
-                diff_list[0] = preprocessing.normalize([diff_list[0]])
-                diff_list[1] = preprocessing.normalize([diff_list[1]])
-                print(ranksums(diff_list[0], diff_list[1]))
+                # diff_list[0] = preprocessing.normalize([diff_list[0]])
+                # diff_list[1] = preprocessing.normalize([diff_list[1]])
+                result = ranksums(diff_list[0], diff_list[1])
+                self.table_result.append([nfeature, 'TNFP', result.pvalue])
             else:
-                print("too little samples")
+                self.table_result.append([nfeature, 'TNFP', "<10"])
+
+            # for now only use 2 features to check
+            if nfeature >= 1:
+                break
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))

@@ -16,9 +16,9 @@ class InfluentialStream(Stream):
         super(InfluentialStream, self).__init__()
 
         if streams is None:
-            streams = [AGRAWALGenerator(random_state=110),
-                       AGRAWALGenerator(random_state=120),
-                       AGRAWALGenerator(random_state=130)]
+            streams = [AGRAWALGenerator(random_state=112),
+                       AGRAWALGenerator(random_state=112, classification_function=2),
+                       AGRAWALGenerator(random_state=112, classification_function=3)]
         for i in range(len(streams)):
             self.n_samples = streams[i].n_samples
             self.n_targets = streams[i].n_targets
