@@ -275,6 +275,9 @@ class EvaluateInfluential(StreamEvaluator):
             # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc
             t0 = preprocessing.normalize(list(zip(*self.distribution_table[0][nfeature])))
             t1 = preprocessing.normalize(list(zip(*self.distribution_table[1][nfeature])))
+
+            t0 = list(zip(*self.distribution_table[0][nfeature]))
+            t1 = list(zip(*self.distribution_table[1][nfeature]))
             t0t1_list = []
             # this for loop adds the density of the same piece from t0 and t1 together
             for i in range(4):
@@ -285,14 +288,29 @@ class EvaluateInfluential(StreamEvaluator):
             # this subtracts the density in t0 from the density of t1
             for item in t0t1_list:
                 for x, y in item:
-                    temp_list.append(x - y)
-                diff_list.append([temp_list])
+                    if abs(x) > 10 and abs(y) > 10:
+                        temp_list.append(x - y)
+                    else:
+                        temp_list.append(None)
+                if None in temp_list:
+                    temp_list = [None]
+                diff_list.append(temp_list)
                 temp_list = []
 
             # diff_list[2] is false negative and [3] is true positive
-            print(ranksums(diff_list[2], diff_list[3]))
+            if diff_list[2][0] is not None and diff_list[3][0] is not None:
+                diff_list[2] = preprocessing.normalize([diff_list[2]])
+                diff_list[3] = preprocessing.normalize([diff_list[3]])
+                print(ranksums(diff_list[2], diff_list[3]))
+            else:
+                print("too little samples")
             # [0] is true negative and [1] is false positive
-            print(ranksums(diff_list[0], diff_list[1]))
+            if diff_list[0][0] is not None and diff_list[1][0] is not None:
+                diff_list[0] = preprocessing.normalize([diff_list[0]])
+                diff_list[1] = preprocessing.normalize([diff_list[1]])
+                print(ranksums(diff_list[0], diff_list[1]))
+            else:
+                print("too little samples")
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
