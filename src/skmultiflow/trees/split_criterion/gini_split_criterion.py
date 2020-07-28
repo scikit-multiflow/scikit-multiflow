@@ -3,9 +3,6 @@ from skmultiflow.trees.split_criterion import SplitCriterion
 
 class GiniSplitCriterion(SplitCriterion):
     """Gini Impurity split criterion.
-
-
-
     """
     def get_merit_of_split(self, pre_split_dist, post_split_dist):
         total_weight = 0.0
@@ -15,7 +12,8 @@ class GiniSplitCriterion(SplitCriterion):
             total_weight += dist_weights[i]
         gini = 0.0
         for i in range(len(post_split_dist)):
-            gini += (dist_weights[i] / total_weight) * self.compute_gini(post_split_dist[i], dist_weights[i])
+            gini += (dist_weights[i] / total_weight) * self.compute_gini(post_split_dist[i],
+                                                                         dist_weights[i])
         return 1.0 - gini
 
     @staticmethod

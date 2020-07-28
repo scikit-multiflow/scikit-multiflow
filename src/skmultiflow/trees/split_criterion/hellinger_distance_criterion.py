@@ -6,14 +6,15 @@ import numpy as np
 class HellingerDistanceCriterion(SplitCriterion):
     """ Hellinger Distance split criterion.
 
-    The Hellinger distance is a measure of distributional divergence. It is used as the splitting criterion [1]_
-    on decision trees to to address the imbalanced data problem.
+    The Hellinger distance is a measure of distributional divergence.
+    It is used as the splitting criterion [1]_ on decision trees to to address
+    the imbalanced data problem.
 
     References
     ----------
     .. [1] Cieslak, David A., T. Ryan Hoens, Nitesh V. Chawla, and W. Philip Kegelmeyer.
-       "Hellinger distance decision trees are robust and skew-insensitive." Data Mining and Knowledge Discovery 24,
-       no. 1 (2012): 136-158.
+       "Hellinger distance decision trees are robust and skew-insensitive."
+       Data Mining and Knowledge Discovery 24, no. 1 (2012): 136-158.
 
     """
 
@@ -41,8 +42,10 @@ class HellingerDistanceCriterion(SplitCriterion):
         total_negative = left_branch_negative + right_branch_negative
         total_positive = left_branch_positive + right_branch_positive
 
-        hellinger = (np.sqrt(left_branch_negative/total_negative) - np.sqrt(left_branch_positive/total_positive)) ** 2 \
-                + (np.sqrt(right_branch_negative/total_negative) - np.sqrt(right_branch_positive/total_positive)) ** 2
+        hellinger = (np.sqrt(left_branch_negative/total_negative)
+                     - np.sqrt(left_branch_positive/total_positive)) ** 2 + \
+                    (np.sqrt(right_branch_negative/total_negative)
+                     - np.sqrt(right_branch_positive/total_positive)) ** 2
 
         return np.sqrt(hellinger)
 
