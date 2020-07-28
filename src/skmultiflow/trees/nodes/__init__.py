@@ -21,8 +21,8 @@ from ._htc_nodes import ActiveLearningNodeNB
 from ._htc_nodes import ActiveLearningNodeNBA
 # Hoeffding Adaptive Tree classifier nodes
 from ._hatc_nodes import AdaNode
-from ._hatc_nodes import AdaSplitNode                      # TODO: verify name
-from ._hatc_nodes import AdaLearningNode                   # TODO: verify name
+from ._hatc_nodes import AdaSplitNode
+from ._hatc_nodes import AdaLearningNode
 # Adaptive Random Forest classifier nodes
 from ._arf_htc_nodes import RandomActiveLeafClass
 from ._arf_htc_nodes import RandomActiveLearningNodeMC
