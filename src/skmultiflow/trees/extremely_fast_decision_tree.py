@@ -134,7 +134,6 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
             else:  # NAIVE BAYES ADAPTIVE (default)
                 return EFDTActiveLearningNodeNBA(initial_class_observations)
         else:
-            # TODO: review it
             return EFDTInactiveLearningNodeMC(initial_class_observations)
 
     # Override _new_split_node
@@ -303,11 +302,6 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
                     child = node.get_child(child_index)
                     if child is not None:
                         self._process_nodes(X, y, weight, child, node, child_index)
-                    else:
-                        # TODO : raise error for nominal attribute
-                        # This possible if there is a problem with child_index, it returns float
-                        # in case of nominal attribute
-                        pass
         elif self._growth_allowed and isinstance(node, ActiveLeaf):
             weight_seen = node.total_weight
             weight_diff = weight_seen - node.last_split_attempt_at

@@ -320,59 +320,6 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                 new_node.fMAE_P = parent_node.fMAE_P
                 return new_node
 
-    # def _get_predictors_faded_error(self, X):
-    #     """Get the faded error of the leaf corresponding to the instance.
-    #
-    #     Parameters
-    #     ----------
-    #     X: numpy.ndarray of length equal to the number of features.
-    #         Instance attributes.
-    #
-    #     Returns
-    #     -------
-    #     dict (predictor, fmae)
-    #     """
-    #     fmaes = {}
-    #     if self._tree_root is not None:
-    #         found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
-    #         leaf_node = found_node.node
-    #         if leaf_node is None:
-    #             leaf_node = found_node.parent
-    #         if isinstance(leaf_node, LearningNode):
-    #             fmaes['mean'] = leaf_node.fMAE_M
-    #             fmaes['perceptron'] = leaf_node.fMAE_P
-    #         else:
-    #             # If the found node is not a learning node, give preference to
-    #             # the mean predictor
-    #             fmaes['mean'] = np.zeros(self._n_targets)
-    #             fmaes['perceptron'] = np.full(self._n_targets, np.Inf)
-    #
-    #     return fmaes
-    #
-    # def get_weights_for_instance(self, X):
-    #     """Get class votes for a single instance.
-    #
-    #     Parameters
-    #     ----------
-    #     X: numpy.ndarray of length equal to the number of features.
-    #         Instance attributes.
-    #
-    #     Returns
-    #     -------
-    #     dict (class_value, weight)
-    #     """
-    #     if self._tree_root is not None:
-    #         found_node = self._tree_root.filter_instance_to_leaf(X, None, -1)
-    #         leaf_node = found_node.node
-    #         if leaf_node is None:
-    #             leaf_node = found_node.parent
-    #         if isinstance(leaf_node, LearningNode):
-    #             return leaf_node.perceptron_weight
-    #         else:
-    #             return None
-    #     else:  # TODO Verify
-    #         return []
-
     def partial_fit(self, X, y, sample_weight=None):
         """Incrementally trains the model. Train samples (instances) are
         composed of X attributes and their corresponding targets y.
@@ -569,10 +516,9 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
             best_suggestion = best_split_suggestions[-1]
             second_best_suggestion = best_split_suggestions[-2]
 
-            if best_suggestion.merit > 0 and \
-                    (second_best_suggestion.merit / best_suggestion.merit <
-                     1 - hoeffding_bound or hoeffding_bound <
-                     self.tie_threshold):
+            if (best_suggestion.merit > 0 and (second_best_suggestion.merit / best_suggestion.merit
+                                               < 1 - hoeffding_bound or hoeffding_bound
+                                               < self.tie_threshold)):
                 should_split = True
             if self.remove_poor_atts and not should_split:
                 poor_atts = set()
@@ -580,15 +526,13 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                     / best_suggestion.merit
 
                 # Add any poor attribute to set
-                # TODO reactivation procedure???
                 for i in range(len(best_split_suggestions)):
                     if best_split_suggestions[i].split_test is not None:
-                        split_atts = best_split_suggestions[i].\
-                            split_test.get_atts_test_depends_on()
+                        split_atts = best_split_suggestions[i].split_test.\
+                            get_atts_test_depends_on()
                         if len(split_atts) == 1:
-                            if best_split_suggestions[i].merit / \
-                                    best_suggestion.merit < \
-                                    best_ratio - 2 * hoeffding_bound:
+                            if (best_split_suggestions[i].merit / best_suggestion.merit
+                                    < best_ratio - 2 * hoeffding_bound):
                                 poor_atts.add(int(split_atts[0]))
 
                 for poor_att in poor_atts:
@@ -600,15 +544,10 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                 # Preprune - null wins
                 self._deactivate_learning_node(node, parent, parent_idx)
             else:
-                new_split = self._new_split_node(
-                    split_decision.split_test,
-                    node.stats
-                )
+                new_split = self._new_split_node(split_decision.split_test, node.stats)
                 for i in range(split_decision.num_splits()):
                     new_child = self._new_learning_node(
-                        split_decision.resulting_stats_from_split(i), node
-                    )
-
+                        split_decision.resulting_stats_from_split(i), node)
                     new_split.set_child(i, new_child)
 
                 self._active_leaf_node_cnt -= 1

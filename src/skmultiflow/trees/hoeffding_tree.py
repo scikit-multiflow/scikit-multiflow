@@ -701,7 +701,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
         if actual_model_size > self.max_byte_size:
             self._enforce_tracker_limit()
 
-    def _deactivate_all_leaves(self):     # TODO confirm usage
+    def _deactivate_all_leaves(self):
         """ Deactivate all leaves. """
         learning_nodes = self._find_learning_nodes()
         for cur_node in learning_nodes:

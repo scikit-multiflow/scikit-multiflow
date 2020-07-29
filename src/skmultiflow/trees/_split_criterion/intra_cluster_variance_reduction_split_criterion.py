@@ -31,8 +31,6 @@ class IntraClusterVarianceReductionSplitCriterion(
 
     @staticmethod
     def compute_SD(dist):
-        # TODO Also consider passing different weights for the targets
-
         N = dist[0]
         sum_ = dist[1]
         sum_sq = dist[2]

@@ -93,7 +93,6 @@ class EFDTSplitNode(SplitNode, EFDTActiveLeaf):
     def __init__(self, split_test, stats, attribute_observers):
         """ AnyTimeSplitNode class constructor."""
         super().__init__(split_test, stats)  # Calls split node constructor
-        # TODO verify
         self.attribute_observers = attribute_observers
         self._weight_seen_at_last_split_reevaluation = 0
 
