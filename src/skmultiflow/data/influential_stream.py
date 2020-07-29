@@ -3,6 +3,8 @@ import random
 from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
 from skmultiflow.data import AGRAWALGenerator
+from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
+from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift
 
 
 class InfluentialStream(Stream):
@@ -16,9 +18,11 @@ class InfluentialStream(Stream):
         super(InfluentialStream, self).__init__()
 
         if streams is None:
-            streams = [AGRAWALGenerator(random_state=112),
-                       AGRAWALGenerator(random_state=112, classification_function=2),
-                       AGRAWALGenerator(random_state=112, classification_function=3)]
+            streams = [RandomRBFGenerator(model_random_state=99, sample_random_state=50, n_classes=2,
+                                          n_features=2, n_centroids=50),
+                       RandomRBFGeneratorDrift(model_random_state=112, sample_random_state=50, n_classes=2,
+                                               n_features=2, n_centroids=50, change_speed=0.87,
+                                               num_drift_centroids=50)]
         self.streams = streams
         self.n_samples = streams[0].n_samples
         self.n_targets = streams[0].n_targets

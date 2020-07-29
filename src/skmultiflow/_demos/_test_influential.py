@@ -1,6 +1,6 @@
 import operator
 
-from skmultiflow.data import influential_stream
+from skmultiflow.data import influential_stream, random_rbf_generator
 from skmultiflow.evaluation import evaluate_influential
 from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.bayes import naive_bayes
@@ -18,9 +18,9 @@ def demo():
     :return:
     """
     equal = PrettyTable()
-    equal.field_names = ["Run", "Feature number", "pos/neg influence", "pvalue"]
+    equal.field_names = ["Run", "Feature number", "pos/neg influence", "FN/TN sample", "FNTP sample", "pvalue"]
     for i in range(3):
-        stream = influential_stream.InfluentialStream(self_defeating=0.9999, self_fulfilling=1.1)
+        stream = influential_stream.InfluentialStream(self_defeating=0.999, self_fulfilling=1.1)
         evaluating(stream, i, equal)
 
     print(equal)

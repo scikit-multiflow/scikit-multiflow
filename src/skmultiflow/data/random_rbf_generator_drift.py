@@ -41,7 +41,6 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
     num_drift_centroids: int (Default: 50)
         The number of centroids that will drift.
 
-    Examples
     --------
     >>> # Imports
     >>> from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift

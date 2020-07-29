@@ -12,6 +12,7 @@ from sklearn.neighbors import KernelDensity
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
 from scipy.stats import ranksums
+from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 
 
 def remove_values_from_list(the_list, val):
@@ -32,7 +33,7 @@ class EvaluateInfluential(StreamEvaluator):
                  show_plot=False,
                  restart_stream=True,
                  data_points_for_classification=False,
-                 weight_output = True
+                 weight_output=True
                  ):
 
         super().__init__()
@@ -255,7 +256,7 @@ class EvaluateInfluential(StreamEvaluator):
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
 
-        print("weights: ", self.stream.weight_tracker[5])
+        print("weights: ", self.stream.weight_tracker)
         self.evaluate_density()
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
@@ -289,34 +290,33 @@ class EvaluateInfluential(StreamEvaluator):
             for item in t0t1_list:
                 for x, y in item:
                     if abs(x) > 10 and abs(y) > 10:
-                        temp_list.append(x - y)
+                        temp_list.append([abs(x-y), True])
                     else:
-                        temp_list.append(None)
-                if None in temp_list:
-                    temp_list = [None]
+                        temp_list.append([abs(x-y), False])
+                # if None in temp_list:
+                #     temp_list = [None]
                 diff_list.append(temp_list)
                 temp_list = []
 
             # diff_list[2] is false negative and [3] is true positive
-            if diff_list[2][0] is not None and diff_list[3][0] is not None:
+            if diff_list[2][0][1] is True and diff_list[3][0][1] is True:
                 # diff_list[2] = preprocessing.normalize([diff_list[2]])
                 # diff_list[3] = preprocessing.normalize([diff_list[3]])
-                result = ranksums(diff_list[2], diff_list[3])
-                self.table_result.append([nfeature, 'FNTP', result.pvalue])
+
+                result = ranksums([item[0] for item in diff_list[2]], [item[0] for item in diff_list[3]])
+                self.table_result.append([nfeature, 'FNTP', [item[0] for item in diff_list[2]], [item[0] for item in diff_list[3]], result.pvalue])
             else:
-                self.table_result.append([nfeature, 'FNTP', "<10"])
+                result = f"FN = {diff_list[2]} TP = {diff_list[3]}"
+                self.table_result.append([nfeature, 'FNTP', [item[0] for item in diff_list[2]], [item[0] for item in diff_list[3]], "too small"])
             # [0] is true negative and [1] is false positive
             if diff_list[0][0] is not None and diff_list[1][0] is not None:
                 # diff_list[0] = preprocessing.normalize([diff_list[0]])
                 # diff_list[1] = preprocessing.normalize([diff_list[1]])
-                result = ranksums(diff_list[0], diff_list[1])
-                self.table_result.append([nfeature, 'TNFP', result.pvalue])
+                result = ranksums([item[0] for item in diff_list[0]], [item[0] for item in diff_list[1]])
+                self.table_result.append([nfeature, 'TNFP', [item[0] for item in diff_list[0]], [item[0] for item in diff_list[1]], result.pvalue])
             else:
-                self.table_result.append([nfeature, 'TNFP', "<10"])
-
-            # for now only use 2 features to check
-            if nfeature >= 1:
-                break
+                result = f"TN = {diff_list[0]} FP = {diff_list[1]}"
+                self.table_result.append([nfeature, 'FNTP', [item[0] for item in diff_list[0]], [item[0] for item in diff_list[1]], "too small"])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
