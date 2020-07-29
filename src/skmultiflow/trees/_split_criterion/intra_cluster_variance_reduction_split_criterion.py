@@ -1,5 +1,6 @@
-from skmultiflow.trees.split_criterion import VarianceReductionSplitCriterion
 import numpy as np
+
+from .variance_reduction_split_criterion import VarianceReductionSplitCriterion
 
 
 # This class extends VarianceReductionSplitCriterion since it just computes

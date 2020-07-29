@@ -4,9 +4,9 @@ from collections import deque
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin
 from skmultiflow.utils import get_dimensions
-from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
-from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
 from skmultiflow.bayes import do_naive_bayes_prediction
+from skmultiflow.trees._attribute_observer import NumericAttributeClassObserverGaussian
+from skmultiflow.trees._attribute_observer import NominalAttributeClassObserver
 
 
 class NaiveBayes(BaseSKMObject, ClassifierMixin):

@@ -1,9 +1,10 @@
-from skmultiflow.utils import check_random_state
 from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
-from skmultiflow.trees.nodes import RandomActiveLearningNodeMC
-from skmultiflow.trees.nodes import RandomActiveLearningNodeNB
-from skmultiflow.trees.nodes import RandomActiveLearningNodeNBA
-from skmultiflow.trees.nodes import InactiveLearningNodeMC
+from skmultiflow.utils import check_random_state
+
+from ._nodes import RandomActiveLearningNodeMC
+from ._nodes import RandomActiveLearningNodeNB
+from ._nodes import RandomActiveLearningNodeNBA
+from ._nodes import InactiveLearningNodeMC
 
 
 class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):

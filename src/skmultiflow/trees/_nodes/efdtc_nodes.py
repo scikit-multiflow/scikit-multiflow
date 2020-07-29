@@ -1,9 +1,11 @@
 import numpy as np
-from skmultiflow.trees.attribute_test import AttributeSplitSuggestion
-from skmultiflow.trees.nodes import SplitNode
-from skmultiflow.trees.nodes import ActiveLeafClass
-from skmultiflow.trees.nodes import LearningNodeMC, LearningNodeNB, LearningNodeNBA
-from skmultiflow.trees.nodes import InactiveLearningNodeMC
+
+from skmultiflow.trees._attribute_test import AttributeSplitSuggestion
+
+from .base import SplitNode
+from .htc_nodes import ActiveLeafClass
+from .htc_nodes import LearningNodeMC, LearningNodeNB, LearningNodeNBA
+from .htc_nodes import InactiveLearningNodeMC
 
 
 class EFDTActiveLeaf(ActiveLeafClass):
@@ -210,7 +212,6 @@ class EFDTSplitNode(SplitNode, EFDTActiveLeaf):
                 if count == 2:  # No need to count beyond this point
                     break
         return count < 2
-
 
 
 class EFDTActiveLearningNodeMC(LearningNodeMC, EFDTActiveLeaf):

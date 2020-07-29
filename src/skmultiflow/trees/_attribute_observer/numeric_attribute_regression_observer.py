@@ -1,7 +1,8 @@
 import numpy as np
-from skmultiflow.trees.attribute_observer import AttributeObserver
-from skmultiflow.trees.attribute_test import NumericAttributeBinaryTest
-from skmultiflow.trees.attribute_test import AttributeSplitSuggestion
+
+from skmultiflow.trees._attribute_test import NumericAttributeBinaryTest
+from skmultiflow.trees._attribute_test import AttributeSplitSuggestion
+from .attribute_observer import AttributeObserver
 
 
 class NumericAttributeRegressionObserver(AttributeObserver):

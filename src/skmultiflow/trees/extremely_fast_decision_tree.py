@@ -1,16 +1,18 @@
 from operator import attrgetter
 import numpy as np
-from skmultiflow.trees.split_criterion import GiniSplitCriterion
-from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
-from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
-from skmultiflow.trees.nodes import ActiveLeaf
-from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import EFDTSplitNode
-from skmultiflow.trees.nodes import EFDTActiveLearningNodeMC
-from skmultiflow.trees.nodes import EFDTInactiveLearningNodeMC
-from skmultiflow.trees.nodes import EFDTActiveLearningNodeNB
-from skmultiflow.trees.nodes import EFDTActiveLearningNodeNBA
+
+from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.utils import get_dimensions
+
+from ._split_criterion import GiniSplitCriterion
+from ._split_criterion import InfoGainSplitCriterion
+from ._nodes import ActiveLeaf
+from ._nodes import LearningNode
+from ._nodes import EFDTSplitNode
+from ._nodes import EFDTActiveLearningNodeMC
+from ._nodes import EFDTInactiveLearningNodeMC
+from ._nodes import EFDTActiveLearningNodeNB
+from ._nodes import EFDTActiveLearningNodeNBA
 
 import warnings
 

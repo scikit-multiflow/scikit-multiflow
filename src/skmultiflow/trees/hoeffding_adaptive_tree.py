@@ -1,11 +1,12 @@
+import numpy as np
+
 from skmultiflow.trees import HoeffdingTreeClassifier
-from skmultiflow.trees.nodes import InactiveLeaf
-from skmultiflow.trees.nodes import InactiveLearningNodeMC
-from skmultiflow.trees.nodes import AdaLearningNode
-from skmultiflow.trees.nodes import AdaSplitNode
 from skmultiflow.utils import add_dict_values
 
-import numpy as np
+from ._nodes import InactiveLeaf
+from ._nodes import InactiveLearningNodeMC
+from ._nodes import AdaLearningNode
+from ._nodes import AdaSplitNode
 
 import warnings
 

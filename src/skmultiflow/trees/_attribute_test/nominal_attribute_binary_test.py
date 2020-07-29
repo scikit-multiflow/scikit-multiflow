@@ -1,5 +1,5 @@
-from skmultiflow.trees.attribute_test import InstanceConditionalTest
 from skmultiflow.rules.base_predicate import Predicate
+from .instance_conditional_test import InstanceConditionalTest
 
 
 class NominalAttributeBinaryTest(InstanceConditionalTest):

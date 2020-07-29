@@ -1,11 +1,10 @@
 import numpy as np
 
-from skmultiflow.trees.nodes import LearningNodePerceptron
-from skmultiflow.trees.nodes import ActiveLeafRegressor
-from skmultiflow.trees.nodes import InactiveLeaf
-
-
 from skmultiflow.utils import get_dimensions
+
+from .base import InactiveLeaf
+from .htr_nodes import ActiveLeafRegressor
+from .htr_nodes import LearningNodePerceptron
 
 
 class LearningNodePerceptronMultiTarget(LearningNodePerceptron):

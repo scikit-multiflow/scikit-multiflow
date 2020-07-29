@@ -5,24 +5,21 @@ from operator import attrgetter, itemgetter
 
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, calculate_object_size
 from skmultiflow.core import BaseSKMObject, ClassifierMixin
-
-from skmultiflow.trees.split_criterion import GiniSplitCriterion
-from skmultiflow.trees.split_criterion import InfoGainSplitCriterion
-from skmultiflow.trees.split_criterion import HellingerDistanceCriterion
-
-from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
-
-from skmultiflow.trees.nodes import Node
-from skmultiflow.trees.nodes import FoundNode
-from skmultiflow.trees.nodes import SplitNode
-from skmultiflow.trees.nodes import ActiveLeaf, InactiveLeaf
-from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import ActiveLearningNodeMC
-from skmultiflow.trees.nodes import ActiveLearningNodeNB
-from skmultiflow.trees.nodes import ActiveLearningNodeNBA
-from skmultiflow.trees.nodes import InactiveLearningNodeMC
-
 from skmultiflow.rules.base_rule import Rule
+
+from ._split_criterion import GiniSplitCriterion
+from ._split_criterion import InfoGainSplitCriterion
+from ._split_criterion import HellingerDistanceCriterion
+from ._attribute_test import NominalAttributeMultiwayTest
+from ._nodes import Node
+from ._nodes import FoundNode
+from ._nodes import SplitNode
+from ._nodes import ActiveLeaf, InactiveLeaf
+from ._nodes import LearningNode
+from ._nodes import ActiveLearningNodeMC
+from ._nodes import ActiveLearningNodeNB
+from ._nodes import ActiveLearningNodeNBA
+from ._nodes import InactiveLearningNodeMC
 
 import warnings
 

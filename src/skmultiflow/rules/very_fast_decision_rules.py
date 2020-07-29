@@ -10,10 +10,10 @@ from skmultiflow.rules.hellinger_distance_criterion import HellingerDistanceCrit
 from skmultiflow.rules.info_gain_rule_criterion import InfoGainExpandCriterion
 from skmultiflow.rules.nominal_attribute_class_observer import NominalAttributeClassObserver
 from skmultiflow.rules.numeric_attribute_class_observer import GaussianNumericAttributeClassObserver
-from skmultiflow.trees.attribute_observer import AttributeObserverNull
 from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, \
     calculate_object_size
+from skmultiflow.trees._attribute_observer import AttributeObserverNull
 
 
 _FIRSTHIT = 'first_hit'

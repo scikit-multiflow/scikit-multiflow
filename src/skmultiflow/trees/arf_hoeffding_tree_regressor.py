@@ -1,9 +1,10 @@
 from skmultiflow.trees import HoeffdingTreeRegressor
-from skmultiflow.trees.nodes import RandomActiveLearningNodeMean
-from skmultiflow.trees.nodes import InactiveLearningNodeMean
-from skmultiflow.trees.nodes import RandomActiveLearningNodePerceptron
-from skmultiflow.trees.nodes import InactiveLearningNodePerceptron
 from skmultiflow.utils import check_random_state
+
+from ._nodes import RandomActiveLearningNodeMean
+from ._nodes import InactiveLearningNodeMean
+from ._nodes import RandomActiveLearningNodePerceptron
+from ._nodes import InactiveLearningNodePerceptron
 
 
 class ARFHoeffdingTreeRegressor(HoeffdingTreeRegressor):

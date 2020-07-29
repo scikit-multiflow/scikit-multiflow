@@ -1,12 +1,12 @@
 import numpy as np
 from skmultiflow.core import MultiOutputMixin
-from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
+from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.utils import get_dimensions
 
-from skmultiflow.trees.nodes import LCActiveLearningNodeMC
-from skmultiflow.trees.nodes import LCInactiveLearningNodeMC
-from skmultiflow.trees.nodes import LCActiveLearningNodeNB
-from skmultiflow.trees.nodes import LCActiveLearningNodeNBA
+from ._nodes import LCActiveLearningNodeMC
+from ._nodes import LCInactiveLearningNodeMC
+from ._nodes import LCActiveLearningNodeNB
+from ._nodes import LCActiveLearningNodeNBA
 
 import warnings
 

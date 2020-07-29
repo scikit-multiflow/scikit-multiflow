@@ -3,13 +3,13 @@ import math
 
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.bayes import do_naive_bayes_prediction
-from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
-from skmultiflow.trees.nodes import FoundNode
-from skmultiflow.trees.nodes import SplitNode
-from skmultiflow.trees.nodes import ActiveLeaf, InactiveLeaf
-from skmultiflow.trees.nodes import ActiveLearningNodeNBA
-
 from skmultiflow.utils import check_random_state, get_max_value_key, normalize_values_in_dict
+
+from skmultiflow.trees._attribute_test import NominalAttributeMultiwayTest
+from .base import FoundNode
+from .base import SplitNode
+from .base import ActiveLeaf, InactiveLeaf
+from .htc_nodes import ActiveLearningNodeNBA
 
 
 class AdaNode(metaclass=ABCMeta):

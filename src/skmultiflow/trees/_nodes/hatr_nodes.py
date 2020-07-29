@@ -1,12 +1,12 @@
 import math
 
-from skmultiflow.trees.nodes import FoundNode
-from skmultiflow.trees.nodes import AdaSplitNode
-from skmultiflow.trees.nodes import ActiveLeaf
-from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
-from skmultiflow.trees.nodes import InactiveLeaf
-from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection.adwin import ADWIN
+from .base import FoundNode
+from .base import ActiveLeaf
+from .base import InactiveLeaf
+from .hatc_nodes import AdaNode
+from .hatc_nodes import AdaSplitNode
+from .htr_nodes import ActiveLearningNodePerceptron
 
 
 class AdaSplitNodeRegressor(AdaSplitNode):

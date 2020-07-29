@@ -4,13 +4,12 @@ import math
 import numpy as np
 
 
-from skmultiflow.trees.nodes import ActiveLeaf
-from skmultiflow.trees.nodes import InactiveLeaf
-from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
-from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserver
-
 from skmultiflow.utils import check_random_state
+from skmultiflow.trees._attribute_observer import NominalAttributeRegressionObserver
+from skmultiflow.trees._attribute_observer import NumericAttributeRegressionObserver
+from .base import ActiveLeaf
+from .base import InactiveLeaf
+from .base import LearningNode
 
 
 class ActiveLeafRegressor(ActiveLeaf):

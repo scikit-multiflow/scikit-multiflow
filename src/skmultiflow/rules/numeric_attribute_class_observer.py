@@ -1,7 +1,7 @@
 import numpy as np
 
 from skmultiflow.rules.attribute_expand_suggestion import AttributeExpandSuggestion
-from skmultiflow.trees.attribute_observer import AttributeObserver
+from skmultiflow.trees._attribute_observer import AttributeObserver
 from skmultiflow.trees.gaussian_estimator import GaussianEstimator
 
 

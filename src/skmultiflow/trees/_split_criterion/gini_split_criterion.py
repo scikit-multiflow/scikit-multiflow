@@ -1,4 +1,4 @@
-from skmultiflow.trees.split_criterion import SplitCriterion
+from .base_split_criterion import SplitCriterion
 
 
 class GiniSplitCriterion(SplitCriterion):

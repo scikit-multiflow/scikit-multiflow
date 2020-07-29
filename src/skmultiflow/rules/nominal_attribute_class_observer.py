@@ -1,5 +1,5 @@
 from skmultiflow.rules.attribute_expand_suggestion import AttributeExpandSuggestion
-from skmultiflow.trees.attribute_observer import AttributeObserver
+from skmultiflow.trees._attribute_observer import AttributeObserver
 
 
 class NominalAttributeClassObserver(AttributeObserver):

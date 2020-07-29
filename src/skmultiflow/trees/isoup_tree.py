@@ -5,19 +5,18 @@ import numpy as np
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees import HoeffdingTreeRegressor
 from skmultiflow.utils import get_dimensions
-from skmultiflow.trees.split_criterion import IntraClusterVarianceReductionSplitCriterion
-from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 
-from skmultiflow.trees.nodes import SplitNode
-from skmultiflow.trees.nodes import LearningNode
-from skmultiflow.trees.nodes import ActiveLeaf
-
-from skmultiflow.trees.nodes import ActiveLearningNodeMean
-from skmultiflow.trees.nodes import ActiveLearningNodePerceptronMultiTarget
-from skmultiflow.trees.nodes import ActiveLearningNodeAdaptiveMultiTarget
-from skmultiflow.trees.nodes import InactiveLearningNodeMean
-from skmultiflow.trees.nodes import InactiveLearningNodePerceptronMultiTarget
-from skmultiflow.trees.nodes import InactiveLearningNodeAdaptiveMultiTarget
+from ._split_criterion import IntraClusterVarianceReductionSplitCriterion
+from ._attribute_test import NominalAttributeMultiwayTest
+from ._nodes import SplitNode
+from ._nodes import LearningNode
+from ._nodes import ActiveLeaf
+from ._nodes import ActiveLearningNodeMean
+from ._nodes import ActiveLearningNodePerceptronMultiTarget
+from ._nodes import ActiveLearningNodeAdaptiveMultiTarget
+from ._nodes import InactiveLearningNodeMean
+from ._nodes import InactiveLearningNodePerceptronMultiTarget
+from ._nodes import InactiveLearningNodeAdaptiveMultiTarget
 
 import warnings
 

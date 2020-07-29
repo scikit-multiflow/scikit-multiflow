@@ -1,11 +1,10 @@
 import numpy as np
 
-from skmultiflow.trees.nodes import LearningNodeMean, LearningNodePerceptron
-from skmultiflow.trees.nodes import RandomActiveLeafClass
-from skmultiflow.trees.attribute_observer import NominalAttributeRegressionObserver
-from skmultiflow.trees.attribute_observer import NumericAttributeRegressionObserver
-
 from skmultiflow.utils import check_random_state
+from skmultiflow.trees._attribute_observer import NominalAttributeRegressionObserver
+from skmultiflow.trees._attribute_observer import NumericAttributeRegressionObserver
+from .htr_nodes import LearningNodeMean, LearningNodePerceptron
+from .arf_htc_nodes import RandomActiveLeafClass
 
 
 class RandomActiveLeafRegressor(RandomActiveLeafClass):

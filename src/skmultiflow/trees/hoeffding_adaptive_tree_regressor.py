@@ -1,11 +1,12 @@
 import numpy as np
 
 from skmultiflow.trees import HoeffdingTreeRegressor
-from skmultiflow.trees.nodes import InactiveLeaf
-from skmultiflow.trees.nodes import AdaSplitNodeRegressor
-from skmultiflow.trees.nodes import AdaActiveLearningNodeRegressor
-from skmultiflow.trees.nodes import InactiveLearningNodeMean, InactiveLearningNodePerceptron
 from skmultiflow.utils import add_dict_values
+
+from ._nodes import InactiveLeaf
+from ._nodes import AdaSplitNodeRegressor
+from ._nodes import AdaActiveLearningNodeRegressor
+from ._nodes import InactiveLearningNodeMean, InactiveLearningNodePerceptron
 
 import warnings
 

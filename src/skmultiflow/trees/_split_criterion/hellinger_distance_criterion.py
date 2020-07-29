@@ -1,6 +1,6 @@
-from skmultiflow.trees.split_criterion import SplitCriterion
-
 import numpy as np
+
+from .base_split_criterion import SplitCriterion
 
 
 class HellingerDistanceCriterion(SplitCriterion):

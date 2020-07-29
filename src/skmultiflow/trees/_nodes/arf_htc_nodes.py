@@ -1,11 +1,11 @@
 import numpy as np
 
-from skmultiflow.trees.nodes import ActiveLeafClass
-from skmultiflow.trees.nodes import LearningNodeMC
-from skmultiflow.trees.nodes import LearningNodeNB
-from skmultiflow.trees.nodes import LearningNodeNBA
-
 from skmultiflow.utils import get_dimensions, check_random_state
+
+from .htc_nodes import ActiveLeafClass
+from .htc_nodes import LearningNodeMC
+from .htc_nodes import LearningNodeNB
+from .htc_nodes import LearningNodeNBA
 
 
 class RandomActiveLeafClass(ActiveLeafClass):

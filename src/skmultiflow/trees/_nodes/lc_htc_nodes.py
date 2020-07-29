@@ -1,5 +1,5 @@
-from skmultiflow.trees.nodes import ActiveLearningNodeMC, ActiveLearningNodeNB,\
-    ActiveLearningNodeNBA, InactiveLearningNodeMC
+from .htc_nodes import ActiveLearningNodeMC, ActiveLearningNodeNB, ActiveLearningNodeNBA, \
+    InactiveLearningNodeMC
 
 
 def transform_label(y):

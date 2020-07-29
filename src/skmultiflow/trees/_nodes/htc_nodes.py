@@ -1,7 +1,8 @@
-from skmultiflow.trees.nodes import LearningNode, ActiveLeaf, InactiveLeaf
-from skmultiflow.trees.attribute_observer import NominalAttributeClassObserver
-from skmultiflow.trees.attribute_observer import NumericAttributeClassObserverGaussian
 from skmultiflow.bayes import do_naive_bayes_prediction
+from skmultiflow.trees._attribute_observer import NominalAttributeClassObserver
+from skmultiflow.trees._attribute_observer import NumericAttributeClassObserverGaussian
+
+from .base import LearningNode, ActiveLeaf, InactiveLeaf
 
 
 class ActiveLeafClass(ActiveLeaf):

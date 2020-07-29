@@ -3,10 +3,10 @@ import numpy as np
 from skmultiflow.core import MultiOutputMixin
 from skmultiflow.trees import iSOUPTreeRegressor
 
-from skmultiflow.trees.nodes import SSTActiveLearningNode
-from skmultiflow.trees.nodes import SSTActiveLearningNodeAdaptive
-from skmultiflow.trees.nodes import SSTInactiveLearningNode
-from skmultiflow.trees.nodes import SSTInactiveLearningNodeAdaptive
+from ._nodes import SSTActiveLearningNode
+from ._nodes import SSTActiveLearningNodeAdaptive
+from ._nodes import SSTInactiveLearningNode
+from ._nodes import SSTInactiveLearningNodeAdaptive
 
 
 class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputMixin):
