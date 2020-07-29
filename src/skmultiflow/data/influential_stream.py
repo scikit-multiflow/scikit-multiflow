@@ -19,20 +19,22 @@ class InfluentialStream(Stream):
             streams = [AGRAWALGenerator(random_state=112),
                        AGRAWALGenerator(random_state=112, classification_function=2),
                        AGRAWALGenerator(random_state=112, classification_function=3)]
-        for i in range(len(streams)):
-            self.n_samples = streams[i].n_samples
-            self.n_targets = streams[i].n_targets
-            self.n_features = streams[i].n_features
-            self.n_num_features = streams[i].n_num_features
-            self.n_cat_features = streams[i].n_cat_features
-            self.n_classes = streams[i].n_classes
-            self.cat_features_idx = streams[i].cat_features_idx
-            self.feature_names = streams[i].feature_names
-            self.target_names = streams[i].target_names
-            self.target_values = streams[i].target_values
-            self.n_targets = streams[i].n_targets
-            self.name = streams[i].name
+        self.streams = streams
+        self.n_samples = streams[0].n_samples
+        self.n_targets = streams[0].n_targets
+        self.n_features = streams[0].n_features
+        self.n_num_features = streams[0].n_num_features
+        self.n_cat_features = streams[0].n_cat_features
+        self.n_classes = streams[0].n_classes
+        self.cat_features_idx = streams[0].cat_features_idx
+        self.feature_names = streams[0].feature_names
+        self.target_names = streams[0].target_names
+        self.target_values = streams[0].target_values
+        self.n_targets = streams[0].n_targets
+        self.name = streams[0].name
+
         self.weight = weight
+        self.weight_tracker = []
         self.last_stream = None
         self.self_fulfilling = self_fulfilling
         self.self_defeating = self_defeating
@@ -41,7 +43,6 @@ class InfluentialStream(Stream):
 
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
-        self.streams = streams
 
         self._prepare_for_use()
         self.set_weight()
@@ -52,7 +53,9 @@ class InfluentialStream(Stream):
     def set_weight(self):
         if self.weight is None:
             counter = len(self.streams)
+            start = [1] * counter
             self.weight = [1] * counter
+        self.weight_tracker = [start]
 
     def check_weight(self):
         print("the current weights are: ", self.weight)
@@ -163,12 +166,11 @@ class InfluentialStream(Stream):
             self.cache.append(no_label)
 
     def receive_feedback_update(self, y_true, y_pred):
-        for i in range(len(self.streams)):
-            if self.last_stream == i:
-                if y_true == y_pred:
-                    self.weight[i] = self.weight[i] * self.self_fulfilling
-                else:
-                    self.weight[i] = self.weight[i] * self.self_defeating
+        if y_true == y_pred:
+            self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_fulfilling
+        else:
+            self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_defeating
+        self.weight_tracker.append(self.weight.copy())
 
     def restart(self):
         self._random_state = check_random_state(self.random_state)

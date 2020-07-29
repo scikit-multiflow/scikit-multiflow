@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from sklearn import preprocessing
 from scipy.stats import ranksums
 
+
 def remove_values_from_list(the_list, val):
     return [value for value in the_list if value != val]
 
@@ -31,7 +32,8 @@ class EvaluateInfluential(StreamEvaluator):
                  show_plot=False,
                  restart_stream=True,
                  data_points_for_classification=False,
-                 track_weight=False):
+                 weight_output = True
+                 ):
 
         super().__init__()
         self._method = 'Influential'
@@ -49,9 +51,8 @@ class EvaluateInfluential(StreamEvaluator):
         self.distribution_table = []
         self.categorical_features = []
         self.numerical_features = []
-        self.track_weight = track_weight
-        self.weight_tracker = []
         self.table_result = []
+        self.weight_output = weight_output
 
         if not self.data_points_for_classification:
             if metrics is None:
@@ -100,8 +101,8 @@ class EvaluateInfluential(StreamEvaluator):
             The trained model(s).
 
         """
-        self._init_evaluation(model=model, stream=stream, model_names=model_names)
 
+        self._init_evaluation(model=model, stream=stream, model_names=model_names)
         if self._check_configuration():
             self._reset_globals()
             # Initialize metrics and outputs (plots, log files, ...)
@@ -110,8 +111,6 @@ class EvaluateInfluential(StreamEvaluator):
             self._init_file()
 
             self.model = self._train_and_test()
-            if self.track_weight:
-                self.weight_tracker = [self.stream.weight]
 
             if self.show_plot:
                 self.visualizer.hold()
@@ -172,6 +171,7 @@ class EvaluateInfluential(StreamEvaluator):
         window_count = 0
         interval_borders = []
         print('Evaluating...')
+
         while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
             try:
@@ -210,8 +210,6 @@ class EvaluateInfluential(StreamEvaluator):
                                 time_window = int(window_count / self.window_size - 1)
                                 self.count_update(data_cache, interval_borders, time_window)
                                 data_cache = []
-                            if self.track_weight:
-                                self.weight_tracker.append(self.stream.weight)
                     self._check_progress(actual_max_samples)
 
                     # Train
@@ -254,13 +252,11 @@ class EvaluateInfluential(StreamEvaluator):
                     self._update_metrics()
                 break
 
-        print("weights list: ", self.weight_tracker)
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
-        self.evaluate_density()
 
-        if self.track_weight:
-            print(self.stream.weight)
+        print("weights: ", self.stream.weight_tracker[5])
+        self.evaluate_density()
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
             self.evaluation_summary()
