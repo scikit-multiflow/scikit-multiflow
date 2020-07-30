@@ -522,8 +522,7 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
                 should_split = True
             if self.remove_poor_atts and not should_split:
                 poor_atts = set()
-                best_ratio = second_best_suggestion.merit \
-                    / best_suggestion.merit
+                best_ratio = second_best_suggestion.merit / best_suggestion.merit
 
                 # Add any poor attribute to set
                 for i in range(len(best_split_suggestions)):

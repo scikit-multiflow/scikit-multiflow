@@ -597,7 +597,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                     should_split = True
                 if self.remove_poor_atts:
                     poor_atts = set()
-                    # Scan 1 - add any poor attribute to set
+                    # Add any poor attribute to set
                     for i in range(len(best_split_suggestions)):
                         if best_split_suggestions[i] is not None:
                             split_atts = best_split_suggestions[i].split_test.\
@@ -606,15 +606,6 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                                 if (best_suggestion.merit - best_split_suggestions[i].merit
                                         > hoeffding_bound):
                                     poor_atts.add(int(split_atts[0]))
-                    # Scan 2 - remove good attributes from set
-                    for i in range(len(best_split_suggestions)):
-                        if best_split_suggestions[i] is not None:
-                            split_atts = best_split_suggestions[i].split_test.\
-                                get_atts_test_depends_on()
-                            if len(split_atts) == 1:
-                                if (best_suggestion.merit - best_split_suggestions[i].merit
-                                        < hoeffding_bound):
-                                    poor_atts.remove(int(split_atts[0]))
                     for poor_att in poor_atts:
                         node.disable_attribute(poor_att)
             if should_split:
