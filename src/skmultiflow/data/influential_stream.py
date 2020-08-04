@@ -19,10 +19,10 @@ class InfluentialStream(Stream):
 
         if streams is None:
             streams = [RandomRBFGenerator(model_random_state=99, sample_random_state=50, n_classes=2,
-                                          n_features=2, n_centroids=50),
+                                          n_features=2, n_centroids=25),
                        RandomRBFGeneratorDrift(model_random_state=112, sample_random_state=50, n_classes=2,
-                                               n_features=2, n_centroids=50, change_speed=0.87,
-                                               num_drift_centroids=50)]
+                                               n_features=2, n_centroids=25, change_speed=0.9,
+                                               num_drift_centroids=5)]
         self.streams = streams
         self.n_samples = streams[0].n_samples
         self.n_targets = streams[0].n_targets

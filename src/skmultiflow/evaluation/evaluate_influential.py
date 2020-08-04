@@ -256,7 +256,7 @@ class EvaluateInfluential(StreamEvaluator):
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
 
-        print("weights: ", self.stream.weight_tracker)
+        # print("weights: ", self.stream.weight_tracker)
         self.evaluate_density()
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
@@ -273,50 +273,29 @@ class EvaluateInfluential(StreamEvaluator):
         # table = tn, fp, fn, tp
         for nfeature in range(self.stream.n_features):
             # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
-            # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc
-            t0 = preprocessing.normalize(list(zip(*self.distribution_table[0][nfeature])))
-            t1 = preprocessing.normalize(list(zip(*self.distribution_table[1][nfeature])))
+            # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc (if there are 4 intervals)
 
             t0 = list(zip(*self.distribution_table[0][nfeature]))
             t1 = list(zip(*self.distribution_table[1][nfeature]))
-            t0t1_list = []
-            # this for loop adds the density of the same piece from t0 and t1 together
-            for i in range(4):
-                t0t1_list.append(list(zip(t1[i], t0[i])))
-            temp_list = []
+
             diff_list = []
 
-            # this subtracts the density in t0 from the density of t1
-            for item in t0t1_list:
-                for x, y in item:
-                    if abs(x) > 10 and abs(y) > 10:
-                        temp_list.append([abs(x-y), True])
-                    else:
-                        temp_list.append([abs(x-y), False])
-                # if None in temp_list:
-                #     temp_list = [None]
-                diff_list.append(temp_list)
-                temp_list = []
+            for i in range(len(t0)):
+                if sum(t0[i]) > 10 and sum(t0[i]) > 10:
+                    diff_list.append([abs(x1 - x2) for (x1, x2) in list(zip(np.array(t0[i]), np.array(t1[i])))])
+                else:
+                    diff_list.append([])
 
-            # diff_list[2] is false negative and [3] is true positive
-            if diff_list[2][0][1] is True and diff_list[3][0][1] is True:
-                # diff_list[2] = preprocessing.normalize([diff_list[2]])
-                # diff_list[3] = preprocessing.normalize([diff_list[3]])
-
-                result = ranksums([item[0] for item in diff_list[2]], [item[0] for item in diff_list[3]])
-                self.table_result.append([nfeature, 'FNTP', [item[0] for item in diff_list[2]], [item[0] for item in diff_list[3]], result.pvalue])
+            if diff_list[2] and diff_list[3]:
+                result = ranksums(diff_list[2], diff_list[3])
+                self.table_result.append([nfeature, diff_list[2], diff_list[3], "-", "-", result.pvalue])
             else:
-                result = f"FN = {diff_list[2]} TP = {diff_list[3]}"
-                self.table_result.append([nfeature, 'FNTP', [item[0] for item in diff_list[2]], [item[0] for item in diff_list[3]], "too small"])
-            # [0] is true negative and [1] is false positive
-            if diff_list[0][0] is not None and diff_list[1][0] is not None:
-                # diff_list[0] = preprocessing.normalize([diff_list[0]])
-                # diff_list[1] = preprocessing.normalize([diff_list[1]])
-                result = ranksums([item[0] for item in diff_list[0]], [item[0] for item in diff_list[1]])
-                self.table_result.append([nfeature, 'TNFP', [item[0] for item in diff_list[0]], [item[0] for item in diff_list[1]], result.pvalue])
+                self.table_result.append([nfeature, diff_list[2], diff_list[3], "-", "-", "sample to small"])
+            if diff_list[0] and diff_list[1]:
+                result = ranksums(diff_list[0], diff_list[1])
+                self.table_result.append([nfeature, "-", "-", diff_list[0], diff_list[1], result.pvalue])
             else:
-                result = f"TN = {diff_list[0]} FP = {diff_list[1]}"
-                self.table_result.append([nfeature, 'FNTP', [item[0] for item in diff_list[0]], [item[0] for item in diff_list[1]], "too small"])
+                self.table_result.append([nfeature, "-", "-", diff_list[2], diff_list[3], "sample to small"])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
