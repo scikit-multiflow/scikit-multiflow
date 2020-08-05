@@ -52,7 +52,8 @@ class EvaluateInfluential(StreamEvaluator):
         self.distribution_table = []
         self.categorical_features = []
         self.numerical_features = []
-        self.table_result = []
+        self.table_positive_influence = []
+        self.table_negative_influence = []
         self.weight_output = weight_output
 
         if not self.data_points_for_classification:
@@ -288,14 +289,14 @@ class EvaluateInfluential(StreamEvaluator):
 
             if diff_list[2] and diff_list[3]:
                 result = ranksums(diff_list[2], diff_list[3])
-                self.table_result.append([nfeature, diff_list[2], diff_list[3], "-", "-", result.pvalue])
+                self.table_positive_influence.append([nfeature, diff_list[2], diff_list[3], "-", "-", result.pvalue])
             else:
-                self.table_result.append([nfeature, diff_list[2], diff_list[3], "-", "-", "sample to small"])
+                self.table_positive_influence.append([nfeature, diff_list[2], diff_list[3], "-", "-", "sample to small"])
             if diff_list[0] and diff_list[1]:
                 result = ranksums(diff_list[0], diff_list[1])
-                self.table_result.append([nfeature, "-", "-", diff_list[0], diff_list[1], result.pvalue])
+                self.table_negative_influence.append([nfeature, "-", "-", diff_list[0], diff_list[1], result.pvalue])
             else:
-                self.table_result.append([nfeature, "-", "-", diff_list[2], diff_list[3], "sample to small"])
+                self.table_negative_influence.append([nfeature, "-", "-", diff_list[2], diff_list[3], "sample to small"])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
