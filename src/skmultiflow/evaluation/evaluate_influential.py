@@ -11,7 +11,7 @@ from statistics import mode
 from sklearn.neighbors import KernelDensity
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
-from scipy.stats import ranksums
+from scipy.stats import ranksums, norm
 from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 
 
@@ -280,23 +280,45 @@ class EvaluateInfluential(StreamEvaluator):
             t1 = list(zip(*self.distribution_table[1][nfeature]))
 
             diff_list = []
-
+            arithmetic_mean_t0 = []
+            arithmetic_mean_t1 = []
             for i in range(len(t0)):
                 if sum(t0[i]) > 10 and sum(t0[i]) > 10:
+                    # arithmetic_mean_t0.append([sum(t0[i])/self.n_intervals])
+                    # arithmetic_mean_t1.append([sum(t1[i])/self.n_intervals])
                     diff_list.append([abs(x1 - x2) for (x1, x2) in list(zip(np.array(t0[i]), np.array(t1[i])))])
                 else:
                     diff_list.append([])
+            for x in range(len(t0)):
+                diffs = sorted([i-j for i in t0[x] for j in t1[x]])
+                print("diffs: ", diffs)
+                diff_median = np.median(list(map(operator.sub, t0[x], t1[x])))
+                print("diff median: ", diff_median)
+                alpha = 0.05
+                N = norm.ppf(1 - alpha/2)
+                n0 = len(t0)
+                n1 = len(t1)
+                k = np.math.ceil(n0*n1/2 - (N*(n0*n1*(n0+n1+1)/12**0.5)))
+                print("confidence interval: ", k)
 
             if diff_list[2] and diff_list[3]:
                 result = ranksums(diff_list[2], diff_list[3])
-                self.table_positive_influence.append([nfeature, diff_list[2], diff_list[3], "-", "-", result.pvalue])
+                self.table_positive_influence.append([nfeature, diff_list[2], sum(diff_list[2])/self.n_intervals,
+                                                      diff_list[3], sum(diff_list[3])/self.n_intervals,
+                                                      result.pvalue])
             else:
-                self.table_positive_influence.append([nfeature, diff_list[2], diff_list[3], "-", "-", "sample to small"])
+                self.table_positive_influence.append([nfeature, sum(diff_list[2])/self.n_intervals,
+                                                      diff_list[3], sum(diff_list[3])/self.n_intervals,
+                                                      "sample to small"])
             if diff_list[0] and diff_list[1]:
                 result = ranksums(diff_list[0], diff_list[1])
-                self.table_negative_influence.append([nfeature, "-", "-", diff_list[0], diff_list[1], result.pvalue])
+                self.table_negative_influence.append([nfeature, diff_list[0],
+                                                      sum(diff_list[0])/self.n_intervals, diff_list[1],
+                                                      sum(diff_list[1])/self.n_intervals, result.pvalue])
             else:
-                self.table_negative_influence.append([nfeature, "-", "-", diff_list[2], diff_list[3], "sample to small"])
+                self.table_negative_influence.append([nfeature, diff_list[0],
+                                                      sum(diff_list[0])/self.n_intervals, diff_list[1],
+                                                      sum(diff_list[1])/self.n_intervals, "sample to small"])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
@@ -341,7 +363,6 @@ class EvaluateInfluential(StreamEvaluator):
 
         unique_values_per_feature_without_mode = list(map(set, values_per_feature))
         idx = 0
-        unique_value_limit = 0.005 * self.window_size
         unique_value_limit = 0.005 * self.window_size
 
         for x in unique_values_per_feature_without_mode:

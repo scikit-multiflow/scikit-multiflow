@@ -20,14 +20,21 @@ def demo():
 
     :return:
     """
-    equal = PrettyTable()
-    fulfilling = PrettyTable()
-    defeating = PrettyTable()
-    table_names = ["Run", "Feature number", "False Negative", "True Positive", "True Negative", "False positive",
-                   "p-value"]
-    defeating.field_names = table_names
-    equal.field_names = table_names
-    fulfilling.field_names = table_names
+    equal_pos = PrettyTable()
+    equal_neg = PrettyTable()
+    fulfilling_pos = PrettyTable()
+    fulfilling_neg = PrettyTable()
+    defeating_pos = PrettyTable()
+    defeating_neg = PrettyTable()
+    table_names_pos = ["Run", "Feature number", "False Negative", "FN mean", "True Positive", "TP mean", "p-value"]
+    table_names_neg = ["Run", "Feature number", "True Negative", "TN mean", "False Positive", "FP mean", "p-value"]
+
+    defeating_pos.field_names = table_names_pos
+    equal_pos.field_names = table_names_pos
+    fulfilling_pos.field_names = table_names_pos
+    defeating_neg.field_names = table_names_neg
+    equal_neg.field_names = table_names_neg
+    fulfilling_neg.field_names = table_names_neg
 
     positive_influence_fulfilling = []
     negative_influence_fulfilling = []
@@ -38,7 +45,7 @@ def demo():
     positive_influence_defeating = []
     negative_influence_defeating = []
 
-    runs = 20
+    runs = 10
 
     for i in range(runs):
         stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1,
@@ -52,8 +59,8 @@ def demo():
                                                                                        n_features=2,
                                                                                        n_centroids=50 + i,
                                                                                        change_speed=2,
-                                                                                       num_drift_centroids=50 + i)])
-        evaluating(stream, i, equal, positive_influence_equal, negative_influence_equal)
+                                                                                       num_drift_centroids=50 + 2*i)])
+        evaluating(stream, i, equal_pos, equal_neg, positive_influence_equal, negative_influence_equal)
 
     for i in range(runs):
         stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1.001,
@@ -67,8 +74,8 @@ def demo():
                                                                                        n_features=2,
                                                                                        n_centroids=50 + i,
                                                                                        change_speed=2,
-                                                                                       num_drift_centroids=50 + i)])
-        evaluating(stream, i, fulfilling, positive_influence_fulfilling, negative_influence_fulfilling)
+                                                                                       num_drift_centroids=50 + 2*i)])
+        evaluating(stream, i, fulfilling_pos, fulfilling_neg, positive_influence_fulfilling, negative_influence_fulfilling)
 
     for i in range(runs):
         stream = influential_stream.InfluentialStream(self_defeating=0.999, self_fulfilling=1,
@@ -82,11 +89,11 @@ def demo():
                                                                                        n_features=2,
                                                                                        n_centroids=50 + i,
                                                                                        change_speed=2,
-                                                                                       num_drift_centroids=50 + i)])
-        evaluating(stream, i, defeating, positive_influence_defeating, negative_influence_defeating)
+                                                                                       num_drift_centroids=50 + 2*i)])
+        evaluating(stream, i, defeating_pos, defeating_neg, positive_influence_defeating, negative_influence_defeating)
 
     # print("equal")
-    # print(equal)
+    print(equal_pos)
     y = [*range(0, runs, 1)]
     plt.figure(1)
     plt.plot(y, positive_influence_equal)
@@ -132,7 +139,7 @@ def demo():
     # print(fulfilling)
 
 
-def evaluating(stream, run, x, positive_influence, negative_influence):
+def evaluating(stream, run, pos, neg, positive_influence, negative_influence):
     classifier = naive_bayes.NaiveBayes()
     # classifier = PerceptronMask()
     # classifier = HoeffdingTreeClassifier()
@@ -157,12 +164,12 @@ def evaluating(stream, run, x, positive_influence, negative_influence):
         result.insert(0, run)
         if result[1] == 0:
             positive_influence.append(result[6])
-            x.add_row(result)
+            pos.add_row(result)
 
     for result in evaluator.table_negative_influence:
         result.insert(0, run)
         if result[1] == 0:
-            x.add_row(result)
+            neg.add_row(result)
             negative_influence.append(result[6])
 
 
