@@ -291,15 +291,15 @@ class EvaluateInfluential(StreamEvaluator):
                     diff_list.append([])
             for x in range(len(t0)):
                 diffs = sorted([i-j for i in t0[x] for j in t1[x]])
-                print("diffs: ", diffs)
+                # print("diffs: ", diffs)
                 diff_median = np.median(list(map(operator.sub, t0[x], t1[x])))
-                print("diff median: ", diff_median)
+                # print("diff median: ", diff_median)
                 alpha = 0.05
                 N = norm.ppf(1 - alpha/2)
                 n0 = len(t0)
                 n1 = len(t1)
                 k = np.math.ceil(n0*n1/2 - (N*(n0*n1*(n0+n1+1)/12**0.5)))
-                print("confidence interval: ", k)
+                # print("confidence interval: ", k)
 
             if diff_list[2] and diff_list[3]:
                 result = ranksums(diff_list[2], diff_list[3])
