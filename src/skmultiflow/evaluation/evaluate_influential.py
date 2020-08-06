@@ -258,7 +258,7 @@ class EvaluateInfluential(StreamEvaluator):
         self._flush_file_buffer()
 
         # print("weights: ", self.stream.weight_tracker)
-        self.evaluate_density()
+        self.calculate_density()
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
             self.evaluation_summary()
@@ -270,7 +270,71 @@ class EvaluateInfluential(StreamEvaluator):
 
         return self.model
 
-    def evaluate_density(self):
+    def calculate_density(self):
+        # table = tn, fp, fn, tp
+        density = [[[0] * 2 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
+        subset_TP = [[] for _ in range(self.stream.n_features)]
+        subset_FN = [[] for _ in range(self.stream.n_features)]
+        subset_TN = [[] for _ in range(self.stream.n_features)]
+        subset_FP = [[] for _ in range(self.stream.n_features)]
+        for feature in range(self.stream.n_features):
+            # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
+            # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc (if there are 4 intervals)
+
+            t0 = list(zip(*self.distribution_table[0][feature]))
+            t1 = list(zip(*self.distribution_table[1][feature]))
+            # create table with density differences of TP and FN (0), and TN and FP (1)
+            for interval in range(self.n_intervals):
+                # calculate density of positive instances
+                density_0 = (self.distribution_table[0][feature][interval][3] +
+                             self.distribution_table[0][feature][interval][2]) / self.window_size
+                density_1 = (self.distribution_table[1][feature][interval][3] +
+                             self.distribution_table[1][feature][interval][2]) / self.window_size
+                # density differences is density1 in density0
+                density_difference = density_1 - density_0
+                density[feature][interval][0] = density_difference
+
+                # calculate density of negative instances
+                density_0 = (self.distribution_table[0][feature][interval][0] +
+                             self.distribution_table[0][feature][interval][1]) / self.window_size
+                density_1 = (self.distribution_table[1][feature][interval][0] +
+                             self.distribution_table[1][feature][interval][1]) / self.window_size
+                # density differences is density1 in density0
+                density_difference = density_1 - density_0
+                density[feature][interval][1] = density_difference
+
+            for interval in range(self.n_intervals):
+                subset_TP[feature].extend([density[feature][interval][0]] * t0[3][interval])
+                subset_FN[feature].extend([density[feature][interval][0]] * t0[2][interval])
+                subset_FP[feature].extend([density[feature][interval][1]] * t0[1][interval])
+                subset_TN[feature].extend([density[feature][interval][1]] * t0[0][interval])
+        self.test_density(subset_TN, subset_FP, subset_FN, subset_TP)
+
+    def test_density(self, subset_TN, subset_FP, subset_FN, subset_TP):
+        for feature in range(self.stream.n_features):
+            # positive instances:
+            mean_subset_TP = sum(subset_TP[feature]) / len(subset_TP[feature])
+            mean_subset_FN = sum(subset_FN[feature]) / len(subset_FN[feature])
+            if len(subset_TP[feature]) > 10 and len(subset_FN[feature]) > 10:
+                test = ranksums(subset_TP[feature], subset_FN[feature])
+                result = test.pvalue
+            else:
+                result = "n too small"
+            self.table_positive_influence.append([feature, len(subset_TP[feature]), mean_subset_TP, len(subset_FN[feature]),
+                                                  mean_subset_FN, abs(mean_subset_TP-mean_subset_FN), result])
+
+            # negative instances
+            mean_subset_TN = sum(subset_TN[feature]) / len(subset_TN[feature])
+            mean_subset_FP = sum(subset_FP[feature]) / len(subset_FP[feature])
+            if len(subset_TN[feature]) > 10 and len(subset_FP[feature]) > 10:
+                test = ranksums(subset_TN[feature], subset_FP[feature])
+                result = test.pvalue
+            else:
+                result = "n too small"
+            self.table_negative_influence.append([feature, len(subset_TN[feature]), mean_subset_TN, len(subset_FP[feature]),
+                                                  mean_subset_FP, abs(mean_subset_TN - mean_subset_FP), result])
+
+    def evaluate_density_old(self):
         # table = tn, fp, fn, tp
         for nfeature in range(self.stream.n_features):
             # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
@@ -290,35 +354,35 @@ class EvaluateInfluential(StreamEvaluator):
                 else:
                     diff_list.append([])
             for x in range(len(t0)):
-                diffs = sorted([i-j for i in t0[x] for j in t1[x]])
+                diffs = sorted([i - j for i in t0[x] for j in t1[x]])
                 # print("diffs: ", diffs)
                 diff_median = np.median(list(map(operator.sub, t0[x], t1[x])))
                 # print("diff median: ", diff_median)
                 alpha = 0.05
-                N = norm.ppf(1 - alpha/2)
+                N = norm.ppf(1 - alpha / 2)
                 n0 = len(t0)
                 n1 = len(t1)
-                k = np.math.ceil(n0*n1/2 - (N*(n0*n1*(n0+n1+1)/12**0.5)))
+                k = np.math.ceil(n0 * n1 / 2 - (N * (n0 * n1 * (n0 + n1 + 1) / 12 ** 0.5)))
                 # print("confidence interval: ", k)
 
             if diff_list[2] and diff_list[3]:
                 result = ranksums(diff_list[2], diff_list[3])
-                self.table_positive_influence.append([nfeature, diff_list[2], sum(diff_list[2])/self.n_intervals,
-                                                      diff_list[3], sum(diff_list[3])/self.n_intervals,
+                self.table_positive_influence.append([nfeature, diff_list[2], sum(diff_list[2]) / self.n_intervals,
+                                                      diff_list[3], sum(diff_list[3]) / self.n_intervals,
                                                       result.pvalue])
             else:
-                self.table_positive_influence.append([nfeature, sum(diff_list[2])/self.n_intervals,
-                                                      diff_list[3], sum(diff_list[3])/self.n_intervals,
+                self.table_positive_influence.append([nfeature, sum(diff_list[2]) / self.n_intervals,
+                                                      diff_list[3], sum(diff_list[3]) / self.n_intervals,
                                                       "sample to small"])
             if diff_list[0] and diff_list[1]:
                 result = ranksums(diff_list[0], diff_list[1])
                 self.table_negative_influence.append([nfeature, diff_list[0],
-                                                      sum(diff_list[0])/self.n_intervals, diff_list[1],
-                                                      sum(diff_list[1])/self.n_intervals, result.pvalue])
+                                                      sum(diff_list[0]) / self.n_intervals, diff_list[1],
+                                                      sum(diff_list[1]) / self.n_intervals, result.pvalue])
             else:
                 self.table_negative_influence.append([nfeature, diff_list[0],
-                                                      sum(diff_list[0])/self.n_intervals, diff_list[1],
-                                                      sum(diff_list[1])/self.n_intervals, "sample to small"])
+                                                      sum(diff_list[0]) / self.n_intervals, diff_list[1],
+                                                      sum(diff_list[1]) / self.n_intervals, "sample to small"])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))

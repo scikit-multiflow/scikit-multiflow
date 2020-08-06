@@ -26,8 +26,10 @@ def demo():
     fulfilling_neg = PrettyTable()
     defeating_pos = PrettyTable()
     defeating_neg = PrettyTable()
-    table_names_pos = ["Run", "Feature number", "False Negative", "FN mean", "True Positive", "TP mean", "p-value"]
-    table_names_neg = ["Run", "Feature number", "True Negative", "TN mean", "False Positive", "FP mean", "p-value"]
+    table_names_pos = ["Run", "Feature number", "length subset TP", "TP sample mean", "length subset FN",
+                       "FN sample mean", "abs difference in mean", "p value"]
+    table_names_neg = ["Run", "Feature number", "length subset TN", "TN sample mean", "length subset FP",
+                       "FP sample mean", "abs difference in mean", "p value"]
 
     defeating_pos.field_names = table_names_pos
     equal_pos.field_names = table_names_pos
@@ -45,51 +47,53 @@ def demo():
     positive_influence_defeating = []
     negative_influence_defeating = []
 
-    runs = 20
+    runs = 100
 
     for i in range(runs):
         stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1,
                                                       streams=[RandomRBFGenerator(model_random_state=99,
-                                                                                  sample_random_state=566,
+                                                                                  sample_random_state=50,
                                                                                   n_classes=2, n_features=4,
-                                                                                  n_centroids=50),
-                                                               RandomRBFGeneratorDrift(model_random_state=112,
+                                                                                  n_centroids=20),
+                                                               RandomRBFGeneratorDrift(model_random_state=99,
                                                                                        sample_random_state=50,
                                                                                        n_classes=2,
                                                                                        n_features=4,
-                                                                                       n_centroids=50,
-                                                                                       change_speed=2,
-                                                                                       num_drift_centroids=int((50/runs)*i))])
+                                                                                       n_centroids=20,
+                                                                                       change_speed=0.8,
+                                                                                       num_drift_centroids=int((20/runs)*i))])
         evaluating(stream, i, equal_pos, equal_neg, positive_influence_equal, negative_influence_equal)
 
     for i in range(runs):
         stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1.001,
                                                       streams=[RandomRBFGenerator(model_random_state=99,
-                                                                                  sample_random_state=566,
+                                                                                  sample_random_state=50,
                                                                                   n_classes=2, n_features=4,
-                                                                                  n_centroids=50),
-                                                               RandomRBFGeneratorDrift(model_random_state=112,
+                                                                                  n_centroids=20),
+                                                               RandomRBFGeneratorDrift(model_random_state=99,
                                                                                        sample_random_state=50,
                                                                                        n_classes=2,
                                                                                        n_features=4,
-                                                                                       n_centroids=50,
-                                                                                       change_speed=2,
-                                                                                       num_drift_centroids=int((50/runs)*i))])
-        evaluating(stream, i, fulfilling_pos, fulfilling_neg, positive_influence_fulfilling, negative_influence_fulfilling)
+                                                                                       n_centroids=20,
+                                                                                       change_speed=0.8,
+                                                                                       num_drift_centroids=int(
+                                                                                           (20 / runs) * i))])
+        evaluating(stream, i, fulfilling_pos, fulfilling_neg, positive_influence_fulfilling,
+                   negative_influence_fulfilling)
 
     for i in range(runs):
         stream = influential_stream.InfluentialStream(self_defeating=0.999, self_fulfilling=1,
                                                       streams=[RandomRBFGenerator(model_random_state=99,
-                                                                                  sample_random_state=566,
+                                                                                  sample_random_state=50,
                                                                                   n_classes=2, n_features=4,
-                                                                                  n_centroids=50),
-                                                               RandomRBFGeneratorDrift(model_random_state=112,
+                                                                                  n_centroids=20),
+                                                               RandomRBFGeneratorDrift(model_random_state=99,
                                                                                        sample_random_state=50,
                                                                                        n_classes=2,
                                                                                        n_features=4,
-                                                                                       n_centroids=50,
-                                                                                       change_speed=2,
-                                                                                       num_drift_centroids=int((50/runs)*i))])
+                                                                                       n_centroids=20,
+                                                                                       change_speed=0.8,
+                                                                                       num_drift_centroids=int((20/runs)*i))])
         evaluating(stream, i, defeating_pos, defeating_neg, positive_influence_defeating, negative_influence_defeating)
 
     # print("equal")
@@ -97,26 +101,26 @@ def demo():
     print(equal_neg, fulfilling_pos, fulfilling_neg, defeating_pos, defeating_neg)
     y = [*range(0, runs, 1)]
     plt.figure(1)
-    plt.plot(y, positive_influence_equal, label="positive influence", color="green")
-    plt.plot(y, negative_influence_equal, label="negative influence", color="red")
+    plt.plot(y, positive_influence_equal, label="influence on positive instances", color="green")
+    plt.plot(y, negative_influence_equal, label="influence on negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('p value')
-    plt.title('p values, influence, equal weights')
+    plt.title('Equal weights')
 
     plt.figure(2)
-    plt.plot(y, positive_influence_fulfilling, label="positive influence", color="green")
-    plt.plot(y, negative_influence_fulfilling, label="negative influence", color="red")
+    plt.plot(y, positive_influence_fulfilling, label="influence on positive instances", color="green")
+    plt.plot(y, negative_influence_fulfilling, label="influence on negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('p value')
-    plt.title('p values  influence, self fulfilling')
+    plt.title('Self fulfilling')
     plt.legend()
 
     plt.figure(3)
-    plt.plot(y, positive_influence_defeating, label="positive influence", color="green")
-    plt.plot(y, negative_influence_defeating, label="negative influence", color="red")
+    plt.plot(y, positive_influence_defeating, label="influence on positive instances", color="green")
+    plt.plot(y, negative_influence_defeating, label="influence on negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('p value')
-    plt.title('p values, influence, self defeating')
+    plt.title('Self defeating')
     plt.legend()
 
     plt.show()
