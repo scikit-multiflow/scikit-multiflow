@@ -14,7 +14,8 @@ class InfluentialStream(Stream):
                  weight=None,
                  self_fulfilling=1.1,
                  self_defeating=0.9,
-                 count=1):
+                 count=1,
+                 influence_method="multiplication"):
         super(InfluentialStream, self).__init__()
 
         if streams is None:
@@ -44,12 +45,14 @@ class InfluentialStream(Stream):
         self.self_defeating = self_defeating
         self.count = count
         self.cache = []
+        self.influence_method = influence_method
 
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
 
         self._prepare_for_use()
         self.set_weight()
+        self.set_influence_method()
 
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
@@ -60,6 +63,10 @@ class InfluentialStream(Stream):
             start = [1] * counter
             self.weight = [1] * counter
         self.weight_tracker = [start]
+
+    def set_influence_method(self):
+        if self.influence_method != "multiplication" and self.influence_method != "addition":
+            self.influence_method = "multiplication"
 
     def check_weight(self):
         print("the current weights are: ", self.weight)
@@ -171,9 +178,15 @@ class InfluentialStream(Stream):
 
     def receive_feedback_update(self, y_true, y_pred):
         if y_true == y_pred:
-            self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_fulfilling
+            if self.influence_method == "multiplication":
+                self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_fulfilling
+            else:
+                self.weight[self.last_stream] = self.weight[self.last_stream] + self.self_fulfilling
         else:
-            self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_defeating
+            if self.influence_method == "multiplication":
+                self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_defeating
+            else:
+                self.weight[self.last_stream] = self.weight[self.last_stream] + self.self_fulfilling
         self.weight_tracker.append(self.weight.copy())
 
     def restart(self):

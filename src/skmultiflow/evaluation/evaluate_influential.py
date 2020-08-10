@@ -52,8 +52,8 @@ class EvaluateInfluential(StreamEvaluator):
         self.distribution_table = []
         self.categorical_features = []
         self.numerical_features = []
-        self.table_positive_influence = []
-        self.table_negative_influence = []
+        self.table_influence_on_positive = []
+        self.table_influence_on_negative = []
         self.weight_output = weight_output
 
         if not self.data_points_for_classification:
@@ -257,7 +257,8 @@ class EvaluateInfluential(StreamEvaluator):
         # Flush file buffer, in case it contains data
         self._flush_file_buffer()
 
-        # print("weights: ", self.stream.weight_tracker)
+        if self.weight_output:
+            print("weights: ", self.stream.weight)
         self.calculate_density()
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
@@ -272,6 +273,8 @@ class EvaluateInfluential(StreamEvaluator):
 
     def calculate_density(self):
         # table = tn, fp, fn, tp
+        # create list that has two values (difference in density in time0 and time1 of TP and FN,
+        #                               and difference in density in time0 and time1 of TN and FP per interval
         density = [[[0] * 2 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
         subset_TP = [[] for _ in range(self.stream.n_features)]
         subset_FN = [[] for _ in range(self.stream.n_features)]
@@ -282,16 +285,17 @@ class EvaluateInfluential(StreamEvaluator):
             # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc (if there are 4 intervals)
 
             t0 = list(zip(*self.distribution_table[0][feature]))
-            t1 = list(zip(*self.distribution_table[1][feature]))
-            # create table with density differences of TP and FN (0), and TN and FP (1)
+            # create table with density differences of TP and FN (0), and TN and FP (1), per interval
             for interval in range(self.n_intervals):
-                # calculate density of positive instances
+                # calculate density of positive instances = instances of TP + FN / window size
                 density_0 = (self.distribution_table[0][feature][interval][3] +
                              self.distribution_table[0][feature][interval][2]) / self.window_size
                 density_1 = (self.distribution_table[1][feature][interval][3] +
                              self.distribution_table[1][feature][interval][2]) / self.window_size
-                # density differences is density1 in density0
+                # density differences is density1 - density0
                 density_difference = density_1 - density_0
+
+                # fill in density difference in list
                 density[feature][interval][0] = density_difference
 
                 # calculate density of negative instances
@@ -304,6 +308,9 @@ class EvaluateInfluential(StreamEvaluator):
                 density[feature][interval][1] = density_difference
 
             for interval in range(self.n_intervals):
+                # add the amount of instances per interval that is belonging to subset
+                # so if feature0, interval 0 has 6 TP instances, and the calculated difference in density of feature0,
+                # interval 0 is 0.07, you will extend the subset with [0.07,0.07,0.07,0.07,0.07,0.07]
                 subset_TP[feature].extend([density[feature][interval][0]] * t0[3][interval])
                 subset_FN[feature].extend([density[feature][interval][0]] * t0[2][interval])
                 subset_FP[feature].extend([density[feature][interval][1]] * t0[1][interval])
@@ -320,8 +327,9 @@ class EvaluateInfluential(StreamEvaluator):
                 result = test.pvalue
             else:
                 result = "n too small"
-            self.table_positive_influence.append([feature, len(subset_TP[feature]), mean_subset_TP, len(subset_FN[feature]),
-                                                  mean_subset_FN, abs(mean_subset_TP-mean_subset_FN), result])
+            self.table_influence_on_positive.append([feature, len(subset_TP[feature]), mean_subset_TP,
+                                                  len(subset_FN[feature]), mean_subset_FN,
+                                                  abs(mean_subset_TP-mean_subset_FN), result])
 
             # negative instances
             mean_subset_TN = sum(subset_TN[feature]) / len(subset_TN[feature])
@@ -331,58 +339,8 @@ class EvaluateInfluential(StreamEvaluator):
                 result = test.pvalue
             else:
                 result = "n too small"
-            self.table_negative_influence.append([feature, len(subset_TN[feature]), mean_subset_TN, len(subset_FP[feature]),
+            self.table_influence_on_negative.append([feature, len(subset_TN[feature]), mean_subset_TN, len(subset_FP[feature]),
                                                   mean_subset_FP, abs(mean_subset_TN - mean_subset_FP), result])
-
-    def evaluate_density_old(self):
-        # table = tn, fp, fn, tp
-        for nfeature in range(self.stream.n_features):
-            # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
-            # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc (if there are 4 intervals)
-
-            t0 = list(zip(*self.distribution_table[0][nfeature]))
-            t1 = list(zip(*self.distribution_table[1][nfeature]))
-
-            diff_list = []
-            arithmetic_mean_t0 = []
-            arithmetic_mean_t1 = []
-            for i in range(len(t0)):
-                if sum(t0[i]) > 10 and sum(t0[i]) > 10:
-                    # arithmetic_mean_t0.append([sum(t0[i])/self.n_intervals])
-                    # arithmetic_mean_t1.append([sum(t1[i])/self.n_intervals])
-                    diff_list.append([abs(x1 - x2) for (x1, x2) in list(zip(np.array(t0[i]), np.array(t1[i])))])
-                else:
-                    diff_list.append([])
-            for x in range(len(t0)):
-                diffs = sorted([i - j for i in t0[x] for j in t1[x]])
-                # print("diffs: ", diffs)
-                diff_median = np.median(list(map(operator.sub, t0[x], t1[x])))
-                # print("diff median: ", diff_median)
-                alpha = 0.05
-                N = norm.ppf(1 - alpha / 2)
-                n0 = len(t0)
-                n1 = len(t1)
-                k = np.math.ceil(n0 * n1 / 2 - (N * (n0 * n1 * (n0 + n1 + 1) / 12 ** 0.5)))
-                # print("confidence interval: ", k)
-
-            if diff_list[2] and diff_list[3]:
-                result = ranksums(diff_list[2], diff_list[3])
-                self.table_positive_influence.append([nfeature, diff_list[2], sum(diff_list[2]) / self.n_intervals,
-                                                      diff_list[3], sum(diff_list[3]) / self.n_intervals,
-                                                      result.pvalue])
-            else:
-                self.table_positive_influence.append([nfeature, sum(diff_list[2]) / self.n_intervals,
-                                                      diff_list[3], sum(diff_list[3]) / self.n_intervals,
-                                                      "sample to small"])
-            if diff_list[0] and diff_list[1]:
-                result = ranksums(diff_list[0], diff_list[1])
-                self.table_negative_influence.append([nfeature, diff_list[0],
-                                                      sum(diff_list[0]) / self.n_intervals, diff_list[1],
-                                                      sum(diff_list[1]) / self.n_intervals, result.pvalue])
-            else:
-                self.table_negative_influence.append([nfeature, diff_list[0],
-                                                      sum(diff_list[0]) / self.n_intervals, diff_list[1],
-                                                      sum(diff_list[1]) / self.n_intervals, "sample to small"])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
@@ -473,7 +431,6 @@ class EvaluateInfluential(StreamEvaluator):
             check = False
             for interval in range(self.n_intervals):
                 if data_instance[2][feature] <= interval_borders[feature][interval]:
-                    # print(data_instance[2][feature], " < ", interval_borders[feature][interval])
                     check = True
                     self.distribution_table[time_window][feature][interval][cf] += 1
                     break
