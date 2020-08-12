@@ -1,0 +1,43 @@
+version: '3.2'
+services:
+  multiflowdev:
+    image: "jmrozanec/multiflow-dev:latest"
+    environment:
+      - PROFILE="DEV"
+    volumes:
+      - type: bind
+        source: MULTIFLOW_HOME
+        target: /home/multiflow
+      - multiflow_logs_vol:/var/log/multiflow
+    networks:
+      - service-tier
+    depends_on:
+      - kafkacontainer
+  kafkacontainer:
+    image: "jmrozanec/kafka:latest"
+    ports:
+      - "3181:2181"
+      - "3092:9092"
+    environment:
+      - ADVERTISED_HOST=kafkacontainer
+      - ADVERTISED_PORT=9092
+      - LOG_DIRS=/var/lib/kafka/data
+      - KAFKA_CREATE_TOPICS=scikit-multiflow:1:1
+    volumes:
+      - kafka_vol_zk_data:/var/lib/zookeeper/data
+      - kafka_vol_zk_tx_logs:/var/lib/zookeeper/log
+      - kafka_vol_kafka:/var/lib/kafka/data
+    networks:
+      - service-tier
+volumes:
+  kafka_vol_zk_data:
+    driver: local
+  kafka_vol_zk_tx_logs:
+    driver: local
+  kafka_vol_kafka:
+    driver: local
+  multiflow_logs_vol:
+    driver: local
+networks:
+  service-tier:
+    driver: bridge

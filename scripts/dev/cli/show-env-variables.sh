@@ -1,0 +1,7 @@
+echo "###############################################"
+echo "############ ENV VARIABLES - START ############"
+echo "####         PROFILE=$PROFILE"
+echo "####         HOME_DIR=$HOME_DIR"
+echo "####         NOHUP_FILE=$NOHUP_FILE"
+echo "############ ENV VARIABLES - END ##############"
+echo "###############################################"
