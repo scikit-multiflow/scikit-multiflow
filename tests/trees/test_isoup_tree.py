@@ -1,16 +1,21 @@
 import os
+from difflib import SequenceMatcher
+
 import numpy as np
+
 from sklearn.metrics import mean_absolute_error
+
 from skmultiflow.data import RegressionGenerator
 from skmultiflow.trees import iSOUPTreeRegressor
-from difflib import SequenceMatcher
+from skmultiflow.utils import calculate_object_size
+
+import pytest
 
 
 def test_isoup_tree_mean(test_path):
     stream = RegressionGenerator(n_samples=2000, n_features=20,
                                  n_informative=15, random_state=1,
                                  n_targets=3)
-    stream.prepare_for_use()
 
     learner = iSOUPTreeRegressor(leaf_prediction='mean')
 
@@ -54,7 +59,6 @@ def test_isoup_tree_perceptron(test_path):
     stream = RegressionGenerator(n_samples=2000, n_features=20,
                                  n_informative=15, random_state=1,
                                  n_targets=3)
-    stream.prepare_for_use()
 
     learner = iSOUPTreeRegressor(leaf_prediction='perceptron',
                                  random_state=1)
@@ -82,7 +86,8 @@ def test_isoup_tree_perceptron(test_path):
     expected_predictions = np.load(test_file)
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 144.44877909957646
+
+    expected_error = 148.36534180008894
     assert np.isclose(error, expected_error)
 
     expected_info = "iSOUPTreeRegressor(binary_split=False, grace_period=200, leaf_prediction='perceptron', " \
@@ -98,7 +103,6 @@ def test_isoup_tree_adaptive(test_path):
     stream = RegressionGenerator(n_samples=2000, n_features=20,
                                  n_informative=15, random_state=1,
                                  n_targets=3)
-    stream.prepare_for_use()
 
     learner = iSOUPTreeRegressor(leaf_prediction='adaptive',
                                  random_state=1)
@@ -126,7 +130,8 @@ def test_isoup_tree_adaptive(test_path):
 
     assert np.allclose(y_pred, expected_predictions)
     error = mean_absolute_error(y_true, y_pred)
-    expected_error = 150.63043466390528
+
+    expected_error = 152.8716829154756
     assert np.isclose(error, expected_error)
 
     expected_info = "iSOUPTreeRegressor(binary_split=False, grace_period=200, leaf_prediction='adaptive', " \
@@ -138,22 +143,45 @@ def test_isoup_tree_adaptive(test_path):
     assert info == expected_info
 
 
-def test_isoup_tree_coverage(test_path):
-    # Cover nominal attribute observer
-    test_file = os.path.join(test_path, 'multi_target_regression_data.npz')
-    data = np.load(test_file)
-    X = data['X']
-    Y = data['Y']
+def test_isoup_tree_coverage():
+    max_samples = 1000
+    max_size_mb = 1
 
-    # Invalid leaf prediction option
-    learner = iSOUPTreeRegressor(
-                leaf_prediction='MEAN',
-                nominal_attributes=[i for i in range(3)]
-              )
-    print(learner.split_criterion)
+    stream = RegressionGenerator(
+        n_samples=max_samples, n_features=10, n_informative=7, n_targets=3,
+        random_state=42
+    )
+
+    # Cover memory management
+    tree = iSOUPTreeRegressor(
+        leaf_prediction='mean', grace_period=200,
+        memory_estimate_period=100, max_byte_size=max_size_mb*2**20
+    )
     # Invalid split_criterion
-    learner.split_criterion = 'ICVR'
-    learner.partial_fit(X, Y)
+    tree.split_criterion = 'ICVR'
+
+    X, y = stream.next_sample(max_samples)
+    tree.partial_fit(X, y)
+
+    # A tree without memory management enabled reaches almost 2 MB in size
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
+
+    # Memory management in a tree with perceptron leaves (purposeful typo in leaf_prediction)
+    tree = iSOUPTreeRegressor(
+        leaf_prediction='PERCEPTRON', grace_period=200,
+        memory_estimate_period=100, max_byte_size=max_size_mb*2**20
+    )
+    tree.partial_fit(X, y)
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
+
+    # Memory management in a tree with adaptive leaves
+    tree = iSOUPTreeRegressor(
+        leaf_prediction='adaptive', grace_period=200,
+        memory_estimate_period=100, max_byte_size=max_size_mb*2**20
+    )
+
+    tree.partial_fit(X, y)
+    assert calculate_object_size(tree, 'MB') <= max_size_mb
 
 
 def test_isoup_tree_model_description():
@@ -161,14 +189,14 @@ def test_isoup_tree_model_description():
         n_samples=700, n_features=20, n_informative=15, random_state=1,
         n_targets=3
     )
-    stream.prepare_for_use()
 
     learner = iSOUPTreeRegressor(leaf_prediction='mean')
 
     max_samples = 700
     X, y = stream.next_sample(max_samples)
     # Trying to predict without fitting
-    learner.predict(X[0])
+    with pytest.warns(UserWarning):
+        learner.predict(X[0])
 
     learner.partial_fit(X, y)
 

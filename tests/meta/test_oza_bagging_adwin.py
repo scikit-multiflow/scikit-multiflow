@@ -7,7 +7,6 @@ import numpy as np
 
 def test_oza_bagging_adwin():
     stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
-    stream.prepare_for_use()
     knn = KNNClassifier(n_neighbors=8, leaf_size=40, max_window_size=2000)
     learner = OzaBaggingADWINClassifier(base_estimator=knn, n_estimators=3, random_state=112)
     first = True
@@ -46,7 +45,8 @@ def test_oza_bagging_adwin():
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    expected_info = "OzaBaggingADWINClassifier(base_estimator=KNNClassifier(leaf_size=40, max_window_size=2000, " \
-                    "n_neighbors=8, nominal_attributes=None), n_estimators=3, random_state=112)"
+    expected_info = "OzaBaggingADWINClassifier(base_estimator=KNNClassifier(leaf_size=40, " \
+                    "max_window_size=2000, metric='euclidean', n_neighbors=8), n_estimators=3, " \
+                    "random_state=112)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info

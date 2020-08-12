@@ -2,7 +2,6 @@ from skmultiflow.trees.nodes import FoundNode
 from skmultiflow.trees.nodes import ActiveLearningNodePerceptron
 from skmultiflow.trees.nodes import AdaNode
 from skmultiflow.drift_detection.adwin import ADWIN
-from skmultiflow.utils import check_random_state
 
 
 class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
@@ -16,22 +15,23 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         online variance calculation. They refer to the number of observations
         (key '0'), the sum of the target values (key '1'), and the sum of the
         squared target values (key '2').
-    perceptron_weight: np.ndarray(n_features) or None, optional (default=None)
-        (default=None)
-        The weights for the linear models. If
-        not passed, uniform values in the range [-1, 1] are used.
+    parent_node: AdaLearningNodeForRegression (default=None)
+        A node containing statistics about observed data.
     random_state: int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used
         by `np.random`.
     """
-    def __init__(self, initial_class_observations, perceptron_weight, random_state=None):
-        super().__init__(initial_class_observations, perceptron_weight, random_state)
+
+    def __init__(self, initial_class_observations, parent_node, random_state=None):
+        super().__init__(initial_class_observations, parent_node, random_state)
         self._estimation_error_weight = ADWIN()
         self._error_change = False
-        self._randomSeed = 1
-        self._classifier_random = check_random_state(self._randomSeed)
+
+        # To normalize the observed errors in the [0, 1] range
+        self._min_error = float('Inf')
+        self._max_error = float('-Inf')
 
     # Override AdaNode
     def number_leaves(self):
@@ -57,10 +57,8 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
 
         super().learn_from_instance(X, y, weight, rhat)
 
-        true_target = y
-        target_prediction = rhat.predict([X])[0]
-
-        normalized_error = rhat.get_normalized_error(target_prediction, true_target)
+        y_pred = rhat.predict([X])[0]
+        normalized_error = self.get_normalized_error(y, y_pred)
 
         if self._estimation_error_weight is None:
             self._estimation_error_weight = ADWIN()
@@ -73,7 +71,7 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         # Detect change with Adwin
         self._error_change = self._estimation_error_weight.detected_change()
 
-        if self._error_change is True and old_error > self.get_error_estimation():
+        if self._error_change and old_error > self.get_error_estimation():
             self._error_change = False
 
         # call ActiveLearningNode
@@ -89,3 +87,17 @@ class AdaLearningNodeForRegression(ActiveLearningNodePerceptron, AdaNode):
         if found_nodes is None:
             found_nodes = []
         found_nodes.append(FoundNode(self, parent, parent_branch))
+
+    def get_normalized_error(self, y, y_pred):
+        abs_error = abs(y - y_pred)
+
+        # Incremental maintenance of the normalization ranges
+        if abs_error < self._min_error:
+            self._min_error = abs_error
+        if abs_error > self._max_error:
+            self._max_error = abs_error
+
+        if self._min_error != self._max_error:
+            return (abs_error - self._min_error) / (self._max_error - self._min_error)
+        else:
+            return 0.0

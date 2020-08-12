@@ -7,11 +7,6 @@ from skmultiflow.trees.nodes import AdaNode
 
 from skmultiflow.utils import get_max_value_key, normalize_values_in_dict
 
-MAJORITY_CLASS = 'mc'
-NAIVE_BAYES = 'nb'
-NAIVE_BAYES_ADAPTIVE = 'nba'
-ERROR_WIDTH_THRESHOLD = 300
-
 
 class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
     """ Learning node for Hoeffding Adaptive Tree that uses Adaptive Naive
@@ -23,12 +18,11 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
         Initial class observations
 
     """
-    def __init__(self, initial_class_observations):
+    def __init__(self, initial_class_observations, random_state=None):
         super().__init__(initial_class_observations)
         self._estimation_error_weight = ADWIN()
         self.error_change = False
-        self._randomSeed = 1
-        self._classifier_random = check_random_state(self._randomSeed)
+        self._random_state = check_random_state(random_state)
 
     # Override AdaNode
     def number_leaves(self):
@@ -55,7 +49,7 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
 
         if hat.bootstrap_sampling:
             # Perform bootstrap-sampling
-            k = self._classifier_random.poisson(1.0)
+            k = self._random_state.poisson(1.0)
             if k > 0:
                 weight = weight * k
 
@@ -69,13 +63,13 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
         old_error = self.get_error_estimation()
 
         # Add element to Adwin
-        add = 0.0 if (bl_correct is True) else 1.0
+        add = 0.0 if bl_correct else 1.0
 
         self._estimation_error_weight.add_element(add)
         # Detect change with Adwin
         self.error_change = self._estimation_error_weight.detected_change()
 
-        if self.error_change is True and old_error > self.get_error_estimation():
+        if self.error_change and old_error > self.get_error_estimation():
             self.error_change = False
 
         # Update statistics
@@ -93,17 +87,19 @@ class AdaLearningNode(LearningNodeNBAdaptive, AdaNode):
         # dist = {}
         prediction_option = ht.leaf_prediction
         # MC
-        if prediction_option == MAJORITY_CLASS:
+        if prediction_option == ht._MAJORITY_CLASS:
             dist = self.get_observed_class_distribution()
         # NB
-        elif prediction_option == NAIVE_BAYES:
-            dist = do_naive_bayes_prediction(X, self._observed_class_distribution, self._attribute_observers)
+        elif prediction_option == ht._NAIVE_BAYES:
+            dist = do_naive_bayes_prediction(X, self._observed_class_distribution,
+                                             self._attribute_observers)
         # NBAdaptive (default)
         else:
             if self._mc_correct_weight > self._nb_correct_weight:
                 dist = self.get_observed_class_distribution()
             else:
-                dist = do_naive_bayes_prediction(X, self._observed_class_distribution, self._attribute_observers)
+                dist = do_naive_bayes_prediction(X, self._observed_class_distribution,
+                                                 self._attribute_observers)
 
         dist_sum = sum(dist.values())  # sum all values in dictionary
         normalization_factor = dist_sum * self.get_error_estimation() * self.get_error_estimation()

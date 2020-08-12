@@ -66,11 +66,10 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     --------
     >>> # Imports
     >>> from skmultiflow.meta import OzaBaggingClassifier
-    >>> from skmultiflow.lazy.knn import KNNClassifier
+    >>> from skmultiflow.lazy import KNNClassifier
     >>> from skmultiflow.data import SEAGenerator
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1, noise_percentage=0.07)
-    >>> stream.prepare_for_use()
     >>> # Setting up the OzaBagging classifier to work with KNN as base estimator
     >>> clf = OzaBaggingClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30), n_estimators=2)
     >>> # Keeping track of sample count and correct prediction count
@@ -120,7 +119,8 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         return self
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
-        """ Partially (incrementally) fit the model.
+        """
+        Partially (incrementally) fit the model.
 
         Parameters
         ----------
@@ -135,16 +135,18 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             for the first partial_fit call where it is compulsory.
 
         sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
-            Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the base estimator.
+            Samples weight. If not provided, uniform weights are assumed. Usage varies depending
+            on the base estimator.
 
         Raises
         ------
-        ValueError: A ValueError is raised if the 'classes' parameter is not
-        passed in the first partial_fit call, or if they are passed in further 
-        calls but differ from the initial classes list passed.
+        ValueError
+            A ValueError is raised if the 'classes' parameter is not passed in the first
+            partial_fit call, or if they are passed in further calls but differ from
+            the initial classes list passed.
         
         Returns
-        _______
+        -------
         OzaBaggingClassifier
             self
 

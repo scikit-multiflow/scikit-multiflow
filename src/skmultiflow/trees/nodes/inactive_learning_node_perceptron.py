@@ -4,7 +4,6 @@ import numpy as np
 
 from skmultiflow.utils import check_random_state
 from skmultiflow.trees.nodes import InactiveLearningNode
-from skmultiflow.trees.nodes.active_learning_node_perceptron import compute_sd
 
 
 class InactiveLearningNodePerceptron(InactiveLearningNode):
@@ -95,4 +94,7 @@ class InactiveLearningNodePerceptron(InactiveLearningNode):
         normalized_pred = np.dot(self.perceptron_weight, normalized_sample)
         normalized_target_value = ht.normalize_target_value(y)
         delta = normalized_target_value - normalized_pred
-        self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * normalized_sample
+        self.perceptron_weight = self.perceptron_weight + learning_ratio * delta * \
+            normalized_sample
+        # Normalize perceptron weights
+        self.perceptron_weight = self.perceptron_weight / np.sum(np.abs(self.perceptron_weight))

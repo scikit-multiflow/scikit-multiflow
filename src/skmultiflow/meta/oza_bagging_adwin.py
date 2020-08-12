@@ -57,11 +57,10 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
     --------
     >>> # Imports
     >>> from skmultiflow.meta import OzaBaggingADWINClassifier
-    >>> from skmultiflow.lazy.knn import KNNClassifier
+    >>> from skmultiflow.lazy import KNNClassifier
     >>> from skmultiflow.data.sea_generator import SEAGenerator
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1, noise_percentage=6.7)
-    >>> stream.prepare_for_use()
     >>> # Setting up the OzaBaggingADWINClassifier to work with KNN as base estimator
     >>> clf = OzaBaggingADWINClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30),
     ...                                 n_estimators=2)
@@ -121,12 +120,13 @@ class OzaBaggingADWINClassifier(OzaBaggingClassifier):
 
         Raises
         ------
-        ValueError: A ValueError is raised if the 'classes' parameter is not
-        passed in the first partial_fit call, or if they are passed in further 
-        calls but differ from the initial classes list passed.
+        ValueError
+            A ValueError is raised if the 'classes' parameter is not passed in the first
+            partial_fit call, or if they are passed in further  calls but differ from
+            the initial classes list passed.
 
         Returns
-        _______
+        -------
         OzaBaggingADWINClassifier
             self
 

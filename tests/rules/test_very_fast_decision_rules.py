@@ -15,7 +15,6 @@ def test_vfdr_info_gain():
                                               min_weight=100,
                                               nb_prediction=False)
     stream = AGRAWALGenerator(random_state=11)
-    stream.prepare_for_use()
 
     cnt = 0
     max_samples = 5000
@@ -58,15 +57,10 @@ def test_vfdr_info_gain():
     assert (learner.get_model_description() == expected_model_description_1) or \
            (learner.get_model_description() == expected_model_description_2)
 
-    expected_model_measurements_1 = {'Number of rules: ': 3, 'model_size in bytes': 61735}
-    expected_model_measurements_2 = {'Number of rules: ': 3, 'model_size in bytes': 72607}
-
-    if sys.platform == 'linux':
-        assert (learner.get_model_measurements() == expected_model_measurements_1) or \
-               (learner.get_model_measurements() == expected_model_measurements_2)
-    else:
-        # run for coverage
-        learner.get_model_measurements()
+    # Following test only covers 'Number of rules' since 'model_size in bytes' is calculated using
+    # the 'calculate_object_size' utility function which is validated in its own test
+    expected_number_of_rules = 3
+    assert learner.get_model_measurements()['Number of rules: '] == expected_number_of_rules
 
 
 def test_vfdr_foil():
@@ -79,7 +73,6 @@ def test_vfdr_foil():
                                               min_weight=100,
                                               nb_prediction=True)
     stream = AGRAWALGenerator(random_state=11)
-    stream.prepare_for_use()
 
     cnt = 0
     max_samples = 5000
@@ -120,7 +113,6 @@ def test_vfdr_hellinger():
                                               min_weight=100,
                                               nb_prediction=True)
     stream = AGRAWALGenerator(random_state=11)
-    stream.prepare_for_use()
 
     cnt = 0
     max_samples = 5000

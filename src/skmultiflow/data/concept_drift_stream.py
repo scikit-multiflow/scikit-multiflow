@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
@@ -34,9 +36,10 @@ class ConceptDriftStream(Stream):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
 
-    alpha: float (optional, default: 0.0)
-        Angle of change to estimate the width of concept drift change. If set will override the width parameter.
-        Valid values are in the range (0.0, 90.0].
+    alpha: float (optional, default: None)
+        Angle of change to estimate the width of concept drift change.
+        If set will override the width parameter. Valid values are in the range (0.0, 90.0].
+        If alpha is None, this parameter will be ignored.
 
     position: int (default: 5000)
         Central position of concept drift change.
@@ -46,10 +49,11 @@ class ConceptDriftStream(Stream):
 
     Notes
     -----
-    An optional way to estimate the width of the transition :math:`w` is based on the angle :math:`\\alpha`:
-    :math:`w = 1/ tan(\\alpha)`. Since width corresponds to the number of samples for the transition, the width
-    is round-down to the nearest smaller integer. Notice that larger values of :math:`\\alpha` result in smaller
-    widths. For :math:`\\alpha>45.0`, the width is smaller than 1 so values are round-up to 1 to avoid
+    An optional way to estimate the width of the transition :math:`w` is based on
+    the angle :math:`\\alpha`: :math:`w = 1/ tan(\\alpha)`. Since width corresponds to
+    the number of samples for the transition, the width is round-down to the nearest
+    smaller integer. Notice that larger values of :math:`\\alpha` result in smaller widths.
+    For :math:`\\alpha>45.0`, the width is smaller than 1 so values are round-up to 1 to avoid
     division by zero errors.
 
     """
@@ -59,7 +63,7 @@ class ConceptDriftStream(Stream):
                  position=5000,
                  width=1000,
                  random_state=None,
-                 alpha=0.0):
+                 alpha=None):
         super(ConceptDriftStream, self).__init__()
 
         self.n_samples = stream.n_samples
@@ -78,7 +82,11 @@ class ConceptDriftStream(Stream):
         self.random_state = random_state
         self._random_state = None   # This is the actual random_state object used internally
         self.alpha = alpha
-        if self.alpha != 0.0:
+        if self.alpha == 0:
+            warnings.warn("Default value for 'alpha' has changed from 0 to None. 'alpha=0' will "
+                          "throw an error from v0.7.0", category=FutureWarning)
+            self.alpha = None
+        if self.alpha is not None:
             if 0 < self.alpha <= 90.0:
                 w = int(1 / np.tan(self.alpha * np.pi / 180))
                 self.width = w if w > 0 else 1
@@ -90,19 +98,10 @@ class ConceptDriftStream(Stream):
         self.stream = stream
         self.drift_stream = drift_stream
 
-    def prepare_for_use(self):
-        """
-        Prepares the stream for use.
+        self._prepare_for_use()
 
-        Notes
-        -----
-        This functions should always be called after the stream initialization.
-
-        """
+    def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
-        self.sample_idx = 0
-        self.stream.prepare_for_use()
-        self.drift_stream.prepare_for_use()
 
     def n_remaining_samples(self):
         """ Returns the estimated number of remaining samples.
@@ -118,8 +117,7 @@ class ConceptDriftStream(Stream):
         return n_samples
 
     def has_more_samples(self):
-        """
-        Checks if stream has more samples.
+        """ Checks if stream has more samples.
 
         Returns
         -------
@@ -130,6 +128,7 @@ class ConceptDriftStream(Stream):
 
     def is_restartable(self):
         """ Determine if the stream is restartable.
+
          Returns
          -------
          Boolean
@@ -138,12 +137,11 @@ class ConceptDriftStream(Stream):
         return self.stream.is_restartable() and self.drift_stream.is_restartable()
 
     def next_sample(self, batch_size=1):
-
-        """ Returns the next `batch_size` samples.
+        """ Returns next sample from the stream.
 
         Parameters
         ----------
-        batch_size: int
+        batch_size: int (optional, default=1)
             The number of samples to return.
 
         Returns

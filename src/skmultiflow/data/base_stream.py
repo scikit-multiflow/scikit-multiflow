@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from skmultiflow.core import BaseSKMObject
+import warnings
 
 
 class Stream(BaseSKMObject, metaclass=ABCMeta):
@@ -7,11 +8,11 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
 
     This abstract class defines the minimum requirements of a stream,
     so that it can work along other modules in scikit-multiflow.
-    
+
     Raises
     ------
     NotImplementedError: This is an abstract class.
-    
+
     """
     _estimator_type = 'stream'
 
@@ -180,34 +181,35 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
         """
         self._target_names = target_names
 
-    @abstractmethod
-    def prepare_for_use(self):
-        """ prepare_for_use
+    @staticmethod
+    def prepare_for_use():  # pragma: no cover
+        """ Prepare the stream for use.
 
-        Prepare the stream for use. Can be the reading of a file, or
-        the generation of a function, or anything necessary for the
-        stream to work after its initialization.
-
-        Notes
-        -----
-        Every time a stream is created this function has to be called.
+        Deprecated in v0.5.0 and will be removed in v0.7.0
 
         """
+        warnings.warn(
+            "'prepare_for_use' has been deprecated in v0.5.0 and will be removed in v0.7.0.\n"
+            "New instances of the Stream class are now ready to use after instantiation.",
+            category=FutureWarning)
+
+    @abstractmethod
+    def _prepare_for_use(self):
         raise NotImplementedError
 
     @abstractmethod
     def next_sample(self, batch_size=1):
-        """ Generates or returns next `batch_size` samples in the stream.
-        
+        """ Returns next sample from the stream.
+
         Parameters
         ----------
-        batch_size: int
-            How many samples at a time to return.
-        
+        batch_size: int (optional, default=1)
+            The number of samples to return.
+
         Returns
         -------
         tuple or tuple list
-            A numpy.ndarray of shape (batch_size, n_features) and an array-like of size 
+            A numpy.ndarray of shape (batch_size, n_features) and an array-like of size
             n_targets, representing the next batch_size samples.
 
         """
@@ -226,17 +228,23 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
         return self.current_sample_x, self.current_sample_y
 
     def is_restartable(self):
-        """ Determine if the stream is restartable.
-         Returns
-         -------
-         Boolean
+        """
+        Determine if the stream is restartable.
+
+        Returns
+        -------
+        Bool
             True if stream is restartable.
-         """
+
+        """
         return True
 
     def restart(self):
         """  Restart the stream. """
-        self.prepare_for_use()
+        self.current_sample_x = None
+        self.current_sample_y = None
+        self.sample_idx = 0
+        self._prepare_for_use()
 
     def n_remaining_samples(self):
         """ Returns the estimated number of remaining samples.
@@ -262,16 +270,17 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
 
     def get_data_info(self):
         """ Retrieves minimum information from the stream
-        
+
         Used by evaluator methods to id the stream.
-        
+
         The default format is: 'Stream name - n_targets, n_classes, n_features'.
-        
+
         Returns
         -------
         string
             Stream data information
-        
+
         """
-        return self.name + " - {} target(s), {} classes, {} features".format(self.n_targets, self.n_classes,
-                                                                           self.n_features)
+        return self.name + " - {} target(s), {} classes, {} features".format(self.n_targets,
+                                                                             self.n_classes,
+                                                                             self.n_features)

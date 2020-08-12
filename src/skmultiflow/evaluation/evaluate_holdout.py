@@ -71,7 +71,7 @@ class EvaluateHoldout(StreamEvaluator):
         | 'average_mean_squared_error'
         | 'average_mean_absolute_error'
         | 'average_root_mean_square_error'
-        | **Experimental**
+        | **General purpose** (no plot generated)
         | 'running_time'
         | 'model_size'
 
@@ -96,6 +96,10 @@ class EvaluateHoldout(StreamEvaluator):
     1. This evaluator can process a single learner to track its performance; or multiple learners  at a time, to
        compare different models on the same stream.
 
+    2. The metrics `running_time` and `model_size ` are not plotted when the `show_plot` option is set. Only their
+       current value is displayed at the bottom of the figure. However, their values over the evaluation are written
+       into the resulting csv file if the `output_file` option is set.
+
     Examples
     --------
     >>> # The first example demonstrates how to evaluate one model
@@ -105,7 +109,6 @@ class EvaluateHoldout(StreamEvaluator):
     >>>
     >>> # Set the stream
     >>> stream = SEAGenerator(random_state=1)
-    >>> stream.prepare_for_use()
     >>>
     >>> # Set the model
     >>> ht = HoeffdingTreeClassifier()
@@ -128,7 +131,6 @@ class EvaluateHoldout(StreamEvaluator):
     >>>
     >>> # Set the stream
     >>> stream = SEAGenerator(random_state=1)
-    >>> stream.prepare_for_use()
     >>>
     >>> # Set the model
     >>> ht = HoeffdingTreeClassifier()
@@ -241,7 +243,7 @@ class EvaluateHoldout(StreamEvaluator):
 
         performance_sampling_cnt = 0
         print('Evaluating...')
-        while ((self.global_sample_count < self.max_samples) & (self._end_time - self._start_time < self.max_time)
+        while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
                & (self.stream.has_more_samples())):
             try:
                 X, y = self.stream.next_sample(self.batch_size)
@@ -283,7 +285,7 @@ class EvaluateHoldout(StreamEvaluator):
                     else:
                         perform_test = (self.global_sample_count - self.test_size) % self.n_wait == 0
 
-                    if perform_test | (self.global_sample_count >= self.max_samples):
+                    if perform_test | (self.global_sample_count >= actual_max_samples):
 
                         if self.dynamic_test_set:
                             print('Separating {} holdout samples.'.format(self.test_size))

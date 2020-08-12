@@ -70,18 +70,17 @@ class HyperplaneGenerator(Stream):
         self.sigma_percentage = sigma_percentage
         self.noise_percentage = noise_percentage
         self.n_targets = 1
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self._next_class_should_be_zero = False
         self._weights = np.zeros(self.n_features)
         self._sigma = np.zeros(self.n_features)
         self.name = "Hyperplane Generator"
 
-        self.__configure()
-
-    def __configure(self):
         self.target_names = ["target_0"]
         self.feature_names = ["att_num_" + str(i) for i in range(self.n_features)]
         self.target_values = [i for i in range(self.n_classes)]
+
+        self._prepare_for_use()
 
     @property
     def n_drift_features(self):
@@ -125,7 +124,8 @@ class HyperplaneGenerator(Stream):
         if (0.0 <= noise_percentage) and (noise_percentage <= 1.0):
             self._noise_percentage = noise_percentage
         else:
-            raise ValueError("noise percentage should be in [0.0..1.0], {} was passed".format(noise_percentage))
+            raise ValueError(
+                "noise percentage should be in [0.0..1.0], {} was passed".format(noise_percentage))
 
     @property
     def mag_change(self):
@@ -150,7 +150,8 @@ class HyperplaneGenerator(Stream):
         if (0.0 <= mag_change) and (mag_change <= 1.0):
             self._mag_change = mag_change
         else:
-            raise ValueError("noise percentage should be in [0.0..1.0], {} was passed".format(mag_change))
+            raise ValueError(
+                "noise percentage should be in [0.0..1.0], {} was passed".format(mag_change))
 
     @property
     def sigma_percentage(self):
@@ -175,26 +176,18 @@ class HyperplaneGenerator(Stream):
         if (0.0 <= sigma_percentage) and (sigma_percentage <= 1.0):
             self._sigma_percentage = sigma_percentage
         else:
-            raise ValueError("sigma percentage should be in [0.0..1.0], {} was passed".format(sigma_percentage))
+            raise ValueError(
+                "sigma percentage should be in [0.0..1.0], {} was passed".format(sigma_percentage))
 
-    def prepare_for_use(self):
-        """
-        Prepares the stream for use.
-
-        Notes
-        -----
-        This functions should always be called after the stream initialization.
-
-        """
+    def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
         self._next_class_should_be_zero = False
-        self.sample_idx = 0
         for i in range(self.n_features):
             self._weights[i] = self._random_state.rand()
             self._sigma[i] = 1 if (i < self.n_drift_features) else 0
 
     def next_sample(self, batch_size=1):
-        """ next_sample
+        """ Returns next sample from the stream.
 
         The sample generation works as follows: The features are generated
         with the random generator, initialized with the seed passed by the
@@ -205,7 +198,7 @@ class HyperplaneGenerator(Stream):
 
         Parameters
         ----------
-        batch_size: int
+        batch_size: int (optional, default=1)
             The number of samples to return.
 
         Returns

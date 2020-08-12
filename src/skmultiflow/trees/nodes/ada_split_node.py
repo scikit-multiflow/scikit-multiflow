@@ -10,8 +10,6 @@ from skmultiflow.trees.attribute_test import NominalAttributeMultiwayTest
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.utils import check_random_state, get_max_value_key
 
-ERROR_WIDTH_THRESHOLD = 300
-
 
 class AdaSplitNode(SplitNode, AdaNode):
     """ Node that splits the data in a Hoeffding Adaptive Tree.
@@ -23,18 +21,18 @@ class AdaSplitNode(SplitNode, AdaNode):
     class_observations: dict (class_value, weight) or None
         Class observations
     """
-    def __init__(self, split_test, class_observations):
+    def __init__(self, split_test, class_observations, random_state=None):
         super().__init__(split_test, class_observations)
         self._estimation_error_weight = ADWIN()
         self._alternate_tree = None
         self.error_change = False
-        self._random_seed = 1
-        self._classifier_random = check_random_state(self._random_seed)
+
+        self._random_state = check_random_state(random_state)
 
     # Override AdaNode
     def number_leaves(self):
         num_of_leaves = 0
-        for child in self._children:
+        for child in self._children.values():
             if child is not None:
                 num_of_leaves += child.number_leaves()
 
@@ -47,7 +45,7 @@ class AdaSplitNode(SplitNode, AdaNode):
     # Override AdaNode
     def get_error_width(self):
         w = 0.0
-        if self.is_null_error() is False:
+        if not self.is_null_error():
             w = self._estimation_error_weight.width
 
         return w
@@ -73,30 +71,31 @@ class AdaSplitNode(SplitNode, AdaNode):
         old_error = self.get_error_estimation()
 
         # Add element to ADWIN
-        add = 0.0 if (bl_correct is True) else 1.0
+        add = 0.0 if bl_correct else 1.0
 
         self._estimation_error_weight.add_element(add)
         # Detect change with ADWIN
         self.error_change = self._estimation_error_weight.detected_change()
 
-        if self.error_change is True and old_error > self.get_error_estimation():
+        if self.error_change and old_error > self.get_error_estimation():
             self.error_change = False
 
         # Check condition to build a new alternate tree
-        if self.error_change is True:
+        if self.error_change:
             self._alternate_tree = hat._new_learning_node()
             hat.alternate_trees_cnt += 1
 
         # Condition to replace alternate tree
-        elif self._alternate_tree is not None and self._alternate_tree.is_null_error() is False:
-            if self.get_error_width() > ERROR_WIDTH_THRESHOLD \
-                    and self._alternate_tree.get_error_width() > ERROR_WIDTH_THRESHOLD:
+        elif self._alternate_tree is not None and not self._alternate_tree.is_null_error():
+            if self.get_error_width() > hat._ERROR_WIDTH_THRESHOLD \
+                    and self._alternate_tree.get_error_width() > hat._ERROR_WIDTH_THRESHOLD:
                 old_error_rate = self.get_error_estimation()
                 alt_error_rate = self._alternate_tree.get_error_estimation()
                 fDelta = .05
-                fN = 1.0 / self._alternate_tree.get_error_width() + 1.0 / (self.get_error_width())
+                fN = 1.0 / self._alternate_tree.get_error_width() + 1.0 / self.get_error_width()
 
-                bound = math.sqrt(2.0 * old_error_rate * (1.0 - old_error_rate) * math.log(2.0 / fDelta) * fN)
+                bound = math.sqrt(2.0 * old_error_rate * (1.0 - old_error_rate) *
+                                  math.log(2.0 / fDelta) * fN)
                 # To check, bound never less than (old_error_rate - alt_error_rate)
                 if bound < (old_error_rate - alt_error_rate):
                     hat._active_leaf_node_cnt -= self.number_leaves()
@@ -107,7 +106,7 @@ class AdaSplitNode(SplitNode, AdaNode):
                         parent.set_child(parent_branch, self._alternate_tree)
                     else:
                         # Switch tree root
-                        hat._tree_root = hat._tree_root.alternateTree
+                        hat._tree_root = hat._tree_root._alternate_tree
                     hat.switch_alternate_trees_cnt += 1
                 elif bound < alt_error_rate - old_error_rate:
                     if isinstance(self._alternate_tree, ActiveLearningNode):
@@ -141,12 +140,12 @@ class AdaSplitNode(SplitNode, AdaNode):
 
     # Override AdaNode
     def kill_tree_children(self, hat):
-        for child in self._children:
+        for child in self._children.values():
             if child is not None:
                 # Delete alternate tree if it exists
                 if isinstance(child, SplitNode) and child._alternate_tree is not None:
                     child._alternate_tree.kill_tree_children(hat)
-                    self._pruned_alternate_trees += 1
+                    hat.pruned_alternate_trees_cnt += 1
                 # Recursive delete of SplitNodes
                 if isinstance(child, SplitNode):
                     child.kill_tree_children(hat)

@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = python -msphinx
+SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = _build
 
@@ -49,7 +49,7 @@ help:
 .PHONY: clean
 clean:
 	rm -rf $(BUILDDIR)/*
-	rm -rf _autosummary/*
+	rm -rf api/generated/*
 
 .PHONY: html
 html:

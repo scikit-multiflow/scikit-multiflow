@@ -6,24 +6,24 @@ import numpy as np
 
 class RegressionGenerator(Stream):
     """ Creates a regression stream.
-    
-    This generator creates a stream of samples for a regression problem. It 
-    uses the make_regression function from scikit-learn, which creates a 
-    batch setting regression problem. These samples are then sequentially 
+
+    This generator creates a stream of samples for a regression problem. It
+    uses the make_regression function from scikit-learn, which creates a
+    batch setting regression problem. These samples are then sequentially
     fed by the next_sample function.
-    
+
     Parameters
     ----------
     n_samples: int (Default: 40000)
         Total amount of samples to generate.
-    
+
     n_features: int (Default: 100)
         Number of features to generate.
-        
+
     n_informative: int (Default: 10)
-        Number of relevant features, in other words, the number of features 
+        Number of relevant features, in other words, the number of features
         that influence the class label.
-    
+
     n_targets: int (Default: 1)
         Number of target_values (outputs) to generate.
 
@@ -36,14 +36,14 @@ class RegressionGenerator(Stream):
     Notes
     -----
     This is a wrapper for scikit-lean's `make_regression`
-    
+
     Examples
     --------
     >>> # Imports
     >>> from skmultiflow.data.regression_generator import RegressionGenerator
     >>> # Setting up the stream
-    >>> stream = RegressionGenerator(n_samples=100, n_features=20, n_targets=4, n_informative=6, random_state=0)
-    >>> stream.prepare_for_use()
+    >>> stream = RegressionGenerator(n_samples=100, n_features=20, n_targets=4, n_informative=6,
+    ... random_state=0)
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[ 0.16422776,  0.56729028, -0.76149221,  0.38728048, -1.69810582,
@@ -108,10 +108,11 @@ class RegressionGenerator(Stream):
     89
     >>> stream.has_more_samples()
     True
-    
+
     """
 
-    def __init__(self, n_samples=40000, n_features=100, n_informative=10, n_targets=1, random_state=None):
+    def __init__(self, n_samples=40000, n_features=100, n_informative=10, n_targets=1,
+                 random_state=None):
         super().__init__()
         self.X = None
         self.y = None
@@ -122,17 +123,12 @@ class RegressionGenerator(Stream):
         self.n_num_features = n_features
         self.n_features = n_features
         self.random_state = random_state
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.name = "Regression Generator"
 
-    def prepare_for_use(self):
-        """ Prepare the stream for usage
-        
-        Uses the make_regression function from scikit-learn to generate a 
-        regression problem. This problem will be kept in memory and provided 
-        as demanded.
-        
-        """
+        self._prepare_for_use()
+
+    def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
         self.X, self.y = make_regression(n_samples=self.n_samples,
                                          n_features=self.n_features,
@@ -164,21 +160,19 @@ class RegressionGenerator(Stream):
         return self.n_samples - self.sample_idx > 0
 
     def next_sample(self, batch_size=1):
-        """ next_sample
-        
-        Returns batch_size samples from the generated regression problem.
-        
+        """ Returns next sample from the stream.
+
         Parameters
         ----------
-        batch_size: int
+        batch_size: int (optional, default=1)
             The number of sample to return.
-            
+
         Returns
         -------
         tuple or tuple list
-            Return a tuple with the features matrix and the labels matrix for 
+            Return a tuple with the features matrix and the labels matrix for
             the batch_size samples that were requested.
-        
+
         """
         self.sample_idx += batch_size
         try:
@@ -204,4 +198,5 @@ class RegressionGenerator(Stream):
         self.current_sample_y = None
 
     def get_data_info(self):
-        return "Regression Generator - {} targets, {} features".format(self.n_targets, self.n_features)
+        return "Regression Generator - {} targets, {} features".format(self.n_targets,
+                                                                       self.n_features)

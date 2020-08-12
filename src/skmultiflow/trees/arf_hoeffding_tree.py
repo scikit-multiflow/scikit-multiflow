@@ -1,9 +1,9 @@
 from skmultiflow.utils import check_random_state
-from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier, MAJORITY_CLASS, \
-    NAIVE_BAYES
+from skmultiflow.trees.hoeffding_tree import HoeffdingTreeClassifier
 from skmultiflow.trees.nodes import RandomLearningNodeClassification
 from skmultiflow.trees.nodes import RandomLearningNodeNB
 from skmultiflow.trees.nodes import RandomLearningNodeNBAdaptive
+from skmultiflow.trees.nodes import InactiveLearningNode
 
 
 class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
@@ -71,6 +71,7 @@ class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
     (see skmultiflow.classification.meta.adaptive_random_forests).
     This Hoeffding Tree includes a max_features parameter, which defines the
     number of randomly selected features to be considered at each split.
+
     """
     def __init__(self,
                  max_byte_size=33554432,
@@ -107,33 +108,33 @@ class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
         self.random_state = random_state
         self._random_state = check_random_state(self.random_state)
 
-    def _new_learning_node(self, initial_class_observations=None):
+    def _new_learning_node(self, initial_class_observations=None, is_active_node=True):
         """Create a new learning node. The type of learning node depends on the
         tree configuration."""
         if initial_class_observations is None:
             initial_class_observations = {}
-        # MAJORITY CLASS
-        if self._leaf_prediction == MAJORITY_CLASS:
-            return RandomLearningNodeClassification(
-                initial_class_observations, self.max_features,
-                random_state=self._random_state
-            )
-        # NAIVE BAYES
-        elif self._leaf_prediction == NAIVE_BAYES:
-            return RandomLearningNodeNB(
-                initial_class_observations, self.max_features,
-                random_state=self._random_state
-            )
-        # NAIVE BAYES ADAPTIVE
-        else:
-            return RandomLearningNodeNBAdaptive(
-                initial_class_observations, self.max_features,
-                random_state=self._random_state
-            )
 
-    @staticmethod
-    def is_randomizable():
-        return True
+        if is_active_node:
+            # MAJORITY CLASS
+            if self._leaf_prediction == self._MAJORITY_CLASS:
+                return RandomLearningNodeClassification(
+                    initial_class_observations, self.max_features,
+                    random_state=self._random_state
+                )
+            # NAIVE BAYES
+            elif self._leaf_prediction == self._NAIVE_BAYES:
+                return RandomLearningNodeNB(
+                    initial_class_observations, self.max_features,
+                    random_state=self._random_state
+                )
+            # NAIVE BAYES ADAPTIVE
+            else:
+                return RandomLearningNodeNBAdaptive(
+                    initial_class_observations, self.max_features,
+                    random_state=self._random_state
+                )
+        else:
+            return InactiveLearningNode(initial_class_observations)
 
     def reset(self):
         super().reset()

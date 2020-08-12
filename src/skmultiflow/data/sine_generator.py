@@ -4,7 +4,7 @@ from skmultiflow.utils import check_random_state
 
 
 class SineGenerator(Stream):
-    """ Sine stream generator.
+    r""" Sine stream generator.
 
     This generator is an implementation of the dara stream with abrupt
     concept drift, as described in Gama, Joao, et al [1]_.
@@ -60,9 +60,8 @@ class SineGenerator(Stream):
     >>> # Imports
     >>> from skmultiflow.data.sine_generator import SineGenerator
     >>> # Setting up the stream
-    >>> stream = SineGenerator(classification_function = 2, random_state = 112, balance_classes = False,
-    ... has_noise = True)
-    >>> stream.prepare_for_use()
+    >>> stream = SineGenerator(classification_function = 2, random_state = 112,
+    ...  balance_classes = False, has_noise = True)
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[0.37505713, 0.64030462, 0.95001658, 0.0756772 ]]), array([1.]))
@@ -76,7 +75,8 @@ class SineGenerator(Stream):
        [0.73653322, 0.83921149, 0.70936161, 0.18840112],
        [0.98566856, 0.38800331, 0.50315448, 0.76353033],
        [0.68373245, 0.72195738, 0.21415209, 0.76309258],
-       [0.07521616, 0.6108907 , 0.42563042, 0.23435109]]), array([1., 0., 1., 0., 1., 1., 1., 0., 0., 1.]))
+       [0.07521616, 0.6108907 , 0.42563042, 0.23435109]]),
+       array([1., 0., 1., 0., 1., 1., 1., 0., 0., 1.]))
     >>> stream.n_remaining_samples()
     -1
     >>> stream.has_more_samples()
@@ -86,12 +86,15 @@ class SineGenerator(Stream):
     _NUM_BASE_ATTRIBUTES = 2
     _TOTAL_ATTRIBUTES_INCLUDING_NOISE = 4
 
-    def __init__(self, classification_function=0, random_state=None, balance_classes=False, has_noise=False):
+    def __init__(self, classification_function=0, random_state=None, balance_classes=False,
+                 has_noise=False):
         super().__init__()
 
         # Classification functions to use
-        self._classification_functions = [self._classification_function_zero, self._classification_function_one,
-                                          self._classification_function_two, self._classification_function_three]
+        self._classification_functions = [self._classification_function_zero,
+                                          self._classification_function_one,
+                                          self._classification_function_two,
+                                          self._classification_function_three]
         self.classification_function = classification_function
         self.random_state = random_state
         self.has_noise = has_noise
@@ -99,19 +102,18 @@ class SineGenerator(Stream):
         self.n_num_features = self._NUM_BASE_ATTRIBUTES
         self.n_classes = 2
         self.n_targets = 1
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.next_class_should_be_zero = False
         self.name = "Sine Generator"
 
-        self.__configure()
-
-    def __configure(self):
         if self.has_noise:
             self.n_num_features = self._TOTAL_ATTRIBUTES_INCLUDING_NOISE
         self.n_features = self.n_num_features
         self.target_names = ["target_0"]
         self.feature_names = ["att_num_" + str(i) for i in range(self.n_features)]
         self.target_values = [i for i in range(self.n_classes)]
+
+        self._prepare_for_use()
 
     @property
     def classification_function(self):
@@ -190,20 +192,12 @@ class SineGenerator(Stream):
         else:
             raise ValueError("has_noise should be boolean, {} was passed".format(has_noise))
 
-    def prepare_for_use(self):
-        """
-        Prepares the stream for use.
-
-        Notes
-        -----
-        This functions should always be called after the stream initialization.
-        """
+    def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
         self.next_class_should_be_zero = False
-        self.sample_idx = 0
 
     def next_sample(self, batch_size=1):
-        """ next_sample
+        """ Returns next sample from the stream.
 
         The sample generation works as follows: The two attributes are
         generated with the random generator, initialized with the seed passed
@@ -218,7 +212,7 @@ class SineGenerator(Stream):
 
         Parameters
         ----------
-        batch_size: int
+        batch_size: int (optional, default=1)
             The number of samples to return.
 
         Returns

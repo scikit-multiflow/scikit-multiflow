@@ -7,10 +7,10 @@ class WaveformGenerator(Stream):
     """ Waveform stream generator.
 
     Generates instances with 21 numeric attributes and 3 classes, based
-    on a random differentiation of some base waveforms. Supports noise 
-    addition, but in this case the generator will have 40 attribute 
+    on a random differentiation of some base waveforms. Supports noise
+    addition, but in this case the generator will have 40 attribute
     instances
-     
+
     Parameters
     ----------
     random_state: int, RandomState instance or None, optional (default=None)
@@ -21,14 +21,13 @@ class WaveformGenerator(Stream):
 
     has_noise: bool
         if True additional 19 unrelated features will be added. (Default: False)
-        
+
     Examples
     --------
     >>> # Imports
     >>> from skmultiflow.data.waveform_generator import WaveformGenerator
     >>> # Setting up the stream
     >>> stream = WaveformGenerator(random_state=774, has_noise=True)
-    >>> stream.prepare_for_use()
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[ -3.87277692e-03,   5.35892351e-01,  -6.07354638e-02,
@@ -80,9 +79,9 @@ class WaveformGenerator(Stream):
     -1
     >>> stream.has_more_samples()
     True
-        
+
     """
-    
+
     _NUM_CLASSES = 3
     _NUM_BASE_ATTRIBUTES = 21
     _TOTAL_ATTRIBUTES_INCLUDING_NOISE = 40
@@ -94,16 +93,12 @@ class WaveformGenerator(Stream):
         super().__init__()
 
         self.random_state = random_state
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.has_noise = has_noise
         self.n_num_features = self._NUM_BASE_ATTRIBUTES
         self.n_classes = self._NUM_CLASSES
         self.n_targets = 1
         self.name = "Waveform Generator"
-
-        self.__configure()
-
-    def __configure(self):
 
         if self.has_noise:
             self.n_num_features = self._TOTAL_ATTRIBUTES_INCLUDING_NOISE
@@ -111,6 +106,8 @@ class WaveformGenerator(Stream):
         self.feature_names = ["att_num_" + str(i) for i in range(self.n_features)]
         self.target_names = ["target_0"]
         self.target_values = [i for i in range(self.n_classes)]
+
+        self._prepare_for_use()
 
     @property
     def has_noise(self):
@@ -137,45 +134,36 @@ class WaveformGenerator(Stream):
         else:
             raise ValueError("has_noise should be boolean, {} was passed".format(has_noise))
 
-    def prepare_for_use(self):
-        """
-        Prepares the stream for use.
-
-        Notes
-        -----
-        This functions should always be called after the stream initialization.
-
-        """
+    def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
-        self.sample_idx = 0
 
     def next_sample(self, batch_size=1):
-        """ next_sample
-        
-        An instance is generated based on the parameters passed. If noise 
+        """ Returns next sample from the stream.
+
+        An instance is generated based on the parameters passed. If noise
         is included the total number of features will be 40, if it's not
-        included there will be 21 attributes. In both cases there is one 
+        included there will be 21 attributes. In both cases there is one
         classification task, which chooses one between three labels.
-        
+
         After the number of attributes is chosen, the algorithm will randomly
-        choose one of the hard coded waveforms, as well as random multipliers. 
-        For each attribute, the actual value generated will be a a combination 
+        choose one of the hard coded waveforms, as well as random multipliers.
+        For each attribute, the actual value generated will be a a combination
         of the hard coded functions, with the multipliers and a random value.
-        
+
         Furthermore, if noise is added the features from 21 to 40 will be
         replaced with a random normal value.
-        
+
         Parameters
         ----------
-        batch_size: int
+        batch_size: int (optional, default=1)
             The number of samples to return.
-            
+
         Returns
         -------
         tuple or tuple list
-            Return a tuple with the features matrix and the labels matrix 
+            Return a tuple with the features matrix and the labels matrix
             for the batch_size samples that were requested.
-        
+
         """
         data = np.zeros([batch_size, self.n_features + 1])
 
@@ -188,9 +176,8 @@ class WaveformGenerator(Stream):
             multiplier_b = 1.0 - multiplier_a
 
             for i in range(self._NUM_BASE_ATTRIBUTES):
-                data[j, i] = multiplier_a * self._H_FUNCTION[choice_a][i] \
-                            + multiplier_b * self._H_FUNCTION[choice_b][i] \
-                            + self._random_state.normal()
+                data[j, i] = multiplier_a * self._H_FUNCTION[choice_a][i] + multiplier_b * \
+                    self._H_FUNCTION[choice_b][i] + self._random_state.normal()
 
             if self.has_noise:
                 for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):

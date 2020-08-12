@@ -51,8 +51,8 @@ class STAGGERGenerator(Stream):
     >>> # Imports
     >>> from skmultiflow.data.stagger_generator import STAGGERGenerator
     >>> # Setting up the stream
-    >>> stream = STAGGERGenerator(classification_function = 2, random_state = 112, balance_classes = False)
-    >>> stream.prepare_for_use()
+    >>> stream = STAGGERGenerator(classification_function = 2, random_state = 112,
+    ...  balance_classes = False)
     >>> # Retrieving one sample
     >>> stream.next_sample()
     (array([[0., 0., 2.]]), array([0.]))
@@ -78,7 +78,8 @@ class STAGGERGenerator(Stream):
         super().__init__()
 
         # Classification functions to use
-        self._classification_functions = [self.classification_function_zero, self.classification_function_one,
+        self._classification_functions = [self.classification_function_zero,
+                                          self.classification_function_one,
                                           self.classification_function_two]
 
         self.classification_function = classification_function
@@ -88,13 +89,9 @@ class STAGGERGenerator(Stream):
         self.n_features = self.n_cat_features
         self.n_classes = 2
         self.n_targets = 1
-        self._random_state = None   # This is the actual random_state object used internally
+        self._random_state = None  # This is the actual random_state object used internally
         self.next_class_should_be_zero = False
         self.name = "Stagger Generator"
-
-        self.__configure()
-
-    def __configure(self):
 
         self.target_names = ["target_0"]
         self.feature_names = ["size", "color", "shape"]
@@ -102,6 +99,8 @@ class STAGGERGenerator(Stream):
         self.color_labels = ["red", "blue", "green"]
         self.shape_labels = ["circle", "square", "triangle"]
         self.target_values = [i for i in range(self.n_classes)]
+
+        self._prepare_for_use()
 
     @property
     def classification_function(self):
@@ -152,24 +151,15 @@ class STAGGERGenerator(Stream):
         if isinstance(balance_classes, bool):
             self._balance_classes = balance_classes
         else:
-            raise ValueError("balance_classes should be boolean, and {} was passed".format(balance_classes))
+            raise ValueError(
+                "balance_classes should be boolean, and {} was passed".format(balance_classes))
 
-    def prepare_for_use(self):
-        """
-        Prepares the stream for use.
-
-        Notes
-        -----
-        This functions should always be called after the stream initialization.
-
-        """
+    def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
         self.next_class_should_be_zero = False
-        self.sample_idx = 0
 
     def next_sample(self, batch_size=1):
-
-        """ next_sample
+        """ Returns next sample from the stream.
 
         The sample generation works as follows: The three attributes are
         generated with the random int generator, initialized with the seed
@@ -183,7 +173,7 @@ class STAGGERGenerator(Stream):
 
         Parameters
         ----------
-        batch_size: int
+        batch_size: int (optional, default=1)
             The number of samples to return.
 
         Returns
@@ -205,7 +195,8 @@ class STAGGERGenerator(Stream):
                 color = self._random_state.randint(3)
                 shape = self._random_state.randint(3)
 
-                group = self._classification_functions[self.classification_function](size, color, shape)
+                group = self._classification_functions[self.classification_function](size, color,
+                                                                                     shape)
 
                 if not self.balance_classes:
                     desired_class_found = True

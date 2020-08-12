@@ -61,6 +61,17 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         'classes' parameter is not passed in the first partial_fit call, or if they
         are passed in further calls but differ from the initial classes.
 
+    Notes
+    -----
+        Originally, Learn++ is designed to train all of its members and combine their predictions
+        considering the observed normalized errors. However, when training the base estimators, if
+        the observed prediction error shrinks to zero before all estimators are trained, the error
+        normalization is ill-defined, i.e., the instance error-based weight normalization factor
+        (the sum of the errors) is zero. This implementation adds an 'early stop' mechanism to
+        circumvent this corner case: LearnPPClassifier stops adding members to the ensemble if all
+        instances are correctly classified. Otherwise (its normal behavior), the model uses as many
+        ensemble members as defined via the ``n_estimators`` parameter.
+
     Examples
     --------
     >>> # Imports
@@ -70,7 +81,6 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     >>> from skmultiflow.data.sea_generator import SEAGenerator
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1)
-    >>> stream.prepare_for_use()
     >>> # Setting up the Learn++ classifier to work with KNN classifiers
     >>> clf = LearnPPClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30), n_estimators=30)
     >>> # Keeping track of sample count and correct prediction count
@@ -178,8 +188,8 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         return self
 
     def __fit_batch(self, X, y):
-        ensemble = [copy.deepcopy(self.base_estimator) for _ in range(self.n_estimators)]
-        normalized_errors = [1.0 for _ in range(self.n_estimators)]
+        ensemble = []
+        normalized_errors = []
 
         m = len(X)
         X = np.array(X)
@@ -193,7 +203,10 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
             patience = 0
 
             # Set distribution Dt
-            Dt = Dt / np.sum(Dt)
+            sum_dt = np.sum(Dt)
+            if sum_dt == 0:  # Early stop in case all instances are correctly classified
+                break
+            Dt = Dt / sum_dt
 
             total_error = 1.0
             while total_error >= self.error_threshold:
@@ -210,7 +223,9 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                 y_test = y[test_items_index]
 
                 # Train a weak learner
-                ensemble[t] = copy.deepcopy(self.base_estimator)
+                if t > len(ensemble) - 1:
+                    ensemble.append(copy.deepcopy(self.base_estimator))
+                    normalized_errors.append(1.0)
                 try:
                     ensemble[t].fit(X_train, y_train)
                 except NotImplementedError:
@@ -297,7 +312,7 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
         for i in range(len(self.ensembles)):
             ensemble = self.ensembles[i]
             ensemble_weight = self.ensemble_weights[i]
-            votes += np.array(self.__vote_proba(X, self.n_estimators, ensemble, ensemble_weight))
+            votes += np.array(self.__vote_proba(X, len(ensemble), ensemble, ensemble_weight))
         return votes
 
     def predict(self, X):
