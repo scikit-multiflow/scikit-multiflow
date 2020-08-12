@@ -34,7 +34,7 @@ ENV BASEDIR=/var/multiflow
 COPY setup-sshd /usr/local/bin/setup-sshd
 RUN chmod 777 /usr/local/bin/setup-sshd && chmod 777 /etc/environment
 
-RUN mkdir ${BASEDIR}/templates
+RUN mkdir -p ${BASEDIR}/templates
 ADD tmux.conf.tpl ${BASEDIR}/templates/.tmux.conf.tpl
 
 
