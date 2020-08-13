@@ -8,11 +8,19 @@ from skmultiflow.utils import add_delay_to_timestamps
 
 
 class TemporalDataStream(DataStream):
-    """ Create a temporal stream from a data source.
+    """ Create a temporal stream.
 
+    TemporalDataStream takes two separate streams of data, and policies to discard delayed data with certain criteria:
+       - ``arrival_time``
+       - ``event_time``
+       - ``event_id``
+       - ``X`` (features)
 
-    TemporalDataStream takes the whole data set containing the ``X`` (features),
-    ``time`` (timestamps) and ``Y`` (targets).
+       and
+       - ``target_arrival_time``
+       - ``labeling_time``
+       - ``event_id``
+       - ``Y`` (targets)
 
     Parameters
     ----------

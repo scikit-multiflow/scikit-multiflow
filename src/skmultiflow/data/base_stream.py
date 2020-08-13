@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from skmultiflow.core import BaseSKMObject
+import numpy as np
 import warnings
 
 
@@ -17,7 +18,7 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
     _estimator_type = 'stream'
 
     def __init__(self):
-        self.n_samples = 0
+        self.source = None
         self.n_targets = 0
         self.n_features = 0
         self.n_num_features = 0
@@ -26,7 +27,6 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
         self.cat_features_idx = []
         self.current_sample_x = None
         self.current_sample_y = None
-        self.sample_idx = 0
         self.feature_names = None
         self.target_names = None
         self.target_values = None
@@ -181,39 +181,93 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
         """
         self._target_names = target_names
 
-    @staticmethod
-    def prepare_for_use():  # pragma: no cover
-        """ Prepare the stream for use.
+    @property
+    def target_idx(self):
+        """
+        Get the number of the column where Y begins.
 
-        Deprecated in v0.5.0 and will be removed in v0.7.0
+        Returns
+        -------
+        int:
+            The number of the column where Y begins.
+        """
+        return self._target_idx
+
+    @target_idx.setter
+    def target_idx(self, target_idx):
+        """
+        Sets the number of the column where Y begins.
+
+        Parameters
+        ----------
+        target_idx: int
+        """
+
+        self._target_idx = target_idx
+
+    @property
+    def cat_features_idx(self):
+        """
+        Get the list of the categorical features index.
+
+        Returns
+        -------
+        list:
+            List of categorical features index.
 
         """
-        warnings.warn(
-            "'prepare_for_use' has been deprecated in v0.5.0 and will be removed in v0.7.0.\n"
-            "New instances of the Stream class are now ready to use after instantiation.",
-            category=FutureWarning)
+        return self._cat_features_idx
 
-    @abstractmethod
-    def _prepare_for_use(self):
-        raise NotImplementedError
+    @cat_features_idx.setter
+    def cat_features_idx(self, cat_features_idx):
+        """
+        Sets the list of the categorical features index.
 
-    @abstractmethod
-    def next_sample(self, batch_size=1):
+        Parameters
+        ----------
+        cat_features_idx:
+            List of categorical features index.
+        """
+
+        self._cat_features_idx = cat_features_idx
+
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         Parameters
         ----------
-        batch_size: int (optional, default=1)
-            The number of samples to return.
 
         Returns
         -------
-        tuple or tuple list
-            A numpy.ndarray of shape (batch_size, n_features) and an array-like of size
-            n_targets, representing the next batch_size samples.
+        tuple
 
         """
-        raise NotImplementedError
+        entry = self.source.next_sample()
+        self.current_sample_x, self.current_sample_y = self.process_data(entry)
+        return self.current_sample_x, self.current_sample_y
+
+
+    def process_data(self, entry):
+        """ Reads the data provided by the user and separates the features and targets.
+        """
+        # TODO re-implement to fit new case
+        #check_data_consistency(raw_data, self.allow_nan)
+
+        X = entry['X']
+        y = entry['y']
+
+        _, self.n_features = X.shape
+
+        self.n_num_features = self.n_features - self.n_cat_features
+
+        if np.issubdtype(y.dtype, np.integer):
+            self.task_type = self._CLASSIFICATION
+            self.n_classes = len(np.unique(y))
+        else:
+            self.task_type = self._REGRESSION
+        self.target_values = self.get_target_values()
+
+        return X, y
 
     def last_sample(self):
         """ Retrieves last `batch_size` samples in the stream.
@@ -237,14 +291,13 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
             True if stream is restartable.
 
         """
-        return True
+        return self.source.is_restartable()
 
     def restart(self):
         """  Restart the stream. """
         self.current_sample_x = None
         self.current_sample_y = None
-        self.sample_idx = 0
-        self._prepare_for_use()
+        self.source.restart()
 
     def n_remaining_samples(self):
         """ Returns the estimated number of remaining samples.

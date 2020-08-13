@@ -7,7 +7,7 @@ from skmultiflow.data.data_stream import DataStream
 from skmultiflow.utils import add_delay_to_timestamps
 
 
-class TemporalDataStream(DataStream):
+class EnrichedTemporalDataStream(DataStream, EnrichmentStrategy):
     """ Create a temporal stream from a data source.
 
 
