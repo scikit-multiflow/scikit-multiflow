@@ -5,10 +5,10 @@ import os
 import numpy as np
 
 from skmultiflow.data import SEAGenerator
-from skmultiflow.trees.ifn.meta_learning import MetaLearning
+from skmultiflow.trees.IFN.IFN_meta_learning import IfnMetaLearning
 
 
-class OnlineNetworkRegenerative:
+class IfnOnlineNetworkRegenerative:
 
     def __init__(self, classifier, path, number_of_classes=2, n_min=378, n_max=math.inf, alpha=0.99,
                  Pe=0.5, init_add_count=10, inc_add_count=50, max_add_count=100, red_add_count=75, min_add_count=1,
@@ -61,7 +61,7 @@ class OnlineNetworkRegenerative:
         self.min_add_count = min_add_count
         self.max_window = max_window
         self.window = None
-        self.meta_learning = MetaLearning(alpha, number_of_classes)
+        self.meta_learning = IfnMetaLearning(alpha, number_of_classes)
         self.data_stream_generator = data_stream_generator
         self.data_stream_generator.prepare_for_use()
         self.counter = 1

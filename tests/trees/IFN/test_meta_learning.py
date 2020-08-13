@@ -1,10 +1,10 @@
-from skmultiflow.trees.ifn.meta_learning import MetaLearning
+from skmultiflow.trees.IFN.IFN_meta_learning import IfnMetaLearning
 import pytest
 
 alpha = 0.99
 number_of_classes = 2
 Pe = 0.5
-meta_learning = MetaLearning(alpha, number_of_classes)
+meta_learning = IfnMetaLearning(alpha, number_of_classes)
 
 
 def test_suite_calculate_initial_window_size():

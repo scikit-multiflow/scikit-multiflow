@@ -5,7 +5,7 @@ import scipy.stats as stats
 import numpy as np
 
 
-class MetaLearning:
+class IfnMetaLearning:
 
     def __init__(self, alpha, number_of_classes):
         """

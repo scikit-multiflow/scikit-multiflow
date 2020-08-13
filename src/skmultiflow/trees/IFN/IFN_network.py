@@ -1,10 +1,10 @@
 # index of the layer
-class Node:
+class IfnNode:
     def __init__(self, index):
         self.index = index
 
 
-class RootNode(Node):
+class IfnRootNode(IfnNode):
     def __init__(self):
         super().__init__(0)
         self.first_layer = None
@@ -12,13 +12,14 @@ class RootNode(Node):
     def set_layer(self, layer):
         self.first_layer = layer
 
+
 # target node. index = 0/1
-class ClassNode(Node):
+class IfnClassNode(IfnNode):
     def __init__(self, index):
         super().__init__(index)
 
 
-class AttributeNode(Node):
+class IfnAttributeNode(IfnNode):
     def __init__(self, index, attribute_value, prev_node, layer, partial_x, partial_y, is_terminal=False):
         """
 
@@ -46,8 +47,9 @@ class AttributeNode(Node):
         if self.is_terminal:
             self.weight_probability_pair = weight_probability_pair
 
+
 # layer contains attribute nodes
-class HiddenLayer:
+class IfnHiddenLayer:
     def __init__(self, index):
         self.index = index
         self.next_layer = None
@@ -71,12 +73,12 @@ class HiddenLayer:
 class IfnNetwork:
     def __init__(self):
         self.target_layer = []
-        self.root_node = RootNode()
+        self.root_node = IfnRootNode()
 
     def build_target_layer(self, num_of_classes):
         if len(num_of_classes) != 0:
             for i in num_of_classes:
-                self.target_layer.append(ClassNode(i))
+                self.target_layer.append(IfnClassNode(i))
 
     def create_network_structure_file(self, path):
         f = open(path, "w+")
@@ -98,4 +100,3 @@ class IfnNetwork:
                     f.write(curr_line + "\n")
             curr_layer = curr_layer.next_layer
         f.close()
-

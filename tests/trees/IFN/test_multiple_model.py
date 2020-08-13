@@ -1,4 +1,4 @@
-from skmultiflow.trees import MultipleModel
+from skmultiflow.trees import IfnMultipleModel
 from skmultiflow.trees import IfnClassifier
 from skmultiflow.data import SEAGenerator
 import numpy as np
@@ -10,7 +10,7 @@ def test_multiple_model(tmpdir):
     dir = tmpdir.mkdir("tmpMultipleModel")
     ifn = IfnClassifier(['float64', 'float64', 'float64'], alpha)
     stream_generator = SEAGenerator(random_state=23)
-    multiple_model = MultipleModel(ifn, dir, n_min=0, n_max=200, Pe=0.7, data_stream_generator=stream_generator)
+    multiple_model = IfnMultipleModel(ifn, dir, n_min=0, n_max=200, Pe=0.7, data_stream_generator=stream_generator)
     last_model = multiple_model.generate()
     expected_number_of_generated_models = 3
     number_of_generated_models = multiple_model.counter - 1
@@ -19,11 +19,11 @@ def test_multiple_model(tmpdir):
     X, y = stream_generator.next_sample(multiple_model.window)
     predictions = multiple_model.classifier.predict(X)
 
-    expected_predictions = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0,
-                            1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                            1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-                            0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
-                            1.0, 0.0, 1.0, 0.0]
+    expected_predictions = [1, 1, 1, 1, 1, 1, 1, 1, 0,
+                            1, 1, 0, 1, 1, 1, 1, 1, 1,
+                            1, 0, 1, 1, 1, 0, 0, 1, 0,
+                            0, 1, 1, 1, 0, 0, 1, 1, 0,
+                            1, 0, 1, 0]
 
     correct_predictions = [i for i, j in zip(y, predictions) if i == j]
     expected_correct_predictions = 38

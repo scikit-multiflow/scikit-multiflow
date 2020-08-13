@@ -1,5 +1,5 @@
 from skmultiflow.data import SEAGenerator
-from skmultiflow.trees import OnlineNetworkRegenerative
+from skmultiflow.trees import IfnOnlineNetworkRegenerative
 from src.skmultiflow.trees import IfnClassifier
 import numpy as np
 
@@ -10,8 +10,8 @@ def test_regenerative(tmpdir):
     dir = tmpdir.mkdir("tmpOLIN")
     ifn = IfnClassifier(['float64', 'float64', 'float64'], alpha)
     stream_generator = SEAGenerator(random_state=23)
-    regenerative = OnlineNetworkRegenerative(ifn, dir, n_min=0, n_max=300, Pe=0.7,
-                                             data_stream_generator=stream_generator)
+    regenerative = IfnOnlineNetworkRegenerative(ifn, dir, n_min=0, n_max=300, Pe=0.7,
+                                                data_stream_generator=stream_generator)
     last_model = regenerative.generate()
 
     expected_number_of_generated_models = 2
@@ -21,15 +21,15 @@ def test_regenerative(tmpdir):
     X, y = stream_generator.next_sample(60)
     predictions = regenerative.classifier.predict(X)
     print(predictions)
-    expected_predictions = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                            1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0,
-                            1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0,
-                            1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0,
-                            1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-                            1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0,
-                            1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0,
-                            1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0,
-                            1.0, 0.0, 1.0, 1.0]
+    expected_predictions = [1, 1, 1, 1, 1, 1, 1,
+                            1, 0, 1, 1, 0, 1, 1,
+                            1, 1, 1, 1, 1, 0, 1,
+                            1, 1, 0, 0, 1, 0, 1,
+                            1, 1, 1, 0, 0, 1, 1,
+                            1, 1, 0, 1, 0, 1, 1,
+                            1, 1, 1, 1, 0, 1, 1,
+                            1, 1, 1, 1, 0, 1, 1,
+                            1, 0, 1, 1]
 
     correct_predictions = [i for i, j in zip(y, predictions) if i == j]
     expected_correct_predictions = 58

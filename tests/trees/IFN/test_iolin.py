@@ -5,104 +5,104 @@ import pytest, os
 
 from sklearn.utils import check_X_y
 
-from skmultiflow.trees.ifn.data_processing import DataProcessor
-from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer, AttributeNode
-from skmultiflow.trees import BasicIncremental
+from skmultiflow.trees.IFN.data_processing import DataProcessor
+from skmultiflow.trees.IFN.IFN_network import IfnNetwork, IfnHiddenLayer, IfnAttributeNode
+from skmultiflow.trees import IfnBasicIncremental
 
-network = IfnNetwork()
 dataset_path = "src/skmultiflow/data/datasets/elec.csv"
 
 
 def _setup_eliminate_nodes_test_env():
+    network = IfnNetwork()
     network.build_target_layer([0, 1])
 
-    first_layer = HiddenLayer(1)
+    first_layer = IfnHiddenLayer(1)
 
-    node1 = AttributeNode(index=1,
-                          attribute_value=0,
-                          prev_node=0,
-                          layer=1,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=False)
-    node2 = AttributeNode(index=2,
-                          attribute_value=1,
-                          prev_node=0,
-                          layer=1,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=False)
+    node1 = IfnAttributeNode(index=1,
+                             attribute_value=0,
+                             prev_node=0,
+                             layer=1,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=False)
+    node2 = IfnAttributeNode(index=2,
+                             attribute_value=1,
+                             prev_node=0,
+                             layer=1,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=False)
 
     first_layer.nodes = [node1, node2]
 
     network.root_node.first_layer = first_layer
 
-    second_layer = HiddenLayer(2)
+    second_layer = IfnHiddenLayer(2)
 
-    node1 = AttributeNode(index=3,
-                          attribute_value=0,
-                          prev_node=1,
-                          layer=2,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=False)
-    node2 = AttributeNode(index=4,
-                          attribute_value=1,
-                          prev_node=1,
-                          layer=2,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=True)
-    node3 = AttributeNode(index=5,
-                          attribute_value=0,
-                          prev_node=2,
-                          layer=2,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=False)
+    node1 = IfnAttributeNode(index=3,
+                             attribute_value=0,
+                             prev_node=1,
+                             layer=2,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=False)
+    node2 = IfnAttributeNode(index=4,
+                             attribute_value=1,
+                             prev_node=1,
+                             layer=2,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=True)
+    node3 = IfnAttributeNode(index=5,
+                             attribute_value=0,
+                             prev_node=2,
+                             layer=2,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=False)
 
-    node4 = AttributeNode(index=6,
-                          attribute_value=1,
-                          prev_node=2,
-                          layer=2,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=True)
+    node4 = IfnAttributeNode(index=6,
+                             attribute_value=1,
+                             prev_node=2,
+                             layer=2,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=True)
 
     second_layer.nodes = [node1, node2, node3, node4]
     first_layer.next_layer = second_layer
 
-    third_layer = HiddenLayer(3)
+    third_layer = IfnHiddenLayer(3)
 
-    node1 = AttributeNode(index=7,
-                          attribute_value=0,
-                          prev_node=3,
-                          layer=3,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=True)
-    node2 = AttributeNode(index=8,
-                          attribute_value=1,
-                          prev_node=3,
-                          layer=3,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=True)
-    node3 = AttributeNode(index=9,
-                          attribute_value=0,
-                          prev_node=5,
-                          layer=3,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=True)
+    node1 = IfnAttributeNode(index=7,
+                             attribute_value=0,
+                             prev_node=3,
+                             layer=3,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=True)
+    node2 = IfnAttributeNode(index=8,
+                             attribute_value=1,
+                             prev_node=3,
+                             layer=3,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=True)
+    node3 = IfnAttributeNode(index=9,
+                             attribute_value=0,
+                             prev_node=5,
+                             layer=3,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=True)
 
-    node4 = AttributeNode(index=10,
-                          attribute_value=1,
-                          prev_node=5,
-                          layer=3,
-                          partial_x=None,
-                          partial_y=None,
-                          is_terminal=True)
+    node4 = IfnAttributeNode(index=10,
+                             attribute_value=1,
+                             prev_node=5,
+                             layer=3,
+                             partial_x=None,
+                             partial_y=None,
+                             is_terminal=True)
 
     third_layer.nodes = [node1, node2, node3, node4]
     second_layer.next_layer = third_layer
@@ -110,11 +110,11 @@ def _setup_eliminate_nodes_test_env():
 
 
 def test_eliminate_all_nodes_in_layer():
-    _setup_eliminate_nodes_test_env()
+    network= _setup_eliminate_nodes_test_env()
 
-    BasicIncremental.eliminate_nodes(nodes={3, 5},
-                                     layer=network.root_node.first_layer.next_layer.next_layer,
-                                     prev_layer=network.root_node.first_layer.next_layer)
+    IfnBasicIncremental.eliminate_nodes(nodes={3, 5},
+                                        layer=network.root_node.first_layer.next_layer.next_layer,
+                                        prev_layer=network.root_node.first_layer.next_layer)
 
     new_third_layer = network.root_node.first_layer.next_layer.next_layer
 
@@ -122,7 +122,7 @@ def test_eliminate_all_nodes_in_layer():
 
 
 def test_eliminate_some_nodes_in_layer():
-    _setup_eliminate_nodes_test_env()
+    network = _setup_eliminate_nodes_test_env()
     third_layer_nodes = network.root_node.first_layer.next_layer.next_layer.nodes
     nodes_to_remains = []
 
@@ -130,9 +130,9 @@ def test_eliminate_some_nodes_in_layer():
         if node.index == 9 or node.index == 10:
             nodes_to_remains.append(node)
 
-    BasicIncremental.eliminate_nodes(nodes={3},
-                                     layer=network.root_node.first_layer.next_layer.next_layer,
-                                     prev_layer=network.root_node.first_layer.next_layer)
+    IfnBasicIncremental.eliminate_nodes(nodes={3},
+                                        layer=network.root_node.first_layer.next_layer.next_layer,
+                                        prev_layer=network.root_node.first_layer.next_layer)
 
     new_third_layer = network.root_node.first_layer.next_layer.next_layer
     third_layer_nodes = network.root_node.first_layer.next_layer.next_layer.nodes
@@ -143,25 +143,24 @@ def test_eliminate_some_nodes_in_layer():
 
 
 def test_eliminate_nodes_with_invalid_input():
-    _setup_eliminate_nodes_test_env()
+    network = _setup_eliminate_nodes_test_env()
     prev_number_of_nodes = len(network.root_node.first_layer.next_layer.next_layer.nodes)
-    BasicIncremental.eliminate_nodes(nodes=set(),
-                                     layer=network.root_node.first_layer.next_layer.next_layer,
-                                     prev_layer=network.root_node.first_layer.next_layer)
+    IfnBasicIncremental.eliminate_nodes(nodes=set(),
+                                        layer=network.root_node.first_layer.next_layer.next_layer,
+                                        prev_layer=network.root_node.first_layer.next_layer)
 
     assert prev_number_of_nodes == len(network.root_node.first_layer.next_layer.next_layer.nodes)
 
-    BasicIncremental.eliminate_nodes(nodes={3},
-                                     layer=network.root_node.first_layer.next_layer.next_layer,
-                                     prev_layer=None)
+    IfnBasicIncremental.eliminate_nodes(nodes={3},
+                                        layer=network.root_node.first_layer.next_layer.next_layer,
+                                        prev_layer=None)
 
     assert prev_number_of_nodes == len(network.root_node.first_layer.next_layer.next_layer.nodes)
 
 
 def test_clone_network():
-    _setup_eliminate_nodes_test_env()
+    network = _setup_eliminate_nodes_test_env()
     dp = DataProcessor()
-    # TODO change the file path
     x_train, x_test, y_train, y_test = \
         dp.convert(
             csv_file_path=dataset_path,
@@ -169,19 +168,20 @@ def test_clone_network():
 
     x_train, y_train = check_X_y(x_train, y_train, accept_sparse=True)
 
-    copy_network = BasicIncremental.clone_network(network=network,
-                                                  training_window_X=x_train,
-                                                  training_window_y=y_train)
+    copy_network = IfnBasicIncremental.clone_network(network=network,
+                                                     training_window_X=x_train,
+                                                     training_window_y=y_train)
 
     assert copy_network.root_node.first_layer.index == 1
     assert len(copy_network.root_node.first_layer.next_layer.nodes) == 4
 
 
 def test_clone_network_invalid_input():
+    network = IfnNetwork()
     with pytest.raises(AttributeError):
-        BasicIncremental.clone_network(network=network,
-                                       training_window_X=None,
-                                       training_window_y=[0, 1])
-        BasicIncremental.clone_network(network=None,
-                                       training_window_X=None,
-                                       training_window_y=[0, 1])
+        IfnBasicIncremental.clone_network(network=network,
+                                          training_window_X=None,
+                                          training_window_y=[0, 1])
+        IfnBasicIncremental.clone_network(network=None,
+                                          training_window_X=None,
+                                          training_window_y=[0, 1])

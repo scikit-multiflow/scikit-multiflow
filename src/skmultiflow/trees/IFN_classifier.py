@@ -11,8 +11,8 @@ from scipy import stats
 
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
-from skmultiflow.trees.ifn.ifn_network import IfnNetwork, HiddenLayer
-from skmultiflow.trees.ifn import ifn_utils as utils
+from skmultiflow.trees.IFN.IFN_network import IfnNetwork, IfnHiddenLayer
+from skmultiflow.trees.IFN import IFN_utils as utils
 from skmultiflow.core import BaseSKMObject, ClassifierMixin
 
 import math
@@ -38,7 +38,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         The maximum number of layers the network will have.
 
     window_size: int, default=100
-        The window size for stream
+        The size of the stream window to be procced.
     """
 
     def __init__(self, columns_type, alpha=0.99, max_number_of_layers=math.inf, window_size=100):
@@ -223,7 +223,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                     nodes_list.append(attribute_node)
                     curr_node_index += 1
 
-            next_layer = HiddenLayer(global_chosen_attribute)
+            next_layer = IfnHiddenLayer(global_chosen_attribute)
 
             # If we're in the first layer
             if current_layer is None:
@@ -394,7 +394,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                 index += 1
             f.close()
 
-        return np.array(predicted)
+        return np.array(predicted).astype(int)
 
     def predict_proba(self, X):
         """ A reference implementation of a predicting probabilities function.
@@ -448,7 +448,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
                 index += 1
             f.close()
 
-        return np.array(predicted)
+        return np.array(predicted).astype(int)
 
     def _choose_split_attribute(self, attributes_indexes, columns_type, nodes=None, X=None, y=None):
         """ Returns the most significant attribute upon all.
@@ -922,7 +922,7 @@ class IfnClassifier(BaseSKMObject, ClassifierMixin):
         chosen_attribute: int
             The index of the attribute upon the network will be splitted by.
 
-        layer: HiddenLayer
+        layer: IfnHiddenLayer
             The current HiddenLayer in the network.
 
 

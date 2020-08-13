@@ -89,8 +89,8 @@ def test_partial_fit():
         cnt += 1
 
     performance = correct_predictions / len(predictions)
-    expected_predictions = [0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0]
+    expected_predictions = [0, 1, 1, 0, 0, 1, 0, 0, 0, 0,
+                            0, 0, 0, 0, 1, 0, 1, 0, 0]
 
     expected_correct_predictions = 14
     expected_performance = 0.7368421052631579

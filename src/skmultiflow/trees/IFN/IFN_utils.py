@@ -1,6 +1,6 @@
 import numpy as np
-
-from .ifn_network import AttributeNode
+from bisect import bisect_left
+from .IFN_network import IfnAttributeNode
 
 
 def binary_search(array: list, left: int, right: int, value):
@@ -27,21 +27,29 @@ def binary_search(array: list, left: int, right: int, value):
 
 
     """
+    # if array is None or len(array) == 0 or left < 0 or len(array) < right:
+    #     return -1
+    #
+    # # Check base case
+    # if right >= left:
+    #     mid = int(left + (right - left) / 2)
+    #     # If element is present at the middle itself
+    #     if (mid == 0 or value > array[mid - 1]) and array[mid] == value:
+    #         return mid
+    #     elif value > array[mid]:
+    #         return binary_search(array, mid + 1, right, value)
+    #     else:
+    #         return binary_search(array, left, mid - 1,value)
+    # else:
+    #     # Element is not present in the array
+    #     return -1
+
     if array is None or len(array) == 0 or left < 0 or len(array) < right:
         return -1
-
-    # Check base case
-    if right >= left:
-        mid = int(left + (right - left) / 2)
-        # If element is present at the middle itself
-        if (mid == 0 or value > array[mid - 1]) and array[mid] == value:
-            return mid
-        elif value > array[mid]:
-            return binary_search(array, mid + 1, right, value)
-        else:
-            return binary_search(array, left, mid - 1,value)
+    i = bisect_left(array, value)
+    if array is not None and i != len(array) and array[i] == value and left <= i <= right:
+            return i
     else:
-        # Element is not present in the array
         return -1
 
 
@@ -233,12 +241,12 @@ def create_attribute_node(partial_X, partial_y, chosen_attribute_index, attribut
     # Create a new AttributeNode only is it has samples
     attributes_node = None
     if len(x_y_tuple[0]):
-        attributes_node = AttributeNode(index=curr_node_index,
-                                        attribute_value=attribute_value,
-                                        prev_node=prev_node_index,
-                                        layer=chosen_attribute_index,
-                                        partial_x=x_y_tuple[0],
-                                        partial_y=x_y_tuple[1])
+        attributes_node = IfnAttributeNode(index=curr_node_index,
+                                           attribute_value=attribute_value,
+                                           prev_node=prev_node_index,
+                                           layer=chosen_attribute_index,
+                                           partial_x=x_y_tuple[0],
+                                           partial_y=x_y_tuple[1])
     return attributes_node
 
 

@@ -13,12 +13,12 @@ from scipy import stats
 from sklearn.utils.validation import check_X_y
 
 from skmultiflow.data import SEAGenerator
-from skmultiflow.trees.ifn.meta_learning import MetaLearning
-from skmultiflow.trees.ifn import ifn_utils as utils
-from skmultiflow.trees.ifn.ifn_network import HiddenLayer
+from skmultiflow.trees.IFN.IFN_meta_learning import IfnMetaLearning
+from skmultiflow.trees.IFN import IFN_utils as utils
+from skmultiflow.trees.IFN.IFN_network import IfnHiddenLayer
 
 
-class IncrementalOnlineNetwork(ABC):
+class IfnIncrementalOnlineNetwork(ABC):
 
     def __init__(self,
                  classifier,
@@ -83,7 +83,7 @@ class IncrementalOnlineNetwork(ABC):
         self.min_add_count = min_add_count
         self.max_window = max_window
         self.window = None
-        self.meta_learning = MetaLearning(alpha, number_of_classes)
+        self.meta_learning = IfnMetaLearning(alpha, number_of_classes)
         self.data_stream_generator = data_stream_generator
         self.data_stream_generator.prepare_for_use()
         self.counter = 1
@@ -142,9 +142,9 @@ class IncrementalOnlineNetwork(ABC):
 
         """
 
-        copy_network = IncrementalOnlineNetwork.clone_network(network=self.classifier.network,
-                                                              training_window_X=training_window_X,
-                                                              training_window_y=training_window_y)
+        copy_network = IfnIncrementalOnlineNetwork.clone_network(network=self.classifier.network,
+                                                                 training_window_X=training_window_X,
+                                                                 training_window_y=training_window_y)
 
         curr_layer = copy_network.root_node.first_layer
         curr_layer_in_original_network = self.classifier.network.root_node.first_layer
@@ -167,9 +167,9 @@ class IncrementalOnlineNetwork(ABC):
             self.classifier._set_terminal_nodes(nodes=un_significant_nodes,
                                                 class_count=self.classifier.class_count)
 
-            IncrementalOnlineNetwork.eliminate_nodes(nodes=set(un_significant_nodes_indexes),
-                                                     layer=curr_layer_in_original_network.next_layer,
-                                                     prev_layer=curr_layer_in_original_network)
+            IfnIncrementalOnlineNetwork.eliminate_nodes(nodes=set(un_significant_nodes_indexes),
+                                                        layer=curr_layer_in_original_network.next_layer,
+                                                        prev_layer=curr_layer_in_original_network)
             curr_layer = curr_layer.next_layer
             curr_layer_in_original_network = curr_layer_in_original_network.next_layer
 
@@ -326,7 +326,7 @@ class IncrementalOnlineNetwork(ABC):
             terminal_nodes.append(node)
 
         # create and link the new last layer to the network
-        new_last_layer = HiddenLayer(index_of_sec_best_att)
+        new_last_layer = IfnHiddenLayer(index_of_sec_best_att)
         new_last_layer.is_continuous = is_continuous
 
         if new_last_layer.is_continuous is True:
@@ -405,7 +405,7 @@ class IncrementalOnlineNetwork(ABC):
                 else:
                     terminal_nodes.append(node)
 
-            new_layer = HiddenLayer(global_chosen_attribute)
+            new_layer = IfnHiddenLayer(global_chosen_attribute)
             last_layer.next_layer = new_layer
             new_layer.nodes = nodes_list
             if is_continuous:
@@ -441,9 +441,9 @@ class IncrementalOnlineNetwork(ABC):
         ----------
         nodes: set
             List of the node which need to be remove from the layer.
-        layer: HiddenLayer
+        layer: IfnHiddenLayer
             The HiddenLayer which contains the nodes.
-        prev_layer: HiddenLayer
+        prev_layer: IfnHiddenLayer
             The previous layer of layer.
 
         """
@@ -465,9 +465,9 @@ class IncrementalOnlineNetwork(ABC):
         if len(layer.nodes) == 0:
             prev_layer.next_layer = layer.next_layer
 
-        IncrementalOnlineNetwork.eliminate_nodes(nodes=set(next_layer_nodes),
-                                                 layer=layer.next_layer,
-                                                 prev_layer=layer)
+        IfnIncrementalOnlineNetwork.eliminate_nodes(nodes=set(next_layer_nodes),
+                                                    layer=layer.next_layer,
+                                                    prev_layer=layer)
 
     @staticmethod
     def clone_network(network, training_window_X, training_window_y):

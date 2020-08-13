@@ -1,4 +1,4 @@
-from skmultiflow.trees import BasicIncremental
+from skmultiflow.trees import IfnBasicIncremental
 from skmultiflow.trees import IfnClassifier
 from skmultiflow.data import SEAGenerator
 import numpy as np
@@ -9,7 +9,7 @@ def test_basic_incremental(tmpdir):
     dir = tmpdir.mkdir("tmpBasicIncremental")
     ifn = IfnClassifier(['float64', 'float64', 'float64'], alpha)
     stream_generator = SEAGenerator(random_state=23)
-    basic_incremental = BasicIncremental(ifn, dir, n_min=0, n_max=300, Pe=0.7, data_stream_generator=stream_generator)
+    basic_incremental = IfnBasicIncremental(ifn, dir, n_min=0, n_max=300, Pe=0.7, data_stream_generator=stream_generator)
     last_model = basic_incremental.generate()
 
     expected_number_of_generated_models = 4
@@ -19,12 +19,12 @@ def test_basic_incremental(tmpdir):
     X, y = stream_generator.next_sample(basic_incremental.window)
     predictions = basic_incremental.classifier.predict(X)
 
-    expected_predictions = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                            1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0,
-                            1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0,
-                            1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-                            1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-                            0.0, 1.0, 1.0, 1.0, 0.0]
+    expected_predictions = [1, 1, 1, 1, 1, 1, 1,
+                            1, 0, 1, 1, 0, 1, 1,
+                            1, 1, 1, 1, 1, 0, 1,
+                            1, 1, 0, 0, 1, 0, 0,
+                            1, 1, 1, 0, 0, 1, 1,
+                            0, 1, 1, 1, 0]
 
     correct_predictions = [i for i, j in zip(y, predictions) if i == j]
     expected_correct_predictions = 37
