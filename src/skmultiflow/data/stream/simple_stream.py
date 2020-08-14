@@ -6,9 +6,9 @@ from skmultiflow.data.base_stream import Stream
 from skmultiflow.data.data_stream import check_data_consistency
 from kafka import KafkaConsumer
 
-
-class FileStream(Stream):
-    """ Creates a stream from a Kafka source.
+#OK
+class SimpleStream(Stream):
+    """ Creates a stream from a data source.
 
     Parameters
     ----------
@@ -41,7 +41,7 @@ class FileStream(Stream):
     Examples
     --------
     >>> # Imports
-    >>> from skmultiflow.data.kafka_stream import FileStream
+    >>> from skmultiflow.data.kafka_stream import SimpleStream
     >>> # Setup the stream
     >>> def parse_entry(line):
     >>>    return TODO complete

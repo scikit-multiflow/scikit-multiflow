@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 from skmultiflow.core import BaseSKMObject
 import warnings
 
+#OK
 class DataSource(BaseSKMObject, metaclass=ABCMeta):
     """ DataSource class.
 
