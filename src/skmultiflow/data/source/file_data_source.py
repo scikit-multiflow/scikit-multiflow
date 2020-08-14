@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from skmultiflow.core import BaseSKMObject
 import warnings
+import th
 
 class FileDataSource(DataSource):
     """ FileDataSource class.
@@ -10,30 +11,12 @@ class FileDataSource(DataSource):
     """
     _estimator_type = 'datasource'
 
-    def __init__(self, filename, record_to_dictionary):
+    def __init__(self, record_to_dictionary, observers, filename):
+        self.record_to_dictionary = record_to_dictionary
+        self.observers = observers
         self.filename = filename
         self.name = "FileDataSource: {}".format(self.filename)
-        self.record_to_dictionary = record_to_dictionary
         self._prepare_for_use()
-
-    def next_sample(self):
-        """ Returns a dictionary with data of next sample in the stream.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        tuple - sample
-
-        """
-        entry = self.file_handler.readline()
-        if(entry == None):
-            self.file_handler.close()
-            self.current_sample = None
-        else:
-            self.current_sample = self.record_to_dictionary(entry)
-        return self.current_sample
 
     def _prepare_for_use(self):
         """ Prepares the data source to be used
@@ -41,4 +24,11 @@ class FileDataSource(DataSource):
         if(self.file_handler is not None):
             self.file_handler.close()
         self.file_handler = open(self.filename, "r")
-        self.current_sample = None
+
+
+    def listen_for_events(self):
+        event = self.file_handler.readline()
+        while event is not None:
+            self.on_new_event(event)
+
+        self.file_handler.close()

@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from skmultiflow.core import BaseSKMObject
 import warnings
+import threading
 
 #OK
 class DataSource(BaseSKMObject, metaclass=ABCMeta):
@@ -16,22 +17,14 @@ class DataSource(BaseSKMObject, metaclass=ABCMeta):
     """
     _estimator_type = 'datasource'
 
-    def __init__(self, record_to_dictionary):
+    def __init__(self, record_to_dictionary, observers):
         self.name = None
         self.record_to_dictionary = record_to_dictionary
+        self.observers = observers
+
 
     @abstractmethod
-    def next_sample(self):
-        """ Returns a dictionary with data of next sample in the stream.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        tuple - sample
-
-        """
+    def listen_for_events(self):
         raise NotImplementedError
 
     @abstractmethod
@@ -39,6 +32,15 @@ class DataSource(BaseSKMObject, metaclass=ABCMeta):
         """ Prepares the data source to be used
         """
         raise NotImplementedError
+
+    def start_event_listener(self):
+        self._prepare_for_use()
+        t = threading.Thread(target=self.listen_for_events)
+        t.start()
+
+    def on_new_event(self, event):
+        for observer in self.observers:
+            observer.update(self.record_to_dictionary(event))
 
     def restart(self):
         """  Restart the stream. """
@@ -48,7 +50,7 @@ class DataSource(BaseSKMObject, metaclass=ABCMeta):
         else:
             raise NotImplementedError
 
-    def last_sample(self):
+    def last_event(self):
         """ Retrieves last sample returned from source.
 
         Returns
