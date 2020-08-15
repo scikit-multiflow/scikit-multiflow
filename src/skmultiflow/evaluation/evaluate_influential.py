@@ -1,22 +1,12 @@
 import os
 import warnings
 import re
-from math import floor
 from timeit import default_timer as timer
 import numpy as np
-import operator
 from skmultiflow.evaluation.base_evaluator import StreamEvaluator
 from skmultiflow.utils import constants
 from statistics import mode
-from sklearn.neighbors import KernelDensity
-import matplotlib.pyplot as plt
-from sklearn import preprocessing
-from scipy.stats import ranksums, norm
-from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
-
-
-def remove_values_from_list(the_list, val):
-    return [value for value in the_list if value != val]
+from scipy.stats import ranksums
 
 
 class EvaluateInfluential(StreamEvaluator):
@@ -55,6 +45,7 @@ class EvaluateInfluential(StreamEvaluator):
         self.table_influence_on_positive = []
         self.table_influence_on_negative = []
         self.weight_output = weight_output
+        self.accuracy = []
 
         if not self.data_points_for_classification:
             if metrics is None:
@@ -120,7 +111,7 @@ class EvaluateInfluential(StreamEvaluator):
             return self.model
 
     def _train_and_test(self):
-        """ Method to control the prequential evaluation.
+        """ Method to control the evaluation.
 
         Returns
         -------
@@ -260,6 +251,7 @@ class EvaluateInfluential(StreamEvaluator):
         if self.weight_output:
             print("weights: ", self.stream.weight)
         self.calculate_density()
+        self.accuracy = self._data_buffer.get_data(metric_id=constants.ACCURACY, data_id=constants.MEAN)
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
             self.evaluation_summary()
@@ -283,6 +275,7 @@ class EvaluateInfluential(StreamEvaluator):
         for feature in range(self.stream.n_features):
             # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
             # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc (if there are 4 intervals)
+            # print("distribution table: ", self.distribution_table)
 
             t0 = list(zip(*self.distribution_table[0][feature]))
             # create table with density differences of TP and FN (0), and TN and FP (1), per interval
@@ -320,27 +313,36 @@ class EvaluateInfluential(StreamEvaluator):
     def test_density(self, subset_TN, subset_FP, subset_FN, subset_TP):
         for feature in range(self.stream.n_features):
             # positive instances:
-            mean_subset_TP = sum(subset_TP[feature]) / len(subset_TP[feature])
-            mean_subset_FN = sum(subset_FN[feature]) / len(subset_FN[feature])
+            mean_subset_TP = 0
+            mean_subset_FN = 0
+            if len(subset_TP[feature]) > 0:
+                mean_subset_TP = sum(subset_TP[feature]) / len(subset_TP[feature])
+            if len(subset_FN[feature]) > 0:
+                mean_subset_FN = sum(subset_FN[feature]) / len(subset_FN[feature])
             if len(subset_TP[feature]) > 10 and len(subset_FN[feature]) > 10:
                 test = ranksums(subset_TP[feature], subset_FN[feature])
                 result = test.pvalue
             else:
-                result = "n too small"
+                result = None
             self.table_influence_on_positive.append([feature, len(subset_TP[feature]), mean_subset_TP,
-                                                  len(subset_FN[feature]), mean_subset_FN,
-                                                  abs(mean_subset_TP-mean_subset_FN), result])
+                                                     len(subset_FN[feature]), mean_subset_FN,
+                                                     abs(mean_subset_TP - mean_subset_FN), result])
 
             # negative instances
-            mean_subset_TN = sum(subset_TN[feature]) / len(subset_TN[feature])
-            mean_subset_FP = sum(subset_FP[feature]) / len(subset_FP[feature])
+            mean_subset_TN = 0
+            mean_subset_FP = 0
+            if len(subset_TN[feature]) > 0:
+                mean_subset_TN = sum(subset_TN[feature]) / len(subset_TN[feature])
+            if len(subset_FP[feature]) > 0:
+                mean_subset_FP = sum(subset_FP[feature]) / len(subset_FP[feature])
             if len(subset_TN[feature]) > 10 and len(subset_FP[feature]) > 10:
                 test = ranksums(subset_TN[feature], subset_FP[feature])
                 result = test.pvalue
             else:
-                result = "n too small"
-            self.table_influence_on_negative.append([feature, len(subset_TN[feature]), mean_subset_TN, len(subset_FP[feature]),
-                                                  mean_subset_FP, abs(mean_subset_TN - mean_subset_FP), result])
+                result = None
+            self.table_influence_on_negative.append([feature, len(subset_TN[feature]), mean_subset_TN,
+                                                     len(subset_FP[feature]), mean_subset_FP,
+                                                     abs(mean_subset_TN - mean_subset_FP), result])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
@@ -373,6 +375,9 @@ class EvaluateInfluential(StreamEvaluator):
                                                               range(len(unique_values_per_feature[categorical]))]
         # print("initialized distribution table: ", self.distribution_table)
 
+    def remove_values_from_list(self, the_list, val):
+        return [value for value in the_list if value != val]
+
     def get_categorical_features(self, values_per_feature):
         mode_per_feature = list(map(mode, values_per_feature))
         self.numerical_features = []
@@ -381,7 +386,7 @@ class EvaluateInfluential(StreamEvaluator):
         unique_values_per_feature = list(map(set, values_per_feature))
 
         for x in range(self.stream.n_features):
-            values_per_feature[x] = remove_values_from_list(values_per_feature[x], mode_per_feature[x])
+            values_per_feature[x] = self.remove_values_from_list(values_per_feature[x], mode_per_feature[x])
 
         unique_values_per_feature_without_mode = list(map(set, values_per_feature))
         idx = 0
@@ -460,16 +465,17 @@ class EvaluateInfluential(StreamEvaluator):
             self
 
         """
-        if self.model is not None:
-            for i in range(self.n_models):
-                if self._task_type == constants.CLASSIFICATION or \
-                        self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
-                    self.model[i].partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight)
-                else:
-                    self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
-            return self
-        else:
-            return self
+        return self
+        # if self.model is not None:
+        #     for i in range(self.n_models):
+        #         if self._task_type == constants.CLASSIFICATION or \
+        #                 self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
+        #             self.model[i].partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight)
+        #         else:
+        #             self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
+        #     return self
+        # else:
+        #     return self
 
     def predict(self, X):
         """ Predicts with the estimator(s) being evaluated.

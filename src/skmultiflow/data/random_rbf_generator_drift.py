@@ -1,6 +1,7 @@
 from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 from skmultiflow.utils import check_random_state
 import numpy as np
+import random
 
 
 class RandomRBFGeneratorDrift(RandomRBFGenerator):
@@ -40,6 +41,18 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
 
     num_drift_centroids: int (Default: 50)
         The number of centroids that will drift.
+
+ uncomment below and change random_rbf_generator.py accordingly:
+    def __init__(self, model_random_state=None, sample_random_state=None, n_classes=2,n_features=10, n_centroids=50,class_weights=[]):
+
+        if (len(class_weights)!=n_classes):
+          class_weights = np.zeros(n_classes) + 1/n_classes
+        self.class_weights = class_weights
+
+    def _generate_centroids(self):
+            # self.centroids[i].class_label = model_random_state.randint(self.n_classes) # replace with:
+            self.centroids[i].class_label = random.choices(range(self.n_classes),weights=self.class_weights,k=1)
+
 
     --------
     >>> # Imports
@@ -84,11 +97,14 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
     """
 
     def __init__(self, model_random_state=None, sample_random_state=None, n_classes=2,
-                 n_features=10, n_centroids=50, change_speed=0.0, num_drift_centroids=50):
+                 n_features=10, n_centroids=50, change_speed=0.0, num_drift_centroids=50, class_weights=[]):
         # Default values
         self.change_speed = change_speed
         self.num_drift_centroids = num_drift_centroids
         self.centroid_speed = None
+        if len(class_weights) != n_classes:
+            class_weights = np.zeros(n_classes) + 1 / n_classes
+        self.class_weights = class_weights
 
         super().__init__(model_random_state=model_random_state,
                          sample_random_state=sample_random_state,
@@ -172,3 +188,5 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
                 rand_speed[j] /= norm_speed
 
             self.centroid_speed.append(rand_speed)
+            label = random.choices(range(self.n_classes), weights=self.class_weights, k=1)
+            self.centroids[i].class_label = label[0]

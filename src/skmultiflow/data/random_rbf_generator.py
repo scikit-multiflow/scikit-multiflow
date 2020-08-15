@@ -2,6 +2,7 @@ from skmultiflow.data.base_stream import Stream
 from skmultiflow.data import pseudo_random_processes as prp
 from skmultiflow.utils import check_random_state
 import numpy as np
+import random as random
 
 
 class RandomRBFGenerator(Stream):
@@ -90,7 +91,7 @@ class RandomRBFGenerator(Stream):
     """
 
     def __init__(self, model_random_state=None, sample_random_state=None, n_classes=2,
-                 n_features=10, n_centroids=50):
+                 n_features=10, n_centroids=50, class_weights=[]):
         super().__init__()
         self.sample_random_state = sample_random_state
         self.model_random_state = model_random_state
@@ -103,10 +104,13 @@ class RandomRBFGenerator(Stream):
         self.centroids = None
         self.centroid_weights = None
         self.name = "Random RBF Generator"
+        self.class_weights = class_weights
 
         self.target_names = ["target_0"]
         self.feature_names = ["att_num_" + str(i) for i in range(self.n_num_features)]
         self.target_values = [i for i in range(self.n_classes)]
+        if len(self.class_weights) != self.n_classes:
+            self.class_weights = np.zeros(n_classes) + 1 / self.n_classes
 
         self._prepare_for_use()
 
@@ -168,7 +172,8 @@ class RandomRBFGenerator(Stream):
             for j in range(self.n_num_features):
                 rand_centre.append(model_random_state.rand())
             self.centroids[i].centre = rand_centre
-            self.centroids[i].class_label = model_random_state.randint(self.n_classes)
+            label = random.choices(range(self.n_classes), weights=self.class_weights, k=1)
+            self.centroids[i].class_label = label[0]
             self.centroids[i].std_dev = model_random_state.rand()
             self.centroid_weights.append(model_random_state.rand())
 
