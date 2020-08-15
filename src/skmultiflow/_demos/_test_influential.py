@@ -9,6 +9,7 @@ from prettytable import PrettyTable
 from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift
 import matplotlib.pyplot as plt
+import matplotlib.backends.backend_pdf
 
 
 def demo():
@@ -29,6 +30,10 @@ def demo():
 
     abs_mean_pos = [[] for _ in range(3)]
     abs_mean_neg = [[] for _ in range(3)]
+    influence_on_positive = [[] for _ in range(3)]
+    influence_on_negative = [[] for _ in range(3)]
+    accuracy = [[] for _ in range(3)]
+
     table_names_pos = ["Run", "Feature number", "length subset TP", "TP sample mean", "length subset FN",
                        "FN sample mean", "abs difference in mean", "p value"]
     table_names_neg = ["Run", "Feature number", "length subset TN", "TN sample mean", "length subset FP",
@@ -40,40 +45,31 @@ def demo():
     defeating_neg.field_names = table_names_neg
     equal_neg.field_names = table_names_neg
     fulfilling_neg.field_names = table_names_neg
-
-    influence_on_positive = [[] for _ in range(3)]
-    influence_on_negative = [[] for _ in range(3)]
-
-    accuracy = [[] for _ in range(3)]
-
     runs = 100
 
     for i in range(runs):
-        component_pos = RandomRBFGeneratorDrift(n_classes=2,
-                                                n_features=1, n_centroids=20, change_speed=0.5,
-                                                num_drift_centroids=int((20/runs)*i), class_weights=[0.4, 0.6])
-        component_neg = RandomRBFGeneratorDrift(n_classes=2,
-                                                n_features=1, n_centroids=20, change_speed=0.5,
-                                                num_drift_centroids=int((20/runs)*i), class_weights=[0.6, 0.4])
-        component = RandomRBFGeneratorDrift(n_classes=2, n_features=1, n_centroids=20, change_speed=(1/runs)*i,
-                                            num_drift_centroids=int((20/runs)*i), class_weights=[0.5, 0.5])
+        component_pos = RandomRBFGeneratorDrift(n_classes=2, n_features=3, n_centroids=1, change_speed=(1 / runs) * i,
+                                                num_drift_centroids=1, class_weights=[0.25, 0.75])
+        component_neg = RandomRBFGeneratorDrift(n_classes=2, n_features=3, n_centroids=1, change_speed=(1 / runs) * i,
+                                                num_drift_centroids=1, class_weights=[0.75, 0.25])
+        component = RandomRBFGeneratorDrift(n_classes=2, n_features=3, n_centroids=1, change_speed=(1 / runs) * i,
+                                            num_drift_centroids=1, class_weights=[0.5, 0.5])
 
         stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1,
-                                                      streams=[component_pos] + [component_neg] + [component]*8)
+                                                      streams=[component_pos]*3 + [component_neg]*3 + [component]*3)
         evaluating(stream, i, equal_pos, equal_neg, influence_on_positive[0], influence_on_negative[0],
                    abs_mean_pos[0], abs_mean_neg[0], accuracy[0])
 
         stream = influential_stream.InfluentialStream(self_defeating=0.999, self_fulfilling=1.001,
-                                                      streams=[component_pos] + [component_neg] + [component]*8)
-        evaluating(stream, i, fulfilling_pos, fulfilling_neg, influence_on_positive[1],
-                   influence_on_negative[1], abs_mean_pos[1], abs_mean_neg[1],
-                   accuracy[1])
+                                                      streams=[component_pos]*3 + [component_neg]*3 + [component]*3)
+        evaluating(stream, i, fulfilling_pos, fulfilling_neg, influence_on_positive[1], influence_on_negative[1],
+                   abs_mean_pos[1], abs_mean_neg[1], accuracy[1])
 
         stream = influential_stream.InfluentialStream(self_defeating=1.001, self_fulfilling=0.999,
-                                                      streams=[component_pos] + [component_neg] + [component]*8)
+                                                      streams=[component_pos]*3 + [component_neg]*3 + [component]*3)
 
-        evaluating(stream, i, defeating_pos, defeating_neg, influence_on_positive[2],
-                   influence_on_negative[2], abs_mean_pos[2], abs_mean_neg[2], accuracy[2])
+        evaluating(stream, i, defeating_pos, defeating_neg, influence_on_positive[2], influence_on_negative[2],
+                   abs_mean_pos[2], abs_mean_neg[2], accuracy[2])
 
     print(fulfilling_pos)
     print(fulfilling_neg)
@@ -110,13 +106,6 @@ def demo():
     plt.title('Abs difference in mean in equal approach')
     plt.legend()
 
-    plt.figure(3)
-    plt.plot(y, accuracy[0], label="accuracy in equal approach")
-    plt.xlabel('runs')
-    plt.ylabel("accuracy")
-    plt.title("accuracy equal approach")
-    plt.legend()
-
     y = []
     i = 0
     for item in influence_on_positive[1]:
@@ -124,7 +113,7 @@ def demo():
             y.append(i)
         i += 1
     influence_on_positive[1] = list(filter(lambda a: a is not None, influence_on_positive[1]))
-    plt.figure(4)
+    plt.figure(3)
     plt.plot(y, influence_on_positive[1], label="influence on positive instances", color="green")
     y = []
     i = 0
@@ -140,7 +129,7 @@ def demo():
     plt.legend()
 
     y = list(range(0, runs, 1))
-    plt.figure(5)
+    plt.figure(4)
     plt.plot(y, abs_mean_pos[1], label="absolute difference of mean positive instances", color="green")
     plt.plot(y, abs_mean_neg[1], label="absolute difference of mean negative instances", color="red")
     plt.xlabel('runs')
@@ -148,16 +137,9 @@ def demo():
     plt.title('Abs difference in mean in Self fulfilling approach')
     plt.legend()
 
-    plt.figure(6)
-    plt.plot(y, accuracy[1], label="accuracy in self fulfilling approach")
-    plt.xlabel('runs')
-    plt.ylabel("accuracy")
-    plt.title("accuracy self fulfilling approach")
-    plt.legend()
-
-    plt.figure(7)
     y = []
     i = 0
+    plt.figure(5)
     for item in influence_on_positive[2]:
         if item is not None:
             y.append(i)
@@ -178,7 +160,7 @@ def demo():
     plt.legend()
 
     y = list(range(0, runs, 1))
-    plt.figure(8)
+    plt.figure(6)
     plt.plot(y, abs_mean_pos[2], label="absolute difference of mean positive instances", color="green")
     plt.plot(y, abs_mean_neg[2], label="absolute difference of mean negative instances", color="red")
     plt.xlabel('runs')
@@ -186,17 +168,22 @@ def demo():
     plt.title('Abs difference in mean in Self defeating approach')
     plt.legend()
 
-    plt.figure(9)
-    plt.plot(y, accuracy[2], label="accuracy in self defeating approach")
+    plt.figure(7)
+    plt.plot(y, accuracy[0], label="accuracy without influence", color="grey")
+    plt.plot(y, accuracy[1], label="accuracy in self fulfilling approach", color="blue")
+    plt.plot(y, accuracy[2], label="accuracy in self defeating approach", color="purple")
     plt.xlabel('runs')
     plt.ylabel("accuracy")
     plt.title("accuracy self defeating approach")
     plt.legend()
-
+    pdf = matplotlib.backends.backend_pdf.PdfPages("testtesttest.pdf")
+    for fig in range(1, plt.figure().number):
+        pdf.savefig(fig)
+    pdf.close()
     plt.show()
 
 
-def evaluating(stream, run, pos, neg, influence_on_positive, influence_on_negative, abs_mean_pos, abs_mean_neg, accuracy):
+def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos, abs_mean_neg, accuracy):
     classifier = naive_bayes.NaiveBayes()
     # classifier = PerceptronMask()
     # classifier = HoeffdingTreeClassifier()
@@ -208,7 +195,7 @@ def evaluating(stream, run, pos, neg, influence_on_positive, influence_on_negati
                                                          max_samples=2200,
                                                          batch_size=1,
                                                          n_time_windows=2,
-                                                         n_intervals=10,
+                                                         n_intervals=6,
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=False,
                                                          weight_output=True)
@@ -222,14 +209,14 @@ def evaluating(stream, run, pos, neg, influence_on_positive, influence_on_negati
     for result in evaluator.table_influence_on_positive:
         result.insert(0, run)
         if result[1] == 0:
-            influence_on_positive.append(result[7])
+            influence_pos.append(result[7])
             abs_mean_pos.append(result[6])
             pos.add_row(result)
 
     for result in evaluator.table_influence_on_negative:
         result.insert(0, run)
         if result[1] == 0:
-            influence_on_negative.append(result[7])
+            influence_neg.append(result[7])
             abs_mean_neg.append(result[6])
             neg.add_row(result)
 

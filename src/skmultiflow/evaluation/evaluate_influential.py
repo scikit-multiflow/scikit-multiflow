@@ -349,6 +349,8 @@ class EvaluateInfluential(StreamEvaluator):
 
         percentile_steps = 100 / self.n_intervals
         percentile_values = list(np.arange(percentile_steps, 101, percentile_steps))
+        if percentile_values[-1] > 100:
+            percentile_values[-1] = 100
         interval_borders = list(map(lambda feature: np.percentile(feature, percentile_values).tolist(),
                                     values_per_feature))
         categorical_values_per_feature = self.get_categorical_features(values_per_feature)
@@ -365,7 +367,10 @@ class EvaluateInfluential(StreamEvaluator):
         unique_values_per_feature = list(map(set, values_per_feature))
         unique_values_per_feature = list(map(list, unique_values_per_feature))
         # print("unique_values_per_feature ", unique_values_per_feature)
-        values_per_categorical_feature = self.get_categorical_features(values_per_feature)
+        # values_per_categorical_feature = self.get_categorical_features(values_per_feature)
+        # print("intervals", self.n_intervals)
+        # print("n features", self.stream.n_features)
+        # print("windows", self.n_time_windows)
         self.distribution_table = [[[[0] * 4 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
                                    for _ in range(self.n_time_windows)]
         # remove intervals for categorical values:
