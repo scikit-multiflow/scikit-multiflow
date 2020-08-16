@@ -270,9 +270,8 @@ def P(y, x, cc, payoff=np.prod):
     for j in range(L):
         P_j = cc.ensemble[j].predict_proba(
             xy[0:D + j].reshape(1, -1))[0]  # e.g., [0.9, 0.1] wrt 0, 1
-        xy[D + j] = y[j]                                           # e.g., 1
-        p[j] = P_j[y[j]]                                         # e.g., 0.1
-        # or, y[j] = 0 is predicted with probability p[j] = 0.9
+        xy[D + j] = y[j]  # e.g., 1
+        p[j] = P_j[y[j]]  # e.g., 0.1 or, y[j] = 0 is predicted with probability p[j] = 0.9
     return payoff(p)
 
 

@@ -198,9 +198,7 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
                 self.classes = classes
 
         if self.classes is not None and classes is not None:
-            if set(self.classes) == set(classes):
-                pass
-            else:
+            if set(self.classes) != set(classes):
                 raise ValueError("The classes passed to the partial_fit function differ "
                                  "from those passed earlier.")
 

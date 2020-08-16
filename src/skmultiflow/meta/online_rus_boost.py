@@ -233,23 +233,22 @@ class OnlineRUSBoostClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
                                              (self.lam_pos[i] + self.lam_neg[i] *
                                               (self.sampling_rate * (self.n_pos / self.n_neg))) *
                                              (((self.sampling_rate + 1) * self.n_pos) / (
-                                                         self.n_pos + self.n_neg)))
+                                                     self.n_pos + self.n_neg)))
                     else:
                         if self.n_pos != 0:
                             lam_rus = lam * ((self.lam_pos[i] + self.lam_neg[i]) /
                                              (self.lam_pos[i] + self.lam_neg[i] *
                                               (self.n_neg / (self.n_pos * self.sampling_rate))) *
                                              (((self.sampling_rate + 1) * self.n_pos) / (
-                                                         self.n_pos + self.n_neg)))
+                                                     self.n_pos + self.n_neg)))
                 elif self.algorithm == 2:
                     if y[j] == 1:
                         lam_rus = ((lam * self.n_pos) / (self.n_pos + self.n_neg)) / \
                                   (self.lam_pos[i] / (self.lam_pos[i] + self.lam_neg[i]))
                     else:
-                        lam_rus = ((lam * self.sampling_rate * self.n_pos) / (self.n_pos +
-                                                                              self.n_neg)) / (
-                                              self.lam_neg[i] / (
-                                                  self.lam_pos[i] + self.lam_neg[i]))
+                        lam_rus = ((lam * self.sampling_rate * self.n_pos) /
+                                   (self.n_pos + self.n_neg)) / \
+                                  (self.lam_neg[i] / (self.lam_pos[i] + self.lam_neg[i]))
                 elif self.algorithm == 3:
                     if y[j] == 1:
                         lam_rus = lam

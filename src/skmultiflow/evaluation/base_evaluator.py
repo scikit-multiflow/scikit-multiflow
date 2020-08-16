@@ -260,7 +260,7 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
         progress_bar = round(progress * steps)
         print('\r', '#' * progress_bar + '-' * (steps - progress_bar),
               '[{:.0%}] [{:.2f}s]'.format(progress, time), end='')
-        sys.stdout.flush()    # Force flush to stdout
+        sys.stdout.flush()  # Force flush to stdout
 
     def _init_metrics(self):
         """ Starts up the metrics and statistics watchers. One watcher is created
@@ -531,7 +531,7 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
 
         shift = 0
         if self._method == 'prequential':
-            shift = -self.batch_size   # Adjust index due to training after testing
+            shift = -self.batch_size  # Adjust index due to training after testing
         self._update_outputs(self.global_sample_count + shift)
 
     def _update_outputs(self, sample_id):
@@ -678,140 +678,105 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
         print('Mean performance:')
         for i in range(self.n_models):
             if constants.ACCURACY in self.metrics:
-                print(
-                    '{} - Accuracy     : {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.ACCURACY,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Accuracy     : {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.ACCURACY,
+                                                              data_id=constants.MEAN)[i]))
             if constants.KAPPA in self.metrics:
-                print(
-                    '{} - Kappa        : {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.KAPPA,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Kappa        : {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.KAPPA,
+                                                              data_id=constants.MEAN)[i]))
             if constants.KAPPA_T in self.metrics:
-                print(
-                    '{} - Kappa T      : {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.KAPPA_T,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Kappa T      : {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.KAPPA_T,
+                                                              data_id=constants.MEAN)[i]))
             if constants.KAPPA_M in self.metrics:
-                print(
-                    '{} - Kappa M      : {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.KAPPA_M,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Kappa M      : {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.KAPPA_M,
+                                                              data_id=constants.MEAN)[i]))
             if constants.PRECISION in self.metrics:
-                print(
-                    '{} - Precision: {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.PRECISION,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Precision: {:.4f}'.format(self.model_names[i],
+                                                      self._data_buffer.get_data(
+                                                          metric_id=constants.PRECISION,
+                                                          data_id=constants.MEAN)[i]))
             if constants.RECALL in self.metrics:
-                print(
-                    '{} - Recall: {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.RECALL,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Recall: {:.4f}'.format(self.model_names[i], self._data_buffer.get_data(
+                    metric_id=constants.RECALL, data_id=constants.MEAN)[i]))
             if constants.F1_SCORE in self.metrics:
-                print(
-                    '{} - F1 score: {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.F1_SCORE,
-                            data_id=constants.MEAN)[i]))
+                print('{} - F1 score: {:.4f}'.format(self.model_names[i],
+                                                     self._data_buffer.get_data(
+                                                         metric_id=constants.F1_SCORE,
+                                                         data_id=constants.MEAN)[i]))
             if constants.HAMMING_SCORE in self.metrics:
-                print(
-                    '{} - Hamming score: {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.HAMMING_SCORE,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Hamming score: {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.HAMMING_SCORE,
+                                                              data_id=constants.MEAN)[i]))
             if constants.HAMMING_LOSS in self.metrics:
-                print(
-                    '{} - Hamming loss : {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.HAMMING_LOSS,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Hamming loss : {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.HAMMING_LOSS,
+                                                              data_id=constants.MEAN)[i]))
             if constants.EXACT_MATCH in self.metrics:
-                print(
-                    '{} - Exact matches: {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.EXACT_MATCH,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Exact matches: {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.EXACT_MATCH,
+                                                              data_id=constants.MEAN)[i]))
             if constants.J_INDEX in self.metrics:
-                print(
-                    '{} - Jaccard index: {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.J_INDEX,
-                            data_id=constants.MEAN)[i]))
+                print('{} - Jaccard index: {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.J_INDEX,
+                                                              data_id=constants.MEAN)[i]))
             if constants.MSE in self.metrics:
-                print(
-                    '{} - MSE          : {:.4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.MSE,
-                            data_id=constants.MEAN)[i]))
+                print('{} - MSE          : {:.4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.MSE,
+                                                              data_id=constants.MEAN)[i]))
             if constants.MAE in self.metrics:
-                print(
-                    '{} - MAE          : {:4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.MAE,
-                            data_id=constants.MEAN)[i]))
+                print('{} - MAE          : {:4f}'.format(self.model_names[i],
+                                                         self._data_buffer.get_data(
+                                                             metric_id=constants.MAE,
+                                                             data_id=constants.MEAN)[i]))
             if constants.AMSE in self.metrics:
-                print(
-                    '{} - AMSE          : {:4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.AMSE,
-                            data_id=constants.MEAN)[i]))
+                print('{} - AMSE          : {:4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.AMSE,
+                                                              data_id=constants.MEAN)[i]))
             if constants.AMAE in self.metrics:
-                print(
-                    '{} - AMAE          : {:4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.AMAE,
-                            data_id=constants.MEAN)[i]))
+                print('{} - AMAE          : {:4f}'.format(self.model_names[i],
+                                                          self._data_buffer.get_data(
+                                                              metric_id=constants.AMAE,
+                                                              data_id=constants.MEAN)[i]))
             if constants.ARMSE in self.metrics:
-                print(
-                    '{} - ARMSE          : {:4f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.ARMSE,
-                            data_id=constants.MEAN)[i]))
+                print('{} - ARMSE          : {:4f}'.format(self.model_names[i],
+                                                           self._data_buffer.get_data(
+                                                               metric_id=constants.ARMSE,
+                                                               data_id=constants.MEAN)[i]))
             if constants.RUNNING_TIME in self.metrics:
                 # Running time
-                print(
-                    '{} - Training time (s)  : {:.2f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.RUNNING_TIME,
-                            data_id='training_time')[i]))
-                print(
-                    '{} - Testing time  (s)  : {:.2f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.RUNNING_TIME,
-                            data_id='testing_time')[i]))
-                print(
-                    '{} - Total time    (s)  : {:.2f}'.format(
-                        self.model_names[i],
-                        self._data_buffer.get_data(
-                            metric_id=constants.RUNNING_TIME,
-                            data_id='total_running_time')[i]))
+                print('{} - Training time (s)  : {:.2f}'
+                      .format(self.model_names[i],
+                              self._data_buffer.get_data(
+                                  metric_id=constants.RUNNING_TIME,
+                                  data_id='training_time')[i]))
+                print('{} - Testing time  (s)  : {:.2f}'
+                      .format(self.model_names[i],
+                              self._data_buffer.get_data(
+                                  metric_id=constants.RUNNING_TIME,
+                                  data_id='testing_time')[i]))
+                print('{} - Total time    (s)  : {:.2f}'
+                      .format(self.model_names[i],
+                              self._data_buffer.get_data(
+                                  metric_id=constants.RUNNING_TIME,
+                                  data_id='total_running_time')[
+                                  i]))
             if constants.MODEL_SIZE in self.metrics:
-                print('{} - Size (kB)          : {:.4f}'.format(
-                    self.model_names[i], self._data_buffer.get_data(metric_id=constants.MODEL_SIZE,
+                print('{} - Size (kB)          : {:.4f}'.format(self.model_names[i],
+                                                                self._data_buffer.get_data(
+                                                                    metric_id=constants.MODEL_SIZE,
                                                                     data_id='model_size')[i]))
 
     def get_measurements(self, model_idx=None):

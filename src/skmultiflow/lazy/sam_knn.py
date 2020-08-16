@@ -227,10 +227,9 @@ class SAMKNNClassifier(BaseSKMObject, ClassifierMixin):
                         self._LTMSamples, self._LTMLabels)
                     self._STMSamples = np.delete(self._STMSamples, shiftRange, 0)
                     self._STMLabels = np.delete(self._STMLabels, shiftRange, 0)
-                    self.STMDistances[:len(self._STMLabels),
-                    :len(self._STMLabels)] = self.STMDistances[  # noqa: E128
-                                             numShifts:len(self._STMLabels) + numShifts,
-                                             numShifts:len(self._STMLabels) + numShifts]
+                    self.STMDistances[:len(self._STMLabels), :len(self._STMLabels)] = \
+                        self.STMDistances[numShifts:len(self._STMLabels) + numShifts,
+                                          numShifts:len(self._STMLabels) + numShifts]
                     for i in shiftRange:
                         self.LTMPredHistory.popleft()
                         self.STMPredHistory.popleft()
@@ -300,11 +299,9 @@ class SAMKNNClassifier(BaseSKMObject, ClassifierMixin):
                 self._STMSamples = np.delete(self._STMSamples, delrange, 0)
                 self._STMLabels = np.delete(self._STMLabels, delrange, 0)
                 diff_window_size = oldWindowSize - newWindowSize
-                self.STMDistances[:len(self._STMLabels),
-                :len(self._STMLabels)] = self.STMDistances[  # noqa: E128
-                                         diff_window_size:diff_window_size + len(self._STMLabels),
-                                         diff_window_size:diff_window_size + len(
-                                             self._STMLabels)]  # noqa: E128
+                self.STMDistances[:len(self._STMLabels), :len(self._STMLabels)] = \
+                    self.STMDistances[diff_window_size:diff_window_size + len(self._STMLabels),
+                                      diff_window_size:diff_window_size + len(self._STMLabels)]
 
                 if self.use_ltm:
                     for i in delrange:
