@@ -470,17 +470,16 @@ class EvaluateInfluential(StreamEvaluator):
             self
 
         """
-        return self
-        # if self.model is not None:
-        #     for i in range(self.n_models):
-        #         if self._task_type == constants.CLASSIFICATION or \
-        #                 self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
-        #             self.model[i].partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight)
-        #         else:
-        #             self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
-        #     return self
-        # else:
-        #     return self
+        if self.model is not None:
+            for i in range(self.n_models):
+                if self._task_type == constants.CLASSIFICATION or \
+                        self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
+                    self.model[i].partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight)
+                else:
+                    self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
+            return self
+        else:
+            return self
 
     def predict(self, X):
         """ Predicts with the estimator(s) being evaluated.
