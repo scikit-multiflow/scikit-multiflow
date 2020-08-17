@@ -1,10 +1,8 @@
-class AttributeExpandSuggestion(object):
-    def __init__(self, att_idx, att_val, operator, resulting_class_distributions, merit):
+class AttributeSplitSuggestion(object):
+    def __init__(self, split_test, resulting_class_distributions, merit):
+        self.split_test = split_test
         self.resulting_class_distributions = resulting_class_distributions
         self.merit = merit
-        self.att_idx = att_idx
-        self.att_val = att_val
-        self.operator = operator
 
     def num_splits(self):
         return len(self.resulting_class_distributions)

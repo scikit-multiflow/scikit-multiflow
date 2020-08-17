@@ -1,11 +1,11 @@
-from skmultiflow.rules.attribute_expand_suggestion import AttributeExpandSuggestion
-from skmultiflow.trees._attribute_observer import AttributeObserver
+from skmultiflow.trees._attribute_test import AttributeSplitSuggestion
+from skmultiflow.trees._attribute_test import NominalAttributeBinaryTest
+from skmultiflow.trees._attribute_test import NominalAttributeMultiwayTest
+from .attribute_observer import AttributeObserver
 
 
 class NominalAttributeClassObserver(AttributeObserver):
-    """ NominalAttributeClassObserver
-
-    Class for observing the class data distribution for a nominal attribute.
+    """ Class for observing the class data distribution for a nominal attribute.
     This observer monitors the class distribution of a given attribute.
     Used in naive Bayes and decision trees to monitor data statistics on leaves.
 
@@ -30,7 +30,10 @@ class NominalAttributeClassObserver(AttributeObserver):
                 self._att_val_dist_per_class[class_val][att_val] += weight
             except KeyError:
                 self._att_val_dist_per_class[class_val][att_val] = weight
-                self._att_val_dist_per_class[class_val] = dict(sorted(self._att_val_dist_per_class[class_val].items()))
+                self._att_val_dist_per_class[class_val] = dict(
+                    sorted(self._att_val_dist_per_class[class_val].items())
+                )
+
         self._total_weight_observed += weight
 
     def probability_of_attribute_value_given_class(self, att_val, class_val):
@@ -40,20 +43,29 @@ class NominalAttributeClassObserver(AttributeObserver):
             return (value + 1.0) / (sum(obs.values()) + len(obs))
         return 0.0
 
-    def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, class_idx=None):
+    def get_best_evaluated_split_suggestion(self, criterion, pre_split_dist, att_idx, binary_only):
         best_suggestion = None
-        att_values = set([att_val for class_val in self._att_val_dist_per_class.values() for att_val in class_val])
+        att_values = sorted(set(
+            [att_val for att_val_per_class in self._att_val_dist_per_class.values()
+             for att_val in att_val_per_class]
+        ))
+        if not binary_only:
+            post_split_dist = self.get_class_dist_from_multiway_split()
+            merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
+            branch_mapping = {attr_val: branch_id for branch_id, attr_val in
+                              enumerate(att_values)}
+            best_suggestion = AttributeSplitSuggestion(
+                NominalAttributeMultiwayTest(att_idx, branch_mapping),
+                post_split_dist, merit
+            )
         for att_val in att_values:
             post_split_dist = self.get_class_dist_from_binary_split(att_val)
-            if class_idx is not None:
-                criterion.class_idx = class_idx
             merit = criterion.get_merit_of_split(pre_split_dist, post_split_dist)
             if best_suggestion is None or merit > best_suggestion.merit:
-                if criterion.best_idx == 0:
-                    symbol = "="
-                else:
-                    symbol = "!="
-                best_suggestion = AttributeExpandSuggestion(att_idx, att_val, symbol, post_split_dist, merit)
+                best_suggestion = AttributeSplitSuggestion(
+                    NominalAttributeBinaryTest(att_idx, att_val),
+                    post_split_dist, merit
+                )
         return best_suggestion
 
     def get_class_dist_from_multiway_split(self):
@@ -65,7 +77,11 @@ class NominalAttributeClassObserver(AttributeObserver):
                 if i not in resulting_dist[j]:
                     resulting_dist[j][i] = 0.0
                 resulting_dist[j][i] += value
-        distributions = [value for value in resulting_dist.values()]
+
+        sorted_keys = sorted(resulting_dist.keys())
+        distributions = [
+            dict(sorted(resulting_dist[k].items())) for k in sorted_keys
+        ]
         return distributions
 
     def get_class_dist_from_binary_split(self, val_idx):
