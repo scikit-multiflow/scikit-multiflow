@@ -1,7 +1,7 @@
 import numpy as np
 from skmultiflow.utils import check_random_state
 
-
+#TODO: check if this is used or can be discarded
 def make_logical(n_tiles=1, random_state=None):
     """ Make a toy dataset with three labels that represent the logical functions: OR, XOR, AND
      (functions of the 2D input).

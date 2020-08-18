@@ -1,9 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from skmultiflow.core import BaseSKMObject
-import warnings
 import threading
 
-#OK
+
 class DataSource(BaseSKMObject, metaclass=ABCMeta):
     """ DataSource class.
 

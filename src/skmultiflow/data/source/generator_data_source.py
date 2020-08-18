@@ -1,5 +1,6 @@
 from skmultiflow.data.source import DataSource
 
+
 class GeneratorDataSource(DataSource):
     """ GeneratorDataSource class.
     Provides a DataSource implementation, pulling data from a generator.

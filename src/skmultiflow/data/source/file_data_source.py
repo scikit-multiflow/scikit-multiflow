@@ -1,5 +1,6 @@
 from skmultiflow.data.source import DataSource
 
+
 class FileDataSource(DataSource):
     """ FileDataSource class.
     Provides a DataSource implementation, reading from a file.

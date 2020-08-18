@@ -1,6 +1,7 @@
 from skmultiflow.data.source import DataSource
 from kafka import KafkaConsumer
 
+
 class KafkaDataSource(DataSource):
     """ KafkaDataSource class.
     Provides a DataSource implementation, reading from Kafka consumer.

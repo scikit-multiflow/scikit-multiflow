@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
-#OK
-class EventObsever(metaclass=ABCMeta):
+
+class EventObserver(metaclass=ABCMeta):
     """ EventObserver class.
 
     This abstract class defines the minimum requirements of a data source.
@@ -12,7 +12,6 @@ class EventObsever(metaclass=ABCMeta):
     NotImplementedError: This is an abstract class.
 
     """
-    _estimator_type = 'eventobserver'
 
     @abstractmethod
     def update(self, event):
