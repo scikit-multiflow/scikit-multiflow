@@ -1,9 +1,9 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+
 from skmultiflow.utils import check_random_state
 
 
-class HyperplaneGenerator(Stream):
+class HyperplaneGenerator():
     r""" Hyperplane stream generator.
 
     Generates a problem of prediction class of a rotation hyperplane. It was
@@ -61,25 +61,19 @@ class HyperplaneGenerator(Stream):
                  noise_percentage=0.05, sigma_percentage=0.1):
         super().__init__()
 
-        self.random_state = random_state
-        self.n_num_features = n_features
-        self.n_features = self.n_num_features
-        self.n_classes = 2
+        self.random_state = random_state # used to check the random state below
+        self._random_state = None  # This is the actual random_state object used internally
+        self.n_features = n_features
+
         self.n_drift_features = n_drift_features
         self.mag_change = mag_change
         self.sigma_percentage = sigma_percentage
         self.noise_percentage = noise_percentage
-        self.n_targets = 1
-        self._random_state = None  # This is the actual random_state object used internally
+
         self._next_class_should_be_zero = False
         self._weights = np.zeros(self.n_features)
         self._sigma = np.zeros(self.n_features)
         self.name = "Hyperplane Generator"
-
-        self.target_names = ["target_0"]
-        self.feature_names = ["att_num_" + str(i) for i in range(self.n_features)]
-        self.target_values = [i for i in range(self.n_classes)]
-
         self._prepare_for_use()
 
     @property
@@ -186,7 +180,7 @@ class HyperplaneGenerator(Stream):
             self._weights[i] = self._random_state.rand()
             self._sigma[i] = 1 if (i < self.n_drift_features) else 0
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         The sample generation works as follows: The features are generated
@@ -208,29 +202,24 @@ class HyperplaneGenerator(Stream):
             the batch_size samples that were requested.
 
         """
-        data = np.zeros([batch_size, self.n_features + 1])
+        data = np.zeros([1, self.n_features + 1])
+        sum_weights = np.sum(self._weights)
 
-        for j in range(batch_size):
-            sum_weights = np.sum(self._weights)
-            self.sample_idx += 1
-            sum = 0
-            for i in range(self.n_features):
-                data[j, i] = self._random_state.rand()
-                sum += self._weights[i] * data[j, i]
+        summ = 0
+        for i in range(self.n_features):
+            data[0, i] = self._random_state.rand()
+            summ += self._weights[i] * data[0, i]
 
-            group = 1 if sum >= sum_weights * 0.5 else 0
+        group = 1 if summ >= sum_weights * 0.5 else 0
 
-            if 0.01 + self._random_state.rand() <= self.noise_percentage:
-                group = 1 if (group == 0) else 0
+        if 0.01 + self._random_state.rand() <= self.noise_percentage:
+            group = 1 if (group == 0) else 0
 
-            data[j, -1] = group
+        data[0, -1] = group
 
-            self._generate_drift()
+        self._generate_drift()
 
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = data[:, self.n_features:].flatten().astype(int)
-
-        return self.current_sample_x, self.current_sample_y
+        return data[:, :self.n_features], data[:, self.n_features:].flatten().astype(int)
 
     def _generate_drift(self):
         """

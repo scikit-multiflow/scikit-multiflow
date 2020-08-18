@@ -1,9 +1,8 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
 
 
-class SEAGenerator(Stream):
+class SEAGenerator():
     r""" SEA stream generator.
 
     This generator is an implementation of the data stream with abrupt
@@ -106,17 +105,10 @@ class SEAGenerator(Stream):
         self.random_state = random_state
         self.balance_classes = balance_classes
         self.noise_percentage = noise_percentage
-        self.n_num_features = 3
-        self.n_features = self.n_num_features
-        self.n_classes = 2
-        self.n_targets = 1
+        self.n_features = 3
         self._random_state = None  # This is the actual random_state object used internally
         self.next_class_should_be_zero = False
         self.name = "SEA Generator"
-
-        self.target_names = ["target_0"]
-        self.feature_names = ["att_num_" + str(i) for i in range(self.n_features)]
-        self.target_values = [i for i in range(self.n_classes)]
 
         self._prepare_for_use()
 
@@ -227,40 +219,34 @@ class SEAGenerator(Stream):
             the batch_size samples that were requested.
 
         """
-        data = np.zeros([batch_size, self.n_features + 1])
+        data = np.zeros([1, self.n_features + 1])
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            att1 = att2 = att3 = 0.0
-            group = 0
-            desired_class_found = False
-            while not desired_class_found:
-                att1 = 10 * self._random_state.rand()
-                att2 = 10 * self._random_state.rand()
-                att3 = 10 * self._random_state.rand()
-                group = self._classification_functions[self.classification_function](att1, att2,
-                                                                                     att3)
+        att1 = att2 = att3 = 0.0
+        group = 0
+        desired_class_found = False
+        while not desired_class_found:
+            att1 = 10 * self._random_state.rand()
+            att2 = 10 * self._random_state.rand()
+            att3 = 10 * self._random_state.rand()
+            group = self._classification_functions[self.classification_function](att1, att2, att3)
 
-                if not self.balance_classes:
+            if not self.balance_classes:
+                desired_class_found = True
+            else:
+                if (self.next_class_should_be_zero and (group == 0)) or \
+                        ((not self.next_class_should_be_zero) and (group == 1)):
                     desired_class_found = True
-                else:
-                    if (self.next_class_should_be_zero and (group == 0)) or \
-                            ((not self.next_class_should_be_zero) and (group == 1)):
-                        desired_class_found = True
-                        self.next_class_should_be_zero = not self.next_class_should_be_zero
+                    self.next_class_should_be_zero = not self.next_class_should_be_zero
 
-            if 0.01 + self._random_state.rand() <= self.noise_percentage:
-                group = 1 if (group == 0) else 0
+        if 0.01 + self._random_state.rand() <= self.noise_percentage:
+            group = 1 if (group == 0) else 0
 
-            data[j, 0] = att1
-            data[j, 1] = att2
-            data[j, 2] = att3
-            data[j, 3] = group
+        data[0, 0] = att1
+        data[0, 1] = att2
+        data[0, 2] = att3
+        data[0, 3] = group
 
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = data[:, self.n_features:].flatten().astype(np.int64)
-
-        return self.current_sample_x, self.current_sample_y
+        return data[:, :self.n_features], data[:, self.n_features:].flatten().astype(np.int64)
 
     def generate_drift(self):
         """

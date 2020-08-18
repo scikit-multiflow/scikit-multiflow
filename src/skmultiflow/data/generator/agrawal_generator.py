@@ -1,10 +1,9 @@
 import numpy as np
 
-from skmultiflow.data.source import DataSource
 from skmultiflow.utils import check_random_state
 
 
-class AGRAWALGenerator(DataSource):
+class AGRAWALGenerator():
     """ Agrawal stream generator.
 
     The generator was introduced by Agrawal et al. in [1]_, and was common source
@@ -80,8 +79,7 @@ class AGRAWALGenerator(DataSource):
 
     """
 
-    def __init__(self, observers, classification_function=0, random_state=None, balance_classes=False,
-                 perturbation=0.0):
+    def __init__(self, classification_function=0, random_state=None, balance_classes=False, perturbation=0.0):
         super().__init__()
 
         # Classification functions to use
@@ -103,15 +101,7 @@ class AGRAWALGenerator(DataSource):
         self._random_state = None  # This is the actual random_state object used internally
         self._next_class_should_be_zero = False
         self.name = "AGRAWAL Generator"
-        self.record_to_dictionary = lambda x: x
-        self.observers = observers
         self._prepare_for_use()
-
-    def listen_for_events(self):
-        event = self.next_sample()
-        while event is not None:
-            self.on_new_event(event)
-            event = self.next_sample()
 
     @property
     def classification_function(self):
@@ -237,13 +227,8 @@ class AGRAWALGenerator(DataSource):
                 hvalue = (9 - zipcode) * 100000 * (0.5 + self._random_state.rand())
                 hyears = 1 + self._random_state.randint(30)
                 loan = self._random_state.rand() * 500000
-                group = self._classification_functions[self.classification_function](salary,
-                                                                                     commission,
-                                                                                     age, elevel,
-                                                                                     car,
-                                                                                     zipcode,
-                                                                                     hvalue,
-                                                                                     hyears, loan)
+                group = self._classification_functions[self.classification_function](salary, commission, age, elevel,
+                                                                                     car, zipcode, hvalue, hyears, loan)
                 if not self.balance_classes:
                     desired_class_found = True
                 else:
@@ -265,10 +250,7 @@ class AGRAWALGenerator(DataSource):
                 data[j, i] = eval(self.feature_names[i])
             data[j, 9] = group
 
-        X = data[:, :self.n_features]
-        y = data[:, self.n_features:].flatten().astype(int)
-
-        return {'X': X, 'y': y}
+        return data[:, :self.n_features], data[:, self.n_features:].flatten().astype(int)
 
     def _perturb_value(self, val, val_min, val_max, val_range=None):
         """

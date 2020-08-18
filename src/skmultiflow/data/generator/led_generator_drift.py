@@ -95,7 +95,7 @@ class LEDGeneratorDrift(LEDGenerator):
 
         self._prepare_for_use()
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         An instance is generated based on the parameters passed. If noise
@@ -114,26 +114,22 @@ class LEDGeneratorDrift(LEDGenerator):
             for the batch_size samples that were requested.
 
         """
-        data = np.zeros([batch_size, self.n_features + 1])
-        target = np.zeros(batch_size, dtype=int)
+        data = np.zeros([1, self.n_features + 1])
+        target = np.zeros(1, dtype=int)
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            selected = self._random_state.randint(self.n_classes)
-            target[j] = selected
-            for i in range(self._NUM_BASE_ATTRIBUTES):
-                if (0.01 + self._random_state.rand()) <= self.noise_percentage:
-                    data[j, self._numberAttribute[i]] = 1 if (
-                        self._ORIGINAL_INSTANCES[selected, i] == 0) else 0
-                else:
-                    data[j, self._numberAttribute[i]] = self._ORIGINAL_INSTANCES[selected, i]
-            if self.has_noise:
-                for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
-                    data[j, self._numberAttribute[i]] = self._random_state.randint(2)
+        selected = self._random_state.randint(self.n_classes)
+        target[0] = selected
+        for i in range(self._NUM_BASE_ATTRIBUTES):
+            if (0.01 + self._random_state.rand()) <= self.noise_percentage:
+                data[j, self._numberAttribute[i]] = 1 if (
+                    self._ORIGINAL_INSTANCES[selected, i] == 0) else 0
+            else:
+                data[0, self._numberAttribute[i]] = self._ORIGINAL_INSTANCES[selected, i]
+        if self.has_noise:
+            for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
+                data[0, self._numberAttribute[i]] = self._random_state.randint(2)
 
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = target
-        return self.current_sample_x, self.current_sample_y
+        return data[:, :self.n_features], target
 
     def get_data_info(self):
         return "Led Generator with drift - {} features".format(self.n_features)

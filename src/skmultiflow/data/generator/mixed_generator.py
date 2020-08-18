@@ -1,9 +1,9 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+
 from skmultiflow.utils import check_random_state
 
 
-class MIXEDGenerator(Stream):
+class MIXEDGenerator():
     r""" Mixed data stream generator.
 
     This generator is an implementation of a data stream with abrupt concept drift and boolean
@@ -94,10 +94,6 @@ class MIXEDGenerator(Stream):
         self.next_class_should_be_zero = False
         self.name = "Mixed Generator"
 
-        self.target_names = ["target_0"]
-        self.feature_names = ["att_num_" + str(i) for i in range(self.n_features)]
-        self.target_values = [i for i in range(self.n_classes)]
-
         self._prepare_for_use()
 
     @property
@@ -152,7 +148,7 @@ class MIXEDGenerator(Stream):
             raise ValueError(
                 "balance_classes should be boolean, {} was passed".format(balance_classes))
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         The sample generation works as follows: The two numeric attributes are
@@ -178,40 +174,34 @@ class MIXEDGenerator(Stream):
 
 
                 """
-        data = np.zeros([batch_size, self.n_features + 1])
+        data = np.zeros([1, self.n_features + 1])
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            att_0 = att_1 = att_2 = att_3 = 0
-            group = 0
-            desired_class_found = False
-            while not desired_class_found:
-                att_0 = 0 if self._random_state.rand() < 0.5 else 1
-                att_1 = 0 if self._random_state.rand() < 0.5 else 1
-                att_2 = self._random_state.rand()
-                att_3 = self._random_state.rand()
+        att_0 = att_1 = att_2 = att_3 = 0
+        group = 0
+        desired_class_found = False
+        while not desired_class_found:
+            att_0 = 0 if self._random_state.rand() < 0.5 else 1
+            att_1 = 0 if self._random_state.rand() < 0.5 else 1
+            att_2 = self._random_state.rand()
+            att_3 = self._random_state.rand()
 
-                group = self._classification_functions[self.classification_function](att_0, att_1,
-                                                                                     att_2, att_3)
+            group = self._classification_functions[self.classification_function](att_0, att_1, att_2, att_3)
 
-                if not self.balance_classes:
+            if not self.balance_classes:
+                desired_class_found = True
+            else:
+                if (self.next_class_should_be_zero and (group == 0)) or \
+                        ((not self.next_class_should_be_zero) and (group == 1)):
                     desired_class_found = True
-                else:
-                    if (self.next_class_should_be_zero and (group == 0)) or \
-                            ((not self.next_class_should_be_zero) and (group == 1)):
-                        desired_class_found = True
-                        self.next_class_should_be_zero = not self.next_class_should_be_zero
+                    self.next_class_should_be_zero = not self.next_class_should_be_zero
 
-            data[j, 0] = att_0
-            data[j, 1] = att_1
-            data[j, 2] = att_2
-            data[j, 3] = att_3
-            data[j, 4] = group
+        data[0, 0] = att_0
+        data[0, 1] = att_1
+        data[0, 2] = att_2
+        data[0, 3] = att_3
+        data[0, 4] = group
 
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = data[:, self.n_features:].flatten().astype(int)
-
-        return self.current_sample_x, self.current_sample_y
+        return data[:, :self.n_features], data[:, self.n_features:].flatten().astype(int)
 
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)

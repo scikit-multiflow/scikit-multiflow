@@ -1,9 +1,8 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
 
 
-class STAGGERGenerator(Stream):
+class STAGGERGenerator():
     """ STAGGER concepts stream generator.
 
     This generator is an implementation of the dara stream with abrupt concept
@@ -158,7 +157,7 @@ class STAGGERGenerator(Stream):
         self._random_state = check_random_state(self.random_state)
         self.next_class_should_be_zero = False
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         The sample generation works as follows: The three attributes are
@@ -183,38 +182,33 @@ class STAGGERGenerator(Stream):
             the batch_size samples that were requested.
 
         """
-        data = np.zeros([batch_size, self.n_features + 1])
+        data = np.zeros([1, self.n_features + 1])
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            size = color = shape = 0
-            group = 0
-            desired_class_found = False
-            while not desired_class_found:
-                size = self._random_state.randint(3)
-                color = self._random_state.randint(3)
-                shape = self._random_state.randint(3)
+        size = color = shape = 0
+        group = 0
+        desired_class_found = False
+        while not desired_class_found:
+            size = self._random_state.randint(3)
+            color = self._random_state.randint(3)
+            shape = self._random_state.randint(3)
 
-                group = self._classification_functions[self.classification_function](size, color,
+            group = self._classification_functions[self.classification_function](size, color,
                                                                                      shape)
 
-                if not self.balance_classes:
+            if not self.balance_classes:
+                desired_class_found = True
+            else:
+                if (self.next_class_should_be_zero and (group == 0)) or \
+                        ((not self.next_class_should_be_zero) and (group == 1)):
                     desired_class_found = True
-                else:
-                    if (self.next_class_should_be_zero and (group == 0)) or \
-                            ((not self.next_class_should_be_zero) and (group == 1)):
-                        desired_class_found = True
-                        self.next_class_should_be_zero = not self.next_class_should_be_zero
+                    self.next_class_should_be_zero = not self.next_class_should_be_zero
 
-            data[j, 0] = size
-            data[j, 1] = color
-            data[j, 2] = shape
-            data[j, 3] = group
+        data[0, 0] = size
+        data[0, 1] = color
+        data[0, 2] = shape
+        data[0, 3] = group
 
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = data[:, self.n_features:].flatten().astype(int)
-
-        return self.current_sample_x, self.current_sample_y
+        return data[:, :self.n_features], data[:, self.n_features:].flatten().astype(int)
 
     def generate_drift(self):
         """

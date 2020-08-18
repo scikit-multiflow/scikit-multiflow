@@ -1,10 +1,10 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+
 from sklearn.datasets import make_multilabel_classification
 from skmultiflow.utils import check_random_state
 
 
-class MultilabelGenerator(Stream):
+class MultilabelGenerator():
     """ Creates a multi-label stream.
 
     This generator creates a stream of samples for a multi-label problem.
@@ -87,33 +87,24 @@ class MultilabelGenerator(Stream):
 
     def __init__(self, n_samples=40000, n_features=20, n_targets=5, n_labels=2, random_state=None):
         super().__init__()
-        self.X = None
-        self.y = None
-        self.n_samples = n_samples
-        self.n_features = n_features
-        self.n_targets = n_targets
-        self.n_labels = n_labels
-        self.n_classes = 2
-        self.n_num_features = n_features
         self.random_state = random_state
-        self._random_state = None  # This is the actual random_state object used internally
+        self.n_samples = n_samples
+        self.n_targets = n_targets
+        self._random_state = check_random_state(self.random_state)
+        self.X, self.y = make_multilabel_classification(n_samples=n_samples,
+                                                        n_features=n_features,
+                                                        n_classes=self.n_targets,
+                                                        n_labels=n_labels,
+                                                        random_state=self._random_state)
         self.name = "Multilabel Generator"
-
+        self.sample_idx = 0
         self._prepare_for_use()
 
     def _prepare_for_use(self):
-        self._random_state = check_random_state(self.random_state)
-        self.X, self.y = make_multilabel_classification(n_samples=self.n_samples,
-                                                        n_features=self.n_features,
-                                                        n_classes=self.n_targets,
-                                                        n_labels=self.n_labels,
-                                                        random_state=self._random_state)
-        self.target_names = ["target_" + str(i) for i in range(self.n_targets)]
-        self.feature_names = ["att_num_" + str(i) for i in range(self.n_num_features)]
         self.target_values = np.unique(self.y).tolist() if self.n_targets == 1 else \
             [np.unique(self.y[:, i]).tolist() for i in range(self.n_targets)]
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         Parameters
@@ -128,26 +119,16 @@ class MultilabelGenerator(Stream):
             the batch_size samples that were requested.
 
         """
-        self.sample_idx += batch_size
-        try:
-            self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
-            self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx, :]
-            if self.n_targets < 2:
-                self.current_sample_y = self.current_sample_y.flatten()
+        if self.n_remaining_samples() < 1:
+            self.sample_idx = 0
+        self.sample_idx += 1
 
-        except IndexError:
-            self.current_sample_x = None
-            self.current_sample_y = None
+        X = self.X[self.sample_idx - 1:self.sample_idx, :]
+        y = self.y[self.sample_idx - 1:self.sample_idx, :]
+        if self.n_targets < 2:
+            y = y.flatten()
 
-        return self.current_sample_x, self.current_sample_y
-
-    def restart(self):
-        """ Restarts the stream
-        """
-        # Note: No need to regenerate the data, just reset the idx
-        self.sample_idx = 0
-        self.current_sample_x = None
-        self.current_sample_y = None
+        return X, y
 
     def n_remaining_samples(self):
         """

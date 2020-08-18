@@ -1,10 +1,9 @@
-from skmultiflow.data.source import DataSource
 from skmultiflow.utils import check_random_state
 
 import numpy as np
 
 
-class AnomalySineGenerator(DataSource):
+class AnomalySineGenerator():
     """
     Simulate a stream with anomalies in sine waves
 
@@ -43,7 +42,7 @@ class AnomalySineGenerator(DataSource):
 
     """
 
-    def __init__(self, observers, n_samples=10000, n_anomalies=2500, contextual=False,
+    def __init__(self, n_samples=10000, n_anomalies=2500, contextual=False,
                  n_contextual=2500, shift=4, noise=0.5, replace=True, random_state=None):
         super().__init__()
         self.sample_idx = 0
@@ -64,15 +63,7 @@ class AnomalySineGenerator(DataSource):
         self._random_state = None  # This is the actual random_state object used internally
         self.name = 'Anomaly Sine Generator'
 
-        self.record_to_dictionary = lambda x: x
-        self.observers = observers
         self._prepare_for_use()
-
-    def listen_for_events(self):
-        event = self.next_sample()
-        while event is not None:
-            self.on_new_event(event)
-            event = self.next_sample()
 
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
@@ -99,7 +90,7 @@ class AnomalySineGenerator(DataSource):
                                                   replace=self.replace)
         self.X[anomalies_idx, 1] = np.sin(self._random_state.choice(self.n_anomalies,
                                                                     replace=self.replace)) \
-            + self._random_state.randn(self.n_anomalies) * self.noise + 2.
+                                   + self._random_state.randn(self.n_anomalies) * self.noise + 2.
         # Mark sample as anomalous
         self.y[anomalies_idx] = 1
 
@@ -124,8 +115,7 @@ class AnomalySineGenerator(DataSource):
         else:
             self.sample_idx += 1
 
-        return {'X': self.X[self.sample_idx - 1:self.sample_idx, :],
-                'y': self.y[self.sample_idx - 1:self.sample_idx].flatten()}
+        return self.X[self.sample_idx - 1:self.sample_idx, :], self.y[self.sample_idx - 1:self.sample_idx].flatten()
 
     def n_remaining_samples(self):
         """

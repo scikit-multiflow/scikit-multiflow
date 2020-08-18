@@ -1,9 +1,8 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
 
 
-class SineGenerator(Stream):
+class SineGenerator():
     r""" Sine stream generator.
 
     This generator is an implementation of the dara stream with abrupt
@@ -97,21 +96,13 @@ class SineGenerator(Stream):
                                           self._classification_function_three]
         self.classification_function = classification_function
         self.random_state = random_state
+        self._random_state = None  # This is the actual random_state object used internally
+
         self.has_noise = has_noise
         self.balance_classes = balance_classes
-        self.n_num_features = self._NUM_BASE_ATTRIBUTES
-        self.n_classes = 2
-        self.n_targets = 1
-        self._random_state = None  # This is the actual random_state object used internally
         self.next_class_should_be_zero = False
         self.name = "Sine Generator"
-
-        if self.has_noise:
-            self.n_num_features = self._TOTAL_ATTRIBUTES_INCLUDING_NOISE
-        self.n_features = self.n_num_features
-        self.target_names = ["target_0"]
-        self.feature_names = ["att_num_" + str(i) for i in range(self.n_features)]
-        self.target_values = [i for i in range(self.n_classes)]
+        self.n_features = self._NUM_BASE_ATTRIBUTES
 
         self._prepare_for_use()
 
@@ -196,7 +187,7 @@ class SineGenerator(Stream):
         self._random_state = check_random_state(self.random_state)
         self.next_class_should_be_zero = False
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         The sample generation works as follows: The two attributes are
@@ -223,40 +214,35 @@ class SineGenerator(Stream):
 
         """
 
-        data = np.zeros([batch_size, self.n_features + 1])
+        data = np.zeros([1, self.n_features + 1])
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            att1 = att2 = 0.0
-            group = 0
-            desired_class_found = False
-            while not desired_class_found:
-                att1 = self._random_state.rand()
-                att2 = self._random_state.rand()
-                group = self._classification_functions[self.classification_function](att1, att2)
+        att1 = att2 = 0.0
+        group = 0
+        desired_class_found = False
+        while not desired_class_found:
+            att1 = self._random_state.rand()
+            att2 = self._random_state.rand()
+            group = self._classification_functions[self.classification_function](att1, att2)
 
-                if not self.balance_classes:
-                    desired_class_found = True
-                else:
-                    if (self.next_class_should_be_zero and (group == 0)) or \
-                            ((not self.next_class_should_be_zero) and (group == 1)):
-                        desired_class_found = True
-                        self.next_class_should_be_zero = not self.next_class_should_be_zero
-
-            data[j, 0] = att1
-            data[j, 1] = att2
-
-            if self.has_noise:
-                for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
-                    data[j, i] = self._random_state.rand()
-                data[j, 4] = group
+            if not self.balance_classes:
+                desired_class_found = True
             else:
-                data[j, 2] = group
+                if (self.next_class_should_be_zero and (group == 0)) or \
+                        ((not self.next_class_should_be_zero) and (group == 1)):
+                    desired_class_found = True
+                    self.next_class_should_be_zero = not self.next_class_should_be_zero
 
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = data[:, self.n_features:].flatten().astype(int)
+        data[0, 0] = att1
+        data[0, 1] = att2
 
-        return self.current_sample_x, self.current_sample_y
+        if self.has_noise:
+            for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
+                data[0, i] = self._random_state.rand()
+            data[0, 4] = group
+        else:
+            data[0, 2] = group
+
+        return data[:, :self.n_features], data[:, self.n_features:].flatten().astype(int)
 
     def generate_drift(self):
         """

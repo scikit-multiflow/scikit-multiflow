@@ -1,10 +1,9 @@
-from skmultiflow.data.base_stream import Stream
 from sklearn.datasets import make_regression
 from skmultiflow.utils import check_random_state
 import numpy as np
 
 
-class RegressionGenerator(Stream):
+class RegressionGenerator():
     """ Creates a regression stream.
 
     This generator creates a stream of samples for a regression problem. It
@@ -116,11 +115,11 @@ class RegressionGenerator(Stream):
         super().__init__()
         self.X = None
         self.y = None
+        self.sample_idx = 0
         self.n_samples = n_samples
         self.n_features = n_features
         self.n_targets = n_targets
         self.n_informative = n_informative
-        self.n_num_features = n_features
         self.n_features = n_features
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
@@ -136,9 +135,6 @@ class RegressionGenerator(Stream):
                                          n_targets=self.n_targets,
                                          random_state=self._random_state)
         self.y = np.resize(self.y, (self.y.size, self.n_targets))
-
-        self.target_names = ["target_" + str(i) for i in range(self.n_targets)]
-        self.feature_names = ["att_num_" + str(i) for i in range(self.n_num_features)]
         self.target_values = [float] * self.n_targets
 
     def n_remaining_samples(self):
@@ -159,13 +155,8 @@ class RegressionGenerator(Stream):
         """
         return self.n_samples - self.sample_idx > 0
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
-
-        Parameters
-        ----------
-        batch_size: int (optional, default=1)
-            The number of sample to return.
 
         Returns
         -------
@@ -174,29 +165,15 @@ class RegressionGenerator(Stream):
             the batch_size samples that were requested.
 
         """
-        self.sample_idx += batch_size
-        try:
+        if self.n_remaining_samples() < 1:
+            self.sample_idx = 0
+        self.sample_idx += 1
+        x = self.X[self.sample_idx - 1:self.sample_idx, :]
+        y = self.y[self.sample_idx - 1:self.sample_idx, :]
+        if self.n_targets < 2:
+            y = y.flatten()
 
-            self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
-            self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx, :]
-            if self.n_targets < 2:
-                self.current_sample_y = self.current_sample_y.flatten()
-
-        except IndexError:
-            self.current_sample_x = None
-            self.current_sample_y = None
-        return self.current_sample_x, self.current_sample_y
-
-    def restart(self):
-        """
-        Restart the stream to the initial state.
-
-        """
-        # Note: No need to regenerate the data, just reset the idx
-        self.sample_idx = 0
-        self.current_sample_x = None
-        self.current_sample_y = None
+        return x, y
 
     def get_data_info(self):
-        return "Regression Generator - {} targets, {} features".format(self.n_targets,
-                                                                       self.n_features)
+        return "Regression Generator - {} targets, {} features".format(self.n_targets, self.n_features)

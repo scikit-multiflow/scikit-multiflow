@@ -1,9 +1,8 @@
 import warnings
 
 import numpy as np
-from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
-from skmultiflow.data import AGRAWALGenerator
+from skmultiflow.data.generator import AGRAWALGenerator
 
 
 class ConceptDriftStreamGenerator(Stream):
@@ -65,19 +64,7 @@ class ConceptDriftStreamGenerator(Stream):
                  random_state=None,
                  alpha=None):
         super(ConceptDriftStreamGenerator, self).__init__()
-
-        self.n_samples = stream.n_samples
-        self.n_targets = stream.n_targets
-        self.n_features = stream.n_features
-        self.n_num_features = stream.n_num_features
-        self.n_cat_features = stream.n_cat_features
-        self.n_classes = stream.n_classes
-        self.cat_features_idx = stream.cat_features_idx
-        self.feature_names = stream.feature_names
-        self.target_names = stream.target_names
-        self.target_values = stream.target_values
-        self.n_targets = stream.n_targets
-        self.name = 'Drifting' + stream.name
+        self.name = 'Drifting {}'.format(stream.name)
 
         self.random_state = random_state
         self._random_state = None   # This is the actual random_state object used internally
@@ -103,46 +90,8 @@ class ConceptDriftStreamGenerator(Stream):
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
 
-    def n_remaining_samples(self):
-        """ Returns the estimated number of remaining samples.
-
-        Returns
-        -------
-        int
-            Remaining number of samples. -1 if infinite (e.g. generator)
-        """
-        n_samples = self.stream.n_remaining_samples() + self.drift_stream.n_remaining_samples()
-        if n_samples < 0:
-            n_samples = -1
-        return n_samples
-
-    def has_more_samples(self):
-        """ Checks if stream has more samples.
-
-        Returns
-        -------
-        Boolean
-            True if stream has more samples.
-        """
-        return self.stream.has_more_samples() and self.drift_stream.has_more_samples()
-
-    def is_restartable(self):
-        """ Determine if the stream is restartable.
-
-         Returns
-         -------
-         Boolean
-            True if stream is restartable.
-         """
-        return self.stream.is_restartable() and self.drift_stream.is_restartable()
-
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
-
-        Parameters
-        ----------
-        batch_size: int (optional, default=1)
-            The number of samples to return.
 
         Returns
         -------
@@ -151,24 +100,13 @@ class ConceptDriftStreamGenerator(Stream):
             for the batch_size samples that were requested.
 
         """
-        self.current_sample_x = np.zeros((batch_size, self.n_features))
-        self.current_sample_y = np.zeros((batch_size, self.n_targets))
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            x = -4.0 * float(self.sample_idx - self.position) / float(self.width)
-            probability_drift = 1.0 / (1.0 + np.exp(x))
-            if self._random_state.rand() > probability_drift:
-                X, y = self.stream.next_sample()
-            else:
-                X, y = self.drift_stream.next_sample()
-            self.current_sample_x[j, :] = X
-            self.current_sample_y[j, :] = y
+        self.sample_idx += 1
+        x = -4.0 * float(self.sample_idx - self.position) / float(self.width)
+        probability_drift = 1.0 / (1.0 + np.exp(x))
+        if self._random_state.rand() > probability_drift:
+            X, y = self.stream.next_sample()
+        else:
+            X, y = self.drift_stream.next_sample()
 
-        return self.current_sample_x, self.current_sample_y.flatten()
-
-    def restart(self):
-        self._random_state = check_random_state(self.random_state)
-        self.sample_idx = 0
-        self.stream.restart()
-        self.drift_stream.restart()
+        return X, y.flatten()

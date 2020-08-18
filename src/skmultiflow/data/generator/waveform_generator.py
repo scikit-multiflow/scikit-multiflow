@@ -1,9 +1,8 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
 
 
-class WaveformGenerator(Stream):
+class WaveformGenerator():
     """ Waveform stream generator.
 
     Generates instances with 21 numeric attributes and 3 classes, based
@@ -137,7 +136,7 @@ class WaveformGenerator(Stream):
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         An instance is generated based on the parameters passed. If noise
@@ -153,11 +152,6 @@ class WaveformGenerator(Stream):
         Furthermore, if noise is added the features from 21 to 40 will be
         replaced with a random normal value.
 
-        Parameters
-        ----------
-        batch_size: int (optional, default=1)
-            The number of samples to return.
-
         Returns
         -------
         tuple or tuple list
@@ -165,26 +159,22 @@ class WaveformGenerator(Stream):
             for the batch_size samples that were requested.
 
         """
-        data = np.zeros([batch_size, self.n_features + 1])
+        data = np.zeros([1, self.n_features + 1])
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            group = self._random_state.randint(0, self.n_classes)
-            choice_a = 1 if (group == 2) else 0
-            choice_b = 1 if (group == 0) else 2
-            multiplier_a = self._random_state.rand()
-            multiplier_b = 1.0 - multiplier_a
+        group = self._random_state.randint(0, self.n_classes)
+        choice_a = 1 if (group == 2) else 0
+        choice_b = 1 if (group == 0) else 2
+        multiplier_a = self._random_state.rand()
+        multiplier_b = 1.0 - multiplier_a
 
-            for i in range(self._NUM_BASE_ATTRIBUTES):
-                data[j, i] = multiplier_a * self._H_FUNCTION[choice_a][i] + multiplier_b * \
-                    self._H_FUNCTION[choice_b][i] + self._random_state.normal()
+        for i in range(self._NUM_BASE_ATTRIBUTES):
+            data[0, i] = multiplier_a * self._H_FUNCTION[choice_a][i] + multiplier_b * \
+                self._H_FUNCTION[choice_b][i] + self._random_state.normal()
 
-            if self.has_noise:
-                for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
-                    data[j, i] = self._random_state.normal()
+        if self.has_noise:
+            for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
+                data[0, i] = self._random_state.normal()
 
-            data[j, data[j].size - 1] = group
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = np.ravel(data[:, self.n_features:]).astype(int)
-
-        return self.current_sample_x, self.current_sample_y
+        data[0, data[0].size - 1] = group
+        ############
+        return data[:, :self.n_features], np.ravel(data[:, self.n_features:]).astype(int)

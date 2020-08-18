@@ -1,9 +1,9 @@
 import numpy as np
-from skmultiflow.data.base_stream import Stream
+
 from skmultiflow.utils import check_random_state
 
 
-class LEDGenerator(Stream):
+class LEDGenerator():
     """ LED stream generator.
 
     This data source originates from the CART book [1]_. An implementation
@@ -103,10 +103,7 @@ class LEDGenerator(Stream):
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
         self.noise_percentage = noise_percentage
-        self.n_cat_features = self._NUM_BASE_ATTRIBUTES
-        self.n_features = self.n_cat_features
         self.has_noise = has_noise
-        self.n_targets = 1
         self.n_classes = 10
         self.name = "Led Generator"
 
@@ -116,8 +113,6 @@ class LEDGenerator(Stream):
             self.n_cat_features = self._NUM_BASE_ATTRIBUTES
 
         self.n_features = self.n_cat_features
-        self.feature_names = ["att_num_" + str(i) for i in range(self.n_cat_features)]
-        self.target_values = [i for i in range(self.n_classes)]
 
         self._prepare_for_use()
 
@@ -175,17 +170,12 @@ class LEDGenerator(Stream):
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         An instance is generated based on the parameters passed. If noise
         is included the total number of attributes will be 24, if it's not
         included there will be 7 attributes.
-
-        Parameters
-        ----------
-        batch_size: int (optional, default=1)
-            The number of samples to return.
 
         Returns
         -------
@@ -194,28 +184,23 @@ class LEDGenerator(Stream):
             for the batch_size samples that were requested.
 
         """
+        data = np.zeros([1, self.n_features + 1])
+        target = np.zeros(1, dtype=int)
 
-        data = np.zeros([batch_size, self.n_features + 1])
-        target = np.zeros(batch_size, dtype=int)
+        selected = self._random_state.randint(self.n_classes)
+        target[0] = selected
 
-        for j in range(batch_size):
-            self.sample_idx += 1
-            selected = self._random_state.randint(self.n_classes)
-            target[j] = selected
+        for i in range(self._NUM_BASE_ATTRIBUTES):
+            if (0.01 + self._random_state.rand()) <= self.noise_percentage:
+                data[0, i] = 1 if (self._ORIGINAL_INSTANCES[selected, i] == 0) else 0
+            else:
+                data[0, i] = self._ORIGINAL_INSTANCES[selected, i]
 
-            for i in range(self._NUM_BASE_ATTRIBUTES):
-                if (0.01 + self._random_state.rand()) <= self.noise_percentage:
-                    data[j, i] = 1 if (self._ORIGINAL_INSTANCES[selected, i] == 0) else 0
-                else:
-                    data[j, i] = self._ORIGINAL_INSTANCES[selected, i]
+        if self.has_noise:
+            for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
+                data[0, i] = self._random_state.randint(2)
 
-            if self.has_noise:
-                for i in range(self._NUM_BASE_ATTRIBUTES, self._TOTAL_ATTRIBUTES_INCLUDING_NOISE):
-                    data[j, i] = self._random_state.randint(2)
-
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = target
-        return self.current_sample_x, self.current_sample_y
+        return data[:, :self.n_features], target
 
     def get_data_info(self):
         return "Led Generator - {} features".format(self.n_features)
