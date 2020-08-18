@@ -1,15 +1,10 @@
-from abc import ABCMeta, abstractmethod
-from skmultiflow.core import BaseSKMObject
+from skmultiflow.data.source import DataSource
 from kafka import KafkaConsumer
-import warnings
 
 class KafkaDataSource(DataSource):
     """ KafkaDataSource class.
-
     Provides a DataSource implementation, reading from Kafka consumer.
-
     """
-    _estimator_type = 'datasource'
 
     def __init__(self, record_to_dictionary, observers, bootstrap_servers, kafka_topic, kafka_group_id=None, ):
         self.record_to_dictionary = record_to_dictionary

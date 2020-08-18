@@ -1,10 +1,10 @@
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.source import DataSource
 from skmultiflow.utils import check_random_state
 
 import numpy as np
 
 
-class AnomalySineGenerator(Stream):
+class AnomalySineGenerator(DataSource):
     """
     Simulate a stream with anomalies in sine waves
 
@@ -43,9 +43,10 @@ class AnomalySineGenerator(Stream):
 
     """
 
-    def __init__(self, n_samples=10000, n_anomalies=2500, contextual=False,
+    def __init__(self, observers, n_samples=10000, n_anomalies=2500, contextual=False,
                  n_contextual=2500, shift=4, noise=0.5, replace=True, random_state=None):
         super().__init__()
+        self.sample_idx = 0
         self.n_samples = n_samples
         if n_anomalies > self.n_samples:
             raise ValueError("n_anomalies ({}) can't be larger "
@@ -62,17 +63,16 @@ class AnomalySineGenerator(Stream):
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
         self.name = 'Anomaly Sine Generator'
-        self.restart()
 
-        # Stream attributes
-        self.n_features = 2
-        self.n_targets = 1
-        self.n_num_features = 2
-        self.target_names = ["anomaly"]
-        self.feature_names = ["att_idx_" + str(i) for i in range(2)]
-        self.target_values = [0, 1]
-
+        self.record_to_dictionary = lambda x: x
+        self.observers = observers
         self._prepare_for_use()
+
+    def listen_for_events(self):
+        event = self.next_sample()
+        while event is not None:
+            self.on_new_event(event)
+            event = self.next_sample()
 
     def _prepare_for_use(self):
         self._random_state = check_random_state(self.random_state)
@@ -103,7 +103,7 @@ class AnomalySineGenerator(Stream):
         # Mark sample as anomalous
         self.y[anomalies_idx] = 1
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """
         Get the next sample from the stream.
 
@@ -119,18 +119,13 @@ class AnomalySineGenerator(Stream):
             the batch_size samples that are requested.
 
         """
-        if self.n_remaining_samples() < batch_size:
-            batch_size = self.n_remaining_samples()
-
-        if batch_size > 0:
-            self.sample_idx += batch_size
-            self.current_sample_x = self.X[self.sample_idx - batch_size:self.sample_idx, :]
-            self.current_sample_y = self.y[self.sample_idx - batch_size:self.sample_idx].flatten()
+        if self.n_remaining_samples() < 1:
+            self.sample_idx = 0
         else:
-            self.current_sample_x = None
-            self.current_sample_y = None
+            self.sample_idx += 1
 
-        return self.current_sample_x, self.current_sample_y
+        return {'X': self.X[self.sample_idx - 1:self.sample_idx, :],
+                'y': self.y[self.sample_idx - 1:self.sample_idx].flatten()}
 
     def n_remaining_samples(self):
         """
@@ -155,13 +150,3 @@ class AnomalySineGenerator(Stream):
 
         """
         return self.name + " - {} target(s), {} features".format(self.n_targets, self.n_features)
-
-    def restart(self):
-        """
-        Restart the stream to the initial state.
-
-        """
-        # Note: No need to regenerate the data, just reset the idx
-        self.sample_idx = 0
-        self.current_sample_x = None
-        self.current_sample_y = None

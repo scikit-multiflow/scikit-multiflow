@@ -1,10 +1,10 @@
 import numpy as np
 
-from skmultiflow.data.base_stream import Stream
+from skmultiflow.data.source import DataSource
 from skmultiflow.utils import check_random_state
 
 
-class AGRAWALGenerator(Stream):
+class AGRAWALGenerator(DataSource):
     """ Agrawal stream generator.
 
     The generator was introduced by Agrawal et al. in [1]_, and was common source
@@ -80,7 +80,7 @@ class AGRAWALGenerator(Stream):
 
     """
 
-    def __init__(self, classification_function=0, random_state=None, balance_classes=False,
+    def __init__(self, observers, classification_function=0, random_state=None, balance_classes=False,
                  perturbation=0.0):
         super().__init__()
 
@@ -99,21 +99,19 @@ class AGRAWALGenerator(Stream):
         self.random_state = random_state
         self.balance_classes = balance_classes
         self.perturbation = perturbation
-        self.n_num_features = 6
-        self.n_cat_features = 3
-        self.n_features = self.n_num_features + self.n_cat_features
-        self.n_classes = 2
-        self.n_targets = 1
+
         self._random_state = None  # This is the actual random_state object used internally
         self._next_class_should_be_zero = False
         self.name = "AGRAWAL Generator"
-
-        self.target_names = ["target"]
-        self.feature_names = ["salary", "commission", "age", "elevel", "car", "zipcode", "hvalue",
-                              "hyears", "loan"]
-        self.target_values = [i for i in range(self.n_classes)]
-
+        self.record_to_dictionary = lambda x: x
+        self.observers = observers
         self._prepare_for_use()
+
+    def listen_for_events(self):
+        event = self.next_sample()
+        while event is not None:
+            self.on_new_event(event)
+            event = self.next_sample()
 
     @property
     def classification_function(self):
@@ -198,7 +196,7 @@ class AGRAWALGenerator(Stream):
         self._random_state = check_random_state(self.random_state)
         self._next_class_should_be_zero = False
 
-    def next_sample(self, batch_size=1):
+    def next_sample(self):
         """ Returns next sample from the stream.
 
         The sample generation works as follows: The 9 features are generated
@@ -214,16 +212,14 @@ class AGRAWALGenerator(Stream):
 
         Parameters
         ----------
-        batch_size: int (optional, default=1)
-            The number of samples to return.
 
         Returns
         -------
         tuple or tuple list
-            Return a tuple with the features matrix and the labels matrix for
-            the batch_size samples that were requested.
+            Return a tuple with the features matrix and the labels matrix for a sample.
 
         """
+        batch_size = 1
         data = np.zeros([batch_size, self.n_features + 1])
 
         for j in range(batch_size):
@@ -269,10 +265,10 @@ class AGRAWALGenerator(Stream):
                 data[j, i] = eval(self.feature_names[i])
             data[j, 9] = group
 
-        self.current_sample_x = data[:, :self.n_features]
-        self.current_sample_y = data[:, self.n_features:].flatten().astype(int)
+        X = data[:, :self.n_features]
+        y = data[:, self.n_features:].flatten().astype(int)
 
-        return self.current_sample_x, self.current_sample_y
+        return {'X': X, 'y': y}
 
     def _perturb_value(self, val, val_min, val_max, val_range=None):
         """

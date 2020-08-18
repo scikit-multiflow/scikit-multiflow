@@ -1,15 +1,9 @@
-from abc import ABCMeta, abstractmethod
-from skmultiflow.core import BaseSKMObject
-import warnings
-import th
+from skmultiflow.data.source import DataSource
 
 class FileDataSource(DataSource):
     """ FileDataSource class.
-
     Provides a DataSource implementation, reading from a file.
-
     """
-    _estimator_type = 'datasource'
 
     def __init__(self, record_to_dictionary, observers, filename):
         self.record_to_dictionary = record_to_dictionary
@@ -30,5 +24,6 @@ class FileDataSource(DataSource):
         event = self.file_handler.readline()
         while event is not None:
             self.on_new_event(event)
+            event = self.file_handler.readline()
 
         self.file_handler.close()
