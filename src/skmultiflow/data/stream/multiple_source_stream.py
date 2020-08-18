@@ -3,13 +3,13 @@ from skmultiflow.data.observer import EventObserver
 import numpy as np
 import warnings
 
-class Stream(EventObserver, metaclass=ABCMeta):
-    """ Stream class.
-    This class defines the minimum requirements of a stream,
-    so that it can work along other modules in scikit-multiflow.
+class MultipleSourcesStream(EventObserver, metaclass=ABCMeta):
+    """ MultipleSourcesStream class.
+    Creates a stream that listens to data from multiple sources.
+    Useful to handle async records labeling, without waiting for the label to be available to process X.
     """
     def __init__(self):
-        self.source = None
+        self.sources = None
         self.n_targets = 0
         self.n_features = 0
         self.n_num_features = 0
@@ -234,14 +234,13 @@ class Stream(EventObserver, metaclass=ABCMeta):
         """ Reads the data provided by the user and separates the features and targets.
             Performs basic checks for data consistency
         """
-        sorted_keys = sorted(list(entry.keys()))
+        sorted_keys = sorted(list(set(entry.keys()).difference({'ID', 'entry-type'})))
         data_pieces = [entry[key] for key in sorted_keys]
         checks = [self.check_data_consistency(data_piece, self.allow_nan) for data_piece in data_pieces]
 
-        X = entry['X']
-        _, self.n_features = X.shape
-        self.n_num_features = self.n_features - self.n_cat_features
-        return data_pieces
+        # self.join_or_enqueue("y", self.process_entry(entry))
+
+        return entry
 
     def is_restartable(self):
         """
@@ -253,11 +252,16 @@ class Stream(EventObserver, metaclass=ABCMeta):
             True if stream is restartable.
 
         """
-        return self.source.is_restartable()
+        is_restartable = True
+        for source in self.sources:
+            is_restartable = is_restartable and source.is_restartable()
+        return is_restartable
 
     def restart(self):
         """  Restart the stream. """
-        self.source.restart()
+        if self.is_restartable():
+            for source in self.sources:
+                source.restart()
 
     # Kudos to https://codereview.stackexchange.com/questions/128032/check-if-a-numpy-array-contains-numerical-data
     def is_numeric_array(self, array):
