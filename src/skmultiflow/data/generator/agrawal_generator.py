@@ -200,9 +200,6 @@ class AGRAWALGenerator():
         The generated sample will have 9 features and 1 label (it has one
         classification task).
 
-        Parameters
-        ----------
-
         Returns
         -------
         tuple or tuple list
