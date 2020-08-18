@@ -3,8 +3,7 @@ from skmultiflow.data.observer import EventObserver
 import numpy as np
 import warnings
 
-
-class Stream(EventObsever, metaclass=ABCMeta):
+class Stream(EventObserver, metaclass=ABCMeta):
     """ Base Stream class.
 
     This abstract class defines the minimum requirements of a stream,
@@ -23,8 +22,6 @@ class Stream(EventObsever, metaclass=ABCMeta):
         self.n_cat_features = 0
         self.n_classes = 0
         self.cat_features_idx = []
-        self.current_sample_x = None
-        self.current_sample_y = None
         self.feature_names = None
         self.target_names = None
         self.target_values = None
@@ -237,36 +234,25 @@ class Stream(EventObsever, metaclass=ABCMeta):
         event:
             dictionary with event data, to be processed
         """
-        self.current_sample_x, self.current_sample_y = self.process_data(event)
-        return self.current_sample_x, self.current_sample_y
+        return self.process_entry(event)
 
-    def process_data(self, entry):
+    def process_entry(self, entry):
         """ Reads the data provided by the user and separates the features and targets.
+            Performs basic checks for data consistency
         """
-        # TODO re-implement to fit new case
-        #check_data_consistency(raw_data, self.allow_nan)
-
         X = entry['X']
         y = entry['y']
-
+        self.check_data_consistency(X, self.allow_nan)
+        self.check_data_consistency(y, self.allow_nan)
         _, self.n_features = X.shape
-
         self.n_num_features = self.n_features - self.n_cat_features
+        return self.process_additional_entry_data(entry)
 
-        return X, y
-
-    #TODO: check if we really need this.
-    def last_sample(self):
-        """ Retrieves last `batch_size` samples in the stream.
-
-        Returns
-        -------
-        tuple or tuple list
-            A numpy.ndarray of shape (batch_size, n_features) and an array-like of shape
-            (batch_size, n_targets), representing the next batch_size samples.
-
+    def process_additional_entry_data(self, entry):
+        """ Should override, if additional fields are considered for
+        the entry or same fields require more processing.
         """
-        return self.current_sample_x, self.current_sample_y
+        return entry['X'], entry['y']
 
     def is_restartable(self):
         """
@@ -282,9 +268,62 @@ class Stream(EventObsever, metaclass=ABCMeta):
 
     def restart(self):
         """  Restart the stream. """
-        self.current_sample_x = None
-        self.current_sample_y = None
         self.source.restart()
+
+    def is_numeric_array(self, array):
+        """Checks if the dtype of the array is numeric.
+
+        Booleans, unsigned integer, signed integer, floats and complex are
+        considered numeric.
+
+        Parameters
+        ----------
+        array : `numpy.ndarray`-like
+            The array to check.
+
+        Returns
+        -------
+        is_numeric : `bool`
+            True if it is a recognized numerical and False if object or
+            string.
+        """
+        numerical_dtype_kinds = {'b',  # boolean
+                                 'u',  # unsigned integer
+                                 'i',  # signed integer
+                                 'f',  # floats
+                                 'c'}  # complex
+        try:
+            return array.dtype.kind in numerical_dtype_kinds
+        except AttributeError:
+            # in case it's not a numpy array it will probably have no dtype.
+            return np.asarray(array).dtype.kind in numerical_dtype_kinds
+
+    def check_data_consistency(self, row, allow_nan=False):
+        """
+        Check data consistency with respect to scikit-multiflow assumptions:
+        * Only numeric data types are used.
+        * Missing values are, in general, not supported.
+        Parameters
+        ----------
+        raw_data_frame: pandas.DataFrame
+            The data frame containing the data to check.
+        allow_nan: bool, optional (default=False)
+            If True, allows NaN values in the data. Otherwise, an error is raised.
+        """
+
+        if (not self.is_numeric_array(row)):
+            # scikit-multiflow assumes that data is numeric
+            raise ValueError('Non-numeric data found:\n {}'
+                             'scikit-multiflow only supports numeric data.'
+                             .format(row.dtypes))
+
+        if np.isnan(row).any():
+            if not allow_nan:
+                raise ValueError("NaN values found. Missing values are not fully supported.\n"
+                                 "You can deactivate this error via the 'allow_nan' option.")
+            else:
+                warnings.warn("NaN values found.", UserWarning)
+
 
     def get_data_info(self):
         """ Retrieves minimum information from the stream
