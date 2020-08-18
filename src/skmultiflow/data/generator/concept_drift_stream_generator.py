@@ -6,7 +6,7 @@ from skmultiflow.utils import check_random_state
 from skmultiflow.data import AGRAWALGenerator
 
 
-class ConceptDriftStream(Stream):
+class ConceptDriftStreamGenerator(Stream):
     """ Generates a stream with concept drift.
 
     A stream generator that adds concept drift or change by joining several streams.
@@ -64,7 +64,7 @@ class ConceptDriftStream(Stream):
                  width=1000,
                  random_state=None,
                  alpha=None):
-        super(ConceptDriftStream, self).__init__()
+        super(ConceptDriftStreamGenerator, self).__init__()
 
         self.n_samples = stream.n_samples
         self.n_targets = stream.n_targets

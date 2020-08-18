@@ -1,10 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from skmultiflow.core import BaseSKMObject
-import warnings
-import threading
 
 #OK
-class EventObsever(BaseSKMObject, metaclass=ABCMeta):
+class EventObsever(metaclass=ABCMeta):
     """ EventObserver class.
 
     This abstract class defines the minimum requirements of a data source.

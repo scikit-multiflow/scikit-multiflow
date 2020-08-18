@@ -1,10 +1,10 @@
-from abc import ABCMeta, abstractmethod
-from skmultiflow.core import BaseSKMObject
+from abc import ABCMeta
+from skmultiflow.data.observer import EventObserver
 import numpy as np
 import warnings
 
 
-class Stream(BaseSKMObject, metaclass=ABCMeta):
+class Stream(EventObsever, metaclass=ABCMeta):
     """ Base Stream class.
 
     This abstract class defines the minimum requirements of a stream,
@@ -15,8 +15,6 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
     NotImplementedError: This is an abstract class.
 
     """
-    _estimator_type = 'stream'
-
     def __init__(self):
         self.source = None
         self.n_targets = 0
@@ -231,21 +229,16 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
 
         self._cat_features_idx = cat_features_idx
 
-    def next_sample(self):
-        """ Returns next sample from the stream.
+    def update(self, event):
+        """ Process next event in stream
 
         Parameters
         ----------
-
-        Returns
-        -------
-        tuple
-
+        event:
+            dictionary with event data, to be processed
         """
-        entry = self.source.next_sample()
-        self.current_sample_x, self.current_sample_y = self.process_data(entry)
+        self.current_sample_x, self.current_sample_y = self.process_data(event)
         return self.current_sample_x, self.current_sample_y
-
 
     def process_data(self, entry):
         """ Reads the data provided by the user and separates the features and targets.
@@ -260,15 +253,9 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
 
         self.n_num_features = self.n_features - self.n_cat_features
 
-        if np.issubdtype(y.dtype, np.integer):
-            self.task_type = self._CLASSIFICATION
-            self.n_classes = len(np.unique(y))
-        else:
-            self.task_type = self._REGRESSION
-        self.target_values = self.get_target_values()
-
         return X, y
 
+    #TODO: check if we really need this.
     def last_sample(self):
         """ Retrieves last `batch_size` samples in the stream.
 
@@ -298,28 +285,6 @@ class Stream(BaseSKMObject, metaclass=ABCMeta):
         self.current_sample_x = None
         self.current_sample_y = None
         self.source.restart()
-
-    def n_remaining_samples(self):
-        """ Returns the estimated number of remaining samples.
-
-        Returns
-        -------
-        int
-            Remaining number of samples. -1 if infinite (e.g. generator)
-
-        """
-        return -1
-
-    def has_more_samples(self):
-        """
-        Checks if stream has more samples.
-
-        Returns
-        -------
-        Boolean
-            True if stream has more samples.
-        """
-        return True
 
     def get_data_info(self):
         """ Retrieves minimum information from the stream
