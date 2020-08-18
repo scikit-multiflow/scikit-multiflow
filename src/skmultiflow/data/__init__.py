@@ -11,8 +11,8 @@ from .synth import make_logical
 from src.skmultiflow.data.generator.waveform_generator import WaveformGenerator
 from .time_manager import TimeManager
 
-__all__ = ["DataStream", "TemporalDataStream", "SimpleStream", "AGRAWALGenerator",
-           "ConceptDriftStream", "HyperplaneGenerator", "LEDGenerator", "LEDGeneratorDrift",
+__all__ = ["AGRAWALGenerator",
+           "ConceptDriftStreamGenerator", "HyperplaneGenerator", "LEDGenerator", "LEDGeneratorDrift",
            "MIXEDGenerator", "MultilabelGenerator", "RandomRBFGenerator",
            "RandomRBFGeneratorDrift", "RandomTreeGenerator", "RegressionGenerator", "SEAGenerator",
            "SineGenerator", "STAGGERGenerator", "make_logical", "WaveformGenerator", "TimeManager",

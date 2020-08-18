@@ -1,4 +1,4 @@
-from skmultiflow.data.source import DataSource
+from skmultiflow.data.source.data_source.base import DataSource
 
 
 class FileDataSource(DataSource):

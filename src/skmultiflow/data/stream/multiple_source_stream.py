@@ -1,7 +1,8 @@
 from abc import ABCMeta
-from skmultiflow.data.observer import EventObserver
+from skmultiflow.data.observer.event_observer import EventObserver
 import numpy as np
 import warnings
+
 
 class MultipleSourcesStream(EventObserver, metaclass=ABCMeta):
     """ MultipleSourcesStream class.
