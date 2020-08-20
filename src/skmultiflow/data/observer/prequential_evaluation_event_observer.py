@@ -5,9 +5,10 @@ class PrequentialEvaluationEventObserver(EventObserver):
     """ PrequentialEvaluationEventObserver class.
     """
 
-    def __init__(self, results_observer):
+    def __init__(self, algorithm, results_observer):
         """ AlgorithmEventObserver class constructor."""
         super().__init__()
+        self.algorithm = algorithm
         self.results_observer = results_observer
 
     def update(self, event):
