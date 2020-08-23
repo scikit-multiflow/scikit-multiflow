@@ -346,10 +346,10 @@ class EvaluatePrequentialDelayed(StreamEvaluator):
         out = []
         if len(predictions) > 0:
             for j in range(predictions.shape[1]):
-                l = []
+                k = []
                 for i in range(predictions.shape[0]):
-                    l.append(predictions[i, j])
-                out.append(l)
+                    k.append(predictions[i, j])
+                out.append(k)
         return out
 
     def _predict_samples(self, X):

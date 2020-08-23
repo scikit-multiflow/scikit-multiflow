@@ -255,11 +255,11 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                         proba.append([0.0 for _ in partial_proba[n]])
 
                 for n in range(r):
-                    for l in range(len(partial_proba[n])):
+                    for k in range(len(partial_proba[n])):
                         try:
-                            proba[n][l] += partial_proba[n][l]
+                            proba[n][k] += partial_proba[n][k]
                         except IndexError:
-                            proba[n].append(partial_proba[n][l])
+                            proba[n].append(partial_proba[n][k])
         except ValueError:
             return np.zeros((r, 1))
         except TypeError:
@@ -267,8 +267,8 @@ class OzaBaggingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
         # normalizing probabilities
         sum_proba = []
-        for l in range(r):
-            sum_proba.append(np.sum(proba[l]))
+        for k in range(r):
+            sum_proba.append(np.sum(proba[k]))
         aux = []
         for i in range(len(proba)):
             if sum_proba[i] > 0.:
