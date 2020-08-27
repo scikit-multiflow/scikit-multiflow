@@ -1,5 +1,3 @@
-import operator
-
 from skmultiflow.data import influential_stream, random_rbf_generator
 from skmultiflow.evaluation import evaluate_influential
 from skmultiflow.trees import HoeffdingTreeClassifier
@@ -8,6 +6,7 @@ from skmultiflow.core import Pipeline
 from prettytable import PrettyTable
 from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift
+from skmultiflow.data.concept_drift_stream import ConceptDriftStream
 import matplotlib.pyplot as plt
 import matplotlib.backends.backend_pdf
 
@@ -21,6 +20,8 @@ def demo():
 
     :return:
     """
+    runs = 50
+
     equal_pos = PrettyTable()
     equal_neg = PrettyTable()
     fulfilling_pos = PrettyTable()
@@ -33,6 +34,7 @@ def demo():
     influence_on_positive = [[] for _ in range(3)]
     influence_on_negative = [[] for _ in range(3)]
     accuracy = [[] for _ in range(3)]
+    y_accuracy = [[] for _ in range(3)]
 
     table_names_pos = ["Run", "Feature number", "length subset TP", "TP sample mean", "length subset FN",
                        "FN sample mean", "abs difference in mean", "p value"]
@@ -45,35 +47,40 @@ def demo():
     defeating_neg.field_names = table_names_neg
     equal_neg.field_names = table_names_neg
     fulfilling_neg.field_names = table_names_neg
-    runs = 100
 
+    negative_table = [equal_neg, fulfilling_neg, defeating_neg]
+    positive_table = [equal_pos, fulfilling_pos, defeating_pos]
+    weightA = [1, 1.001, 0.999]
+    weightB = [1, 0.999, 1.001]
     for i in range(runs):
-        component_pos = RandomRBFGeneratorDrift(n_classes=2, n_features=3, n_centroids=1, change_speed=(1 / runs) * i,
-                                                num_drift_centroids=1, class_weights=[0.25, 0.75])
-        component_neg = RandomRBFGeneratorDrift(n_classes=2, n_features=3, n_centroids=1, change_speed=(1 / runs) * i,
-                                                num_drift_centroids=1, class_weights=[0.75, 0.25])
-        component = RandomRBFGeneratorDrift(n_classes=2, n_features=3, n_centroids=1, change_speed=(1 / runs) * i,
-                                            num_drift_centroids=1, class_weights=[0.5, 0.5])
+        component_pos_drift = RandomRBFGeneratorDrift(n_classes=2, n_features=1, n_centroids=1, num_drift_centroids=1,
+                                                      change_speed=0, class_weights=[0, 1])
 
-        stream = influential_stream.InfluentialStream(self_defeating=1, self_fulfilling=1,
-                                                      streams=[component_pos]*3 + [component_neg]*3 + [component]*3)
-        evaluating(stream, i, equal_pos, equal_neg, influence_on_positive[0], influence_on_negative[0],
-                   abs_mean_pos[0], abs_mean_neg[0], accuracy[0])
+        # component_pos = RandomRBFGenerator(n_classes=2, n_features=2, n_centroids=2, class_weights=[0.4, 0.6])
+        # component_neg = RandomRBFGenerator(n_classes=2, n_features=2, n_centroids=20, class_weights=[0.6, 0.4])
+        # component_neg_drift = ConceptDriftStream(stream=RandomRBFGenerator(n_classes=2, n_features=2,
+        #                                                                    n_centroids=20, class_weights=[0.7, 0.3]),
+        #                                          drift_stream=RandomRBFGeneratorDrift(n_classes=2, n_features=2,
+        #                                                                               n_centroids=20,
+        #                                                                               num_drift_centroids=int(
+        #                                                                                   (20 / runs) * i),
+        #                                                                               change_speed=(1 / runs) * i,
+        #                                                                               class_weights=[0.5, 0.5]),
+        #                                          position=0, width=1000)
+        component_neg_drift = RandomRBFGeneratorDrift(n_classes=2, n_features=1, n_centroids=1, num_drift_centroids=1,
+                                                      change_speed=1, class_weights=[1, 0])
 
-        stream = influential_stream.InfluentialStream(self_defeating=0.999, self_fulfilling=1.001,
-                                                      streams=[component_pos]*3 + [component_neg]*3 + [component]*3)
-        evaluating(stream, i, fulfilling_pos, fulfilling_neg, influence_on_positive[1], influence_on_negative[1],
-                   abs_mean_pos[1], abs_mean_neg[1], accuracy[1])
+        for j in range(3):
+            stream = influential_stream.InfluentialStream(self_defeating=weightA[j], self_fulfilling=weightB[j],
+                                                          streams=[component_neg_drift] * 5 + [component_pos_drift] * 5)
+            evaluating(stream, i, positive_table[j], negative_table[j], influence_on_positive[j],
+                       influence_on_negative[j],
+                       abs_mean_pos[j], abs_mean_neg[j], accuracy[j], y_accuracy[j])
 
-        stream = influential_stream.InfluentialStream(self_defeating=1.001, self_fulfilling=0.999,
-                                                      streams=[component_pos]*3 + [component_neg]*3 + [component]*3)
-
-        evaluating(stream, i, defeating_pos, defeating_neg, influence_on_positive[2], influence_on_negative[2],
-                   abs_mean_pos[2], abs_mean_neg[2], accuracy[2])
-
-    print(fulfilling_pos)
-    print(fulfilling_neg)
-
+    print(positive_table[0])
+    print(negative_table[0])
+    print(positive_table[1])
+    print(negative_table[1])
     y = []
     i = 0
     for item in influence_on_positive[0]:
@@ -167,23 +174,34 @@ def demo():
     plt.ylabel('Absolute difference in mean')
     plt.title('Abs difference in mean in Self defeating approach')
     plt.legend()
-
     plt.figure(7)
     plt.plot(y, accuracy[0], label="accuracy without influence", color="grey")
     plt.plot(y, accuracy[1], label="accuracy in self fulfilling approach", color="blue")
     plt.plot(y, accuracy[2], label="accuracy in self defeating approach", color="purple")
     plt.xlabel('runs')
     plt.ylabel("accuracy")
-    plt.title("accuracy self defeating approach")
+    plt.title("accuracy per strategy")
     plt.legend()
-    pdf = matplotlib.backends.backend_pdf.PdfPages("testtesttest.pdf")
+
+    plt.figure(8)
+    for i in range(3):
+        accuracy[i] = [accuracy[i][j] for j in y_accuracy[i]]
+    plt.plot(y_accuracy[0], accuracy[0], label="accuracy without influence", color="grey")
+    plt.plot(y_accuracy[1], accuracy[1], label="accuracy in self fulfilling approach", color="blue")
+    plt.plot(y_accuracy[2], accuracy[2], label="accuracy in self defeating approach", color="purple")
+    plt.xlabel('runs')
+    plt.ylabel("accuracy")
+    plt.title("accuracy for runs with p value <0.05")
+    plt.legend()
+
+    pdf = matplotlib.backends.backend_pdf.PdfPages("output.pdf")
     for fig in range(1, plt.figure().number):
         pdf.savefig(fig)
     pdf.close()
     plt.show()
 
 
-def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos, abs_mean_neg, accuracy):
+def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos, abs_mean_neg, accuracy, y_accuracy):
     classifier = naive_bayes.NaiveBayes()
     # classifier = PerceptronMask()
     # classifier = HoeffdingTreeClassifier()
@@ -195,7 +213,7 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
                                                          max_samples=2200,
                                                          batch_size=1,
                                                          n_time_windows=2,
-                                                         n_intervals=6,
+                                                         n_intervals=4,
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=False,
                                                          weight_output=True)
@@ -203,12 +221,15 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
 
     # 4. Run evaluation
     evaluator.evaluate(stream=stream, model=pipe)
-
     accuracy.append(evaluator.accuracy)
-
+    idx_pos = []
+    idx_neg = []
     for result in evaluator.table_influence_on_positive:
         result.insert(0, run)
         if result[1] == 0:
+            if result[7] is not None:
+                if result[7] < 0.05:
+                    idx_pos.append(run)
             influence_pos.append(result[7])
             abs_mean_pos.append(result[6])
             pos.add_row(result)
@@ -216,9 +237,15 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
     for result in evaluator.table_influence_on_negative:
         result.insert(0, run)
         if result[1] == 0:
+            if result[7] is not None:
+                if result[7] < 0.05:
+                    idx_neg.append(run)
             influence_neg.append(result[7])
             abs_mean_neg.append(result[6])
             neg.add_row(result)
+    # idx = [i for i, j in zip(idx_pos, idx_neg) if i == j]
+    idx = idx_pos + list(set(idx_neg) - set(idx_pos))
+    y_accuracy.extend(idx)
 
 
 if __name__ == '__main__':

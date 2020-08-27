@@ -226,7 +226,7 @@ class EvaluateInfluential(StreamEvaluator):
                     else:
                         for i in range(self.n_models):
                             self.running_time_measurements[i].compute_training_time_begin()
-                            self.model[i].partial_fit(X, y)
+                            # self.model[i].partial_fit(X, y)
                             self.running_time_measurements[i].compute_training_time_end()
                             self.running_time_measurements[i].update_time_measurements(self.batch_size)
 

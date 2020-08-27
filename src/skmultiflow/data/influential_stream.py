@@ -14,7 +14,6 @@ class InfluentialStream(Stream):
                  weight=None,
                  self_fulfilling=1.1,
                  self_defeating=0.9,
-                 count=1,
                  influence_method="multiplication"):
         super(InfluentialStream, self).__init__()
 
@@ -43,7 +42,6 @@ class InfluentialStream(Stream):
         self.last_stream = None
         self.self_fulfilling = self_fulfilling
         self.self_defeating = self_defeating
-        self.count = count
         self.cache = []
         self.influence_method = influence_method
 
@@ -120,7 +118,7 @@ class InfluentialStream(Stream):
         batch_size: int (optional, default=1)
             The number of samples to return.
 
-        Returns
+        Returnsfive
         -------
         tuple or tuple list
             Return a tuple with the features matrix
@@ -135,11 +133,8 @@ class InfluentialStream(Stream):
             n_streams = list(range(len(self.streams)))
             probability = random.choices(n_streams, self.weight)
             used_stream = probability[0]
-            for stream in range(len(self.weight)):
-                if stream == used_stream:
-                    X, y = self.streams[stream].next_sample()
-                    self.last_stream = stream
-
+            X, y = self.streams[used_stream].next_sample()
+            self.last_stream = used_stream
             self.current_sample_x[j, :] = X
             self.current_sample_y[j, :] = y
 

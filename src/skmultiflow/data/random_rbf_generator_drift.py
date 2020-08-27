@@ -42,17 +42,6 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
     num_drift_centroids: int (Default: 50)
         The number of centroids that will drift.
 
- uncomment below and change random_rbf_generator.py accordingly:
-    def __init__(self, model_random_state=None, sample_random_state=None, n_classes=2,n_features=10, n_centroids=50,class_weights=[]):
-
-        if (len(class_weights)!=n_classes):
-          class_weights = np.zeros(n_classes) + 1/n_classes
-        self.class_weights = class_weights
-
-    def _generate_centroids(self):
-            # self.centroids[i].class_label = model_random_state.randint(self.n_classes) # replace with:
-            self.centroids[i].class_label = random.choices(range(self.n_classes),weights=self.class_weights,k=1)
-
 
     --------
     >>> # Imports
