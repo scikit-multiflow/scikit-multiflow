@@ -23,7 +23,8 @@ class EvaluateInfluential(StreamEvaluator):
                  show_plot=False,
                  restart_stream=True,
                  data_points_for_classification=False,
-                 weight_output=True
+                 weight_output=True,
+                 weight_plot=False
                  ):
 
         super().__init__()
@@ -45,6 +46,7 @@ class EvaluateInfluential(StreamEvaluator):
         self.table_influence_on_positive = []
         self.table_influence_on_negative = []
         self.weight_output = weight_output
+        self.weight_plot = weight_plot
         self.accuracy = []
 
         if not self.data_points_for_classification:
@@ -162,7 +164,6 @@ class EvaluateInfluential(StreamEvaluator):
 
         update_count = 0
         window_count = 0
-        interval_borders = []
         print('Evaluating...')
 
         while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
@@ -194,7 +195,7 @@ class EvaluateInfluential(StreamEvaluator):
                             if window_count == self.window_size:
                                 feature_data = [item[2] for item in data_cache]
                                 interval_borders = self.create_intervals(feature_data)
-                                self.init_table(feature_data, interval_borders)
+                                self.init_table(feature_data)
                                 self.count_update(data_cache, interval_borders, time_window=0)
                                 data_cache = []
                             if window_count > self.window_size and window_count % self.window_size == 0:
@@ -250,6 +251,9 @@ class EvaluateInfluential(StreamEvaluator):
 
         if self.weight_output:
             print("weights: ", self.stream.weight)
+
+        if self.weight_plot:
+            self.stream.plot_weight()
         self.calculate_density()
         self.accuracy = self._data_buffer.get_data(metric_id=constants.ACCURACY, data_id=constants.MEAN)
 
@@ -358,19 +362,13 @@ class EvaluateInfluential(StreamEvaluator):
         for categorical in self.categorical_features:
             interval_borders[categorical] = categorical_values_per_feature[idx]
             idx += 1
-        # print("initial intervals percentiles: ", interval_borders)
         return interval_borders
 
-    def init_table(self, feature_data, interval_borders):
+    def init_table(self, feature_data):
         values_per_feature = list(zip(*feature_data))
-        # print("values per feature: ", values_per_feature)
         unique_values_per_feature = list(map(set, values_per_feature))
         unique_values_per_feature = list(map(list, unique_values_per_feature))
-        # print("unique_values_per_feature ", unique_values_per_feature)
-        # values_per_categorical_feature = self.get_categorical_features(values_per_feature)
-        # print("intervals", self.n_intervals)
-        # print("n features", self.stream.n_features)
-        # print("windows", self.n_time_windows)
+
         self.distribution_table = [[[[0] * 4 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
                                    for _ in range(self.n_time_windows)]
         # remove intervals for categorical values:
@@ -378,7 +376,6 @@ class EvaluateInfluential(StreamEvaluator):
             for categorical in self.categorical_features:
                 self.distribution_table[time][categorical] = [[0] * 4 for _ in
                                                               range(len(unique_values_per_feature[categorical]))]
-        # print("initialized distribution table: ", self.distribution_table)
 
     def remove_values_from_list(self, the_list, val):
         return [value for value in the_list if value != val]
@@ -406,28 +403,30 @@ class EvaluateInfluential(StreamEvaluator):
 
         categories = [unique_values_per_feature[i] for i in self.categorical_features]
         categories = list(map(list, categories))
-        # print("Categorical features are: ", self.categorical_features)
-        # print("categories are: ", categories)
         return categories
 
     def count_update(self, data_cache, interval_borders, time_window):
         # data_instance = [y[i], prediction[j][i], X[i]]
         # order of distribution table = tn, fp, fn, tp
+        TN = 0
+        FP = 1
+        FN = 2
+        TP = 3
         for data_instance in data_cache:
             true_label = data_instance[0]
             prediction = data_instance[1]
             if true_label == 0 and prediction == 0:
                 # true negative
-                self.count_update_helper(data_instance, interval_borders, time_window, cf=0)
+                self.count_update_helper(data_instance, interval_borders, time_window, cf=TN)
             elif true_label == 0 and prediction == 1:
                 # false positive
-                self.count_update_helper(data_instance, interval_borders, time_window, cf=1)
+                self.count_update_helper(data_instance, interval_borders, time_window, cf=FP)
             elif true_label == 1 and prediction == 0:
                 # false negative
-                self.count_update_helper(data_instance, interval_borders, time_window, cf=2)
+                self.count_update_helper(data_instance, interval_borders, time_window, cf=FN)
             elif true_label == 1 and prediction == 1:
                 # true positive
-                self.count_update_helper(data_instance, interval_borders, time_window, cf=3)
+                self.count_update_helper(data_instance, interval_borders, time_window, cf=TP)
 
     def count_update_helper(self, data_instance, interval_borders, time_window, cf):
         for feature in range(self.stream.n_features):

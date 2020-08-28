@@ -5,6 +5,7 @@ from skmultiflow.utils import check_random_state
 from skmultiflow.data import AGRAWALGenerator
 from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift
+import matplotlib.pyplot as plt
 
 
 class InfluentialStream(Stream):
@@ -36,7 +37,6 @@ class InfluentialStream(Stream):
         self.target_values = streams[0].target_values
         self.n_targets = streams[0].n_targets
         self.name = streams[0].name
-
         self.weight = weight
         self.weight_tracker = []
         self.last_stream = None
@@ -181,8 +181,22 @@ class InfluentialStream(Stream):
             if self.influence_method == "multiplication":
                 self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_defeating
             else:
-                self.weight[self.last_stream] = self.weight[self.last_stream] + self.self_fulfilling
+                self.weight[self.last_stream] = self.weight[self.last_stream] + self.self_defeating
         self.weight_tracker.append(self.weight.copy())
+
+    def plot_weight(self):
+        n_streams = len(self.streams)
+        x_value = list(range(0, len(self.weight_tracker), 1))
+        plt.figure(1)
+        for i in range(n_streams):
+            label = "stream {}".format(i)
+            y_values = [weight[i] for weight in self.weight_tracker]
+            plt.plot(x_value, y_values, label=label)
+        plt.xlabel('time')
+        plt.ylabel("weight value")
+        plt.title("weight development per stream")
+        plt.legend()
+        plt.show()
 
     def restart(self):
         self._random_state = check_random_state(self.random_state)
