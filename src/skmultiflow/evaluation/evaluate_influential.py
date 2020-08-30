@@ -141,24 +141,23 @@ class EvaluateInfluential(StreamEvaluator):
         first_run = True
         if self.pretrain_size > 0:
             print('Pre-training on {} sample(s).'.format(self.pretrain_size))
-
-            X, y = self.stream.next_sample(self.pretrain_size)
-
-            for i in range(self.n_models):
-                if self._task_type == constants.CLASSIFICATION:
-                    # Training time computation
-                    self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, classes=self.stream.target_values)
-                    self.running_time_measurements[i].compute_training_time_end()
-                elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
-                    self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y, classes=np.unique(self.stream.target_values))
-                    self.running_time_measurements[i].compute_training_time_end()
-                else:
-                    self.running_time_measurements[i].compute_training_time_begin()
-                    self.model[i].partial_fit(X=X, y=y)
-                    self.running_time_measurements[i].compute_training_time_end()
-                self.running_time_measurements[i].update_time_measurements(self.pretrain_size)
+            for sample in range(self.pretrain_size):
+                X, y = self.stream.next_sample(self.batch_size)
+                for i in range(self.n_models):
+                    if self._task_type == constants.CLASSIFICATION:
+                        # Training time computation
+                        self.running_time_measurements[i].compute_training_time_begin()
+                        self.model[i].partial_fit(X=X, y=y, classes=self.stream.target_values)
+                        self.running_time_measurements[i].compute_training_time_end()
+                    elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
+                        self.running_time_measurements[i].compute_training_time_begin()
+                        self.model[i].partial_fit(X=X, y=y, classes=np.unique(self.stream.target_values))
+                        self.running_time_measurements[i].compute_training_time_end()
+                    else:
+                        self.running_time_measurements[i].compute_training_time_begin()
+                        self.model[i].partial_fit(X=X, y=y)
+                        self.running_time_measurements[i].compute_training_time_end()
+                    self.running_time_measurements[i].update_time_measurements(self.batch_size)
             self.global_sample_count += self.pretrain_size
             first_run = False
 
@@ -227,7 +226,7 @@ class EvaluateInfluential(StreamEvaluator):
                     else:
                         for i in range(self.n_models):
                             self.running_time_measurements[i].compute_training_time_begin()
-                            # self.model[i].partial_fit(X, y)
+                            self.model[i].partial_fit(X, y)
                             self.running_time_measurements[i].compute_training_time_end()
                             self.running_time_measurements[i].update_time_measurements(self.batch_size)
 

@@ -34,7 +34,8 @@ def demo():
     influence_on_positive = [[] for _ in range(3)]
     influence_on_negative = [[] for _ in range(3)]
     accuracy = [[] for _ in range(3)]
-    y_accuracy = [[] for _ in range(3)]
+    x_accuracy = [[] for _ in range(3)]
+    final_weights = [[] for _ in range(3)]
 
     table_names_pos = ["Run", "Feature number", "length subset TP", "TP sample mean", "length subset FN",
                        "FN sample mean", "abs difference in mean", "p value"]
@@ -50,8 +51,8 @@ def demo():
 
     negative_table = [equal_neg, fulfilling_neg, defeating_neg]
     positive_table = [equal_pos, fulfilling_pos, defeating_pos]
-    weightA = [1, 1.005, 0.995]
-    weightB = [1, 0.995, 1.005]
+    weightA = [1, 1.002, 0.995]
+    weightB = [1, 0.998, 1.005]
     for i in range(runs):
         component_pos_drift = RandomRBFGeneratorDrift(model_random_state=99, sample_random_state=50,
                                                       n_classes=2, n_features=1,
@@ -60,9 +61,9 @@ def demo():
                                                       class_weights=[0, 1])
         component_pos = RandomRBFGenerator(model_random_state=99, sample_random_state=50,
                                            n_classes=2, n_features=1, n_centroids=1, class_weights=[0, 1])
-        component_neg = RandomRBFGenerator(model_random_state=99, sample_random_state=50,
+        component_neg = RandomRBFGenerator(model_random_state=99, sample_random_state=88,
                                            n_classes=2, n_features=1, n_centroids=1, class_weights=[1, 0])
-        component_neg_drift = RandomRBFGeneratorDrift(model_random_state=99, sample_random_state=50,
+        component_neg_drift = RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=88,
                                                       n_classes=2, n_features=1,
                                                       n_centroids=1, num_drift_centroids=1,
                                                       change_speed=(1 / runs) * i,
@@ -73,12 +74,13 @@ def demo():
                                                           streams=[component_pos_drift] * 5 + [component_neg_drift] * 5)
             evaluating(stream, i, positive_table[j], negative_table[j], influence_on_positive[j],
                        influence_on_negative[j],
-                       abs_mean_pos[j], abs_mean_neg[j], accuracy[j], y_accuracy[j])
+                       abs_mean_pos[j], abs_mean_neg[j], accuracy[j], x_accuracy[j], final_weights[j])
 
-    print(positive_table[0])
-    print(negative_table[0])
-    print(positive_table[1])
-    print(negative_table[1])
+    for i in range(3):
+        print(positive_table[i])
+        print(negative_table[i])
+        print("how many times a p value below 0.01:", len(x_accuracy[i]))
+
     y = []
     i = 0
     for item in influence_on_positive[0]:
@@ -88,7 +90,7 @@ def demo():
     influence_on_positive[0] = list(filter(lambda a: a is not None, influence_on_positive[0]))
 
     plt.figure(1)
-    plt.plot(y, influence_on_positive[0], label="influence on positive instances", color="green")
+    plt.plot(y, influence_on_positive[0], label="Influence on positive instances", color="green")
     y = []
     i = 0
     for item in influence_on_negative[0]:
@@ -96,7 +98,7 @@ def demo():
             y.append(i)
         i += 1
     influence_on_negative[0] = list(filter(lambda a: a is not None, influence_on_negative[0]))
-    plt.plot(y, influence_on_negative[0], label="influence on negative instances", color="red")
+    plt.plot(y, influence_on_negative[0], label="Influence on negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('p value')
     plt.title('Equal weights')
@@ -104,11 +106,11 @@ def demo():
 
     y = list(range(0, runs, 1))
     plt.figure(2)
-    plt.plot(y, abs_mean_pos[0], label="absolute difference of mean positive instances", color="green")
-    plt.plot(y, abs_mean_neg[0], label="absolute difference of mean negative instances", color="red")
+    plt.plot(y, abs_mean_pos[0], label="Absolute difference in mean positive instances", color="green")
+    plt.plot(y, abs_mean_neg[0], label="Absolute difference in mean negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('Absolute difference in mean')
-    plt.title('Abs difference in mean in equal approach')
+    plt.title('Absolute difference in mean in equal approach')
     plt.legend()
 
     y = []
@@ -130,16 +132,16 @@ def demo():
     plt.plot(y, influence_on_negative[1], label="influence on negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('p value')
-    plt.title('Self fulfilling')
+    plt.title('Self fulfilling approach')
     plt.legend()
 
     y = list(range(0, runs, 1))
     plt.figure(4)
-    plt.plot(y, abs_mean_pos[1], label="absolute difference of mean positive instances", color="green")
-    plt.plot(y, abs_mean_neg[1], label="absolute difference of mean negative instances", color="red")
+    plt.plot(y, abs_mean_pos[1], label="Absolute difference in mean positive instances", color="green")
+    plt.plot(y, abs_mean_neg[1], label="Absolute difference in mean negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('Absolute difference in mean')
-    plt.title('Abs difference in mean in Self fulfilling approach')
+    plt.title('Absolute difference in mean in Self fulfilling approach')
     plt.legend()
 
     y = []
@@ -150,7 +152,7 @@ def demo():
             y.append(i)
         i += 1
     influence_on_positive[2] = list(filter(lambda a: a is not None, influence_on_positive[2]))
-    plt.plot(y, influence_on_positive[2], label="influence on positive instances", color="green")
+    plt.plot(y, influence_on_positive[2], label="Influence on positive instances", color="green")
     y = []
     i = 0
     for item in influence_on_negative[2]:
@@ -158,19 +160,19 @@ def demo():
             y.append(i)
         i += 1
     influence_on_negative[2] = list(filter(lambda a: a is not None, influence_on_negative[2]))
-    plt.plot(y, influence_on_negative[2], label="influence on negative instances", color="red")
+    plt.plot(y, influence_on_negative[2], label="Influence on negative instances", color="red")
     plt.xlabel('runs')
-    plt.ylabel('p value')
-    plt.title('Self defeating')
+    plt.ylabel('p-value')
+    plt.title('Self defeating approach')
     plt.legend()
 
     y = list(range(0, runs, 1))
     plt.figure(6)
-    plt.plot(y, abs_mean_pos[2], label="absolute difference of mean positive instances", color="green")
-    plt.plot(y, abs_mean_neg[2], label="absolute difference of mean negative instances", color="red")
+    plt.plot(y, abs_mean_pos[2], label="absolute difference in mean positive instances", color="green")
+    plt.plot(y, abs_mean_neg[2], label="absolute difference in mean negative instances", color="red")
     plt.xlabel('runs')
     plt.ylabel('Absolute difference in mean')
-    plt.title('Abs difference in mean in Self defeating approach')
+    plt.title('Absolute difference in mean in Self defeating approach')
     plt.legend()
     plt.figure(7)
     plt.plot(y, accuracy[0], label="accuracy without influence", color="grey")
@@ -183,14 +185,29 @@ def demo():
 
     plt.figure(8)
     for i in range(3):
-        accuracy[i] = [accuracy[i][j] for j in y_accuracy[i]]
-    plt.plot(y_accuracy[0], accuracy[0], label="accuracy without influence", color="grey")
-    plt.plot(y_accuracy[1], accuracy[1], label="accuracy in self fulfilling approach", color="blue")
-    plt.plot(y_accuracy[2], accuracy[2], label="accuracy in self defeating approach", color="purple")
+        accuracy[i] = [accuracy[i][j] for j in x_accuracy[i]]
+    plt.plot(x_accuracy[0], accuracy[0], label="accuracy without influence", color="grey")
+    plt.plot(x_accuracy[1], accuracy[1], label="accuracy in self fulfilling approach", color="blue")
+    plt.plot(x_accuracy[2], accuracy[2], label="accuracy in self defeating approach", color="purple")
     plt.xlabel('runs')
     plt.ylabel("accuracy")
-    plt.title("accuracy for runs with p value <0.05")
+    plt.title("Accuracy for strategies with at least one p value <0.05")
     plt.legend()
+
+    title = ['equal weights', 'self fulfilling approach', 'self defeating approach']
+    figure = 9
+    for j in range(2):
+        plt.figure(figure)
+        x_value = list(range(0, len(final_weights[j + 1]), 1))
+        for i in range(len(stream.streams)):
+            label = "stream {}".format(i)
+            y_values = [weight[i] for weight in final_weights[j + 1]]
+            plt.plot(x_value, y_values, label=label)
+        plt.xlabel('runs')
+        plt.ylabel("weight")
+        plt.title("Final weights of streams with  {}".format(title[j + 1]))
+        plt.legend()
+        figure += 1
 
     pdf = matplotlib.backends.backend_pdf.PdfPages("output.pdf")
     for fig in range(1, plt.figure().number):
@@ -199,7 +216,8 @@ def demo():
     plt.show()
 
 
-def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos, abs_mean_neg, accuracy, y_accuracy):
+def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos, abs_mean_neg, accuracy, x_accuracy,
+               final_weights):
     classifier = naive_bayes.NaiveBayes()
     # classifier = PerceptronMask()
     # classifier = HoeffdingTreeClassifier()
@@ -211,7 +229,7 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
                                                          max_samples=2200,
                                                          batch_size=1,
                                                          n_time_windows=2,
-                                                         n_intervals=4,
+                                                         n_intervals=8,
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=False,
                                                          weight_output=True,
@@ -220,6 +238,7 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
 
     # 4. Run evaluation
     evaluator.evaluate(stream=stream, model=pipe)
+    final_weights.append(evaluator.stream.weight)
     accuracy.append(evaluator.accuracy[0])
     idx_pos = []
     idx_neg = []
@@ -237,14 +256,14 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
         result.insert(0, run)
         if result[1] == 0:
             if result[7] is not None:
-                if result[7] < 0.05:
+                if result[7] < 0.01:
                     idx_neg.append(run)
             influence_neg.append(result[7])
             abs_mean_neg.append(result[6])
             neg.add_row(result)
     # idx = [i for i, j in zip(idx_pos, idx_neg) if i == j]
     idx = idx_pos + list(set(idx_neg) - set(idx_pos))
-    y_accuracy.extend(idx)
+    x_accuracy.extend(idx)
 
 
 if __name__ == '__main__':

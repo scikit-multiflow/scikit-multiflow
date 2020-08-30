@@ -192,7 +192,7 @@ class InfluentialStream(Stream):
             label = "stream {}".format(i)
             y_values = [weight[i] for weight in self.weight_tracker]
             plt.plot(x_value, y_values, label=label)
-        plt.xlabel('time')
+        plt.xlabel('instance')
         plt.ylabel("weight value")
         plt.title("weight development per stream")
         plt.legend()

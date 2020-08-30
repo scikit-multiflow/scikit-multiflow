@@ -98,7 +98,8 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
         super().__init__(model_random_state=model_random_state,
                          sample_random_state=sample_random_state,
                          n_classes=n_classes,
-                         n_features=n_features, n_centroids=n_centroids)
+                         n_features=n_features, n_centroids=n_centroids,
+                         class_weights=class_weights)
 
         self.name = "Random RBF Generator with drift"
 
