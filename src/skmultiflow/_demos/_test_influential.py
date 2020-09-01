@@ -20,7 +20,7 @@ def demo():
 
     :return:
     """
-    runs = 100
+    runs = 1
 
     equal_pos = PrettyTable()
     equal_neg = PrettyTable()
@@ -54,16 +54,16 @@ def demo():
     weightA = [1, 1.002, 0.995]
     weightB = [1, 0.998, 1.005]
     for i in range(runs):
-        component_pos_drift = RandomRBFGeneratorDrift(model_random_state=99, sample_random_state=50,
+        component_pos = RandomRBFGenerator(model_random_state=i, sample_random_state=50,
+                                           n_classes=2, n_features=1, n_centroids=1, class_weights=[0, 1])
+        component_neg = RandomRBFGenerator(model_random_state=i, sample_random_state=51,
+                                           n_classes=2, n_features=1, n_centroids=1, class_weights=[1, 0])
+        component_pos_drift = RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=50,
                                                       n_classes=2, n_features=1,
                                                       n_centroids=1, num_drift_centroids=1,
                                                       change_speed=(1 / runs) * i,
                                                       class_weights=[0, 1])
-        component_pos = RandomRBFGenerator(model_random_state=99, sample_random_state=50,
-                                           n_classes=2, n_features=1, n_centroids=1, class_weights=[0, 1])
-        component_neg = RandomRBFGenerator(model_random_state=99, sample_random_state=88,
-                                           n_classes=2, n_features=1, n_centroids=1, class_weights=[1, 0])
-        component_neg_drift = RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=88,
+        component_neg_drift = RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=51,
                                                       n_classes=2, n_features=1,
                                                       n_centroids=1, num_drift_centroids=1,
                                                       change_speed=(1 / runs) * i,
@@ -71,7 +71,7 @@ def demo():
 
         for j in range(3):
             stream = influential_stream.InfluentialStream(self_fulfilling=weightA[j], self_defeating=weightB[j],
-                                                          streams=[component_pos_drift] * 5 + [component_neg_drift] * 5)
+                                                          streams=[component_pos_drift]*5 + [component_neg_drift]*5)
             evaluating(stream, i, positive_table[j], negative_table[j], influence_on_positive[j],
                        influence_on_negative[j],
                        abs_mean_pos[j], abs_mean_neg[j], accuracy[j], x_accuracy[j], final_weights[j])
@@ -233,7 +233,7 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=False,
                                                          weight_output=True,
-                                                         weight_plot=False)
+                                                         weight_plot=True)
     pipe = Pipeline([('Naive Bayes', classifier)])
 
     # 4. Run evaluation
@@ -261,8 +261,8 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
             influence_neg.append(result[7])
             abs_mean_neg.append(result[6])
             neg.add_row(result)
-    # idx = [i for i, j in zip(idx_pos, idx_neg) if i == j]
-    idx = idx_pos + list(set(idx_neg) - set(idx_pos))
+    idx = [i for i, j in zip(idx_pos, idx_neg) if i == j]
+    # idx = idx_pos + list(set(idx_neg) - set(idx_pos))
     x_accuracy.extend(idx)
 
 
