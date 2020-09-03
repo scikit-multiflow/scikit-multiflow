@@ -1,8 +1,10 @@
+import warnings
+
+import numpy as np
+
 from skmultiflow.core import ClassifierMixin
 from skmultiflow.lazy.base_neighbors import BaseNeighbors
-from skmultiflow.utils.utils import *
-
-import warnings
+from skmultiflow.utils.utils import get_dimensions
 
 
 def KNN(n_neighbors=5, max_window_size=1000,
@@ -16,7 +18,7 @@ def KNN(n_neighbors=5, max_window_size=1000,
 
 class KNNClassifier(BaseNeighbors, ClassifierMixin):
     """ k-Nearest Neighbors classifier.
-    
+
     This non-parametric classification method keeps track of the last
     ``max_window_size`` training samples. The predicted class-label for a
     given query sample is obtained in two steps:
@@ -29,10 +31,10 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
     ----------
     n_neighbors: int (default=5)
         The number of nearest neighbors to search for.
-        
+
     max_window_size: int (default=1000)
         The maximum size of the window storing the last observed samples.
-        
+
     leaf_size: int (default=30)
         sklearn.KDTree parameter. The maximum number of samples that can
         be stored in one leaf node, which determines from which point the
@@ -44,7 +46,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
         sklearn.KDTree parameter. The distance metric to use for the KDTree.
         Default=’euclidean’. KNNClassifier.valid_metrics() gives a list of
         the metrics which are valid for KDTree.
-    
+
     Notes
     -----
     This estimator is not optimal for a mixture of categorical and numerical
@@ -76,7 +78,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
     5000 samples analyzed.
     >>> print("KNNClassifier's performance: {}".format(corrects/n_samples))
     KNN's performance: 0.8776
-    
+
     """
 
     def __init__(self,
@@ -92,21 +94,21 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
         """ Partially (incrementally) fit the model.
-        
+
         Parameters
         ----------
         X: Numpy.ndarray of shape (n_samples, n_features)
             The data upon which the algorithm will create its model.
-            
+
         y: Array-like
-            An array-like containing the classification targets for all 
+            An array-like containing the classification targets for all
             samples in X.
 
         classes: numpy.ndarray, optional (default=None)
             Array with all possible/known classes.
 
         sample_weight: Not used.
-        
+
         Returns
         -------
         KNNClassifier
@@ -132,18 +134,18 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
 
     def predict(self, X):
         """ Predict the class label for sample X
-        
+
         Parameters
         ----------
         X: Numpy.ndarray of shape (n_samples, n_features)
             All the samples we want to predict the label for.
-            
+
         Returns
         -------
         numpy.ndarray
             A 1D array of shape (, n_samples), containing the
             predicted class labels for all instances in X.
-        
+
         """
         y_proba = self.predict_proba(X)
         y_pred = np.argmax(y_proba, axis=1)
@@ -151,11 +153,11 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
 
     def predict_proba(self, X):
         """ Estimate the probability of X belonging to each class-labels.
-        
+
         Parameters
         ----------
         X: Numpy.ndarray of shape (n_samples, n_features)
-        
+
         Returns
         -------
         numpy.ndarray
@@ -163,7 +165,7 @@ class KNNClassifier(BaseNeighbors, ClassifierMixin):
             contains len(self.target_value) elements, representing the
             probability that the i-th sample of X belongs to a certain
             class label.
-         
+
         """
         r, c = get_dimensions(X)
         if self.data_window is None or self.data_window.size < self.n_neighbors:

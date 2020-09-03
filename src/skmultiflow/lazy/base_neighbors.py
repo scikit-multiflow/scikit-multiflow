@@ -7,6 +7,7 @@ from sklearn.neighbors import KDTree
 class BaseNeighbors(BaseSKMObject):
     """ Base class for neighbors-based estimators
     """
+
     def __init__(self,
                  n_neighbors=5,
                  max_window_size=1000,
@@ -38,4 +39,3 @@ class BaseNeighbors(BaseSKMObject):
     def valid_metrics():
         """ Get valid distance metrics for the KDTree. """
         return KDTree.valid_metrics
-
