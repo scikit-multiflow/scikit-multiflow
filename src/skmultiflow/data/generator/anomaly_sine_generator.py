@@ -126,17 +126,8 @@ class AnomalySineGenerator():
         """
         return self.n_samples - self.sample_idx
 
-    def get_data_info(self):
-        """ Retrieves minimum information from the stream
-
-        Used by evaluator methods to id the stream.
-
-        The default format is: 'Stream name - n_targets, n_classes, n_features'.
-
-        Returns
-        -------
-        string
-            Stream data information
-
-        """
-        return self.name + " - {} target(s), {} features".format(self.n_targets, self.n_features)
+    def get_info(self):
+        return "AnomalySineGenerator(contextual={}, n_anomalies={}, n_contextual={}, " \
+                    "n_samples={}, noise={}, random_state={}, replace={}, shift={})".format(
+            self.contextual, self.n_anomalies, self.n_contextual, self.n_samples, self.noise,
+            self.random_state, self.replace, self.shift)
