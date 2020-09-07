@@ -13,14 +13,15 @@ export HOME_DIR=/home/multiflow
 #
 . $HOME_DIR/scripts/common/setup-env-variables.sh
 
+if [ $PROFILE = "DOCKER-DEV" ]; then
+    echo "Installing required dependencies..."
+    /bin/bash $HOME_DIR/scripts/build/install-all-deps.sh
+    /bin/bash $HOME_DIR/scripts/build/build-all.sh
+fi
+
 echo "###########################################################"
 echo "#"
 echo "#             Welcome to scikit-multiflow development!"
 echo "#"
 echo "###########################################################"
 
-if [ $PROFILE = "DOCKER-DEV" ]; then
-    echo "Installing required dependencies..."
-    /bin/bash $HOME_DIR/scripts/build/install-all-deps.sh
-    /bin/bash $HOME_DIR/scripts/build/build-all.sh
-fi

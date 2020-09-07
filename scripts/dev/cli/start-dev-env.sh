@@ -43,9 +43,6 @@ else
     echo "$ECHO_PREFIX Package already installed :)"
 fi
 
-echo "$ECHO_PREFIX Generating configurations ..."
-bash $PROJECT_DIR/scripts/build/create-profile-configs.sh
-
 echo "$ECHO_PREFIX Generating unified docker-compose definition ..."
 TMP_DIR=$PROJECT_DIR/local-devconfig-files
 mkdir -p $TMP_DIR
