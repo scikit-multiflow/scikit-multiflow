@@ -22,7 +22,6 @@ def test_anomaly_sine_generator(test_path):
 
     for j in range(0,100):
         X, y = stream.next_sample()
-        print("y: {} vs. expected: {}".format(y[0], y_expected[j]))
         assert np.alltrue(np.isclose(X, X_expected[j].reshape((1, 2))))
         assert np.alltrue(np.isclose(y[0], y_expected[j]))
 

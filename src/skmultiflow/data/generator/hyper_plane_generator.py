@@ -230,3 +230,7 @@ class HyperplaneGenerator():
             self._weights[i] += float(float(self._sigma[i]) * float(self.mag_change))
             if (0.01 + self._random_state.rand()) <= self.sigma_percentage:
                 self._sigma[i] *= -1
+
+    def get_info(self):
+        return "HyperplaneGenerator(mag_change={}, n_drift_features={}, n_features={}, noise_percentage={}, random_state={}, sigma_percentage={})"\
+            .format(self.mag_change, self.n_drift_features, self.n_features, self.noise_percentage, self.random_state, self.sigma_percentage)
