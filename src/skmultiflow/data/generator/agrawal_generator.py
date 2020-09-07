@@ -93,6 +93,9 @@ class AGRAWALGenerator():
                                           self._classification_function_seven,
                                           self._classification_function_eight,
                                           self._classification_function_nine]
+        self.feature_names = ["salary", "commission", "age", "elevel", "car", "zipcode", "hvalue",
+                              "hyears", "loan"]
+        self.n_features = len(self.feature_names)
         self.classification_function = classification_function
         self.random_state = random_state
         self.balance_classes = balance_classes
@@ -210,7 +213,6 @@ class AGRAWALGenerator():
         data = np.zeros([batch_size, self.n_features + 1])
 
         for j in range(batch_size):
-            self.sample_idx += 1
             group = 0
             desired_class_found = False
             while not desired_class_found:
@@ -766,3 +768,9 @@ class AGRAWALGenerator():
             equity = hvalue * (hyears - 20) / 10
         disposable = (2 * (salary + commission) / 3 - 5000 * elevel + equity / 5 - 10000)
         return 0 if disposable > 1 else 1
+
+
+    def get_info(self):
+        return \
+            "AGRAWALGenerator(balance_classes={}, classification_function={}, perturbation={}, random_state={})"\
+                .format(self.balance_classes, self.classification_function, self.perturbation, self.random_state)
