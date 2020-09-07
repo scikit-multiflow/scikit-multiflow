@@ -11,7 +11,7 @@ PROFILE="${PROFILE:-LOCAL}"
 MODE="$1"
 
 # Check if option passed is valid
-OPTIONS_ARRAY=( "--start" "--recreate" "--stop" "--destroy" "--show-args" "--into-dev" "--attach-tmux" "--help" "--update-images" )
+OPTIONS_ARRAY=( "--start" "--recreate" "--stop" "--destroy" "--show-args" "--into-dev" "--attach-tmux" "--help" "--update-images" "--purge-images" "--run-tests" "--run-test" )
 VALID_OPTION="false"
 if [ -z "$1" ]; then
     echo "Please specify an option!"
@@ -112,6 +112,22 @@ if [ $MODE = "--rebuild-images" ]; then
     fi
 fi
 
+if [ $MODE = "--run-tests" ]; then
+    if [ $PROFILE != "LOCAL" ]; then
+        cd /home/multiflow && python setup.py test
+    else
+        echo "$MODE allowed inside Docker only."
+    fi
+fi
+
+if [ $MODE = "--run-test" ]; then
+    if [ $PROFILE != "LOCAL" ]; then
+        pytest $2 --showlocals -v
+    else
+        echo "$MODE allowed inside Docker only."
+    fi
+fi
+
 if [ $MODE = "--help" ]; then
     if [ $PROFILE = "LOCAL" ]; then
         MULTIFLOW_SCRIPT="bash multiflow.sh"
@@ -126,6 +142,8 @@ if [ $MODE = "--help" ]; then
         echo "    $MULTIFLOW_SCRIPT --update-images                                                  | update local Docker images to latest version"
         echo "    $MULTIFLOW_SCRIPT --rebuild-images                                                 | rebuild our Docker images tree"
         echo "    $MULTIFLOW_SCRIPT --purge-images                                                   | purge Docker dangling images"
+        echo "    $MULTIFLOW_SCRIPT --run-tests                                                      | run all tests"
+        echo "    $MULTIFLOW_SCRIPT --run-test <TEST-NAME>                                           | run a specific test"
     else
         echo "$MULTIFLOW_SCRIPT --attach-tmux                                                        | attach tmux session"
         echo "$MULTIFLOW_SCRIPT --show-args                                                          | display relevant environment variables"
