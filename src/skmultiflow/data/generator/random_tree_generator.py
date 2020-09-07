@@ -105,8 +105,6 @@ class RandomTreeGenerator():
     def __init__(self, tree_random_state=None, sample_random_state=None, n_classes=2,
                  n_cat_features=5, n_num_features=5, n_categories_per_cat_feature=5,
                  max_tree_depth=5, min_leaf_depth=3, fraction_leaves_per_level=0.15):
-        super().__init__()
-
         self.tree_random_state = tree_random_state
         self.sample_random_state = sample_random_state
         self.n_classes = n_classes
@@ -326,24 +324,42 @@ class RandomTreeGenerator():
             batch_size samples that were requested.
 
         """
+        batch_size = 1
+        num_attributes = -1
+        max_features = self.n_num_features + (
+            self.n_cat_features * self.n_categories_per_cat_feature)
+        data = np.zeros([batch_size, max_features + 1])
+        for j in range(batch_size):
+            for i in range(self.n_num_features):
+                data[j, i] = self._sample_random_state.rand()
 
-        max_features = self.n_num_features + (self.n_cat_features * self.n_categories_per_cat_feature)
-        data = np.zeros([1, max_features + 1])
+            for i in range(self.n_num_features, max_features, self.n_categories_per_cat_feature):
+                aux = self._sample_random_state.randint(0, self.n_categories_per_cat_feature)
+                for k in range(self.n_categories_per_cat_feature):
+                    if aux == k:
+                        data[j, k + i] = 1.0
+                    else:
+                        data[j, k + i] = 0.0
 
-        for i in range(self.n_num_features):
-            data[0, i] = self._sample_random_state.rand()
+            data[j, max_features] = self._classify_instance(self.tree_root, data[j])
 
-        for i in range(self.n_num_features, max_features, self.n_categories_per_cat_feature):
-            aux = self._sample_random_state.randint(0, self.n_categories_per_cat_feature)
-            for k in range(self.n_categories_per_cat_feature):
-                if aux == k:
-                    data[0, k + i] = 1.0
-                else:
-                    data[0, k + i] = 0.0
+            self.current_sample_x = data[:max_features]
+            self.current_sample_y = data[max_features:]
 
-        data[0, max_features] = self._classify_instance(self.tree_root, data[0])
+            num_attributes = max_features
 
-        return data[:max_features], data[max_features:]
+        self.current_sample_x = data[:, :num_attributes]
+        self.current_sample_y = np.ravel(data[:, num_attributes:])
+        return self.current_sample_x, self.current_sample_y
+
+    def get_info(self):
+        return "RandomTreeGenerator(fraction_leaves_per_level={}, max_tree_depth={}," \
+               "min_leaf_depth={}, n_cat_features={}, n_categories_per_cat_feature={}, n_classes={}," \
+               "n_num_features={}, sample_random_state={}, tree_random_state={})"\
+            .format(self.fraction_leaves_per_level, self.max_tree_depth, self.min_leaf_depth, self.n_cat_features,
+                    self.n_categories_per_cat_feature, self.n_classes, self.n_num_features, self.sample_random_state,
+                    self.tree_random_state)
+
 
 
 class Node:

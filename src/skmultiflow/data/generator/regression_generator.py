@@ -175,5 +175,6 @@ class RegressionGenerator():
 
         return x, y
 
-    def get_data_info(self):
-        return "Regression Generator - {} targets, {} features".format(self.n_targets, self.n_features)
+    def get_info(self):
+        return "RegressionGenerator(n_features={}, n_informative={}, n_samples={}, n_targets={}, random_state={})"\
+            .format(self.n_features, self.n_informative, self.n_samples, self.n_targets, self.random_state)
