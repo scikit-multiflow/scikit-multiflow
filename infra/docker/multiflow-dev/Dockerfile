@@ -13,7 +13,7 @@ RUN groupadd -g ${gid} ${group} && useradd -d "${USER_HOME}" -u "${uid}" -g "${g
 RUN echo "multiflow:multiflow" | chpasswd
 
 # setup SSH server
-RUN apt-get update && apt-get install --no-install-recommends -y openssh-server gawk && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install --no-install-recommends -y openssh-server gawk vim && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i /etc/ssh/sshd_config \
         -e 's/#PermitRootLogin.*/PermitRootLogin no/' \
