@@ -1,6 +1,6 @@
+from skmultiflow.data.observer.train_eval_trigger import TrainEvalTrigger
 
-
-class QuantityBasedPrequentialTrigger():
+class QuantityBasedPrequentialTrigger(TrainEvalTrigger):
     """ QuantityBasedPrequentialTrigger class.
     """
 

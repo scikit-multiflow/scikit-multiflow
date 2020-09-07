@@ -1,11 +1,11 @@
 from skmultiflow.data.observer.train_eval_trigger import TrainEvalTrigger
 
-class TimeBasedHoldoutTrigger(TrainEvalTrigger):
-    """ TimeBasedHoldoutTrigger class.
+class TimeBasedPrequentialTrigger(TrainEvalTrigger):
+    """ TimeBasedPrequentialTrigger class.
     """
 
     def __init__(self, wait_to_test_time_window, time_between, get_event_time):
-        """ TimeBasedHoldoutTrigger class constructor."""
+        """ TimeBasedPrequentialTrigger class constructor."""
         super().__init__()
         self.initial_time_window = None
         self.initialization_period = True
@@ -25,14 +25,7 @@ class TimeBasedHoldoutTrigger(TrainEvalTrigger):
                 self.initialization_period = False
                 self.reference_time = event_time
                 return False
-        if self.time_between(self.reference_time, self.get_event_time(event)) < self.wait_to_test_time_window:
-            return False
         return True
 
     def shall_predict(self, event):
-        event_time = self.get_event_time(event)
-        if self.time_between(self.reference_time, self.get_event_time(event)) < self.wait_to_test_time_window:
-            return False
-        else:
-            self.reference_time = event_time
-            return True
+        return not self.initialization_period
