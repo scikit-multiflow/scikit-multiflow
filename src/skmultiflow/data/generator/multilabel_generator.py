@@ -88,6 +88,8 @@ class MultilabelGenerator():
     def __init__(self, n_samples=40000, n_features=20, n_targets=5, n_labels=2, random_state=None):
         super().__init__()
         self.random_state = random_state
+        self.n_features = n_features
+        self.n_labels = n_labels
         self.n_samples = n_samples
         self.n_targets = n_targets
         self._random_state = check_random_state(self.random_state)
@@ -138,3 +140,7 @@ class MultilabelGenerator():
             Number of remaining samples.
         """
         return self.n_samples - self.sample_idx
+
+    def get_info(self):
+        return "MultilabelGenerator(n_features={}, n_labels={}, n_samples={}, n_targets={}, random_state={})"\
+            .format(self.n_features, self.n_labels, self.n_samples, self.n_targets, self.random_state)

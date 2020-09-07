@@ -202,5 +202,5 @@ class LEDGenerator():
 
         return data[:, :self.n_features], target
 
-    def get_data_info(self):
-        return "Led Generator - {} features".format(self.n_features)
+    def get_info(self):
+        return "LEDGenerator(has_noise={}, noise_percentage={}, random_state={})".format(self.has_noise, self.noise_percentage, self.random_state)

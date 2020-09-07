@@ -1,4 +1,4 @@
-from skmultiflow.data import pseudo_random_processes as prp
+from skmultiflow.data.generator import pseudo_random_processes as prp
 from skmultiflow.utils import check_random_state
 import numpy as np
 
@@ -169,6 +169,10 @@ class RandomRBFGenerator():
             self.centroids[i].class_label = model_random_state.randint(self.n_classes)
             self.centroids[i].std_dev = model_random_state.rand()
             self.centroid_weights.append(model_random_state.rand())
+
+    def get_info(self):
+        return "RandomRBFGenerator(model_random_state={}, n_centroids={}, n_classes={}, n_features={}, sample_random_state={})"\
+            .format(self.model_random_state, self.n_centroids, self.n_classes, self.n_features, self.sample_random_state)
 
 
 class Centroid:

@@ -1,5 +1,5 @@
 import numpy as np
-from skmultiflow.data.led_generator import LEDGenerator
+from skmultiflow.data.generator.led_generator import LEDGenerator
 
 
 class LEDGeneratorDrift(LEDGenerator):
@@ -121,7 +121,7 @@ class LEDGeneratorDrift(LEDGenerator):
         target[0] = selected
         for i in range(self._NUM_BASE_ATTRIBUTES):
             if (0.01 + self._random_state.rand()) <= self.noise_percentage:
-                data[j, self._numberAttribute[i]] = 1 if (
+                data[0, self._numberAttribute[i]] = 1 if (
                     self._ORIGINAL_INSTANCES[selected, i] == 0) else 0
             else:
                 data[0, self._numberAttribute[i]] = self._ORIGINAL_INSTANCES[selected, i]
@@ -131,5 +131,6 @@ class LEDGeneratorDrift(LEDGenerator):
 
         return data[:, :self.n_features], target
 
-    def get_data_info(self):
-        return "Led Generator with drift - {} features".format(self.n_features)
+    def get_info(self):
+        return "LEDGeneratorDrift(has_noise={}, n_drift_features={}, noise_percentage={}, random_state={})"\
+            .format(self.has_noise, self.n_drift_features, self.noise_percentage, self.random_state)

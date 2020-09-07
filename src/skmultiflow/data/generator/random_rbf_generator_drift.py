@@ -1,4 +1,4 @@
-from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
+from skmultiflow.data.generator.random_rbf_generator import RandomRBFGenerator
 from skmultiflow.utils import check_random_state
 import numpy as np
 
@@ -131,7 +131,7 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
                 if (self.centroids[i].centre[j] > 1) or (self.centroids[i].centre[j] < 0):
                     self.centroids[i].centre[j] = 1 if (self.centroids[i].centre[j] > 1) else 0
                     self.centroid_speed[i][j] = -self.centroid_speed[i][j]
-        x, y = super().next_sample(1)
+        x, y = super().next_sample()
 
         return x, y.flatten().astype(int)
 
@@ -168,3 +168,7 @@ class RandomRBFGeneratorDrift(RandomRBFGenerator):
                 rand_speed[j] /= norm_speed
 
             self.centroid_speed.append(rand_speed)
+
+    def get_info(self):
+        return "RandomRBFGeneratorDrift(change_speed={}, model_random_state={}, n_centroids={}, n_classes={}, n_features={}, num_drift_centroids={}, sample_random_state={})"\
+            .format(self.change_speed, self.model_random_state, self.n_centroids, self.n_classes, self.n_features, self.num_drift_centroids, self.sample_random_state)

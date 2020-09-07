@@ -273,3 +273,7 @@ class MIXEDGenerator():
 
         """
         self.classification_function = 1 - self.classification_function
+
+    def get_info(self):
+        return "MIXEDGenerator(balance_classes={}, classification_function={}, random_state={})"\
+            .format(self.balance_classes, self.classification_function, self.random_state)
