@@ -361,3 +361,7 @@ class SEAGenerator():
 
         """
         return 0 if (att1 + att2 <= 9.5) else 1
+
+    def get_info(self):
+        return "SEAGenerator(balance_classes={}, classification_function={}, noise_percentage={}, random_state={})"\
+            .format(self.balance_classes, self.classification_function, self.noise_percentage, self.random_state)

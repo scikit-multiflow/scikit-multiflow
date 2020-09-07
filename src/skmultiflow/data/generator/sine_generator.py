@@ -342,3 +342,7 @@ class SineGenerator():
 
         """
         return 0 if (att1 < 0.5 + 0.3 * np.sin(3 * np.pi * att2)) else 1
+
+    def get_info(self):
+        return "SineGenerator(balance_classes={}, classification_function={}, has_noise={}, random_state={})"\
+            .format(self.balance_classes, self.classification_function, self.has_noise, self.random_state)
