@@ -2,10 +2,10 @@ import warnings
 
 import numpy as np
 from skmultiflow.utils import check_random_state
-from skmultiflow.data.generator import AGRAWALGenerator
+from skmultiflow.data.generator.agrawal_generator import AGRAWALGenerator
 
 
-class ConceptDriftStreamGenerator(Stream):
+class ConceptDriftStreamGenerator():
     """ Generates a stream with concept drift.
 
     A stream generator that adds concept drift or change by joining several streams.
@@ -63,8 +63,8 @@ class ConceptDriftStreamGenerator(Stream):
                  width=1000,
                  random_state=None,
                  alpha=None):
-        super(ConceptDriftStreamGenerator, self).__init__()
         self.name = 'Drifting {}'.format(stream.name)
+        self.sample_idx = 0
 
         self.random_state = random_state
         self._random_state = None   # This is the actual random_state object used internally
@@ -110,3 +110,8 @@ class ConceptDriftStreamGenerator(Stream):
             X, y = self.drift_stream.next_sample()
 
         return X, y.flatten()
+
+
+    def get_info(self):
+        return "ConceptDriftStreamGenerator(alpha={}, drift_stream={}, position={}, random_state={}, stream={}, width={})"\
+            .format(self.alpha, self.drift_stream.get_info(), self.position, self.random_state, self.stream.get_info(), self.width)
