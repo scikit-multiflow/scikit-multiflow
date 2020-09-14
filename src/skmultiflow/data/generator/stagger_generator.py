@@ -74,8 +74,6 @@ class STAGGERGenerator():
     """
 
     def __init__(self, classification_function=0, random_state=None, balance_classes=False):
-        super().__init__()
-
         # Classification functions to use
         self._classification_functions = [self.classification_function_zero,
                                           self.classification_function_one,

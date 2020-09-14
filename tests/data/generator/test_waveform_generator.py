@@ -32,10 +32,6 @@ def test_waveform_generator_noise(test_path):
 
     for j in range(0,10):
         X, y = stream.next_sample()
-        print(X_expected[j])
-        print(X[0])
-        print(y_expected[j])
-        print(y[0])
         assert np.array_equal(X[0], X_expected[j])
         assert np.array_equal(y[0], y_expected[j])
 

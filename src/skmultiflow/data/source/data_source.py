@@ -38,8 +38,9 @@ class DataSource(BaseSKMObject, metaclass=ABCMeta):
         t.start()
 
     def on_new_event(self, event):
-        for observer in self.observers:
-            observer.update(self.record_to_dictionary(event))
+        if(event is not None):
+            for observer in self.observers:
+                observer.update(self.record_to_dictionary(event))
 
     def restart(self):
         """  Restart the stream. """
