@@ -297,3 +297,7 @@ class STAGGERGenerator():
 
         """
         return 1 if (size == 1 or size == 2) else 0
+
+    def get_info(self):
+        return "STAGGERGenerator(balance_classes={}, classification_function={}, random_state={})"\
+            .format(self.balance_classes, self.classification_function, self.random_state)

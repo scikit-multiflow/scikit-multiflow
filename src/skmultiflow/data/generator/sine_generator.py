@@ -85,9 +85,7 @@ class SineGenerator():
     _NUM_BASE_ATTRIBUTES = 2
     _TOTAL_ATTRIBUTES_INCLUDING_NOISE = 4
 
-    def __init__(self, classification_function=0, random_state=None, balance_classes=False,
-                 has_noise=False):
-        super().__init__()
+    def __init__(self, classification_function=0, random_state=None, balance_classes=False, has_noise=False):
 
         # Classification functions to use
         self._classification_functions = [self._classification_function_zero,
@@ -102,7 +100,10 @@ class SineGenerator():
         self.balance_classes = balance_classes
         self.next_class_should_be_zero = False
         self.name = "Sine Generator"
-        self.n_features = self._NUM_BASE_ATTRIBUTES
+        self.n_num_features = self._NUM_BASE_ATTRIBUTES
+        if self.has_noise:
+            self.n_num_features = self._TOTAL_ATTRIBUTES_INCLUDING_NOISE
+        self.n_features = self.n_num_features
 
         self._prepare_for_use()
 

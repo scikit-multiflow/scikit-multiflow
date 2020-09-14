@@ -1,34 +1,10 @@
 import os
 import numpy as np
-from skmultiflow.data.stagger_generator import STAGGERGenerator
+from skmultiflow.data.generator.stagger_generator import STAGGERGenerator
 
 
 def test_stagger_generator(test_path):
     stream = STAGGERGenerator(classification_function=2, random_state=112, balance_classes=False)
-
-    assert stream.n_remaining_samples() == -1
-
-    expected_names = ["size", "color", "shape"]
-    assert stream.feature_names == expected_names
-
-    expected_targets = [0, 1]
-    assert stream.target_values == expected_targets
-
-    assert stream.target_names == ['target_0']
-
-    assert stream.n_features == 3
-
-    assert stream.n_cat_features == 3
-
-    assert stream.n_num_features == 0
-
-    assert stream.n_targets == 1
-
-    assert stream.get_data_info() == 'Stagger Generator - 1 target(s), 2 classes, 3 features'
-
-    assert stream.has_more_samples() is True
-
-    assert stream.is_restartable() is True
 
     # Load test data corresponding to first 10 instances
     test_file = os.path.join(test_path, 'stagger_stream.npz')
@@ -36,25 +12,15 @@ def test_stagger_generator(test_path):
     X_expected = data['X']
     y_expected = data['y']
 
-    X, y = stream.next_sample()
-    assert np.alltrue(X[0] == X_expected[0])
-    assert np.alltrue(y[0] == y_expected[0])
+    for j in range(0,10):
+        X, y = stream.next_sample()
+        print(X_expected[j])
+        print(X[0])
+        print(y_expected[j])
+        print(y[0])
+        assert np.array_equal(X[0], X_expected[j])
+        assert np.array_equal(y[0], y_expected[j])
 
-    X, y = stream.last_sample()
-    assert np.alltrue(X[0] == X_expected[0])
-    assert np.alltrue(y[0] == y_expected[0])
 
-    stream.restart()
-    X, y = stream.next_sample(10)
-    assert np.alltrue(X == X_expected)
-    assert np.alltrue(y == y_expected)
-
-    assert stream.n_targets == np.array(y).ndim
-
-    assert stream.n_features == X.shape[1]
-
-    assert 'stream' == stream._estimator_type
-
-    expected_info = "STAGGERGenerator(balance_classes=False, classification_function=2,\n" \
-                    "                 random_state=112)"
+    expected_info = "STAGGERGenerator(balance_classes=False, classification_function=2, random_state=112)"
     assert stream.get_info() == expected_info
