@@ -89,7 +89,6 @@ class WaveformGenerator():
                             [0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0]])
 
     def __init__(self, random_state=None, has_noise=False):
-        super().__init__()
 
         self.random_state = random_state
         self._random_state = None  # This is the actual random_state object used internally
@@ -178,3 +177,7 @@ class WaveformGenerator():
         data[0, data[0].size - 1] = group
         ############
         return data[:, :self.n_features], np.ravel(data[:, self.n_features:]).astype(int)
+
+
+    def get_info(self):
+        return "WaveformGenerator(has_noise={}, random_state={})".format(self.has_noise, self.random_state)
