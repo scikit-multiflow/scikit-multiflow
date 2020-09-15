@@ -1,5 +1,5 @@
-from skmultiflow.data.source import DataSource
-from kafka import KafkaConsumer
+from skmultiflow.data.source.data_source import DataSource
+import threading
 
 
 class KafkaDataSource(DataSource):
@@ -7,28 +7,27 @@ class KafkaDataSource(DataSource):
     Provides a DataSource implementation, reading from Kafka consumer.
     """
 
-    def __init__(self, record_to_dictionary, observers, bootstrap_servers, kafka_topic, kafka_group_id=None, ):
+    def __init__(self, record_to_dictionary, observers, kafka_consumer):
         self.record_to_dictionary = record_to_dictionary
         self.observers = observers
-        self.bootstrap_servers = bootstrap_servers
-        self.topic = kafka_topic
-        self.group_id = kafka_group_id
-        self.name = "KafkaDataSource: {}{}[at]{}".format(self.topic, self.group_id, self.bootstrap_servers)
-
+        consumer_properties = kafka_consumer.__dict__['config']
+        self.name = "KafkaDataSource: bootstrap_servers: {}; group_id: {}".format(consumer_properties['bootstrap_servers'], consumer_properties['group_id'])
+        self.kafka_consumer = kafka_consumer
         self._prepare_for_use()
 
     def _prepare_for_use(self):
         """ Prepares the data source to be used
         """
-        if(self.group_id == None):
-            self.consumer = KafkaConsumer(self.topic, self.group_id, bootstrap_servers=self.bootstrap_servers,
-                                          auto_offset_reset='earliest', enable_auto_commit=True,
-                                          auto_commit_interval_ms=1000)
-        else:
-            self.consumer = KafkaConsumer(self.topic, bootstrap_servers=self.bootstrap_servers,
-                                          auto_offset_reset='earliest', enable_auto_commit=True,
-                                          auto_commit_interval_ms=1000)
+        return None
 
     def listen_for_events(self):
-        for message in self.consumer:
+        thread = threading.Thread(target=self.consume_kafka_messages, args=())
+        thread.daemon = True
+        thread.start()
+
+    def consume_kafka_messages(self):
+        for message in self.kafka_consumer:
             self.on_new_event(message.value)
+
+    def get_info(self):
+        return self.name
