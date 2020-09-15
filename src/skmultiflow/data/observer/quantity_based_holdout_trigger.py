@@ -4,7 +4,7 @@ class QuantityBasedHoldoutTrigger(TrainEvalTrigger):
     """ QuantityBasedHoldout class.
     """
 
-    #TODO: support dynamic and static test set
+    #TODO: support dynamic and static test set: we support it considering the report evaluation policy
     def __init__(self, n_wait_to_test, test_size):
         """ QuantityBasedHoldout class constructor."""
         super().__init__()

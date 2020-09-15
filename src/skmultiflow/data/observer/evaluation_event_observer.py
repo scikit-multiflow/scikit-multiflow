@@ -1,5 +1,5 @@
 from skmultiflow.data.observer.event_observer import EventObserver
-
+import numpy as np
 
 class EvaluationEventObserver(EventObserver):
     """ EvaluationEventObserver class.
@@ -30,5 +30,15 @@ class EvaluationEventObserver(EventObserver):
 
         if self.train_eval_trigger.shall_fit(event):
             self.results_observer.report(self.y_pred_buffer, self.y_true_buffer)
-            for idx in range(0, len(x)):
-                self.algorithm.partial_fit(self.x_buffer[idx], self.y_true_buffer[idx])
+            for idx in range(0, len(self.x_buffer)):
+                x_array = np.array(self.x_buffer[idx])
+                x_array = x_array.reshape(x_array.shape[0], 1)
+                y_array = np.array(0)
+                y_array = y_array.reshape(1, 1)
+                print("selected: {}".format(len(self.y_true_buffer)))
+                print("selected: {}".format(self.y_true_buffer))
+                self.algorithm.partial_fit(x_array, y_array)
+
+            self.y_pred_buffer = []
+            self.y_true_buffer = []
+            self.x_buffer = []

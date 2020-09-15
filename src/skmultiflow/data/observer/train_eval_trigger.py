@@ -13,9 +13,9 @@ class TrainEvalTrigger(metaclass=ABCMeta):
 
     """
 
-    @abstractmethod
-    def update(self, event):
-        raise NotImplementedError
+    #@abstractmethod
+    #def update(self, event):
+    #    raise NotImplementedError
 
     @abstractmethod
     def shall_fit(self, event):

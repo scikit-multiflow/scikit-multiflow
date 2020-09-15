@@ -213,3 +213,6 @@ class HoeffdingAdaptiveTreeClassifier(HoeffdingTreeClassifier):
     # Override HoeffdingTreeClassifier
     def new_split_node(self, split_test, class_observations):
         return AdaSplitNode(split_test, class_observations, self.random_state)
+
+    def algorithm_type(self):
+        return "CLASSIFICATION"
