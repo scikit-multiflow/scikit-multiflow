@@ -14,6 +14,10 @@ class TimeBasedHoldoutTrigger(TrainEvalTrigger):
         self.get_event_time = get_event_time
         self.reference_time = None
 
+    def update(self, event):
+        # TODO: complete
+        return True
+
     def shall_fit(self, event):
         # Once we got the initial window, we shall not fit, but wait to get whole test period
         # Then we evaluate the whole test period, and fit the algorithm with it

@@ -22,7 +22,7 @@ def record_to_dictionary(record):
 
 def test_file_data_source(test_path):
     test_file = os.path.join(test_path, 'iris.data')
-    train_eval_trigger = QuantityBasedHoldoutTrigger(10, 20)
+    train_eval_trigger = QuantityBasedHoldoutTrigger(5, 10, 20)
     algorithm = HoeffdingAdaptiveTreeClassifier(leaf_prediction='mc', random_state=1)
     buffer_data_event_observer = BufferDataEventObserver()
     results_observer = BufferResultObserver()

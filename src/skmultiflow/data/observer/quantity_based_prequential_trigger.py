@@ -10,6 +10,10 @@ class QuantityBasedPrequentialTrigger(TrainEvalTrigger):
         self.n_wait_to_fit = n_wait_to_fit
         self.wait_to_fit_counter = 0
 
+    def update(self, event):
+        # TODO: complete
+        return True
+
     def shall_predict(self, event):
         if self.wait_to_fit_counter < self.n_wait_to_fit:
             self.wait_to_fit_counter += 1

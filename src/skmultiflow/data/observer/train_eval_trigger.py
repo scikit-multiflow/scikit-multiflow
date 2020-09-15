@@ -13,9 +13,14 @@ class TrainEvalTrigger(metaclass=ABCMeta):
 
     """
 
-    #@abstractmethod
-    #def update(self, event):
-    #    raise NotImplementedError
+    @abstractmethod
+    def update(self, event):
+        """
+        This method aims to store the event, so that can be used to fit or predict
+        :param event:
+        :return:
+        """
+        raise NotImplementedError
 
     @abstractmethod
     def shall_fit(self, event):
