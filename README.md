@@ -104,6 +104,25 @@ publication, please use the following Bibtex entry:
 }
 ```
 
+## Setup
+
+1. Go to scikit-multiflow/infra/docker/kafka/kafka/ and run:
+```bash
+bash create-img.sh
+```
+
+2. Go to scikit-multiflow/infra/docker/multiflow-dev/ and run:
+```bash
+bash create-img.sh
+```
+
+3. Go to scikit-multiflow/ and run:
+```bash
+bash multiflow.sh --start
+bash multiflow.sh --into-dev
+```
+
+
 ## Common issues
 
 * When running
