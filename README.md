@@ -103,3 +103,12 @@ publication, please use the following Bibtex entry:
   url     = {http://jmlr.org/papers/v19/18-251.html}
 }
 ```
+
+## Common issues
+
+* When running
+```bash
+bash create-img.sh
+```
+possible error is: "Error response from daemon: squash is only supported with experimental mode".
+It is solved with answer from [here](https://stackoverflow.com/questions/44346322/how-to-run-docker-with-experimental-functions-on-ubuntu-16-04).
