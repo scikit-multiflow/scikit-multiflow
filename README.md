@@ -103,3 +103,31 @@ publication, please use the following Bibtex entry:
   url     = {http://jmlr.org/papers/v19/18-251.html}
 }
 ```
+
+## Setup
+
+1. Go to scikit-multiflow/infra/docker/kafka/kafka/ and run:
+```bash
+bash create-img.sh
+```
+
+2. Go to scikit-multiflow/infra/docker/multiflow-dev/ and run:
+```bash
+bash create-img.sh
+```
+
+3. Go to scikit-multiflow/ and run:
+```bash
+bash multiflow.sh --start
+bash multiflow.sh --into-dev
+```
+
+
+## Common issues
+
+* When running
+```bash
+bash create-img.sh
+```
+possible error is: "Error response from daemon: squash is only supported with experimental mode".
+It is solved with answer from [here](https://stackoverflow.com/questions/44346322/how-to-run-docker-with-experimental-functions-on-ubuntu-16-04).
