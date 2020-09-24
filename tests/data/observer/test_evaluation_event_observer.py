@@ -30,6 +30,8 @@ def test_file_data_source(test_path):
     data_source = FileDataSource(record_to_dictionary, [evaluation_event_observer, buffer_data_event_observer], test_file)
     data_source.listen_for_events()
 
+    #algorithm.partial_fit(X=X, y=y, classes=self.stream.target_values)
+
     time.sleep(10)
     print("Will exit now :)")
 

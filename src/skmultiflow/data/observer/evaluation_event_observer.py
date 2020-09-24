@@ -38,8 +38,9 @@ class EvaluationEventObserver(EventObserver):
                     self.y_true_buffer = []
 
                 x_array = np.array(x)
-                x_array = x_array.reshape(x_array.shape[0], 1)
+                x_array = x_array.reshape(1, x_array.shape[0])
                 y_array = np.array(y_true)
-                y_array = y_array.reshape(1, 1)
+                #y_array = y_array.reshape(1, 1)
 
-                self.algorithm.partial_fit(x_array, y_array)
+                print("Shapes are: {}->{}".format(x_array.shape, y_array.shape))
+                self.algorithm.partial_fit(x_array, y_array, [0, 1, 2])
