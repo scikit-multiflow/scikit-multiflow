@@ -142,9 +142,9 @@ if [ $MODE = "--help" ]; then
         echo "    $MULTIFLOW_SCRIPT --update-images                                                  | update local Docker images to latest version"
         echo "    $MULTIFLOW_SCRIPT --rebuild-images                                                 | rebuild our Docker images tree"
         echo "    $MULTIFLOW_SCRIPT --purge-images                                                   | purge Docker dangling images"
-        echo "    $MULTIFLOW_SCRIPT --run-tests                                                      | run all tests"
-        echo "    $MULTIFLOW_SCRIPT --run-test <TEST-NAME>                                           | run a specific test"
     else
+        echo "$MULTIFLOW_SCRIPT --run-tests                                                          | run all tests"
+        echo "$MULTIFLOW_SCRIPT --run-test <TEST-NAME>                                               | run a specific test"
         echo "$MULTIFLOW_SCRIPT --attach-tmux                                                        | attach tmux session"
         echo "$MULTIFLOW_SCRIPT --show-args                                                          | display relevant environment variables"
     fi
