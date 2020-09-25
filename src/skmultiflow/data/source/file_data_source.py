@@ -7,12 +7,9 @@ class FileDataSource(DataSource):
     """ FileDataSource class.
     Provides a DataSource implementation, reading from a file.
     """
-
-    def __init__(self, record_to_dictionary, observers, filename, feature_names):
-        # TODO invoke super
-        self.record_to_dictionary = record_to_dictionary
+    def __init__(self, record_to_dictionary, observers, filename):
+        super().__init__(record_to_dictionary, observers)
         self.file_handler = None
-        self.observers = observers
         self.filename = filename
         self.feature_names = feature_names
         self.name = "FileDataSource: {}".format(self.filename)

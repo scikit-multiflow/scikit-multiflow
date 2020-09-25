@@ -7,8 +7,7 @@ class GeneratorDataSource(DataSource):
     """
 
     def __init__(self, record_to_dictionary, observers, generator):
-        self.record_to_dictionary = record_to_dictionary
-        self.observers = observers
+        super().__init__(record_to_dictionary, observers)
         self.generator = generator
 
         self.name = "GeneratorDataSource: {}".format(self.generator.name)
