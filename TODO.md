@@ -15,3 +15,8 @@
 
 How to test:
 pytest --capture=tee-sys tests/data/observer/test_evaluation_event_observer.py --showlocals -v
+
+
+ - the issue we want to get assigned to push changes: https://github.com/scikit-multiflow/scikit-multiflow/issues/106
+ - our PRs so far:
+   - developer tools: https://github.com/scikit-multiflow/scikit-multiflow/pull/276
