@@ -16,10 +16,11 @@ class DataSource(BaseSKMObject, metaclass=ABCMeta):
     """
     _estimator_type = 'datasource'
 
-    def __init__(self, record_to_dictionary, observers):
+    def __init__(self, record_to_dictionary, observers, feature_names):
         self.name = None
         self.record_to_dictionary = record_to_dictionary
         self.observers = observers
+        self.feature_names = feature_names
 
 
     @abstractmethod
@@ -40,7 +41,7 @@ class DataSource(BaseSKMObject, metaclass=ABCMeta):
     def on_new_event(self, event):
         if(event is not None):
             for observer in self.observers:
-                observer.update(self.record_to_dictionary(event))
+                observer.update(self.record_to_dictionary(event), self.feature_names)
 
     def restart(self):
         """  Restart the stream. """

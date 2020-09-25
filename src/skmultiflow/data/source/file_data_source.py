@@ -8,11 +8,13 @@ class FileDataSource(DataSource):
     Provides a DataSource implementation, reading from a file.
     """
 
-    def __init__(self, record_to_dictionary, observers, filename):
+    def __init__(self, record_to_dictionary, observers, filename, feature_names):
+        # TODO invoke super
         self.record_to_dictionary = record_to_dictionary
         self.file_handler = None
         self.observers = observers
         self.filename = filename
+        self.feature_names = feature_names
         self.name = "FileDataSource: {}".format(self.filename)
         self._prepare_for_use()
 
@@ -27,7 +29,6 @@ class FileDataSource(DataSource):
         thread = threading.Thread(target=self.read_file, args=())
         thread.daemon = True
         thread.start()
-
 
     def read_file(self):
         event = self.file_handler.readline()
