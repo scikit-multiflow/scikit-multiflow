@@ -10,15 +10,17 @@ import warnings
 
 
 def BatchIncremental(nominal_attributes=None):     # pragma: no cover
-    warnings.warn("'BatchIncremental' has been renamed to 'BatchIncrementalClassifier' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    warnings.warn(
+        "'BatchIncremental' has been renamed to 'BatchIncrementalClassifier' in v0.5.0.\n"
+        "The old name will be removed in v0.7.0",
+        category=FutureWarning)
     return BatchIncrementalClassifier(nominal_attributes=nominal_attributes)
 
 
 class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     """ Batch Incremental ensemble classifier.
 
-    This is a wrapper that allows the application of any batch model to a 
+    This is a wrapper that allows the application of any batch model to a
     stream by incrementally building an ensemble of instances of the batch model.
     A window of examples is collected, then used to train a new model, which is
     added to the ensemble. A maximum number of models ensures memory use is finite
@@ -26,11 +28,13 @@ class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMi
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=DecisionTreeClassifier)
-        Each member of the ensemble is an instance of the base estimator
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator
+        (default=DecisionTreeClassifier) Each member of the ensemble is
+        an instance of the base estimator
 
     window_size: int (default=100)
-        The size of the training window (batch), in other words, how many instances are kept for training.
+        The size of the training window (batch), in other words,
+        how many instances are kept for training.
 
     n_estimators: int (default=100)
         Number of estimators in the ensemble.
@@ -74,7 +78,7 @@ class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMi
         self.window_size = window_size
         self.n_estimators = n_estimators
         self.base_estimator = base_estimator
-        # The ensemble 
+        # The ensemble
         self.ensemble = []
         self.i = -1
         self.X_batch = None
@@ -147,9 +151,10 @@ class BatchIncrementalClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMi
 
         Returns
         -------
-        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is associated with the X entry of the
-        same index. And where the list in index [i] contains len(self.target_values) elements, each of which represents
-        the probability that the i-th sample of X belongs to a certain class-label.
+        A numpy.ndarray of shape (n_samples, n_labels), in which each outer entry is
+        associated with the X entry of the same index. And where the list in index [i] contains
+        len(self.target_values) elements, each of which represents the probability that
+        the i-th sample of X belongs to a certain class-label.
 
         """
         N, D = X.shape
