@@ -8,8 +8,7 @@ class KafkaDataSource(DataSource):
     """
 
     def __init__(self, record_to_dictionary, observers, kafka_consumer):
-        self.record_to_dictionary = record_to_dictionary
-        self.observers = observers
+        super().__init__(record_to_dictionary, observers)
         consumer_properties = kafka_consumer.__dict__['config']
         self.name = "KafkaDataSource: bootstrap_servers: {}; group_id: {}".format(consumer_properties['bootstrap_servers'], consumer_properties['group_id'])
         self.kafka_consumer = kafka_consumer
