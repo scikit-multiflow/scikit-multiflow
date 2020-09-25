@@ -23,9 +23,9 @@ class TrainEvalTrigger(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def shall_fit(self, event):
+    def shall_fit(self):
         raise NotImplementedError
 
     @abstractmethod
-    def shall_predict(self, event):
+    def shall_predict(self):
         raise NotImplementedError

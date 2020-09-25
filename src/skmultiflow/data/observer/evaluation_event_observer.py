@@ -5,12 +5,13 @@ class EvaluationEventObserver(EventObserver):
     """ EvaluationEventObserver class.
     """
 
-    def __init__(self, algorithm, train_eval_trigger, results_observer):
+    def __init__(self, algorithm, train_eval_trigger, results_observer, expected_target_values=None):
         """ EvaluationEventObserver class constructor."""
         super().__init__()
-        self.algorithm = algorithm
+        self.expected_target_values = expected_target_values
         self.train_eval_trigger = train_eval_trigger
         self.results_observer = results_observer
+        self.algorithm = algorithm
         self.y_true_buffer = []
         self.y_pred_buffer = []
         self.x_buffer = []
@@ -25,13 +26,12 @@ class EvaluationEventObserver(EventObserver):
 
             self.train_eval_trigger.update(event)
 
-            if self.train_eval_trigger.shall_predict(event):
+            if self.train_eval_trigger.shall_predict():
                 y_pred = self.algorithm.predict(x)
                 self.y_true_buffer.append(y_true)
                 self.y_pred_buffer.append(y_pred)
 
-            if self.train_eval_trigger.shall_fit(event):
-                print("Will report? {}".format(len(self.y_true_buffer)))
+            if self.train_eval_trigger.shall_fit():
                 if len(self.y_true_buffer)>0:
                     self.results_observer.report(self.y_pred_buffer, self.y_true_buffer)
                     self.y_pred_buffer = []
@@ -40,7 +40,8 @@ class EvaluationEventObserver(EventObserver):
                 x_array = np.array(x)
                 x_array = x_array.reshape(1, x_array.shape[0])
                 y_array = np.array(y_true)
-                #y_array = y_array.reshape(1, 1)
 
-                print("Shapes are: {}->{}".format(x_array.shape, y_array.shape))
-                self.algorithm.partial_fit(x_array, y_array, [0, 1, 2])
+                if(self.expected_target_values is not None):
+                    self.algorithm.partial_fit(x_array, y_array, self.expected_target_values)
+                else:
+                    self.algorithm.partial_fit(x_array, y_array)

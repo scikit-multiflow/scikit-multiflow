@@ -16,7 +16,6 @@ class QuantityBasedHoldoutTrigger(TrainEvalTrigger):
         self.test_cases_counter = 0
 
     def update(self, event):
-        print("Received event: {} {} {}".format(self.first_time_wait_counter, self.wait_to_test_counter, self.test_cases_counter))
         if self.first_time_wait_counter < self.first_time_wait:
             self.first_time_wait_counter += 1
         else:
@@ -31,13 +30,13 @@ class QuantityBasedHoldoutTrigger(TrainEvalTrigger):
                 self.wait_to_test_counter = 0
 
 
-    def shall_fit(self, event):
+    def shall_fit(self):
         if self.first_time_wait_counter < self.first_time_wait:
             return True
         else:
             return self.wait_to_test_counter < self.n_wait_to_test and self.test_cases_counter == 0
 
-    def shall_predict(self, event):
+    def shall_predict(self):
         if self.first_time_wait_counter < self.first_time_wait:
             return False
         else:

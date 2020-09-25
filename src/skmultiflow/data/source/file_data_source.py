@@ -11,7 +11,6 @@ class FileDataSource(DataSource):
         super().__init__(record_to_dictionary, observers)
         self.file_handler = None
         self.filename = filename
-        self.feature_names = feature_names
         self.name = "FileDataSource: {}".format(self.filename)
         self._prepare_for_use()
 
