@@ -1,0 +1,5 @@
+TMUX_COLOR_01=green
+TMUX_COLOR_02=white
+
+export TMUX_COLOR_01
+export TMUX_COLOR_02

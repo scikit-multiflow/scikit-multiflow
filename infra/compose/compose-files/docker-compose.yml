@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+  multiflowdev:
+    image: "multiflow/multiflow-dev:latest"
+    environment:
+      - PROFILE="DOCKER-DEV"
+    volumes:
+      - type: bind
+        source: MULTIFLOW_HOME
+        target: /home/multiflow
+      - multiflow_logs_vol:/var/log/multiflow
+    networks:
+      - service-tier
+volumes:
+  multiflow_logs_vol:
+    driver: local
+networks:
+  service-tier:
+    driver: bridge
