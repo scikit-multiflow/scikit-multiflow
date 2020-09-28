@@ -13,6 +13,7 @@ class FileDataSource(DataSource):
     >>> from skmultiflow.data.source.file_data_source import FileDataSource
     >>> from skmultiflow.data.observer.buffer_data_event_observer import BufferDataEventObserver
     >>>
+    >>>
     >>> # Function needs to be written regarding input data. This is example for iris dataset.
     >>> def record_to_dictionary(record):
     >>>     record_array = record.strip().split(',')
