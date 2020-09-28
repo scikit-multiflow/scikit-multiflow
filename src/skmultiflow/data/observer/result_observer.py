@@ -1,8 +1,8 @@
-class BufferedResultObserver():
+class ResultObserver():
     """ BufferResultObserver class.
     """
 
-    def __init__(self, measurements, reporter, preserve_data=False, buffer_size=20):
+    def __init__(self, measurements, reporter):
         """ BufferResultObserver class constructor."""
         self.measurements = measurements
         self.reporter = reporter
@@ -11,4 +11,3 @@ class BufferedResultObserver():
         for i in range(len(y_true)):
             self.measurements.add_result(y_true[i], y_pred[i])
         self.reporter(self.measurements)
-
