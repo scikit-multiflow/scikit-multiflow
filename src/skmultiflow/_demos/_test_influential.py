@@ -251,7 +251,7 @@ def evaluating(stream, run, pos, neg, influence_pos, influence_neg, abs_mean_pos
                                                          metrics=['accuracy'],
                                                          data_points_for_classification=False,
                                                          weight_output=True,
-                                                         weight_plot=False)
+                                                         weight_plot=True)
     pipe = Pipeline([('Naive Bayes', classifier)])
 
     # 4. Run evaluation

@@ -207,9 +207,6 @@ class EvaluateInfluential(StreamEvaluator):
                                 interval_borders = self.create_intervals(feature_data)
                                 self.init_table(feature_data)
                                 self.count_update(data_cache, interval_borders, time_window=0)
-                                data_cachelist = pd.DataFrame(data_cache)
-                                self.plotPerColumnDistribution(data_cachelist, self.stream.n_features,
-                                                               self.stream.n_features)
                                 data_cache = []
                             if window_count > self.window_size and window_count % self.window_size == 0:
                                 feature_data = [item[2] for item in data_cache]
@@ -279,27 +276,6 @@ class EvaluateInfluential(StreamEvaluator):
             self.stream.restart()
 
         return self.model
-
-    def plotPerColumnDistribution(self, df, nGraphShown, nGraphPerRow):
-        nunique = df.nunique()
-        df = df[[col for col in df if 1 < nunique[col] < 50]]
-        nRow, nCol = df.shape
-        columnNames = list(df)
-        nGraphRow = (nCol + nGraphPerRow - 1) / nGraphPerRow
-        plt.figure(num=None, figsize=(6 * nGraphPerRow, 8 * nGraphRow), dpi=80, facecolor='w', edgecolor='k')
-        for i in range(min(nCol, nGraphShown)):
-            plt.subplot(nGraphRow, nGraphPerRow, i + 1)
-            columnDf = df.iloc[:, i]
-            if not np.issubdtype(type(columnDf.iloc[0]), np.number):
-                valueCounts = columnDf.value_counts()
-                valueCounts.plot.bar()
-            else:
-                columnDf.hist()
-            plt.ylabel('counts')
-            plt.xticks(rotation=90)
-            plt.title(f'{columnNames[i]} (column {i})')
-        plt.tight_layout(pad=1.0, w_pad=1.0, h_pad=1.0)
-        plt.show()
 
     def calculate_density(self):
         # table = tn, fp, fn, tp
