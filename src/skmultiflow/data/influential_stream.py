@@ -39,6 +39,7 @@ class InfluentialStream(Stream):
         self.name = streams[0].name
         self.weight = weight
         self.weight_tracker = []
+        self.weight_tracker_dynamic = []
         self.last_stream = None
         self.self_fulfilling = self_fulfilling
         self.self_defeating = self_defeating
@@ -61,6 +62,7 @@ class InfluentialStream(Stream):
             start = [1] * counter
             self.weight = [1] * counter
         self.weight_tracker = [start]
+        self.weight_tracker_dynamic = [start]
 
     def set_influence_method(self):
         if self.influence_method != "multiplication" and self.influence_method != "addition":
@@ -137,10 +139,11 @@ class InfluentialStream(Stream):
             self.last_stream = used_stream
             self.current_sample_x[j, :] = X
             self.current_sample_y[j, :] = y
+        self.weight_tracker.append(self.weight.copy())
 
-        return self.current_sample_x, self.current_sample_y.flatten()
+        return self.current_sample_x, self.current_sample_y.flatten(), self.last_stream
 
-    def receive_feedback(self, y_true, y_pred, x_features):
+    def receive_feedback(self, y_true, y_pred, x_features, stream):
         """
         If the true label is given in this function and
         if the cache is empty or the instance matches the first item in the list
@@ -156,37 +159,47 @@ class InfluentialStream(Stream):
 
         If no true label is given, then add the instance in the end of the cache.
         """
-        if y_true is not None:
-            if len(self.cache) == 0 or (y_pred == self.cache[0][0] and x_features == self.cache[0][1]):
-                self.receive_feedback_update(y_true, y_pred)
-                if len(self.cache) != 0:
-                    self.cache.remove(self.cache[0])
-                    while len(self.cache[0]) == 3:
-                        self.receive_feedback_update(y_true, y_pred)
+        if isinstance(y_true, int) and isinstance(y_pred, int):
+            y_true, y_pred, x_features = [y_true], [y_pred], [x_features]
+        for i in range(len(y_true)):
+            if y_true[i] is not None:
+                if len(self.cache) == 0 or (y_pred[i] == self.cache[0][0] and x_features[i] == self.cache[0][1]):
+                    self.receive_feedback_update(y_true[i], y_pred[i], stream[i])
+                    if len(self.cache) != 0:
                         self.cache.remove(self.cache[0])
+                        while len(self.cache[0]) == 4:
+                            self.receive_feedback_update(y_true[i], y_pred[i], stream[i])
+                            self.cache.remove(self.cache[0])
+                else:
+                    wait_for_feedback = [y_pred[i], x_features[i], y_true[i], stream[i]]
+                    self.cache.append(wait_for_feedback)
             else:
-                wait_for_feedback = [y_pred, x_features, y_true]
-                self.cache.append(wait_for_feedback)
-        else:
-            no_label = [y_pred, x_features]
-            self.cache.append(no_label)
+                no_label = [y_pred[i], x_features[i], stream[i]]
+                self.cache.append(no_label)
 
-    def receive_feedback_update(self, y_true, y_pred):
+    def receive_feedback_update(self, y_true, y_pred, stream):
         if y_true == y_pred:
             if self.influence_method == "multiplication":
-                self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_fulfilling
+                self.weight[stream] = self.weight[stream] * self.self_fulfilling
             else:
-                self.weight[self.last_stream] = self.weight[self.last_stream] + self.self_fulfilling
+                self.weight[stream] = self.weight[stream] + self.self_fulfilling
         else:
             if self.influence_method == "multiplication":
-                self.weight[self.last_stream] = self.weight[self.last_stream] * self.self_defeating
+                self.weight[stream] = self.weight[stream] * self.self_defeating
             else:
-                self.weight[self.last_stream] = self.weight[self.last_stream] + self.self_defeating
-        self.weight_tracker.append(self.weight.copy())
+                self.weight[stream] = self.weight[stream] + self.self_defeating
+        self.weight_tracker_dynamic.append(self.weight.copy())
 
     def plot_weight(self):
         n_streams = len(self.streams)
         x_value = list(range(0, len(self.weight_tracker), 1))
+        x_value_dynamic = list(range(0, len(self.weight_tracker_dynamic), 1))
+        if self.self_defeating > self.self_fulfilling:
+            title = "weight development per stream self defeating approach"
+        elif self.self_defeating < self.self_fulfilling:
+            title = "weight development per stream self fulfilling approach"
+        else:
+            title="Weight development no prediction influence"
         plt.figure(1)
         for i in range(n_streams):
             label = "stream {}".format(i)
@@ -194,7 +207,17 @@ class InfluentialStream(Stream):
             plt.plot(x_value, y_values, label=label)
         plt.xlabel('instance')
         plt.ylabel("weight value")
-        plt.title("weight development per stream")
+        plt.title(title)
+        plt.legend()
+
+        plt.figure(2)
+        for i in range(n_streams):
+            label = "stream {}".format(i)
+            y_values = [weight[i] for weight in self.weight_tracker_dynamic]
+            plt.plot(x_value_dynamic, y_values, label=label)
+        plt.xlabel('instance')
+        plt.ylabel("weight value")
+        plt.title(title)
         plt.legend()
         plt.show()
 
