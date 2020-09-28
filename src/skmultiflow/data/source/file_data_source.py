@@ -13,7 +13,7 @@ class FileDataSource(DataSource):
     >>> from skmultiflow.data.source.file_data_source import FileDataSource
     >>> from skmultiflow.data.observer.buffer_data_event_observer import BufferDataEventObserver
     >>>
-    >>>
+    >>> # Function needs to be written regarding input data. This is example for iris dataset.
     >>> def record_to_dictionary(record):
     >>>     record_array = record.strip().split(',')
     >>>     if(len(record_array)==5):
@@ -21,9 +21,9 @@ class FileDataSource(DataSource):
     >>>     return None
     >>>
     >>>
-    >>> # Setup an event observer and a data source from file 'iris.data'
+    >>> # Setup an event observer and a data source from file filename.csv
     >>> buffer_data_event_observer = BufferDataEventObserver()
-    >>> data_source = FileDataSource(record_to_dictionary, [buffer_data_event_observer], 'iris.data')
+    >>> data_source = FileDataSource(record_to_dictionary, [buffer_data_event_observer], 'filename.csv')
     >>> data_source.listen_for_events()
     >>>
     >>> # Wait until there are at least two events in the buffer
