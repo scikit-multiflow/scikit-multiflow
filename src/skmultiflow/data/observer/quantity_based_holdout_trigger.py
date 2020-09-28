@@ -8,37 +8,28 @@ class QuantityBasedHoldoutTrigger(TrainEvalTrigger):
     def __init__(self, first_time_wait, n_wait_to_test, test_size):
         """ QuantityBasedHoldout class constructor."""
         super().__init__()
-        self.first_time_wait = first_time_wait
-        self.first_time_wait_counter = 0
+        self.first_time_wait = max(first_time_wait, n_wait_to_test)
         self.n_wait_to_test = n_wait_to_test
         self.test_size = test_size
-        self.wait_to_test_counter = 0
-        self.test_cases_counter = 0
+        self.test_mode = False
+        self.events_counter = 0
+        self.events_target = self.first_time_wait
 
     def update(self, event):
-        if self.first_time_wait_counter < self.first_time_wait:
-            self.first_time_wait_counter += 1
-        else:
-            if self.wait_to_test_counter == 0 and self.test_cases_counter == self.test_size:
-                self.test_cases_counter = 0
-            if self.wait_to_test_counter < self.n_wait_to_test:
-                self.wait_to_test_counter += 1
+        if self.events_counter == self.events_target:
+            self.test_mode = not self.test_mode
+            self.events_counter = 0
+            if self.test_mode:
+                self.events_target = self.test_size
             else:
-                self.test_cases_counter += 1
+                self.events_target = self.n_wait_to_test
 
-            if self.test_cases_counter == self.test_size:
-                self.wait_to_test_counter = 0
+        if self.events_counter < self.events_target:
+            self.events_counter += 1
 
 
     def shall_fit(self):
-        if self.first_time_wait_counter < self.first_time_wait:
-            return True
-        else:
-            return self.wait_to_test_counter < self.n_wait_to_test and self.test_cases_counter == 0
+        return not self.test_mode
 
     def shall_predict(self):
-        if self.first_time_wait_counter < self.first_time_wait:
-            return False
-        else:
-            return self.test_cases_counter == self.test_size
-
+        return self.test_mode

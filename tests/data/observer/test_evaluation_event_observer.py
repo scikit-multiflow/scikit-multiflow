@@ -10,19 +10,23 @@ import numpy as np
 import time
 import os
 
+
 def one_hot_encoding(string_value):
-    if(string_value == 'Iris-setosa'):
+    if (string_value == 'Iris-setosa'):
         return 0
-    if(string_value == 'Iris-versicolor'):
+    if (string_value == 'Iris-versicolor'):
         return 1
-    if(string_value == 'Iris-virginica'):
+    if (string_value == 'Iris-virginica'):
         return 2
     return -1
 
+
 def record_to_dictionary(record):
     record_array = record.strip().split(',')
-    if(len(record_array)==5):
-        return {'X': np.array([float(record_array[0]), float(record_array[1]), float(record_array[2]), float(record_array[3])]), 'y': [one_hot_encoding(record_array[4])]}
+    if (len(record_array) == 5):
+        return {'X': np.array(
+            [float(record_array[0]), float(record_array[1]), float(record_array[2]), float(record_array[3])]),
+                'y': [one_hot_encoding(record_array[4])]}
     return None
 
 
@@ -39,4 +43,3 @@ def test_evaluation_event_observer(test_path):
     time.sleep(3)
 
     verify(results_observer, times=4).report(any, any)
-
