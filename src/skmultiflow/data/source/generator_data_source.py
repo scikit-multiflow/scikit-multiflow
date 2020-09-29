@@ -1,4 +1,5 @@
-from skmultiflow.data.source import DataSource
+from skmultiflow.data.source.data_source import DataSource
+import threading
 
 
 class GeneratorDataSource(DataSource):
@@ -13,7 +14,17 @@ class GeneratorDataSource(DataSource):
         self.name = "GeneratorDataSource: {}".format(self.generator.name)
 
 
+    def _prepare_for_use(self):
+        """ Prepares the data source to be used
+        """
+        pass
+
     def listen_for_events(self):
+        thread = threading.Thread(target=self.consume_generator_messages, args=())
+        thread.daemon = True
+        thread.start()
+
+    def consume_generator_messages(self):
         event = self.generator.next_sample()
         while event is not None:
             self.on_new_event(event)

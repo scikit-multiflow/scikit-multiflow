@@ -17,7 +17,7 @@ class KafkaDataSource(DataSource):
     def _prepare_for_use(self):
         """ Prepares the data source to be used
         """
-        return None
+        pass
 
     def listen_for_events(self):
         thread = threading.Thread(target=self.consume_kafka_messages, args=())
