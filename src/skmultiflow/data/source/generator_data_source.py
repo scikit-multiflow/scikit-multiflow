@@ -1,4 +1,5 @@
 from skmultiflow.data.source.data_source import DataSource
+import threading
 
 
 class GeneratorDataSource(DataSource):
@@ -42,13 +43,18 @@ class GeneratorDataSource(DataSource):
     def _prepare_for_use(self):
         pass
 
+    def _prepare_for_use(self):
+        """ Prepares the data source to be used
+        """
+        pass
+
     def listen_for_events(self):
-        #TODO: solve problem with infinite while in some better way
-        X, y = self.generator.next_sample()
-        event = {'X': X[0], 'y': y}
-        count = 0
-        while event is not None and count < 10:
+        thread = threading.Thread(target=self.consume_generator_messages, args=())
+        thread.daemon = True
+        thread.start()
+
+    def consume_generator_messages(self):
+        event = self.generator.next_sample()
+        while event is not None:
             self.on_new_event(event)
-            X, y = self.generator.next_sample()
-            event = {'X': X[0], 'y': y}
-            count += 1
+            event = self.generator.next_sample()
