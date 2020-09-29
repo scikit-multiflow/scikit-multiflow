@@ -1,10 +1,8 @@
-import os
-from array import array
-
-import numpy as np
-
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.anomaly_detection import HalfSpaceTrees
-from skmultiflow.data import SEAGenerator
+from array import array
+import numpy as np
+import os
 
 
 def test_half_space_trees(test_path):

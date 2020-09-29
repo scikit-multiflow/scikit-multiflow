@@ -159,3 +159,6 @@ class KNNADWINClassifier(KNNClassifier):
                     for i in range(self.data_window.size, self.adwin.width, -1):
                         self.data_window.delete_oldest_sample()
         return self
+
+    def algorithm_type(self):
+        return "CLASSIFICATION"

@@ -10,11 +10,11 @@ def test_buffered_result_observer():
 
     when(metrics).get_accuracy().thenReturn(0.9)
     when(reporter).report(any, any).thenReturn(metrics.get_accuracy())
-    buffered_result_observer = ResultObserver(metrics, reporter)
+    result_observer = ResultObserver(metrics, reporter)
 
     y_true = np.concatenate((np.ones(85), np.zeros(10), np.ones(5)))
     y_pred = np.concatenate((np.ones(90), np.zeros(10)))
 
-    buffered_result_observer.report(y_pred, y_true)
+    result_observer.report(y_pred, y_true)
 
     verify(metrics).get_accuracy()

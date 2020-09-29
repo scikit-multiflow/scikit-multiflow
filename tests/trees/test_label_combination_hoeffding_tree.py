@@ -1,6 +1,6 @@
 import numpy as np
 from skmultiflow.trees import LabelCombinationHoeffdingTreeClassifier
-from skmultiflow.data import MultilabelGenerator
+from skmultiflow.data.generator.multilabel_generator import MultilabelGenerator
 from skmultiflow.utils import calculate_object_size
 
 

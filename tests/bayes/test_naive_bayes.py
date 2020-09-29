@@ -1,9 +1,9 @@
-import numpy as np
-from array import array
-import os
-from skmultiflow.data import SEAGenerator
-from skmultiflow.bayes import NaiveBayes
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.core.base import is_classifier
+from skmultiflow.bayes import NaiveBayes
+from array import array
+import numpy as np
+import os
 
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning)
@@ -30,7 +30,7 @@ def test_naive_bayes(test_path):
         if (cnt % wait_samples == 0) and (cnt != 0):
             y_pred.append(learner.predict(X)[0])
             y_proba.append(learner.predict_proba(X)[0])
-        learner.partial_fit(X, y, classes=stream.target_values)
+        learner.partial_fit(X, y, classes=[0, 1])
         cnt += 1
 
     expected_predictions = array('i', [1, 1, 1, 0, 1, 1, 1, 0, 0, 1,

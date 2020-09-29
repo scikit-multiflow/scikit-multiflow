@@ -164,6 +164,7 @@ class Pipeline(BaseSKMObject):
 
         """
         Xt = X
+
         for name, transform in self.steps[:-1]:
             if transform is None:
                 pass
@@ -323,3 +324,6 @@ class Pipeline(BaseSKMObject):
 
         """
         return self.steps[-1][-1]
+
+    def algorithm_type(self):
+        return self.steps[-1][-1].algorithm_type()

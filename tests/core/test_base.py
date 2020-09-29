@@ -1,14 +1,13 @@
-from array import array
-
-from skmultiflow.core import clone
-from skmultiflow.core.base import _pprint
-from skmultiflow.data import SEAGenerator
-from skmultiflow.bayes import NaiveBayes
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.trees import HoeffdingTreeRegressor
 from skmultiflow.trees import iSOUPTreeRegressor
 from skmultiflow.core import is_classifier
 from skmultiflow.core import is_regressor
+from skmultiflow.core.base import _pprint
+from skmultiflow.bayes import NaiveBayes
+from skmultiflow.core import clone
+from array import array
 
 
 def test_clone():
@@ -32,7 +31,7 @@ def test_clone():
         if (cnt % wait_samples == 0) and (cnt != 0):
             y_pred.append(learner.predict(X)[0])
             y_proba.append(learner.predict_proba(X)[0])
-        learner.partial_fit(X, y, classes=stream.target_values)
+        learner.partial_fit(X, y, classes=[0, 1])
         cnt += 1
 
     cloned = clone(learner)
