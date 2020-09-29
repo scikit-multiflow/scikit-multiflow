@@ -17,7 +17,7 @@ class GeneratorDataSource(DataSource):
     >>> def record_to_dictionary(record):
     >>>     if record is None:
     >>>         return None
-    >>>     return record
+    >>>     return {'X': record[0], 'y': record[1]}
     >>>
     >>>
     >>> # Setup an event observer and a data source
