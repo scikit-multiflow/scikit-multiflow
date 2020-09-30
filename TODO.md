@@ -1,8 +1,9 @@
  - create two event observers: one for algorithms and one for drift detection.
 
 #TODO: add
+ - strategies on event streaming: shall stop after q or given time window?
  - strategies to compute features on the fly
- - evaluation strategy: holdout vs prequential
+ - evaluation strategy: time delayed prequential
  - results observer, supporting async results reporting + policies to discard data that arrives too late?
  - add documentation on how to use Docker for this purpose
  
@@ -11,6 +12,7 @@
   - data -> source
   - data -> stream
   - data -> observer
+  - evaluation strategy: holdout vs prequential
 
 
 How to test:
