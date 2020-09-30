@@ -57,16 +57,16 @@ def demo():
     for i in range(runs):
         list_of_streams = []
         for x in range(5):
-            list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=51+x,
-                                                           n_classes=2, n_features=4,
-                                                           n_centroids=1, num_drift_centroids=1,
-                                                           change_speed=(1 / runs) * (i + 1),
+            list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=51,
+                                                           n_classes=2, n_features=1,
+                                                           n_centroids=10, num_drift_centroids=int(10/runs*i),
+                                                           change_speed=0.75,
                                                            class_weights=[1, 0]))
         for x in range(5):
-            list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=50+x,
-                                                           n_classes=2, n_features=4,
-                                                           n_centroids=1, num_drift_centroids=1,
-                                                           change_speed=(1 / runs) * (i + 1),
+            list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=50,
+                                                           n_classes=2, n_features=1,
+                                                           n_centroids=10, num_drift_centroids=int(10/runs*i),
+                                                           change_speed=0.75,
                                                            class_weights=[0, 1]))
         for j in range(3):
             stream = influential_stream.InfluentialStream(self_fulfilling=weightA[j], self_defeating=weightB[j],
