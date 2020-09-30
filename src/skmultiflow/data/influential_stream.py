@@ -195,9 +195,9 @@ class InfluentialStream(Stream):
         x_value = list(range(0, len(self.weight_tracker), 1))
         x_value_dynamic = list(range(0, len(self.weight_tracker_dynamic), 1))
         if self.self_defeating > self.self_fulfilling:
-            title = "weight development per stream self defeating approach"
+            title = "Weight development per stream self defeating approach"
         elif self.self_defeating < self.self_fulfilling:
-            title = "weight development per stream self fulfilling approach"
+            title = "Weight development per stream self fulfilling approach"
         else:
             title="Weight development no prediction influence"
         plt.figure(1)
@@ -205,8 +205,8 @@ class InfluentialStream(Stream):
             label = "stream {}".format(i)
             y_values = [weight[i] for weight in self.weight_tracker]
             plt.plot(x_value, y_values, label=label)
-        plt.xlabel('instance')
-        plt.ylabel("weight value")
+        plt.xlabel('Instance')
+        plt.ylabel("Weight value")
         plt.title(title)
         plt.legend()
 
@@ -215,8 +215,8 @@ class InfluentialStream(Stream):
             label = "stream {}".format(i)
             y_values = [weight[i] for weight in self.weight_tracker_dynamic]
             plt.plot(x_value_dynamic, y_values, label=label)
-        plt.xlabel('instance')
-        plt.ylabel("weight value")
+        plt.xlabel('Instance')
+        plt.ylabel("Weight value")
         plt.title(title)
         plt.legend()
         plt.show()

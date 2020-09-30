@@ -7,8 +7,6 @@ from skmultiflow.evaluation.base_evaluator import StreamEvaluator
 from skmultiflow.utils import constants
 from statistics import mode
 from scipy.stats import ranksums
-import pandas as pd
-import matplotlib.pyplot as plt
 
 
 class EvaluateInfluential(StreamEvaluator):
@@ -17,7 +15,7 @@ class EvaluateInfluential(StreamEvaluator):
                  max_samples=100000,
                  n_time_windows=1,
                  batch_size=1,
-                 batch_size_update=1,
+                 batch_size_update=False,
                  pretrain_size=200,
                  n_intervals=2,
                  max_time=float("inf"),
@@ -139,6 +137,11 @@ class EvaluateInfluential(StreamEvaluator):
         actual_max_samples = self.stream.n_remaining_samples()
         if actual_max_samples == -1 or actual_max_samples > self.max_samples:
             actual_max_samples = self.max_samples
+
+        if self.batch_size_update is True:
+            self.batch_size_update = self.window_size
+        else:
+            self.batch_size_update = 1
 
         data_cache = []
         update_cache = []
@@ -281,10 +284,7 @@ class EvaluateInfluential(StreamEvaluator):
         # table = tn, fp, fn, tp
         # create list that has two values (difference in density in time0 and time1 of TP and FN,
         #                               and difference in density in time0 and time1 of TN and FP per interval
-        TN = 0
-        FP = 1
-        FN = 2
-        TP = 3
+        TN, FP, FN, TP = 0, 1, 2, 3
         density = [[[[0] * 2 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
                    for _ in range(self.n_time_windows - 1)]
         subset_TP = [[[] for _ in range(self.stream.n_features)] for _ in range(self.n_time_windows - 1)]
