@@ -1,6 +1,6 @@
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.meta import OnlineRUSBoostClassifier
 from skmultiflow.bayes import NaiveBayes
-from skmultiflow.data import SEAGenerator
 import numpy as np
 
 
@@ -25,7 +25,7 @@ def test_online_rus_1():
             if y[0] == predictions[-1]:
                 correct_predictions += 1
         if first:
-            learner.partial_fit(X, y, classes=stream.target_values)
+            learner.partial_fit(X, y, classes=[0, 1])
             first = False
         else:
             learner.partial_fit(X, y)
@@ -74,7 +74,7 @@ def test_online_rus_2():
             if y[0] == predictions[-1]:
                 correct_predictions += 1
         if first:
-            learner.partial_fit(X, y, classes=stream.target_values)
+            learner.partial_fit(X, y, classes=[0, 1])
             first = False
         else:
             learner.partial_fit(X, y)
@@ -118,7 +118,7 @@ def test_online_rus_3():
             if y[0] == predictions[-1]:
                 correct_predictions += 1
         if first:
-            learner.partial_fit(X, y, classes=stream.target_values)
+            learner.partial_fit(X, y, classes=[0, 1])
             first = False
         else:
             learner.partial_fit(X, y)

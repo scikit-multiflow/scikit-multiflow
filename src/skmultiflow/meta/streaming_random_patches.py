@@ -11,7 +11,7 @@ from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.utils import check_random_state, get_dimensions
-from skmultiflow.metrics import ClassificationPerformanceEvaluator
+from skmultiflow.metrics.measure_collection import ClassificationMeasurements
 
 
 class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
@@ -177,7 +177,7 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
         self._n_samples_seen = 0
         self._subspaces = None
 
-        self._base_performance_evaluator = ClassificationPerformanceEvaluator()
+        self._base_performance_evaluator = ClassificationMeasurements()
         self._base_learner_class = StreamingRandomPatchesBaseLearner
 
     def partial_fit(self, X, y, classes=None, sample_weight=None):
@@ -304,7 +304,7 @@ class StreamingRandomPatchesClassifier(BaseSKMObject, ClassifierMixin, MetaEstim
             y_proba_temp = self.ensemble[i].predict_proba(X)
             if np.sum(y_proba_temp) > 0.0:
                 y_proba_temp = normalize(y_proba_temp, norm='l1')[0].copy()
-                acc = self.ensemble[i].performance_evaluator.accuracy_score()
+                acc = self.ensemble[i].performance_evaluator.get_accuracy()
                 if not self.disable_weighted_vote and acc > 0.0:
                     y_proba_temp *= acc
                 # Check array length consistency

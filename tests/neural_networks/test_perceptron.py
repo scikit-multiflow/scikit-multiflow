@@ -1,14 +1,11 @@
-import numpy as np
-
-from array import array
-import os
-
-from skmultiflow.data import SEAGenerator
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.neural_networks import PerceptronMask
-from sklearn.metrics import accuracy_score
-
-import pytest
 from sklearn import __version__ as sklearn_version
+from sklearn.metrics import accuracy_score
+from array import array
+import numpy as np
+import pytest
+import os
 
 
 @pytest.mark.filterwarnings('ignore::FutureWarning')
@@ -33,7 +30,7 @@ def test_perceptron(test_path):
         if (cnt % wait_samples == 0) and (cnt != 0):
             y_pred.append(learner.predict(X)[0])
             y_proba.append(learner.predict_proba(X)[0])
-        learner.partial_fit(X, y, classes=stream.target_values)
+        learner.partial_fit(X, y, classes=[0,1])
         cnt += 1
 
     expected_predictions = array('i', [1, 1, 1, 0, 1, 1, 0, 0, 0, 1,

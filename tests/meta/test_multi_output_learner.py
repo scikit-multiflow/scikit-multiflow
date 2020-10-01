@@ -1,17 +1,16 @@
-from sklearn.linear_model import SGDClassifier, SGDRegressor
-from sklearn.metrics import mean_absolute_error
-from sklearn import __version__ as sklearn_version
-from sklearn import set_config
-
+from skmultiflow.data.generator.multilabel_generator import MultilabelGenerator
+from skmultiflow.data.generator.regression_generator import RegressionGenerator
 from skmultiflow.meta.multi_output_learner import MultiOutputLearner
-from skmultiflow.data import MultilabelGenerator, RegressionGenerator
 from skmultiflow.metrics.measure_collection import hamming_score
-
+from sklearn.linear_model import SGDClassifier, SGDRegressor
+from skmultiflow.utils.utils import get_next_n_samples
+from sklearn import __version__ as sklearn_version
+from sklearn.metrics import mean_absolute_error
+from distutils.version import LooseVersion
+from sklearn import set_config
 import numpy as np
-
 import pytest
 
-from distutils.version import LooseVersion
 
 # Force sklearn to show only the parameters whose default value have been changed when
 # printing an estimator (backwards compatibility with versions prior to sklearn==0.23)
@@ -30,7 +29,7 @@ def test_multi_output_learner_classifier():
     estimator = SGDClassifier(random_state=112, max_iter=10, loss='log')
     classifier = MultiOutputLearner(base_estimator=estimator)
 
-    X, y = stream.next_sample(150)
+    X, y = get_next_n_samples(stream, 150)
     classifier.partial_fit(X, y)
 
     cnt = 0
@@ -125,7 +124,7 @@ def test_multi_output_learner_regressor():
     estimator = SGDRegressor(random_state=112, tol=1e-3, max_iter=10, loss='squared_loss')
     learner = MultiOutputLearner(base_estimator=estimator)
 
-    X, y = stream.next_sample(150)
+    X, y = get_next_n_samples(stream, 150)
     learner.partial_fit(X, y)
 
     cnt = 0

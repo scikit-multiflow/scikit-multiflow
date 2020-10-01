@@ -1,13 +1,16 @@
-import numpy as np
-from array import array
-import os
-from skmultiflow.data import ConceptDriftStream, SEAGenerator, HyperplaneGenerator, \
-    AGRAWALGenerator
+from skmultiflow.data.generator.concept_drift_stream_generator import ConceptDriftStreamGenerator
+from skmultiflow.data.generator.hyperplane_generator import HyperplaneGenerator
+from skmultiflow.data.generator.agrawal_generator import AGRAWALGenerator
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.trees import HoeffdingAdaptiveTreeClassifier
+from skmultiflow.utils.utils import get_next_n_samples
+from array import array
+import numpy as np
+import os
 
 
 def test_hoeffding_adaptive_tree_mc(test_path):
-    stream = ConceptDriftStream(stream=SEAGenerator(random_state=1, noise_percentage=0.05),
+    stream = ConceptDriftStreamGenerator(stream=SEAGenerator(random_state=1, noise_percentage=0.05),
                                 drift_stream=SEAGenerator(random_state=2, classification_function=2,
                                                           noise_percentage=0.05),
                                 random_state=1, position=250, width=10)
@@ -48,22 +51,25 @@ def test_hoeffding_adaptive_tree_mc(test_path):
 
     assert info == expected_info
 
-    expected_model_1 = 'Leaf = Class 1.0 | {0.0: 398.0, 1.0: 1000.0}\n'
+    expected_model_1 = 'Leaf = Class 1 | {0: 398.0, 1: 1000.0}\n'
 
     assert (learner.get_model_description() == expected_model_1)
 
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    stream.restart()
-    X, y = stream.next_sample(5000)
+    stream = ConceptDriftStreamGenerator(stream=SEAGenerator(random_state=1, noise_percentage=0.05),
+                                drift_stream=SEAGenerator(random_state=2, classification_function=2,
+                                                          noise_percentage=0.05),
+                                random_state=1, position=250, width=10)
+    X, y = get_next_n_samples(stream, 5000)
 
     learner = HoeffdingAdaptiveTreeClassifier(max_byte_size=30, leaf_prediction='mc', grace_period=10)
     learner.partial_fit(X, y)
 
 
 def test_hoeffding_adaptive_tree_nb(test_path):
-    stream = ConceptDriftStream(stream=SEAGenerator(random_state=1, noise_percentage=0.05),
+    stream = ConceptDriftStreamGenerator(stream=SEAGenerator(random_state=1, noise_percentage=0.05),
                                 drift_stream=SEAGenerator(random_state=2, classification_function=2,
                                                           noise_percentage=0.05),
                                 random_state=1, position=250, width=10)

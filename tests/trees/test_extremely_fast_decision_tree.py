@@ -1,9 +1,11 @@
-import numpy as np
-from array import array
-import os
-from skmultiflow.data import RandomTreeGenerator, SEAGenerator
+from skmultiflow.data.generator.random_tree_generator import RandomTreeGenerator
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.trees import ExtremelyFastDecisionTreeClassifier
+from skmultiflow.utils.utils import get_next_n_samples
 from skmultiflow.utils import calculate_object_size
+from array import array
+import numpy as np
+import os
 
 
 def test_extremely_fast_decision_tree_nb_gini(test_path):
@@ -104,7 +106,7 @@ def test_extremely_fast_decision_tree_coverage():
     # Cover memory management
     max_size_kb = 20
     stream = SEAGenerator(random_state=1, noise_percentage=0.05)
-    X, y = stream.next_sample(5000)
+    X, y = get_next_n_samples(stream, 5000)
 
     # Unconstrained model has over 50 kB
     learner = ExtremelyFastDecisionTreeClassifier(
@@ -112,7 +114,7 @@ def test_extremely_fast_decision_tree_coverage():
         min_samples_reevaluate=2500
     )
 
-    learner.partial_fit(X, y, classes=stream.target_values)
+    learner.partial_fit(X, y, classes=[0,1])
     assert calculate_object_size(learner, 'kB') <= max_size_kb
 
     learner.reset()
@@ -121,6 +123,6 @@ def test_extremely_fast_decision_tree_coverage():
     stream = RandomTreeGenerator(tree_random_state=23, sample_random_state=12, n_classes=2, n_cat_features=2,
                                  n_categories_per_cat_feature=4, n_num_features=1, max_tree_depth=30, min_leaf_depth=10,
                                  fraction_leaves_per_level=0.45)
-    X, y = stream.next_sample(5000)
+    X, y = get_next_n_samples(stream, 5000)
     learner = ExtremelyFastDecisionTreeClassifier(leaf_prediction='nba', nominal_attributes=[i for i in range(1, 9)])
-    learner.partial_fit(X, y, classes=stream.target_values)
+    learner.partial_fit(X, y, classes=[0,1])

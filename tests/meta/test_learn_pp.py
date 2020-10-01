@@ -1,5 +1,6 @@
-from skmultiflow.data import RandomTreeGenerator
+from skmultiflow.data.generator.random_tree_generator import RandomTreeGenerator
 from skmultiflow.meta.learn_pp import LearnPPClassifier
+from skmultiflow.utils.utils import get_next_n_samples
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import set_config
 import numpy as np
@@ -23,12 +24,12 @@ def test_learn_pp():
     corrects = 0
 
     # Pre training the classifier with 200 samples
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
     classifier.partial_fit(X, y, classes=stream.target_values)
     predictions = []
 
     for i in range(10):
-        X, y = stream.next_sample(200)
+        X, y = get_next_n_samples(stream, 200)
         pred = classifier.predict(X)
         classifier.partial_fit(X, y)
 
@@ -78,12 +79,12 @@ def test_learn_pp_early_stop():
     corrects = 0
 
     # Pre training the classifier with 200 samples
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
     classifier.partial_fit(X, y, classes=stream.target_values)
     predictions = []
 
     for i in range(5):
-        X, y = stream.next_sample(m)
+        X, y = get_next_n_samples(stream, m)
         pred = classifier.predict(X)
         classifier.partial_fit(X, y)
 

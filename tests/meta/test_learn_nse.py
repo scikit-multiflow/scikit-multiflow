@@ -1,14 +1,14 @@
-import pytest
-import numpy as np
-
-from sklearn.naive_bayes import GaussianNB
-from sklearn.tree import DecisionTreeClassifier
-from sklearn import set_config
-
-
-from skmultiflow.data import SEAGenerator, RandomTreeGenerator
-from skmultiflow.meta import LearnPPNSEClassifier
+from skmultiflow.data.generator.random_tree_generator import RandomTreeGenerator
+from skmultiflow.data.generator.sea_generator import SEAGenerator
+from skmultiflow.utils.utils import get_next_n_samples
 from skmultiflow.trees import HoeffdingTreeClassifier
+from skmultiflow.meta import LearnPPNSEClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn import set_config
+import numpy as np
+import pytest
+
 
 # Force sklearn to show only the parameters whose default value have been changed when
 # printing an estimator (backwards compatibility with versions prior to sklearn==0.23)
@@ -28,11 +28,11 @@ def run_classifier(estimator, stream, pruning=None, ensemble_size=15, m=200):
     corrects = 0
 
     # Pre training the classifier with 200 samples
-    X, y = stream.next_sample(m)
-    classifier.partial_fit(X, y, classes=stream.target_values)
+    X, y = get_next_n_samples(stream, m)
+    classifier.partial_fit(X, y, classes=[0, 1])
 
     for i in range(10):
-        X, y = stream.next_sample(m)
+        X, y = get_next_n_samples(stream, m)
         pred = classifier.predict(X)
         classifier.partial_fit(X, y)
 
@@ -103,12 +103,12 @@ def test_learn_nse():
 
     m = 250
     # Pre training the classifier
-    X, y = stream.next_sample(m)
-    classifier.partial_fit(X, y, classes=stream.target_values)
+    X, y = get_next_n_samples(stream, m)
+    classifier.partial_fit(X, y, classes=[0, 1])
 
     # print(classifier.ensemble_weights)
     for i in range(10):
-        X, y = stream.next_sample(m)
+        X, y = get_next_n_samples(stream, m)
         pred = classifier.predict(X)
         classifier.partial_fit(X, y)
 
@@ -133,19 +133,19 @@ def test_learn_nse_different_proba_sizes():
                                       window_size=250)
 
     # Pre training the classifier with 250 samples
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
 
     # Set manually classes
     classifier.partial_fit(X, y, classes=np.array([0, 1, 2, 3]))
 
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
     y[y == 0] = 3
     y[y == 1] = 2
 
     # pred = classifier.predict(X)
     classifier.partial_fit(X, y)
 
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
     y[y == 0] = 3
 
     pred = classifier.predict(X)
@@ -157,14 +157,16 @@ def test_learn_nse_different_proba_sizes():
     expected_correct_predictions = 115
     assert corrects == expected_correct_predictions
 
-    stream.reset()
+    stream = RandomTreeGenerator(
+        tree_random_state=7, sample_random_state=8, n_classes=2
+    )
     # Repeating process with a skmultiflow-based learner
     ht = HoeffdingTreeClassifier(leaf_prediction='mc')
     classifier = LearnPPNSEClassifier(base_estimator=ht,
                                       window_size=250)
 
     # Pre training the classifier with 250 samples
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
 
     # Forcing exception to increase coverage
     with pytest.raises(RuntimeError):
@@ -174,14 +176,14 @@ def test_learn_nse_different_proba_sizes():
     # Set manually classes
     classifier.partial_fit(X, y, classes=np.array([0, 1, 2, 3]))
 
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
     y[y == 0] = 3
     y[y == 1] = 2
 
     # pred = classifier.predict(X)
     classifier.partial_fit(X, y)
 
-    X, y = stream.next_sample(m)
+    X, y = get_next_n_samples(stream, m)
     y[y == 0] = 3
 
     pred = classifier.predict(X)

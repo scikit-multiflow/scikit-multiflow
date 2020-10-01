@@ -1,10 +1,10 @@
-import numpy as np
-from array import array
-from skmultiflow.data import SEAGenerator
 from skmultiflow.prototype import RobustSoftLearningVectorQuantization as RSLVQ
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.core.base import is_classifier
-
+from array import array
+import numpy as np
 import warnings
+
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 
@@ -31,8 +31,8 @@ def test_rslvq():
         if (cnt % wait_samples == 0) and (cnt != 0):
             y_pred_vanilla.append(learner_vanilla.predict(X)[0])
             y_pred_adadelta.append(learner_adadelta.predict(X)[0])
-        learner_adadelta.partial_fit(X, y, classes=stream.target_values)
-        learner_vanilla.partial_fit(X, y, classes=stream.target_values)
+        learner_adadelta.partial_fit(X, y, classes=[0, 1])
+        learner_vanilla.partial_fit(X, y, classes=[0, 1])
         cnt += 1
 
     expected_predictions_vanilla = array('i',

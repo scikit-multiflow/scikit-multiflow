@@ -1,10 +1,11 @@
-import numpy as np
-from array import array
-import os
-from skmultiflow.data import RandomTreeGenerator, SEAGenerator
+from skmultiflow.data.generator.random_tree_generator import RandomTreeGenerator
+from skmultiflow.data.generator.sea_generator import SEAGenerator
+from skmultiflow.utils.utils import get_next_n_samples
 from skmultiflow.trees import HoeffdingTreeClassifier
 from skmultiflow.utils import calculate_object_size
-
+from array import array
+import numpy as np
+import os
 
 def test_hoeffding_tree_nb(test_path):
     stream = RandomTreeGenerator(
@@ -98,7 +99,7 @@ def test_hoeffding_tree_nba(test_path):
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray
 
-    X, y = stream.next_sample(20000)
+    X, y = get_next_n_samples(stream, 20000)
     learner.split_criterion = 'hellinger'
     learner.partial_fit(X, y)
 
@@ -133,7 +134,7 @@ def test_hoeffding_tree_coverage():
         max_byte_size=max_size_kb*2**10
     )
 
-    X, y = stream.next_sample(max_samples)
+    X, y = get_next_n_samples(stream, max_samples)
     learner.partial_fit(X, y)
 
     assert calculate_object_size(learner, 'kB') <= max_size_kb
@@ -143,12 +144,12 @@ def test_hoeffding_tree_coverage():
 
 def test_hoeffding_tree_model_information():
     stream = SEAGenerator(random_state=1, noise_percentage=0.05)
-    X, y = stream.next_sample(5000)
+    X, y = get_next_n_samples(stream, 5000)
 
     nominal_attr_idx = [x for x in range(5, stream.n_features)]
     learner = HoeffdingTreeClassifier(nominal_attributes=nominal_attr_idx)
 
-    learner.partial_fit(X, y, classes=stream.target_values)
+    learner.partial_fit(X, y, classes=[0, 1])
 
     expected_info = {
         'Tree size (nodes)': 5,

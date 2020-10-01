@@ -4,7 +4,7 @@ batch-to-stream conversion and generators.
 """
 
 from src.skmultiflow.data.generator.agrawal_generator import AGRAWALGenerator
-from src.skmultiflow.data.generator.hyper_plane_generator import HyperplaneGenerator
+from src.skmultiflow.data.generator.hyperplane_generator import HyperplaneGenerator
 from src.skmultiflow.data.generator.regression_generator import RegressionGenerator
 from src.skmultiflow.data.generator.stagger_generator import STAGGERGenerator
 from .synth import make_logical
