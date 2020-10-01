@@ -1,5 +1,5 @@
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.meta import AdditiveExpertEnsembleClassifier
-from skmultiflow.data import SEAGenerator
 from skmultiflow.bayes import NaiveBayes
 import numpy as np
 
@@ -25,7 +25,7 @@ def test_additive_expert_ensemble_weakest():
             if y[0] == predictions[-1]:
                 correct_predictions += 1
         if first:
-            learner.partial_fit(X, y, classes=stream.target_values)
+            learner.partial_fit(X, y, classes=[0, 1])
             first = False
         else:
             learner.partial_fit(X, y)
@@ -71,7 +71,7 @@ def test_additive_expert_ensemble_oldest():
             if y[0] == predictions[-1]:
                 correct_predictions += 1
         if first:
-            learner.partial_fit(X, y, classes=stream.target_values)
+            learner.partial_fit(X, y, classes=[0, 1])
             first = False
         else:
             learner.partial_fit(X, y)

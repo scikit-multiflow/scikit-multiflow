@@ -8,7 +8,7 @@ from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 from skmultiflow.drift_detection.base_drift_detector import BaseDriftDetector
 from skmultiflow.drift_detection import ADWIN
 from skmultiflow.trees.arf_hoeffding_tree import ARFHoeffdingTreeClassifier
-from skmultiflow.metrics import ClassificationPerformanceEvaluator
+from skmultiflow.metrics.measure_collection import ClassificationMeasurements
 from skmultiflow.utils import get_dimensions, normalize_values_in_dict, check_random_state,\
     check_weights
 
@@ -260,7 +260,7 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
 
         # ARH Hoeffding Tree configuration
         self.max_byte_size = max_byte_size
-        self. memory_estimate_period = memory_estimate_period
+        self.memory_estimate_period = memory_estimate_period
         self.grace_period = grace_period
         self.split_criterion = split_criterion
         self.split_confidence = split_confidence
@@ -418,7 +418,7 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
             if vote != {} and sum(vote.values()) > 0:
                 vote = normalize_values_in_dict(vote, inplace=True)
                 if not self.disable_weighted_vote:
-                    performance = self.ensemble[i].evaluator.accuracy_score()\
+                    performance = self.ensemble[i].evaluator.get_accuracy()\
                         if self.performance_metric == 'acc'\
                         else self.ensemble[i].evaluator.kappa_score()
                     if performance != 0.0:  # CHECK How to handle negative (kappa) values?
@@ -523,7 +523,7 @@ class ARFBaseLearner(BaseSKMObject):
         self.classifier = classifier
         self.created_on = instances_seen
         self.is_background_learner = is_background_learner
-        self.evaluator_method = ClassificationPerformanceEvaluator
+        self.evaluator_method = ClassificationMeasurements
 
         # Drift and warning
         self.drift_detection_method = drift_detection_method

@@ -1,11 +1,8 @@
-from array import array
-
-import numpy as np
-
-import pytest
-
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.lazy import SAMKNNClassifier
-from skmultiflow.data import SEAGenerator
+from array import array
+import numpy as np
+import pytest
 
 
 def test_sam_knn():

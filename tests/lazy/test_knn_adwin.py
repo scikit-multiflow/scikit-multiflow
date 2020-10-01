@@ -1,11 +1,12 @@
-from array import array
+from skmultiflow.data.generator.concept_drift_stream_generator import ConceptDriftStreamGenerator
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.lazy import KNNADWINClassifier
-from skmultiflow.data import ConceptDriftStream, SEAGenerator
+from array import array
 import numpy as np
 
 
 def test_knn_adwin():
-    stream = ConceptDriftStream(stream=SEAGenerator(random_state=1),
+    stream = ConceptDriftStreamGenerator(stream=SEAGenerator(random_state=1),
                                 drift_stream=SEAGenerator(random_state=2, classification_function=2),
                                 random_state=1, position=250, width=10)
 
@@ -44,16 +45,6 @@ def test_knn_adwin():
                     "metric='euclidean', n_neighbors=8)"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info
-
-    stream.restart()
-
-    X, y = stream.next_sample(max_samples)
-    learner.fit(X[:950], y[:950])
-    predictions = learner.predict(X[951:])
-
-    correct_predictions = sum(np.array(predictions) == y[951:])
-    expected_correct_predictions = 47
-    assert correct_predictions == expected_correct_predictions
 
     assert type(learner.predict(X)) == np.ndarray
     assert type(learner.predict_proba(X)) == np.ndarray

@@ -1,6 +1,6 @@
-from array import array
+from skmultiflow.data.generator.sea_generator import SEAGenerator
 from skmultiflow.lazy import KNNClassifier
-from skmultiflow.data import SEAGenerator
+from array import array
 import numpy as np
 
 

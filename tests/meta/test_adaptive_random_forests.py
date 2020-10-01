@@ -1,8 +1,19 @@
+from skmultiflow.data.generator.random_tree_generator import RandomTreeGenerator
+from skmultiflow.meta import AdaptiveRandomForestClassifier
 import numpy as np
 
-from skmultiflow.data import RandomTreeGenerator
-from skmultiflow.meta import AdaptiveRandomForestClassifier
 
+def get_next_n_samples(stream, n):
+    x_array = []
+    y_array = []
+    count = 0
+    while count < n:
+        X, y = stream.next_sample()
+        count += 1
+        x_array.append(X)
+        y_array.append(y)
+
+    return np.array(x_array).reshape((n, X.shape[1])), np.array(y_array).reshape((n))
 
 def test_adaptive_random_forests_mc():
     stream = RandomTreeGenerator(tree_random_state=112,
@@ -13,7 +24,7 @@ def test_adaptive_random_forests_mc():
                                              leaf_prediction='mc',
                                              random_state=112)
 
-    X, y = stream.next_sample(150)
+    X, y = get_next_n_samples(stream, 150)
     learner.partial_fit(X, y)
 
     cnt = 0
@@ -66,7 +77,7 @@ def test_adaptive_random_forests_nb():
                                              random_state=112,
                                              leaf_prediction='nb')
 
-    X, y = stream.next_sample(150)
+    X, y = get_next_n_samples(stream, 150)
     learner.partial_fit(X, y)
 
     cnt = 0
@@ -119,7 +130,7 @@ def test_adaptive_random_forests_nba():
     learner = AdaptiveRandomForestClassifier(n_estimators=3,
                                              random_state=112)
 
-    X, y = stream.next_sample(150)
+    X, y = get_next_n_samples(stream, 150)
     learner.partial_fit(X, y, classes=[0, 1])  # labels given
 
     cnt = 0
