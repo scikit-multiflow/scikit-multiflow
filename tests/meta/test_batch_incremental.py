@@ -1,6 +1,7 @@
-from skmultiflow.data import RandomTreeGenerator
+from skmultiflow.data.generator.random_tree_generator import RandomTreeGenerator
 from skmultiflow.meta.batch_incremental import BatchIncrementalClassifier
 
+from skmultiflow.utils.utils import get_next_n_samples
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import set_config
 import numpy as np
@@ -15,7 +16,7 @@ def test_batch_incremental():
     estimator = DecisionTreeClassifier(random_state=112)
     learner = BatchIncrementalClassifier(base_estimator=estimator, n_estimators=10)
 
-    X, y = stream.next_sample(150)
+    X, y = get_next_n_samples(stream, 150)
     learner.partial_fit(X, y)
 
     cnt = 0

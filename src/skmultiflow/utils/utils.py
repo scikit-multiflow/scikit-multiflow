@@ -7,6 +7,20 @@ from collections import deque
 
 import numpy as np
 
+def get_next_n_samples(stream, n):
+    x_array = []
+    y_array = []
+    count = 0
+    while count < n:
+        X, y = stream.next_sample()
+        count += 1
+        x_array.append(X)
+        y_array.append(y)
+
+    if len(y.shape) > 1:
+        return np.array(x_array).reshape((n, X.shape[1])), np.array(y_array).reshape((n, y.shape[1]))
+    return np.array(x_array).reshape((n, X.shape[1])), np.array(y_array).reshape((n))
+
 
 def get_dimensions(X):
     """ Return the dimensions from a numpy.array, numpy.ndarray or list.

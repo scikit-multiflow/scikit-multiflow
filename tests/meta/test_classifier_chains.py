@@ -1,14 +1,14 @@
+from skmultiflow.meta import ClassifierChain, MonteCarloClassifierChain, ProbabilisticClassifierChain
+from skmultiflow.data.generator.multilabel_generator import MultilabelGenerator
+from skmultiflow.utils.utils import get_next_n_samples
+from sklearn import __version__ as sklearn_version
+from skmultiflow.data.synth import make_logical
+from sklearn.linear_model import SGDClassifier
+from sklearn import set_config
+import numpy as np
 import pytest
 
-from sklearn.linear_model import SGDClassifier
-from sklearn import __version__ as sklearn_version
-from sklearn import set_config
 
-from skmultiflow.data import MultilabelGenerator, make_logical
-from skmultiflow.meta import ClassifierChain, MonteCarloClassifierChain, \
-    ProbabilisticClassifierChain
-
-import numpy as np
 # Force sklearn to show only the parameters whose default value have been changed when
 # printing an estimator (backwards compatibility with versions prior to sklearn==0.23)
 set_config(print_changed_only=True)
@@ -21,7 +21,7 @@ def test_classifier_chains():
 
     estimator = SGDClassifier(random_state=seed, max_iter=10)
     learner = ClassifierChain(base_estimator=estimator, random_state=seed)
-    X, y = stream.next_sample(150)
+    X, y = get_next_n_samples(stream, 150)
     learner.partial_fit(X, y)
 
     cnt = 0
