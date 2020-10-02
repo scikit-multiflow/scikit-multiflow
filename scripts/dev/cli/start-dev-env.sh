@@ -18,6 +18,17 @@ else
 fi
 
 echo "$ECHO_PREFIX Using project location '$PROJECT_DIR'"
+
+echo "Check if required Docker images are locally available."
+if [[ "$(docker images -q multiflow/multiflow-dev | wc -l | xargs)" == "0" ]]; then
+    cd $PROJECT_DIR/infra/docker/multiflow-dev/ && bash create-img.sh && cd $PROJECT_DIR
+fi
+if [[ "$(docker images -q multiflow/kafka | wc -l | xargs)" == "0" ]]; then
+    cd $PROJECT_DIR/infra/docker/kafka/kafka/ && bash create-img.sh && cd $PROJECT_DIR
+fi
+
+
+
 CONFIG_DIR=$PROJECT_DIR/infra/compose/compose-files
 echo "$ECHO_PREFIX Using config location  '$CONFIG_DIR'"
 
