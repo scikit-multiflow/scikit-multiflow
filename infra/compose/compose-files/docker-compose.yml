@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   multiflowdev:
-    image: "jmrozanec/multiflow-dev:latest"
+    image: "multiflow/multiflow-dev:latest"
     environment:
       - PROFILE="DOCKER-DEV"
     volumes:
@@ -14,7 +14,7 @@ services:
     depends_on:
       - kafkacontainer
   kafkacontainer:
-    image: "jmrozanec/kafka:latest"
+    image: "multiflow/kafka:latest"
     ports:
       - "3181:2181"
       - "3092:9092"
