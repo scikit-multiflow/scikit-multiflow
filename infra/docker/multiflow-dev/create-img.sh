@@ -1,5 +1,5 @@
 #!/bin/bash
-basename="jmrozanec/multiflow-dev"
+basename="multiflow/multiflow-dev"
 
 ######################## GET SCRIPT LOCATION - START - ##############################
 SCRIPT_LOCATION="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

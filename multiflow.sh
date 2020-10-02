@@ -83,8 +83,8 @@ if [ $MODE = "--attach-tmux" ]; then
 fi
 if [ $MODE = "--update-images" ]; then
     if [ $PROFILE = "LOCAL" ]; then
-        docker pull "jmrozanec/multiflow-dev:latest"
-        docker pull "jmrozanec/kafka:latest"
+        docker pull "multiflow/multiflow-dev:latest"
+        docker pull "multiflow/kafka:latest"
     else
         echo "$MODE allowed outside Docker only."
     fi
