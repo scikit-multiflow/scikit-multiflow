@@ -26,8 +26,7 @@ class EvaluationEventObserver(EventObserver):
                 y_true = event['y']
 
             x_array = np.array(x)
-            x_array = x_array.reshape(1, x_array.shape[0])
-            y_array = np.array(y_true).reshape(1, 1)
+            y_array = np.array(y_true)
 
             self.train_eval_trigger.update(event)
 
@@ -41,10 +40,6 @@ class EvaluationEventObserver(EventObserver):
                     self.results_observer.report(self.y_pred_buffer, self.y_true_buffer)
                     self.y_pred_buffer = []
                     self.y_true_buffer = []
-
-                #x_array = np.array(x)
-                #x_array = x_array.reshape(1, x_array.shape[0])
-                #y_array = np.array(y_true)
 
                 if(self.expected_target_values is not None):
                     self.algorithm.partial_fit(x_array, y_array, self.expected_target_values)

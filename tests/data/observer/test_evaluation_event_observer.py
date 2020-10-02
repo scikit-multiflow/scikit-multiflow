@@ -25,7 +25,7 @@ def record_to_dictionary(record):
     record_array = record.strip().split(',')
     if (len(record_array) == 5):
         return {'X': np.array(
-            [float(record_array[0]), float(record_array[1]), float(record_array[2]), float(record_array[3])]),
+            [float(record_array[0]), float(record_array[1]), float(record_array[2]), float(record_array[3])]).reshape((1, 4)),
                 'y': [one_hot_encoding(record_array[4])]}
     return None
 

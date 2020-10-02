@@ -29,7 +29,7 @@ def test_pipeline(test_path):
 
     data_as_dict = []
     for i in range(0, len(data['X'])):
-        data_as_dict.append({'X':data['X'][i], 'y':data['y'][i]})
+        data_as_dict.append({'X':data['X'][i].reshape(1, 25), 'y':np.array(data['y'][i]).reshape(1, 1)})
 
 
     # Setup transformer
