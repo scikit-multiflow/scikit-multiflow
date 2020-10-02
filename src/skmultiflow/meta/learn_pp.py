@@ -9,8 +9,8 @@ from skmultiflow.utils import check_random_state
 import warnings
 
 
-def LearnPP(base_estimator=DecisionTreeClassifier(), error_threshold=0.5, n_estimators=30, n_ensembles=10,
-            window_size=100, random_state=None):     # pragma: no cover
+def LearnPP(base_estimator=DecisionTreeClassifier(), error_threshold=0.5, n_estimators=30,
+            n_ensembles=10, window_size=100, random_state=None):  # pragma: no cover
     warnings.warn("'LearnPP' has been renamed to 'LearnPPClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return LearnPPClassifier(base_estimator=base_estimator,
@@ -38,14 +38,16 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=DecisionTreeClassifier)
-        Each member of the ensemble is an instance of the base estimator.
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator
+        (default=DecisionTreeClassifier) Each member of the ensemble is
+        an instance of the base estimator.
     n_estimators: int (default=30)
         The number of classifiers per ensemble
     n_ensembles: int (default=10)
         The number of ensembles to keep.
     window_size: int (default=100)
-        The size of the training window (batch), in other words, how many instances are kept for training.
+        The size of the training window (batch), in other words, how many instances are kept
+        for training.
     error_threshold: float (default=0.5)
         Only keep the learner with the error smaller than error_threshold
     random_state: int, RandomState instance or None, optional (default=None)
@@ -82,7 +84,8 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     >>> # Setting up the stream
     >>> stream = SEAGenerator(1)
     >>> # Setting up the Learn++ classifier to work with KNN classifiers
-    >>> clf = LearnPPClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000, leaf_size=30), n_estimators=30)
+    >>> clf = LearnPPClassifier(base_estimator=KNNClassifier(n_neighbors=8, max_window_size=2000,
+    ...                                                     leaf_size=30), n_estimators=30)
     >>> # Keeping track of sample count and correct prediction count
     >>> sample_count = 0
     >>> corrects = 0
@@ -242,13 +245,15 @@ class LearnPPClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                     normalized_errors[t] = norm_error
 
                     # predict using all hypothesis in the ensemble with majority votes
-                    y_predict_composite = self.__majority_vote(X, t + 1, ensemble, normalized_errors)
+                    y_predict_composite = self.__majority_vote(
+                        X, t + 1, ensemble, normalized_errors)
 
                     total_error = self.__compute_error(Dt, y, y_predict_composite)
                     if total_error < self.error_threshold:
                         normalize_composite_error = total_error / (1 - total_error)
                         if t < self.n_estimators - 1:
-                            Dt[y_predict_composite == y] = Dt[y_predict_composite == y] * normalize_composite_error
+                            Dt[y_predict_composite == y] = Dt[y_predict_composite == y] * \
+                                normalize_composite_error
 
                 if total_error > self.error_threshold:
                     patience += 1

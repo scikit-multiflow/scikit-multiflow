@@ -1,12 +1,13 @@
 import copy as cp
+import warnings
+
+import numpy as np
 
 from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
+from skmultiflow.drift_detection import ADWIN
 from skmultiflow.lazy import KNNADWINClassifier
 from skmultiflow.utils import check_random_state
-from skmultiflow.utils.utils import *
-from skmultiflow.drift_detection import ADWIN
-
-import warnings
+from skmultiflow.utils.utils import get_dimensions
 
 
 def OnlineBoosting(base_estimator=KNNADWINClassifier(), n_estimators=10, drift_detection=True,
@@ -47,8 +48,9 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
     Parameters
     ----------
-    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator (default=KNNADWINClassifier)
-        Each member of the ensemble is an instance of the base estimator.
+    base_estimator: skmultiflow.core.BaseSKMObject or sklearn.BaseEstimator
+        (default=KNNADWINClassifier) Each member of the ensemble is
+        an instance of the base estimator.
 
     n_estimators: int, optional (default=10)
         The size of the ensemble, in other words, how many classifiers to train.
@@ -108,7 +110,12 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
     >>> print('Online Boosting performance: {}'.format(correct_cnt / n_samples))
     """
 
-    def __init__(self, base_estimator=KNNADWINClassifier(), n_estimators=10, drift_detection=True, random_state=None):
+    def __init__(
+            self,
+            base_estimator=KNNADWINClassifier(),
+            n_estimators=10,
+            drift_detection=True,
+            random_state=None):
 
         super().__init__()
         self.base_estimator = base_estimator
@@ -167,7 +174,8 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
             for the first partial_fit call where it is compulsory.
 
         sample_weight: Array-like
-            Instance weight. If not provided, uniform weights are assumed. Usage varies depending on the base estimator.
+            Instance weight. If not provided, uniform weights are assumed.
+            Usage varies depending on the base estimator.
 
         Raises
         ------
@@ -190,10 +198,9 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
                 self.classes = classes
 
         if self.classes is not None and classes is not None:
-            if set(self.classes) == set(classes):
-                pass
-            else:
-                raise ValueError("The classes passed to the partial_fit function differ from those passed earlier.")
+            if set(self.classes) != set(classes):
+                raise ValueError("The classes passed to the partial_fit function differ "
+                                 "from those passed earlier.")
 
         self.__adjust_ensemble_size()
 
@@ -312,24 +319,27 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
         if self.ensemble is None:
             return np.zeros((r, 1))
 
-        with warnings.catch_warnings():  # Context manager to catch errors raised by numpy as RuntimeWarning
+        # Context manager to catch errors raised by numpy as RuntimeWarning
+        with warnings.catch_warnings():
             warnings.filterwarnings('error')
             try:
                 for i in range(self.actual_n_estimators):
                     partial_proba = self.ensemble[i].predict_proba(X)
                     if len(partial_proba[0]) > max(self.classes) + 1:
-                        raise ValueError("The number of classes in the base learner is larger than in the ensemble.")
+                        raise ValueError("The number of classes in the base learner is larger "
+                                         "than in the ensemble.")
 
                     if len(proba) < 1:
                         for n in range(r):
                             proba.append([0.0 for _ in partial_proba[n]])
 
                     for n in range(r):
-                        for l in range(len(partial_proba[n])):
+                        for k in range(len(partial_proba[n])):
                             try:
-                                proba[n][l] += np.log((1 - self.epsilon[i]) / self.epsilon[i]) * partial_proba[n][l]
+                                proba[n][k] += np.log((1 - self.epsilon[i]) /
+                                                      self.epsilon[i]) * partial_proba[n][k]
                             except IndexError:
-                                proba[n].append(partial_proba[n][l])
+                                proba[n].append(partial_proba[n][k])
                             except RuntimeWarning:
                                 # Catch division by zero errors raised by numpy as RuntimeWarning
                                 continue
@@ -341,8 +351,8 @@ class OnlineBoostingClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixi
 
         # normalizing probabilities
         sum_proba = []
-        for l in range(r):
-            sum_proba.append(np.sum(proba[l]))
+        for k in range(r):
+            sum_proba.append(np.sum(proba[k]))
         aux = []
         for i in range(len(proba)):
             if sum_proba[i] > 0.:

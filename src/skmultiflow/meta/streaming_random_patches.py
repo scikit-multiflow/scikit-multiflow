@@ -426,6 +426,7 @@ class StreamingRandomPatchesBaseLearner:
     """
     Class representing the base learner of StreamingRandomPatchesClassifier.
     """
+
     def __init__(self,
                  idx_original,
                  base_estimator,

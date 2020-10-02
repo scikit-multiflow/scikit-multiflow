@@ -7,8 +7,8 @@ from skmultiflow.core import BaseSKMObject, ClassifierMixin, MetaEstimatorMixin
 import warnings
 
 
-def LearnNSE(base_estimator=DecisionTreeClassifier(), window_size=250, slope=0.5, crossing_point=10, n_estimators=15,
-             pruning=None):     # pragma: no cover
+def LearnNSE(base_estimator=DecisionTreeClassifier(), window_size=250, slope=0.5,
+             crossing_point=10, n_estimators=15, pruning=None):  # pragma: no cover
     warnings.warn("'LearnNSE' has been renamed to 'LearnPPNSEClassifier' in v0.5.0.\n"
                   "The old name will be removed in v0.7.0", category=FutureWarning)
     return LearnPPNSEClassifier(base_estimator=base_estimator,
@@ -42,7 +42,8 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
     n_estimators: int (default=15)
         The number of base estimators in the ensemble.
     window_size: int (default=250)
-        The size of the training window (batch), in other words, how many instances are kept for training.
+        The size of the training window (batch), in other words, how many instances
+        are kept for training.
     crossing_point: float (default=0.5)
         Halfway crossing point of the sigmoid function controlling the number of previous
         periods taken into account during weighting.
@@ -212,12 +213,14 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                     if k == t and ekt > 0.5:
                         # Generate a new classifier
                         classifier = cp.deepcopy(self.base_estimator)
-                        self._train_model(classifier, self.X_batch, self.y_batch, classes=self.classes)
+                        self._train_model(
+                            classifier, self.X_batch, self.y_batch, classes=self.classes)
                         self.ensemble[k - 1] = classifier
                     elif ekt > 0.5:
                         ekt = 0.5
 
-                    # Storing the index of the classifier with higher error in case of error-based pruning
+                    # Storing the index of the classifier with higher error in case of
+                    # error-based pruning
                     if ekt > max_error:
                         max_error = ekt
                         error_index = k
@@ -285,7 +288,7 @@ class LearnPPNSEClassifier(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin):
                         votes += self.ensemble_weights[i] * \
                             self._fill_missing_probs(
                                 y_predicts, obs_classes, self.classes
-                            )
+                        )
 
             res.append(votes.reshape(len(classes)))
         return np.array(res)

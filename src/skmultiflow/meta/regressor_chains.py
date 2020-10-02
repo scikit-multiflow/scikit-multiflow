@@ -58,6 +58,7 @@ class RegressorChain(BaseSKMObject, RegressorMixin, MetaEstimatorMixin, MultiOut
     >>> rc.fit(X, Y)
     >>> print(rc.predict(X))
     """
+
     def __init__(self, base_estimator=SGDRegressor(), order=None, random_state=None):
         super().__init__()
         self.base_estimator = base_estimator
@@ -105,7 +106,7 @@ class RegressorChain(BaseSKMObject, RegressorMixin, MetaEstimatorMixin, MultiOut
 
         # Train
         self.ensemble = [copy.deepcopy(self.base_estimator) for _ in range(L)]
-        XY = np.zeros((N, D + L-1))
+        XY = np.zeros((N, D + L - 1))
         XY[:, 0:D] = X
         XY[:, D:] = y[:, 0:L - 1]
         for j in range(self.L):
@@ -142,7 +143,7 @@ class RegressorChain(BaseSKMObject, RegressorMixin, MetaEstimatorMixin, MultiOut
         # Set the chain order
         y = y[:, self.chain]
 
-        XY = np.zeros((N, D + L-1))
+        XY = np.zeros((N, D + L - 1))
         XY[:, 0:D] = X
         XY[:, D:] = y[:, 0:L - 1]
         for j in range(L):
@@ -164,10 +165,10 @@ class RegressorChain(BaseSKMObject, RegressorMixin, MetaEstimatorMixin, MultiOut
 
         """
         N, D = X.shape
-        Y = np.zeros((N,self.L))
+        Y = np.zeros((N, self.L))
         for j in range(self.L):
             if j > 0:
-                X = np.column_stack([X, Y[:, j-1]])
+                X = np.column_stack([X, Y[:, j - 1]])
             Y[:, j] = self.ensemble[j].predict(X)
 
         # Unset the chain order (back to default)

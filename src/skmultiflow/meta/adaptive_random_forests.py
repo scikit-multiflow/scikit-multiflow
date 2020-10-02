@@ -217,8 +217,8 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
                  disable_weighted_vote=False,
                  lambda_value=6,
                  performance_metric='acc',
-                 drift_detection_method: BaseDriftDetector=ADWIN(0.001),
-                 warning_detection_method: BaseDriftDetector=ADWIN(0.01),
+                 drift_detection_method: BaseDriftDetector = ADWIN(0.001),
+                 warning_detection_method: BaseDriftDetector = ADWIN(0.01),
                  max_byte_size=33554432,
                  memory_estimate_period=2000000,
                  grace_period=50,
@@ -379,7 +379,7 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
         r, _ = get_dimensions(X)
         y_proba = []
         for i in range(r):
-            votes = deepcopy(self.get_votes_for_instance(X[i]))
+            votes = deepcopy(self._get_votes_for_instance(X[i]))
             if votes == {}:
                 # Estimator is empty, all classes equal, default to zero
                 y_proba.append([0])
@@ -408,13 +408,13 @@ class AdaptiveRandomForestClassifier(BaseSKMObject, ClassifierMixin, MetaEstimat
         self._train_weight_seen_by_model = 0.0
         self._random_state = check_random_state(self.random_state)
 
-    def get_votes_for_instance(self, X):
+    def _get_votes_for_instance(self, X):
         if self.ensemble is None:
             self._init_ensemble(X)
         combined_votes = {}
 
         for i in range(self.n_estimators):
-            vote = deepcopy(self.ensemble[i].get_votes_for_instance(X))
+            vote = deepcopy(self.ensemble[i]._get_votes_for_instance(X))
             if vote != {} and sum(vote.values()) > 0:
                 vote = normalize_values_in_dict(vote, inplace=True)
                 if not self.disable_weighted_vote:
@@ -512,6 +512,7 @@ class ARFBaseLearner(BaseSKMObject):
     Contains analysis information, such as the numberOfDriftsDetected.
 
     """
+
     def __init__(self,
                  index_original,
                  classifier: ARFHoeffdingTreeClassifier,
@@ -608,5 +609,5 @@ class ARFBaseLearner(BaseSKMObject):
     def predict(self, X):
         return self.classifier.predict(X)
 
-    def get_votes_for_instance(self, X):
-        return self.classifier.get_votes_for_instance(X)
+    def _get_votes_for_instance(self, X):
+        return self.classifier._get_votes_for_instance(X)
