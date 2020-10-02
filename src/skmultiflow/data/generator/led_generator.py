@@ -1,6 +1,5 @@
-import numpy as np
-
 from skmultiflow.utils import check_random_state
+import numpy as np
 
 
 class LEDGenerator():

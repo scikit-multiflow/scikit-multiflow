@@ -1,8 +1,7 @@
-import warnings
-
-import numpy as np
-from skmultiflow.utils import check_random_state
 from skmultiflow.data.generator.agrawal_generator import AGRAWALGenerator
+from skmultiflow.utils import check_random_state
+import numpy as np
+import warnings
 
 
 class ConceptDriftStreamGenerator():

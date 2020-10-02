@@ -18,7 +18,7 @@ def get_next_n_samples(stream, n):
         y_array.append(y)
 
     if len(y.shape) > 1:
-        return np.array(x_array).reshape((n, X.shape[1])), np.array(y_array).reshape((n, y.shape[1]))
+        return np.array(x_array).reshape((n, X.shape[-1])), np.array(y_array).reshape((n, y.shape[-1]))
     return np.array(x_array).reshape((n, X.shape[1])), np.array(y_array).reshape((n))
 
 

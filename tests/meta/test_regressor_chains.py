@@ -1,28 +1,39 @@
-from sklearn.datasets import make_regression
-from skmultiflow.data import DataStream
-
-from skmultiflow.meta import RegressorChain
+from skmultiflow.data.observer.quantity_based_holdout_trigger import QuantityBasedHoldoutTrigger
+from skmultiflow.data.observer.evaluation_event_observer import EvaluationEventObserver
+from skmultiflow.data.generator.from_array_generator import FromArrayGenerator
+from skmultiflow.utils.utils import get_next_n_samples
 from sklearn.linear_model import SGDRegressor
+from sklearn.datasets import make_regression
+from skmultiflow.meta import RegressorChain
 from sklearn import set_config
-
+from mockito import mock
 import numpy as np
-
 import pytest
+
 
 # Force sklearn to show only the parameters whose default value have been changed when
 # printing an estimator (backwards compatibility with versions prior to sklearn==0.23)
 set_config(print_changed_only=True)
 
 
+def record_to_dictionary(record):
+    return {'X': record[0], 'y': record[1]}
+
+
 @pytest.mark.filterwarnings('ignore::UserWarning')
 def test_regressor_chains():
     X_reg, y_reg = make_regression(random_state=112, n_targets=3, n_samples=5150)
-    stream = DataStream(X_reg, y_reg)
+    array = []
+    for i in range(0, X_reg.shape[0]):
+        array.append([X_reg[i].reshape(1, 100), y_reg[i].reshape(1, 3)])
 
     estimator = SGDRegressor(random_state=112, max_iter=10)
     learner = RegressorChain(base_estimator=estimator, random_state=112)
 
-    X, y = stream.next_sample(150)
+    stream = FromArrayGenerator(array, False)
+
+    X, y = get_next_n_samples(stream, 150)
+
     learner.partial_fit(X, y)
 
     cnt = 0
@@ -91,7 +102,6 @@ def test_regressor_chains():
                             [-113.86249490223707, 2634310697909.643, 1.580428629322546e+23],
                             [-35.92856878407447, -5410985463428.589, 2.522168862637753e+23]]
 
-    print(predictions)
     assert np.allclose(np.array(predictions).all(), np.array(expected_predictions).all())
     assert type(learner.predict(X)) == np.ndarray
 

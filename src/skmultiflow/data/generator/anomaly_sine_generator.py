@@ -1,5 +1,4 @@
 from skmultiflow.utils import check_random_state
-
 import numpy as np
 
 
@@ -44,7 +43,6 @@ class AnomalySineGenerator():
 
     def __init__(self, n_samples=10000, n_anomalies=2500, contextual=False,
                  n_contextual=2500, shift=4, noise=0.5, replace=True, random_state=None):
-        super().__init__()
         self.sample_idx = 0
         self.n_samples = n_samples
         if n_anomalies > self.n_samples:

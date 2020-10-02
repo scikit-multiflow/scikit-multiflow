@@ -15,7 +15,7 @@ class ArrayDataSource(DataSource):
     def __init__(self, record_to_dictionary, observers, array):
         super().__init__(record_to_dictionary, observers)
         self.array = array
-        self.name = "ArrayDataSource" # TODO: can we md5 hash the content?
+        self.name = "ArrayDataSource" # TODO: md5 the content
         self._prepare_for_use()
 
     def _prepare_for_use(self):
