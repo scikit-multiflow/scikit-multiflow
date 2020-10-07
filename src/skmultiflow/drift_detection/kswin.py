@@ -24,30 +24,36 @@ class KSWIN(BaseDriftDetector):
 
     Notes
     -----
-    KSWIN (Kolmogorov-Smirnov Windowing) [1]_ is a concept change detection method based
-    on the Kolmogorov-Smirnov (KS) statistical test. KS-test is a statistical test with
-    no assumption of underlying data distribution. KSWIN can monitor data or performance
-    distributions. Note that the detector accepts one dimensional input as array.
+    KSWIN (Kolmogorov-Smirnov Windowing) [1]_ is a concept change detection
+    method based on the Kolmogorov-Smirnov (KS) statistical test. KS-test is
+    a statistical test with no assumption of underlying data distribution.
+    KSWIN can monitor data or performance distributions. Note that the
+    detector accepts one dimensional input as array.
 
-    KSWIN maintains a sliding window :math:`\Psi` of fixed size :math:`n` (window_size). The
-    last :math:`r` (stat_size) samples of :math:`\Psi` are assumed to represent the last
-    concept considered as :math:`R`. From the first :math:`n-r` samples of :math:`\Psi`,
-    :math:`r` samples are uniformly drawn, representing an approximated last concept :math:`W`.
+    KSWIN maintains a sliding window :math:`\Psi` of fixed size
+    :math:`n` (window_size). The last :math:`r` (stat_size) samples of
+    :math:`\Psi` are assumed to represent the last concept considered as
+    :math:`R`. From the first :math:`n-r` samples of :math:`\Psi`,
+    :math:`r` samples are uniformly drawn, representing an
+    approximated last concept :math:`W`.
 
-    The KS-test is performed on the windows :math:`R` and :math:`W` of the same size. KS
-    -test compares the distance of the empirical cumulative data distribution :math:`dist(R,W)`.
+    The KS-test is performed on the windows :math:`R` and :math:`W` of
+    the same size. KS-test compares the distance of the empirical cumulative
+    data distribution :math:`dist(R,W)`.
 
     A concept drift is detected by KSWIN if:
 
     * :math:`dist(R,W) > \sqrt{-\frac{ln\alpha}{r}}`
 
-    -> The difference in empirical data distributions between the windows :math:`R` and :math:`W`
-    is too large as that R and W come from the same distribution.
+    -> The difference in empirical data distributions between the windows
+    :math:`R` and :math:`W` is too large as that R and W come
+    from the same distribution.
 
     References
     ----------
     .. [1] Christoph Raab, Moritz Heusinger, Frank-Michael Schleif, Reactive
-       Soft Prototype Computing for Concept Drift Streams, Neurocomputing, 2020,
+       Soft Prototype Computing for Concept Drift Streams,
+       Neurocomputing, 2020,
 
     Examples
     --------
@@ -59,7 +65,8 @@ class KSWIN(BaseDriftDetector):
     >>> # Initialize KSWIN and a data stream
     >>> kswin = KSWIN(alpha=0.01)
     >>> stream = SEAGenerator(classification_function = 2,
-    >>>     random_state = 112, balance_classes = False,noise_percentage = 0.28)
+    >>>     random_state = 112, balance_classes = False,
+    >>>                           noise_percentage = 0.28)
     >>> # Store detections
     >>> detections = []
     >>> # Process stream via KSWIN and print detections
@@ -113,10 +120,12 @@ class KSWIN(BaseDriftDetector):
         currentLength = self.window.shape[0]
         if currentLength >= self.window_size:
             self.window = np.delete(self.window, 0)
-            rnd_window = np.random.choice(self.window[:-self.stat_size], self.stat_size)
+            rnd_window = np.random.choice(
+                self.window[:-self.stat_size], self.stat_size)
 
             (st, self.p_value) = stats.ks_2samp(rnd_window,
-                                                self.window[-self.stat_size:], mode="exact")
+                                                self.window[-self.stat_size:],
+                                                mode="exact")
 
             if self.p_value <= self.alpha and st > 0.1:
                 self.change_detected = True
@@ -125,7 +134,6 @@ class KSWIN(BaseDriftDetector):
                 self.change_detected = False
         else:  # Not enough samples in sliding window for a valid test
             self.change_detected = False
-
 
     def detected_change(self):
         """ Get detected change
