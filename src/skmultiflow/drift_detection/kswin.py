@@ -109,6 +109,7 @@ class KSWIN(BaseDriftDetector):
             New data sample the sliding window should add.
         """
         self.n += 1
+        self.window = np.concatenate([self.window, [input_value]])
         currentLength = self.window.shape[0]
         if currentLength >= self.window_size:
             self.window = np.delete(self.window, 0)
@@ -125,7 +126,6 @@ class KSWIN(BaseDriftDetector):
         else:  # Not enough samples in sliding window for a valid test
             self.change_detected = False
 
-        self.window = np.concatenate([self.window, [input_value]])
 
     def detected_change(self):
         """ Get detected change

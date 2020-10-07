@@ -58,7 +58,7 @@ def test_kswin_functionality(test_path):
     kswin = KSWIN(alpha=0.0001,window_size=200,stat_size=100)
     test_file = os.path.join(test_path, 'drift_stream.npy')
     data_stream = np.load(test_file)
-    expected_indices = [1045, 1145]
+    expected_indices = [1044, 1144]
     detected_indices = []
 
     for i in range(data_stream.size):
