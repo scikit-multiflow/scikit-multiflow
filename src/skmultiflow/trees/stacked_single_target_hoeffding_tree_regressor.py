@@ -201,3 +201,6 @@ class StackedSingleTargetHoeffdingTreeRegressor(iSOUPTreeRegressor, MultiOutputM
                 new_node.fMAE_P = parent_node.fMAE_P
                 new_node.fMAE_SP = parent_node.fMAE_SP
                 return new_node
+
+    def algorithm_type(self):
+        return "REGRESSION"

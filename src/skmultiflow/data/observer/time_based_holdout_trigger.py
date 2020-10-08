@@ -25,6 +25,7 @@ class TimeBasedHoldoutTrigger(TrainEvalTrigger):
         time_between = event_time - self.reference_time
         if time_between > self.target_window:
             self.reference_time = event_time
+            print("Switched to reference time: {}".format(self.reference_time))
             self.test_mode = not self.test_mode
             if self.test_mode:
                 self.target_window = self.test_time_window

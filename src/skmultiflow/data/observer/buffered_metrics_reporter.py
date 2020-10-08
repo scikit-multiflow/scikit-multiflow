@@ -8,7 +8,9 @@ class BufferedMetricsReporter(MetricsReporter):
         self.buffer = None
 
     def report(self, measurements):
-        self.buffer = self.retrieve_metrics(measurements)
+        if self.buffer is None:
+            self.buffer = self.retrieve_metrics(measurements)
+        print("[BufferedMetricsReporter] value assigned: {}".format(self.buffer))
 
     def get_buffer(self):
         return self.buffer

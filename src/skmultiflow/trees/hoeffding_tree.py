@@ -822,3 +822,6 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
             description += str(rule) + '\n'
 
         return description
+
+    def algorithm_type(self):
+        return "CLASSIFICATION"

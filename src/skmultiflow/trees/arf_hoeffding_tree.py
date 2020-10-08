@@ -157,3 +157,6 @@ class ARFHoeffdingTreeClassifier(HoeffdingTreeClassifier):
                                           nominal_attributes=self.nominal_attributes,
                                           max_features=self.max_features,
                                           random_state=self._random_state)
+
+    def algorithm_type(self):
+        return "CLASSIFICATION"

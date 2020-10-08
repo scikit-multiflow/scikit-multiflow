@@ -557,3 +557,6 @@ class ExtremelyFastDecisionTreeClassifier(HoeffdingTreeClassifier):
         leaf.attribute_observers = node.attribute_observers
 
         return leaf
+
+    def algorithm_type(self):
+        return "CLASSIFICATION"

@@ -565,3 +565,6 @@ class HoeffdingTreeRegressor(RegressorMixin, HoeffdingTreeClassifier):
             parent.set_child(parent_branch, new_leaf)
         self._active_leaf_node_cnt -= 1
         self._inactive_leaf_node_cnt += 1
+
+    def algorithm_type(self):
+        return "REGRESSION"

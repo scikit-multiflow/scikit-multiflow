@@ -11,4 +11,4 @@ MULTIFLOW_BASEDIR=$SCRIPT_LOCATION/../..
 ######################## GET SCRIPT LOCATION - END - ################################
 
 # TODO: complete
-bash $SCRIPT_LOCATION/build-multiflow.sh
+#bash $SCRIPT_LOCATION/build-multiflow.sh

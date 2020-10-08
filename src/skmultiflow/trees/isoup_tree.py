@@ -568,3 +568,6 @@ class iSOUPTreeRegressor(HoeffdingTreeRegressor, MultiOutputMixin):
     def _more_tags(self):
         return {'multioutput': True,
                 'multioutput_only': True}
+
+    def algorithm_type(self):
+        return "REGRESSION"

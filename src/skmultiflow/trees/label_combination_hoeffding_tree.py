@@ -224,3 +224,6 @@ class LabelCombinationHoeffdingTreeClassifier(HoeffdingTreeClassifier, MultiOutp
     def _more_tags():
         return {'multioutput': True,
                 'multioutput_only': True}
+
+    def algorithm_type(self):
+        return "CLASSIFICATION"

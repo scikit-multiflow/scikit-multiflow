@@ -138,3 +138,6 @@ class ARFHoeffdingTreeRegressor(HoeffdingTreeRegressor):
                                          learning_ratio_const=self.learning_ratio_const,
                                          max_features=self.max_features,
                                          random_state=self.random_state)
+
+    def algorithm_type(self):
+        return "REGRESSION"

@@ -237,3 +237,6 @@ class HoeffdingAdaptiveTreeRegressor(HoeffdingTreeRegressor):
 
     def _new_split_node(self, split_test, class_observations):
         return AdaSplitNodeRegressor(split_test, class_observations, self.random_state)
+
+    def algorithm_type(self):
+        return "REGRESSION"

@@ -420,6 +420,9 @@ class AdaptiveRandomForestRegressor(RegressorMixin, AdaptiveRandomForestClassifi
         if self.max_features > n:
             self.max_features = n
 
+    def algorithm_type(self):
+        return "REGRESSION"
+
 
 class ARFRegBaseLearner(BaseSKMObject):
     """ARF Base Learner class.
@@ -635,3 +638,4 @@ class ARFRegBaseLearner(BaseSKMObject):
 
     def predict_proba(self, X):
         raise NotImplementedError
+
