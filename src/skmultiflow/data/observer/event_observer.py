@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import datetime
+import uuid
 
 
 class EventObserver(metaclass=ABCMeta):
@@ -46,8 +47,10 @@ class EvaluationEventObserver(EventObserver):
         self.train_eval_trigger = train_eval_trigger
         self.results_observers = results_observers
         self.algorithm = algorithm
+        self.result_buffer_id = []
         self.result_buffer_ytrue = []
         self.result_buffer_ypred = []
+
         self.event_buffer_t = []
         self.event_buffer_x = []
         self.event_buffer_y = []
@@ -64,6 +67,10 @@ class EvaluationEventObserver(EventObserver):
         """
         if event is not None:
             algorithm_type = self.algorithm.algorithm_type()
+            if 'id' in event:
+                id = event['id']
+            else:
+                id = uuid.uuid1()
             if 't' in event:
                 t = event['t']
             else:
@@ -90,6 +97,7 @@ class EvaluationEventObserver(EventObserver):
                 y_pred = self.algorithm.predict(x_array)
                 self.result_buffer_ytrue.append(y_true)
                 self.result_buffer_ypred.append(y_pred)
+                self.result_buffer_id.append(id)
 
             if self.train_eval_trigger.shall_buffer():
                 self.event_buffer_t.append(t_array)
@@ -103,9 +111,10 @@ class EvaluationEventObserver(EventObserver):
             self.event_buffer_t, self.event_buffer_x, self.event_buffer_y = self.train_eval_trigger.remaining_buffer(self.event_buffer_t, self.event_buffer_x, self.event_buffer_y)
 
     def fit_algorithm(self, x, y):
-        if len(self.result_buffer_ytrue) > 0:
+        if len(self.result_buffer_id) > 0:
             for result_observer in self.results_observers:
-                result_observer.report(self.result_buffer_ypred, self.result_buffer_ytrue)
+                result_observer.report(self.result_buffer_id, self.result_buffer_ypred, self.result_buffer_ytrue)
+            self.result_buffer_id = []
             self.result_buffer_ypred = []
             self.result_buffer_ytrue = []
 

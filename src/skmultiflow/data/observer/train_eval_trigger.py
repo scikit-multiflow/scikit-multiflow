@@ -149,8 +149,10 @@ class TimeBasedCrossvalidationTrigger(TrainEvalTrigger):
         self.test_time_window = test_time_window
         self.get_event_time = get_event_time
 
-        self.test_mode = False
         self.reference_time = None
+        self.completed_initial_time_window = False
+        self.fit_buffered_instances = False
+        self.remaining_buffer_checked = False
         self.target_window = self.initial_time_window
 
     def update(self, event):
@@ -161,27 +163,35 @@ class TimeBasedCrossvalidationTrigger(TrainEvalTrigger):
         time_between = event_time - self.reference_time
         if time_between > self.target_window:
             self.reference_time = event_time
-            print("Switched to reference time: {}".format(self.reference_time))
-            self.test_mode = not self.test_mode
-            if self.test_mode:
-                self.target_window = self.test_time_window
-            else:
-                self.target_window = self.wait_to_test_time_window
+            self.completed_initial_time_window = True
+            self.fit_buffered_instances = True
+            self.remaining_buffer_checked = False
+            self.target_window = self.test_time_window
 
     def shall_buffer(self):
         return True
 
     def shall_predict(self):
-        return self.test_mode
+        return self.completed_initial_time_window
 
     def instances_to_fit(self, t, x, y):
-        if not self.test_mode:
+        if not self.completed_initial_time_window:
             return x, y
+        else:
+            if self.fit_buffered_instances:
+                self.fit_buffered_instances = False
+                return x, y
         return [], []
 
     def remaining_buffer(self, t, x, y):
-        if not self.test_mode:
+        if not self.completed_initial_time_window:
             return [], [], []
+        else:
+            if not self.remaining_buffer_checked:
+                self.remaining_buffer_checked = True
+                return [], [], []
         return t, x, y
 
-# TODO: implement prequential delayed, implement cross-validation.
+
+
+# TODO: implement prequential delayed

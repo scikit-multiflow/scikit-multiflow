@@ -98,7 +98,6 @@ def test_time_crossvalidation_trigger():
         assert train_eval_trigger.shall_buffer() == True
         eventcount += 1
 
-
     test_eventcount = 0
     while test_eventcount <= test_time_window_days:
         train_eval_trigger.update(create_event(eventcount+test_eventcount, reference_date))
@@ -107,5 +106,5 @@ def test_time_crossvalidation_trigger():
         test_eventcount += 1
 
     train_eval_trigger.update(create_event(eventcount+test_eventcount, reference_date))
-    assert train_eval_trigger.shall_predict() == False
+    assert train_eval_trigger.shall_predict() == True
     assert train_eval_trigger.shall_buffer() == True

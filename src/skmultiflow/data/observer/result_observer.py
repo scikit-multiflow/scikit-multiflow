@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 class ResultObserver(metaclass=ABCMeta):
 
     @abstractmethod
-    def report(self, y_pred, y_true):
+    def report(self, id, y_pred, y_true):
         raise NotImplementedError
 
 
@@ -14,7 +14,7 @@ class MetricsResultObserver(ResultObserver):
         self.measurements = measurements
         self.metrics_reporter = metrics_reporter
 
-    def report(self, y_pred, y_true):
+    def report(self, id, y_pred, y_true):
         for i in range(len(y_true)):
             self.measurements.add_result(y_true[i], y_pred[i])
         self.metrics_reporter.report(self.measurements)
@@ -27,9 +27,9 @@ class CSVResultObserver(ResultObserver):
         self.file_handle.write("y_pred,y_true\n")
         self.file_handle.flush()
 
-    def report(self, y_pred, y_true):
-        for i in range(len(y_true)):
-            self.file_handle.write("{},{}\n".format(self.unpack(y_true[i]), self.unpack(y_pred[i])))
+    def report(self, id, y_pred, y_true):
+        for i in range(len(id)):
+            self.file_handle.write("{},{},{}\n".format(id[i], self.unpack(y_true[i]), self.unpack(y_pred[i])))
             self.file_handle.flush()
 
     def unpack(self, value):
