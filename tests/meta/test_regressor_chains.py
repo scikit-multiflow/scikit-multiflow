@@ -1,5 +1,5 @@
-from skmultiflow.data.observer.quantity_based_holdout_trigger import QuantityBasedHoldoutTrigger
-from skmultiflow.data.observer.evaluation_event_observer import EvaluationEventObserver
+from skmultiflow.data.observer.train_eval_trigger import QuantityBasedHoldoutTrigger
+from skmultiflow.data.observer.event_observer import EvaluationEventObserver
 from skmultiflow.data.generator.from_array_generator import FromArrayGenerator
 from skmultiflow.utils.utils import get_next_n_samples
 from sklearn.linear_model import SGDRegressor

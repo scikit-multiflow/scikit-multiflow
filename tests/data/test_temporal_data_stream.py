@@ -1,9 +1,9 @@
-from skmultiflow.data.observer.buffer_data_event_observer import BufferDataEventObserver
-from skmultiflow.data.observer.buffered_metrics_reporter import BufferedMetricsReporter
+from skmultiflow.data.observer.event_observer import BufferDataEventObserver
+from skmultiflow.data.observer.metrics_reporter import BufferedMetricsReporter
 from skmultiflow.metrics.measure_collection import ClassificationMeasurements
-from skmultiflow.data.observer.prequential_trigger import PrequentialTrigger
+from skmultiflow.data.observer.train_eval_trigger import PrequentialTrigger
 from skmultiflow.data.source.dataframe_data_source import DataframeDataSource
-from skmultiflow.data.observer.result_observer import ResultObserver
+from skmultiflow.data.observer.result_observer import MetricsResultObserver
 import os
 import numpy as np
 import pandas as pd

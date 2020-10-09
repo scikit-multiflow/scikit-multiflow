@@ -1,4 +1,4 @@
-from skmultiflow.data.observer.quantity_based_holdout_trigger import QuantityBasedHoldoutTrigger
+from skmultiflow.data.observer.train_eval_trigger import QuantityBasedHoldoutTrigger
 
 
 def test_quantity_based_holdout_trigger_first_time_wait_less_than_wait_to_test():

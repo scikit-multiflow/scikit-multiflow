@@ -1,5 +1,5 @@
-from skmultiflow.data.observer.quantity_based_holdout_trigger import QuantityBasedHoldoutTrigger
-from skmultiflow.data.observer.evaluation_event_observer import EvaluationEventObserver
+from skmultiflow.data.observer.train_eval_trigger import QuantityBasedHoldoutTrigger
+from skmultiflow.data.observer.event_observer import EvaluationEventObserver
 from skmultiflow.data.source.file_data_source import FileDataSource
 from skmultiflow.trees import HoeffdingAdaptiveTreeClassifier
 
@@ -36,7 +36,7 @@ def test_evaluation_event_observer(test_path):
     algorithm = HoeffdingAdaptiveTreeClassifier(leaf_prediction='mc', random_state=1)
 
     results_observer = mock()
-    evaluation_event_observer = EvaluationEventObserver(algorithm, train_eval_trigger, results_observer, [0, 1, 2])
+    evaluation_event_observer = EvaluationEventObserver(algorithm, train_eval_trigger, [results_observer], [0, 1, 2])
 
     data_source = FileDataSource(record_to_dictionary, [evaluation_event_observer], test_file)
     data_source.listen_for_events()

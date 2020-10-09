@@ -2,7 +2,7 @@ import os
 import time
 import numpy as np
 from skmultiflow.data.source.file_data_source import FileDataSource
-from skmultiflow.data.observer.buffer_data_event_observer import BufferDataEventObserver
+from skmultiflow.data.observer.event_observer import BufferDataEventObserver
 
 
 def record_to_dictionary(record):

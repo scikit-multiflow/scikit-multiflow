@@ -3,7 +3,7 @@ import time
 import json
 import numpy as np
 from skmultiflow.data.source.kafka_data_source import KafkaDataSource
-from skmultiflow.data.observer.buffer_data_event_observer import BufferDataEventObserver
+from skmultiflow.data.observer.event_observer import BufferDataEventObserver
 
 
 def record_to_dictionary(record):

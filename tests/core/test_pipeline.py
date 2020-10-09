@@ -1,11 +1,11 @@
 import os
 
-from skmultiflow.data.observer.evaluation_event_observer import EvaluationEventObserver
-from skmultiflow.data.observer.buffered_metrics_reporter import BufferedMetricsReporter
+from skmultiflow.data.observer.event_observer import EvaluationEventObserver
+from skmultiflow.data.observer.metrics_reporter import BufferedMetricsReporter
 from skmultiflow.metrics.measure_collection import ClassificationMeasurements
-from skmultiflow.data.observer.prequential_trigger import PrequentialTrigger
+from skmultiflow.data.observer.train_eval_trigger import PrequentialTrigger
 from skmultiflow.data.source.array_data_source import ArrayDataSource
-from skmultiflow.data.observer.result_observer import ResultObserver
+from skmultiflow.data.observer.result_observer import MetricsResultObserver
 from skmultiflow.transform import OneHotToCategorical
 from skmultiflow.lazy import KNNADWINClassifier
 from skmultiflow.core import Pipeline
@@ -43,8 +43,8 @@ def test_pipeline(test_path):
 
     train_eval_trigger = PrequentialTrigger(10)
     reporter = BufferedMetricsReporter(retrieve_metrics)
-    results_observer = ResultObserver(ClassificationMeasurements(), reporter)
-    evaluation_event_observer = EvaluationEventObserver(pipe, train_eval_trigger, results_observer, [0, 1])
+    results_observer = MetricsResultObserver(ClassificationMeasurements(), reporter)
+    evaluation_event_observer = EvaluationEventObserver(pipe, train_eval_trigger, [results_observer], [0, 1])
 
     data_source = ArrayDataSource(record_to_dictionary, [evaluation_event_observer], data_as_dict)
 

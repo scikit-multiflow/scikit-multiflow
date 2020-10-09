@@ -1,4 +1,4 @@
-from skmultiflow.data.observer.time_based_holdout_trigger import TimeBasedHoldoutTrigger
+from skmultiflow.data.observer.train_eval_trigger import TimeBasedHoldoutTrigger
 from datetime import datetime, timedelta
 
 

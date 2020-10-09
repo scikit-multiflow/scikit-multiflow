@@ -1,4 +1,4 @@
-from skmultiflow.data.observer.prequential_trigger import PrequentialTrigger
+from skmultiflow.data.observer.train_eval_trigger import PrequentialTrigger
 
 
 def test_prequential_trigger():

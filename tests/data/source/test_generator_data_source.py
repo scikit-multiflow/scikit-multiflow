@@ -1,4 +1,4 @@
-from skmultiflow.data.observer.buffer_data_event_observer import BufferDataEventObserver
+from skmultiflow.data.observer.event_observer import BufferDataEventObserver
 from skmultiflow.data.generator.anomaly_sine_generator import AnomalySineGenerator
 from skmultiflow.data.source.generator_data_source import GeneratorDataSource
 import numpy as np
