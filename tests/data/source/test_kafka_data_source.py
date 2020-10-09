@@ -1,9 +1,9 @@
+from skmultiflow.data.observer.event_observer import BufferDataEventObserver
 from kafka import SimpleProducer, KafkaClient, KafkaConsumer, KafkaProducer
+from skmultiflow.data.source.kafka_data_source import KafkaDataSource
+import numpy as np
 import time
 import json
-import numpy as np
-from skmultiflow.data.source.kafka_data_source import KafkaDataSource
-from skmultiflow.data.observer.event_observer import BufferDataEventObserver
 
 
 def record_to_dictionary(record):
@@ -12,7 +12,7 @@ def record_to_dictionary(record):
     return record # already deserialized in consumer
 
 
-def test_kafka_data_source(test_path):
+def test_kafka_data_source():
     broker = "kafkacontainer:9092"
     topic = "scikit-multiflow"
     producer = KafkaProducer(bootstrap_servers=broker)

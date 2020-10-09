@@ -24,11 +24,15 @@ class CSVResultObserver(ResultObserver):
 
     def __init__(self, filename):
         self.file_handle = open(filename, "w")
-        self.file_handle.write("y_pred,y_true")
+        self.file_handle.write("y_pred,y_true\n")
         self.file_handle.flush()
 
     def report(self, y_pred, y_true):
         for i in range(len(y_true)):
-            self.file_handle.write("{},{}".format(y_true[i], y_pred[i]))
+            self.file_handle.write("{},{}\n".format(self.unpack(y_true[i]), self.unpack(y_pred[i])))
             self.file_handle.flush()
 
+    def unpack(self, value):
+        if len(value.shape) == 2:
+            return value[0][0]
+        return value[0]

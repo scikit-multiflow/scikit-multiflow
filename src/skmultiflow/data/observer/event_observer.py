@@ -46,40 +46,73 @@ class EvaluationEventObserver(EventObserver):
         self.train_eval_trigger = train_eval_trigger
         self.results_observers = results_observers
         self.algorithm = algorithm
-        self.y_true_buffer = []
-        self.y_pred_buffer = []
-        self.x_buffer = []
+        self.result_buffer_ytrue = []
+        self.result_buffer_ypred = []
+        self.event_buffer_t = []
+        self.event_buffer_x = []
+        self.event_buffer_y = []
 
     def update(self, event):
+        """For each new event, we follow this sequence:
+           - update the train_eval_trigger, so it gains new context
+           - check if we shall fit the algorithm with buffered data
+             - update the buffer, according to the trigger policy
+           - shall predict?
+           - shall buffer new instance?
+           - get instances to fit from buffer
+           - update the buffer
+        """
         if event is not None:
             algorithm_type = self.algorithm.algorithm_type()
+            if 't' in event:
+                t = event['t']
+            else:
+                t = datetime.datetime.now()
             x = event['X']
 
             y_true = None
             if algorithm_type == 'CLASSIFICATION' or algorithm_type == 'REGRESSION':
                 y_true = event['y']
 
+            t_array = np.array(t)
             x_array = np.array(x)
             y_array = np.array(y_true)
 
             self.train_eval_trigger.update(event)
 
+            bx_to_fit, by_to_fit = self.train_eval_trigger.instances_to_fit(self.event_buffer_t, self.event_buffer_x, self.event_buffer_y)
+            for idx in range(len(bx_to_fit)):
+                self.fit_algorithm(bx_to_fit[idx], by_to_fit[idx])
+
+            self.event_buffer_t, self.event_buffer_x, self.event_buffer_y = self.train_eval_trigger.remaining_buffer(self.event_buffer_t, self.event_buffer_x, self.event_buffer_y)
+
             if self.train_eval_trigger.shall_predict():
                 y_pred = self.algorithm.predict(x_array)
-                self.y_true_buffer.append(y_true)
-                self.y_pred_buffer.append(y_pred)
+                self.result_buffer_ytrue.append(y_true)
+                self.result_buffer_ypred.append(y_pred)
 
-            if self.train_eval_trigger.shall_fit():
-                if len(self.y_true_buffer)>0:
-                    for result_observer in self.results_observers:
-                        result_observer.report(self.y_pred_buffer, self.y_true_buffer)
-                    self.y_pred_buffer = []
-                    self.y_true_buffer = []
+            if self.train_eval_trigger.shall_buffer():
+                self.event_buffer_t.append(t_array)
+                self.event_buffer_x.append(x_array)
+                self.event_buffer_y.append(y_array)
 
-                if self.expected_target_values is not None:
-                    self.algorithm.partial_fit(x_array, y_array, self.expected_target_values)
-                else:
-                    self.algorithm.partial_fit(x_array, y_array)
+            bx_to_fit, by_to_fit = self.train_eval_trigger.instances_to_fit(self.event_buffer_t, self.event_buffer_x, self.event_buffer_y)
+            for idx in range(len(bx_to_fit)):
+                self.fit_algorithm(bx_to_fit[idx], by_to_fit[idx])
+
+            self.event_buffer_t, self.event_buffer_x, self.event_buffer_y = self.train_eval_trigger.remaining_buffer(self.event_buffer_t, self.event_buffer_x, self.event_buffer_y)
+
+    def fit_algorithm(self, x, y):
+        if len(self.result_buffer_ytrue) > 0:
+            for result_observer in self.results_observers:
+                result_observer.report(self.result_buffer_ypred, self.result_buffer_ytrue)
+            self.result_buffer_ypred = []
+            self.result_buffer_ytrue = []
+
+        if self.expected_target_values is not None:
+            self.algorithm.partial_fit(x, y, self.expected_target_values)
+        else:
+            self.algorithm.partial_fit(x, y)
 
 
 class StreamSpeedObserver(EventObserver):

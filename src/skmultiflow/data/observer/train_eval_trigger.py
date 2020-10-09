@@ -23,21 +23,25 @@ class TrainEvalTrigger(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def shall_fit(self):
+    def shall_predict(self):
         raise NotImplementedError
 
     @abstractmethod
-    def shall_predict(self):
+    def shall_buffer(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def instances_to_fit(self, t, x, y):
+        raise NotImplementedError
+
+    @abstractmethod
+    def remaining_buffer(self, t, x, y):
         raise NotImplementedError
 
 
 class PrequentialTrigger(TrainEvalTrigger):
-    """ PrequentialTrigger class.
-    """
 
     def __init__(self, n_wait_to_fit):
-        """ QuantityBasedHoldout class constructor."""
-        super().__init__()
         self.first_time_wait = n_wait_to_fit
         self.first_time_wait_counter = 0
 
@@ -50,16 +54,19 @@ class PrequentialTrigger(TrainEvalTrigger):
             return False
         return True
 
-    def shall_fit(self):
+    def shall_buffer(self):
         return True
 
+    def instances_to_fit(self, t, x, y):
+        return x, y
+
+    def remaining_buffer(self, t, x, y):
+        return [], [], []
+
+
 class TimeBasedHoldoutTrigger(TrainEvalTrigger):
-    """ TimeBasedHoldoutTrigger class.
-    """
 
     def __init__(self, initial_time_window, wait_to_test_time_window, test_time_window, get_event_time):
-        """ TimeBasedHoldoutTrigger class constructor."""
-        super().__init__()
         self.initial_time_window = initial_time_window
         self.wait_to_test_time_window = wait_to_test_time_window
         self.test_time_window = test_time_window
@@ -68,7 +75,6 @@ class TimeBasedHoldoutTrigger(TrainEvalTrigger):
         self.test_mode = False
         self.reference_time = None
         self.target_window = self.initial_time_window
-
 
     def update(self, event):
         event_time = self.get_event_time(event)
@@ -85,20 +91,23 @@ class TimeBasedHoldoutTrigger(TrainEvalTrigger):
             else:
                 self.target_window = self.wait_to_test_time_window
 
-    def shall_fit(self):
+    def shall_buffer(self):
         return not self.test_mode
 
     def shall_predict(self):
         return self.test_mode
 
+    def instances_to_fit(self, t, x, y):
+        return x, y
+
+    def remaining_buffer(self, t, x, y):
+        return [], [], []
+
+
 class QuantityBasedHoldoutTrigger(TrainEvalTrigger):
-    """ QuantityBasedHoldout class.
-    """
 
     #TODO: support dynamic and static test set: we support it considering the report evaluation policy
     def __init__(self, first_time_wait, n_wait_to_test, test_size):
-        """ QuantityBasedHoldout class constructor."""
-        super().__init__()
         self.first_time_wait = max(first_time_wait, n_wait_to_test)
         self.n_wait_to_test = n_wait_to_test
         self.test_size = test_size
@@ -119,8 +128,60 @@ class QuantityBasedHoldoutTrigger(TrainEvalTrigger):
             self.events_counter += 1
 
 
-    def shall_fit(self):
+    def shall_buffer(self):
         return not self.test_mode
 
     def shall_predict(self):
         return self.test_mode
+
+    def instances_to_fit(self, t, x, y):
+        return x, y
+
+    def remaining_buffer(self, t, x, y):
+        return [], [], []
+
+
+class TimeBasedCrossvalidationTrigger(TrainEvalTrigger):
+
+    def __init__(self, initial_time_window, wait_to_test_time_window, test_time_window, get_event_time):
+        self.initial_time_window = initial_time_window
+        self.wait_to_test_time_window = wait_to_test_time_window
+        self.test_time_window = test_time_window
+        self.get_event_time = get_event_time
+
+        self.test_mode = False
+        self.reference_time = None
+        self.target_window = self.initial_time_window
+
+    def update(self, event):
+        event_time = self.get_event_time(event)
+        if self.reference_time is None:
+            self.reference_time = event_time
+
+        time_between = event_time - self.reference_time
+        if time_between > self.target_window:
+            self.reference_time = event_time
+            print("Switched to reference time: {}".format(self.reference_time))
+            self.test_mode = not self.test_mode
+            if self.test_mode:
+                self.target_window = self.test_time_window
+            else:
+                self.target_window = self.wait_to_test_time_window
+
+    def shall_buffer(self):
+        return True
+
+    def shall_predict(self):
+        return self.test_mode
+
+    def instances_to_fit(self, t, x, y):
+        if not self.test_mode:
+            return x, y
+        return [], []
+
+    def remaining_buffer(self, t, x, y):
+        if not self.test_mode:
+            return [], [], []
+        return t, x, y
+
+# TODO: implement prequential delayed, implement cross-validation.
