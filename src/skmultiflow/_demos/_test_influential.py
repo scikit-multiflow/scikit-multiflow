@@ -54,18 +54,19 @@ def demo():
     positive_table = [equal_pos, fulfilling_pos, defeating_pos]
     weightA = [1, 1.003, 0.997]
     weightB = [1, 0.997, 1.003]
+    all_idx = list(range(0, runs, 1))
     for i in range(runs):
         list_of_streams = []
         for x in range(5):
             list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=51,
                                                            n_classes=2, n_features=1,
-                                                           n_centroids=10, num_drift_centroids=int(10/runs*i),
+                                                           n_centroids=10, num_drift_centroids=int(10 / runs * i),
                                                            change_speed=0.75,
                                                            class_weights=[1, 0]))
         for x in range(5):
             list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=50,
                                                            n_classes=2, n_features=1,
-                                                           n_centroids=10, num_drift_centroids=int(10/runs*i),
+                                                           n_centroids=10, num_drift_centroids=int(10 / runs * i),
                                                            change_speed=0.75,
                                                            class_weights=[0, 1]))
         for j in range(3):
@@ -79,11 +80,11 @@ def demo():
                                                                  max_samples=2200,
                                                                  batch_size=1,
                                                                  batch_size_update=False,
-                                                                 n_time_windows=n_comparisons+1,
+                                                                 n_time_windows=n_comparisons + 1,
                                                                  n_intervals=8,
                                                                  metrics=['accuracy'],
                                                                  data_points_for_classification=False,
-                                                                 weight_output=True,
+                                                                 weight_output=False,
                                                                  weight_plot=False)
             pipe = Pipeline([('Naive Bayes', classifier)])
 
@@ -119,6 +120,7 @@ def demo():
             significant_pvalues[j].extend(idx)
             significantpneg[j].extend(idx_neg)
             significantppos[j].extend(idx_pos)
+
     title = ['no prediction influence', 'self fulfilling approach', 'self defeating approach']
     for i in range(3):
         print(title[i])
@@ -128,32 +130,52 @@ def demo():
         print(negative_table[i])
         print("how many times a p value below 0.01 both:", len(significant_pvalues[i]))
         print("significant p value pos instances: ", len(significantppos[i]))
+        print("index not significant: ", list(set(all_idx) - set(significantppos[i])))
         print("significant p value neg instances: ", len(significantpneg[i]))
+        print("index not significant: ", list(set(all_idx) - set(significantpneg[i])))
 
     x = list(range(0, runs, 1))
-    y = [[] for _ in range(3)]
+    y_pos = [[] for _ in range(3)]
+    y_neg = [[] for _ in range(3)]
     for i in range(runs):
         for j in range(3):
             t = [item[i] for item in influence_on_positive[j]]
+            u = [item[i] for item in influence_on_negative[j]]
             if len(list(filter(None, t))) != 0:
                 averagep = sum(filter(None, t)) / len(list(filter(None, t)))
             else:
-                averagep = 0
-            y[j].append(averagep)
+                averagep = None
+            y_pos[j].append(averagep)
+            if len(list(filter(None, u))) != 0:
+                averagep = sum(filter(None, u)) / len(list(filter(None, u)))
+            else:
+                averagep = None
+            y_neg[j].append(averagep)
     plt.figure(1)
     run = 0
-    for i in y:
+    for i in y_pos:
         label = "Strategy " + title[run]
         plt.plot(x, i, label=label)
         run += 1
     plt.xlabel('Runs')
     plt.ylabel('Average p-value')
-    plt.title('Average p-value per strategy per run')
+    plt.title('Average p-value per strategy per run on positive instances')
+    plt.legend()
+
+    plt.figure(2)
+    run = 0
+    for i in y_neg:
+        label = "Strategy " + title[run]
+        plt.plot(x, i, label=label)
+        run += 1
+    plt.xlabel('Runs')
+    plt.ylabel('Average p-value')
+    plt.title('Average p-value per strategy per run on negative instances')
     plt.legend()
 
     y = list(range(0, runs, 1))
 
-    plt.figure(2)
+    plt.figure(3)
     plt.plot(y, accuracy[0], label="accuracy without prediction influence", color="grey")
     plt.plot(y, accuracy[1], label="accuracy in self fulfilling approach", color="blue")
     plt.plot(y, accuracy[2], label="accuracy in self defeating approach", color="purple")
@@ -162,10 +184,20 @@ def demo():
     plt.title("Accuracy per strategy")
     plt.legend()
 
-    plt.figure(3)
+    plt.figure(4)
     plt.boxplot(significant_pvalues)
     plt.xticks([1, 2, 3], title)
     plt.title("Significant p values")
+
+    plt.figure(5)
+    plt.boxplot(significantppos)
+    plt.xticks([1, 2, 3], title)
+    plt.title("Significant p values positive instances")
+
+    plt.figure(6)
+    plt.boxplot(significantpneg)
+    plt.xticks([1, 2, 3], title)
+    plt.title("Significant p values negative instances")
 
     # pdf = matplotlib.backends.backend_pdf.PdfPages("output.pdf")
     # for fig in range(1, plt.figure().number):

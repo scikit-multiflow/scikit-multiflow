@@ -133,7 +133,8 @@ class InfluentialStream(Stream):
         for j in range(batch_size):
             self.sample_idx += 1
             n_streams = list(range(len(self.streams)))
-            probability = random.choices(n_streams, self.weight)
+            norm_weight = [float(i) / max(self.weight) for i in self.weight]
+            probability = random.choices(n_streams, norm_weight)
             used_stream = probability[0]
             X, y = self.streams[used_stream].next_sample()
             self.last_stream = used_stream
