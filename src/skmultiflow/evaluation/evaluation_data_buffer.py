@@ -2,6 +2,7 @@ class EvaluationDataBuffer(object):
     """ Stores evaluation data at a given time. It is used to track and distribute
     data across evaluators and visualizers.
     """
+
     def __init__(self, data_dict):
         """
 

@@ -9,8 +9,10 @@ import warnings
 
 def DynamicWeightedMajority(n_estimators=5, base_estimator=NaiveBayes(), period=50, beta=0.5,
                             theta=0.01):     # pragma: no cover
-    warnings.warn("'DynamicWeightedMajority' has been renamed to 'DynamicWeightedMajorityClassifier' in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+    warnings.warn("'DynamicWeightedMajority' has been renamed to "
+                  "'DynamicWeightedMajorityClassifier' in v0.5.0.\n"
+                  "The old name will be removed in v0.7.0",
+                  category=FutureWarning)
     return DynamicWeightedMajorityClassifier(n_estimators=n_estimators,
                                              base_estimator=base_estimator,
                                              period=period,
@@ -90,6 +92,7 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
         weight: float
             The estimator's weight.
         """
+
         def __init__(self, estimator, weight):
             self.estimator = estimator
             self.weight = weight
@@ -135,7 +138,8 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
             for the first partial_fit call where it is compulsory.
 
         sample_weight: numpy.ndarray of shape (n_samples), optional (default=None)
-            Samples weight. If not provided, uniform weights are assumed. Usage varies depending on the base estimator.
+            Samples weight. If not provided, uniform weights are assumed.
+            Usage varies depending on the base estimator.
 
         Returns
         -------
@@ -144,7 +148,7 @@ class DynamicWeightedMajorityClassifier(BaseSKMObject, ClassifierMixin, MetaEsti
         """
         for i in range(len(X)):
             self.fit_single_sample(
-                X[i:i+1, :], y[i:i+1], classes, sample_weight
+                X[i:i + 1, :], y[i:i + 1], classes, sample_weight
             )
         return self
 

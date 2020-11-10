@@ -5,14 +5,15 @@ import numpy as np
 import copy as cp
 import operator as op
 
-
 import warnings
 
 
-def AccuracyWeightedEnsemble(n_estimators=10, n_kept_estimators=30, base_estimator=NaiveBayes(), window_size=200,
-                             n_splits=5):     # pragma: no cover
-    warnings.warn("’AccuracyWeightedEnsemble’ has been renamed to ‘AccuracyWeightedEnsembleClassifier’ in v0.5.0.\n"
-                  "The old name will be removed in v0.7.0", category=FutureWarning)
+def AccuracyWeightedEnsemble(n_estimators=10, n_kept_estimators=30, base_estimator=NaiveBayes(),
+                             window_size=200, n_splits=5):  # pragma: no cover
+    warnings.warn(
+        "’AccuracyWeightedEnsemble’ has been renamed to "
+        "‘AccuracyWeightedEnsembleClassifier’ in v0.5.0.\n The old name will be removed in v0.7.0",
+        category=FutureWarning)
     return AccuracyWeightedEnsembleClassifier(n_estimators=n_estimators,
                                               n_kept_estimators=n_kept_estimators,
                                               base_estimator=base_estimator,
@@ -160,8 +161,8 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
         y: numpy.ndarray of shape (n_samples)
             An array-like with the class labels of all samples in X.
         classes: numpy.ndarray, optional (default=None)
-            Contains the class values in the stream. If defined, will be used to define the length of the arrays
-            returned by `predict_proba`
+            Contains the class values in the stream. If defined, will be used to define
+            the length of the arrays returned by `predict_proba`
         sample_weight: float or array-like
             Samples weight. If not provided, uniform weights are assumed.
         """
@@ -196,15 +197,19 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
                 baseline_score = self.compute_baseline(self.y_chunk)
 
                 # compute the weight of C' with cross-validation
-                clf_new = self.WeightedClassifier(estimator=C_new, weight=-1.0, seen_labels=classes)
+                clf_new = self.WeightedClassifier(
+                    estimator=C_new, weight=-1.0, seen_labels=classes)
                 clf_new.weight = self.compute_weight(model=clf_new, baseline_score=baseline_score,
                                                      n_splits=self.n_splits)
 
-                # (4) update the weights of each classifier in the ensemble, not using cross-validation
+                # (4) update the weights of each classifier in the ensemble,
+                # not using cross-validation
                 for model in self.models_pool:
-                    model.weight = self.compute_weight(model=model, baseline_score=baseline_score, n_splits=None)
+                    model.weight = self.compute_weight(
+                        model=model, baseline_score=baseline_score, n_splits=None)
 
-                # add the new model to the pool if there are slots available, else remove the worst one
+                # add the new model to the pool if there are slots available, else remove
+                # the worst one
                 if len(self.models_pool) < self.n_kept_estimators:
                     self.models_pool.append(clf_new)
                 else:
@@ -273,7 +278,9 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
             return np.zeros(N, dtype=int)
 
         # get top K classifiers
-        end = self.n_estimators if len(self.models_pool) > self.n_estimators else len(self.models_pool)
+        end = self.n_estimators if len(
+            self.models_pool) > self.n_estimators else len(
+            self.models_pool)
         ensemble = sorted(self.models_pool, key=lambda clf: clf.weight, reverse=True)[0:end]
 
         sum_weights = np.sum([abs(clf.weight) for clf in ensemble])
@@ -312,7 +319,8 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
 
         This code needs to take into account the fact that a classifier C trained on a
         previous data chunk may not have seen all the labels that appear in a new chunk
-        (e.g. C is trained with only labels [1, 2] but the new chunk contains labels [1, 2, 3, 4, 5]
+        (e.g. C is trained with only labels [1, 2] but the new chunk contains labels
+        [1, 2, 3, 4, 5]
 
         Parameters
         ----------
@@ -335,7 +343,8 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
         sum_error = 0
         for i, c in enumerate(y):
             if c in labels:
-                index_label_c = np.where(labels == c)[0][0]  # find the index of this label c in probabs[i]
+                # find the index of this label c in probabs[i]
+                index_label_c = np.where(labels == c)[0][0]
                 probab_ic = probabs[i][index_label_c]
                 sum_error += (1.0 - probab_ic) * (1.0 - probab_ic)
             else:
@@ -361,7 +370,7 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
             The score of an estimator computed via CV
         """
 
-        if n_splits is not None and type(n_splits) is int:
+        if n_splits is not None and isinstance(n_splits, int):
             # we create a copy because we don't want to "modify" an already trained model
             copy_model = cp.deepcopy(model)
             copy_model.estimator = cp.deepcopy(self.base_estimator)
@@ -371,9 +380,12 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
             for train_idx, test_idx in kf.split(X=self.X_chunk, y=self.y_chunk):
                 X_train, y_train = self.X_chunk[train_idx], self.y_chunk[train_idx]
                 X_test, y_test = self.X_chunk[test_idx], self.y_chunk[test_idx]
-                copy_model.estimator = self.train_model(model=copy_model.estimator, X=X_train, y=y_train,
-                                                        classes=copy_model.seen_labels,
-                                                        sample_weight=None)
+                copy_model.estimator = self.train_model(
+                    model=copy_model.estimator,
+                    X=X_train,
+                    y=y_train,
+                    classes=copy_model.seen_labels,
+                    sample_weight=None)
                 score += self.compute_score(model=copy_model, X=X_test, y=y_test) / self.n_splits
         else:
             # compute the score on the entire data chunk
@@ -382,8 +394,8 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
         return score
 
     def compute_weight(self, model, baseline_score, n_splits=None):
-        """ Computes the weight of a classifier given the baseline score calculated on a random learner.
-        The weight relies on either (1) MSE if it is a normal classifier,
+        """ Computes the weight of a classifier given the baseline score calculated
+        on a random learner. The weight relies on either (1) MSE if it is a normal classifier,
         or (2) benefit if it is a cost-sensitive classifier.
 
         Parameters
@@ -410,9 +422,9 @@ class AccuracyWeightedEnsembleClassifier(BaseSKMObject, ClassifierMixin, MetaEst
 
     @staticmethod
     def compute_baseline(y):
-        """ This method computes the score produced by a random classifier, served as a baseline.
-        The baseline score is MSE\ :sub:`r`\  in case of a normal classifier, b\ :sub:`r`\  in case of a cost-sensitive
-        classifier.
+        r""" This method computes the score produced by a random classifier, served as a baseline.
+        The baseline score is MSE\ :sub:`r`\  in case of a normal classifier,
+         b\ :sub:`r`\ in case of a cost-sensitive classifier.
 
         Parameters
         ----------
