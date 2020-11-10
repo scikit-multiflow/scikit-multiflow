@@ -8,5 +8,9 @@ from .evaluate_holdout import EvaluateHoldout
 from .evaluation_data_buffer import EvaluationDataBuffer
 from .evaluate_influential import EvaluateInfluential
 
-
-__all__ = ["EvaluatePrequential", "EvaluatePrequentialDelayed", "EvaluateHoldout", "EvaluationDataBuffer", "EvaluateInfluential"]
+__all__ = [
+    "EvaluatePrequential",
+    "EvaluatePrequentialDelayed",
+    "EvaluateHoldout",
+    "EvaluationDataBuffer",
+    "EvaluateInfluential"]

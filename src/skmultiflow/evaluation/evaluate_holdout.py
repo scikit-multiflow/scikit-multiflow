@@ -33,8 +33,9 @@ class EvaluateHoldout(StreamEvaluator):
     Parameters
     ----------
     n_wait: int (Default: 10000)
-        The number of samples to process between each test. Also defines when to update the plot if `show_plot=True`.
-        Note that setting `n_wait` too small can significantly slow the evaluation process.
+        The number of samples to process between each test. Also defines when to update the plot
+        if `show_plot=True`. Note that setting `n_wait` too small can significantly slow
+        the evaluation process.
 
     max_samples: int (Default: 100000)
         The maximum number of samples to process during the evaluation.
@@ -46,8 +47,8 @@ class EvaluateHoldout(StreamEvaluator):
         The maximum duration of the simulation (in seconds).
 
     metrics: list, optional (Default: ['accuracy', 'kappa'])
-        | The list of metrics to track during the evaluation. Also defines the metrics that will be displayed in plots
-          and/or logged into the output file. Valid options are
+        | The list of metrics to track during the evaluation. Also defines the metrics that will
+            be displayed in plots and/or logged into the output file. Valid options are
         | **Classification**
         | 'accuracy'
         | 'kappa'
@@ -79,8 +80,8 @@ class EvaluateHoldout(StreamEvaluator):
         File name to save the summary of the evaluation.
 
     show_plot: bool (Default: False)
-        If True, a plot will show the progress of the evaluation. Warning: Plotting can slow down the evaluation
-        process.
+        If True, a plot will show the progress of the evaluation. Warning: Plotting can slow down
+        the evaluation process.
 
     restart_stream: bool, optional (Default=True)
         If True, the stream is restarted once the evaluation is complete.
@@ -89,16 +90,18 @@ class EvaluateHoldout(StreamEvaluator):
         The size of the test set.
 
     dynamic_test_set: bool (Default: False)
-        If `True`, will continuously change the test set, otherwise will use the same test set for all tests.
+        If `True`, will continuously change the test set, otherwise will use the same test set for
+        all tests.
 
     Notes
     -----
-    1. This evaluator can process a single learner to track its performance; or multiple learners  at a time, to
-       compare different models on the same stream.
+    1. This evaluator can process a single learner to track its performance; or multiple learners
+        at a time, to compare different models on the same stream.
 
-    2. The metrics `running_time` and `model_size ` are not plotted when the `show_plot` option is set. Only their
-       current value is displayed at the bottom of the figure. However, their values over the evaluation are written
-       into the resulting csv file if the `output_file` option is set.
+    2. The metrics `running_time` and `model_size ` are not plotted when the `show_plot` option
+        is set. Only their current value is displayed at the bottom of the figure.
+        However, their values over the evaluation are written into the resulting csv file
+        if the `output_file` option is set.
 
     Examples
     --------
@@ -204,7 +207,8 @@ class EvaluateHoldout(StreamEvaluator):
             The trained learner(s).
 
         """
-        # First off we need to verify if this is a simple evaluation task or a comparison between learners task.
+        # First off we need to verify if this is a simple evaluation task or a
+        # comparison between learners task.
         self._init_evaluation(model=model, stream=stream, model_names=model_names)
 
         if self._check_configuration():
@@ -243,8 +247,8 @@ class EvaluateHoldout(StreamEvaluator):
 
         performance_sampling_cnt = 0
         print('Evaluating...')
-        while ((self.global_sample_count < actual_max_samples) & (self._end_time - self._start_time < self.max_time)
-               & (self.stream.has_more_samples())):
+        while ((self.global_sample_count < actual_max_samples) & (self._end_time -
+               self._start_time < self.max_time) & (self.stream.has_more_samples())):
             try:
                 X, y = self.stream.next_sample(self.batch_size)
 
@@ -256,17 +260,21 @@ class EvaluateHoldout(StreamEvaluator):
                         for i in range(self.n_models):
                             if self._task_type == constants.CLASSIFICATION:
                                 self.running_time_measurements[i].compute_training_time_begin()
-                                self.model[i].partial_fit(X=X, y=y, classes=self.stream.target_values)
+                                self.model[i].partial_fit(
+                                    X=X, y=y, classes=self.stream.target_values)
                                 self.running_time_measurements[i].compute_training_time_end()
                             elif self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
                                 self.running_time_measurements[i].compute_training_time_begin()
-                                self.model[i].partial_fit(X=X, y=y, classes=unique(self.stream.target_values))
+                                self.model[i].partial_fit(
+                                    X=X, y=y, classes=unique(
+                                        self.stream.target_values))
                                 self.running_time_measurements[i].compute_training_time_end()
                             else:
                                 self.running_time_measurements[i].compute_training_time_begin()
                                 self.model[i].partial_fit(X=X, y=y)
                                 self.running_time_measurements[i].compute_training_time_end()
-                            self.running_time_measurements[i].update_time_measurements(self.batch_size)
+                            self.running_time_measurements[i].update_time_measurements(
+                                self.batch_size)
                         first_run = False
                     else:
                         for i in range(self.n_models):
@@ -274,16 +282,19 @@ class EvaluateHoldout(StreamEvaluator):
                             self.running_time_measurements[i].compute_training_time_begin()
                             self.model[i].partial_fit(X, y)
                             self.running_time_measurements[i].compute_training_time_end()
-                            self.running_time_measurements[i].update_time_measurements(self.batch_size)
+                            self.running_time_measurements[i].update_time_measurements(
+                                self.batch_size)
 
                     self._check_progress(actual_max_samples)   # TODO Confirm place
 
                     # Test on holdout set
                     if self.dynamic_test_set:
-                        perform_test = self.global_sample_count >= (self.n_wait * (performance_sampling_cnt + 1)
-                                                                    + (self.test_size * performance_sampling_cnt))
+                        perform_test = self.global_sample_count >= \
+                                       (self.n_wait * (performance_sampling_cnt + 1)
+                                        + (self.test_size * performance_sampling_cnt))
                     else:
-                        perform_test = (self.global_sample_count - self.test_size) % self.n_wait == 0
+                        perform_test = (
+                            self.global_sample_count - self.test_size) % self.n_wait == 0
 
                     if perform_test | (self.global_sample_count >= actual_max_samples):
 
@@ -300,7 +311,8 @@ class EvaluateHoldout(StreamEvaluator):
                                     self.running_time_measurements[i].compute_testing_time_begin()
                                     prediction[i].extend(self.model[i].predict(self.X_test))
                                     self.running_time_measurements[i].compute_testing_time_end()
-                                    self.running_time_measurements[i].update_time_measurements(self.test_size)
+                                    self.running_time_measurements[i].update_time_measurements(
+                                        self.test_size)
                                 except TypeError:
                                     raise TypeError("Unexpected prediction value from {}"
                                                     .format(type(self.model[i]).__name__))
@@ -309,8 +321,8 @@ class EvaluateHoldout(StreamEvaluator):
                                     for i in range(len(prediction[0])):
                                         self.mean_eval_measurements[j].add_result(self.y_test[i],
                                                                                   prediction[j][i])
-                                        self.current_eval_measurements[j].add_result(self.y_test[i],
-                                                                                     prediction[j][i])
+                                        self.current_eval_measurements[j].add_result(
+                                            self.y_test[i], prediction[j][i])
 
                                 self._update_metrics()
                             performance_sampling_cnt += 1
@@ -341,10 +353,12 @@ class EvaluateHoldout(StreamEvaluator):
             The data upon which the algorithm will create its model.
 
         y: Array-like
-            An array-like containing the classification labels / target values for all samples in X.
+            An array-like containing the classification labels / target values for
+            all samples in X.
 
         classes: list
-            Stores all the classes that may be encountered during the classification task. Not used for regressors.
+            Stores all the classes that may be encountered during the classification task.
+            Not used for regressors.
 
         sample_weight: Array-like
             Samples weight. If not provided, uniform weights are assumed.
@@ -359,7 +373,8 @@ class EvaluateHoldout(StreamEvaluator):
             for i in range(self.n_models):
                 if self._task_type == constants.CLASSIFICATION or \
                         self._task_type == constants.MULTI_TARGET_CLASSIFICATION:
-                    self.model[i].partial_fit(X=X, y=y, classes=classes, sample_weight=sample_weight)
+                    self.model[i].partial_fit(
+                        X=X, y=y, classes=classes, sample_weight=sample_weight)
                 else:
                     self.model[i].partial_fit(X=X, y=y, sample_weight=sample_weight)
             return self
