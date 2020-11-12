@@ -2,7 +2,6 @@ import numpy as np
 import random
 from skmultiflow.data.base_stream import Stream
 from skmultiflow.utils import check_random_state
-from skmultiflow.data import AGRAWALGenerator
 from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift
 import matplotlib.pyplot as plt

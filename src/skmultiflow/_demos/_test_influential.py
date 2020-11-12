@@ -6,7 +6,7 @@ from skmultiflow.core import Pipeline
 from prettytable import PrettyTable
 from skmultiflow.data.random_rbf_generator import RandomRBFGenerator
 from skmultiflow.data.random_rbf_generator_drift import RandomRBFGeneratorDrift
-from skmultiflow.data.concept_drift_stream import ConceptDriftStream
+from skmultiflow.drift_detection.prediction_influence_detector import predictionInfluenceDetector
 import matplotlib.pyplot as plt
 import matplotlib.backends.backend_pdf
 
@@ -20,7 +20,7 @@ def demo():
 
     :return:
     """
-    runs = 100
+    runs = 50
     n_comparisons = 1
 
     equal_pos = PrettyTable()
@@ -60,14 +60,14 @@ def demo():
         for x in range(5):
             list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=51,
                                                            n_classes=2, n_features=1,
-                                                           n_centroids=10, num_drift_centroids=int(10 / runs * i),
-                                                           change_speed=0.75,
+                                                           n_centroids=1, num_drift_centroids=1,
+                                                           change_speed=(1/runs)*i,
                                                            class_weights=[1, 0]))
         for x in range(5):
             list_of_streams.append(RandomRBFGeneratorDrift(model_random_state=101, sample_random_state=50,
                                                            n_classes=2, n_features=1,
-                                                           n_centroids=10, num_drift_centroids=int(10 / runs * i),
-                                                           change_speed=0.75,
+                                                           n_centroids=1, num_drift_centroids=1,
+                                                           change_speed=(1/runs)*i,
                                                            class_weights=[0, 1]))
         for j in range(3):
             stream = influential_stream.InfluentialStream(self_fulfilling=weightA[j], self_defeating=weightB[j],
@@ -77,7 +77,7 @@ def demo():
             # Setup the evaluator
             evaluator = evaluate_influential.EvaluateInfluential(show_plot=False,
                                                                  pretrain_size=200,
-                                                                 max_samples=2200,
+                                                                 max_samples=4200,
                                                                  batch_size=1,
                                                                  batch_size_update=False,
                                                                  n_time_windows=n_comparisons + 1,
@@ -90,6 +90,7 @@ def demo():
 
             # 4. Run evaluation
             evaluator.evaluate(stream=stream, model=pipe)
+            predictionInfluenceDetector.calculate_density(evaluator)
             final_weights[j].append(evaluator.stream.weight)
             accuracy[j].append(evaluator.accuracy[0])
             idx_pos, idx_neg = [], []

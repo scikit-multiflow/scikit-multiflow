@@ -1,12 +1,14 @@
 import os
-import warnings
 import re
-from timeit import default_timer as timer
+import warnings
+
 import numpy as np
+from scipy.stats import ranksums
 from skmultiflow.evaluation.base_evaluator import StreamEvaluator
+# from skmultiflow.drift_detection.prediction_influence_detector import predictionInfluenceDetector
 from skmultiflow.utils import constants
 from statistics import mode
-from scipy.stats import ranksums
+from timeit import default_timer as timer
 
 
 class EvaluateInfluential(StreamEvaluator):
@@ -267,7 +269,7 @@ class EvaluateInfluential(StreamEvaluator):
 
         if self.weight_plot:
             self.stream.plot_weight()
-        self.calculate_density()
+        # predictionInfluenceDetector.calculate_density()
         self.accuracy = self._data_buffer.get_data(metric_id=constants.ACCURACY, data_id=constants.MEAN)
 
         if len(set(self.metrics).difference({constants.DATA_POINTS})) > 0:
@@ -279,101 +281,6 @@ class EvaluateInfluential(StreamEvaluator):
             self.stream.restart()
 
         return self.model
-
-    def calculate_density(self):
-        # table = tn, fp, fn, tp
-        # create list that has two values (difference in density in time0 and time1 of TP and FN,
-        #                               and difference in density in time0 and time1 of TN and FP per interval
-        TN, FP, FN, TP = 0, 1, 2, 3
-        density = [[[[0] * 2 for _ in range(self.n_intervals)] for _ in range(self.stream.n_features)]
-                   for _ in range(self.n_time_windows - 1)]
-        subset_TP = [[[] for _ in range(self.stream.n_features)] for _ in range(self.n_time_windows - 1)]
-        subset_FN = [[[] for _ in range(self.stream.n_features)] for _ in range(self.n_time_windows - 1)]
-        subset_TN = [[[] for _ in range(self.stream.n_features)] for _ in range(self.n_time_windows - 1)]
-        subset_FP = [[[] for _ in range(self.stream.n_features)] for _ in range(self.n_time_windows - 1)]
-        for timeperiod1 in range(self.n_time_windows - 1):
-            timeperiod2 = timeperiod1 + 1
-            for feature in range(self.stream.n_features):
-                # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
-                # next step will create the following: [tn, tn, tn, tn],[fp,fp,fp,fp] etc (if there are 4 intervals)
-                # print("distribution table: ", self.distribution_table)
-
-                t0 = list(zip(*self.distribution_table[timeperiod1][feature]))
-                # create table with density differences of TP and FN (0), and TN and FP (1), per interval
-                for interval in range(self.n_intervals):
-                    # calculate density of positive instances = instances of TP + FN / window size
-                    density_0 = (self.distribution_table[timeperiod1][feature][interval][TP] +
-                                 self.distribution_table[timeperiod1][feature][interval][FN]) / self.window_size
-                    density_1 = (self.distribution_table[timeperiod2][feature][interval][TP] +
-                                 self.distribution_table[timeperiod2][feature][interval][FN]) / self.window_size
-                    # density differences is density1 - density0
-                    density_difference = density_1 - density_0
-
-                    # fill in density difference in list
-                    density[timeperiod1][feature][interval][0] = density_difference
-
-                    # calculate density of negative instances
-                    density_0 = (self.distribution_table[timeperiod1][feature][interval][TN] +
-                                 self.distribution_table[timeperiod1][feature][interval][FP]) / self.window_size
-                    density_1 = (self.distribution_table[timeperiod2][feature][interval][TN] +
-                                 self.distribution_table[timeperiod2][feature][interval][FP]) / self.window_size
-                    # density differences is density1 in density0
-                    density_difference = density_1 - density_0
-                    density[timeperiod1][feature][interval][1] = density_difference
-
-                for interval in range(self.n_intervals):
-                    # add the amount of instances per interval that is belonging to subset
-                    # so if feature0, interval 0 has 6 TP instances, and the calculated difference
-                    # in density of feature0,
-                    # interval 0 is 0.07, you will extend the subset with [0.07,0.07,0.07,0.07,0.07,0.07]
-                    subset_TP[timeperiod1][feature].extend(
-                        [density[timeperiod1][feature][interval][0]] * t0[TP][interval])
-                    subset_FN[timeperiod1][feature].extend(
-                        [density[timeperiod1][feature][interval][0]] * t0[FN][interval])
-                    subset_FP[timeperiod1][feature].extend(
-                        [density[timeperiod1][feature][interval][1]] * t0[FP][interval])
-                    subset_TN[timeperiod1][feature].extend(
-                        [density[timeperiod1][feature][interval][1]] * t0[TN][interval])
-        self.test_density(subset_TN, subset_FP, subset_FN, subset_TP)
-
-    def test_density(self, subset_TN, subset_FP, subset_FN, subset_TP):
-        for timeperiod in range(self.n_time_windows - 1):
-            for feature in range(self.stream.n_features):
-                TP = subset_TP[timeperiod][feature]
-                FN = subset_FN[timeperiod][feature]
-                TN = subset_TN[timeperiod][feature]
-                FP = subset_FP[timeperiod][feature]
-                # positive instances:
-                mean_subset_TP = 0
-                mean_subset_FN = 0
-                if len(subset_TP[timeperiod][feature]) > 0:
-                    mean_subset_TP = sum(TP) / len(TP)
-                if len(subset_FN[timeperiod][feature]) > 0:
-                    mean_subset_FN = sum(FN) / len(FN)
-                if len(TP) > 10 and len(FN) > 10:
-                    test = ranksums(TP, FN)
-                    result = test.pvalue
-                else:
-                    result = None
-                self.table_influence_on_positive.append([feature, timeperiod, len(TP),
-                                                         mean_subset_TP, len(FN),
-                                                         mean_subset_FN, abs(mean_subset_TP - mean_subset_FN), result])
-
-                # negative instances
-                mean_subset_TN = 0
-                mean_subset_FP = 0
-                if len(TN) > 0:
-                    mean_subset_TN = sum(TN) / len(TN)
-                if len(FP) > 0:
-                    mean_subset_FP = sum(FP) / len(FP)
-                if len(TN) > 10 and len(FP) > 10:
-                    test = ranksums(TN, FP)
-                    result = test.pvalue
-                else:
-                    result = None
-                self.table_influence_on_negative.append([feature, timeperiod, len(TN),
-                                                         mean_subset_TN, len(FP),
-                                                         mean_subset_FP, abs(mean_subset_TN - mean_subset_FP), result])
 
     def create_intervals(self, feature_data):
         values_per_feature = list(zip(*feature_data))
