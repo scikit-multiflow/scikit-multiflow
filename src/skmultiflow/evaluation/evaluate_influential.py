@@ -47,8 +47,8 @@ class EvaluateInfluential(StreamEvaluator):
         self.distribution_table = []
         self.categorical_features = []
         self.numerical_features = []
-        self.table_influence_on_positive = []
-        self.table_influence_on_negative = []
+        # self.table_influence_on_positive = []
+        # self.table_influence_on_negative = []
         self.weight_output = weight_output
         self.weight_plot = weight_plot
         self.accuracy = []
