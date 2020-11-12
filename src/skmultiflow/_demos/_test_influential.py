@@ -17,7 +17,7 @@ def demo():
 
     :return:
     """
-    runs = 20
+    runs = 100
     n_comparisons = 1
     n_features = 1
     info_positive, info_negative = [], []
@@ -47,7 +47,7 @@ def demo():
             # Setup the evaluator
             evaluator = EvaluateInfluential(show_plot=False,
                                             pretrain_size=200,
-                                            max_samples=4200,
+                                            max_samples=2200,
                                             batch_size=1,
                                             batch_size_update=False,
                                             n_time_windows=n_comparisons + 1,
@@ -141,6 +141,40 @@ def demo():
     plt.xlabel('Runs')
     plt.ylabel('mean sample value')
     plt.title('Mean sample value in negative instances')
+    plt.legend()
+
+    plt.figure(5)
+    for i in range(len(negative_instances)):
+        for j in range(n_comparisons):
+            for f in range(n_features):
+                plt.plot([item[0] for item in negative_instances[i] if item[chunk] == j and item[feature] == f],
+                         [item[absolute_difference] for item in negative_instances[i] if
+                          item[chunk] == j and item[feature] == f],
+                         label="Absolute difference mean " + title[i])
+    plt.xlabel('Runs')
+    plt.ylabel('y')
+    plt.title('Absolute difference in negative instances')
+    plt.legend()
+
+    plt.figure(6)
+    for i in range(len(positive_instances)):
+        for j in range(n_comparisons):
+            for f in range(n_features):
+                plt.plot([item[0] for item in positive_instances[i] if item[chunk] == j and item[feature] == f],
+                         [item[absolute_difference] for item in positive_instances[i] if
+                          item[chunk] == j and item[feature] == f],
+                         label="Absolute difference mean " + title[i])
+    plt.xlabel('Runs')
+    plt.ylabel('y')
+    plt.title('Absolute difference in positive instances')
+    plt.legend()
+
+    plt.figure(7)
+    for i in range(len(title)):
+        plt.plot(list(range(0, runs, 1)), accuracy[i], label=title[i])
+    plt.xlabel('Runs')
+    plt.ylabel('Accuracy')
+    plt.title('Accuracy classifier per run per strategy')
     plt.legend()
     plt.show()
 
