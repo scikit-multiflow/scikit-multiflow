@@ -17,7 +17,7 @@ class predictionInfluenceDetector(BaseSKMObject, metaclass=ABCMeta):
         # create list that has two values (difference in density in time0 and time1 of TP and FN,
         #                               and difference in density in time0 and time1 of TN and FP per interval
         TN, FP, FN, TP = 0, 1, 2, 3
-        density = [[[[0] * 2 for _ in range(evaluator.n_intervals)] for _ in range(evaluator.stream.n_features)]
+        density = [[[[0] * 4 for _ in range(evaluator.n_intervals)] for _ in range(evaluator.stream.n_features)]
                    for _ in range(evaluator.n_time_windows - 1)]
         subset_TP = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(evaluator.n_time_windows - 1)]
         subset_FN = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(evaluator.n_time_windows - 1)]
@@ -33,39 +33,45 @@ class predictionInfluenceDetector(BaseSKMObject, metaclass=ABCMeta):
                 t0 = list(zip(*evaluator.distribution_table[chunk0][feature]))
                 # create table with density differences of TP and FN (0), and TN and FP (1), per interval
                 for interval in range(evaluator.n_intervals):
-                    # calculate density of positive instances = instances of TP + FN / window size
-                    density_0 = (evaluator.distribution_table[chunk0][feature][interval][TP] +
-                                 evaluator.distribution_table[chunk0][feature][interval][FN]) / evaluator.window_size
-                    density_1 = (evaluator.distribution_table[chunk1][feature][interval][TP] +
-                                 evaluator.distribution_table[chunk1][feature][interval][FN]) / evaluator.window_size
-                    # density differences is density1 - density0
-                    density_difference = density_1 - density_0
+                    TN1 = evaluator.distribution_table[chunk1][feature][interval][TN]
+                    TN0 = evaluator.distribution_table[chunk0][feature][interval][TN]
 
-                    # fill in density difference in list
-                    density[chunk0][feature][interval][0] = density_difference
+                    FP1 = evaluator.distribution_table[chunk1][feature][interval][FP]
+                    FP0 = evaluator.distribution_table[chunk0][feature][interval][FP]
 
-                    # calculate density of negative instances
-                    density_0 = (evaluator.distribution_table[chunk0][feature][interval][TN] +
-                                 evaluator.distribution_table[chunk0][feature][interval][FP]) / evaluator.window_size
-                    density_1 = (evaluator.distribution_table[chunk1][feature][interval][TN] +
-                                 evaluator.distribution_table[chunk1][feature][interval][FP]) / evaluator.window_size
+                    FN1 = evaluator.distribution_table[chunk1][feature][interval][FN]
+                    FN0 = evaluator.distribution_table[chunk0][feature][interval][FN]
+
+                    TP1 = evaluator.distribution_table[chunk1][feature][interval][TP]
+                    TP0 = evaluator.distribution_table[chunk0][feature][interval][TP]
+
+                    density_TP, density_FN, density_TN, density_FP = 0, 0, 0, 0
+                    if TN0 > 0:
+                        density_TN = (TN1 - TN0) / TN0
+                    if TP0 > 0:
+                        density_TP = (TP1 - TP0) / TP0
+                    if FN0 > 0:
+                        density_FN = (FN1 - FN0) / FN0
+                    if FP0 > 0:
+                        density_FP = (FP1 - FP0) / FP0
+                    densities = [density_TN, density_FP, density_FN, density_TP]
+
+                    for i in range(4):
+                        density[chunk0][feature][interval][i] = densities[i]
                     # density differences is density1 in density0
-                    density_difference = density_1 - density_0
-                    density[chunk0][feature][interval][1] = density_difference
+                    #density_difference = density_1 - density_0
+                    #density[chunk0][feature][interval][1] = density_difference
 
                 for interval in range(evaluator.n_intervals):
-                    # add the amount of instances per interval that is belonging to subset
-                    # so if feature0, interval 0 has 6 TP instances, and the calculated difference
-                    # in density of feature0,
-                    # interval 0 is 0.07, you will extend the subset with [0.07,0.07,0.07,0.07,0.07,0.07]
-                    subset_TP[chunk0][feature].extend(
-                        [density[chunk0][feature][interval][0]] * t0[TP][interval])
-                    subset_FN[chunk0][feature].extend(
-                        [density[chunk0][feature][interval][0]] * t0[FN][interval])
-                    subset_FP[chunk0][feature].extend(
-                        [density[chunk0][feature][interval][1]] * t0[FP][interval])
                     subset_TN[chunk0][feature].extend(
-                        [density[chunk0][feature][interval][1]] * t0[TN][interval])
+                        [density[chunk0][feature][interval][TN]] * t0[TN][interval])
+                    subset_FP[chunk0][feature].extend(
+                        [density[chunk0][feature][interval][FP]] * t0[FP][interval])
+                    subset_FN[chunk0][feature].extend(
+                        [density[chunk0][feature][interval][FN]] * t0[FN][interval])
+                    subset_TP[chunk0][feature].extend(
+                        [density[chunk0][feature][interval][TP]] * t0[TP][interval])
+
         predictionInfluenceDetector.test_density(self, evaluator, subset_TN, subset_FP, subset_FN, subset_TP)
 
     def test_density(self, evaluator, subset_TN, subset_FP, subset_FN, subset_TP):
