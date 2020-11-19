@@ -113,6 +113,15 @@ class MultilabelGenerator(Stream):
         self.target_values = np.unique(self.y).tolist() if self.n_targets == 1 else \
             [np.unique(self.y[:, i]).tolist() for i in range(self.n_targets)]
 
+    def has_more_samples(self):
+        """
+        Returns
+        -------
+        Boolean
+            True if stream has more samples.
+        """
+        return self.n_samples - self.sample_idx > 0
+
     def next_sample(self, batch_size=1):
         """ Returns next sample from the stream.
 
