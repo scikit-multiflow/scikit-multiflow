@@ -1,6 +1,6 @@
 from array import array
 
-from skmultiflow.core import clone
+from skmultiflow.core import clone, ForecasterMixin
 from skmultiflow.core.base import _pprint
 from skmultiflow.data import SEAGenerator
 from skmultiflow.bayes import NaiveBayes
@@ -9,6 +9,7 @@ from skmultiflow.trees import HoeffdingTreeRegressor
 from skmultiflow.trees import iSOUPTreeRegressor
 from skmultiflow.core import is_classifier
 from skmultiflow.core import is_regressor
+from skmultiflow.core import is_forecaster
 
 
 def test_clone():
@@ -129,3 +130,17 @@ def test_is_classifier():
 def test_is_regressor():
     learner = HoeffdingTreeRegressor()
     assert is_regressor(learner) is True
+
+
+def test_is_forecaster():
+    ForecasterMixin.__abstractmethods__ = set()
+    learner = ForecasterMixin()
+    assert is_forecaster(learner) is True
+
+
+def test_forecaster_default_parameters():
+    ForecasterMixin.__abstractmethods__ = set()
+    forecaster = ForecasterMixin()
+    forecaster.__init__()
+    assert forecaster.k is 1
+    assert forecaster.l is 1
