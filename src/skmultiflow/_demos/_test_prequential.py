@@ -28,8 +28,8 @@ def demo(output_file=None, instances=40000):
     
     """
     # Setup the File Stream
-    # stream = FileStream("https://raw.githubusercontent.com/scikit-multiflow/streaming-datasets/"
-    #                     "master/sea_big.csv")
+    stream = FileStream("https://raw.githubusercontent.com/scikit-multiflow/streaming-datasets/"
+                         "master/sea_big.csv")
     # stream = WaveformGenerator()
 
     # Setup the classifier
@@ -47,7 +47,7 @@ def demo(output_file=None, instances=40000):
     # Setup the evaluator
     evaluator = EvaluatePrequential(pretrain_size=200, max_samples=instances, batch_size=1, n_wait=100, max_time=1000,
                                     output_file=output_file, show_plot=True,
-                                    metrics=['kappa', 'kappa_t', 'performance'])
+                                    metrics=['kappa', 'kappa_t'])
 
     # Evaluate
     evaluator.evaluate(stream=stream, model=pipe)
