@@ -38,6 +38,7 @@ class MultiOutputLearner(BaseSKMObject, ClassifierMixin, MetaEstimatorMixin, Mul
     --------
     >>> from skmultiflow.meta.multi_output_learner import MultiOutputLearner
     >>> from skmultiflow.data.file_stream import FileStream
+    >>> from skmultiflow.metrics import hamming_score
     >>> from sklearn.linear_model import Perceptron
     >>> # Setup the file stream
     >>> stream = FileStream("https://raw.githubusercontent.com/scikit-multiflow/"
