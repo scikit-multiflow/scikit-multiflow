@@ -5,6 +5,7 @@ import numpy as np
 import pytest
 import os
 
+
 def test_kswin_initialization():
     """
     KSWIN Test
@@ -20,8 +21,8 @@ def test_kswin_initialization():
     0 < stat_size <  window_size
 
     KSWIN change detector size initialisation test.
-    At least 1 false positive must arisie due to the sensitive alpha, when testing the standard
-    Sea generator
+    At least 1 false positive must arisie due to the sensitive alpha,
+    when testing the standard Sea generator
     """
     with pytest.raises(ValueError):
         KSWIN(alpha=-0.1)
@@ -32,12 +33,10 @@ def test_kswin_initialization():
     kswin = KSWIN(alpha=0.5)
     assert kswin.alpha == 0.5
 
-
     kswin = KSWIN(data="st")
     assert isinstance(kswin.window, np.ndarray)
 
-
-    kswin = KSWIN(data=np.array([0.75,0.80,1,-1]))
+    kswin = KSWIN(data=np.array([0.75, 0.80, 1, -1]))
     assert isinstance(kswin.window, np.ndarray)
 
     try:
@@ -55,10 +54,10 @@ def test_kswin_initialization():
 
 
 def test_kswin_functionality(test_path):
-    kswin = KSWIN(alpha=0.0001,window_size=200,stat_size=100)
+    kswin = KSWIN(alpha=0.0001, window_size=200, stat_size=100)
     test_file = os.path.join(test_path, 'drift_stream.npy')
     data_stream = np.load(test_file)
-    expected_indices = [1045, 1145]
+    expected_indices = [1044, 1144]
     detected_indices = []
 
     for i in range(data_stream.size):
@@ -74,4 +73,4 @@ def test_kswin_reset():
     kswin.reset()
     assert kswin.p_value == 0
     assert kswin.window.shape[0] == 0
-    assert kswin.change_detected == False
+    assert kswin.change_detected is False
