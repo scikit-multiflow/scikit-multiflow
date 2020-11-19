@@ -86,7 +86,7 @@ def test_sam_knn_coverage():
                                        0, 0, 0, 0, 0, 1, 0, 1, 1])
     assert np.alltrue(predictions == expected_predictions)
 
-    expected_info = "SAMKNNClassifier(ltm_size=0.4, max_window_size=None, min_stm_size=10, n_neighbors=3, " \
+    expected_info = "SAMKNNClassifier(ltm_size=0.4, max_window_size=50, min_stm_size=10, n_neighbors=3, " \
                     "stm_size_option='maxACC', use_ltm=True, weighting='uniform')"
     info = " ".join([line.strip() for line in learner.get_info().split()])
     assert info == expected_info

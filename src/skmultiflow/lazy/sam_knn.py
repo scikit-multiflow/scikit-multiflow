@@ -112,7 +112,7 @@ class SAMKNNClassifier(BaseSKMObject, ClassifierMixin):
         super().__init__()
         self.n_neighbors = n_neighbors
         self.weighting = weighting
-        self.max_wind_size = max_window_size
+        self.max_window_size = max_window_size
         self.ltm_size = ltm_size
         self.min_stm_size = min_stm_size
         self.use_ltm = use_ltm
@@ -122,8 +122,8 @@ class SAMKNNClassifier(BaseSKMObject, ClassifierMixin):
         self._STMLabels = np.empty(shape=(0), dtype=np.int32)
         self._LTMSamples = None
         self._LTMLabels = np.empty(shape=(0), dtype=np.int32)
-        self.maxLTMSize = self.ltm_size * self.max_wind_size
-        self.maxSTMSize = self.max_wind_size - self.maxLTMSize
+        self.maxLTMSize = self.ltm_size * self.max_window_size
+        self.maxSTMSize = self.max_window_size - self.maxLTMSize
         self.minSTMSize = self.min_stm_size
 
         if self.stm_size_option is not None:
