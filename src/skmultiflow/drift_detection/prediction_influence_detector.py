@@ -17,13 +17,14 @@ class predictionInfluenceDetector(BaseSKMObject, metaclass=ABCMeta):
         # create list that has two values (difference in density in time0 and time1 of TP and FN,
         #                               and difference in density in time0 and time1 of TN and FP per interval
         TN, FP, FN, TP = 0, 1, 2, 3
+        n_comparisons = evaluator.n_time_windows - 1
         density = [[[[0] * 4 for _ in range(evaluator.n_intervals)] for _ in range(evaluator.stream.n_features)]
-                   for _ in range(evaluator.n_time_windows - 1)]
-        subset_TP = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(evaluator.n_time_windows - 1)]
-        subset_FN = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(evaluator.n_time_windows - 1)]
-        subset_TN = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(evaluator.n_time_windows - 1)]
-        subset_FP = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(evaluator.n_time_windows - 1)]
-        for chunk0 in range(evaluator.n_time_windows - 1):
+                   for _ in range(n_comparisons)]
+        subset_TP = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(n_comparisons)]
+        subset_FN = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(n_comparisons)]
+        subset_TN = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(n_comparisons)]
+        subset_FP = [[[] for _ in range(evaluator.stream.n_features)] for _ in range(n_comparisons)]
+        for chunk0 in range(n_comparisons):
             chunk1 = chunk0 + 1
             for feature in range(evaluator.stream.n_features):
                 # dist table is organized like this: [tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp],[tn, fp, fn, tp]
@@ -72,10 +73,10 @@ class predictionInfluenceDetector(BaseSKMObject, metaclass=ABCMeta):
                     subset_TP[chunk0][feature].extend(
                         [density[chunk0][feature][interval][TP]] * t0[TP][interval])
 
-        predictionInfluenceDetector.test_density(self, evaluator, subset_TN, subset_FP, subset_FN, subset_TP)
+        predictionInfluenceDetector.test_density(self, evaluator, subset_TN, subset_FP, subset_FN, subset_TP, n_comparisons)
 
-    def test_density(self, evaluator, subset_TN, subset_FP, subset_FN, subset_TP):
-        for chunk in range(evaluator.n_time_windows - 1):
+    def test_density(self, evaluator, subset_TN, subset_FP, subset_FN, subset_TP, n_comparisons):
+        for chunk in range(n_comparisons):
             for feature in range(evaluator.stream.n_features):
                 TP = subset_TP[chunk][feature]
                 FN = subset_FN[chunk][feature]
