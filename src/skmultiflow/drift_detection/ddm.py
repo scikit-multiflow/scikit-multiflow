@@ -133,7 +133,7 @@ class DDM(BaseDriftDetector):
         self.in_warning_zone = False
         self.delay = 0
 
-        if self.sample_count < self.min_instances:
+        if self.sample_count <= self.min_instances:
             return
 
         if self.miss_prob + self.miss_std <= self.miss_prob_sd_min:
@@ -141,11 +141,11 @@ class DDM(BaseDriftDetector):
             self.miss_sd_min = self.miss_std
             self.miss_prob_sd_min = self.miss_prob + self.miss_std
 
-        if self.miss_prob + self.miss_std > self.miss_prob_min + self.out_control_level \
+        if self.miss_prob + self.miss_std >= self.miss_prob_min + self.out_control_level \
                 * self.miss_sd_min:
             self.in_concept_change = True
 
-        elif self.miss_prob + self.miss_std > self.miss_prob_min + self.warning_level \
+        elif self.miss_prob + self.miss_std >= self.miss_prob_min + self.warning_level \
                 * self.miss_sd_min:
             self.in_warning_zone = True
 
