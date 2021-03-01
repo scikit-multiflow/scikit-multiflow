@@ -11,4 +11,4 @@ The following map is provided to help users navigate the multiple methods availa
    :align: center
 
 This is a rough guide to identify a method depending on the task/data at hand.
-For more information, please see the `API Reference <api/api.html>`_
+For more information, please see the `API Reference <../api/api.html>`_
