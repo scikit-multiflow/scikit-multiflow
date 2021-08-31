@@ -237,6 +237,21 @@ Trees based methods
    trees.iSOUPTreeRegressor
    trees.StackedSingleTargetHoeffdingTreeRegressor
 
+Unsupervised Learning
+---------------------
+.. automodule:: skmultiflow.ADCN
+   :no-members:
+   :no-inherited-members:
+
+.. currentmodule:: skmultiflow
+
+.. autosummary::
+   :nosignatures:
+   :template: class.rst
+   :toctree: generated
+
+   ADCN.ADCNclassifier
+   ADCN.ADCNevaluator
 
 Drift Detection
 ===============
