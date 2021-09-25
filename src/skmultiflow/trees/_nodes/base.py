@@ -423,6 +423,11 @@ class ActiveLeaf(metaclass=ABCMeta):
     def new_numeric_attribute_observer():
         pass
 
+    @staticmethod
+    @abstractmethod
+    def numeric_attribute_observer_gaussian_hellinger():
+        pass
+
     @property
     def attribute_observers(self):
         try:
@@ -442,6 +447,8 @@ class ActiveLeaf(metaclass=ABCMeta):
             except KeyError:
                 if tree.nominal_attributes is not None and idx in tree.nominal_attributes:
                     obs = self.new_nominal_attribute_observer()
+                elif tree.split_criterion == 'gaussian_hellinger':
+                    obs = self.numeric_attribute_observer_gaussian_hellinger()
                 else:
                     obs = self.new_numeric_attribute_observer()
                 self.attribute_observers[idx] = obs
@@ -499,6 +506,10 @@ class InactiveLeaf:
 
     @staticmethod
     def new_numeric_attribute_observer():
+        return None
+
+    @staticmethod
+    def numeric_attribute_observer_gaussian_hellinger():
         return None
 
     def update_attribute_observers(self, X, y, weight, tree):
