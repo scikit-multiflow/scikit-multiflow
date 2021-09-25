@@ -124,3 +124,48 @@ def test_extremely_fast_decision_tree_coverage():
     X, y = stream.next_sample(5000)
     learner = ExtremelyFastDecisionTreeClassifier(leaf_prediction='nba', nominal_attributes=[i for i in range(1, 9)])
     learner.partial_fit(X, y, classes=stream.target_values)
+
+
+def test_extremely_fast_decision_tree_gh(test_path):
+    stream = SEAGenerator(1, noise_percentage=0.067, random_state=112)
+    learner = ExtremelyFastDecisionTreeClassifier(split_criterion='gaussian_hellinger')
+
+    cnt = 0
+    max_samples = 5000
+    predictions = []
+    wait_samples = 100
+    correct_predictions = 0
+
+    while cnt < max_samples:
+        X, y = stream.next_sample()
+        # Test every n samples
+        if (cnt % wait_samples == 0) and (cnt != 0):
+            predictions.append(learner.predict(X)[0])
+            if y[0] == predictions[-1]:
+                correct_predictions += 1
+        learner.partial_fit(X, y)
+        cnt += 1
+
+    performance = correct_predictions / len(predictions)
+    expected_predictions = [1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+                            0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1,
+                            1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
+                            0, 0, 1, 0, 0, 1, 0, 0, 1, 1]
+
+    expected_correct_predictions = 41
+    expected_performance = 0.8367346938775511
+
+    assert np.alltrue(predictions == expected_predictions)
+    assert np.isclose(expected_performance, performance)
+    assert correct_predictions == expected_correct_predictions
+
+    assert type(learner.predict(X)) == np.ndarray
+    assert type(learner.predict_proba(X)) == np.ndarray
+
+    expected_info = "ExtremelyFastDecisionTreeClassifier(binary_split=False, grace_period=200, " \
+                    "leaf_prediction='nba', max_byte_size=33554432, memory_estimate_period=1000000, " \
+                    "min_samples_reevaluate=20, nb_threshold=0, nominal_attributes=None, " \
+                    "split_confidence=1e-07, split_criterion='gaussian_hellinger', stop_mem_management=False, " \
+                    "tie_threshold=0.05)"
+    info = " ".join([line.strip() for line in learner.get_info().split()])
+    assert info == expected_info

@@ -1,6 +1,7 @@
 from skmultiflow.bayes import do_naive_bayes_prediction
 from skmultiflow.trees._attribute_observer import NominalAttributeClassObserver
 from skmultiflow.trees._attribute_observer import NumericAttributeClassObserverGaussian
+from skmultiflow.trees._attribute_observer import NumericAttributeClassObserverGaussianHellinger
 
 from .base import LearningNode, ActiveLeaf, InactiveLeaf
 
@@ -13,6 +14,11 @@ class ActiveLeafClass(ActiveLeaf):
     @staticmethod
     def new_numeric_attribute_observer():
         return NumericAttributeClassObserverGaussian()
+
+
+    @staticmethod
+    def numeric_attribute_observer_gaussian_hellinger():
+        return NumericAttributeClassObserverGaussianHellinger()
 
 
 class LearningNodeMC(LearningNode):

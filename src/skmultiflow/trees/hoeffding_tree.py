@@ -10,6 +10,7 @@ from skmultiflow.rules.base_rule import Rule
 from ._split_criterion import GiniSplitCriterion
 from ._split_criterion import InfoGainSplitCriterion
 from ._split_criterion import HellingerDistanceCriterion
+from ._split_criterion import GaussianHellingerDistanceCriterion
 from ._attribute_test import NominalAttributeMultiwayTest
 from ._nodes import Node
 from ._nodes import FoundNode
@@ -143,6 +144,7 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
     _GINI_SPLIT = 'gini'
     _INFO_GAIN_SPLIT = 'info_gain'
     _HELLINGER = 'hellinger'
+    _GAUSSIAN_HELLINGER = 'gaussian_hellinger'
     _MAJORITY_CLASS = 'mc'
     _NAIVE_BAYES = 'nb'
     _NAIVE_BAYES_ADAPTIVE = 'nba'
@@ -199,7 +201,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
     def split_criterion(self, split_criterion):
         if split_criterion not in [self._GINI_SPLIT,
                                    self._INFO_GAIN_SPLIT,
-                                   self._HELLINGER]:
+                                   self._HELLINGER,
+                                   self._GAUSSIAN_HELLINGER]:
             print("Invalid split_criterion option {}', will use default '{}'".
                   format(split_criterion, self._INFO_GAIN_SPLIT))
             self._split_criterion = self._INFO_GAIN_SPLIT
@@ -580,6 +583,8 @@ class HoeffdingTreeClassifier(BaseSKMObject, ClassifierMixin):
                 split_criterion = InfoGainSplitCriterion()
             elif self._split_criterion == self._HELLINGER:
                 split_criterion = HellingerDistanceCriterion()
+            elif self._split_criterion == self._GAUSSIAN_HELLINGER:
+                split_criterion = GaussianHellingerDistanceCriterion()
             else:
                 split_criterion = InfoGainSplitCriterion()
             best_split_suggestions = node.get_best_split_suggestions(split_criterion, self)
