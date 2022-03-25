@@ -187,7 +187,6 @@ class ADWIN(BaseDriftDetector):
         This function should be used at every new sample analysed.
 
         """
-
         if self.in_concept_change:
             self.reset()
 
