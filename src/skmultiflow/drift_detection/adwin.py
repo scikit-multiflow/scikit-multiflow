@@ -187,6 +187,9 @@ class ADWIN(BaseDriftDetector):
         This function should be used at every new sample analysed.
 
         """
+        if self.in_concept_change:
+            self.reset()
+
         self._width += 1
         self.__insert_element_bucket(0, value, self.list_row_bucket.first)
         incremental_variance = 0
@@ -314,7 +317,7 @@ class ADWIN(BaseDriftDetector):
                 i = self.last_bucket_row
 
                 while (not bln_exit) and (cursor is not None):
-                    for k in range(cursor.bucket_size_row - 1):
+                    for k in range(cursor.bucket_size_row):
                         n2 = self.bucket_size(i)
                         u2 = cursor.get_total(k)
 

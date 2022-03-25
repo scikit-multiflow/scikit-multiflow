@@ -13,7 +13,7 @@ def test_adwin(test_path):
     adwin = ADWIN()
     test_file = os.path.join(test_path, 'drift_stream.npy')
     data_stream = np.load(test_file)
-    expected_indices = [1023, 1055, 1087, 1151]
+    expected_indices = [1023]
     detected_indices = []
 
     for i in range(data_stream.size):
