@@ -295,6 +295,9 @@ class EvaluationVisualizer(BaseListener):
                 elif metric_id == constants.F1_SCORE:
                     plot_tracker.sub_plot_obj.set_title('F1 Score')
                     plot_tracker.sub_plot_obj.set_ylabel('f1 score')
+                elif metric_id == constants.GMEAN:
+                    plot_tracker.sub_plot_obj.set_title('G-mean')
+                    plot_tracker.sub_plot_obj.set_ylabel('g-mean')
                 elif metric_id == constants.HAMMING_SCORE:
                     plot_tracker.sub_plot_obj.set_title('Hamming score')
                     plot_tracker.sub_plot_obj.set_ylabel('hamming score')

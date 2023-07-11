@@ -710,6 +710,11 @@ class StreamEvaluator(BaseSKMObject, metaclass=ABCMeta):
                                                      self._data_buffer.get_data(
                                                          metric_id=constants.F1_SCORE,
                                                          data_id=constants.MEAN)[i]))
+            if constants.GMEAN in self.metrics:
+                print('{} - G-mean: {:.4f}'.format(self.model_names[i],
+                                                      self._data_buffer.get_data(
+                                                          metric_id=constants.GMEAN,
+                                                          data_id=constants.MEAN)[i]))
             if constants.HAMMING_SCORE in self.metrics:
                 print('{} - Hamming score: {:.4f}'.format(self.model_names[i],
                                                           self._data_buffer.get_data(
