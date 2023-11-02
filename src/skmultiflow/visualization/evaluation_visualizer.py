@@ -182,7 +182,7 @@ class EvaluationVisualizer(BaseListener):
         self.fig.suptitle(self.dataset_name)
         plot_metrics = [m for m in self.metrics if m not in [constants.RUNNING_TIME, constants.MODEL_SIZE]]
         base = 11 + len(plot_metrics) * 100  # 3-digit integer describing the position of the subplot.
-        self.fig.canvas.set_window_title('scikit-multiflow')
+
 
         # Subplots handler
         for metric_id in self.metrics:
